@@ -1,7 +1,7 @@
 # About Project KeyWave
 
 <p align="center">
-  <img src="https://github.com/jackburkhardt/KeyWave/blob/main/keywave.png">
+  <img width="300" height="300" src="https://github.com/jackburkhardt/KeyWave/blob/main/keywave.png">
 </p>
 
 ### What is KeyWave?
