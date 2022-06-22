@@ -1,7 +1,7 @@
 # About Project KeyWave
 
 <p align="center">
-  ![KeyWave](keywave.png)
+  <img src="https://github.com/jackburkhardt/KeyWave/blob/main/keywave.png">
 </p>
 
 ### What is KeyWave?
