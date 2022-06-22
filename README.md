@@ -1,6 +1,8 @@
 # About Project KeyWave
 
-                                                                ![KeyWave](keywave.png)   
+<p align="center">
+  ![KeyWave](keywave.png)
+</p>
 
 ### What is KeyWave?
 
