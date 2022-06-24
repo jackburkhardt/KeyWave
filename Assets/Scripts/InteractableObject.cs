@@ -6,7 +6,7 @@ using UnityEngine.Events;
 /// An object in the world space that the player can click on to interact with.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
-[RequireComponent(typeof(Outline))]
+//[RequireComponent(typeof(Outline))]
 public class InteractableObject : MonoBehaviour
 {
     [SerializeField] private UnityEvent _postInteractAction;

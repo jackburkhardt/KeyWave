@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
@@ -24,15 +25,16 @@ public class InputManager : MonoBehaviour
             hitGO.GetComponent<Outline>().enabled = true;
             lastHitGO = hitGO;
             
-            // if the player also clicks, interact with this object
+            /*// if the player also clicks, interact with this object
             if (Input.GetMouseButtonDown(1))
             {
                 Interactor.Instance.Interact(hitGO.GetComponent<InteractableObject>());
-            }
-        } else if (!hit.collider || hit.collider.gameObject != lastHitGO)
+            }*/
+        } else if ((!hit.collider || hit.collider.gameObject != lastHitGO) && lastHitGO )
         {
             // if there's no longer a raycast hit or it hits something else, remove outline from old selection
             lastHitGO.GetComponent<Outline>().enabled = false;
+            lastHitGO = null;
         }
     }
 }
