@@ -21,6 +21,7 @@ public class CameraFader : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        _fadeImage.color = _defaultFadeColor;
         //DontDestroyOnLoad(this.transform.parent.gameObject); //lmao
         StartCoroutine(FadeFromColor(_defaultFadeSpeed));
     }
