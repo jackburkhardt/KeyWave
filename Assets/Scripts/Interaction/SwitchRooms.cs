@@ -34,6 +34,7 @@ public class SwitchRooms : MonoBehaviour, IInteractable
 
     public void EndInteraction()
     {
+        PreviouslyInteractedWith = true;
         _postSwitchEvent?.Invoke();
         GameEvent.InteractionEnd(this);
     }
@@ -47,4 +48,6 @@ public class SwitchRooms : MonoBehaviour, IInteractable
     {
         _outline.enabled = false;
     }
+    
+    public bool PreviouslyInteractedWith { get; private set;  }
 }

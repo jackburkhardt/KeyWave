@@ -4,13 +4,12 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Item : MonoBehaviour, IInteractable
+public class InspectableItem : MonoBehaviour, IInteractable
 {
     private Outline _outline;
     
     // action to be executed after the main interaction completes
     [SerializeField] private UnityEvent _postInteractAction;
-    [SerializeField] private bool _popup;
     [SerializeField] [TextArea] private string _flavortext;
 
     private void Awake()
@@ -26,14 +25,12 @@ public class Item : MonoBehaviour, IInteractable
     public void Interact()
     {
         GameEvent.InteractionStart(this);
-        if (!_popup)
-        {
-            StartCoroutine(DialogueDisplay.Instance.Run(_flavortext, this));
-        }
+        StartCoroutine(Dialogue.Instance.Run(_flavortext, this));
     }
 
     public void EndInteraction()
     {
+        PreviouslyInteractedWith = true;
         _postInteractAction?.Invoke();
         GameEvent.InteractionEnd(this);
     }
@@ -47,4 +44,6 @@ public class Item : MonoBehaviour, IInteractable
     {
         _outline.enabled = false;
     }
+
+    public bool PreviouslyInteractedWith { get; private set; }
 }

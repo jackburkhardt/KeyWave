@@ -10,6 +10,7 @@ public interface IInteractable : IPointerEnterHandler, IPointerExitHandler, IPoi
     string name { get; set; }
     void Interact();
     void EndInteraction();
+    bool PreviouslyInteractedWith { get; }
 
     void IPointerClickHandler.OnPointerClick(PointerEventData data)
     {

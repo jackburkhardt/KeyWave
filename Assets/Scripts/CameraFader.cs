@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CameraFader : MonoBehaviour
 {
     public static CameraFader Instance = null;
-    [SerializeField] private SpriteRenderer _fadeImage;
+    [SerializeField] private Image _fadeImage;
     [SerializeField] private Color _defaultFadeColor = Color.black;
     [SerializeField] private float _defaultFadeSpeed = 1;
 

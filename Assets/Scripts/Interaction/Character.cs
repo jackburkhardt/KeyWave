@@ -18,6 +18,7 @@ public class Character : MonoBehaviour, IInteractable
 
     public void EndInteraction()
     {
+        PreviouslyInteractedWith = true;
         throw new System.NotImplementedException();
     }
 
@@ -30,4 +31,6 @@ public class Character : MonoBehaviour, IInteractable
     {
         _outline.enabled = false;
     }
+    
+    public bool PreviouslyInteractedWith { get; private set;  }
 }

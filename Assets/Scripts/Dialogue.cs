@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine.UI;
-public class DialogueDisplay : MonoBehaviour
+public class Dialogue : MonoBehaviour
 {
-    public static DialogueDisplay Instance = null;
+    public static Dialogue Instance = null;
     [SerializeField] private TMP_Text _displayText;
     [SerializeField] private TMP_Text _npcNameText;
     
