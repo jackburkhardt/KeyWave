@@ -3,12 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine.UI;
 public class DialogueDisplay : MonoBehaviour
 {
     public static DialogueDisplay Instance = null;
-    [SerializeField] private Text _displayText;
-    [SerializeField] private Text _npcNameText;
+    [SerializeField] private TMP_Text _displayText;
+    [SerializeField] private TMP_Text _npcNameText;
     
     // the background of the text box
     [SerializeField] private Image _dialogueBackgroundImage;
@@ -20,8 +21,6 @@ public class DialogueDisplay : MonoBehaviour
     // 0.01 fast, 0.05 medium, 0.1 slow
     [SerializeField] private float _textScrollDelay;
 
-    private DialogueStyle _defaultStyle;
-
     private void Awake()
     {
         if (!Instance)
@@ -31,9 +30,6 @@ public class DialogueDisplay : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        _defaultStyle = new DialogueStyle(_displayText.font, _displayText.fontStyle, _displayText.fontSize,
-            _displayText.color);
     }
 
     /// <summary>
@@ -42,12 +38,12 @@ public class DialogueDisplay : MonoBehaviour
     /// <param name="dialogue">Lines of dialogue to be displayed.</param>
     /// <param name="interacObj">The interactive object this is related to (usually the caller)</param>
     /// <returns></returns>
-    public IEnumerator DisplayDialogue(List<string> dialogue, IInteractable interacObj)
+    public IEnumerator Run(List<string> dialogue, IInteractable interacObj)
     {
         // enable visible canvas elements, set blank
         _dialogueBackgroundImage.enabled = true;
         _displayText.text = "";
-        _npcNameText.text = interacObj.name;
+        _npcNameText.text = interacObj.GetType() == typeof(Character) ? interacObj.name : "";
         _npcNameText.enabled = true;
         _displayText.enabled = true;
 
@@ -69,7 +65,7 @@ public class DialogueDisplay : MonoBehaviour
                 // using the | character will add pauses mid-line!
                 if (c == '|')
                 {
-                    while (!Input.GetKeyDown(KeyCode.Space))
+                    while (!Input.GetMouseButton(0))
                     {
                         _continueImage.enabled = true;
                         yield return null;
@@ -82,7 +78,7 @@ public class DialogueDisplay : MonoBehaviour
             }
             
             // wait for player to press button to continue
-            while (!Input.GetKeyDown(KeyCode.Space))
+            while (!Input.GetMouseButton(0))
             {
                 _continueImage.enabled = true;
                 yield return null;
@@ -106,8 +102,8 @@ public class DialogueDisplay : MonoBehaviour
         interacObj.EndInteraction();
     }
 
-    public IEnumerator DisplayDialogue(string dialogue, IInteractable interacObj)
-        => DisplayDialogue(new List<string> {dialogue}, interacObj);
+    public IEnumerator Run(string dialogue, IInteractable interacObj)
+        => Run(new List<string> {dialogue}, interacObj);
 
     /// <summary>
     /// Sets the dialogue text styling (font, style, color, size).
@@ -127,12 +123,12 @@ public class DialogueDisplay : MonoBehaviour
 /// </summary>
 public struct DialogueStyle
 {
-    public Font Font;
-    public FontStyle FontStyle;
-    public int Size;
+    public TMP_FontAsset Font;
+    public FontStyles FontStyle;
+    public float Size;
     public Color TextColor;
 
-    public DialogueStyle(Font font, FontStyle fontStyle, int size, Color textColor)
+    public DialogueStyle(TMP_FontAsset font, FontStyles fontStyle, float size, Color textColor)
     {
         Font = font;
         FontStyle = fontStyle;

@@ -33,7 +33,7 @@ public class CameraFader : MonoBehaviour
 
         while (_fadeImage.color.a < 1)
         {
-            float fadeAmount = color.a + (speed * Time.deltaTime);
+            float fadeAmount = color.a + (speed * Time.fixedDeltaTime);
             color = new Color(color.r, color.g, color.b, fadeAmount);
             _fadeImage.color = color;
 
@@ -50,7 +50,7 @@ public class CameraFader : MonoBehaviour
         var color = _fadeImage.color;
         while (_fadeImage.color.a > 0)
         {
-            float fadeAmount = color.a - (speed * Time.deltaTime);
+            float fadeAmount = color.a - (speed * Time.fixedDeltaTime);
             color = new Color(color.r, color.g, color.b, fadeAmount);
             _fadeImage.color = color;
 
@@ -60,5 +60,11 @@ public class CameraFader : MonoBehaviour
     }
 
     public IEnumerator FadeFromColor() => FadeFromColor(_defaultFadeSpeed);
+    
+    public IEnumerator FadeInOut(Color color, float fadeSpeed)
+    {
+        yield return StartCoroutine(FadeToColor(color, fadeSpeed));;
+        StartCoroutine(FadeFromColor(fadeSpeed));
+    }
     
 }
