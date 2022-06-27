@@ -19,7 +19,7 @@ public class Character : MonoBehaviour, IInteractable
     public void EndInteraction()
     {
         PreviouslyInteractedWith = true;
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
