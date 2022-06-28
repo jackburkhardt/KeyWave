@@ -73,6 +73,12 @@ public class Dialogue : MonoBehaviour
                     _continueImage.enabled = false;
                     continue;
                 }
+
+                /*if (Input.GetMouseButton(1))
+                {
+                    _displayText.text = line;
+                    break;
+                }*/
                 _displayText.text += c;
                 yield return new WaitForSeconds(_textScrollDelay);
             }
@@ -99,7 +105,7 @@ public class Dialogue : MonoBehaviour
             SetStyle(_defaultStyle);
         }*/
         
-        interacObj.EndInteraction();
+        if (interacObj.GetType() != typeof(PopupItem)) interacObj.EndInteraction();
     }
 
     public IEnumerator Run(string dialogue, IInteractable interacObj)

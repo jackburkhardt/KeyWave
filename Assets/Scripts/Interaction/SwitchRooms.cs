@@ -4,6 +4,9 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// An object in the game space which can be clicked on to travel to other rooms.
+/// </summary>
 public class SwitchRooms : MonoBehaviour, IInteractable
 {
     private Outline _outline;
@@ -23,12 +26,12 @@ public class SwitchRooms : MonoBehaviour, IInteractable
 
     IEnumerator Transition()
     {
-        StartCoroutine(CameraFader.Instance.FadeInOut(Color.black, 1));
         // TODO: tweak numbers here
-        yield return new WaitForSeconds(1);
+        yield return StartCoroutine(CameraFader.Instance.FadeToColor(Color.black, 0.1f));
         Camera main = Camera.allCameras[0]; // bit faster than camera.main methinks
         Vector3 newPos = new Vector3(_destination.position.x, _destination.position.y, main.transform.position.z);
         main.transform.position = newPos;
+        yield return StartCoroutine(CameraFader.Instance.FadeFromColor(0.1f));
         EndInteraction();
     }
 

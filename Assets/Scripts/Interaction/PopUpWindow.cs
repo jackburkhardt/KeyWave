@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
+/// <summary>
+/// A "window" created by a PopupItem.
+/// </summary>
 public class PopUpWindow : MonoBehaviour
 {
     [SerializeField] private GameObject _imageView;

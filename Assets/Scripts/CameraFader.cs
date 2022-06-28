@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// Handles fading the camera in and out using a black image.
+/// </summary>
 public class CameraFader : MonoBehaviour
 {
     public static CameraFader Instance = null;

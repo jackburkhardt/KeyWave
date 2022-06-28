@@ -4,13 +4,16 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// An item in the game space which can be clicked on for internal dialogue.
+/// </summary>
 public class InspectableItem : MonoBehaviour, IInteractable
 {
     private Outline _outline;
     
     // action to be executed after the main interaction completes
     [SerializeField] private UnityEvent _postInteractAction;
-    [SerializeField] [TextArea] private string _flavortext;
+    [SerializeField] [TextArea] private string _internalDialogue;
 
     private void Awake()
     {
@@ -25,7 +28,7 @@ public class InspectableItem : MonoBehaviour, IInteractable
     public void Interact()
     {
         GameEvent.InteractionStart(this);
-        StartCoroutine(Dialogue.Instance.Run(_flavortext, this));
+        StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
     }
 
     public void EndInteraction()

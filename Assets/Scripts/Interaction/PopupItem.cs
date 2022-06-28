@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
+/// <summary>
+/// An item in the game space which will create popups when clicked on.
+/// </summary>
 public class PopupItem: MonoBehaviour, IInteractable
 {
     private Outline _outline;
@@ -24,7 +27,7 @@ public class PopupItem: MonoBehaviour, IInteractable
     public void Interact()
     {
         GameEvent.InteractionStart(this);
-        //if (_internalDialogue != "" && !PreviouslyInteractedWith) StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
+        if (_internalDialogue != "" && !PreviouslyInteractedWith) StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
         GameEvent.PopupCreated();
         foreach (var window in _containedPopupWindows)
         {

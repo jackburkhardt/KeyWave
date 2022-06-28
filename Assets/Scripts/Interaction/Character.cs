@@ -2,6 +2,9 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Representation of an NPC which can be conversed with.
+/// </summary>
 public class Character : MonoBehaviour, IInteractable
 {
     private Outline _outline;
