@@ -35,7 +35,7 @@ public class CameraFader : MonoBehaviour
 
         while (_fadeImage.color.a < 1)
         {
-            float fadeAmount = color.a + (speed * Time.fixedDeltaTime);
+            float fadeAmount = color.a + (speed * Time.deltaTime);
             color = new Color(color.r, color.g, color.b, fadeAmount);
             _fadeImage.color = color;
 
@@ -52,7 +52,7 @@ public class CameraFader : MonoBehaviour
         var color = _fadeImage.color;
         while (_fadeImage.color.a > 0)
         {
-            float fadeAmount = color.a - (speed * Time.fixedDeltaTime);
+            float fadeAmount = color.a - (speed * Time.deltaTime);
             color = new Color(color.r, color.g, color.b, fadeAmount);
             _fadeImage.color = color;
 

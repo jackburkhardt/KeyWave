@@ -27,11 +27,11 @@ public class SwitchRooms : MonoBehaviour, IInteractable
     IEnumerator Transition()
     {
         // TODO: tweak numbers here
-        yield return StartCoroutine(CameraFader.Instance.FadeToColor(Color.black, 0.5f));
+        yield return StartCoroutine(CameraFader.Instance.FadeToColor(Color.black, 1.5f));
         Camera main = Camera.allCameras[0]; // bit faster than camera.main methinks
         Vector3 newPos = new Vector3(_destination.position.x, _destination.position.y, main.transform.position.z);
         main.transform.position = newPos;
-        yield return StartCoroutine(CameraFader.Instance.FadeFromColor(0.5f));
+        yield return StartCoroutine(CameraFader.Instance.FadeFromColor(1.5f));
         EndInteraction();
     }
 
