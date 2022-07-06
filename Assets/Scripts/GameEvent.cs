@@ -19,21 +19,31 @@
         https://www.tutorialsteacher.com/csharp/csharp-event
      */
     
+    
+    // DELEGATES
     public delegate void InteractionStartDelegate(IInteractable interacObj);
     public delegate void InteractionEndDelegate(IInteractable interacObj);
     public delegate void PopupViewChangeDelegate();
     public delegate void PopupCreatedDelegate();
-
     public delegate void PopupClosedDelegate();
+    public delegate void ChapterStartDelegate();
+    public delegate void ChapterEndDelegate();
+    
+    // EVENTS
     public static event InteractionStartDelegate OnInteractionStart;
     public static event InteractionEndDelegate OnInteractionEnd;
     public static event PopupViewChangeDelegate OnPopupViewChange;
     public static event PopupCreatedDelegate OnPopupCreate;
     public static event PopupClosedDelegate OnPopupClose;
+    public static event ChapterStartDelegate OnChapterStart;
+    public static event ChapterEndDelegate OnChapterEnd;
 
+    // TRIGGERS
     public static void InteractionStart(IInteractable interacObj) => OnInteractionStart?.Invoke(interacObj);
     public static void InteractionEnd(IInteractable interacObj) => OnInteractionEnd?.Invoke(interacObj);
     public static void ChangePopupView() => OnPopupViewChange?.Invoke();
     public static void PopupCreated() => OnPopupCreate?.Invoke();
     public static void PopupClose() => OnPopupClose?.Invoke();
+    public static void StartChapter() => OnChapterStart?.Invoke();
+    public static void EndChapter() => OnChapterEnd?.Invoke();
 }

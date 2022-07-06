@@ -37,4 +37,6 @@ public class Assignment : MonoBehaviour
     {
         
     }
+
+    public AssignmentType AssignmentType => _assignmentType;
 }

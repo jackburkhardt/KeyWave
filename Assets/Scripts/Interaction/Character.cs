@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -8,6 +10,7 @@ using UnityEngine.UI;
 public class Character : MonoBehaviour, IInteractable
 {
     private Outline _outline;
+    private List<Assignment> _delegatedAssignments = new List<Assignment>();
 
     private void Awake()
     {
@@ -33,6 +36,11 @@ public class Character : MonoBehaviour, IInteractable
     public void OnPointerExit(PointerEventData eventData)
     {
         _outline.enabled = false;
+    }
+
+    public bool TryRecieveAssignment(Assignment assignment)
+    {
+        throw new NotImplementedException();
     }
     
     public bool PreviouslyInteractedWith { get; private set;  }
