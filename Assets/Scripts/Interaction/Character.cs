@@ -1,47 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assignments;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-/// <summary>
-/// Representation of an NPC which can be conversed with.
-/// </summary>
-public class Character : MonoBehaviour, IInteractable
+namespace Interaction
 {
-    private Outline _outline;
-    private List<Assignment> _delegatedAssignments = new List<Assignment>();
-
-    private void Awake()
+    /// <summary>
+    /// Representation of an NPC which can be conversed with.
+    /// </summary>
+    public class Character : MonoBehaviour, IInteractable
     {
-        _outline = GetComponent<Outline>();
-    }
+        private Outline _outline;
+        private List<Assignment> _delegatedAssignments = new List<Assignment>();
 
-    public void Interact()
-    {
-        throw new System.NotImplementedException();
-    }
+        private void Awake()
+        {
+            _outline = GetComponent<Outline>();
+        }
 
-    public void EndInteraction()
-    {
-        PreviouslyInteractedWith = true;
-        //throw new System.NotImplementedException();
-    }
+        public void Interact()
+        {
+            throw new System.NotImplementedException();
+        }
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        _outline.enabled = true;
-    }
+        public void EndInteraction()
+        {
+            PreviouslyInteractedWith = true;
+            //throw new System.NotImplementedException();
+        }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _outline.enabled = false;
-    }
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            _outline.enabled = true;
+        }
 
-    public bool TryRecieveAssignment(Assignment assignment)
-    {
-        throw new NotImplementedException();
-    }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            _outline.enabled = false;
+        }
+
+        public bool TryRecieveAssignment(Assignment assignment)
+        {
+            throw new NotImplementedException();
+        }
     
-    public bool PreviouslyInteractedWith { get; private set;  }
+        public bool PreviouslyInteractedWith { get; private set;  }
+    }
 }

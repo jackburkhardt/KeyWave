@@ -1,4 +1,6 @@
-﻿public static class GameEvent
+﻿using Interaction;
+
+public static class GameEvent
 {
     /*
      How to use events 101!! Events are nice because they can allow your code to react to stuff happening in other
@@ -28,6 +30,9 @@
     public delegate void PopupClosedDelegate();
     public delegate void ChapterStartDelegate();
     public delegate void ChapterEndDelegate();
+    public delegate void EmailDeliverDelegate();
+    public delegate void GameSaveDelegate();
+    public delegate void GameLoadDelegate();
     
     // EVENTS
     public static event InteractionStartDelegate OnInteractionStart;
@@ -37,6 +42,9 @@
     public static event PopupClosedDelegate OnPopupClose;
     public static event ChapterStartDelegate OnChapterStart;
     public static event ChapterEndDelegate OnChapterEnd;
+    public static event EmailDeliverDelegate OnEmailDeliver;
+    public static event GameSaveDelegate OnGameSave;
+    public static event GameLoadDelegate OnGameLoad;
 
     // TRIGGERS
     public static void InteractionStart(IInteractable interacObj) => OnInteractionStart?.Invoke(interacObj);
@@ -46,4 +54,7 @@
     public static void PopupClose() => OnPopupClose?.Invoke();
     public static void StartChapter() => OnChapterStart?.Invoke();
     public static void EndChapter() => OnChapterEnd?.Invoke();
+    public static void DeliverEmail(Email email) => OnEmailDeliver?.Invoke();
+    public static void SaveGame() => OnGameSave?.Invoke();
+    public static void LoadGame() => OnGameLoad?.Invoke();
 }

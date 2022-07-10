@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Interaction;
 using TMPro;
 using UnityEngine.UI;
 public class Dialogue : MonoBehaviour

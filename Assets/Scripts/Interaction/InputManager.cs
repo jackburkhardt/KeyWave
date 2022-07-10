@@ -1,25 +1,25 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-public class InputManager : MonoBehaviour
+namespace Interaction
 {
-
-    [SerializeField] private Camera _camera;
-    [SerializeField] private LayerMask _interactLayerMask;
-    public static bool _controlsEnabled = true;
-    private GameObject lastHitGO;
-
-    private void Awake()
+    public class InputManager : MonoBehaviour
     {
-        GameEvent.OnInteractionStart += obj => _controlsEnabled = false;
-        GameEvent.OnInteractionEnd += obj => _controlsEnabled = true;
-    }
 
-    private void Update()
-    {
-        if (!_controlsEnabled) return;
+        [SerializeField] private Camera _camera;
+        [SerializeField] private LayerMask _interactLayerMask;
+        public static bool _controlsEnabled = true;
+        private GameObject lastHitGO;
 
+        private void Awake()
+        {
+            GameEvent.OnInteractionStart += obj => _controlsEnabled = false;
+            GameEvent.OnInteractionEnd += obj => _controlsEnabled = true;
+        }
+
+        private void Update()
+        {
+            if (!_controlsEnabled) return;
+
+        }
     }
 }

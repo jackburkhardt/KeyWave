@@ -1,56 +1,57 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-/// <summary>
-/// Mouse drag feature for UI elements.
-/// </summary>
-public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler
+namespace Interaction
 {
-    
-    // Code adapted from: http://gyanendushekhar.com/2019/11/11/move-canvas-ui-mouse-drag-unity-3d-drag-drop-ui/
-    
-    private Vector2 lastMousePosition;
-    
-    public void OnBeginDrag(PointerEventData eventData)
+    /// <summary>
+    /// Mouse drag feature for UI elements.
+    /// </summary>
+    public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler
     {
-        lastMousePosition = eventData.position;
-    }
+    
+        // Code adapted from: http://gyanendushekhar.com/2019/11/11/move-canvas-ui-mouse-drag-unity-3d-drag-drop-ui/
+    
+        private Vector2 lastMousePosition;
+    
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            lastMousePosition = eventData.position;
+        }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        /*Vector3 newPos = new Vector3(eventData.position.x, eventData.position.y, transform.position.z);
-        transform.position = newPos;*/
-        Vector2 currentMousePosition = eventData.position;
-        Vector2 diff = currentMousePosition - lastMousePosition;
-        RectTransform rect = GetComponent<RectTransform>();
-        Vector3 oldPos = rect.position;
-        Vector3 newPosition = rect.position +  new Vector3(diff.x, diff.y, transform.position.z);
-        rect.position = newPosition;
-        if(!IsRectTransformInsideSreen(rect))
+        public void OnDrag(PointerEventData eventData)
         {
-            rect.position = oldPos;
-        }
-        lastMousePosition = currentMousePosition;
-    }
-    
-    private bool IsRectTransformInsideSreen(RectTransform rectTransform)
-    {
-        bool isInside = false;
-        Vector3[] corners = new Vector3[4];
-        rectTransform.GetWorldCorners(corners);
-        int visibleCorners = 0;
-        Rect rect = new Rect(0,0,Screen.width, Screen.height);
-        foreach(Vector3 corner in corners)
-        {
-            if(rect.Contains(corner))
+            Vector2 currentMousePosition = eventData.position;
+            Vector2 diff = currentMousePosition - lastMousePosition;
+            RectTransform rect = GetComponent<RectTransform>();
+            Vector3 oldPos = rect.position;
+            Vector3 newPosition = rect.position +  new Vector3(diff.x, diff.y, transform.position.z);
+            rect.position = newPosition;
+            if(!IsRectTransformInsideSreen(rect))
             {
-                visibleCorners++;
+                rect.position = oldPos;
             }
+            lastMousePosition = currentMousePosition;
         }
-        if(visibleCorners == 4)
+    
+        private bool IsRectTransformInsideSreen(RectTransform rectTransform)
         {
-            isInside = true;
+            bool isInside = false;
+            Vector3[] corners = new Vector3[4];
+            rectTransform.GetWorldCorners(corners);
+            int visibleCorners = 0;
+            Rect rect = new Rect(0,0,Screen.width, Screen.height);
+            foreach(Vector3 corner in corners)
+            {
+                if(rect.Contains(corner))
+                {
+                    visibleCorners++;
+                }
+            }
+            if(visibleCorners == 4)
+            {
+                isInside = true;
+            }
+            return isInside;
         }
-        return isInside;
     }
 }

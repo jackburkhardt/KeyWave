@@ -1,42 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Interaction;
 using UnityEngine;
 
-public class AssignmentManager : MonoBehaviour
+namespace Assignments
 {
-    [SerializeField] private List<Assignment> _activeAssignments = new List<Assignment>();
-    [SerializeField] private List<Assignment> _inactiveAssignments;
-    [SerializeField] private List<Assignment> _completedAssignments = new List<Assignment>();
-
-    private void Awake()
+    public class AssignmentManager : MonoBehaviour
     {
-        GameEvent.OnChapterStart += OnChapterStart;
-    }
+        [SerializeField] private List<Assignment> _activeAssignments = new List<Assignment>();
+        [SerializeField] private List<Assignment> _inactiveAssignments;
+        [SerializeField] private List<Assignment> _completedAssignments = new List<Assignment>();
 
-    private void OnChapterStart()
-    {
-        // findobjects is not great but it's fine here
-        _inactiveAssignments = FindObjectsOfType<Assignment>().ToList();
-    }
+        private void Awake()
+        {
+            GameEvent.OnChapterStart += OnChapterStart;
+        }
 
-    public void ActivateAssignment(Assignment assignment)
-    {
-        _inactiveAssignments.Remove(assignment);
-        _activeAssignments.Add(assignment);
-        assignment.Activate();
-    }
+        private void OnChapterStart()
+        {
+            // findobjects is not great but it's fine here
+            _inactiveAssignments = FindObjectsOfType<Assignment>().ToList();
+        }
 
-    public void DelegateAssignment(Assignment assignment, Character character)
-    {
-        if (assignment.AssignmentType is AssignmentType.PlayerOnly or AssignmentType.PlayerTimeSensitive
-            or AssignmentType.PlayerEmergency) return;
+        public void ActivateAssignment(Assignment assignment)
+        {
+            _inactiveAssignments.Remove(assignment);
+            _activeAssignments.Add(assignment);
+            assignment.Activate();
+        }
 
-        character.TryRecieveAssignment(assignment); // TODO: handle if this fails
-    }
+        public void DelegateAssignment(Assignment assignment, Character character)
+        {
+            if (assignment.AssignmentType is AssignmentType.PlayerOnly or AssignmentType.PlayerTimeSensitive
+                or AssignmentType.PlayerEmergency) return;
 
-    private void OnDestroy()
-    {
-        GameEvent.OnChapterStart -= OnChapterStart;
+            character.TryRecieveAssignment(assignment); // TODO: handle if this fails
+        }
+
+        private void OnDestroy()
+        {
+            GameEvent.OnChapterStart -= OnChapterStart;
+        }
     }
 }

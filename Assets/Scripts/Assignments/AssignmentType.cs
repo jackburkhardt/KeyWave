@@ -1,9 +1,12 @@
-﻿public enum AssignmentType
+﻿namespace Assignments
 {
-    General,
-    PlayerOnly,
-    TimeSensitive,
-    Emergency,
-    PlayerTimeSensitive,
-    PlayerEmergency
+    public enum AssignmentType
+    {
+        General,
+        PlayerOnly,
+        TimeSensitive,
+        Emergency,
+        PlayerTimeSensitive,
+        PlayerEmergency
+    }
 }

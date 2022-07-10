@@ -3,40 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class Assignment : MonoBehaviour
+namespace Assignments
 {
-    [SerializeField] private AssignmentType _assignmentType;
-    public bool _locked;
-    [SerializeField] private int _timeToComplete; // in seconds
-    public List<Assignment> _dependentAssignments;
-    public string descriptor;
-    [SerializeField] private bool _completed;
-
-    public void Activate()
+    [Serializable]
+    public class Assignment : MonoBehaviour
     {
-        if (_assignmentType is AssignmentType.TimeSensitive or AssignmentType.PlayerTimeSensitive)
+        [SerializeField] private AssignmentType _assignmentType;
+        public bool _locked;
+        [SerializeField] private int _timeToComplete; // in seconds
+        public List<Assignment> _dependentAssignments;
+        public string descriptor;
+        [SerializeField] private bool _completed;
+
+        public void Activate()
         {
-            StartCoroutine(TimedAssignmentCountdown());
+            if (_assignmentType is AssignmentType.TimeSensitive or AssignmentType.PlayerTimeSensitive)
+            {
+                StartCoroutine(TimedAssignmentCountdown());
+            }
+        
         }
-        
-    }
     
-    private IEnumerator TimedAssignmentCountdown()
-    {
-        yield return new WaitForSeconds(_timeToComplete);
-        if (!_completed) Fail();
-    }
+        private IEnumerator TimedAssignmentCountdown()
+        {
+            yield return new WaitForSeconds(_timeToComplete);
+            if (!_completed) Fail();
+        }
     
-    public void Complete()
-    {
-        _completed = true;
-    }
+        public void Complete()
+        {
+            _completed = true;
+        }
 
-    public void Fail()
-    {
+        public void Fail()
+        {
         
-    }
+        }
 
-    public AssignmentType AssignmentType => _assignmentType;
+        public AssignmentType AssignmentType => _assignmentType;
+    }
 }
