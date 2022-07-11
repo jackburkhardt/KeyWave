@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assignments;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace Interaction
         private void Awake()
         {
             _outline = GetComponent<Outline>();
+            CharacterManager.SceneCharacters.Add(this);
         }
 
         public void Interact()

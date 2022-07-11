@@ -1,4 +1,7 @@
-﻿using Interaction;
+﻿using System.Linq;
+using DefaultNamespace;
+using Interaction;
+using JetBrains.Annotations;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -6,13 +9,20 @@ namespace Apps
 {
     public class TextManager : ScriptableObject
     {
-        [YarnCommand("func_player_sendtext")]
-        public void SendText(string text)
+        [YarnCommand("player_sendtext")]
+        public void SendTextMessage(string recipient, string message)
+        {
+            
+        }
+        
+        [YarnCommand("player_receivetext_noreply")]
+        public void ReceiveTextMessage(string sender, string message)
         {
             
         }
 
-        public void ActivateTextMessage(Character character, string yarnNode)
+        [YarnCommand("player_receivetext")]
+        public void ActivateTextMessage(string yarnNode, string sender)
         {
             
         }

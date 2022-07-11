@@ -4,11 +4,12 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
+using Yarn.Unity;
 using File = System.IO.File;
 
 namespace Apps
 {
-    public class EmailManager : ScriptableObject
+    public class EmailManager : MonoBehaviour
     {
         private static string emailsPath;
         private static string inboxPath;
@@ -20,8 +21,24 @@ namespace Apps
             inboxPath = Application.dataPath + "/GameData/Emails/inbox.json";
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
+            TestEmail();
         }
 
+        private void TestEmail()
+        {
+            Email email = new Email("Steve Becker", "Ava", "An idea for managing finances",
+                "Hi Ava, \n\ntake a look at these pictures and" +
+                "let me know what you think. \n\nThis could be big.",
+                new string[] { "idea-image1.png", "idea-image2.jpg" });
+            
+            StreamWriter sw = !File.Exists(emailsPath + email.Subject + ".json") ? File.CreateText(emailsPath + email.Subject + ".json") 
+                : new StreamWriter(emailsPath + email.Subject + ".json");
+            string json = JsonConvert.SerializeObject(email, Formatting.Indented);
+            sw.Write(json);
+            sw.Close();
+        }
+
+        [YarnCommand("deliver_email")]
         public static void DeliverEmail(string subject)
         {
             Email email = LoadEmailFromDisk(subject);
@@ -33,7 +50,7 @@ namespace Apps
         {
             try
             {
-                Email email = JsonConvert.DeserializeObject<Email>(File.ReadAllText(emailsPath + "subject" + ".json"));
+                Email email = JsonConvert.DeserializeObject<Email>(File.ReadAllText(emailsPath + subject + ".json"));
                 return email;
             }
             catch (Exception e)
