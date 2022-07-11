@@ -2,6 +2,7 @@
 
 <p align="center">
   <img width="265" height="300" src="https://github.com/jackburkhardt/KeyWave/blob/main/keywave.png">
+  <p>--- <a href="https://github.com/jackburkhardt/KeyWave/wiki">WIKI</a> ---</p>
 </p>
 
 ### What is KeyWave?
