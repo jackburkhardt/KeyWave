@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Interaction
 {
@@ -10,18 +13,58 @@ namespace Interaction
         [SerializeField] private float closePhoneY;
         [SerializeField] private float openCloseDuration;
         private bool transitioning;
-        [SerializeField] private List<Object> screens;
+        [SerializeField] private List<Object> screens = new List<Object>();
+        [SerializeField] private Transform phoneTransform;
+        [SerializeField] private Transform appTransform;
+        private List<GameObject> screenHistory = new List<GameObject>();
 
+        private void Awake()
+        {
+            screenHistory.Add(GameObject.Find("HomeScreen"));
+        }
 
         public void SwitchScreen(string screen)
         {
+            var screenPrefab = screens.Find(s => s.name == screen);
+            if (!screenPrefab)
+            {
+                Debug.LogError("Attempted to switch to screen \"" + screen + "\" but one by that name was not found. Are you sure the prefab was added to the screen list?");    
+                return;
+            }
+
+            //var screenGO = Instantiate(screenPrefab, phoneTransform.position, Quaternion.identity, phoneTransform) as GameObject;
+            var screenGO = Instantiate(screenPrefab, appTransform) as GameObject;
+            screenHistory.Add(screenGO);
+        }
+
+        public void GoBack()
+        {
+            if (screenHistory.Count <= 1)
+            {
+                StartClosePhone();
+                return;
+            }
             
+            Destroy(screenHistory.Last());
+            screenHistory.Remove(screenHistory.Last());
+
+        }
+
+        public void GoHome()
+        {
+            while (screenHistory.Count > 1)
+            {
+                Destroy(screenHistory.Last());
+                screenHistory.Remove(screenHistory.Last());
+            }
         }
         
         public void StartOpenPhone() => StartCoroutine(OpenPhone());
         private IEnumerator OpenPhone()
         {
+            Debug.Log("ttt");
             if (transitioning) yield break;
+            Debug.Log("dd");
             Vector3 startPos = transform.position;
             float t = 0f;
             transitioning = true;
@@ -42,6 +85,9 @@ namespace Interaction
             Vector3 startPos = transform.position;
             float t = 0f;
             transitioning = true;
+
+            GoHome();
+            
             while (t < openCloseDuration)
             {
                 t += Time.deltaTime;
