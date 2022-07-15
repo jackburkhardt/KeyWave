@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace Apps
+namespace Phone
 {
     public class CallManager : ScriptableObject
     {

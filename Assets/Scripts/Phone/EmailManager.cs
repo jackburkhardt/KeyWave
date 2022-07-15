@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.UI;
 using Yarn.Unity;
 using File = System.IO.File;
 
-namespace Apps
+namespace Phone
 {
     public class EmailManager : ScriptableObject
     {

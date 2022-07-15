@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using DefaultNamespace;
-using Interaction;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace Apps
+namespace Phone
 {
     public class TextManager : ScriptableObject
     {
@@ -32,14 +27,26 @@ namespace Apps
                 convo = new TextConversation(recipient, new List<TextMessage>());
                 _conversations.Add(recipient, convo);
             }
-            convo.Messages.Add(new TextMessage(true, message));    
+
+            var tm = new TextMessage(true, message);
+            convo.Messages.Add(tm);
+            GameEvent.SendText(convo, tm);
         
         }
         
         [YarnCommand("player_receivetext_noreply")]
         public void ReceiveTextMessage(string sender, string message)
         {
+            if (!_conversations.TryGetValue(sender, out var convo))
+            {
+                convo = new TextConversation(sender, new List<TextMessage>());
+                _conversations.Add(sender, convo);
+            }
             
+            var tm = new TextMessage(false, message);
+            convo.Messages.Add(tm);
+            GameEvent.ReceiveText(convo, tm);
+
         }
 
         [YarnCommand("player_receivetext")]
