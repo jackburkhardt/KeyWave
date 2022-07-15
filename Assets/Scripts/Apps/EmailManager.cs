@@ -9,7 +9,7 @@ using File = System.IO.File;
 
 namespace Apps
 {
-    public class EmailManager : MonoBehaviour
+    public class EmailManager : ScriptableObject
     {
         private static string emailsPath;
         private static string inboxPath;
@@ -36,6 +36,7 @@ namespace Apps
             string json = JsonConvert.SerializeObject(email, Formatting.Indented);
             sw.Write(json);
             sw.Close();
+            playerInbox.Add(email);
         }
 
         [YarnCommand("deliver_email")]
@@ -81,7 +82,7 @@ namespace Apps
 
         private void Save()
         {
-            StreamWriter sw = !File.Exists(inboxPath) ? File.CreateText(inboxPath) : new StreamWriter(inboxPath);
+            StreamWriter sw = new StreamWriter(inboxPath, false);
             string json = JsonConvert.SerializeObject(playerInbox, Formatting.Indented);
             sw.Write(json);
             sw.Close();

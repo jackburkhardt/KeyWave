@@ -2,41 +2,30 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Apps;
 using Assignments;
 using UnityEngine;
 
 public class DataSaver : MonoBehaviour
 {
-        
-    public void SaveState(GameState state)
+    public static EmailManager EmailManager;
+    public static CallManager CallManager;
+    public static TextManager TextManager;
+    
+    private void Awake()
     {
-        string destination = Application.persistentDataPath + "/assignments.dat";
-
-        var file = File.Exists(destination) ? File.OpenWrite(destination) : File.Create(destination);
-        BinaryFormatter bf = new BinaryFormatter();
+        EmailManager = ScriptableObject.CreateInstance<EmailManager>();
+        CallManager = ScriptableObject.CreateInstance<CallManager>();
+        TextManager = ScriptableObject.CreateInstance<TextManager>();
         
-        bf.Serialize(file, state);
-        file.Close();
+        GameEvent.LoadGame();
     }
 
-    public GameState LoadState()
+    private void OnDestroy()
     {
-        string destination = Application.persistentDataPath + "/assignments.dat";
-        FileStream file;
-        BinaryFormatter bf = new BinaryFormatter();
-
-        try
-        {
-            file = File.OpenRead(destination);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e);
-            throw;
-        }
-
-        return (GameState)bf.Deserialize(file);
+        GameEvent.SaveGame();
     }
+   
 }
 
 [Serializable]

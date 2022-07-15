@@ -33,6 +33,9 @@ public static class GameEvent
     public delegate void EmailDeliverDelegate();
     public delegate void GameSaveDelegate();
     public delegate void GameLoadDelegate();
+    public delegate void TextSendDelegate(TextConversation convo, TextMessage message);
+    public delegate void TextReceiveDelegate(TextConversation convo, TextMessage message);
+    
     
     // EVENTS
     public static event InteractionStartDelegate OnInteractionStart;
@@ -45,6 +48,8 @@ public static class GameEvent
     public static event EmailDeliverDelegate OnEmailDeliver;
     public static event GameSaveDelegate OnGameSave;
     public static event GameLoadDelegate OnGameLoad;
+    public static event TextSendDelegate OnTextSend;
+    public static event TextReceiveDelegate OnTextReceive;
 
     // TRIGGERS
     public static void InteractionStart(IInteractable interacObj) => OnInteractionStart?.Invoke(interacObj);
@@ -57,4 +62,6 @@ public static class GameEvent
     public static void DeliverEmail(Email email) => OnEmailDeliver?.Invoke();
     public static void SaveGame() => OnGameSave?.Invoke();
     public static void LoadGame() => OnGameLoad?.Invoke();
+    public static void SendText(TextConversation convo, TextMessage message) => OnTextSend?.Invoke(convo, message);
+    public static void ReceiveText(TextConversation convo, TextMessage message) => OnTextReceive?.Invoke(convo, message);
 }

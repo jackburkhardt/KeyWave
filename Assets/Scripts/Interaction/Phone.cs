@@ -16,6 +16,7 @@ namespace Interaction
         [SerializeField] private List<Object> screens = new List<Object>();
         [SerializeField] private Transform phoneTransform;
         [SerializeField] private Transform appTransform;
+        [SerializeField] private GameObject openPhoneButton;
         private List<GameObject> screenHistory = new List<GameObject>();
 
         private void Awake()
@@ -23,20 +24,25 @@ namespace Interaction
             screenHistory.Add(GameObject.Find("HomeScreen"));
         }
 
-        public void SwitchScreen(string screen)
+        public void UISwitchScreen(string screen) => SwitchScreen(screen);
+        public GameObject SwitchScreen(string screen)
         {
             var screenPrefab = screens.Find(s => s.name == screen);
             if (!screenPrefab)
             {
                 Debug.LogError("Attempted to switch to screen \"" + screen + "\" but one by that name was not found. Are you sure the prefab was added to the screen list?");    
-                return;
+                return null;
             }
 
             //var screenGO = Instantiate(screenPrefab, phoneTransform.position, Quaternion.identity, phoneTransform) as GameObject;
             var screenGO = Instantiate(screenPrefab, appTransform) as GameObject;
             screenHistory.Add(screenGO);
+            return screenGO;
         }
 
+        /// <summary>
+        /// Goes back to the previous screen, removing the current one in the process.
+        /// </summary>
         public void GoBack()
         {
             if (screenHistory.Count <= 1)
@@ -50,6 +56,9 @@ namespace Interaction
 
         }
 
+        /// <summary>
+        /// Removes all screens until it returns to the home screen.
+        /// </summary>
         public void GoHome()
         {
             while (screenHistory.Count > 1)
@@ -58,13 +67,20 @@ namespace Interaction
                 screenHistory.Remove(screenHistory.Last());
             }
         }
+
+        public void SendNotification()
+        {
+            
+        }
         
+        /// <summary>
+        /// Starts a coroutine to bring the phone into view.
+        /// </summary>
         public void StartOpenPhone() => StartCoroutine(OpenPhone());
         private IEnumerator OpenPhone()
         {
-            Debug.Log("ttt");
             if (transitioning) yield break;
-            Debug.Log("dd");
+            openPhoneButton.SetActive(false);
             Vector3 startPos = transform.position;
             float t = 0f;
             transitioning = true;
@@ -78,6 +94,9 @@ namespace Interaction
             transitioning = false;
         }
 
+        /// <summary>
+        /// Starts a coroutine to hide the phone from view.
+        /// </summary>
         public void StartClosePhone() => StartCoroutine(ClosePhone());
         private IEnumerator ClosePhone()
         {
@@ -95,6 +114,7 @@ namespace Interaction
                 transform.position = Vector3.Lerp(startPos, new Vector3(startPos.x, closePhoneY), t / openCloseDuration);
                 yield return null;
             }
+            openPhoneButton.SetActive(true);
             transitioning = false;
         }
     }
