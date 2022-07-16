@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace Phone
+namespace Apps
 {
     public class TextManager : ScriptableObject
     {

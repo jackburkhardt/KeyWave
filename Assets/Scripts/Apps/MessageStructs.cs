@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Phone
+namespace Apps
 {
     [Serializable]
     public struct Email

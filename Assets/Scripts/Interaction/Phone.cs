@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Interaction
 {
     public class Phone : MonoBehaviour
     {
+        public static Phone Instance;
         [SerializeField] private float openPhoneY;
         [SerializeField] private float closePhoneY;
         [SerializeField] private float openCloseDuration;
@@ -21,6 +23,7 @@ namespace Interaction
 
         private void Awake()
         {
+            Instance = this;
             screenHistory.Add(GameObject.Find("HomeScreen"));
         }
 

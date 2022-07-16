@@ -1,5 +1,6 @@
-﻿using Interaction;
-using Phone;
+﻿using Apps;
+using Interaction;
+using UnityEngine;
 
 public static class GameEvent
 {
@@ -36,8 +37,8 @@ public static class GameEvent
     public delegate void GameLoadDelegate();
     public delegate void TextSendDelegate(TextConversation convo, TextMessage message);
     public delegate void TextReceiveDelegate(TextConversation convo, TextMessage message);
-    
-    
+
+
     // EVENTS
     public static event InteractionStartDelegate OnInteractionStart;
     public static event InteractionEndDelegate OnInteractionEnd;

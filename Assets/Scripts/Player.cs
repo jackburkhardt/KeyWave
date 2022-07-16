@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private bool _isInteracting;
+    public static int Time = 1200;
 
     private void Awake()
     {

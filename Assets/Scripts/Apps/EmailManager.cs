@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using TMPro;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using Yarn.Unity;
 using File = System.IO.File;
+using Object = UnityEngine.Object;
 
-namespace Phone
+namespace Apps
 {
     public class EmailManager : ScriptableObject
     {
@@ -18,6 +22,7 @@ namespace Phone
         {
             emailsPath = Application.dataPath + "/GameData/Emails/";
             inboxPath = Application.dataPath + "/GameData/Emails/inbox.json";
+
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
             TestEmail();
@@ -78,7 +83,7 @@ namespace Phone
 
             return loadedImages;
         }
-
+        
         private void Save()
         {
             StreamWriter sw = new StreamWriter(inboxPath, false);
@@ -94,6 +99,8 @@ namespace Phone
                 playerInbox = JsonConvert.DeserializeObject<List<Email>>(File.ReadAllText(inboxPath));
             }
         }
+
+        public static List<Email> PlayerInbox => playerInbox;
 
         private void OnDestroy()
         {

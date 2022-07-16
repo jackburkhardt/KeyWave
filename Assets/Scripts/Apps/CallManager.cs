@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace Phone
+namespace Apps
 {
     public class CallManager : ScriptableObject
     {
-        private List<PhoneContact> _contacts = new List<PhoneContact>();
+        private static List<PhoneContact> _contacts = new List<PhoneContact>();
         private string _contactsPath;
 
         private void Awake()
@@ -50,6 +50,8 @@ namespace Phone
             sw.Write(json);
             sw.Close();
         }
+
+        public static List<PhoneContact> Contacts => _contacts;
 
         private void Load()
         {
