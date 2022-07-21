@@ -1,8 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Apps
+namespace Apps.Phone
 {
     public class ContactListView : MonoBehaviour
     {
@@ -13,7 +12,7 @@ namespace Apps
         
         private void OnEnable()
         {
-            foreach (var contact in CallManager.Contacts)
+            foreach (var contact in CallBackend.Contacts)
             {
                 var contactGO = Instantiate(listingPrefab, content) as GameObject;
                 var fields = contactGO.GetComponentsInChildren<TMP_Text>();

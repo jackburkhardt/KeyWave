@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Apps;
+using Apps.Phone;
 using Assignments;
 using UnityEngine;
 
 public class DataSaver : MonoBehaviour
 {
-    public static EmailManager EmailManager;
-    public static CallManager CallManager;
-    public static TextManager TextManager;
+    public static EmailBackend EmailBackend;
+    public static CallBackend CallBackend;
+    public static TextBackend TextBackend;
     
     private void Awake()
     {
-        EmailManager = ScriptableObject.CreateInstance<EmailManager>();
-        CallManager = ScriptableObject.CreateInstance<CallManager>();
-        TextManager = ScriptableObject.CreateInstance<TextManager>();
+        EmailBackend = ScriptableObject.CreateInstance<EmailBackend>();
+        CallBackend = ScriptableObject.CreateInstance<CallBackend>();
+        TextBackend = ScriptableObject.CreateInstance<TextBackend>();
         
         GameEvent.LoadGame();
     }

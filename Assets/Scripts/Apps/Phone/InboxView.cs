@@ -1,11 +1,9 @@
-﻿using System;
-using Interaction;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Apps
+namespace Apps.Phone
 {
     public class InboxView : MonoBehaviour
     {
@@ -15,7 +13,7 @@ namespace Apps
         
         private void OnEnable()
         {
-            foreach (var email in EmailManager.PlayerInbox)
+            foreach (var email in EmailBackend.PlayerInbox)
             {
                 var emailGO = Instantiate(email.Read ? readEmailPrefab : unreadEmailPrefab, content) as GameObject;
                 var fields = emailGO.GetComponentsInChildren<TMP_Text>();
@@ -27,10 +25,11 @@ namespace Apps
 
         private void OpenEmail(Email email)
         {
-            var emailBodyGO = Phone.Instance.SwitchScreen("EmailBody");
+            // jank level on this is a solid 7/10. todo: unjankify
+            var emailBodyGO = Interaction.Phone.Instance.SwitchScreen("EmailBody");
             var fields = emailBodyGO.GetComponentsInChildren<TMP_Text>();
-            fields[0].text = "From: " + email.Sender + "<" + email.Sender.Replace(' ', '.') + "@keywave.net>";
-            fields[1].text = "To: " + email.Recipient + "<" + email.Recipient.Replace(' ', '.') + "@keywave.net>";
+            fields[0].text = "From: " + email.Sender + " <" + email.Sender.Replace(' ', '.') + "@keywave.net>";
+            fields[1].text = "To: " + email.Recipient + " <" + email.Recipient.Replace(' ', '.') + "@keywave.net>";
             fields[2].text = email.Subject;
             fields[3].text = email.BodyText;
             email.Read = true;
@@ -38,7 +37,7 @@ namespace Apps
             // if there are no images, we are done here!
             if (email.BodyImagePaths.Length <= 0) return;
             
-            var images = EmailManager.LoadEmailImages(email.BodyImagePaths);
+            var images = EmailBackend.LoadEmailImages(email.BodyImagePaths);
             foreach (var image in images)
             {
                 var imageGO = new GameObject("image", typeof(RawImage));

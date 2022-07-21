@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Apps
+namespace Apps.Phone
 {
     public class Notifications : MonoBehaviour
     {

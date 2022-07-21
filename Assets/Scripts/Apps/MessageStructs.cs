@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+//TODO: rethink scope of these structs
 namespace Apps
 {
     [Serializable]

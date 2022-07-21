@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace Apps
+namespace Apps.Phone
 {
-    public class TextManager : ScriptableObject
+    public class TextBackend : ScriptableObject
     {
         private Dictionary<string, TextConversation> _conversations = new Dictionary<string, TextConversation>();
         private string _conversationsPath;

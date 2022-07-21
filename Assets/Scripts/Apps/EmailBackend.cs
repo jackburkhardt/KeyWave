@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 
 namespace Apps
 {
-    public class EmailManager : ScriptableObject
+    public class EmailBackend : ScriptableObject
     {
         private static string emailsPath;
         private static string inboxPath;

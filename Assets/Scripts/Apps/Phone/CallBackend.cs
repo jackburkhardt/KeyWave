@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace Apps
+namespace Apps.Phone
 {
-    public class CallManager : ScriptableObject
+    public class CallBackend : ScriptableObject
     {
         private static List<PhoneContact> _contacts = new List<PhoneContact>();
         private string _contactsPath;
