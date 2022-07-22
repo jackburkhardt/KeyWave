@@ -10,7 +10,7 @@ namespace Interaction
     /// <summary>
     /// An item in the game space which will create popups when clicked on.
     /// </summary>
-    public class PopupItem: MonoBehaviour, IInteractable
+    public class PopupItem : MonoBehaviour, IInteractable
     {
         private Outline _outline;
         [SerializeField] [TextArea] private string _internalDialogue;

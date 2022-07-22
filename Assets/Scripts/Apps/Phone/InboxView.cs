@@ -26,7 +26,7 @@ namespace Apps.Phone
         private void OpenEmail(Email email)
         {
             // jank level on this is a solid 7/10. todo: unjankify
-            var emailBodyGO = Interaction.Phone.Instance.SwitchScreen("EmailBody");
+            var emailBodyGO = Phone.Instance.SwitchScreen("EmailBody");
             var fields = emailBodyGO.GetComponentsInChildren<TMP_Text>();
             fields[0].text = "From: " + email.Sender + " <" + email.Sender.Replace(' ', '.') + "@keywave.net>";
             fields[1].text = "To: " + email.Recipient + " <" + email.Recipient.Replace(' ', '.') + "@keywave.net>";

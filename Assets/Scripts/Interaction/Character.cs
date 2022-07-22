@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assignments;
-using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
