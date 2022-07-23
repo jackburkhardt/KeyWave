@@ -13,7 +13,7 @@ namespace Apps.PC
 
         private void Awake()
         {
-            _searchFilePath = Application.dataPath + "/GameData/Search/";
+            _searchFilePath = Application.dataPath + "/GameData/Search/entries.json";
 
             GameEvent.OnGameLoad += Load;
         }
@@ -25,11 +25,11 @@ namespace Apps.PC
         private void Load()
         {
             List<SearchItem> textEntries;
-            if (File.Exists(_searchFilePath + "/entries.json"))
+            if (File.Exists(_searchFilePath))
             {
                 textEntries =
                     JsonConvert.DeserializeObject<List<SearchItem>>(
-                        File.ReadAllText(_searchFilePath + "/entries.json"));
+                        File.ReadAllText(_searchFilePath));
             }
             else
             {
