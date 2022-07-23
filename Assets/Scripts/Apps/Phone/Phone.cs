@@ -22,7 +22,7 @@ namespace Apps.Phone
         private void Awake()
         {
             Instance = this;
-            screenHistory.Add(GameObject.Find("HomeScreen"));
+            SwitchScreen("HomeScreen");
         }
 
         public void UISwitchScreen(string screen) => SwitchScreen(screen);
@@ -31,7 +31,7 @@ namespace Apps.Phone
             var screenPrefab = screens.Find(s => s.name == screen);
             if (!screenPrefab)
             {
-                Debug.LogError("Attempted to switch to screen \"" + screen + "\" but one by that name was not found. Are you sure the prefab was added to the screen list?");    
+                Debug.LogError("Attempted to switch to screen \"" + screen + "\" but one by that name was not found. Did you add the prefab to the screen list?");    
                 return null;
             }
 
@@ -54,7 +54,6 @@ namespace Apps.Phone
             
             Destroy(screenHistory.Last());
             screenHistory.Remove(screenHistory.Last());
-
         }
 
         /// <summary>
