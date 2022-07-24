@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         GameEvent.OnPopupCreate += () => TogglePopupIcons(true);
+        GameEvent.OnPCClose += () => _uiBackground.enabled = false;
+        GameEvent.OnPCOpen += () => _uiBackground.enabled = true;
     }
 
     // using unity events to trigger c# events...society...

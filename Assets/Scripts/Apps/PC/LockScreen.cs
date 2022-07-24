@@ -13,11 +13,11 @@ namespace Apps.PC
         private float textAnimateDelay = 0.2f;
         private int textAnimateCycles = 3;
 
-
-        public void AttemptLogon(string attempt)
+        public void AttemptLogon()
         {
-            if (attempt == _password)
+            if (_inputField.text == _password)
             {
+                if (_incorrectPassText.enabled) _incorrectPassText.enabled = false;
                 StartCoroutine(DoCorrectLogon());
             }
             else
@@ -45,7 +45,7 @@ namespace Apps.PC
                 textAnimateCycles--;
             }
 
-            PC.Instance.SwitchScreen("Desktop");
+            PC.Instance.SwitchScreen("Search");
             Destroy(this.gameObject);
         }
     }

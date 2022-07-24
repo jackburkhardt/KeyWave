@@ -10,13 +10,26 @@ namespace Apps.PC
         public static PC Instance;
         [SerializeField] private List<Object> screens = new List<Object>();
         [SerializeField] private Transform appTransform;
+        [SerializeField] private GameObject computerGO;
         public bool loggedIn;
         private List<GameObject> screenHistory = new List<GameObject>();
 
         private void Awake()
         {
             Instance = this;
+        }
+
+        public void OpenPC()
+        {
+            computerGO.SetActive(true);
             SwitchScreen(!loggedIn ? "LockScreen" : "Search");
+            GameEvent.OpenPC();
+        }
+
+        public void ClosePC()
+        {
+            computerGO.SetActive(false);
+            GameEvent.ClosePC();
         }
         
         

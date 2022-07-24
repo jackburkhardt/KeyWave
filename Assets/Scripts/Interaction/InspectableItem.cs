@@ -13,6 +13,7 @@ namespace Interaction
         private Outline _outline;
     
         // action to be executed after the main interaction completes
+        [SerializeField] private UnityEvent _interactAction;
         [SerializeField] private UnityEvent _postInteractAction;
         [SerializeField] [TextArea] private string _internalDialogue;
 
@@ -29,7 +30,8 @@ namespace Interaction
         public void Interact()
         {
             GameEvent.InteractionStart(this);
-            StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
+            _interactAction?.Invoke();
+            if (_internalDialogue != "") StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
         }
 
         public void EndInteraction()
