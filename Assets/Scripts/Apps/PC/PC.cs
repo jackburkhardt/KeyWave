@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -17,12 +18,12 @@ namespace Apps.PC
         private void Awake()
         {
             Instance = this;
+            SwitchScreen(!loggedIn ? "LockScreen" : "Search");
         }
 
         public void OpenPC()
         {
             computerGO.SetActive(true);
-            SwitchScreen(!loggedIn ? "LockScreen" : "Search");
             GameEvent.OpenPC();
         }
 
@@ -31,7 +32,16 @@ namespace Apps.PC
             computerGO.SetActive(false);
             GameEvent.ClosePC();
         }
-        
+
+        public void GoHome()
+        {
+            while (screenHistory.Count > 1)
+            {
+                Destroy(screenHistory.Last());
+                screenHistory.Remove(screenHistory.Last());
+            }
+            SwitchScreen(!loggedIn ? "LockScreen" : "Search");
+        }
         
         public void UISwitchScreen(string screen) => SwitchScreen(screen);
         public GameObject SwitchScreen(string screen)

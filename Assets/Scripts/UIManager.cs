@@ -1,4 +1,5 @@
 ﻿using System;
+using Apps.PC;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,9 +11,22 @@ public class UIManager : MonoBehaviour
     
     private void Awake()
     {
-        GameEvent.OnPopupCreate += () => TogglePopupIcons(true);
-        GameEvent.OnPCClose += () => _uiBackground.enabled = false;
-        GameEvent.OnPCOpen += () => _uiBackground.enabled = true;
+        GameEvent.OnPopupCreate += () =>
+        {
+            TogglePopupIcons(true);
+            _closePopup.GetComponent<Button>().onClick.AddListener(ClosePopups);
+        };
+        GameEvent.OnPCClose += () =>
+        {
+            _uiBackground.enabled = false;
+            TogglePopupIcons(false);
+        };
+        GameEvent.OnPCOpen += () =>
+        {
+            _uiBackground.enabled = true;
+            _closePopup.SetActive(true);
+            _closePopup.GetComponent<Button>().onClick.AddListener(() => PC.Instance.ClosePC());
+        };
     }
 
     // using unity events to trigger c# events...society...
@@ -25,6 +39,7 @@ public class UIManager : MonoBehaviour
     {
         _togglePopupViewMode.SetActive(visible);
         _closePopup.SetActive(visible);
+        _closePopup.GetComponent<Button>().onClick.RemoveAllListeners();
         _uiBackground.enabled = visible;
     }
 

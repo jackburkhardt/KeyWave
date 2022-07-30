@@ -1,6 +1,8 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace Apps.PC
 {
@@ -9,7 +11,16 @@ namespace Apps.PC
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Texture2D notFoundPage;
         [SerializeField] private Object popupPrefab;
-        
+
+        [SerializeField] private Button emailButton;
+        [SerializeField] private Button financeButton;
+        [SerializeField] private Button filesButton;
+
+        private void OnEnable()
+        {
+            emailButton.onClick.AddListener(() => PC.Instance.SwitchScreen("PCInbox"));
+        }
+
         public void TrySearch()
         {
             var result = SearchBackend.Search(inputField.text);

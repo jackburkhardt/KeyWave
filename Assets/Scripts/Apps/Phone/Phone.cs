@@ -14,7 +14,7 @@ namespace Apps.Phone
         [SerializeField] private float openCloseDuration;
         private bool transitioning;
         [SerializeField] private List<Object> screens = new List<Object>();
-        [SerializeField] private Transform phoneTransform;
+        [SerializeField] private Canvas phoneCanvas;
         [SerializeField] private Transform appTransform;
         [SerializeField] private GameObject openPhoneButton;
         private List<GameObject> screenHistory = new List<GameObject>();
@@ -23,6 +23,9 @@ namespace Apps.Phone
         {
             Instance = this;
             SwitchScreen("HomeScreen");
+
+            GameEvent.OnPCOpen += () => phoneCanvas.enabled = false;
+            GameEvent.OnPCClose += () => phoneCanvas.enabled = true;
         }
 
         public void UISwitchScreen(string screen) => SwitchScreen(screen);

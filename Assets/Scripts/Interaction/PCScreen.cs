@@ -6,20 +6,20 @@ using UnityEngine.UI;
 namespace Interaction
 {
     /// <summary>
-    /// An item in the game space which can be clicked on for internal dialogue.
+    /// Representation of in-scene PC screen.
     /// </summary>
-    public class InspectableItem : MonoBehaviour, IInteractable
+    public class PCScreen : MonoBehaviour, IInteractable
     {
         private Outline _outline;
     
         // action to be executed after the main interaction completes
         [SerializeField] private UnityEvent _interactAction;
         [SerializeField] private UnityEvent _postInteractAction;
-        [SerializeField] [TextArea] private string _internalDialogue;
 
         private void Awake()
         {
             _outline = GetComponent<Outline>();
+            GameEvent.OnPCClose += EndInteraction;
         }
 
         public void Discard()
@@ -31,7 +31,6 @@ namespace Interaction
         {
             GameEvent.InteractionStart(this);
             _interactAction?.Invoke();
-            //if (_internalDialogue != "") StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
         }
 
         public void EndInteraction()

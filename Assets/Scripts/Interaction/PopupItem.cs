@@ -28,13 +28,18 @@ namespace Interaction
         public void Interact()
         {
             GameEvent.InteractionStart(this);
-            if (_internalDialogue != "" && !PreviouslyInteractedWith) StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
-            GameEvent.PopupCreated();
-            foreach (var window in _containedPopupWindows)
+
+            if (_containedPopupWindows.Count > 0)
             {
-                GameObject p = Instantiate(window, Camera.main.transform.position, Quaternion.identity, Camera.main.transform) as GameObject;
-                _generatedPopups.Add(p);
+                GameEvent.PopupCreated();
+                foreach (var window in _containedPopupWindows)
+                {
+                    GameObject p = Instantiate(window, Camera.main.transform.position, Quaternion.identity,
+                        Camera.main.transform) as GameObject;
+                    _generatedPopups.Add(p);
+                }
             }
+
             PreviouslyInteractedWith = true;
         }
 
