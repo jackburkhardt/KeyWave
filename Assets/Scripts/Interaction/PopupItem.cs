@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using KeyWave;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Yarn.Unity;
 using Object = UnityEngine.Object;
 
 namespace Interaction
@@ -29,17 +31,16 @@ namespace Interaction
         {
             GameEvent.InteractionStart(this);
 
-            if (_containedPopupWindows.Count > 0)
+            GameEvent.PopupCreated();
+            foreach (var window in _containedPopupWindows)
             {
                 GameEvent.PopupCreated();
-                foreach (var window in _containedPopupWindows)
-                {
-                    GameObject p = Instantiate(window, Camera.main.transform.position, Quaternion.identity,
-                        Camera.main.transform) as GameObject;
-                    _generatedPopups.Add(p);
-                }
+                GameObject p = Instantiate(window, Camera.main.transform.position, Quaternion.identity,
+                    Camera.main.transform) as GameObject;
+                _generatedPopups.Add(p);
             }
-
+            
+            Dialogue.RunLine(name);
             PreviouslyInteractedWith = true;
         }
 

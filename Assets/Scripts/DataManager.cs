@@ -6,9 +6,10 @@ using Apps;
 using Apps.PC;
 using Apps.Phone;
 using Assignments;
+using Newtonsoft.Json;
 using UnityEngine;
 
-public class DataSaver : MonoBehaviour
+public class DataManager : MonoBehaviour
 {
     public static EmailBackend EmailBackend;
     public static CallBackend CallBackend;
@@ -25,6 +26,18 @@ public class DataSaver : MonoBehaviour
         SearchBackend = ScriptableObject.CreateInstance<SearchBackend>();
         
         GameEvent.LoadGame();
+    }
+    public static T DeserializeData<T>(string path)
+    {
+        return File.Exists(path) ? JsonConvert.DeserializeObject<T>(File.ReadAllText(path)) : default(T);
+    }
+
+    public static async void SerializeData(object obj, string path)
+    {
+        StreamWriter sw = new StreamWriter(path, false);
+        string json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+        await sw.WriteAsync(json);
+        sw.Close();
     }
 
     private void OnDestroy()

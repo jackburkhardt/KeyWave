@@ -54,21 +54,8 @@ namespace Apps.Phone
         {
             
         }
-        
-        private void Save()
-        {
-            StreamWriter sw = new StreamWriter(_conversationsPath, false);
-            string json = JsonConvert.SerializeObject(_conversations, Formatting.Indented);
-            sw.Write(json);
-            sw.Close();
-        }
 
-        private void Load()
-        {
-            if (File.Exists(_conversationsPath))
-            {
-                _conversations = JsonConvert.DeserializeObject<Dictionary<string, TextConversation>>(File.ReadAllText(_conversationsPath));
-            }
-        }
+        private void Save() => DataManager.SerializeData(_conversations, _conversationsPath);
+        private void Load() => _conversations = DataManager.DeserializeData<Dictionary<string, TextConversation>>(_conversationsPath);
     }
 }

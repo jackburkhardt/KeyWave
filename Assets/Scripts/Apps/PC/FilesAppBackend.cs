@@ -17,22 +17,6 @@ namespace Apps.PC
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
             
-            GenerateOneShot();
-        }
-
-        private void GenerateOneShot()
-        {
-            SimFolder newRoot = new SimFolder("root"), folder1 = new SimFolder("folder1"), folder2 = new SimFolder("folder2"), folder3 = new SimFolder("folder3"), folder4 = new SimFolder("folder4"), folder5 = new SimFolder("folder5");
-            folder4.Locked = true;
-            folder4.Password = "test";
-            folder5.Locked = true;
-            folder5.Password = "superSecurePassword";
-            folder1.ContainedFiles.Add(new SimFile("Finances.doc","document.png"));
-            folder1.ContainedFiles.Add(new SimFile("HiringList.pdf", "otherDoc.png"));
-            folder2.ContainedFiles.Add(new SimFile("Screenshot.png", "specialimage.png"));
-            newRoot.ContainedFolders = new List<SimFolder> {folder1, folder2, folder3, folder4, folder5};
-            _rootFolder = newRoot;
-            Save();
         }
 
         private void Save()

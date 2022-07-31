@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
@@ -16,16 +17,9 @@ namespace Apps.Phone
             _contactsPath = Application.dataPath + "/GameData/Phone/contacts.json";
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
-
-            TestContacts();
+            
         }
-
-        private void TestContacts()
-        {
-            PhoneContact contact = new PhoneContact("Steve Becker", 0900, 1700);
-            _contacts.Add(contact);
-        }
-
+        
         public static void OutboundCall(string character, string node)
         {
             
@@ -42,23 +36,11 @@ namespace Apps.Phone
         {
             _contacts.Add(new PhoneContact(contactName, open, close));
         }
-        
-        private void Save()
-        {
-            StreamWriter sw = new StreamWriter(_contactsPath, false);
-            string json = JsonConvert.SerializeObject(_contacts, Formatting.Indented);
-            sw.Write(json);
-            sw.Close();
-        }
 
         public static List<PhoneContact> Contacts => _contacts;
 
-        private void Load()
-        {
-            if (File.Exists(_contactsPath))
-            {
-                _contacts = JsonConvert.DeserializeObject<List<PhoneContact>>(File.ReadAllText(_contactsPath));
-            }
-        }
+        private void Save() => DataManager.SerializeData(_contacts, _contactsPath);
+        private void Load() => _contacts = DataManager.DeserializeData<List<PhoneContact>>(_contactsPath);
+
     }
 }

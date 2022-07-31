@@ -28,6 +28,10 @@ public class CameraFader : MonoBehaviour
         StartCoroutine(FadeFromColor(_defaultFadeSpeed));
     }
 
+    public IEnumerator FadeToColor(float speed) => FadeToColor(_defaultFadeColor, speed);
+
+    public IEnumerator FadeToColor() => FadeToColor(_defaultFadeColor, _defaultFadeSpeed);
+    
     public IEnumerator FadeToColor(Color color, float speed)
     {
         color.a = 0;
@@ -43,10 +47,8 @@ public class CameraFader : MonoBehaviour
         }
     }
 
-    public IEnumerator FadeToColor(float speed) => FadeToColor(_defaultFadeColor, speed);
-
-    public IEnumerator FadeToColor() => FadeToColor(_defaultFadeColor, _defaultFadeSpeed);
-
+    
+    public IEnumerator FadeFromColor() => FadeFromColor(_defaultFadeSpeed);
     public IEnumerator FadeFromColor(float speed)
     {
         var color = _fadeImage.color;
@@ -61,8 +63,6 @@ public class CameraFader : MonoBehaviour
         
     }
 
-    public IEnumerator FadeFromColor() => FadeFromColor(_defaultFadeSpeed);
-    
     public IEnumerator FadeInOut(Color color, float fadeSpeed)
     {
         yield return StartCoroutine(FadeToColor(color, fadeSpeed));;

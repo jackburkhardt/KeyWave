@@ -2,44 +2,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assignments
 {
-    [Serializable]
-    public class Assignment : MonoBehaviour
+ 
+    public class Assignment
     {
-        [SerializeField] private AssignmentType _assignmentType;
-        public bool _locked;
-        [SerializeField] private int _timeToComplete; // in seconds
-        public List<Assignment> _dependentAssignments;
-        public string descriptor;
-        [SerializeField] private bool _completed;
+        public string Name;
+        public AssignmentType Type;
+        public bool Locked;
+        public int TimeToComplete; // in seconds
+        public List<Assignment> DependentAssignments;
+        public string Descriptor;
+        public bool Completed;
 
-        public void Activate()
-        {
-            if (_assignmentType is AssignmentType.TimeSensitive or AssignmentType.PlayerTimeSensitive)
-            {
-                StartCoroutine(TimedAssignmentCountdown());
-            }
-        
-        }
-    
-        private IEnumerator TimedAssignmentCountdown()
-        {
-            yield return new WaitForSeconds(_timeToComplete);
-            if (!_completed) Fail();
-        }
-    
         public void Complete()
         {
-            _completed = true;
+            GameEvent.CompleteAssignment(this);
+            Completed = true;
         }
 
         public void Fail()
         {
-        
+            GameEvent.FailAssignment(this);
         }
 
-        public AssignmentType AssignmentType => _assignmentType;
+        public bool IsTimed => Type is AssignmentType.TimeSensitive or AssignmentType.PlayerTimeSensitive
+            or AssignmentType.Emergency or AssignmentType.PlayerEmergency;
     }
 }

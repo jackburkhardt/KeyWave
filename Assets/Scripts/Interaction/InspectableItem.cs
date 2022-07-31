@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using KeyWave;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,7 +16,6 @@ namespace Interaction
         // action to be executed after the main interaction completes
         [SerializeField] private UnityEvent _interactAction;
         [SerializeField] private UnityEvent _postInteractAction;
-        [SerializeField] [TextArea] private string _internalDialogue;
 
         private void Awake()
         {
@@ -31,7 +31,7 @@ namespace Interaction
         {
             GameEvent.InteractionStart(this);
             _interactAction?.Invoke();
-            //if (_internalDialogue != "") StartCoroutine(Dialogue.Instance.Run(_internalDialogue, this));
+            Dialogue.RunLine(name);
         }
 
         public void EndInteraction()

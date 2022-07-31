@@ -1,4 +1,5 @@
 ﻿using Apps;
+using Assignments;
 using Interaction;
 using UnityEngine;
 
@@ -25,36 +26,37 @@ public static class GameEvent
     
     
     // DELEGATES
-    public delegate void InteractionStartDelegate(IInteractable interacObj);
-    public delegate void InteractionEndDelegate(IInteractable interacObj);
+    public delegate void InteractionDelegate(IInteractable interacObj);
     public delegate void PopupViewChangeDelegate();
-    public delegate void PopupCreatedDelegate();
-    public delegate void PopupClosedDelegate();
-    public delegate void ChapterStartDelegate();
-    public delegate void ChapterEndDelegate();
+    public delegate void PopupDelegate();
+    public delegate void ChapterStartDelegate(int chapter);
+    public delegate void ChapterEndDelegate(int chapter);
     public delegate void EmailDeliverDelegate();
     public delegate void GameSaveDelegate();
     public delegate void GameLoadDelegate();
-    public delegate void TextSendDelegate(TextConversation convo, TextMessage message);
-    public delegate void TextReceiveDelegate(TextConversation convo, TextMessage message);
+    public delegate void TextDelegate(TextConversation convo, TextMessage message);
     public delegate void PCEventDelegate();
+    public delegate void AssignmentDelegate(Assignment assignment);
 
 
     // EVENTS
-    public static event InteractionStartDelegate OnInteractionStart;
-    public static event InteractionEndDelegate OnInteractionEnd;
+    public static event InteractionDelegate OnInteractionStart;
+    public static event InteractionDelegate OnInteractionEnd;
     public static event PopupViewChangeDelegate OnPopupViewChange;
-    public static event PopupCreatedDelegate OnPopupCreate;
-    public static event PopupClosedDelegate OnPopupClose;
+    public static event PopupDelegate OnPopupCreate;
+    public static event PopupDelegate OnPopupClose;
     public static event ChapterStartDelegate OnChapterStart;
     public static event ChapterEndDelegate OnChapterEnd;
     public static event EmailDeliverDelegate OnEmailDeliver;
     public static event GameSaveDelegate OnGameSave;
     public static event GameLoadDelegate OnGameLoad;
-    public static event TextSendDelegate OnTextSend;
-    public static event TextReceiveDelegate OnTextReceive;
+    public static event TextDelegate OnTextSend;
+    public static event TextDelegate OnTextReceive;
     public static event PCEventDelegate OnPCOpen;
     public static event PCEventDelegate OnPCClose;
+    public static event AssignmentDelegate OnAssignmentActive;
+    public static event AssignmentDelegate OnAssignmentComplete;
+    public static event AssignmentDelegate OnAssignmentFail;
 
     // TRIGGERS
     public static void InteractionStart(IInteractable interacObj) => OnInteractionStart?.Invoke(interacObj);
@@ -62,8 +64,8 @@ public static class GameEvent
     public static void ChangePopupView() => OnPopupViewChange?.Invoke();
     public static void PopupCreated() => OnPopupCreate?.Invoke();
     public static void PopupClose() => OnPopupClose?.Invoke();
-    public static void StartChapter() => OnChapterStart?.Invoke();
-    public static void EndChapter() => OnChapterEnd?.Invoke();
+    public static void StartChapter(int chapter) => OnChapterStart?.Invoke(chapter);
+    public static void EndChapter(int chapter) => OnChapterEnd?.Invoke(chapter);
     public static void DeliverEmail(Email email) => OnEmailDeliver?.Invoke();
     public static void SaveGame() => OnGameSave?.Invoke();
     public static void LoadGame() => OnGameLoad?.Invoke();
@@ -71,4 +73,7 @@ public static class GameEvent
     public static void ReceiveText(TextConversation convo, TextMessage message) => OnTextReceive?.Invoke(convo, message);
     public static void OpenPC() => OnPCOpen?.Invoke();
     public static void ClosePC() => OnPCClose?.Invoke();
+    public static void StartAssignment(Assignment assignment) => OnAssignmentActive?.Invoke(assignment);
+    public static void FailAssignment(Assignment assignment) => OnAssignmentFail?.Invoke(assignment);
+    public static void CompleteAssignment(Assignment assignment) => OnAssignmentComplete?.Invoke(assignment);
 }

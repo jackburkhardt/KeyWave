@@ -25,22 +25,6 @@ namespace Apps
 
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
-            TestEmail();
-        }
-
-        private void TestEmail()
-        {
-            Email email = new Email("Steve Becker", "Ava", "An idea for managing finances",
-                "Hi Ava, \n\ntake a look at these pictures and" +
-                "let me know what you think. \n\nThis could be big.",
-                new string[] { "idea-image1.png", "idea-image2.jpg" });
-            
-            StreamWriter sw = !File.Exists(emailsPath + email.Subject + ".json") ? File.CreateText(emailsPath + email.Subject + ".json") 
-                : new StreamWriter(emailsPath + email.Subject + ".json");
-            string json = JsonConvert.SerializeObject(email, Formatting.Indented);
-            sw.Write(json);
-            sw.Close();
-            playerInbox.Add(email);
         }
 
         [YarnCommand("deliver_email")]
@@ -84,21 +68,8 @@ namespace Apps
             return loadedImages;
         }
         
-        private void Save()
-        {
-            StreamWriter sw = new StreamWriter(inboxPath, false);
-            string json = JsonConvert.SerializeObject(playerInbox, Formatting.Indented);
-            sw.Write(json);
-            sw.Close();
-        }
-
-        private void Load()
-        {
-            if (File.Exists(inboxPath))
-            {
-                playerInbox = JsonConvert.DeserializeObject<List<Email>>(File.ReadAllText(inboxPath));
-            }
-        }
+        private void Save() => DataManager.SerializeData(playerInbox, inboxPath);
+        private void Load() => playerInbox = DataManager.DeserializeData<List<Email>>(inboxPath);
 
         public static List<Email> PlayerInbox => playerInbox;
 

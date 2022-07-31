@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Apps.PC;
+using Assignments;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _togglePopupViewMode;
     [SerializeField] private GameObject _closePopup;
     [SerializeField] private Image _uiBackground;
-    
+
     private void Awake()
     {
         GameEvent.OnPopupCreate += () =>
@@ -47,5 +52,35 @@ public class UIManager : MonoBehaviour
     {
         TogglePopupIcons(false);
         GameEvent.PopupClose();
+    }
+
+    public static IEnumerator FadeIn(Renderer renderer, float speed = 0.5f)
+    {
+        var color = renderer.material.color;
+
+        while (renderer.material.color.a < 1)
+        {
+            float fadeAmount = color.a + (speed * Time.deltaTime);
+            color = new Color(color.r, color.g, color.b, fadeAmount);
+            renderer.material.color = color;
+
+            yield return null;
+        }
+    }
+    
+    public static IEnumerator FadeOut(Renderer renderer, float speed = 0.5f, bool destroy = false)
+    {
+        var color = renderer.material.color;
+        
+        while (renderer.material.color.a > 0)
+        {
+            float fadeAmount = color.a - (speed * Time.deltaTime);
+            color = new Color(color.r, color.g, color.b, fadeAmount);
+            renderer.material.color = color;
+
+            yield return null;
+        }
+        
+        if (destroy) Destroy(renderer.gameObject);
     }
 }
