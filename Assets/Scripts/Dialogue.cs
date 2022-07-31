@@ -1,7 +1,4 @@
-﻿using System;
-using UnityEngine;
-using Yarn;
-using Yarn.Markup;
+﻿using UnityEngine;
 using Yarn.Unity;
 
 namespace KeyWave

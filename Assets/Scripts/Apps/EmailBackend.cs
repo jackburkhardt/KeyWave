@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 using Yarn.Unity;
-using File = System.IO.File;
-using Object = UnityEngine.Object;
 
 namespace Apps
 {
@@ -72,6 +67,26 @@ namespace Apps
         private void Load() => playerInbox = DataManager.DeserializeData<List<Email>>(inboxPath);
 
         public static List<Email> PlayerInbox => playerInbox;
+        
+        public struct Email
+        {
+            public string Sender;
+            public string Recipient;
+            public string Subject;
+            public string BodyText;
+            public string[] BodyImagePaths;
+            public bool Read;
+
+            public Email(string sender, string recipient, string subject, string bodyText, string[] bodyImagePaths)
+            {
+                Sender = sender;
+                Recipient = recipient;
+                Subject = subject;
+                BodyText = bodyText;
+                BodyImagePaths = bodyImagePaths;
+                Read = false;
+            }
+        }
 
         private void OnDestroy()
         {

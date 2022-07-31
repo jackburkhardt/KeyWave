@@ -1,7 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 namespace Apps.Phone
 {
@@ -23,7 +22,7 @@ namespace Apps.Phone
             }
         }
 
-        private void OpenEmail(Email email)
+        private void OpenEmail(EmailBackend.Email email)
         {
             // jank level on this is a solid 7/10. todo: unjankify
             var emailBodyGO = Phone.Instance.SwitchScreen("EmailBody");

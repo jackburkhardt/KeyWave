@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -57,5 +55,29 @@ namespace Apps.Phone
 
         private void Save() => DataManager.SerializeData(_conversations, _conversationsPath);
         private void Load() => _conversations = DataManager.DeserializeData<Dictionary<string, TextConversation>>(_conversationsPath);
+        
+        public struct TextConversation
+        {
+            public string Recipient;
+            public List<TextMessage> Messages;
+
+            public TextConversation(string recipient, List<TextMessage> messages)
+            {
+                Recipient = recipient;
+                Messages = messages;
+            }
+        }
+        
+        public struct TextMessage
+        {
+            public bool FromPlayer;
+            public string Content;
+
+            public TextMessage(bool fromPlayer, string content)
+            {
+                FromPlayer = fromPlayer;
+                Content = content;
+            }
+        }
     }
 }

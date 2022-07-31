@@ -23,7 +23,7 @@ namespace Interaction
 
         public void Interact()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void EndInteraction()

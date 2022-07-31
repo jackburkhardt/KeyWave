@@ -1,7 +1,7 @@
 ﻿using Apps;
+using Apps.Phone;
 using Assignments;
 using Interaction;
-using UnityEngine;
 
 public static class GameEvent
 {
@@ -34,7 +34,7 @@ public static class GameEvent
     public delegate void EmailDeliverDelegate();
     public delegate void GameSaveDelegate();
     public delegate void GameLoadDelegate();
-    public delegate void TextDelegate(TextConversation convo, TextMessage message);
+    public delegate void TextDelegate(TextBackend.TextConversation convo, TextBackend.TextMessage message);
     public delegate void PCEventDelegate();
     public delegate void AssignmentDelegate(Assignment assignment);
 
@@ -66,11 +66,11 @@ public static class GameEvent
     public static void PopupClose() => OnPopupClose?.Invoke();
     public static void StartChapter(int chapter) => OnChapterStart?.Invoke(chapter);
     public static void EndChapter(int chapter) => OnChapterEnd?.Invoke(chapter);
-    public static void DeliverEmail(Email email) => OnEmailDeliver?.Invoke();
+    public static void DeliverEmail(EmailBackend.Email email) => OnEmailDeliver?.Invoke();
     public static void SaveGame() => OnGameSave?.Invoke();
     public static void LoadGame() => OnGameLoad?.Invoke();
-    public static void SendText(TextConversation convo, TextMessage message) => OnTextSend?.Invoke(convo, message);
-    public static void ReceiveText(TextConversation convo, TextMessage message) => OnTextReceive?.Invoke(convo, message);
+    public static void SendText(TextBackend.TextConversation convo, TextBackend.TextMessage message) => OnTextSend?.Invoke(convo, message);
+    public static void ReceiveText(TextBackend.TextConversation convo, TextBackend.TextMessage message) => OnTextReceive?.Invoke(convo, message);
     public static void OpenPC() => OnPCOpen?.Invoke();
     public static void ClosePC() => OnPCClose?.Invoke();
     public static void StartAssignment(Assignment assignment) => OnAssignmentActive?.Invoke(assignment);

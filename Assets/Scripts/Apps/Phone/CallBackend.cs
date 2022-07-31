@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -42,5 +39,20 @@ namespace Apps.Phone
         private void Save() => DataManager.SerializeData(_contacts, _contactsPath);
         private void Load() => _contacts = DataManager.DeserializeData<List<PhoneContact>>(_contactsPath);
 
+        public struct PhoneContact
+        {
+            public string ContactName;
+            // time is represented on 24hr clock and uses 4 digits
+            // ex: 8:00 am -> 0800 , ex: 3:25pm -> 1525
+            public int StartAvailableTime; 
+            public int EndAvailableTime;
+
+            public PhoneContact(string contactName, int startAvailableTime, int endAvailableTime)
+            {
+                ContactName = contactName;
+                StartAvailableTime = startAvailableTime;
+                EndAvailableTime = endAvailableTime;
+            }
+        }
     }
 }

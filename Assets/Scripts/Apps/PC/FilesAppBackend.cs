@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Apps.PC
@@ -19,23 +16,9 @@ namespace Apps.PC
             
         }
 
-        private void Save()
-        {
-            StreamWriter sw = new StreamWriter(_filesLocation, false);
-            string json = JsonConvert.SerializeObject(_rootFolder, Formatting.Indented);
-            sw.Write(json);
-            sw.Close();
-        }
-
-        private void Load()
-        {
-            if (File.Exists(_filesLocation))
-            {
-                _rootFolder = JsonConvert.DeserializeObject<SimFolder>(File.ReadAllText(_filesLocation));
-            }
-        }
-
-        [Serializable]
+        private void Save() => DataManager.SerializeData(_rootFolder, _filesLocation);
+        private void Load() => _rootFolder = DataManager.DeserializeData<SimFolder>(_filesLocation);
+        
         private struct SimFolder
         {
             public string Name;
@@ -53,8 +36,7 @@ namespace Apps.PC
                 ContainedFiles = new List<SimFile>();
             }
         }
-
-        [Serializable]
+        
         private struct SimFile
         {
             public string Name;

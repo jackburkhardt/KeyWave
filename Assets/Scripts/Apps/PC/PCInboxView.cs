@@ -24,7 +24,7 @@ namespace Apps.PC
             }
         }
 
-        private void OpenEmail(Email email)
+        private void OpenEmail(EmailBackend.Email email)
         {
             if (emailView.childCount > 0)
             {

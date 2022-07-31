@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Yarn.Unity;
-using Object = UnityEngine.Object;
 
 namespace Interaction
 {
