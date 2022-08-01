@@ -6,23 +6,24 @@ namespace Assignments
     public class Assignment
     {
         public string Name;
+        public string Descriptor;
         public AssignmentType Type;
         public bool Locked;
         public int TimeToComplete; // in seconds
         public List<Assignment> DependentAssignments;
-        public string Descriptor;
         public bool Completed;
 
-        public void Complete()
+        public Assignment(string name, string descriptor, AssignmentType type, bool locked, int timeToComplete, List<Assignment> dependentAssignments, bool completed)
         {
-            GameEvent.CompleteAssignment(this);
-            Completed = true;
+            Name = name;
+            Descriptor = descriptor;
+            Type = type;
+            Locked = locked;
+            TimeToComplete = timeToComplete;
+            DependentAssignments = dependentAssignments;
+            Completed = completed;
         }
-
-        public void Fail()
-        {
-            GameEvent.FailAssignment(this);
-        }
+        
 
         public bool IsTimed => Type is AssignmentType.TimeSensitive or AssignmentType.PlayerTimeSensitive
             or AssignmentType.Emergency or AssignmentType.PlayerEmergency;

@@ -12,7 +12,7 @@ namespace Apps.PC
 
         private void Awake()
         {
-            _searchFilePath = Application.dataPath + "/GameData/Search/entries.json";
+            _searchFilePath = Application.streamingAssetsPath + "/GameData/Search/entries.json";
 
             GameEvent.OnGameLoad += Load;
         }

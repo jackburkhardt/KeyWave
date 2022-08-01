@@ -51,5 +51,4 @@ public struct GameState
 {
     public int Chapter;
     public List<Assignment> Assignments;
-    public Location LastLocation;
 }

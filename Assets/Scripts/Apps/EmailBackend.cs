@@ -15,8 +15,8 @@ namespace Apps
 
         public void Awake()
         {
-            emailsPath = Application.dataPath + "/GameData/Emails/";
-            inboxPath = Application.dataPath + "/GameData/Emails/inbox.json";
+            emailsPath = Application.streamingAssetsPath + "/GameData/Emails/";
+            inboxPath = Application.streamingAssetsPath + "/GameData/Emails/inbox.json";
 
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;

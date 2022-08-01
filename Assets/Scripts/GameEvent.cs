@@ -29,8 +29,7 @@ public static class GameEvent
     public delegate void InteractionDelegate(IInteractable interacObj);
     public delegate void PopupViewChangeDelegate();
     public delegate void PopupDelegate();
-    public delegate void ChapterStartDelegate(int chapter);
-    public delegate void ChapterEndDelegate(int chapter);
+    public delegate void ChapterDelegate(int chapter);
     public delegate void EmailDeliverDelegate();
     public delegate void GameSaveDelegate();
     public delegate void GameLoadDelegate();
@@ -45,8 +44,8 @@ public static class GameEvent
     public static event PopupViewChangeDelegate OnPopupViewChange;
     public static event PopupDelegate OnPopupCreate;
     public static event PopupDelegate OnPopupClose;
-    public static event ChapterStartDelegate OnChapterStart;
-    public static event ChapterEndDelegate OnChapterEnd;
+    public static event ChapterDelegate OnChapterStart;
+    public static event ChapterDelegate OnChapterEnd;
     public static event EmailDeliverDelegate OnEmailDeliver;
     public static event GameSaveDelegate OnGameSave;
     public static event GameLoadDelegate OnGameLoad;

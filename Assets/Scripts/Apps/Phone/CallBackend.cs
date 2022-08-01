@@ -11,7 +11,7 @@ namespace Apps.Phone
 
         private void Awake()
         {
-            _contactsPath = Application.dataPath + "/GameData/Phone/contacts.json";
+            _contactsPath = Application.streamingAssetsPath + "/GameData/Phone/contacts.json";
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
             

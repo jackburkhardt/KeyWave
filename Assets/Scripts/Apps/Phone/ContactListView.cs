@@ -16,7 +16,7 @@ namespace Apps.Phone
             {
                 var contactGO = Instantiate(listingPrefab, content) as GameObject;
                 var fields = contactGO.GetComponentsInChildren<TMP_Text>();
-                bool available = Player.Time < contact.EndAvailableTime && Player.Time > contact.StartAvailableTime;
+                bool available = GameManager.Time < contact.EndAvailableTime && GameManager.Time > contact.StartAvailableTime;
                 fields[0].text = contact.ContactName;
                 fields[1].text = available
                     ? "Available to call!"

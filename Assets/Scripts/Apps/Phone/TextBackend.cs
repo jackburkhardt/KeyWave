@@ -11,7 +11,7 @@ namespace Apps.Phone
         
         private void Awake()
         {
-            _conversationsPath = Application.dataPath + "/GameData/Texts/conversations.json";
+            _conversationsPath = Application.streamingAssetsPath + "/GameData/Texts/conversations.json";
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
         }

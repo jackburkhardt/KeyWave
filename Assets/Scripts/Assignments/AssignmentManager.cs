@@ -5,14 +5,19 @@ using Interaction;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Yarn.Unity;
 
 namespace Assignments
 {
     public class AssignmentManager : MonoBehaviour
     {
+
+        private string _assignmentPath;
+            
         [SerializeField] public static List<Assignment> _activeAssignments = new List<Assignment>();
-        [SerializeField] public static List<Assignment> _inactiveAssignments;
+        [SerializeField] public static List<Assignment> _inactiveAssignments = new List<Assignment>();
         [SerializeField] public static List<Assignment> _completedAssignments = new List<Assignment>();
+        public static List<Assignment> _failedAssignments = new List<Assignment>();
         
         [SerializeField] private Transform _assignmentsDisplay;
         [SerializeField] private Object _assignmentListingPrefab;
@@ -23,6 +28,9 @@ namespace Assignments
             GameEvent.OnChapterStart += OnChapterStart;
             GameEvent.OnAssignmentActive += AddAssignmentToDisplay;
             GameEvent.OnAssignmentComplete += RemoveAssignmentFromDisplay;
+            GameEvent.OnAssignmentFail += RemoveAssignmentFromDisplay;
+
+            _assignmentPath = Application.streamingAssetsPath + "/GameData/Assignments/";
         }
 
         private void OnChapterStart(int chapter)
@@ -30,6 +38,7 @@ namespace Assignments
 
         }
         
+        [YarnCommand("activate_assignment")]
         public static void ActivateAssignment(string name)
         {
             Assignment assignment = _inactiveAssignments.FirstOrDefault(inactive => inactive.Name == name);
@@ -38,6 +47,37 @@ namespace Assignments
             _inactiveAssignments.Remove(assignment);
             _activeAssignments.Add(assignment);
             GameEvent.StartAssignment(assignment);
+        }
+
+        [YarnCommand("complete_assignment")]
+        public static void CompleteAssignment(string name)
+        {
+            Assignment assignment = _inactiveAssignments.FirstOrDefault(inactive => inactive.Name == name);
+            if (assignment == default) return;
+            
+            _completedAssignments.Add(assignment);
+            _activeAssignments.Remove(assignment);
+            GameEvent.CompleteAssignment(assignment);
+        }
+
+        [YarnCommand("fail_assignment")]
+        public static void FailAssignment(string name)
+        {
+            Assignment assignment = _inactiveAssignments.FirstOrDefault(inactive => inactive.Name == name);
+            if (assignment == default) return;
+            
+            _failedAssignments.Add(assignment);
+            _activeAssignments.Remove(assignment);
+            GameEvent.FailAssignment(assignment);
+        }
+        
+
+        public static void DelegateAssignment(Assignment assignment, Character character)
+        {
+            if (assignment.Type is AssignmentType.PlayerOnly or AssignmentType.PlayerTimeSensitive
+                or AssignmentType.PlayerEmergency) return;
+
+            character.TryRecieveAssignment(assignment); // TODO: handle if this fails
         }
         
         private void AddAssignmentToDisplay(Assignment assignment)
@@ -83,17 +123,12 @@ namespace Assignments
 
             if (!assignment.Completed)
             {
-                assignment.Fail();
+                FailAssignment(assignment.Name);
             }
         }
 
-        public static void DelegateAssignment(Assignment assignment, Character character)
-        {
-            if (assignment.Type is AssignmentType.PlayerOnly or AssignmentType.PlayerTimeSensitive
-                or AssignmentType.PlayerEmergency) return;
-
-            character.TryRecieveAssignment(assignment); // TODO: handle if this fails
-        }
+        private void Load() => _inactiveAssignments =
+            DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter{GameManager.Chapter}.json");
 
         private void OnDestroy()
         {

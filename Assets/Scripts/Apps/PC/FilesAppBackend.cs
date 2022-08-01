@@ -10,7 +10,7 @@ namespace Apps.PC
         
         private void Awake()
         {
-            _filesLocation = Application.dataPath + "/GameData/SimFiles/tree.json";
+            _filesLocation = Application.streamingAssetsPath + "/GameData/SimFiles/tree.json";
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
             

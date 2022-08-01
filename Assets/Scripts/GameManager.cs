@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
 
     [SerializeField] private Camera _camera;
     [SerializeField] private LayerMask _interactLayerMask;
     public static bool _controlsEnabled = true;
     private GameObject lastHitGO;
+    private static int time;
+    private static int chapter;
 
     private void Awake()
     {
@@ -19,4 +22,9 @@ public class InputManager : MonoBehaviour
         if (!_controlsEnabled) return;
 
     }
+
+    public static int Time => time;
+    public static int Chapter => chapter;
+    public static bool ControlsEnabled => _controlsEnabled;
+
 }
