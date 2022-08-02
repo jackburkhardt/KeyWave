@@ -33,11 +33,6 @@ namespace Assignments
             }
         }
 
-        private void OnAssignmentComplete(Assignment assignment)
-        {
-            
-        }
-        
         private void AddAssignmentToDisplay(Assignment assignment)
         {
             var newDisplay = Instantiate(_assignmentListingPrefab, transform) as GameObject;

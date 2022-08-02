@@ -13,11 +13,9 @@ namespace Assignments
 {
     public class AssignmentManager : MonoBehaviour
     {
-
         private string _assignmentPath;
         public static List<Assignment> _chapterAssignments = new List<Assignment>();
         
-
         private void Awake()
         {
             GameEvent.OnChapterStart += OnChapterStart;
@@ -98,10 +96,10 @@ namespace Assignments
         }
 
         private void Load() => _chapterAssignments = 
-            DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter/{GameManager.Chapter}.json");
+            DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter{GameManager.Chapter}.json");
 
         private void Save() =>
-            DataManager.SerializeData(_chapterAssignments, $"{_assignmentPath}Chapter/{GameManager.Chapter}.json");
+            DataManager.SerializeData(_chapterAssignments, $"{_assignmentPath}Chapter{GameManager.Chapter}.json");
 
         private void OnDestroy()
         {
