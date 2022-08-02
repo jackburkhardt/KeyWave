@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Yarn.Unity;
+using AssignmentType = Assignments.Assignment.AssignmentType;
+using AssignmentState = Assignments.Assignment.AssignmentState;
 
 namespace Assignments
 {
@@ -13,103 +15,71 @@ namespace Assignments
     {
 
         private string _assignmentPath;
-            
-        [SerializeField] public static List<Assignment> _activeAssignments = new List<Assignment>();
-        [SerializeField] public static List<Assignment> _inactiveAssignments = new List<Assignment>();
-        [SerializeField] public static List<Assignment> _completedAssignments = new List<Assignment>();
-        public static List<Assignment> _failedAssignments = new List<Assignment>();
+        public static List<Assignment> _chapterAssignments = new List<Assignment>();
         
-        [SerializeField] private Transform _assignmentsDisplay;
-        [SerializeField] private Object _assignmentListingPrefab;
-        private Dictionary<AssignmentType, Sprite> _assignmentIcons = new Dictionary<AssignmentType, Sprite>( );
 
         private void Awake()
         {
             GameEvent.OnChapterStart += OnChapterStart;
-            GameEvent.OnAssignmentActive += AddAssignmentToDisplay;
-            GameEvent.OnAssignmentComplete += RemoveAssignmentFromDisplay;
-            GameEvent.OnAssignmentFail += RemoveAssignmentFromDisplay;
 
             _assignmentPath = Application.streamingAssetsPath + "/GameData/Assignments/";
         }
 
         private void OnChapterStart(int chapter)
         {
-
+            
         }
-        
+
         [YarnCommand("activate_assignment")]
         public static void ActivateAssignment(string name)
         {
-            Assignment assignment = _inactiveAssignments.FirstOrDefault(inactive => inactive.Name == name);
-            if (assignment == default) return;
-            
-            _inactiveAssignments.Remove(assignment);
-            _activeAssignments.Add(assignment);
+            Assignment assignment = _chapterAssignments.FirstOrDefault(inactive => inactive.Name == name);
+            if (assignment.Equals(default))
+            {
+                Debug.LogError("ActivateAssignment: An assignment by the name of \"{name}\" could not be found.");
+                return;
+            }
+
+            assignment.State = AssignmentState.Active;
             GameEvent.StartAssignment(assignment);
         }
 
         [YarnCommand("complete_assignment")]
         public static void CompleteAssignment(string name)
         {
-            Assignment assignment = _inactiveAssignments.FirstOrDefault(inactive => inactive.Name == name);
-            if (assignment == default) return;
-            
-            _completedAssignments.Add(assignment);
-            _activeAssignments.Remove(assignment);
+            Assignment assignment = _chapterAssignments.FirstOrDefault(inactive => inactive.Name == name);
+            if (assignment.Equals(default))
+            {
+                Debug.LogError("CompleteAssignment: An assignment by the name of \"{name}\" could not be found.");
+                return;
+            }
+
+            assignment.State = AssignmentState.Completed;
             GameEvent.CompleteAssignment(assignment);
         }
 
         [YarnCommand("fail_assignment")]
         public static void FailAssignment(string name)
         {
-            Assignment assignment = _inactiveAssignments.FirstOrDefault(inactive => inactive.Name == name);
-            if (assignment == default) return;
-            
-            _failedAssignments.Add(assignment);
-            _activeAssignments.Remove(assignment);
+            Assignment assignment = _chapterAssignments.FirstOrDefault(inactive => inactive.Name == name);
+            if (assignment.Equals(default))
+            {
+                Debug.LogError("FailAssignment: An assignment by the name of \"{name}\" could not be found.");
+                return;
+            }
+
+            assignment.State = AssignmentState.Failed;
             GameEvent.FailAssignment(assignment);
         }
         
-
         public static void DelegateAssignment(Assignment assignment, Character character)
         {
-            if (assignment.Type is AssignmentType.PlayerOnly or AssignmentType.PlayerTimeSensitive
+            if (assignment.Type is AssignmentType.PlayerOnly or AssignmentType.PlayerTimed
                 or AssignmentType.PlayerEmergency) return;
 
             character.TryRecieveAssignment(assignment); // TODO: handle if this fails
         }
         
-        private void AddAssignmentToDisplay(Assignment assignment)
-        {
-            var newDisplay = Instantiate(_assignmentListingPrefab, _assignmentsDisplay) as GameObject;
-        
-            _assignmentIcons.TryGetValue(assignment.Type, out var icon);
-            newDisplay.GetComponent<Image>().sprite = icon ? icon : _assignmentIcons[0];
-        
-            var fields = newDisplay.GetComponents<TMP_Text>();
-            fields[0].text = assignment.Name;
-            fields[1].text = assignment.Descriptor;
-
-            if (assignment.IsTimed)
-            {
-                StartCoroutine(DoAssignmentCountdown(assignment, fields[3]));
-            }
-
-            StartCoroutine(UIManager.FadeIn(newDisplay.GetComponent<Renderer>()));
-        }
-    
-        private void RemoveAssignmentFromDisplay(Assignment assignment)
-        {
-            foreach (Transform child in _assignmentsDisplay)
-            {
-                if (child.GetComponent<Assignment>().Name == assignment.Name)
-                {
-                    StartCoroutine(UIManager.FadeOut(child.GetComponent<Renderer>(), 0.5f, true));
-                }
-            }
-        }
-
         private IEnumerator DoAssignmentCountdown(Assignment assignment, TMP_Text timeleftText)
         {
             timeleftText.enabled = true;
@@ -127,14 +97,15 @@ namespace Assignments
             }
         }
 
-        private void Load() => _inactiveAssignments =
-            DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter{GameManager.Chapter}.json");
+        private void Load() => _chapterAssignments = 
+            DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter/{GameManager.Chapter}.json");
+
+        private void Save() =>
+            DataManager.SerializeData(_chapterAssignments, $"{_assignmentPath}Chapter/{GameManager.Chapter}.json");
 
         private void OnDestroy()
         {
             GameEvent.OnChapterStart -= OnChapterStart;
-            GameEvent.OnAssignmentActive += AddAssignmentToDisplay;
-            GameEvent.OnAssignmentComplete += RemoveAssignmentFromDisplay;
         }
     }
 }

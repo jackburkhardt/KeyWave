@@ -2,30 +2,49 @@
 
 namespace Assignments
 {
- 
-    public class Assignment
+    public struct Assignment
     {
         public string Name;
         public string Descriptor;
         public AssignmentType Type;
-        public bool Locked;
+        public AssignmentState State;
         public int TimeToComplete; // in seconds
         public List<Assignment> DependentAssignments;
-        public bool Completed;
 
-        public Assignment(string name, string descriptor, AssignmentType type, bool locked, int timeToComplete, List<Assignment> dependentAssignments, bool completed)
+        public Assignment(string name, string descriptor, AssignmentType type, AssignmentState state, int timeToComplete, List<Assignment> dependentAssignments)
         {
             Name = name;
             Descriptor = descriptor;
             Type = type;
-            Locked = locked;
+            State = state;
             TimeToComplete = timeToComplete;
             DependentAssignments = dependentAssignments;
-            Completed = completed;
         }
-        
 
-        public bool IsTimed => Type is AssignmentType.TimeSensitive or AssignmentType.PlayerTimeSensitive
+        public bool IsTimed => this.Type is AssignmentType.Timed or AssignmentType.PlayerTimed
             or AssignmentType.Emergency or AssignmentType.PlayerEmergency;
+
+        public bool Over => this.State is AssignmentState.Completed or AssignmentState.Inactive or AssignmentState.Failed;
+
+        public bool Completed => this.State == AssignmentState.Completed;
+        
+        public enum AssignmentType
+        {
+            General,
+            Locked,
+            PlayerOnly,
+            Timed,
+            Emergency,
+            PlayerTimed,
+            PlayerEmergency
+        }
+
+        public enum AssignmentState
+        {
+            Inactive,
+            Active,
+            Completed,
+            Failed
+        }
     }
 }
