@@ -58,6 +58,7 @@ namespace Assignments
         private IEnumerator DisplayCountdownText(Assignment assignment, TMP_Text text)
         {
             int timeLeft = assignment.TimeToComplete;
+            text.enabled = true;
 
             while (timeLeft > 0)
             {
@@ -73,6 +74,7 @@ namespace Assignments
         private IEnumerator DisplaySuccess(Assignment assignment)
         {
             var text = FindListing(assignment).GetComponents<TMP_Text>()[3];
+            text.enabled = true;
             text.color = Color.green;
             text.text = "COMPLETE!";
             
@@ -83,6 +85,7 @@ namespace Assignments
         private IEnumerator DisplayFail(Assignment assignment)
         {
             var text = FindListing(assignment).GetComponents<TMP_Text>()[3];
+            text.enabled = true;
             text.color = Color.red;
             text.text = "FAILED!";
 
