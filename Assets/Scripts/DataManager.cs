@@ -15,6 +15,7 @@ public class DataManager : MonoBehaviour
     public static TextBackend TextBackend;
     public static FilesAppBackend FilesAppBackend;
     public static SearchBackend SearchBackend;
+    public static AssignmentManager AssignmentManager;
     
     private void Awake()
     {
@@ -23,12 +24,21 @@ public class DataManager : MonoBehaviour
         TextBackend = ScriptableObject.CreateInstance<TextBackend>();
         FilesAppBackend = ScriptableObject.CreateInstance<FilesAppBackend>();
         SearchBackend = ScriptableObject.CreateInstance<SearchBackend>();
+        AssignmentManager = ScriptableObject.CreateInstance<AssignmentManager>();
         
         GameEvent.LoadGame();
     }
     public static T DeserializeData<T>(string path)
     {
-        return File.Exists(path) ? JsonConvert.DeserializeObject<T>(File.ReadAllText(path)) : default(T);
+        if (File.Exists(path))
+        {
+            return JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
+        }
+        else
+        {
+            Debug.LogError($"DataManager: The path \"{path}\" was not able to be loaded.");
+            return default(T);
+        }
     }
 
     public static async void SerializeData(object obj, string path)
@@ -44,11 +54,4 @@ public class DataManager : MonoBehaviour
         GameEvent.SaveGame();
     }
    
-}
-
-[Serializable]
-public struct GameState
-{
-    public int Chapter;
-    public List<Assignment> Assignments;
 }

@@ -38,9 +38,9 @@ namespace Assignments
             var newDisplay = Instantiate(_assignmentListingPrefab, transform) as GameObject;
         
             _assignmentIcons.TryGetValue(assignment.Type, out var icon);
-            newDisplay.GetComponent<Image>().sprite = icon ? icon : _assignmentIcons[0];
+            newDisplay.GetComponentInChildren<Image>().sprite = icon ? icon : _assignmentIcons[0];
         
-            var fields = newDisplay.GetComponents<TMP_Text>();
+            var fields = newDisplay.GetComponentsInChildren<TMP_Text>();
             fields[0].text = assignment.Name;
             fields[1].text = assignment.Descriptor;
 

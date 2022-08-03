@@ -8,7 +8,6 @@ namespace Apps.PC
     {
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Texture2D notFoundPage;
-        [SerializeField] private Object popupPrefab;
 
         [SerializeField] private Button emailButton;
         [SerializeField] private Button financeButton;
@@ -27,13 +26,10 @@ namespace Apps.PC
 
         private void OpenSearchResult(Texture2D tex)
         {
-            var newPopup = Instantiate(popupPrefab, transform) as GameObject;
-            newPopup.GetComponentInChildren<RawImage>().texture = tex;
-        }
-
-        public void Close()
-        {
-            Destroy(this.gameObject);
+            var resultScreen = PC.Instance.SwitchScreen("SearchResult");
+            resultScreen.GetComponentInChildren<RawImage>().texture = tex;
+            resultScreen.GetComponentInChildren<Text>().text = $"Search result for: \"{inputField.text}\"";
+            resultScreen.GetComponent<Button>().onClick.AddListener(() => PC.Instance.GoBack());
         }
     }
 }

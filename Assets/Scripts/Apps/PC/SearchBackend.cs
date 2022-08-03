@@ -23,18 +23,7 @@ namespace Apps.PC
         
         private void Load()
         {
-            List<SearchItem> textEntries;
-            if (File.Exists(_searchFilePath))
-            {
-                textEntries =
-                    JsonConvert.DeserializeObject<List<SearchItem>>(
-                        File.ReadAllText(_searchFilePath));
-            }
-            else
-            {
-                Debug.LogWarning("Search: An entries.json file was not found.");
-                return;
-            }
+            List<SearchItem> textEntries = DataManager.DeserializeData<List<SearchItem>>(_searchFilePath);
 
             foreach (var textEntry in textEntries)
             {

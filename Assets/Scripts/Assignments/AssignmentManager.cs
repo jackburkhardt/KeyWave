@@ -11,23 +11,16 @@ using AssignmentState = Assignments.Assignment.AssignmentState;
 
 namespace Assignments
 {
-    public class AssignmentManager : MonoBehaviour
+    public class AssignmentManager : ScriptableObject
     {
         private string _assignmentPath;
         public static List<Assignment> _chapterAssignments = new List<Assignment>();
         
         private void Awake()
         {
-            GameEvent.OnChapterStart += OnChapterStart;
-
             _assignmentPath = Application.streamingAssetsPath + "/GameData/Assignments/";
         }
-
-        private void OnChapterStart(int chapter)
-        {
-            
-        }
-
+        
         [YarnCommand("activate_assignment")]
         public static void ActivateAssignment(string name)
         {
@@ -40,6 +33,14 @@ namespace Assignments
 
             assignment.State = AssignmentState.Active;
             GameEvent.StartAssignment(assignment);
+        }
+        
+        public static void ActivateAssignment(IEnumerable<string> names)
+        {
+            foreach (var s in names)
+            {
+                ActivateAssignment(s);
+            }
         }
 
         [YarnCommand("complete_assignment")]
@@ -55,6 +56,14 @@ namespace Assignments
             assignment.State = AssignmentState.Completed;
             GameEvent.CompleteAssignment(assignment);
         }
+        
+        public static void CompleteAssignment(IEnumerable<string> names)
+        {
+            foreach (var s in names)
+            {
+                CompleteAssignment(s);
+            }
+        }
 
         [YarnCommand("fail_assignment")]
         public static void FailAssignment(string name)
@@ -68,6 +77,14 @@ namespace Assignments
 
             assignment.State = AssignmentState.Failed;
             GameEvent.FailAssignment(assignment);
+        }
+        
+        public static void FailAssignment(IEnumerable<string> names)
+        {
+            foreach (var s in names)
+            {
+                FailAssignment(s);
+            }
         }
         
         public static void DelegateAssignment(Assignment assignment, Character character)
@@ -103,7 +120,6 @@ namespace Assignments
 
         private void OnDestroy()
         {
-            GameEvent.OnChapterStart -= OnChapterStart;
         }
     }
 }

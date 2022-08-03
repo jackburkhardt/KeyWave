@@ -30,19 +30,8 @@ namespace Apps
             GameEvent.DeliverEmail(email);
         }
 
-        private static Email LoadEmailFromDisk(string subject)
-        {
-            try
-            {
-                Email email = JsonConvert.DeserializeObject<Email>(File.ReadAllText(emailsPath + subject + ".json"));
-                return email;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
+        private static Email LoadEmailFromDisk(string subject) =>
+            DataManager.DeserializeData<Email>(emailsPath + subject + ".json");
 
         public static List<Texture2D> LoadEmailImages(string[] paths)
         {
@@ -75,9 +64,11 @@ namespace Apps
             public string Subject;
             public string BodyText;
             public string[] BodyImagePaths;
+            public string[] CompletesAssignments;
+            public string[] ActivatesAssignments;
             public bool Read;
 
-            public Email(string sender, string recipient, string subject, string bodyText, string[] bodyImagePaths)
+            public Email(string sender, string recipient, string subject, string bodyText, string[] bodyImagePaths, string[] completesAssignments, string[] activatesAssignments)
             {
                 Sender = sender;
                 Recipient = recipient;
@@ -85,6 +76,8 @@ namespace Apps
                 BodyText = bodyText;
                 BodyImagePaths = bodyImagePaths;
                 Read = false;
+                CompletesAssignments = completesAssignments;
+                ActivatesAssignments = activatesAssignments;
             }
         }
 

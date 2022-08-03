@@ -30,6 +30,18 @@ namespace Apps.PC
             computerGO.SetActive(false);
             GameEvent.ClosePC();
         }
+        
+        public void GoBack()
+        {
+            if (screenHistory.Count <= 1)
+            {
+                ClosePC();
+                return;
+            }
+            
+            Destroy(screenHistory.Last());
+            screenHistory.Remove(screenHistory.Last());
+        }
 
         public void GoHome()
         {

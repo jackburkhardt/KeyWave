@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Assignments;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +33,9 @@ namespace Apps.Phone
             fields[2].text = email.Subject;
             fields[3].text = email.BodyText;
             email.Read = true;
+            
+            if (email.CompletesAssignments.Length > 0) AssignmentManager.CompleteAssignment(email.CompletesAssignments);
+            if (email.ActivatesAssignments.Length > 0) AssignmentManager.ActivateAssignment(email.ActivatesAssignments);
             
             // if there are no images, we are done here!
             if (email.BodyImagePaths.Length <= 0) return;
