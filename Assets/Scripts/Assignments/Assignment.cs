@@ -2,16 +2,16 @@
 
 namespace Assignments
 {
-    public struct Assignment
+    public class Assignment
     {
-        public string Name;
-        public string Descriptor;
-        public AssignmentType Type;
-        public AssignmentState State;
-        public int TimeToComplete; // in seconds
-        public List<Assignment> DependentAssignments;
+        public string Name { get; set; }
+        public string Descriptor { get; set; }
+        public AssignmentType Type { get; set; }
+        public AssignmentState State { get; set; }
+        public int TimeToComplete { get; private set; } // in seconds
+        public List<string> DependentAssignments { get; set; }
 
-        public Assignment(string name, string descriptor, AssignmentType type, AssignmentState state, int timeToComplete, List<Assignment> dependentAssignments)
+        public Assignment(string name, string descriptor, AssignmentType type, AssignmentState state, int timeToComplete = 0, List<string> dependentAssignments = null)
         {
             Name = name;
             Descriptor = descriptor;

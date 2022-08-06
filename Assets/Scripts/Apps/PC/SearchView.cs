@@ -7,6 +7,7 @@ namespace Apps.PC
     public class SearchView : MonoBehaviour
     {
         [SerializeField] private TMP_InputField inputField;
+        private string searchtext;
         [SerializeField] private Texture2D notFoundPage;
 
         [SerializeField] private Button emailButton;
@@ -28,8 +29,8 @@ namespace Apps.PC
         {
             var resultScreen = PC.Instance.SwitchScreen("SearchResult");
             resultScreen.GetComponentInChildren<RawImage>().texture = tex;
-            resultScreen.GetComponentInChildren<Text>().text = $"Search result for: \"{inputField.text}\"";
-            resultScreen.GetComponent<Button>().onClick.AddListener(() => PC.Instance.GoBack());
+            resultScreen.GetComponentInChildren<TMP_Text>().text = $"Search result for: \"{inputField.text}\"";
+            resultScreen.GetComponentInChildren<Button>().onClick.AddListener(() => PC.Instance.GoBack());
         }
     }
 }

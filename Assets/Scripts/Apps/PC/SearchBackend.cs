@@ -7,12 +7,14 @@ namespace Apps.PC
 {
     public class SearchBackend : ScriptableObject
     {
+        private string _searchResultsPath;
         private string _searchFilePath;
         private static Dictionary<string, Texture2D> _searchMap = new Dictionary<string, Texture2D>(); // TODO: check sprite vs raw
 
         private void Awake()
         {
             _searchFilePath = Application.streamingAssetsPath + "/GameData/Search/entries.json";
+            _searchResultsPath = Application.streamingAssetsPath + "/GameData/Search/Results/";
 
             GameEvent.OnGameLoad += Load;
         }
@@ -37,9 +39,9 @@ namespace Apps.PC
 
         private Texture2D LoadImage(string fileName)
         {
-            if (!File.Exists(_searchFilePath + fileName)) throw new FileNotFoundException(); // TODO: load oops?
+            if (!File.Exists(_searchResultsPath + fileName)) throw new FileNotFoundException(); // TODO: load oops?
 
-            var fileData = File.ReadAllBytes(_searchFilePath + fileName);
+            var fileData = File.ReadAllBytes(_searchResultsPath + fileName);
             var tex = new Texture2D(2, 2); // Create new "empty" texture
             tex.LoadImage(fileData);
             return tex;

@@ -11,7 +11,7 @@ using AssignmentState = Assignments.Assignment.AssignmentState;
 
 namespace Assignments
 {
-    public class AssignmentManager : ScriptableObject
+    public class AssignmentManager : MonoBehaviour
     {
         private string _assignmentPath;
         public static List<Assignment> _chapterAssignments = new List<Assignment>();
@@ -19,15 +19,34 @@ namespace Assignments
         private void Awake()
         {
             _assignmentPath = Application.streamingAssetsPath + "/GameData/Assignments/";
+            GameEvent.OnGameSave += Save;
+            GameEvent.OnGameLoad += Load;
+            GameEvent.OnAssignmentActive += assignment =>
+            {
+                if (assignment.IsTimed) StartCoroutine(DoAssignmentCountdown(assignment));
+            };
+            
+            AssignmentTest();
+        }
+
+        void AssignmentTest()
+        {
+            Assignment newass1 = new Assignment("Getting Started", "Log into your computer.", AssignmentType.General,
+                AssignmentState.Active);
+            Assignment newass2 = new Assignment("A New Idea", "Rob told you to check your email.",
+                AssignmentType.General, AssignmentState.Inactive);
+            _chapterAssignments.Add(newass1);
+            _chapterAssignments.Add(newass2);
+            ActivateAssignment(newass1.Name);
         }
         
         [YarnCommand("activate_assignment")]
         public static void ActivateAssignment(string name)
         {
             Assignment assignment = _chapterAssignments.FirstOrDefault(inactive => inactive.Name == name);
-            if (assignment.Equals(default))
+            if (assignment.Equals(default) || assignment.State is AssignmentState.Completed or AssignmentState.Failed)
             {
-                Debug.LogError("ActivateAssignment: An assignment by the name of \"{name}\" could not be found.");
+                Debug.LogError($"ActivateAssignment: An assignment by the name of \"{name}\" could not be found.");
                 return;
             }
 
@@ -46,14 +65,14 @@ namespace Assignments
         [YarnCommand("complete_assignment")]
         public static void CompleteAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.FirstOrDefault(inactive => inactive.Name == name);
-            if (assignment.Equals(default))
+            Assignment assignment = _chapterAssignments.FirstOrDefault(active => active.Name == name);
+            if (assignment.Equals(default) || assignment.Over)
             {
-                Debug.LogError("CompleteAssignment: An assignment by the name of \"{name}\" could not be found.");
+                Debug.LogError($"CompleteAssignment: An assignment by the name of \"{name}\" could not be found.");
                 return;
             }
 
-            assignment.State = AssignmentState.Completed;
+            assignment.State = AssignmentState.Active;
             GameEvent.CompleteAssignment(assignment);
         }
         
@@ -68,10 +87,10 @@ namespace Assignments
         [YarnCommand("fail_assignment")]
         public static void FailAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.FirstOrDefault(inactive => inactive.Name == name);
-            if (assignment.Equals(default))
+            Assignment assignment = _chapterAssignments.FirstOrDefault(active => active.Name == name);
+            if (assignment.Equals(default) || assignment.Over)
             {
-                Debug.LogError("FailAssignment: An assignment by the name of \"{name}\" could not be found.");
+                Debug.LogError($"FailAssignment: An assignment by the name of \"{name}\" could not be found.");
                 return;
             }
 
@@ -95,15 +114,14 @@ namespace Assignments
             character.TryRecieveAssignment(assignment); // TODO: handle if this fails
         }
         
-        private IEnumerator DoAssignmentCountdown(Assignment assignment, TMP_Text timeleftText)
+        private IEnumerator DoAssignmentCountdown(Assignment assignment)
         {
-            timeleftText.enabled = true;
             var time = assignment.TimeToComplete;
             while (time > 0 && !assignment.Completed)
             {
+                if (assignment.Over) yield break;
                 yield return new WaitForSeconds(1);
                 time--;
-                timeleftText.text = $"{time / 60}:{time % 60}";
             }
 
             if (!assignment.Completed)
@@ -120,6 +138,8 @@ namespace Assignments
 
         private void OnDestroy()
         {
+            GameEvent.OnGameSave -= Save;
+            GameEvent.OnGameLoad -= Load;
         }
     }
 }

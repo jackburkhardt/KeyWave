@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Assignments;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,7 +31,7 @@ namespace Apps.PC
             {
                 for (int i = emailView.childCount - 1; i >= 0; i--)
                 {
-                    Destroy(emailView.GetChild(i));
+                    Destroy(emailView.GetChild(i).gameObject);
                 }
             }
             
@@ -42,6 +43,9 @@ namespace Apps.PC
             fields[2].text = email.Subject;
             fields[3].text = email.BodyText;
             email.Read = true;
+            
+            if (email.CompletesAssignments is { Length: > 0 }) AssignmentManager.CompleteAssignment(email.CompletesAssignments);
+            if (email.ActivatesAssignments is { Length: > 0 }) AssignmentManager.ActivateAssignment(email.ActivatesAssignments);
             
             // if there are no images, we are done here!
             if (email.BodyImagePaths.Length <= 0) return;

@@ -24,7 +24,7 @@ public class DataManager : MonoBehaviour
         TextBackend = ScriptableObject.CreateInstance<TextBackend>();
         FilesAppBackend = ScriptableObject.CreateInstance<FilesAppBackend>();
         SearchBackend = ScriptableObject.CreateInstance<SearchBackend>();
-        AssignmentManager = ScriptableObject.CreateInstance<AssignmentManager>();
+        AssignmentManager = gameObject.AddComponent<AssignmentManager>();
         
         GameEvent.LoadGame();
     }

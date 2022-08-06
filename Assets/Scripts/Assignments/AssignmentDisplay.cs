@@ -19,7 +19,7 @@ namespace Assignments
         private Dictionary<AssignmentType, Sprite> _assignmentIcons = new Dictionary<AssignmentType, Sprite>();
         private const float resultDisplayTime = 3;
         
-        private void Awake()
+        private void Start()
         {
             GameEvent.OnAssignmentActive += AddAssignmentToDisplay;
             GameEvent.OnAssignmentComplete += (a) => StartCoroutine(DisplaySuccess(a));
@@ -31,6 +31,12 @@ namespace Assignments
                 // this creates a strict reliance on file naming conventions
                 _assignmentIcons.Add(Enum.Parse<AssignmentType>(sprite.name), sprite);
             }
+
+            foreach (var assignment in AssignmentManager._chapterAssignments)
+            {
+                if (assignment.State == Assignment.AssignmentState.Active)
+                    AddAssignmentToDisplay(assignment);
+            }
         }
 
         private void AddAssignmentToDisplay(Assignment assignment)
@@ -38,21 +44,29 @@ namespace Assignments
             var newDisplay = Instantiate(_assignmentListingPrefab, transform) as GameObject;
         
             _assignmentIcons.TryGetValue(assignment.Type, out var icon);
-            newDisplay.GetComponentInChildren<Image>().sprite = icon ? icon : _assignmentIcons[0];
-        
+            newDisplay.GetComponentsInChildren<Image>()[1].sprite = icon ? icon : _assignmentIcons[0];
+            newDisplay.name = assignment.Name;
+            
             var fields = newDisplay.GetComponentsInChildren<TMP_Text>();
             fields[0].text = assignment.Name;
             fields[1].text = assignment.Descriptor;
 
             if (assignment.IsTimed) StartCoroutine(DisplayCountdownText(assignment, fields[3]));
 
-            StartCoroutine(UIManager.FadeIn(newDisplay.GetComponent<Renderer>()));
+            foreach (var renderer in newDisplay.GetComponentsInChildren<Renderer>())
+            {
+                StartCoroutine(UIManager.FadeIn(renderer));
+            }
         }
     
         private void RemoveAssignmentFromDisplay(Assignment assignment)
         {
             var display = FindListing(assignment);
-            StartCoroutine(UIManager.FadeOut(display.GetComponent<Renderer>(), 0.5f, true));
+            /*foreach (var r in display.GetComponentsInChildren<Renderer>())
+            {
+                StartCoroutine(UIManager.FadeOut(r, 0.5f, true));
+            }*/
+            Destroy(display);
         }
 
         private IEnumerator DisplayCountdownText(Assignment assignment, TMP_Text text)
@@ -73,7 +87,7 @@ namespace Assignments
 
         private IEnumerator DisplaySuccess(Assignment assignment)
         {
-            var text = FindListing(assignment).GetComponents<TMP_Text>()[3];
+            var text = FindListing(assignment).GetComponentsInChildren<TMP_Text>()[2];
             text.enabled = true;
             text.color = Color.green;
             text.text = "COMPLETE!";
@@ -84,7 +98,7 @@ namespace Assignments
         
         private IEnumerator DisplayFail(Assignment assignment)
         {
-            var text = FindListing(assignment).GetComponents<TMP_Text>()[3];
+            var text = FindListing(assignment).GetComponentsInChildren<TMP_Text>()[2];
             text.enabled = true;
             text.color = Color.red;
             text.text = "FAILED!";
@@ -97,7 +111,7 @@ namespace Assignments
         {
             foreach (Transform child in transform)
             {
-                if (child.GetComponent<Assignment>().Name == assignment.Name)
+                if (child.name == assignment.Name)
                 {
                     return child.gameObject;
                 }

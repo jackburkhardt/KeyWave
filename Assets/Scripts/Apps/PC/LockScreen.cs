@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assignments;
 using TMPro;
 using UnityEngine;
 
@@ -47,6 +48,8 @@ namespace Apps.PC
 
             PC.Instance.loggedIn = true;
             PC.Instance.SwitchScreen("Search");
+            AssignmentManager.CompleteAssignment("Getting Started");
+            AssignmentManager.ActivateAssignment("A New Idea");
             Destroy(this.gameObject);
         }
     }
