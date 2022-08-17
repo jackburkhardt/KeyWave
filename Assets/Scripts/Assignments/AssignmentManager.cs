@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Interaction;
@@ -14,7 +15,7 @@ namespace Assignments
     public class AssignmentManager : MonoBehaviour
     {
         private string _assignmentPath;
-        public static List<Assignment> _chapterAssignments = new List<Assignment>();
+        [NonSerialized] public static List<Assignment> _chapterAssignments = new List<Assignment>();
         
         private void Awake()
         {
@@ -26,10 +27,10 @@ namespace Assignments
                 if (assignment.IsTimed) StartCoroutine(DoAssignmentCountdown(assignment));
             };
             
-            AssignmentTest();
+            //AssignmentTest();
         }
 
-        void AssignmentTest()
+        /*void AssignmentTest()
         {
             Assignment newass1 = new Assignment("Getting Started", "Log into your computer.", AssignmentType.General,
                 AssignmentState.Active);
@@ -38,7 +39,7 @@ namespace Assignments
             _chapterAssignments.Add(newass1);
             _chapterAssignments.Add(newass2);
             ActivateAssignment(newass1.Name);
-        }
+        }*/
         
         [YarnCommand("activate_assignment")]
         public static void ActivateAssignment(string name)
