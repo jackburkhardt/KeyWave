@@ -53,5 +53,12 @@ public class DataManager : MonoBehaviour
     {
         GameEvent.SaveGame();
     }
+
+    public struct SaveData
+    {
+        public bool IsPCUnlocked;
+        public int CurrentChapter;
+        public TimeSpan CurrentTime;
+    }
    
 }

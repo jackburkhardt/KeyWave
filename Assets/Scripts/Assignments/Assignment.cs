@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Assignments
 {
@@ -8,16 +9,18 @@ namespace Assignments
         public string Descriptor { get; set; }
         public AssignmentType Type { get; set; }
         public AssignmentState State { get; set; }
-        public int TimeToComplete { get; private set; } // in seconds
+        public TimeSpan ReleaseTime { get; set; }
+        public TimeSpan DueTime { get; private set; }
         public List<string> DependentAssignments { get; set; }
 
-        public Assignment(string name, string descriptor, AssignmentType type, AssignmentState state, int timeToComplete = 0, List<string> dependentAssignments = null)
+        public Assignment(string name, string descriptor, AssignmentType type, AssignmentState state, TimeSpan releaseTime = default, TimeSpan dueTime = default, List<string> dependentAssignments = null)
         {
             Name = name;
             Descriptor = descriptor;
             Type = type;
             State = state;
-            TimeToComplete = timeToComplete;
+            ReleaseTime = releaseTime;
+            DueTime = dueTime;
             DependentAssignments = dependentAssignments;
         }
 

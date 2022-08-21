@@ -12,9 +12,14 @@ namespace KeyWave
             _runner = GetComponent<DialogueRunner>();
         }
 
-        public static void RunLine(string node)
+        public static void Run(string node, string view = "")
         {
             if (_runner.NodeExists(node)) _runner.StartDialogue(node);
+        }
+
+        public static void Stop()
+        {
+            _runner.Stop();
         }
     }
 }

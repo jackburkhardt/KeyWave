@@ -26,7 +26,8 @@ namespace Assignments
             {
                 if (assignment.IsTimed) StartCoroutine(DoAssignmentCountdown(assignment));
             };
-            
+            GameEvent.OnChapterEnd += OnChapterEnd;
+
             //AssignmentTest();
         }
 
@@ -73,10 +74,13 @@ namespace Assignments
                 return;
             }
 
-            assignment.State = AssignmentState.Active;
+            assignment.State = AssignmentState.Completed;
             GameEvent.CompleteAssignment(assignment);
         }
         
+        /// <summary>
+        /// Override for CompleteAssignment to allow for multiple assignments to be completed at once.
+        /// </summary>
         public static void CompleteAssignment(IEnumerable<string> names)
         {
             foreach (var s in names)
@@ -99,6 +103,9 @@ namespace Assignments
             GameEvent.FailAssignment(assignment);
         }
         
+        /// <summary>
+        /// Override for FailAssignment to allow for multiple assignments to be failed at once.
+        /// </summary>
         public static void FailAssignment(IEnumerable<string> names)
         {
             foreach (var s in names)
@@ -115,15 +122,13 @@ namespace Assignments
             character.TryRecieveAssignment(assignment); // TODO: handle if this fails
         }
         
+        /// <summary>
+        /// For timed assignments, this function will wait until the due time and if the assignment is
+        /// not completed, it will be failed.
+        /// </summary>
         private IEnumerator DoAssignmentCountdown(Assignment assignment)
         {
-            var time = assignment.TimeToComplete;
-            while (time > 0 && !assignment.Completed)
-            {
-                if (assignment.Over) yield break;
-                yield return new WaitForSeconds(1);
-                time--;
-            }
+            yield return new WaitUntil(() => RealtimeManager.Time > assignment.DueTime);
 
             if (!assignment.Completed)
             {
@@ -131,16 +136,25 @@ namespace Assignments
             }
         }
 
+        private void OnChapterEnd(int chapter)
+        {
+            foreach (var assignment in _chapterAssignments.Where(assignment => !assignment.Over))
+            {
+                FailAssignment(assignment.Name);
+            }
+        }
+
         private void Load() => _chapterAssignments = 
-            DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter{GameManager.Chapter}.json");
+            DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter{RealtimeManager.Chapter}.json");
 
         private void Save() =>
-            DataManager.SerializeData(_chapterAssignments, $"{_assignmentPath}Chapter{GameManager.Chapter}.json");
+            DataManager.SerializeData(_chapterAssignments, $"{_assignmentPath}Chapter{RealtimeManager.Chapter}.json");
 
         private void OnDestroy()
         {
             GameEvent.OnGameSave -= Save;
             GameEvent.OnGameLoad -= Load;
+            GameEvent.OnChapterEnd -= OnChapterEnd;
         }
     }
 }

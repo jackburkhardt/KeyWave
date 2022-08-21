@@ -1,4 +1,5 @@
-﻿using Apps;
+﻿using System;
+using Apps;
 using Apps.Phone;
 using Assignments;
 using Interaction;
@@ -30,12 +31,13 @@ public static class GameEvent
     public delegate void PopupViewChangeDelegate();
     public delegate void PopupDelegate();
     public delegate void ChapterDelegate(int chapter);
-    public delegate void EmailDeliverDelegate();
+    public delegate void EmailDelegate(EmailBackend.Email email);
     public delegate void GameSaveDelegate();
     public delegate void GameLoadDelegate();
     public delegate void TextDelegate(TextBackend.TextConversation convo, TextBackend.TextMessage message);
     public delegate void PCEventDelegate();
     public delegate void AssignmentDelegate(Assignment assignment);
+    public delegate void TimeDelegate(TimeSpan time);
 
 
     // EVENTS
@@ -46,7 +48,8 @@ public static class GameEvent
     public static event PopupDelegate OnPopupClose;
     public static event ChapterDelegate OnChapterStart;
     public static event ChapterDelegate OnChapterEnd;
-    public static event EmailDeliverDelegate OnEmailDeliver;
+    public static event EmailDelegate OnEmailDeliver;
+    public static event EmailDelegate OnEmailOpen;
     public static event GameSaveDelegate OnGameSave;
     public static event GameLoadDelegate OnGameLoad;
     public static event TextDelegate OnTextSend;
@@ -56,6 +59,7 @@ public static class GameEvent
     public static event AssignmentDelegate OnAssignmentActive;
     public static event AssignmentDelegate OnAssignmentComplete;
     public static event AssignmentDelegate OnAssignmentFail;
+    public static event TimeDelegate OnTimeChange;
 
     // TRIGGERS
     public static void InteractionStart(IInteractable interacObj) => OnInteractionStart?.Invoke(interacObj);
@@ -65,7 +69,8 @@ public static class GameEvent
     public static void PopupClose() => OnPopupClose?.Invoke();
     public static void StartChapter(int chapter) => OnChapterStart?.Invoke(chapter);
     public static void EndChapter(int chapter) => OnChapterEnd?.Invoke(chapter);
-    public static void DeliverEmail(EmailBackend.Email email) => OnEmailDeliver?.Invoke();
+    public static void DeliverEmail(EmailBackend.Email email) => OnEmailDeliver?.Invoke(email);
+    public static void OpenEmail(EmailBackend.Email email) => OnEmailOpen?.Invoke(email);
     public static void SaveGame() => OnGameSave?.Invoke();
     public static void LoadGame() => OnGameLoad?.Invoke();
     public static void SendText(TextBackend.TextConversation convo, TextBackend.TextMessage message) => OnTextSend?.Invoke(convo, message);
@@ -75,4 +80,5 @@ public static class GameEvent
     public static void StartAssignment(Assignment assignment) => OnAssignmentActive?.Invoke(assignment);
     public static void FailAssignment(Assignment assignment) => OnAssignmentFail?.Invoke(assignment);
     public static void CompleteAssignment(Assignment assignment) => OnAssignmentComplete?.Invoke(assignment);
+    public static void ChangeTime(TimeSpan time) => OnTimeChange?.Invoke(time);
 }

@@ -31,7 +31,7 @@ namespace Interaction
         {
             GameEvent.InteractionStart(this);
             _interactAction?.Invoke();
-            Dialogue.RunLine(name);
+            Dialogue.Run(name);
         }
 
         public void EndInteraction()

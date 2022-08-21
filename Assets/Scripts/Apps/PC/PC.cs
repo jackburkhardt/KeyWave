@@ -31,6 +31,10 @@ namespace Apps.PC
             GameEvent.ClosePC();
         }
         
+        /// <summary>
+        /// Goes to the previous screen in the history. If there is none, it closes the computer.
+        /// Note: this destroys the current screen from the history.
+        /// </summary>
         public void GoBack()
         {
             if (screenHistory.Count <= 1)
@@ -43,6 +47,9 @@ namespace Apps.PC
             screenHistory.Remove(screenHistory.Last());
         }
 
+        /// <summary>
+        /// Goes to the home screen. Note: this will destroy all screens in the history.
+        /// </summary>
         public void GoHome()
         {
             while (screenHistory.Count > 1)
@@ -50,10 +57,15 @@ namespace Apps.PC
                 Destroy(screenHistory.Last());
                 screenHistory.Remove(screenHistory.Last());
             }
-            SwitchScreen(!loggedIn ? "LockScreen" : "Search");
+            SwitchScreen(loggedIn ? "Search" : "LockScreen");
         }
         
+        // this is only here because unity UI calls need to return void todo: check if need this anymore
         public void UISwitchScreen(string screen) => SwitchScreen(screen);
+       
+        /// <summary>
+        /// Attempts to switch the current PC screen to the one provided. Make sure this screen is in the prefab list in the inspector!
+        /// </summary>
         public GameObject SwitchScreen(string screen)
         {
             var screenPrefab = screens.Find(s => s.name == screen);

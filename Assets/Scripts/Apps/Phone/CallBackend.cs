@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -25,13 +26,27 @@ namespace Apps.Phone
         [YarnCommand("receive_phonecall")]
         public static void InboundCall(string character, string node)
         {
+            var contact = _contacts.Find(c => c.ContactName == character);
+            if (contact.Equals(default)) return;
             
+            Phone.Instance.StartOpenPhone();
+            var callScreen = Phone.Instance.SwitchScreen("ActiveCall");
+            callScreen.GetComponent<CallView>().ReceiveCall(contact, node);
         }
 
-        [YarnCommand("add_contact")]
-        public void AddContact(string contactName, int open, int close)
+        /// <summary>
+        /// Make a contact visible to the player and able to be called. Equivalent to "giving" the
+        /// contact to the player in the context of the game world.
+        /// </summary>
+        /// <param name="contactName"></param>
+        [YarnCommand("enable_contact")]
+        public void EnableContact(string contactName)
         {
-            _contacts.Add(new PhoneContact(contactName, open, close));
+            PhoneContact contact = _contacts.Find(c => c.ContactName == contactName);
+            if (!contact.Equals(default))
+            {
+                contact.Available = true;
+            }
         }
 
         public static List<PhoneContact> Contacts => _contacts;
@@ -42,16 +57,16 @@ namespace Apps.Phone
         public struct PhoneContact
         {
             public string ContactName;
-            // time is represented on 24hr clock and uses 4 digits
-            // ex: 8:00 am -> 0800 , ex: 3:25pm -> 1525
-            public int StartAvailableTime; 
-            public int EndAvailableTime;
+            public bool Available;
+            public TimeSpan StartAvailableTime; 
+            public TimeSpan EndAvailableTime;
 
-            public PhoneContact(string contactName, int startAvailableTime, int endAvailableTime)
+            public PhoneContact(string contactName, TimeSpan startAvailableTime, TimeSpan endAvailableTime, bool available = true)
             {
                 ContactName = contactName;
                 StartAvailableTime = startAvailableTime;
                 EndAvailableTime = endAvailableTime;
+                Available = available;
             }
         }
     }

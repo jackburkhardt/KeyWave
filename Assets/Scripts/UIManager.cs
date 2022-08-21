@@ -49,33 +49,25 @@ public class UIManager : MonoBehaviour
         GameEvent.PopupClose();
     }
 
-    public static IEnumerator FadeIn(Renderer renderer, float speed = 0.5f)
+    /// <summary>
+    /// Fades renderers for an object to a given alpha value. Caller must provide renderers.
+    /// Note that this differs from CameraFade in that it does not fade the whole screen.
+    /// </summary>
+    public static IEnumerator FadeRenderers(Renderer[] renderers, float startAlpha, float endAlpha, float duration = 0.5f)
     {
-        var color = renderer.material.color;
-
-        while (renderer.material.color.a < 1)
+        float t = 0;
+        while (t < duration)
         {
-            float fadeAmount = color.a + (speed * Time.deltaTime);
-            color = new Color(color.r, color.g, color.b, fadeAmount);
-            renderer.material.color = color;
-
+            foreach (var renderer in renderers)
+            {
+                var color = renderer.material.color;
+                color.a = Mathf.Lerp(startAlpha, endAlpha, t / duration);
+                renderer.material.color = color;
+            }
+            t += Time.deltaTime;
             yield return null;
         }
     }
-    
-    public static IEnumerator FadeOut(Renderer renderer, float speed = 0.5f, bool destroy = false)
-    {
-        var color = renderer.material.color;
-        
-        while (renderer.material.color.a > 0)
-        {
-            float fadeAmount = color.a - (speed * Time.deltaTime);
-            color = new Color(color.r, color.g, color.b, fadeAmount);
-            renderer.material.color = color;
 
-            yield return null;
-        }
-        
-        if (destroy) Destroy(renderer.gameObject);
-    }
+
 }

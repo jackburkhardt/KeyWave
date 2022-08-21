@@ -14,7 +14,7 @@ namespace Interaction
 
         void IPointerClickHandler.OnPointerClick(PointerEventData data)
         {
-            if (!GameManager.ControlsEnabled) return;
+            if (!RealtimeManager.ControlsEnabled) return;
             Interact();
         }
 

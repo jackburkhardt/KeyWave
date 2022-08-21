@@ -22,8 +22,8 @@ namespace Assignments
         private void Start()
         {
             GameEvent.OnAssignmentActive += AddAssignmentToDisplay;
-            GameEvent.OnAssignmentComplete += (a) => StartCoroutine(DisplaySuccess(a));
-            GameEvent.OnAssignmentFail += (a) => StartCoroutine(DisplayFail(a));
+            GameEvent.OnAssignmentComplete += OnAssignmentComplete;
+            GameEvent.OnAssignmentFail += OnAssignmentFail;
 
             var loadedSprites = Resources.LoadAll<Sprite>("AssignmentIcons");
             foreach (var sprite in loadedSprites)
@@ -38,7 +38,7 @@ namespace Assignments
                     AddAssignmentToDisplay(assignment);
             }
         }
-
+        
         private void AddAssignmentToDisplay(Assignment assignment)
         {
             var newDisplay = Instantiate(_assignmentListingPrefab, transform) as GameObject;
@@ -51,40 +51,21 @@ namespace Assignments
             fields[0].text = assignment.Name;
             fields[1].text = assignment.Descriptor;
 
-            if (assignment.IsTimed) StartCoroutine(DisplayCountdownText(assignment, fields[3]));
+            if (assignment.IsTimed) fields[2].text = $"Due by: {assignment.DueTime}";
 
-            foreach (var renderer in newDisplay.GetComponentsInChildren<Renderer>())
-            {
-                StartCoroutine(UIManager.FadeIn(renderer));
-            }
+            // todo: update prefab alphas to 0
+            StartCoroutine(UIManager.FadeRenderers(newDisplay.GetComponentsInChildren<Renderer>(), 0f, 1f));
         }
-    
+
         private void RemoveAssignmentFromDisplay(Assignment assignment)
         {
-            var display = FindListing(assignment);
-            /*foreach (var r in display.GetComponentsInChildren<Renderer>())
-            {
-                StartCoroutine(UIManager.FadeOut(r, 0.5f, true));
-            }*/
-            Destroy(display);
+            var assignmentDisplay = transform.Find(assignment.Name);
+            if (assignmentDisplay == null) return;
+            StartCoroutine(UIManager.FadeRenderers(assignmentDisplay.GetComponentsInChildren<Renderer>(), 1f, 0f));
+            Destroy(assignmentDisplay.gameObject);
         }
 
-        private IEnumerator DisplayCountdownText(Assignment assignment, TMP_Text text)
-        {
-            int timeLeft = assignment.TimeToComplete;
-            text.enabled = true;
-
-            while (timeLeft > 0)
-            {
-                if (assignment.Over) yield break;
-                yield return new WaitForSeconds(1);
-                var mins = timeLeft / 60;
-                var secs = (timeLeft % 60).ToString("00");
-                text.text = $"{mins}:{secs}";
-                timeLeft--;
-            }
-        }
-
+        private void OnAssignmentComplete(Assignment assignment) => StartCoroutine(DisplaySuccess(assignment));
         private IEnumerator DisplaySuccess(Assignment assignment)
         {
             var text = FindListing(assignment).GetComponentsInChildren<TMP_Text>()[2];
@@ -96,6 +77,7 @@ namespace Assignments
             RemoveAssignmentFromDisplay(assignment);
         }
         
+        private void OnAssignmentFail(Assignment assignment) => StartCoroutine(DisplayFail(assignment));
         private IEnumerator DisplayFail(Assignment assignment)
         {
             var text = FindListing(assignment).GetComponentsInChildren<TMP_Text>()[2];
@@ -124,6 +106,8 @@ namespace Assignments
         private void OnDestroy()
         {
             GameEvent.OnAssignmentActive -= AddAssignmentToDisplay;
+            GameEvent.OnAssignmentComplete -= OnAssignmentComplete;
+            GameEvent.OnAssignmentFail -= OnAssignmentFail;
         }
     }
 }

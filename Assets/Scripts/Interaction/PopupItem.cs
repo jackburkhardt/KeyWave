@@ -38,7 +38,7 @@ namespace Interaction
                 _generatedPopups.Add(p);
             }
             
-            Dialogue.RunLine(name);
+            Dialogue.Run(name);
             PreviouslyInteractedWith = true;
         }
 

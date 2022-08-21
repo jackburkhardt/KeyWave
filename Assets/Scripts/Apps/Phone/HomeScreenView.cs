@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HomeScreenView : MonoBehaviour
 {
-    // Start is called before the first frame update
+    // just links the app buttons on homescreen with the "apps" (screens) they open
     void Start()
     {
         var buttons = GetComponentsInChildren<Button>();

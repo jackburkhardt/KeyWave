@@ -22,17 +22,18 @@ namespace Apps
             GameEvent.OnGameLoad += Load;
         }
 
+        /// <summary>
+        /// "Delivers" an email by marking it as available and adding it to the player's inbox.
+        /// </summary>
         [YarnCommand("deliver_email")]
         public static void DeliverEmail(string subject)
         {
-            Email email = LoadEmailFromDisk(subject);
-            playerInbox.Add(email);
+            Email email = playerInbox.Find(e => e.Subject == subject);
+            if (email.Equals(default)) return;
+            
             GameEvent.DeliverEmail(email);
         }
-
-        private static Email LoadEmailFromDisk(string subject) =>
-            DataManager.DeserializeData<Email>(emailsPath + subject + ".json");
-
+        
         public static List<Texture2D> LoadEmailImages(string[] paths)
         {
             List<Texture2D> loadedImages = new List<Texture2D>();
@@ -64,20 +65,19 @@ namespace Apps
             public string Subject;
             public string BodyText;
             public string[] BodyImagePaths;
-            public string[] CompletesAssignments;
-            public string[] ActivatesAssignments;
             public bool Read;
+            public bool Available;
 
-            public Email(string sender, string recipient, string subject, string bodyText, string[] bodyImagePaths, string[] completesAssignments, string[] activatesAssignments)
+            public Email(string sender, string recipient, string subject, string bodyText, 
+                string[] bodyImagePaths, bool read = false, bool available = false)
             {
                 Sender = sender;
                 Recipient = recipient;
                 Subject = subject;
                 BodyText = bodyText;
                 BodyImagePaths = bodyImagePaths;
-                Read = false;
-                CompletesAssignments = completesAssignments;
-                ActivatesAssignments = activatesAssignments;
+                Read = read;
+                Available = available;
             }
         }
 

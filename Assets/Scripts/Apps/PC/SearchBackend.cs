@@ -26,7 +26,8 @@ namespace Apps.PC
         private void Load()
         {
             List<SearchItem> textEntries = DataManager.DeserializeData<List<SearchItem>>(_searchFilePath);
-
+            
+            // links search queries to the search result images
             foreach (var textEntry in textEntries)
             {
                 var image = LoadImage(textEntry.ImageName);
