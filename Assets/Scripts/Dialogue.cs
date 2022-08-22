@@ -21,5 +21,7 @@ namespace KeyWave
         {
             _runner.Stop();
         }
+
+        public static DialogueRunner Runner => _runner;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Yarn.Unity;
 
 public class RealtimeManager : MonoBehaviour
 {

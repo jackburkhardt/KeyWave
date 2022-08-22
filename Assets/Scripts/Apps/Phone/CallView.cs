@@ -21,6 +21,14 @@ namespace Apps.Phone
         private CallBackend.PhoneContact callContact;
         private bool callActive;
 
+        private void OnEnable()
+        {
+            Dialogue.Runner.onDialogueComplete.AddListener(() =>
+            {
+                if (callActive) EndCall();
+            });
+        }
+
         public void ReceiveCall(CallBackend.PhoneContact caller, string node)
         {
             callContact = caller;
@@ -67,7 +75,13 @@ namespace Apps.Phone
             
             throw new Exception("CallView: A call has been going for 1000 seconds and was forcefully ended. Is this intended"); 
         }
-        
-        
+
+        private void OnDestroy()
+        {
+            Dialogue.Runner.onDialogueComplete.RemoveListener(() =>
+            {
+                if (callActive) EndCall();
+            });
+        }
     }
 }
