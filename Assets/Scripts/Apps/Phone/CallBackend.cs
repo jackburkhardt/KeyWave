@@ -40,7 +40,7 @@ namespace Apps.Phone
         /// </summary>
         /// <param name="contactName"></param>
         [YarnCommand("enable_contact")]
-        public void EnableContact(string contactName)
+        public static void EnableContact(string contactName)
         {
             PhoneContact contact = _contacts.Find(c => c.ContactName == contactName);
             if (!contact.Equals(default))

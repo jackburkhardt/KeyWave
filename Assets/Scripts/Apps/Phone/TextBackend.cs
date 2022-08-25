@@ -6,8 +6,8 @@ namespace Apps.Phone
 {
     public class TextBackend : ScriptableObject
     {
-        private Dictionary<string, TextConversation> _conversations = new Dictionary<string, TextConversation>();
-        private string _conversationsPath;
+        private static Dictionary<string, TextConversation> _conversations = new Dictionary<string, TextConversation>();
+        private static string _conversationsPath;
         
         private void Awake()
         {
@@ -18,7 +18,7 @@ namespace Apps.Phone
         
 
         [YarnCommand("player_sendtext")]
-        public void SendTextMessage(string recipient, string message)
+        public static void SendTextMessage(string recipient, string message)
         {
             if (!_conversations.TryGetValue(recipient, out var convo))
             {
@@ -33,7 +33,7 @@ namespace Apps.Phone
         }
         
         [YarnCommand("player_receivetext_noreply")]
-        public void ReceiveTextMessage(string sender, string message)
+        public static void ReceiveTextMessage(string sender, string message)
         {
             if (!_conversations.TryGetValue(sender, out var convo))
             {
@@ -48,7 +48,7 @@ namespace Apps.Phone
         }
 
         [YarnCommand("player_receivetext")]
-        public void ActivateTextMessage(string yarnNode, string sender)
+        public static void ActivateTextMessage(string yarnNode, string sender)
         {
             
         }
