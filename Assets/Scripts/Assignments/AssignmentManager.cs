@@ -27,33 +27,20 @@ namespace Assignments
                 if (assignment.IsTimed) StartCoroutine(DoAssignmentCountdown(assignment));
             };
             GameEvent.OnChapterEnd += OnChapterEnd;
-
-            //AssignmentTest();
+            
         }
 
-        /*void AssignmentTest()
-        {
-            Assignment newass1 = new Assignment("Getting Started", "Log into your computer.", AssignmentType.General,
-                AssignmentState.Active);
-            Assignment newass2 = new Assignment("A New Idea", "Rob told you to check your email.",
-                AssignmentType.General, AssignmentState.Inactive);
-            _chapterAssignments.Add(newass1);
-            _chapterAssignments.Add(newass2);
-            ActivateAssignment(newass1.Name);
-        }*/
-        
         [YarnCommand("activate_assignment")]
         public static void ActivateAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.FirstOrDefault(inactive => inactive.Name == name);
-            if (assignment.Equals(default) || assignment.State is AssignmentState.Completed or AssignmentState.Failed)
+            Assignment assignment = _chapterAssignments.Find(inactive => inactive.Name == name);
+            if (assignment.Equals(default))
             {
                 Debug.LogError($"ActivateAssignment: An assignment by the name of \"{name}\" could not be found.");
                 return;
             }
-
-            assignment.State = AssignmentState.Active;
-            GameEvent.StartAssignment(assignment);
+            
+            assignment.Activate();
         }
         
         public static void ActivateAssignment(IEnumerable<string> names)
@@ -67,15 +54,14 @@ namespace Assignments
         [YarnCommand("complete_assignment")]
         public static void CompleteAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.FirstOrDefault(active => active.Name == name);
-            if (assignment.Equals(default) || assignment.Over)
+            Assignment assignment = _chapterAssignments.Find(active => active.Name == name);
+            if (assignment.Equals(default))
             {
                 Debug.LogError($"CompleteAssignment: An assignment by the name of \"{name}\" could not be found.");
                 return;
             }
-
-            assignment.State = AssignmentState.Completed;
-            GameEvent.CompleteAssignment(assignment);
+            
+            assignment.Complete();
         }
         
         /// <summary>
@@ -92,15 +78,14 @@ namespace Assignments
         [YarnCommand("fail_assignment")]
         public static void FailAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.FirstOrDefault(active => active.Name == name);
-            if (assignment.Equals(default) || assignment.Over)
+            Assignment assignment = _chapterAssignments.Find(active => active.Name == name);
+            if (assignment.Equals(default))
             {
                 Debug.LogError($"FailAssignment: An assignment by the name of \"{name}\" could not be found.");
                 return;
             }
-
-            assignment.State = AssignmentState.Failed;
-            GameEvent.FailAssignment(assignment);
+            
+            assignment.Fail();
         }
         
         /// <summary>

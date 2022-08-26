@@ -30,7 +30,7 @@ namespace Apps.Phone
             if (contact.Equals(default)) return;
             
             Phone.Instance.StartOpenPhone();
-            var callScreen = Phone.Instance.SwitchScreen("ActiveCall");
+            var callScreen = Phone.Instance.SwitchScreen("CallView");
             callScreen.GetComponent<CallView>().ReceiveCall(contact, node);
         }
 
