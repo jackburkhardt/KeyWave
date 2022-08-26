@@ -17,7 +17,7 @@ namespace Assignments
 
         [SerializeField] private Object _assignmentListingPrefab;
         private Dictionary<AssignmentType, Sprite> _assignmentIcons = new Dictionary<AssignmentType, Sprite>();
-        private const float resultDisplayTime = 3;
+        [SerializeField] private float resultDisplayTime = 3;
         
         private void Start()
         {
@@ -34,8 +34,7 @@ namespace Assignments
 
             foreach (var assignment in AssignmentManager.ChapterAssignments)
             {
-                if (assignment.State == Assignment.AssignmentState.Active)
-                    AddAssignmentToDisplay(assignment);
+                if (assignment.IsActive) AddAssignmentToDisplay(assignment);
             }
         }
         

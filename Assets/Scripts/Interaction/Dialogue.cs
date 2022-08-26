@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Yarn.Unity;
 
-namespace KeyWave
+namespace Interaction
 {
     public class Dialogue : MonoBehaviour
     {

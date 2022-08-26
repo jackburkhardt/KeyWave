@@ -5,9 +5,7 @@ using System.Linq;
 using Interaction;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Yarn.Unity;
-using AssignmentType = Assignments.Assignment.AssignmentType;
 using AssignmentState = Assignments.Assignment.AssignmentState;
 
 namespace Assignments
@@ -22,13 +20,8 @@ namespace Assignments
             _assignmentPath = Application.streamingAssetsPath + "/GameData/Assignments/";
             GameEvent.OnGameSave += Save;
             GameEvent.OnGameLoad += Load;
-            GameEvent.OnAssignmentActive += assignment =>
-            {
-                if (assignment.IsTimed) StartCoroutine(DoAssignmentCountdown(assignment));
-            };
             GameEvent.OnChapterEnd += OnChapterEnd;
             GameEvent.OnTimeChange += OnTimeChange;
-
         }
 
         [YarnCommand("activate_assignment")]
@@ -106,20 +99,6 @@ namespace Assignments
 
             character.TryRecieveAssignment(assignment); // TODO: handle if this fails
         }
-        
-        /// <summary>
-        /// For timed assignments, this function will wait until the due time and if the assignment is
-        /// not completed, it will be failed.
-        /// </summary>
-        private IEnumerator DoAssignmentCountdown(Assignment assignment)
-        {
-            yield return new WaitUntil(() => RealtimeManager.Time > assignment.DueTime);
-
-            if (!assignment.Completed)
-            {
-                FailAssignment(assignment.Name);
-            }
-        }
 
         private void OnChapterEnd(int chapter)
         {
@@ -132,7 +111,7 @@ namespace Assignments
         private void OnTimeChange(TimeSpan time)
         {
             foreach (var assignment in ChapterAssignments.Where(
-                         assignment => !assignment.IsActive && assignment.ReleaseTime != default))
+                         assignment => assignment.State is AssignmentState.Inactive  && assignment.ReleaseTime != default))
             {
                 if (time >= assignment.ReleaseTime)
                 {

@@ -1,8 +1,6 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
-namespace KeyWave.Minigames
+namespace Minigames
 {
     public class Garbage : MonoBehaviour
     {

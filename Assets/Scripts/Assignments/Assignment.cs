@@ -32,6 +32,7 @@ namespace Assignments
             ReleaseTime = releaseTime;
             DueTime = dueTime;
             State = state;
+            if (activationCriteria.Count >= 0) ToggleListeners(true);
         }
         
         public void Activate()
@@ -42,7 +43,8 @@ namespace Assignments
             }
             
             State = AssignmentState.Active;
-            ToggleListeners(true);
+            // this check is to avoid toggling listeners on twice if they were already on for activation checking
+            if (ActivationCriteria.Count == 0) ToggleListeners(true);
             GameEvent.StartAssignment(this);
         }
         
@@ -117,15 +119,24 @@ namespace Assignments
         
         private (List<Criteria>, List<int>) FindCriteriaByAction(string type)
         {
-            var foundCriteria = CompletionCriteria.FindAll(criteria => criteria.Type == type && criteria.Fulfilled == false);
+            List<Criteria> foundCriteria = new List<Criteria>();
+            
+            // if this assignment is active, we are looking for COMPLETION criteria matching the action type
+            // if this assignment is inactive, we are looking for ACTIVATION criteria matching the action type
+            if (State is AssignmentState.Active)
+            {
+                foundCriteria = CompletionCriteria.FindAll(criteria => criteria.Type == type && criteria.Fulfilled == false);
+            } else if (State is AssignmentState.Inactive)
+            {
+                foundCriteria = ActivationCriteria.FindAll(criteria => criteria.Type == type && criteria.Fulfilled == false);
+            }
+
             // make a list of all of the indexes of foundCriteria
             var foundIndexes = foundCriteria.Select(criteria => CompletionCriteria.IndexOf(criteria)).ToList();
             
-            // return a tuple of all the found criteria and their indexes in completioncriteria
+            // return a tuple of all the found criteria and their indexes in completioncriteria/activationcriteria
             return (foundCriteria, foundIndexes);
         }
-        
-        // i really really don't like these two functions. consider redoing them. they just feel grossly complicated
 
         private void UpdateCriteria(string action, string value)
         {
@@ -141,10 +152,18 @@ namespace Assignments
                 if (criteria.Value == value)
                 {
                     criteria.Fulfilled = true;
-                    CompletionCriteria[result.Item2[i]] = criteria;
+                    if (State is AssignmentState.Active)
+                    {
+                        CompletionCriteria[result.Item2[i]] = criteria;
+                        // check if all criteria have been fulfilled and complete the assignment if they have
+                        if (CompletionCriteria.All(criterion => criterion.Fulfilled)) Complete();
+                    } else if (State is AssignmentState.Inactive)
+                    {
+                        ActivationCriteria[result.Item2[i]] = criteria;
+                        // check if all criteria have been fulfilled and activate the assignment if they have
+                        if (ActivationCriteria.All(criterion => criterion.Fulfilled)) Activate();
+                    }
                     
-                    // check if all criteria have been fulfilled and complete the assignment if they have
-                    if (CompletionCriteria.All(criterion => criterion.Fulfilled)) Complete();
                 }
             }
         }
@@ -156,7 +175,7 @@ namespace Assignments
 
         public bool Completed => this.State == AssignmentState.Completed;
         
-        public bool IsActive => this.State != AssignmentState.Inactive;
+        public bool IsActive => this.State == AssignmentState.Active;
         
         public bool CanDelegate => this.Type is not AssignmentType.PlayerTimed or AssignmentType.PlayerEmergency or AssignmentType.PlayerOnly;
         
