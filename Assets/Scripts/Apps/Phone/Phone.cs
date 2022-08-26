@@ -40,6 +40,7 @@ namespace Apps.Phone
             //var screenGO = Instantiate(screenPrefab, phoneTransform.position, Quaternion.identity, phoneTransform) as GameObject;
             var screenGO = Instantiate(screenPrefab, appTransform) as GameObject;
             screenHistory.Add(screenGO);
+            GameEvent.ChangePhoneScreen(screen);
             return screenGO;
         }
 

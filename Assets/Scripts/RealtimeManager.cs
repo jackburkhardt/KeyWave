@@ -45,10 +45,11 @@ public class RealtimeManager : MonoBehaviour
 
     private IEnumerator DoRealtimeClock()
     {
-        while (time < EndTime)
+        while (time.Add(TimeSpan.FromMinutes(TIMESTEP_REALTIME)) < EndTime)
         {
             yield return new WaitForSeconds(TIMESTEP_SECONDS);
             time = time.Add(TimeSpan.FromMinutes(TIMESTEP_REALTIME)); // todo: finalize
+            GameEvent.ChangeTime(time);
         }
         
         GameEvent.EndChapter(Chapter);

@@ -15,7 +15,7 @@ namespace Assignments
     public class AssignmentManager : MonoBehaviour
     {
         private string _assignmentPath;
-        [NonSerialized] public static List<Assignment> _chapterAssignments = new List<Assignment>();
+        [NonSerialized] public static List<Assignment> ChapterAssignments = new List<Assignment>();
         
         private void Awake()
         {
@@ -27,13 +27,14 @@ namespace Assignments
                 if (assignment.IsTimed) StartCoroutine(DoAssignmentCountdown(assignment));
             };
             GameEvent.OnChapterEnd += OnChapterEnd;
-            
+            GameEvent.OnTimeChange += OnTimeChange;
+
         }
 
         [YarnCommand("activate_assignment")]
         public static void ActivateAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.Find(inactive => inactive.Name == name);
+            Assignment assignment = ChapterAssignments.Find(inactive => inactive.Name == name);
             if (assignment.Equals(default))
             {
                 Debug.LogError($"ActivateAssignment: An assignment by the name of \"{name}\" could not be found.");
@@ -54,7 +55,7 @@ namespace Assignments
         [YarnCommand("complete_assignment")]
         public static void CompleteAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.Find(active => active.Name == name);
+            Assignment assignment = ChapterAssignments.Find(active => active.Name == name);
             if (assignment.Equals(default))
             {
                 Debug.LogError($"CompleteAssignment: An assignment by the name of \"{name}\" could not be found.");
@@ -78,7 +79,7 @@ namespace Assignments
         [YarnCommand("fail_assignment")]
         public static void FailAssignment(string name)
         {
-            Assignment assignment = _chapterAssignments.Find(active => active.Name == name);
+            Assignment assignment = ChapterAssignments.Find(active => active.Name == name);
             if (assignment.Equals(default))
             {
                 Debug.LogError($"FailAssignment: An assignment by the name of \"{name}\" could not be found.");
@@ -101,8 +102,7 @@ namespace Assignments
         
         public static void DelegateAssignment(Assignment assignment, Character character)
         {
-            if (assignment.Type is AssignmentType.PlayerOnly or AssignmentType.PlayerTimed
-                or AssignmentType.PlayerEmergency) return;
+            if (!assignment.CanDelegate) return;
 
             character.TryRecieveAssignment(assignment); // TODO: handle if this fails
         }
@@ -123,23 +123,36 @@ namespace Assignments
 
         private void OnChapterEnd(int chapter)
         {
-            foreach (var assignment in _chapterAssignments.Where(assignment => !assignment.Over))
+            foreach (var assignment in ChapterAssignments.Where(assignment => !assignment.Over))
             {
                 FailAssignment(assignment.Name);
             }
         }
 
-        private void Load() => _chapterAssignments = 
+        private void OnTimeChange(TimeSpan time)
+        {
+            foreach (var assignment in ChapterAssignments.Where(
+                         assignment => !assignment.IsActive && assignment.ReleaseTime != default))
+            {
+                if (time >= assignment.ReleaseTime)
+                {
+                    assignment.Activate();
+                }
+            }
+        }
+
+        private void Load() => ChapterAssignments = 
             DataManager.DeserializeData<List<Assignment>>($"{_assignmentPath}Chapter{RealtimeManager.Chapter}.json");
 
         private void Save() =>
-            DataManager.SerializeData(_chapterAssignments, $"{_assignmentPath}Chapter{RealtimeManager.Chapter}.json");
+            DataManager.SerializeData(ChapterAssignments, $"{_assignmentPath}Chapter{RealtimeManager.Chapter}.json");
 
         private void OnDestroy()
         {
             GameEvent.OnGameSave -= Save;
             GameEvent.OnGameLoad -= Load;
             GameEvent.OnChapterEnd -= OnChapterEnd;
+            GameEvent.OnTimeChange -= OnTimeChange;
         }
     }
 }

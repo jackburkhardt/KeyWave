@@ -46,8 +46,7 @@ namespace Apps.PC
                 textAnimateCycles--;
             }
 
-            PC.Instance.loggedIn = true;
-            PC.Instance.SwitchScreen("Search");
+            GameEvent.UnlockPC();
             Destroy(this.gameObject);
         }
     }

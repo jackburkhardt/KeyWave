@@ -13,8 +13,8 @@ namespace Assignments
     {
         public readonly string Name;
         public readonly string Descriptor;
-        public List<Criteria> CompletionCriteria;
-        public List<Criteria> ActivationCriteria;
+        public readonly List<Criteria> CompletionCriteria;
+        public readonly List<Criteria> ActivationCriteria;
         public readonly AssignmentType Type;
         public AssignmentState State;
         public readonly TimeSpan ReleaseTime;
@@ -80,12 +80,14 @@ namespace Assignments
             }
         }
         
-        private void OnEmailOpen(EmailBackend.Email email) => UpdateCriteria("send_email", email.Subject);
+        private void OnEmailOpen(EmailBackend.Email email) => UpdateCriteria("open_email", email.Subject);
         private void OnInteractionStart(IInteractable interactable) => UpdateCriteria("interact", interactable.name);
         private void OnUnlockPC() => UpdateCriteria("unlock_pc", "");
         private void OnAssignmentComplete(Assignment assignment) => UpdateCriteria("complete_assignment", assignment.Name);
         private void OnSearch(string query, bool success) => UpdateCriteria("do_search", query);
         private void OnConversationStart(Character character) => UpdateCriteria("converse", character.name);
+        private void OnPCScreenChange(string screen) => UpdateCriteria("view_screen_pc", screen);
+        private void OnPhoneScreenChange(string screen) => UpdateCriteria("view_screen_phone", screen);
 
         private void ToggleListeners(bool enable)
         {
@@ -95,6 +97,10 @@ namespace Assignments
                 GameEvent.OnEmailOpen += OnEmailOpen;
                 GameEvent.OnInteractionStart += OnInteractionStart;
                 GameEvent.OnAssignmentComplete += OnAssignmentComplete;
+                GameEvent.OnSearch += OnSearch;
+                GameEvent.OnPCUnlock += OnUnlockPC;
+                GameEvent.OnPCScreenChange += OnPCScreenChange;
+                GameEvent.OnPhoneScreenChange += OnPhoneScreenChange;
             }
             else
             {
@@ -102,6 +108,10 @@ namespace Assignments
                 GameEvent.OnEmailOpen -= OnEmailOpen;
                 GameEvent.OnInteractionStart -= OnInteractionStart;
                 GameEvent.OnAssignmentComplete -= OnAssignmentComplete;
+                GameEvent.OnSearch -= OnSearch;
+                GameEvent.OnPCUnlock -= OnUnlockPC;
+                GameEvent.OnPCScreenChange -= OnPCScreenChange;
+                GameEvent.OnPhoneScreenChange -= OnPhoneScreenChange;
             }
         }
         
@@ -146,6 +156,8 @@ namespace Assignments
 
         public bool Completed => this.State == AssignmentState.Completed;
         
+        public bool IsActive => this.State != AssignmentState.Inactive;
+        
         public bool CanDelegate => this.Type is not AssignmentType.PlayerTimed or AssignmentType.PlayerEmergency or AssignmentType.PlayerOnly;
         
         public enum AssignmentType
@@ -169,8 +181,8 @@ namespace Assignments
         
         public struct Criteria
         {
-            public string Type;
-            public string Value;
+            public readonly string Type;
+            public readonly string Value;
             public bool Fulfilled;
             
             public Criteria(string type, string value)

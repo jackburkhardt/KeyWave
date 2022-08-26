@@ -36,8 +36,12 @@ public static class GameEvent
     public delegate void GameLoadDelegate();
     public delegate void TextDelegate(TextBackend.TextConversation convo, TextBackend.TextMessage message);
     public delegate void PCEventDelegate();
+    public delegate void PCScreenEventDelegate(string screen);
+    public delegate void PhoneEventDelegate();
+    public delegate void PhoneScreenEventDelegate(string screen);
     public delegate void AssignmentDelegate(Assignment assignment);
     public delegate void TimeDelegate(TimeSpan time);
+    public delegate void SearchDelegate(string query, bool success);
 
 
     // EVENTS
@@ -56,10 +60,16 @@ public static class GameEvent
     public static event TextDelegate OnTextReceive;
     public static event PCEventDelegate OnPCOpen;
     public static event PCEventDelegate OnPCClose;
+    public static event PCEventDelegate OnPCUnlock;
+    public static event PCScreenEventDelegate OnPCScreenChange;
+    public static event PhoneEventDelegate OnPhoneOpen;
+    public static event PhoneEventDelegate OnPhoneClose;
+    public static event PhoneScreenEventDelegate OnPhoneScreenChange;
     public static event AssignmentDelegate OnAssignmentActive;
     public static event AssignmentDelegate OnAssignmentComplete;
     public static event AssignmentDelegate OnAssignmentFail;
     public static event TimeDelegate OnTimeChange;
+    public static event SearchDelegate OnSearch;
 
     // TRIGGERS
     public static void InteractionStart(IInteractable interacObj) => OnInteractionStart?.Invoke(interacObj);
@@ -77,8 +87,14 @@ public static class GameEvent
     public static void ReceiveText(TextBackend.TextConversation convo, TextBackend.TextMessage message) => OnTextReceive?.Invoke(convo, message);
     public static void OpenPC() => OnPCOpen?.Invoke();
     public static void ClosePC() => OnPCClose?.Invoke();
+    public static void UnlockPC() => OnPCUnlock?.Invoke();
+    public static void ChangePCScreen(string screen) => OnPCScreenChange?.Invoke(screen);
+    public static void OpenPhone() => OnPhoneOpen?.Invoke();
+    public static void ClosePhone() => OnPhoneClose?.Invoke();
+    public static void ChangePhoneScreen(string screen) => OnPhoneScreenChange?.Invoke(screen);
     public static void StartAssignment(Assignment assignment) => OnAssignmentActive?.Invoke(assignment);
     public static void FailAssignment(Assignment assignment) => OnAssignmentFail?.Invoke(assignment);
     public static void CompleteAssignment(Assignment assignment) => OnAssignmentComplete?.Invoke(assignment);
     public static void ChangeTime(TimeSpan time) => OnTimeChange?.Invoke(time);
+    public static void Search(string query, bool success) => OnSearch?.Invoke(query, success);
 }

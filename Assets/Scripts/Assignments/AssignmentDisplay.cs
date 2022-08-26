@@ -32,7 +32,7 @@ namespace Assignments
                 _assignmentIcons.Add(Enum.Parse<AssignmentType>(sprite.name), sprite);
             }
 
-            foreach (var assignment in AssignmentManager._chapterAssignments)
+            foreach (var assignment in AssignmentManager.ChapterAssignments)
             {
                 if (assignment.State == Assignment.AssignmentState.Active)
                     AddAssignmentToDisplay(assignment);

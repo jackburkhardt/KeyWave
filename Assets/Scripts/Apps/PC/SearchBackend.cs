@@ -20,9 +20,13 @@ namespace Apps.PC
         }
 
         // returning null this time so that frontend can handle however it chooses
-        public static Texture2D Search(string key) =>
-            _searchMap.TryGetValue(key, out var tex) ? tex : null;
-        
+        public static Texture2D Search(string key)
+        {
+            var result = _searchMap.TryGetValue(key, out var tex) ? tex : null;
+            GameEvent.Search(key, result != null);
+            return result;
+        }
+
         private void Load()
         {
             List<SearchItem> textEntries = DataManager.DeserializeData<List<SearchItem>>(_searchFilePath);

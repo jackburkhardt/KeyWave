@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Apps.PC
 {
@@ -16,6 +18,7 @@ namespace Apps.PC
         private void Awake()
         {
             Instance = this;
+            GameEvent.OnPCUnlock += OnPCUnlock;
             SwitchScreen(!loggedIn ? "LockScreen" : "Search");
         }
 
@@ -71,14 +74,27 @@ namespace Apps.PC
             var screenPrefab = screens.Find(s => s.name == screen);
             if (!screenPrefab)
             {
-                Debug.LogError("Attempted to switch to screen \"" + screen + "\" but one by that name was not found. Are you sure the prefab was added to the screen list?");    
+                Debug.LogError(
+                    $"Attempted to switch to screen \"{screen}\" but one by that name was not found. Are you sure the prefab was added to the screen list?");    
                 return null;
             }
 
             //var screenGO = Instantiate(screenPrefab, phoneTransform.position, Quaternion.identity, phoneTransform) as GameObject;
             var screenGO = Instantiate(screenPrefab, appTransform) as GameObject;
             screenHistory.Add(screenGO);
+            GameEvent.ChangePCScreen(screen);
             return screenGO;
+        }
+        
+        private void OnPCUnlock()
+        {
+            loggedIn = true;
+            SwitchScreen("Search");
+        }
+
+        private void OnDestroy()
+        {
+            GameEvent.OnPCUnlock -= OnPCUnlock;
         }
     }
 }
