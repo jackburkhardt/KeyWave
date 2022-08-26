@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Antlr4.Runtime.Misc;
 using Apps;
+using Interaction;
 using JetBrains.Annotations;
 using Unity.VisualScripting.Antlr3.Runtime;
 
@@ -18,8 +19,6 @@ namespace Assignments
         public AssignmentState State;
         public readonly TimeSpan ReleaseTime;
         public readonly TimeSpan DueTime;
-
-        private List<string> eventActions;
 
         public Assignment(string name, string descriptor, List<Criteria> completionCriteria, List<Criteria> activationCriteria, 
             AssignmentType type = AssignmentType.General, AssignmentState state = AssignmentState.Inactive, 
@@ -81,48 +80,63 @@ namespace Assignments
             }
         }
         
-        private void OnEmailOpen(EmailBackend.Email email)
-        {
-            UpdateCriteria("send_email", email.Subject);
-        }
-        
+        private void OnEmailOpen(EmailBackend.Email email) => UpdateCriteria("send_email", email.Subject);
+        private void OnInteractionStart(IInteractable interactable) => UpdateCriteria("interact", interactable.name);
+        private void OnUnlockPC() => UpdateCriteria("unlock_pc", "");
+        private void OnAssignmentComplete(Assignment assignment) => UpdateCriteria("complete_assignment", assignment.Name);
+        private void OnSearch(string query, bool success) => UpdateCriteria("do_search", query);
+        private void OnConversationStart(Character character) => UpdateCriteria("converse", character.name);
+
         private void ToggleListeners(bool enable)
         {
-            eventActions = CompletionCriteria.Select(criterion => criterion.Type).ToList();
-            eventActions = eventActions.Distinct().ToList();
             if (enable)
             {
                 if (IsTimed) GameEvent.OnTimeChange += OnTimeChange;
                 GameEvent.OnEmailOpen += OnEmailOpen;
+                GameEvent.OnInteractionStart += OnInteractionStart;
+                GameEvent.OnAssignmentComplete += OnAssignmentComplete;
             }
             else
             {
                 if (IsTimed) GameEvent.OnTimeChange -= OnTimeChange;
                 GameEvent.OnEmailOpen -= OnEmailOpen;
+                GameEvent.OnInteractionStart -= OnInteractionStart;
+                GameEvent.OnAssignmentComplete -= OnAssignmentComplete;
             }
         }
         
-        private List<Criteria> FindCriteriaIndex(string type)
+        private (List<Criteria>, List<int>) FindCriteriaByAction(string type)
         {
-            return CompletionCriteria.FindAll(criteria => criteria.Type == type && criteria.Fulfilled == false);
+            var foundCriteria = CompletionCriteria.FindAll(criteria => criteria.Type == type && criteria.Fulfilled == false);
+            // make a list of all of the indexes of foundCriteria
+            var foundIndexes = foundCriteria.Select(criteria => CompletionCriteria.IndexOf(criteria)).ToList();
+            
+            // return a tuple of all the found criteria and their indexes in completioncriteria
+            return (foundCriteria, foundIndexes);
         }
+        
+        // i really really don't like these two functions. consider redoing them. they just feel grossly complicated
 
         private void UpdateCriteria(string action, string value)
         {
             // find all unfulfilled criteria for the given action
-            // disregard if 
-            var list = FindCriteriaIndex(action);
-            if (list.Count == 0) return;
+            var result = FindCriteriaByAction(action);
+            if (result.Item1.Count == 0) return;
 
-            for (int i = 0; i < list.Count; i++)
+            // go through each unfulfilled criteria and if its value is the same as the given value, mark it as fulfilled
+            // then update the main completioncriteria list with the fulfilled criteria
+            for (int i = 0; i < result.Item1.Count; i++)
             {
-                var criteria = CompletionCriteria[c];
-                criteria.Fulfilled = true;
-
-                CompletionCriteria[c] = criteria;
+                var criteria = result.Item1[i];
+                if (criteria.Value == value)
+                {
+                    criteria.Fulfilled = true;
+                    CompletionCriteria[result.Item2[i]] = criteria;
+                    
+                    // check if all criteria have been fulfilled and complete the assignment if they have
+                    if (CompletionCriteria.All(criterion => criterion.Fulfilled)) Complete();
+                }
             }
-
-            if (CompletionCriteria.All(criterion => criterion.Fulfilled)) Complete();
         }
 
         public bool IsTimed => this.Type is AssignmentType.Timed or AssignmentType.PlayerTimed
