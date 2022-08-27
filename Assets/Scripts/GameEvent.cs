@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Apps;
 using Apps.Phone;
 using Assignments;
@@ -34,7 +35,7 @@ public static class GameEvent
     public delegate void EmailDelegate(EmailBackend.Email email);
     public delegate void GameSaveDelegate();
     public delegate void GameLoadDelegate();
-    public delegate void TextDelegate(TextBackend.TextConversation convo, TextBackend.TextMessage message);
+    public delegate void TextDelegate(TextBackend.TextConversation convo);
     public delegate void PCEventDelegate();
     public delegate void PCScreenEventDelegate(string screen);
     public delegate void PhoneEventDelegate();
@@ -58,6 +59,7 @@ public static class GameEvent
     public static event GameLoadDelegate OnGameLoad;
     public static event TextDelegate OnTextSend;
     public static event TextDelegate OnTextReceive;
+    public static event TextDelegate OnConversationOpen;
     public static event PCEventDelegate OnPCOpen;
     public static event PCEventDelegate OnPCClose;
     public static event PCEventDelegate OnPCUnlock;
@@ -83,8 +85,9 @@ public static class GameEvent
     public static void OpenEmail(EmailBackend.Email email) => OnEmailOpen?.Invoke(email);
     public static void SaveGame() => OnGameSave?.Invoke();
     public static void LoadGame() => OnGameLoad?.Invoke();
-    public static void SendText(TextBackend.TextConversation convo, TextBackend.TextMessage message) => OnTextSend?.Invoke(convo, message);
-    public static void ReceiveText(TextBackend.TextConversation convo, TextBackend.TextMessage message) => OnTextReceive?.Invoke(convo, message);
+    public static void SendText(TextBackend.TextConversation convo) => OnTextSend?.Invoke(convo);
+    public static void ReceiveText(TextBackend.TextConversation convo) => OnTextReceive?.Invoke(convo);
+    public static void OpenConversation(TextBackend.TextConversation convo) => OnConversationOpen?.Invoke(convo);
     public static void OpenPC() => OnPCOpen?.Invoke();
     public static void ClosePC() => OnPCClose?.Invoke();
     public static void UnlockPC() => OnPCUnlock?.Invoke();

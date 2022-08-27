@@ -6,7 +6,7 @@ namespace Apps.Phone
 {
     public class TextBackend : ScriptableObject
     {
-        private static Dictionary<string, TextConversation> _conversations = new Dictionary<string, TextConversation>();
+        public static List<TextConversation> Conversations = new List<TextConversation>();
         private static string _conversationsPath;
         
         private void Awake()
@@ -20,30 +20,35 @@ namespace Apps.Phone
         [YarnCommand("player_sendtext")]
         public static void SendTextMessage(string recipient, string message)
         {
-            if (!_conversations.TryGetValue(recipient, out var convo))
+            var foundIndex = Conversations.FindIndex(c => c.Recipient == recipient);
+            if (foundIndex == -1)
             {
-                convo = new TextConversation(recipient, new List<TextMessage>());
-                _conversations.Add(recipient, convo);
+                var newConvo = new TextConversation(recipient, new List<TextMessage>());
+                Conversations.Add(newConvo);
+                foundIndex = Conversations.Count - 1;
             }
 
-            var tm = new TextMessage(true, message);
-            convo.Messages.Add(tm);
-            GameEvent.SendText(convo, tm);
-        
+            var foundConvo = Conversations[foundIndex];
+            var tm = new TextMessage(message, true);
+            foundConvo.Messages.Add(tm);
+            GameEvent.SendText(foundConvo, tm);
         }
         
         [YarnCommand("player_receivetext_noreply")]
         public static void ReceiveTextMessage(string sender, string message)
         {
-            if (!_conversations.TryGetValue(sender, out var convo))
+            var foundIndex = Conversations.FindIndex(c => c.Recipient == sender);
+            if (foundIndex == -1)
             {
-                convo = new TextConversation(sender, new List<TextMessage>());
-                _conversations.Add(sender, convo);
+                var newConvo = new TextConversation(sender, new List<TextMessage>());
+                Conversations.Add(newConvo);
+                foundIndex = Conversations.Count - 1;
             }
             
-            var tm = new TextMessage(false, message);
-            convo.Messages.Add(tm);
-            GameEvent.ReceiveText(convo, tm);
+            var foundConvo = Conversations[foundIndex];
+            var tm = new TextMessage(message, false);
+            foundConvo.Messages.Add(tm);
+            GameEvent.ReceiveText(foundConvo, tm);
 
         }
 
@@ -53,27 +58,29 @@ namespace Apps.Phone
             
         }
 
-        private void Save() => DataManager.SerializeData(_conversations, _conversationsPath);
-        private void Load() => _conversations = DataManager.DeserializeData<Dictionary<string, TextConversation>>(_conversationsPath);
+        private void Save() => DataManager.SerializeData(Conversations, _conversationsPath);
+        private void Load() => Conversations = DataManager.DeserializeData<List<TextConversation>>(_conversationsPath);
         
         public struct TextConversation
         {
             public string Recipient;
             public List<TextMessage> Messages;
+            public bool Read;
 
             public TextConversation(string recipient, List<TextMessage> messages)
             {
                 Recipient = recipient;
                 Messages = messages;
+                Read = false;
             }
         }
         
         public struct TextMessage
         {
-            public bool FromPlayer;
             public string Content;
+            public bool FromPlayer;
 
-            public TextMessage(bool fromPlayer, string content)
+            public TextMessage(string content, bool fromPlayer)
             {
                 FromPlayer = fromPlayer;
                 Content = content;
