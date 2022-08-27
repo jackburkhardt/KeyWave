@@ -31,7 +31,7 @@ namespace Apps.Phone
             var foundConvo = Conversations[foundIndex];
             var tm = new TextMessage(message, true);
             foundConvo.Messages.Add(tm);
-            GameEvent.SendText(foundConvo, tm);
+            GameEvent.SendText(foundConvo);
         }
         
         [YarnCommand("player_receivetext_noreply")]
@@ -48,7 +48,7 @@ namespace Apps.Phone
             var foundConvo = Conversations[foundIndex];
             var tm = new TextMessage(message, false);
             foundConvo.Messages.Add(tm);
-            GameEvent.ReceiveText(foundConvo, tm);
+            GameEvent.ReceiveText(foundConvo);
 
         }
 
