@@ -4,7 +4,6 @@ using Interaction;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Yarn.Unity;
 
 namespace Apps.Phone
 {

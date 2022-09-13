@@ -93,13 +93,24 @@ namespace Assignments
             }
         }
         
-        public static void DelegateAssignment(Assignment assignment, Character character)
+        [YarnCommand("delegate_assignment")]
+        public static void DelegateAssignment(string assignmentName, string characterName)
         {
-            if (!assignment.CanDelegate) return;
+            Assignment assignment = ChapterAssignments.Find(active => active.Name == assignmentName);
+            if (assignment.Equals(default))
+            {
+                Debug.LogError($"DelegateAssignment: An assignment by the name of \"{assignmentName}\" could not be found.");
+                return;
+            }
+            
+            Character character = CharacterManager.Find(characterName);
+            if (character.Equals(default)){
+                Debug.LogError($"DelegateAssignment: A character by the name of \"{characterName}\" could not be found.");
+                return;
+            }
 
-            character.TryRecieveAssignment(assignment); // TODO: handle if this fails
+            character.TryReceiveAssignment(assignment);
         }
-
         private void OnChapterEnd(int chapter)
         {
             foreach (var assignment in ChapterAssignments.Where(assignment => !assignment.Over))

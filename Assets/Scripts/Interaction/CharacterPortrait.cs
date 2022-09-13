@@ -10,15 +10,15 @@ namespace Interaction
     /// <summary>
     /// Representation of an NPC which can be conversed with.
     /// </summary>
-    public class Character : MonoBehaviour, IInteractable
+    public class CharacterPortrait : MonoBehaviour, IInteractable
     {
         private Outline _outline;
-        private List<Assignment> _delegatedAssignments = new List<Assignment>();
-
+        private Character _character;
+        
         private void Awake()
         {
             _outline = GetComponent<Outline>();
-            CharacterManager.SceneCharacters.Add(this);
+            CharacterManager.SceneCharacters.Add(_character);
         }
 
         public void Interact()

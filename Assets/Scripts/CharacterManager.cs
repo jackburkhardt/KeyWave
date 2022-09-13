@@ -9,6 +9,6 @@ public class CharacterManager : ScriptableObject
 
     public static Character Find(string characterName)
     {
-        return SceneCharacters.FirstOrDefault(character => character.name == characterName);
+        return SceneCharacters.FirstOrDefault(character => character.Name == characterName);
     }
 }

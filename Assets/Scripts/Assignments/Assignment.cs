@@ -17,18 +17,21 @@ namespace Assignments
         public readonly List<Criteria> ActivationCriteria;
         public readonly AssignmentType Type;
         public AssignmentState State;
+        public TimeSpan TimeToComplete;
         public readonly TimeSpan ReleaseTime;
         public readonly TimeSpan DueTime;
+        public readonly int RequiredSkillLevel;
+        public readonly string RequiredSkillName;
 
-        public Assignment(string name, string descriptor, List<Criteria> completionCriteria, List<Criteria> activationCriteria, 
-            AssignmentType type = AssignmentType.General, AssignmentState state = AssignmentState.Inactive, 
-            TimeSpan releaseTime = default, TimeSpan dueTime = default)
+        public Assignment(string name, string descriptor, List<Criteria> completionCriteria, List<Criteria> activationCriteria, TimeSpan timeToComplete, 
+            AssignmentType type = AssignmentType.General, AssignmentState state = AssignmentState.Inactive, TimeSpan releaseTime = default, TimeSpan dueTime = default)
         {
             Name = name;
             Descriptor = descriptor;
             CompletionCriteria = completionCriteria;
             ActivationCriteria = activationCriteria;
             Type = type;
+            TimeToComplete = timeToComplete;
             ReleaseTime = releaseTime;
             DueTime = dueTime;
             State = state;
@@ -87,7 +90,7 @@ namespace Assignments
         private void OnUnlockPC() => UpdateCriteria("unlock_pc", "");
         private void OnAssignmentComplete(Assignment assignment) => UpdateCriteria("complete_assignment", assignment.Name);
         private void OnSearch(string query, bool success) => UpdateCriteria("do_search", query);
-        private void OnConversationStart(Character character) => UpdateCriteria("converse", character.name);
+        private void OnConversationStart(Character character) => UpdateCriteria("converse", character.Name);
         private void OnPCScreenChange(string screen) => UpdateCriteria("view_screen_pc", screen);
         private void OnPhoneScreenChange(string screen) => UpdateCriteria("view_screen_phone", screen);
 
