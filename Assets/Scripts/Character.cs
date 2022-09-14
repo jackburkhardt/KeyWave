@@ -27,6 +27,13 @@ public class Character
     {
         var modifier = CalculateCompletionModifier(a);
 
+        if (modifier == 0)
+        {
+            // means the assignment is not completable by this character
+            // todo: figure out how we handle this
+            return;
+        }
+        
         if (delegatedAssignments == null)
         {
             delegatedAssignments = new Dictionary<Assignment, TimeSpan>();

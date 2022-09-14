@@ -16,11 +16,7 @@ public class CharacterManager : ScriptableObject
         GameEvent.OnGameLoad += Load;
     }
 
-    public static Character Find(string characterName)
-    {
-        return Characters.FirstOrDefault(character => character.Name == characterName);
-    }
-
+    public static Character Find(string characterName) => characters.FirstOrDefault(character => character.Name == characterName);
     public static List<Character> Characters => characters;
     private void Save() => DataManager.SerializeData(characters, charactersPath);
     private void Load() => characters = DataManager.DeserializeData<List<Character>>(charactersPath);
