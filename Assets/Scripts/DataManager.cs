@@ -16,6 +16,9 @@ public class DataManager : MonoBehaviour
     public static FilesAppBackend FilesAppBackend;
     public static SearchBackend SearchBackend;
     public static AssignmentManager AssignmentManager;
+    public static CharacterManager CharacterManager;
+    
+    public static SaveData SaveData;
     
     private void Awake()
     {
@@ -25,6 +28,7 @@ public class DataManager : MonoBehaviour
         FilesAppBackend = ScriptableObject.CreateInstance<FilesAppBackend>();
         SearchBackend = ScriptableObject.CreateInstance<SearchBackend>();
         AssignmentManager = gameObject.AddComponent<AssignmentManager>();
+        CharacterManager = ScriptableObject.CreateInstance<CharacterManager>();
         
         GameEvent.LoadGame();
     }
@@ -54,11 +58,11 @@ public class DataManager : MonoBehaviour
         GameEvent.SaveGame();
     }
 
-    public struct SaveData
-    {
-        public bool IsPCUnlocked;
-        public int CurrentChapter;
-        public TimeSpan CurrentTime;
-    }
-   
+}
+
+public struct SaveData
+{
+    public bool IsPCUnlocked;
+    public int CurrentChapter;
+    public TimeSpan CurrentTime;
 }

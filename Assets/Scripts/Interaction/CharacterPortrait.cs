@@ -18,7 +18,6 @@ namespace Interaction
         private void Awake()
         {
             _outline = GetComponent<Outline>();
-            CharacterManager.SceneCharacters.Add(_character);
         }
 
         public void Interact()

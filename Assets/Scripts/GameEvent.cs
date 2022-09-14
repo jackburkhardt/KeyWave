@@ -41,6 +41,7 @@ public static class GameEvent
     public delegate void PhoneEventDelegate();
     public delegate void PhoneScreenEventDelegate(string screen);
     public delegate void AssignmentDelegate(Assignment assignment);
+    public delegate void DelegationEventDelegate(Assignment assignment, Character character);
     public delegate void TimeDelegate(TimeSpan time);
     public delegate void SearchDelegate(string query, bool success);
 
@@ -70,6 +71,7 @@ public static class GameEvent
     public static event AssignmentDelegate OnAssignmentActive;
     public static event AssignmentDelegate OnAssignmentComplete;
     public static event AssignmentDelegate OnAssignmentFail;
+    public static event DelegationEventDelegate OnAssignmentDelegate;
     public static event TimeDelegate OnTimeChange;
     public static event SearchDelegate OnSearch;
 
@@ -98,6 +100,7 @@ public static class GameEvent
     public static void StartAssignment(Assignment assignment) => OnAssignmentActive?.Invoke(assignment);
     public static void FailAssignment(Assignment assignment) => OnAssignmentFail?.Invoke(assignment);
     public static void CompleteAssignment(Assignment assignment) => OnAssignmentComplete?.Invoke(assignment);
+    public static void DelegateAssignment(Assignment assignment, Character character) => OnAssignmentDelegate?.Invoke(assignment, character);
     public static void ChangeTime(TimeSpan time) => OnTimeChange?.Invoke(time);
     public static void Search(string query, bool success) => OnSearch?.Invoke(query, success);
 }

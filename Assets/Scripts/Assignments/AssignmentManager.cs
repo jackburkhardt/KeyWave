@@ -109,8 +109,34 @@ namespace Assignments
                 return;
             }
 
-            character.TryReceiveAssignment(assignment);
+            if (!assignment.CanDelegate)
+            {
+                Debug.LogError($"DelegateAssignment: The assignment \"{assignmentName}\" cannot be delegated.");
+                return;
+            }
+
+            character.DelegateAssignment(assignment);
         }
+
+        [YarnCommand("undelegate_assignment")]
+        public static void UndelegateAssignment(string assignmentName, string characterName)
+        {
+            Assignment assignment = ChapterAssignments.Find(active => active.Name == assignmentName);
+            if (assignment.Equals(default))
+            {
+                Debug.LogError($"UndelegateAssignment: An assignment by the name of \"{assignmentName}\" could not be found.");
+                return;
+            }
+            
+            Character character = CharacterManager.Find(characterName);
+            if (character.Equals(default)){
+                Debug.LogError($"UndelegateAssignment: A character by the name of \"{characterName}\" could not be found.");
+                return;
+            }
+
+            character.UndelegateAssignment(assignment);
+        }
+        
         private void OnChapterEnd(int chapter)
         {
             foreach (var assignment in ChapterAssignments.Where(assignment => !assignment.Over))
