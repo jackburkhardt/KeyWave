@@ -5,6 +5,7 @@ using Antlr4.Runtime.Misc;
 using Apps;
 using Interaction;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using Unity.VisualScripting.Antlr3.Runtime;
 
 namespace Assignments
@@ -17,14 +18,17 @@ namespace Assignments
         public readonly List<Criteria> ActivationCriteria;
         public readonly AssignmentType Type;
         public AssignmentState State;
-        public TimeSpan TimeToComplete;
         public readonly TimeSpan ReleaseTime;
         public readonly TimeSpan DueTime;
+        
+        // these are primarily for delegation
         public readonly int RequiredSkillLevel;
         public readonly string RequiredSkillName;
+        public TimeSpan TimeToComplete;
 
-        public Assignment(string name, string descriptor, List<Criteria> completionCriteria, List<Criteria> activationCriteria, TimeSpan timeToComplete, 
-            AssignmentType type = AssignmentType.General, AssignmentState state = AssignmentState.Inactive, TimeSpan releaseTime = default, TimeSpan dueTime = default)
+        public Assignment(string name, string descriptor, List<Criteria> completionCriteria, List<Criteria> activationCriteria, 
+            AssignmentType type = AssignmentType.General, AssignmentState state = AssignmentState.Inactive, TimeSpan releaseTime = default, TimeSpan dueTime = default,
+            TimeSpan timeToComplete = default, int requiredSkillLevel = 0, string requiredSkillName = "")
         {
             Name = name;
             Descriptor = descriptor;
@@ -35,6 +39,8 @@ namespace Assignments
             ReleaseTime = releaseTime;
             DueTime = dueTime;
             State = state;
+            RequiredSkillLevel = requiredSkillLevel;
+            RequiredSkillName = requiredSkillName;
             if (activationCriteria.Count >= 0) ToggleListeners(true);
         }
         
@@ -42,7 +48,7 @@ namespace Assignments
         {
             if (State is AssignmentState.Completed or AssignmentState.Failed)
             {
-                throw new Exception("Attempted to activate an assignment that was already finished.");
+                throw new Exception($"Attempted to activate an assignment ({this.Name}) that was already finished.");
             }
             
             State = AssignmentState.Active;
@@ -55,7 +61,7 @@ namespace Assignments
         {
             if (State is not AssignmentState.Active)
             {
-                throw new Exception("Attempted to complete an assignment that was not active.");
+                throw new Exception($"Attempted to complete an assignment ({this.Name}) that was not active.");
             }
             
             State = AssignmentState.Completed;
@@ -67,7 +73,7 @@ namespace Assignments
         {
             if (State is not AssignmentState.Active)
             {
-                throw new Exception("Attempted to complete an assignment that was not active.");
+                throw new Exception($"Attempted to complete an assignment ({this.Name}) that was not active.");
             }
             
             State = AssignmentState.Failed;
@@ -93,6 +99,7 @@ namespace Assignments
         private void OnConversationStart(Character character) => UpdateCriteria("converse", character.Name);
         private void OnPCScreenChange(string screen) => UpdateCriteria("view_screen_pc", screen);
         private void OnPhoneScreenChange(string screen) => UpdateCriteria("view_screen_phone", screen);
+        private void OnAssignmentDelegate(Assignment assignment, Character character) => UpdateCriteria("delegate_assignment", assignment.Name);
 
         private void ToggleListeners(bool enable)
         {
@@ -106,6 +113,7 @@ namespace Assignments
                 GameEvent.OnPCUnlock += OnUnlockPC;
                 GameEvent.OnPCScreenChange += OnPCScreenChange;
                 GameEvent.OnPhoneScreenChange += OnPhoneScreenChange;
+                GameEvent.OnAssignmentDelegate += OnAssignmentDelegate;
             }
             else
             {
@@ -117,6 +125,7 @@ namespace Assignments
                 GameEvent.OnPCUnlock -= OnUnlockPC;
                 GameEvent.OnPCScreenChange -= OnPCScreenChange;
                 GameEvent.OnPhoneScreenChange -= OnPhoneScreenChange;
+                GameEvent.OnAssignmentDelegate -= OnAssignmentDelegate;
             }
         }
         
@@ -207,6 +216,7 @@ namespace Assignments
             public readonly string Value;
             public bool Fulfilled;
             
+            [JsonConstructor]
             public Criteria(string type, string value)
             {
                 Type = type;

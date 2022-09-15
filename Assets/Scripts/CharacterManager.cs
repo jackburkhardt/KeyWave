@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assignments;
 using Interaction;
 using UnityEngine;
+using Yarn.Unity;
 
 public class CharacterManager : ScriptableObject
 {
@@ -11,9 +13,27 @@ public class CharacterManager : ScriptableObject
 
     private void Awake()
     {
-        charactersPath = Application.dataPath + "/GameData/Characters/Characters.json";
+        charactersPath = Application.streamingAssetsPath + "/GameData/Characters/Characters.json";
         GameEvent.OnGameSave += Save;
         GameEvent.OnGameLoad += Load;
+    }
+
+    /// <summary>
+    /// Enables/disables the ability for a character to be delegated assignments.
+    /// </summary>
+    /// <param name="characterName"></param>
+    /// <param name="enabled"></param>
+    [YarnCommand("toggle_delegation")]
+    public static void ToggleCharacterDelegation(string characterName, bool enabled)
+    {
+        var c = Find(characterName);
+        if (c.Equals(default))
+        {
+            Debug.LogError($"ToggleCharacterDelegation: Character {characterName} not found.");
+            return;
+        }
+        
+        c.CanReceiveDelegations = enabled;
     }
 
     public static Character Find(string characterName) => characters.FirstOrDefault(character => character.Name == characterName);

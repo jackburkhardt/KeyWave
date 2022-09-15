@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assignments;
+using UnityEngine;
 
 public class Character
 {
     public readonly string Name;
+    public readonly TimeSpan StartAvailableTime;
+    public readonly TimeSpan EndAvailableTime;
+    public bool CanReceiveDelegations;
     private int social;
     private int technical;
     private int creative;
@@ -13,9 +17,12 @@ public class Character
 
     private const float MULTI_ASSIGNMENT_PENALTY = 1.1f;
 
-    public Character(string name, int social, int technical, int creative, int trust, Dictionary<Assignment, TimeSpan> delegatedAssignments)
+    public Character(string name, TimeSpan startAvailableTime, TimeSpan endAvailableTime, bool canReceiveDelegations, int social, int technical, int creative, int trust, Dictionary<Assignment, TimeSpan> delegatedAssignments)
     {
         Name = name;
+        StartAvailableTime = startAvailableTime;
+        EndAvailableTime = endAvailableTime;
+        CanReceiveDelegations = canReceiveDelegations;
         this.social = social;
         this.technical = technical;
         this.creative = creative;
@@ -25,6 +32,12 @@ public class Character
 
     public void DelegateAssignment(Assignment a)
     {
+        if (!CanReceiveDelegations || RealtimeManager.Time < StartAvailableTime || RealtimeManager.Time > EndAvailableTime)
+        {
+            Debug.LogError($"Character {Name} cannot receive delegation for assignment {a.Name}.");
+            return;
+        }
+        
         var modifier = CalculateCompletionModifier(a);
 
         if (modifier == 0)
@@ -102,6 +115,9 @@ public class Character
         return skillModifier;
     }
     
+    /// <summary>
+    /// Updates the remaining time for assignments delegated to this character.
+    /// </summary>
     private void UpdateAssignmentProgress(TimeSpan newTime)
     {
         foreach (var (updatedA, value) in delegatedAssignments)
@@ -112,6 +128,8 @@ public class Character
             if (updatedT <= TimeSpan.Zero)
             {
                 updatedA.Complete();
+                if (delegatedAssignments.Count == 0) GameEvent.OnTimeChange -= UpdateAssignmentProgress;
+                if (delegatedAssignments.Count >= 1) DoMultiAssignmentPenalty(false);
             }
             else
             {

@@ -19,9 +19,14 @@ public class DataManager : MonoBehaviour
     public static CharacterManager CharacterManager;
     
     public static SaveData SaveData;
+    private string savePath;
     
     private void Awake()
     {
+        savePath = Application.streamingAssetsPath + "/GameData/save.json";
+        SaveData = DeserializeData<SaveData>(savePath);
+        RealtimeManager.Chapter = SaveData.CurrentChapter;
+        
         EmailBackend = ScriptableObject.CreateInstance<EmailBackend>();
         CallBackend = ScriptableObject.CreateInstance<CallBackend>();
         TextBackend = ScriptableObject.CreateInstance<TextBackend>();
@@ -29,9 +34,13 @@ public class DataManager : MonoBehaviour
         SearchBackend = ScriptableObject.CreateInstance<SearchBackend>();
         AssignmentManager = gameObject.AddComponent<AssignmentManager>();
         CharacterManager = ScriptableObject.CreateInstance<CharacterManager>();
-        
+    }
+
+    private void Start()
+    {
         GameEvent.LoadGame();
     }
+
     public static T DeserializeData<T>(string path)
     {
         if (File.Exists(path))
@@ -56,6 +65,7 @@ public class DataManager : MonoBehaviour
     private void OnDestroy()
     {
         GameEvent.SaveGame();
+        SerializeData(SaveData, savePath);
     }
 
 }
@@ -65,4 +75,12 @@ public struct SaveData
     public bool IsPCUnlocked;
     public int CurrentChapter;
     public TimeSpan CurrentTime;
+    
+    SaveData Default(){
+        return new SaveData{
+            IsPCUnlocked = false,
+            CurrentChapter = 1,
+            CurrentTime = new TimeSpan(9, 0, 0)
+        };
+    }
 }

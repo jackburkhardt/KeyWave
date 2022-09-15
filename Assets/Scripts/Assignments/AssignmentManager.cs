@@ -13,7 +13,7 @@ namespace Assignments
     public class AssignmentManager : MonoBehaviour
     {
         private string _assignmentPath;
-        [NonSerialized] public static List<Assignment> ChapterAssignments = new List<Assignment>();
+        public static List<Assignment> ChapterAssignments = new List<Assignment>();
         
         private void Awake()
         {

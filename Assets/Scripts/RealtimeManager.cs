@@ -28,6 +28,7 @@ public class RealtimeManager : MonoBehaviour
     private void Start()
     {
         GameEvent.StartChapter(Chapter);
+        time = DataManager.SaveData.CurrentTime;
         StartCoroutine(DoRealtimeClock());
     }
 
@@ -48,7 +49,7 @@ public class RealtimeManager : MonoBehaviour
         while (time.Add(TimeSpan.FromMinutes(TIMESTEP_GAMETIME_MINS)) < EndTime)
         {
             yield return new WaitForSeconds(TIMESTEP_REALTIME_SECONDS);
-            time = time.Add(TimeSpan.FromMinutes(TIMESTEP_GAMETIME_MINS)); // todo: finalize
+            time += TimeSpan.FromMinutes(TIMESTEP_GAMETIME_MINS); // todo: finalize
             GameEvent.ChangeTime(time);
         }
         

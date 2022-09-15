@@ -19,6 +19,11 @@ namespace Apps.PC
         {
             Instance = this;
             GameEvent.OnPCUnlock += OnPCUnlock;
+        }
+
+        private void Start()
+        {
+            loggedIn = DataManager.SaveData.IsPCUnlocked;
             SwitchScreen(!loggedIn ? "LockScreen" : "Search");
         }
 
