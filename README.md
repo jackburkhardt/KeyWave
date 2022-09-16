@@ -21,4 +21,4 @@ This game is not intended to be used as a sole teaching tool. It instead acts as
 
 ### Technical Specifications
 
-KeyWave is a 2D game using the Unity engine. It will be developed for PC and Mac systems, released as a single executable file and with a future goal of releasing it as a web-based Unity game.
+KeyWave is a 2D game using the Unity engine, version 2021.3.9f1 LTS. It will be developed for PC and Mac systems, released as a single executable file and with a future goal of releasing it as a web-based Unity game.
