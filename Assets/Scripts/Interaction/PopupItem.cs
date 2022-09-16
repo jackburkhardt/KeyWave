@@ -12,7 +12,6 @@ namespace Interaction
     public class PopupItem : MonoBehaviour, IInteractable
     {
         private Outline _outline;
-        [SerializeField] [TextArea] private string _internalDialogue;
         // action to be executed after the main interaction completes
         [SerializeField] private UnityEvent _postInteractAction;
         [SerializeField] private List<Object> _containedPopupWindows;
