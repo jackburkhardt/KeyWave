@@ -8,6 +8,9 @@ using Assignments;
 using Newtonsoft.Json;
 using UnityEngine;
 
+/// <summary>
+/// Handles persistent data loading/saving as well as setting up some of the game systems.
+/// </summary>
 public class DataManager : MonoBehaviour
 {
     public static EmailBackend EmailBackend;
@@ -70,6 +73,8 @@ public class DataManager : MonoBehaviour
 
 }
 
+// this struct can contain whatever data you want to save (settings, scores, etc) that isn't
+// specific to a particular system (like the emails or assignments)
 public struct SaveData
 {
     public bool IsPCUnlocked;

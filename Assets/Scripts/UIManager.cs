@@ -3,6 +3,9 @@ using Apps.PC;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the general game UI.
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _togglePopupViewMode;

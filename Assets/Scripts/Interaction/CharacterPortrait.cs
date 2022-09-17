@@ -22,6 +22,7 @@ namespace Interaction
 
         public void Interact()
         {
+            // todo: should start dialogue (but where?)
             throw new NotImplementedException();
         }
 

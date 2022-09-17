@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine;
 using Yarn.Unity;
 
+/// <summary>
+/// Manages the realtime sections of the game.
+/// </summary>
 public class RealtimeManager : MonoBehaviour
 {
     public static int Chapter;
