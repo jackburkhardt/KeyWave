@@ -1,0 +1,164 @@
+title: Intro
+position: 100,-268
+---
+<<wait 0.5>>
+Douglas:Do you really think you have what it takes?
+[i]He doesn't.[/i]
+Daniel:Psh! Haven't you seen my performance evaluations? I've got this in the bag.
+Douglas:You know that's not what I mean. My concern is that your inexperience is [negative]clouding your judgment[/negative].
+Daniel:Look, I know I'm young. But the results speak for themselves! And I think a fresh new look is [emphasis]exactly[/emphasis] what the store needs.
+Douglas:You remind me of myself. I can see why Francisco wanted you. You've met him, right? 
+->He's quite the character.
+    Daniel:He's quite the character.
+    Douglas:He's rough to deal with, yes. You want my advice? Don't take inspiration from that. 
+    Daniel:How so?
+    Douglas:Look, if you really want this store to thrive, [emphasis]know your people[/emphasis]. Get closer to the team before you try to change anything.
+    ->Sounds like you're speaking from experience.
+        Daniel:Sounds loke you're speaking from experience.
+        Douglas:I am. I fell into the same trap he did, and it cost me dearly.
+        Douglas:Look, just do me a favor and be smart about this.
+        Daniel:I'm not worried about that. I've got plenty of ideas already. Things are going to turn around [important]before you know it[/important]. 
+    ->But aren't we short on time?
+        Daniel:I thought speed was paramount.
+        Douglas:It is, which is why it's even more important for you to respect your team.
+        Daniel:Oh, I'm sure the team will respect me. I've got plenty of great ideas. I think things are going to turn out [important]just fine[/important].
+->We didn't really see eye-to-eye.
+    Daniel:I'm not sure we'll get along.
+    Douglas:Good. I don't think he's someone you shoud be looking up to in terms of leadership.
+    Daniel:Really?
+    Douglas:Yes, really. Don't take inspiration from him. It'll lead you to the [negative]same trap I got caught in.[/negative]
+    ->What trap?
+        Daniel:What are you saying exactly?
+        Douglas:Look, if you really want this store to thrive, [emphasis]know your people[/emphasis]. Get closer to the team before you try to change anything. 
+        Daniel:Look, I've got plenty of ideas already. I think things are going to turn out [important]just fine[/important].
+    ->I wouldn't worry about that.
+        Daniel:I'm not worried about that. I've got plenty of ideas already. Things are going to turn around [important]before you know it[/important]. 
+
+
+
+<<play_camera_animation "IntroCutscene">>
+
+
+===
+title: EnterBoatyard0
+position: -210,-108
+---
+<<if first_visit()>>
+Robyn:If there's one thing I need to do here, it's figure out why we're having this factory quality issue.
+Robyn:Hmm.. I think I can see Charlie Douglas right over there! Looks like I managed to catch him on a break.
+<<else>>
+Robyn:Charlie's still here.
+Robyn:I need to talk to him while he's easy to find.
+<<endif>>
+
+===
+
+title: EnterBoatyard1
+position: -210,-108
+---
+There's nothing else for me to do here.
+===
+
+title: InteractCharlie0
+position: -340,365
+---
+Robyn: Let's talk to Charlie.
+<<show Charlie>>
+Robyn: Hi Charlie!
+Charlie: Hey Robyn! I can imagine why you're here.
+Robyn: (Now that I'm here... what should I decide?)
+
+->Personally take charge of the factory quality issue.
+    Robyn: I think for the sake of accelerating the process of fixing this, I will be taking charge for now.
+    Robyn: Let's shut down production until we can identify the core of this issue. Let's call your team together and begin to solve this.
+    Charlie: I understand you want to fix this situation now, but given the complexity of this issue, I recommend we wait until McPhail returns for Gunerson's funeral.
+    Charlie: We can handle the problem. I just wanted to keep you informed.
+    Robyn: I trust you guys can fix it, but I still want to be closely involved.
+    Charlie sighs.
+    <<set $DelegateCharlie to false>>
+->Delegate the task to Charlie Douglas, the foreman, to find the solution.
+    Robyn: I have confidence that you, McPhail, and the rest of the team will be able to solve this issue on your own.
+    Robyn: I'll be keeping in touch but I trust you. If you feel like temporarily shutting down production is necessary, you have my full support.
+    Charlie: Thank you Robyn. The team and I sure appreciate your confidence in us.
+    Charlie: McPhail returns tomorrow, but we'll get started right away.
+    Charlie smiles.
+    <<set $DelegateCharlie to true>>
+<<hide Charlie>>
+
+===
+
+title: InteractCharlie1
+position: -77,359
+---
+<<if $DelegateCharlie is true>>
+Charlie seems to appreciate my confidence in him.
+<<else>>
+Charlie doesn't seem too happy about my decision.
+<<endif>>
+
+===
+title: EnterMeetingRoom
+position: 535,-453
+---
+<<if first_visit()>>
+    Robyn: It looks like this is where most of our meetings are held.
+<<endif>>
+Robyn: I can decide to gather the managers now, or wait until a more appropriate time.
+===
+
+
+title: MeetingChoice
+position: 560,-234
+---
+<<if !$meetingOccurred>>
+Robyn: Should I gather the managers now?
+-> Yes
+    Robyn: I'll go ahead and set everything up.
+    <<jump ManagerMeeting>>
+-> No
+    Robyn: It might be better to wait some time.
+<<else>>
+Robyn: I've already met with the managers.
+<<endif>>
+===
+
+title: ManagerMeeting
+position: 550,-76
+---
+<<travel Meeting(Full)>>
+Robyn: Good morning, everyone.
+Robyn: I'm thrilled to be here as the new head of Yellowtail.
+Robyn: (Alright Robyn, you have to make a good first impression).
+Robyn: (I need to decide what I want to focus on in this speech. What should I emphasize?)
+-> My background and qualifications for my new job.
+    Robyn: I believe my work at Sportscraft has provided with the experience and tools to guide Yellowtail to even better performance."
+    Robyn: The two businesses are similar enough, so I have full confidence I can hit the ground running."
+    Robyn: I look forward to providing you with new ideas as well as all the help you need."
+    Robyn: (I hope that made a good first impression...)
+    Mark: (Wow. It's like she doesn't even recognize that Olaf just died. The funeral is tomorrow!)
+    Paula: (Typical hotshot manager. Self centered, only cares about the bottom line....)
+-> My exciting plans for the future of YellowTail.
+    Robyn: As your leader, I have so many ideas for us to implement. The excitement of doing new things will be contagious, I'm sure.
+    Robyn: I really look forward to working with all of you. I'm so excited about the future that holds for Yellowtail.
+    Robyn: Boz hired me to turn Yellowtail around. I will make sure that will happen.
+    Robyn: (I hope that made a good first impression...)
+    Mark: (Wow. It's like she doesn't even recognize that Olaf just died. The funeral is tomorrow!)
+    Paula: (Typical hotshot manager. Self centered, only cares about the bottom line....)
+-> Their feelings and concerns about the immediate situation.
+    Robyn: Before we discuss anything else, I think we need to talk about Olaf.
+    Robyn: I am so sorry about Olaf's death. I understand this is a sad time for all of you. You have my sympathy.
+    Robyn: Although we have many things to accomplish, I think it would be for the best if we all took some time to share our fondest memories of Olaf.
+    Robyn: (I think this was the right decision...)
+    Mark: (I'm glad she's sensitive to the situation. We really do miss Olaf.)
+    Paula: (Thank you, Robyn.)
+<<travel Meeting>>
+<<set $meetingOccurred to true>>
+Robyn: Now that that's taken care of, I can take care of other things.
+===
+title: Start
+position: 90,-452
+---
+//declare variables
+<<set $meetingOccurred to false>>
+<<jump BozCall>>
+===
