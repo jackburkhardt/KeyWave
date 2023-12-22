@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using PixelCrushers.DialogueSystem;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -14,12 +16,7 @@ public class PlayerEvents
      * The list of PlayerEvents is serialized and saved to a JSON file.
     */
 
-    public List<PlayerEvent> events;
-
-    public PlayerEvents()
-    {
-        events = new List<PlayerEvent>();
-    }
+    public List<PlayerEvent> events = new();
 
     [System.Serializable]
     public class PlayerEvent
@@ -28,34 +25,38 @@ public class PlayerEvents
          * Event types include: player_interact, player_move, lua_decision
          */
 
-        [SerializeField] string EventType;
-        [SerializeField] string EventValue;
-        [SerializeField] string Timestamp;
+        [SerializeField] private string type;
+        [SerializeField] private string index;
+        [SerializeField] private string value;
+        [SerializeField] private string sender;
+        [SerializeField] private string receiver;
+        [SerializeField] private string timeStamp;
 
-        public PlayerEvent(string eventType, string eventValue, string timestamp)
+        public PlayerEvent(string eventType, string eventValue, string eventSender, string eventReceiver, string timestamp)
         {
-            EventType = eventType;
-            EventValue = eventValue;
-            Timestamp = timestamp;
+            this.value = eventValue;
+            this.type = eventType;
+            this.sender = eventSender;
+            this.reciever = eventReceiver;
+            timeStamp = timestamp;
         }
 
         // for readability purposes
 
         public string GetEventType()
         {
-            return EventType;
+            return type;
         }
 
         public string GetEventValue()
         {
-            return EventValue;
+            return value;
         }
-
     }
 
-    public void AddEvent(string eventType, string eventValue, bool logToConsole = false)
+    public void AddEvent(string eventType, string eventSender, string eventReceiver, string eventValue, bool logToConsole = false)
     {
-        events.Add(new PlayerEvent(eventType, eventValue, System.DateTime.Now.ToString()));
+        events.Add(new PlayerEvent(eventType, eventSender, eventReceiver, eventValue,System.DateTime.Now.ToString(CultureInfo.CurrentCulture)));
 
         if (logToConsole) Debug.Log($"Added event: {eventType} {eventValue}");
     }
@@ -84,9 +85,9 @@ public class PlayerEventStack : MonoBehaviour
     string _path;
 
 
-    private void AddEvent(string eventType, string eventInput)
+    private void AddEvent(string eventType, string eventSender, string eventReceiver, string eventValue)
     {
-       events.AddEvent(eventType, eventInput, verboseLogging);
+       events.AddEvent(eventType, eventValue, eventSender, eventReceiver);
        
        DataManager.SerializeData(events, _path);
     }
@@ -106,11 +107,44 @@ public class PlayerEventStack : MonoBehaviour
     {
         GameEvent.OnPlayerEvent -= AddEvent;
     }
+    
+    
+    
+    //INVOKE EVENTS 
 
-
-    // Update is called once per frame
-    void Update()
+    public void OnInteraction(string receiver)
     {
-        
+        GameEvent.PlayerEvent("interact", "player", receiver);
     }
+
+    public void OnConversationDecision(string conversation, string decision)
+    {
+        var sender = DialogueManager.instance.activeConversation.conversationTitle;
+        var currentNode = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title;
+        GameEvent.PlayerEvent("decision", conversation, currentNode, decision);
+    }
+
+    public void OnConversationState(string state)
+    {
+        var conversation = DialogueManager.instance.activeConversation.conversationTitle;
+        GameEvent.PlayerEvent("dialogue",  conversation, state);
+    }
+
+    public void OnConversationLine()
+    {
+        var actor;
+        var conversant;
+        var 
+    }
+    
+    /*
+
+    public void OnConversationEnd() { 
+    
+        var conversation = DialogueManager.instance.activeConversation.conversationTitle;
+        GameEvent.PlayerEvent("dialogue_end", conversation);
+
+    }
+    
+    */
 }

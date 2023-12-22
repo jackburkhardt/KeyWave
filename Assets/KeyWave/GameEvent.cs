@@ -31,8 +31,11 @@ public static class GameEvent
 
 
     //ANYEVENT
-    public static event Action<string, string> OnPlayerEvent;
-    public static void PlayerEvent(string eventType, string eventInput) => OnPlayerEvent?.Invoke(eventType, eventInput);
+    public static event Action<string, string, string, string> OnPlayerEvent;
+    public static void PlayerEvent(string type, string sender, string receiver, string value = null) => OnPlayerEvent?.Invoke(type, sender, receiver, value);
+
+    
+    
 
     //YARNEVENT
     public static event Action<YarnEvent> onYarnEvent;
