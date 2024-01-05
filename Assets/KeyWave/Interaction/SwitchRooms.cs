@@ -22,7 +22,7 @@ namespace Interaction
 
         public void Interact()
         {
-            if (!GameManager.isControlEnabled) return;
+         //   if (!GameManager.isControlEnabled) return;
             GameEvent.InteractionStart(this);
      //       GameManager.playerActor.RelocateToRoom(_destination); 
         }

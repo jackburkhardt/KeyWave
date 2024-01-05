@@ -34,9 +34,9 @@ public class Actor : MonoBehaviour
 
     IEnumerator Relocation(Transform destination)
     {
-        GameEvent.RemoveActorFromRoom(this);
+    //    GameEvent.RemoveActorFromRoom(this);
         yield return new WaitForSeconds(0.75f); // number should change depending on distance from new location
-        GameEvent.MoveActorToRoom(this, destination);
+     //   GameEvent.MoveActorToRoom(this, destination);
     }
 
     

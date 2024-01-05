@@ -28,13 +28,13 @@ namespace PerilsAndPitfalls
         }
 
         private void OnEnable()
-        {
-            GameEvent.onActorDialogueLine += SetSpeakingActor;
+        { 
+            //GameEvent.onActorDialogueLine += SetSpeakingActor;
         }
 
         private void OnDisable()
         {
-            GameEvent.onActorDialogueLine -= SetSpeakingActor;
+            //GameEvent.onActorDialogueLine -= SetSpeakingActor;
         }
 
         void SetSpeakingActor(string name)

@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Apps;
 using Apps.Phone;
 using Assignments;
 using Interaction;
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.UI;
+using PlayerEvent = PlayerEvents.PlayerEvent;
 
 public static class GameEvent
 {
@@ -27,17 +32,92 @@ public static class GameEvent
         https://www.tutorialsteacher.com/csharp/csharp-event
      */
 
-    
-
-
     //ANYEVENT
-    public static event Action<string, string, string, string> OnPlayerEvent;
-    public static void PlayerEvent(string type, string sender, string receiver, string value = null) => OnPlayerEvent?.Invoke(type, sender, receiver, value);
 
+    // pls goob: use a generic interface instead of "Button"
+
+    private static void InvokePlayerEvent(string type, string sender, string receiver, string value = null)
+    {
+        var playerEvent = new PlayerEvent(type, sender, receiver, value);
+        OnPlayerEvent?.Invoke(playerEvent);
+    }
+    public static void OnInteraction(GameObject interactable)
+    {
+        if (interactable.TryGetComponent(out DialogueSystemTrigger dialogueSystemTrigger))
+        {
+            InvokePlayerEvent("interact", "player", interactable.name, "DialogueSystemTrigger");
+            dialogueSystemTrigger.OnUse();
+        }
+    }
+
+    public static void OnMove(string sender, string value)
+    {
+        InvokePlayerEvent("move", sender, "player", value);
+    }
+
+    public static event Action<PlayerEvents.PlayerEvent> OnPlayerEvent;
     
+    public static void PlayerEvent(PlayerEvents.PlayerEvent playerEvent) => OnPlayerEvent?.Invoke(playerEvent);
+
+    public static void OnConversationDecision(string decision)
+    {
+        var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
+        var currentNode = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title;
+        InvokePlayerEvent("decision", conversationTitle, currentNode, decision);
+    }
+
+    public static void OnConversationStart(string eventSender)
+    {
+        var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
+        var currentEntry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
+        InvokePlayerEvent("conversation_start",  eventSender, conversationTitle, currentEntry.ToString());
+    }
+    
+    public static void OnConversationEnd()
+    {
+        var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
+        var currentEntry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
+        InvokePlayerEvent("conversation_end",  "DialogueManager", conversationTitle, currentEntry.ToString());
+    }
+
+    public static void OnConversationResponseMenu()
+    {
+        var dialogueEntryNodeTitle = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title;
+        string responses = "";
+        foreach (var response in DialogueManager.instance.currentConversationState.pcResponses)
+        {
+            if (responses.Length != 0) responses += ",";
+            responses += response.destinationEntry.Title;
+        }
+        InvokePlayerEvent("awaiting_response", dialogueEntryNodeTitle, "player", String.Join(",", responses));
+    }
+
+    public static void OnConversationLine()
+    {
+        /*
+        var actor = DialogueManager.instance.currentActor.name;
+        var conversant = DialogueManager.instance.currentConversant.name;
+        var dialogueEntryID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id.ToString();
+        */
+        
+       // var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
+        var dialogueEntryID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
+        var dialogueEntryTitle = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title;
+        var actorName = DialogueManager.instance.conversationController.actorInfo.Name;
+        var conversantName = DialogueManager.instance.conversationController.conversantInfo.Name;
+        
+        if (GameManager.MostRecentResponseNode != string.Empty) InvokePlayerEvent("conversation_decision", "player", GameManager.MostRecentResponseNode, dialogueEntryTitle);
+        InvokePlayerEvent("line", actorName, conversantName, dialogueEntryID.ToString());
+
+        
+        
+        // DialogueManager.StartConversation(conversation.Title, actorTransform, conversantTransform, entryID);
+    }
     
 
-    //YARNEVENT
+    //YARNEVENT (depecrated)
+    
+    /*
     public static event Action<YarnEvent> onYarnEvent;
     public static void YarnEvent(YarnEvent yarnEvent) => onYarnEvent.Invoke(yarnEvent);
 
@@ -86,6 +166,7 @@ public static class GameEvent
     public static event Action<string> onActorDialogueLine;
     public static void OnActorCurrentlySpeaking(string actor) => onActorDialogueLine?.Invoke(actor);
 
+*/
 
     //UI SCREEN
     public delegate void OnUIScreen(Transform UIscreen);

@@ -66,7 +66,7 @@ namespace YarnEvents {
         [YarnCommand("signal")]
         public static void Signal(string signal)
         {
-            GameEvent.YarnSignal(signal);
+           // GameEvent.YarnSignal(signal);
         }
 
         [YarnFunction("first_visit")]

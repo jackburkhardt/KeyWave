@@ -42,7 +42,7 @@ public class YarnEvent
 
             // this check is to avoid toggling listeners on twice if they were already on for activation checking
             if (ActivationCriteria.Count == 0) ToggleListeners(true);
-            GameEvent.StartYarnEvent(this);
+          //  GameEvent.StartYarnEvent(this);
         }
 
     public struct Criteria
@@ -176,7 +176,7 @@ public class YarnEvent
         private void ToggleListeners(bool enable)
     {
         if (enable)
-        {
+        { /*
             //   GameEvent.OnActorEnterRoom += OnPlayerEnterRoom;
                 GameEvent.OnYarnEventActive += OnYarnEventActivation;
                 GameEvent.OnInteractionStart += OnPlayerInteract;
@@ -184,7 +184,9 @@ public class YarnEvent
                 GameEvent.OnYarnSignal += OnYarnSignal;
                 GameEvent.OnYarnNodeEnd += onYarnNodeEnd;
                 GameEvent.OnYarnNodeStart += onYarnNodeStart;
+                */
             }
+            
         else
         {
            

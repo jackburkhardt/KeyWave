@@ -21,7 +21,7 @@ namespace YarnEvents
         {
             _yarnEventPath = Application.streamingAssetsPath + "/GameData/YarnEvents/";
             GameEvent.OnGameLoad += Load;
-            GameEvent.OnYarnEventActive += NewYarnEvent;
+          //  GameEvent.OnYarnEventActive += NewYarnEvent;
         }
 
         private void Load()
@@ -50,23 +50,24 @@ DataManager.DeserializeData<List<YarnEvent>>($"{_yarnEventPath}{GameManager.curr
             DialogueRunner.name = YarnEvent.Name; // debug purposes
             if (DialogueRunner.yarnProject == null) DialogueRunner.SetProject(Resources.Load($"Yarn/{GameManager.currentModule}/YarnProject") as YarnProject);
             DialogueRunner.onDialogueComplete.AddListener(OnRunnerEnd);
-            DialogueRunner.onNodeComplete.AddListener(OnNodeEnd);
-            DialogueRunner.onNodeStart.AddListener(OnNodeStart);
+         //   DialogueRunner.onNodeComplete.AddListener(OnNodeEnd);
+         //   DialogueRunner.onNodeStart.AddListener(OnNodeStart);
 
             //queue yarnevent activation for when appropriate
           //  GameEvent.OnAnyEvent += StartYarn; 
 
         }
 
-        private void OnNodeEnd(string node) => GameEvent.YarnNodeEnd(node);
+      //  private void OnNodeEnd(string node) => GameEvent.YarnNodeEnd(node);
 
-        private void OnNodeStart(string node) => GameEvent.YarnNodeStart(node);
+        //private void OnNodeStart(string node) => GameEvent.YarnNodeStart(node);
 
         private void StartYarn()
         {
-
+            /*
             if (!GameManager.isControlEnabled) return;
             Debug.Log("starting");
+            */
           //  GameEvent.OnAnyEvent -= StartYarn;
             GameEvent.InteractionStart(DialogueRunner.GetComponent<Interaction.Dialogue>()); // otherwise "player_interact" can get confused
             DialogueRunner.LoadStateFromPlayerPrefs(); //load variables, otherwise variables don't save
@@ -77,7 +78,7 @@ DataManager.DeserializeData<List<YarnEvent>>($"{_yarnEventPath}{GameManager.curr
 
         private void OnRunnerEnd()
         {
-            GameEvent.EndYarnEvent(YarnEvent);
+         //   GameEvent.EndYarnEvent(YarnEvent);
             YarnEvent.State = YarnEvent.YarnEventState.Inactive;
 
             bool CompletionIsFulfilled = YarnEvent.CompletionCriteria.All(criterion => criterion.Fulfilled);

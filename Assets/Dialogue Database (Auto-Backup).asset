@@ -8826,11 +8826,11 @@ MonoBehaviour:
     - title: Title
       value: VendingMachineInteraction
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
       value: 1
       type: 5
@@ -8910,7 +8910,7 @@ MonoBehaviour:
         destinationConversationID: 10
         destinationDialogueID: 2
         isConnector: 0
-        priority: 2
+        priority: 0
       - originConversationID: 10
         originDialogueID: 0
         destinationConversationID: 10
@@ -8930,8 +8930,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 688.35803
-        y: 73.38631
+        x: 591.62683
+        y: 80.040794
         width: 160
         height: 30
     - id: 2
@@ -8991,8 +8991,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 308.83176
-        y: 258.02634
+        x: 316.70435
+        y: 244.99918
         width: 160
         height: 30
     - id: 3
@@ -9062,8 +9062,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 182.97385
-        y: 413.2684
+        x: 182.95459
+        y: 400.2869
         width: 160
         height: 30
     - id: 4
@@ -9133,8 +9133,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 428.5479
-        y: 412.67963
+        x: 427.70047
+        y: 399.98703
         width: 160
         height: 30
     - id: 5
@@ -9182,7 +9182,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 178.71722
+        x: 179.74815
         y: 502.92352
         width: 160
         height: 30
@@ -9233,7 +9233,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 425.20126
-        y: 499.8921
+        y: 498.19714
         width: 160
         height: 30
     - id: 7
@@ -9286,15 +9286,15 @@ MonoBehaviour:
         destinationDialogueID: 9
         isConnector: 0
         priority: 2
-      conditionsString: Variable["player_interact_VendingMachine"] == 1
+      conditionsString: Variable["VendingMachineInteraction_cycle"] == 1
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 687.99536
-        y: 257.50778
+        x: 682.73535
+        y: 254.41501
         width: 160
         height: 30
     - id: 9
@@ -9316,7 +9316,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: Snackos Taste Good Though
+        value: Those chips were delicious!
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -9334,7 +9334,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 10
+        originDialogueID: 9
+        destinationConversationID: 10
+        destinationDialogueID: 13
+        isConnector: 0
+        priority: 2
       conditionsString: Variable["VendingMachineInteraction_choice0"] == "snacks"
       userScript: 
       onExecute:
@@ -9342,8 +9348,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 685.47
-        y: 399.686
+        x: 689.1464
+        y: 397.1118
         width: 160
         height: 30
     - id: 11
@@ -9391,8 +9397,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 954.19214
-        y: 402.08832
+        x: 973.50024
+        y: 402.75232
         width: 160
         height: 30
     - id: 12
@@ -9445,20 +9451,69 @@ MonoBehaviour:
         destinationDialogueID: 11
         isConnector: 0
         priority: 2
-      conditionsString: Variable["player_interact_VendingMachine"] > 1
+      conditionsString: Variable["VendingMachineInteraction_cycle"] > 1
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 957.4302
-        y: 266.6853
+        x: 972.04724
+        y: 258.5964
+        width: 160
+        height: 30
+    - id: 13
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: I can't wait to talk to Prado.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 10
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 689.1464
+        y: 468.43533
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 67.516335, y: 0}
-    canvasZoom: 0.8200002
+    canvasScrollPosition: {x: 501.2696, y: 180.69392}
+    canvasZoom: 1.3899996
   - id: 11
     fields:
     - title: Title

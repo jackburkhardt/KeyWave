@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InvokeMovePlayer : MonoBehaviour
 {
+    [SerializeField] private SceneAsset unloadScene;
     private enum Room
     {
         Lobby,
@@ -15,18 +18,9 @@ public class InvokeMovePlayer : MonoBehaviour
 
     public void MovePlayerTo(InvokeMovePlayer destination)
     {
-        GameEvent.PlayerEvent("player_enter", destination.room.ToString());
+        GameEvent.OnMove(gameObject.name, destination.room.ToString());
+      //  if (unloadScene != null) SceneManager.UnloadSceneAsync(unloadScene.name);
       }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
+    
 }

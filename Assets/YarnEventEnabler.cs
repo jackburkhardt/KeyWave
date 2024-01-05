@@ -18,12 +18,12 @@ public class YarnEventEnabler : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvent.OnActorExitRoom += EnableYarnOnPlayerExit;
+        //GameEvent.OnActorExitRoom += EnableYarnOnPlayerExit;
     }
 
     private void OnDisable()
     {
-        GameEvent.OnActorExitRoom -= EnableYarnOnPlayerExit;
+      //  GameEvent.OnActorExitRoom -= EnableYarnOnPlayerExit;
     }
 
     void EnableYarnOnPlayerExit(Actor actor, Transform room)

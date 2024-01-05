@@ -656,7 +656,7 @@ namespace PerilsAndPitfalls
                 //set scroll down
                 lineText = Instantiate(_textPrefab, _textContainer).GetComponent<TextMeshProUGUI>();
 
-                GameEvent.OnActorCurrentlySpeaking(dialogueLine.CharacterName);
+              //  GameEvent.OnActorCurrentlySpeaking(dialogueLine.CharacterName);
 
                 lineText.gameObject.SetActive(true);
                 canvasGroup.gameObject.SetActive(true);

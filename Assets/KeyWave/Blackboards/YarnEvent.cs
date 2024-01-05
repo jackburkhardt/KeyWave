@@ -63,7 +63,7 @@ public class YarnEvent : MonoBehaviour
         yield return new WaitForEndOfFrame();
         if (!CheckRequirements()) yield break;
         dialogueRunner.Stop();
-        GameEvent.YarnEvent(this);
+      //  GameEvent.YarnEvent(this);
         dialogueRunner.StartDialogue(node);
     }
 

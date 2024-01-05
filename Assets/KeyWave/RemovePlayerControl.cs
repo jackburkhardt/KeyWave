@@ -19,14 +19,14 @@ public class RemovePlayerControl : MonoBehaviour
         if (controlDisablerQueue.Contains(obj)) return;
         controlDisablerQueue.Add(obj);
     //    Debug.Log("Added " + obj.name + " to disabler queue");
-        GameManager.isControlEnabled = false;
+     //   GameManager.isControlEnabled = false;
     //    GameEvent.AnyEvent();
     }
     public static void RemoveFromDisablerQueue(Object obj)
     {
         controlDisablerQueue.Remove(obj);
     //    Debug.Log("Removed " + obj.name + " from disabler queue");
-        if (controlDisablerQueue.Count == 0) { GameManager.isControlEnabled = true; }
+      //  if (controlDisablerQueue.Count == 0) { GameManager.isControlEnabled = true; }
      //   GameEvent.AnyEvent();
     }
 

@@ -33,11 +33,12 @@ public abstract class EventRequirementsCheck : MonoBehaviour
     {
         requirementsDebugLog = "Requirements unmet: ";
         requirementsMatched = true;
-        if (!GameManager.isControlEnabled)
+     /*   if (!GameManager.isControlEnabled)
         {
             requirementsMatched = false;
             requirementsDebugLog += "PlayerControl ";
         }
+     */
     }
 
 

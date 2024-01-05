@@ -13,7 +13,7 @@ public class UIScreenManager : MonoBehaviour
     [SerializeField] protected Canvas backgroundCanvas;
 
     [SerializeField] protected GameObject _overlayElementPrefab;
-    [SerializeField] protected GameObject _backgroundPrefab;
+    [SerializeField] protected GameObject _backgroundScene;
 
     protected Transform overlayElementsContainer;
     protected Transform backgroundContainer;
@@ -69,9 +69,11 @@ public class UIScreenManager : MonoBehaviour
 
     protected virtual void SetupBackgroundProperties()
     {
-        if (_backgroundPrefab == null) return;
+        if (_backgroundScene == null) return;
 
-        backgroundContainer = Instantiate(_backgroundPrefab, backgroundCanvas.transform).transform;
+        SceneManager.LoadScene(_backgroundScene.name, LoadSceneMode.Additive);
+
+       // backgroundContainer = Instantiate(_backgroundScene, backgroundCanvas.transform).transform;
         var canvas = backgroundContainer.GetComponent<Canvas>();
         var rectTransform = backgroundContainer.GetComponent<RectTransform>();
 
