@@ -65,8 +65,9 @@ public class MindmapManager : UIScreenManager
         StartCoroutine(SetPath());
         IEnumerator SetPath()
         {
-            while (GameManager.currentModule == null) yield return null;
-            _path = $"{Application.streamingAssetsPath}/GameData/{GameManager.currentModule}/Mindmap.json";
+            yield return null;
+            //  while (GameManager.currentModule == null) yield return null;
+            // _path = $"{Application.streamingAssetsPath}/GameData/{GameManager.currentModule}/Mindmap.json";
         }
     }
 

@@ -54,8 +54,9 @@ public class PortraitView : DialogueViewBase
             StartCoroutine(SetPath());
             IEnumerator SetPath()
             {
-                while (GameManager.currentModule == null) yield return null;
-                _path = $"{Application.streamingAssetsPath}/GameData/{GameManager.currentModule}/Party.json";
+                yield return null;
+                //while (GameManager.currentModule == null) yield return null;
+                // _path = $"{Application.streamingAssetsPath}/GameData/{GameManager.currentModule}/Party.json";
             }
 
 
@@ -75,7 +76,7 @@ public class PortraitView : DialogueViewBase
             {
                 Portrait.portraitObject = Instantiate(PortraitPrefab, transform);
                 Portrait.portraitObject.GetComponent<RectTransform>().sizeDelta = PortraitSize(Portrait.IsTalking);
-                Portrait.portraitObject.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{GameManager.currentModule}/Portraits/{Portrait.Name}");
+              //  Portrait.portraitObject.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Sprites/{GameManager.currentModule}/Portraits/{Portrait.Name}");
             }
         }
 

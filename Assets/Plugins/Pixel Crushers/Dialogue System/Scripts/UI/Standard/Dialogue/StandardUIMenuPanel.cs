@@ -593,6 +593,7 @@ namespace PixelCrushers.DialogueSystem
 
         protected virtual GameObject InstantiateButton()
         {
+            /*
             // Try to pull from pool first:
             if (m_instantiatedButtonPool.Count > 0)
             {
@@ -602,8 +603,10 @@ namespace PixelCrushers.DialogueSystem
             }
             else
             {
-                return GameObject.Instantiate(buttonTemplate.gameObject) as GameObject;
+                
             }
+            */
+            return Instantiate(buttonTemplate.gameObject) as GameObject;
         }
 
         public void DestroyInstantiatedButtons()
@@ -611,7 +614,7 @@ namespace PixelCrushers.DialogueSystem
             // Return buttons to pool:
             for (int i = 0; i < instantiatedButtons.Count; i++)
             {
-                instantiatedButtons[i].SetActive(false);
+                if (instantiatedButtons[i] != null) instantiatedButtons[i].SetActive(false);
             }
             m_instantiatedButtonPool.AddRange(instantiatedButtons);
 

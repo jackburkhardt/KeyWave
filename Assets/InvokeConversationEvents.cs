@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,38 +12,18 @@ public class InvokeConversationEvents : MonoBehaviour
     public void BroadcastLine()
     {
         if (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id == 0) return; 
+        
         GameEvent.OnConversationLine();
     //   StartCoroutine(DelayedBroadcast("line"));
     }
 
     public void BroadcastConversationStart()
     {
-      GameEvent.OnConversationStart(GameManager.MostRecentDialogueTrigger);
-     //  StartCoroutine(DelayedBroadcast("start"));
+        GameEvent.OnConversationStart();
+        //  StartCoroutine(DelayedBroadcast("start"));
 
     }
-    
-   
-    
-    IEnumerator DelayedBroadcast(string type)
-    {
-        switch (type)
 
-        {
-            case "line":
-                yield return null;
-                GameEvent.OnConversationLine();
-                break;
-            case "start":
-                GameEvent.OnConversationStart(GameManager.MostRecentDialogueTrigger);
-                break;
-            case "end":
-                GameEvent.OnConversationEnd();
-                break;
-        }
-
-    }
-    
 
     
     public void BroadcastConversationEnd()

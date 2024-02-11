@@ -13,19 +13,6 @@ public class AdditiveSceneLoader : MonoBehaviour
 
     public void OnInteract()
     {
-        if (!isSceneLoaded)
-        {
-            SceneManager.LoadSceneAsync(scene.name, LoadSceneMode.Additive);
-            
-        }
-
-        else
-        {
-            SceneManager.UnloadSceneAsync(scene.name);
-        }
-        
-        isSceneLoaded = !isSceneLoaded;
-       
+        SceneManager.LoadSceneAsync(scene.name, LoadSceneMode.Additive);
     }
-
 }

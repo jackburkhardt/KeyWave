@@ -26,9 +26,9 @@ namespace YarnEvents
 
         private void Load()
         {
-            ChapterYarnEvents =
-DataManager.DeserializeData<List<YarnEvent>>($"{_yarnEventPath}{GameManager.currentModule}/{GameManager.currentChapter}.json");
-            Debug.Log(ChapterYarnEvents.Count + " YarnEvents loaded.");
+           // ChapterYarnEvents =
+//DataManager.DeserializeData<List<YarnEvent>>($"{_yarnEventPath}{GameManager.currentModule}/{GameManager.currentChapter}.json");
+            //Debug.Log(ChapterYarnEvents.Count + " YarnEvents loaded.");
         }
 
         //class that ties a dialoguerunner with a yarnevent
@@ -46,9 +46,9 @@ DataManager.DeserializeData<List<YarnEvent>>($"{_yarnEventPath}{GameManager.curr
         public YarnEventInstance(YarnEvent yarnEvent)
         {
             YarnEvent = yarnEvent;
-            DialogueRunner = (GameObject.Instantiate(Resources.Load($"Yarn/{GameManager.currentModule}/Dialogue System") as GameObject)).GetComponent<DialogueRunner>();
+           // DialogueRunner = (GameObject.Instantiate(Resources.Load($"Yarn/{GameManager.currentModule}/Dialogue System") as GameObject)).GetComponent<DialogueRunner>();
             DialogueRunner.name = YarnEvent.Name; // debug purposes
-            if (DialogueRunner.yarnProject == null) DialogueRunner.SetProject(Resources.Load($"Yarn/{GameManager.currentModule}/YarnProject") as YarnProject);
+           // if (DialogueRunner.yarnProject == null) DialogueRunner.SetProject(Resources.Load($"Yarn/{GameManager.currentModule}/YarnProject") as YarnProject);
             DialogueRunner.onDialogueComplete.AddListener(OnRunnerEnd);
          //   DialogueRunner.onNodeComplete.AddListener(OnNodeEnd);
          //   DialogueRunner.onNodeStart.AddListener(OnNodeStart);
