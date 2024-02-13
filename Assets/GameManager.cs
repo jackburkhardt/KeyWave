@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameStateManager gameStateManager;
     private PlayerEventStack playerEventStack;
+
+    public List<GameLocation> locations;
     public struct TimeScales
     {
         internal static int GlobalTimeScale = 15;
@@ -57,6 +59,11 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+    }
+    
+    public enum Region {
+        Vitoria,
+        Recife
     }
 
     public enum Locations {
@@ -226,6 +233,32 @@ public class GameManager : MonoBehaviour
     public void Wait(int duration)
     {
        GameEvent.OnWait(duration);
+    }
+
+    public int GetPlayerDistanceFromLocation(Locations location)
+    {
+        GameLocation playerLocation = null, nextLocation = null;
+        
+        foreach (var gameLocation in locations)
+        {
+            playerLocation = gameLocation.location.ToString() == gameStateManager.gameState.player_location
+                ? gameLocation
+                : playerLocation;
+            
+            nextLocation = gameLocation.location == location
+                ? gameLocation
+                : nextLocation;
+        }
+        
+        if (playerLocation == null || nextLocation == null) return 0;
+        return (int)Vector2.Distance(playerLocation.coordinates, nextLocation.coordinates);
+    }
+    
+    
+    public string GetEtaToLocation(Locations location)
+    {
+        var distance = GetPlayerDistanceFromLocation(location);
+        return HoursMinutes(distance * TimeScales.GlobalTimeScale + GameStateManager.instance.gameState.clock);
     }
 
 
