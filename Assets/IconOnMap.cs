@@ -28,15 +28,15 @@ public class IconOnMap : MonoBehaviour
             {
                 distance = (int)Vector2.Distance(mapPin.transform.localPosition, transform.localPosition);
             }
-        }
-        
-    
-
-        return distance;
+        } return distance;
 
     }
 
-    public void OnHover() => _mapAnimator.ShowInfoPanel(transform, _location.ToString(), description, DistanceToPlayerLocation() * GameManager.TimeScales.GlobalTimeScale);
+    public void OnHover()
+    {
+        _mapAnimator.ShowInfoPanelHandler(transform, _location, description,
+            DistanceToPlayerLocation() * GameManager.TimeScales.GlobalTimeScale);
+    }
 
     public void OnMouseLeave()
     {
@@ -46,7 +46,10 @@ public class IconOnMap : MonoBehaviour
     
     public void OnClick()
     {
+        _mapAnimator.ShowInfoPanelHandler(transform, _location, description,
+            DistanceToPlayerLocation() * GameManager.TimeScales.GlobalTimeScale, true);
        _mapAnimator.ShowConfirmationButtons();
+       _mapAnimator.ZoomInOnIcon(transform);
     }
 
    

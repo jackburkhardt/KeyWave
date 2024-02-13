@@ -15,17 +15,12 @@ public class WatchInteractable : MonoBehaviour
     public Image image;
     [SerializeField] private Transform pointerHand;
     [SerializeField] private Button button;
-    
-    [SerializeField] private float _watchHandAngle;
-    [SerializeField] private float _minAngle;
-    [SerializeField] private float _maxAngle;
     [SerializeReference] private Side watchSide;
     [SerializeField] private bool syncWatchSides = true;
     [SerializeReference] private Spacing spacing;
     [SerializeField] private bool syncSpacingWithWatchSide = true;
     [NonSerialized] public float angleIndex;
     [NonSerialized] public Spacing masterSpacing = Spacing.Spread;
-    [NonSerialized] public Side masterSide;
     List<WatchInteractable> matchedSideInteractables = new List<WatchInteractable>();
     [SerializeField] private float _padding;
     public UnityEvent onHover, onClick, onMouseExit;
@@ -68,6 +63,8 @@ public class WatchInteractable : MonoBehaviour
         button ??= GetComponent<Button>();
         image.alphaHitTestMinimumThreshold = 2;
     }
+
+    private bool isButtonActive = false;
     
     
     private void Update()
@@ -143,25 +140,29 @@ public class WatchInteractable : MonoBehaviour
         var pointer = new PointerEventData(EventSystem.current);
         
         //check if pointer is not already on top of another button
-        
-       
-      
-        
-        if (watchHandAngle < maxAngle && watchHandAngle > minAngle && button.interactable)
+
+
+        var isArrowPointingAtButton = watchHandAngle < maxAngle && watchHandAngle > minAngle;
+
+        if (isArrowPointingAtButton && button.interactable && !isButtonActive)
         {
+            isButtonActive = true;
             ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerEnterHandler);
-            
             onHover.Invoke();
-            
-            if (Input.GetKeyDown(KeyCode.Mouse0)) ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerClickHandler);
-            
-            onClick.Invoke();
-            
         }
-        else
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && isButtonActive && button.interactable)
+        {
+            ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerClickHandler);
+            onClick.Invoke();
+        }
+    
+        if (!isArrowPointingAtButton && isButtonActive)
         {
             ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerExitHandler);
             onMouseExit.Invoke();
+            isButtonActive = false;
         }
+        
     }
 }

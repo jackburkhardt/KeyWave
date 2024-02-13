@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 [RequireComponent(typeof(RectTransform))]
@@ -21,17 +22,25 @@ public class MapAnimator : MonoBehaviour
     {
         // Initialize the origin position (you can set this to your starting point)
         _rectTransform = GetComponent<RectTransform>();
-        _direction = new Vector3(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(-10f, 10f), 0f).normalized;
-        _infoPanel.gameObject.SetActive(false);
         _parentRectTransform = transform.parent.GetComponent<RectTransform>();
+        ResetAnimation();
+        
 
         // Start the coroutine to move the object
        // StartCoroutine(MoveObject());
     }
-    
-    public void ShowInfoPanel(Transform locationTransform, string locationName, string descriptionText, int distanceInSeconds)  
+
+    public void ShowInfoPanelHandler(Transform locationTransform, GameManager.Locations location, string descriptionText,
+        int distanceInSeconds, bool onClick = false)
     {
-        _locationName.text = locationName;
+        if (!_confirmButton.gameObject.activeSelf && !onClick || _confirmButton.gameObject.activeSelf && onClick) 
+            ShowInfoPanel(locationTransform, location, descriptionText, distanceInSeconds);
+    }
+    
+    public void ShowInfoPanel(Transform locationTransform, GameManager.Locations location, string descriptionText, int distanceInSeconds)  
+    {
+        _locationName.text = location.ToString();
+        _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
         _etaText.text = $"ETA: {GameManager.instance.HoursMinutes(distanceInSeconds + DialogueLua.GetVariable("clock").asInt)}";
         _descriptionText.text = descriptionText;
         _infoPanel.gameObject.SetActive(true);
@@ -61,14 +70,22 @@ public class MapAnimator : MonoBehaviour
 
     public void ZoomInOnIcon(Transform locationTransform)
     {
+        CancelAnimations();
         var location = locationTransform.localPosition;
         LeanTween.moveLocal(gameObject, -location * transform.localScale.x, 1f).setEaseInOutSine();
         LeanTween.scale(transform.parent.gameObject, new Vector3(2, 2, 1), 1f).setEaseInOutSine();
+    }
+
+    public void CancelAnimations()
+    {
+        LeanTween.cancel(gameObject);
+        LeanTween.cancel(transform.parent.gameObject);
     }
    
 
     public void ResetAnimation()
     {
+        CancelAnimations();
         LeanTween.scale(transform.parent.gameObject, new Vector3(1, 1, 1), 0.5f).setEaseInOutSine();
         _standby = true;
         _direction = new Vector3(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(-10f, 10f), 0f).normalized;
