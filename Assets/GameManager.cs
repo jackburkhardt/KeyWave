@@ -19,8 +19,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameStateManager gameStateManager;
     private PlayerEventStack playerEventStack;
-
     public List<GameLocation> locations;
+    public List<GameObjective> Objectives;
     public struct TimeScales
     {
         internal static int GlobalTimeScale = 15;
@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
         internal static int SecondsBetweenLines = 15;
         internal static int SecondsPerInteract = 30;
     }
-
 
     // Start is called before the first frame update
     private void Awake()
@@ -210,6 +209,29 @@ public class GameManager : MonoBehaviour
         return value;
     }
 
+    public GameObjective GetObjectiveFromTitle(string title)
+    {
+        GameObjective objective = null;
+
+        foreach (var obj in GameManager.instance.Objectives)
+        {
+            if (obj.objectiveTitle == title)
+            {
+                objective = obj;
+                break;
+            }
+        }
+        return objective;
+    }
+
+    public void UpdateObjectiveState(string objectiveTitle)
+    {
+        var objective = GetObjectiveFromTitle(objectiveTitle);
+        var status = DialogueLua.GetQuestField(objectiveTitle, "state").ToString();
+        
+        objective.state = (GameObjective.State)Enum.Parse(typeof(GameObjective.State), status);
+    }
+
     public void LoadScene(string sceneName) => StartCoroutine(LoadSceneHandler(sceneName));
     
     public void ChangeScene(string currentScene, string newScene) => StartCoroutine(LoadSceneHandler(newScene, currentScene));
@@ -260,7 +282,6 @@ public class GameManager : MonoBehaviour
         var distance = GetPlayerDistanceFromLocation(location);
         return HoursMinutes(distance * TimeScales.GlobalTimeScale + GameStateManager.instance.gameState.clock);
     }
-
 
     public IEnumerator LoadSceneHandler(string newScene, string currentScene = "")
     {

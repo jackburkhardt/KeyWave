@@ -8,23 +8,39 @@ public class NotificationWidget : MonoBehaviour
 {
 
 
+    [SerializeField] private GameObjective _objective;
     [SerializeField] private TMPro.TMP_Text _taskText, _etaText;
-    public GameManager.Hour hour;
-    public GameManager.Minute minute;
-
-    public string task;
-    public GameManager.Locations location;
-    
+ 
     // Start is called before the first frame update
-    void Start()
+
+    public GameObjective.State GetObjectiveState()
     {
+        return _objective.state;
+    }
+
+    public void SetObjective(GameObjective objective)
+    {
+        _objective = objective;
+    }
+    
+    public void SetObjective(string objectiveTitle)
+    {
+        GameObjective objective = null;
         
+        foreach (var obj in GameManager.instance.Objectives)
+        {
+            if (obj.objectiveTitle == objectiveTitle)
+            {
+                objective = obj;
+            }
+        }
+        _objective = objective;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _taskText.text = $"{task} at the {location} at {hour}:{minute}";
-        _etaText.text = $"Earliest ETA: {GameManager.instance.GetEtaToLocation(location)}";
+        _taskText.text = $"{_objective.objectiveTitle} at the {_objective.location} at {_objective.hour}:{_objective.minute}";
+        _etaText.text = $"Earliest ETA: {GameManager.instance.GetEtaToLocation(_objective.location)}";
     }
 }
