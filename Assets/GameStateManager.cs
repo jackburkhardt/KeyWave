@@ -262,7 +262,13 @@ public class GameStateManager : PlayerEventHandler
             }
        
         gameState.clock += playerEvent.Duration;
+        
         DialogueLua.SetVariable("clock", gameState.clock);
+
+        foreach (var location in GameManager.instance.locations)
+        {
+            DialogueLua.SetLocationField(location.name, "etaFromPlayer", GameManager.instance.GetEtaToLocation(location.location));
+        }
     }
 
     public IEnumerator LoadGameState()

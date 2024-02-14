@@ -58,6 +58,15 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+        
+
+        foreach (var location in locations)
+        {
+            DialogueLua.SetLocationField(location.name, "X Coordinate", location.coordinates.x);
+            DialogueLua.SetLocationField(location.name, "Y Coordinate", location.coordinates.y);
+            
+        }
+
     }
     
     public enum Region {
