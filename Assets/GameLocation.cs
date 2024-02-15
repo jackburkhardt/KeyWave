@@ -14,6 +14,7 @@ public class GameLocation : ScriptableObject
     public Sprite pin;
     public Color buttonTint;
     public List<Scene> scenes;
+    public List<string> objectives;
     public Vector2 coordinates;
     public bool isUnlocked;
     

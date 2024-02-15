@@ -151,7 +151,7 @@ MonoBehaviour:
   - id: 3
     fields:
     - title: Name
-      value: Douglas10AMMeeting
+      value: Meet with Douglas
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -199,7 +199,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_QuestState
     - title: Entry 1
-      value: "Current ETA:  [lua(Location[\"Caf\xE9\"].etaFromPlayer)]"
+      value: "Current ETA:  [lua(Location[\"Caf\xE9\"].ETA)]"
       type: 0
       typeString: CustomFieldType_Text
     - title: Entry 1 ETA
@@ -207,7 +207,11 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Display Name
-      value: "Meet with Douglas at the Caf\xE9 at 10AM."
+      value: "Meet with Douglas at the Caf\xE9 at [lua(Variable[\"douglasMeetingTime\"])]."
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Group
+      value: Critical Objectives
       type: 0
       typeString: CustomFieldType_Text
   - id: 5
@@ -257,7 +261,11 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_QuestState
     - title: Entry 1
-      value: "Current ETA:  [lua(Location[\"Caf\xE9\"].etaFromPlayer)]"
+      value: "Current ETA:  [lua(Location[\"Caf\xE9\"].ETA)]"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Group
+      value: Critical Objectives
       type: 0
       typeString: CustomFieldType_Text
   - id: 4
@@ -6429,7 +6437,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestState("Douglas10AMMeeting", "active")
+      userScript: SetQuestState("Meet with Douglas", "active")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -6491,7 +6499,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 225.53242
-        y: 831.85394
+        y: 833.0103
         width: 160
         height: 30
     - id: 13

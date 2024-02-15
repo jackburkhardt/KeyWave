@@ -16,40 +16,32 @@ public class IconOnMap : MonoBehaviour
         _mapAnimator??=GetComponentInParent<MapAnimator>();
     }
 
-    private int DistanceToPlayerLocation()
-    {
-        var allMapPins = FindObjectsOfType<IconOnMap>();
-
-        var distance = 0;
-        
-        foreach (var mapPin in allMapPins)
-        {
-            if (mapPin._location.ToString() == GameStateManager.instance.gameState.player_location)
-            {
-                distance = (int)Vector2.Distance(mapPin.transform.localPosition, transform.localPosition);
-            }
-        } return distance;
-
-    }
+   
 
     public void OnHover()
     {
+        /*
         _mapAnimator.ShowInfoPanelHandler(transform, _location, description,
             DistanceToPlayerLocation() * GameManager.TimeScales.GlobalTimeScale);
+            */
     }
 
     public void OnMouseLeave()
     {
+        /*
         _mapAnimator.HideInfoPanelHandler();
+        */
     }
     
     
     public void OnClick()
     {
+        /*
         _mapAnimator.ShowInfoPanelHandler(transform, _location, description,
             DistanceToPlayerLocation() * GameManager.TimeScales.GlobalTimeScale, true);
        _mapAnimator.ShowConfirmationButtons();
        _mapAnimator.ZoomInOnIcon(transform);
+       */
     }
 
    

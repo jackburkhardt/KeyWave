@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         {
             DialogueLua.SetLocationField(location.name, "X Coordinate", location.coordinates.x);
             DialogueLua.SetLocationField(location.name, "Y Coordinate", location.coordinates.y);
+            DialogueLua.SetLocationField(location.name, "Description", location.description);
             
         }
 
@@ -84,6 +85,30 @@ public class GameManager : MonoBehaviour
         Café,
         Store
     }
+    
+    public static GameLocation GetGameLocation(string location)
+    {
+        GameLocation gameLocation = null;
+        
+        foreach (var loc in instance.locations)
+        {
+            if (loc.name != location) continue;
+            gameLocation = loc;
+            break;
+        }
+        return gameLocation;
+    }
+    
+    public static List<string> GetLocationObjectives(string location)
+    {
+        var gameLocation = GetGameLocation(location);
+        return gameLocation.objectives;
+    }
+
+    public static List<string> GetLocationObjectives(Locations location) => GetLocationObjectives(location.ToString());
+  
+    
+    
     
     public enum Hour
     {

@@ -8,27 +8,45 @@ using UnityEngine.UI;
 [RequireComponent(typeof(RectTransform))]
 public class MapAnimator : MonoBehaviour
 {
-    
+    public Image pinPrefab;
     // Start is called before the first frame update
-    public float moveSpeed = 5f; // Adjust the movement speed as needed
+    private float _animationSpeed = 20f; // animation speed
     private bool _standby = true;
     private RectTransform _rectTransform, _parentRectTransform;
     private Vector3 _direction;
     
     
-    [SerializeField] private RectTransform _infoPanel, _confirmButton, _cancelButton;
+    [SerializeField] private RectTransform _infoPanel, _confirmButton, _cancelButton, _objectivePrefab;
     [SerializeField] private TMPro.TMP_Text _locationName, _etaText, _descriptionText;
+    private RectTransform _objectivePanel;
+    
     private void Start()
     {
         // Initialize the origin position (you can set this to your starting point)
         _rectTransform = GetComponent<RectTransform>();
         _parentRectTransform = transform.parent.GetComponent<RectTransform>();
         ResetAnimation();
-        
+        SpawnPins();
+        _objectivePanel = _objectivePrefab.parent.GetComponent<RectTransform>();
+        _objectivePrefab.gameObject.SetActive(false);
 
         // Start the coroutine to move the object
        // StartCoroutine(MoveObject());
     }
+
+    private void SpawnPins()
+    {
+        foreach (var location in GameManager.instance.locations)
+        {
+            var coordinates = new Vector3(location.coordinates.x, location.coordinates.y, 0);
+            Instantiate(pinPrefab.gameObject, coordinates, Quaternion.identity, transform);
+        }
+        
+        pinPrefab.gameObject.SetActive(false);
+        
+    }
+    
+    /*
 
     public void ShowInfoPanelHandler(Transform locationTransform, GameManager.Locations location, string descriptionText,
         int distanceInSeconds, bool onClick = false)
@@ -37,36 +55,84 @@ public class MapAnimator : MonoBehaviour
             ShowInfoPanel(locationTransform, location, descriptionText, distanceInSeconds);
     }
     
-    public void ShowInfoPanel(Transform locationTransform, GameManager.Locations location, string descriptionText, int distanceInSeconds)  
+    */
+    
+    public void ShowFleetingInfoPanel(string location)
+    {
+        var locationEnum = (GameManager.Locations) Enum.Parse(typeof(GameManager.Locations), location);
+        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(locationEnum);
+    }
+    
+    public void ShowFleetingInfoPanel(GameManager.Locations location)
+    {
+        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(location);
+    }
+
+    public void ShowPersistentHeroPanel(GameManager.Locations location)
+    {
+        ShowInfoPanel(location);
+    }
+    
+    public void ShowPersistentHeroPanel(string location)
+    {
+        var locationEnum = (GameManager.Locations) Enum.Parse(typeof(GameManager.Locations), location);
+        ShowInfoPanel(locationEnum);
+    }
+    
+    public void HideFleetingInfoPanel()
+    {
+        if (!_confirmButton.gameObject.activeSelf) HideInfoPanel();
+       
+    }
+
+  
+    
+    
+    
+    
+    
+    private void ShowInfoPanel(GameManager.Locations location)  
     {
         _locationName.text = location.ToString();
         _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
-        _etaText.text = $"ETA: {GameManager.instance.HoursMinutes(distanceInSeconds + DialogueLua.GetVariable("clock").asInt)}";
-        _descriptionText.text = descriptionText;
+        _etaText.text = $"ETA: {DialogueLua.GetLocationField(location.ToString(), "ETA").asString}";
+        _descriptionText.text = DialogueLua.GetLocationField(location.ToString(), "Description").asString;
         _infoPanel.gameObject.SetActive(true);
+
+        foreach (var objective in _objectivePanel.GetComponentsInChildren<Transform>())
+        {
+            if (objective == _objectivePrefab) continue;
+            
+            Destroy(objective.gameObject);
+        }
+
+        foreach (var objective in GameManager.GetLocationObjectives(location))
+        {
+            var objectiveItem = Instantiate(_objectivePrefab.gameObject, _objectivePanel);
+            objectiveItem.SetActive(true);
+           // objectiveItem.GetComponent<InfoPanelObjective>()
+        }
+        
+        
     }
 
-    public void HideInfoPanel()
+    private void HideInfoPanel()
     {
         _infoPanel.gameObject.SetActive(false);
     }
 
-    public void ShowConfirmationButtons() {
+    private void ShowConfirmationButtons() {
         _confirmButton.gameObject.SetActive(true);
         _cancelButton.gameObject.SetActive(true);
     }
 
-    public void HideConfirmationButtons()
+    private void HideConfirmationButtons()
     {
         _confirmButton.gameObject.SetActive(false);
         _cancelButton.gameObject.SetActive(false);
     }
     
-    public void HideInfoPanelHandler()
-    {
-       if (!_confirmButton.gameObject.activeSelf) HideInfoPanel();
-       
-    }
+    
 
     public void ZoomInOnIcon(Transform locationTransform)
     {
@@ -113,7 +179,7 @@ public class MapAnimator : MonoBehaviour
         var distanceToVerticalEdge = (_rectTransform.rect.height - _parentRectTransform.rect.height) / 2f - Mathf.Abs(_rectTransform.localPosition.y);
         
       //  Debug.Log((_rectTransform.rect.width - _parentRectTransform.rect.width) / 2f);
-        transform.localPosition += _direction * (moveSpeed * Time.deltaTime);
+        transform.localPosition += _direction * (_animationSpeed * Time.deltaTime);
         
         
         if (distanceToHorizontalEdge < 30 || distanceToVerticalEdge < 30)
