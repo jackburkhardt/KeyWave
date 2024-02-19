@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 
@@ -69,7 +70,66 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    private void OnEnable()
+    {
+        RegisterLuaFunctions();
+    }
+
+    private void OnDisable()
+    {
+        DeregisterLuaFunctions();
+    }
+
+    private void RegisterLuaFunctions()
+    {
+        Lua.RegisterFunction(nameof(SurpassedTime), this, SymbolExtensions.GetMethodInfo(() => SurpassedTime(string.Empty)));
+        Lua.RegisterFunction(nameof(BehindTime), this, SymbolExtensions.GetMethodInfo(() => BehindTime(string.Empty)));
+        Lua.RegisterFunction(nameof(WithinTimeRange), this, SymbolExtensions.GetMethodInfo(() => WithinTimeRange(string.Empty, string.Empty)));
+        Lua.RegisterFunction(nameof(WithinGracePeriod), this, SymbolExtensions.GetMethodInfo(() => WithinGracePeriod(string.Empty, 0)));
+    }
+
+    private void DeregisterLuaFunctions()
+    {
+        Lua.UnregisterFunction(nameof(SurpassedTime));
+        Lua.UnregisterFunction(nameof(BehindTime));
+        Lua.UnregisterFunction(nameof(WithinTimeRange));
+        Lua.UnregisterFunction(nameof(WithinGracePeriod));
+    }
+
+    private bool SurpassedTime(string time)
+    {
+        var clock = DialogueLua.GetVariable("clock").asInt;
+        var timeInSeconds = Seconds(time);
+
+        return clock > timeInSeconds;
+    }
     
+    private bool BehindTime(string time)
+    {
+        var clock = DialogueLua.GetVariable("clock").asInt;
+        var timeInSeconds = Seconds(time);
+
+        return clock < timeInSeconds;
+    }
+    
+    private bool WithinTimeRange(string time1, string time2)
+    {
+        var clock = DialogueLua.GetVariable("clock").asInt;
+        var time1InSeconds = Seconds(time1);
+        var time2InSeconds = Seconds(time2);
+
+        return clock > time1InSeconds && clock < time2InSeconds;
+    }
+    
+    private bool WithinGracePeriod(string time, double gracePeriod)
+    {
+        var clock = DialogueLua.GetVariable("clock").asInt;
+        var timeInSeconds = Seconds(time);
+        return clock > timeInSeconds - (int)gracePeriod && clock < timeInSeconds + (int)gracePeriod;
+    }
+    
+
     public enum Region {
         Vitoria,
         Recife
@@ -86,6 +146,8 @@ public class GameManager : MonoBehaviour
         Store
     }
     
+    public static GameLocation GetGameLocation(Locations location) => GetGameLocation(location.ToString());
+    
     public static GameLocation GetGameLocation(string location)
     {
         GameLocation gameLocation = null;
@@ -99,15 +161,27 @@ public class GameManager : MonoBehaviour
         return gameLocation;
     }
     
-    public static List<string> GetLocationObjectives(string location)
+    public static List<GameLocation.Objectives> GetLocationObjectives(string location)
     {
         var gameLocation = GetGameLocation(location);
         return gameLocation.objectives;
     }
 
-    public static List<string> GetLocationObjectives(Locations location) => GetLocationObjectives(location.ToString());
+    public static List<GameLocation.Objectives> GetLocationObjectives(Locations location) => GetLocationObjectives(location.ToString());
   
-    
+    public static void RefreshLayoutGroupsImmediateAndRecursive(GameObject root)
+
+    {
+        var componentsInChildren = root.GetComponentsInChildren<LayoutGroup>(true);
+        foreach (var layoutGroup in componentsInChildren)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
+        }
+
+        var parent = root.GetComponent<LayoutGroup>();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
+
+    }
     
     
     public enum Hour
@@ -213,10 +287,22 @@ public class GameManager : MonoBehaviour
         return $"{hoursString}:{minutesString}";
     }
 
+    public int Seconds(string hoursMinutes)
+    {
+        if (hoursMinutes.Length != 5) Debug.LogError("Invalid time format");
+        
+        var hours = int.Parse(hoursMinutes.Substring(0, 2));
+        
+        var minutes = int.Parse(hoursMinutes.Substring(3, 2));
+        
+        return (hours * 3600 + minutes * 60);
+    }
+
     private void Start()
     {
         StartCoroutine(StartHandler());
     }
+   
     
     IEnumerator StartHandler()
     {
@@ -306,7 +392,7 @@ public class GameManager : MonoBehaviour
                 : nextLocation;
         }
         
-        if (playerLocation == null || nextLocation == null) return 0;
+        if (playerLocation == null || nextLocation == null) return 0; 
         return (int)Vector2.Distance(playerLocation.coordinates, nextLocation.coordinates);
     }
     
@@ -314,7 +400,8 @@ public class GameManager : MonoBehaviour
     public string GetEtaToLocation(Locations location)
     {
         var distance = GetPlayerDistanceFromLocation(location);
-        return HoursMinutes(distance * TimeScales.GlobalTimeScale + GameStateManager.instance.gameState.clock);
+        if (location.ToString() == "Café") Debug.Log("ETA is " + HoursMinutes(distance * TimeScales.GlobalTimeScale + DialogueLua.GetVariable("clock").asInt));
+        return HoursMinutes(distance * TimeScales.GlobalTimeScale + DialogueLua.GetVariable("clock").asInt);
     }
 
     public IEnumerator LoadSceneHandler(string newScene, string currentScene = "")

@@ -72,10 +72,11 @@ public class InvokeMovePlayer : PlayerEventHandler
     [SerializeReference] private GameManager.Locations _destination;
 
     
-    public int distanceInSeconds;
+    
 
     public void MovePlayer()
     {
+        var distanceInSeconds =  GameManager.instance.GetPlayerDistanceFromLocation(_destination);
         GameEvent.OnMove(gameObject.name, _destination.ToString(), distanceInSeconds);
     }
 

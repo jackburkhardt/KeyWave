@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using PixelCrushers.DialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -39,7 +40,8 @@ public class MapAnimator : MonoBehaviour
         foreach (var location in GameManager.instance.locations)
         {
             var coordinates = new Vector3(location.coordinates.x, location.coordinates.y, 0);
-            Instantiate(pinPrefab.gameObject, coordinates, Quaternion.identity, transform);
+            var pin = Instantiate(pinPrefab.gameObject, transform, false);
+            pin.transform.localPosition = coordinates;
         }
         
         pinPrefab.gameObject.SetActive(false);
@@ -71,12 +73,15 @@ public class MapAnimator : MonoBehaviour
     public void ShowPersistentHeroPanel(GameManager.Locations location)
     {
         ShowInfoPanel(location);
+        ShowConfirmationButtons();
+        ZoomInOnCoordinates(GameManager.GetGameLocation(location).coordinates);
     }
     
     public void ShowPersistentHeroPanel(string location)
     {
         var locationEnum = (GameManager.Locations) Enum.Parse(typeof(GameManager.Locations), location);
-        ShowInfoPanel(locationEnum);
+        ShowPersistentHeroPanel(locationEnum);
+       
     }
     
     public void HideFleetingInfoPanel()
@@ -87,6 +92,9 @@ public class MapAnimator : MonoBehaviour
 
   
     
+
+   
+
     
     
     
@@ -99,9 +107,9 @@ public class MapAnimator : MonoBehaviour
         _descriptionText.text = DialogueLua.GetLocationField(location.ToString(), "Description").asString;
         _infoPanel.gameObject.SetActive(true);
 
-        foreach (var objective in _objectivePanel.GetComponentsInChildren<Transform>())
+        foreach (var objective in _objectivePanel.GetComponentsInChildren<InfoPanelObjective>())
         {
-            if (objective == _objectivePrefab) continue;
+            if (objective == _objectivePrefab.GetComponent<InfoPanelObjective>()) continue;
             
             Destroy(objective.gameObject);
         }
@@ -110,8 +118,10 @@ public class MapAnimator : MonoBehaviour
         {
             var objectiveItem = Instantiate(_objectivePrefab.gameObject, _objectivePanel);
             objectiveItem.SetActive(true);
-           // objectiveItem.GetComponent<InfoPanelObjective>()
+            objectiveItem.GetComponent<InfoPanelObjective>().SetObjectiveText(objective.ToString());
         }
+        
+        GameManager.RefreshLayoutGroupsImmediateAndRecursive(_objectivePanel.gameObject);
         
         
     }
@@ -134,11 +144,10 @@ public class MapAnimator : MonoBehaviour
     
     
 
-    public void ZoomInOnIcon(Transform locationTransform)
+    public void ZoomInOnCoordinates(Vector2 coordinates)
     {
         CancelAnimations();
-        var location = locationTransform.localPosition;
-        LeanTween.moveLocal(gameObject, -location * transform.localScale.x, 1f).setEaseInOutSine();
+        LeanTween.moveLocal(gameObject, -coordinates * transform.localScale.x, 1f).setEaseInOutSine();
         LeanTween.scale(transform.parent.gameObject, new Vector3(2, 2, 1), 1f).setEaseInOutSine();
     }
 

@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Language.Lua;
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +12,7 @@ public class InfoPanelObjective : MonoBehaviour
     
     public void SetObjectiveText(string text)
     {
-        
-        _objectiveText.text = text;
+        _objectiveText.text = DialogueLua.GetQuestField(text, "State").asString == "unassigned" ? "???" : FormattedText.Parse(QuestLog.GetQuestTitle(text), DialogueManager.masterDatabase.emphasisSettings).text;
     }
     
     

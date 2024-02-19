@@ -79,9 +79,9 @@ public static class GameEvent
     }
     
    public static void OnMove(string sender, string value, int duration = 0)
-    {
-        SerializePlayerEvent("move", sender, "player", value, duration);
-    }
+   {
+       SerializePlayerEvent("move", sender, "player", value, duration * GameManager.TimeScales.GlobalTimeScale);
+   }
    
    public static void OnWait(int duration)
     {
@@ -153,8 +153,13 @@ public static class GameEvent
         var dialogueEntryID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
         var actorName = DialogueManager.instance.conversationController.actorInfo.Name;
         var conversantName = DialogueManager.instance.conversationController.conversantInfo.Name;
-        var durationSeconds = text.Length / GameManager.TimeScales.SpokenCharactersPerSecond + GameManager.TimeScales.SecondsBetweenLines;
-        
+        var declaredDuration =
+            Field.LookupInt(DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.fields,
+                "Duration");
+        var durationSeconds = declaredDuration == 0
+            ? (text.Length / GameManager.TimeScales.SpokenCharactersPerSecond +
+              GameManager.TimeScales.SecondsBetweenLines) * GameManager.TimeScales.GlobalTimeScale
+            : declaredDuration;
         SerializePlayerEvent("conversation_line", actorName, conversantName, dialogueEntryID.ToString(), durationSeconds, $"{actorName}: {text}");
         
         

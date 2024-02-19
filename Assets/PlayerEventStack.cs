@@ -44,7 +44,7 @@ public class PlayerEvents
             this.type = type;
             this.sender = sender;
             this.receiver = receiver;
-            this.duration = duration * GameManager.TimeScales.GlobalTimeScale;
+            this.duration = duration;
             this.log = log;
             this.timeStamp = System.DateTime.Now.ToString();
         }
