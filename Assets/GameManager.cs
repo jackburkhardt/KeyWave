@@ -395,12 +395,167 @@ public class GameManager : MonoBehaviour
         if (playerLocation == null || nextLocation == null) return 0; 
         return (int)Vector2.Distance(playerLocation.coordinates, nextLocation.coordinates);
     }
+
+    public static int GetLineAutoDuration(string line)
+    {
+        if (line == string.Empty) return 0;
+        return (line.Length / TimeScales.SpokenCharactersPerSecond +
+                TimeScales.SecondsBetweenLines) * TimeScales.GlobalTimeScale;
+    }
+    
+    private List<List<DialogueEntry>> FindAllPathsBetweenNodes(DialogueEntry node1, DialogueEntry node2)
+    {
+       
+        var stack = new List<DialogueEntry>();
+        var visited = new List<DialogueEntry>();
+        var paths = new List<List<DialogueEntry>>();
+        
+        var currentNode = node1;
+        
+        stack.Add(currentNode);
+
+        
+        
+        // get all paths from node1 to node2 using DFS algorithm
+        
+        
+        
+        void DFS(DialogueEntry node)
+        {
+            if (node == node2)
+            {
+                paths.Add(new List<DialogueEntry>(stack));
+                return;
+            }
+            
+            visited.Add(node);
+            
+            foreach (var link in node.outgoingLinks)
+            {
+                var nextNode = GetDialogueEntryByID(link.destinationConversationID, link.destinationDialogueID);
+                if (visited.Contains(nextNode)) continue;
+                
+                stack.Add(nextNode);
+                DFS(nextNode);
+                stack.Remove(nextNode);
+            }
+        }
+        
+        DFS(currentNode);
+
+        //print all paths
+        
+        foreach (var path in paths)
+        {
+            foreach (var entry in path)
+            {
+                var duration = GetNodeDuration(entry.conversationID, entry.id);
+                Debug.Log("entryID: " + entry.id + " duration: " + duration);
+            }
+        }
+        
+        return paths;
+    }
+    
+    private int FindShortestDurationBetweenPaths(List<List<DialogueEntry>> paths)
+    {
+        var shortestDistance = int.MaxValue;
+        
+        foreach (var path in paths)
+        {
+            var distance = 0;
+            
+            for (int i = 0; i < path.Count; i++)
+            {
+                distance += GetNodeDuration(path[i].conversationID, path[i].id);
+            }
+            
+            if (distance < shortestDistance) shortestDistance = distance;
+        }
+        
+        
+        return shortestDistance;
+    }
+    
+    private int FindLargestDurationBetweenPaths(List<List<DialogueEntry>> paths)
+    {
+        var largestDistance = 0;
+        
+        foreach (var path in paths)
+        {
+            var distance = 0;
+            
+            for (int i = 0; i < path.Count; i++)
+            {
+                distance += GetNodeDuration(path[i].conversationID, path[i].id);
+            }
+            
+            if (distance > largestDistance) largestDistance = distance;
+        }
+        
+        return largestDistance;
+    }
+    
+    public (int,int) FindDurationRange(DialogueEntry node) {
+        
+        var targetNodes = new List<DialogueEntry>();
+
+        foreach (var field in node.fields)
+        {
+           if (field.type != FieldType.Node) continue;
+           
+           var conversationID = Int32.Parse(field.value.Split(',')[0]);
+           var entryID = Int32.Parse(field.value.Split(',')[1]);
+
+
+           var entry = GetDialogueEntryByID(conversationID, entryID);
+           
+           targetNodes.Add(entry);
+        }
+
+        int shortestDuration = int.MaxValue;
+        int longestDuration = 0;
+        
+
+        foreach (var targetNode in targetNodes)
+        {
+            var pathsBetweenNodes = FindAllPathsBetweenNodes(node, targetNode);
+            shortestDuration = Math.Min(shortestDuration, FindShortestDurationBetweenPaths(pathsBetweenNodes));
+            longestDuration = Math.Max(longestDuration, FindLargestDurationBetweenPaths(pathsBetweenNodes));
+        }
+
+        return (shortestDuration, longestDuration);
+    }
+
+    public Conversation GetConversationByID(int id)
+    {
+        return DialogueManager.masterDatabase.conversations.Find(
+            conversation => conversation.id == id);
+    }
+
+    public DialogueEntry GetDialogueEntryByID(Conversation conversation, int id)
+    {
+        return conversation.dialogueEntries.Find(
+            entry => entry.id == id);
+    }
+    
+    public DialogueEntry GetDialogueEntryByID(int conversationID, int entryID)
+    {
+        return GetDialogueEntryByID(GetConversationByID(conversationID), entryID);
+    }
+
+    public int GetNodeDuration(int conversationID, int nodeID)
+    {
+       var node = GetDialogueEntryByID(conversationID, nodeID);
+       
+       var durationField = Field.LookupInt(node.fields, "Duration");
+       return durationField == 0 ? GetLineAutoDuration(node.currentDialogueText) : durationField;
+    }
     
     
     public string GetEtaToLocation(Locations location)
     {
         var distance = GetPlayerDistanceFromLocation(location);
-        if (location.ToString() == "Café") Debug.Log("ETA is " + HoursMinutes(distance * TimeScales.GlobalTimeScale + DialogueLua.GetVariable("clock").asInt));
         return HoursMinutes(distance * TimeScales.GlobalTimeScale + DialogueLua.GetVariable("clock").asInt);
     }
 

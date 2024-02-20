@@ -151,15 +151,10 @@ public static class GameEvent
         
        // var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
         var dialogueEntryID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
+        var conversationID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.conversationID;
         var actorName = DialogueManager.instance.conversationController.actorInfo.Name;
         var conversantName = DialogueManager.instance.conversationController.conversantInfo.Name;
-        var declaredDuration =
-            Field.LookupInt(DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.fields,
-                "Duration");
-        var durationSeconds = declaredDuration == 0
-            ? (text.Length / GameManager.TimeScales.SpokenCharactersPerSecond +
-              GameManager.TimeScales.SecondsBetweenLines) * GameManager.TimeScales.GlobalTimeScale
-            : declaredDuration;
+        var durationSeconds = GameManager.instance.GetNodeDuration(conversationID, dialogueEntryID);
         SerializePlayerEvent("conversation_line", actorName, conversantName, dialogueEntryID.ToString(), durationSeconds, $"{actorName}: {text}");
         
         

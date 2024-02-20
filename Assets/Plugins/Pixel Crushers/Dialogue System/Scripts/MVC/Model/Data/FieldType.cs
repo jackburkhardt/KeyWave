@@ -47,7 +47,16 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Location ID
         /// </summary>
-        Location
+        Location,
+        
+        //custom
+        
+        /// <summary>
+        /// Formatted as "ConversationID,SubtitleID"
+        /// </summary>
+        Node,
+        
+        Time
     }
 
 }

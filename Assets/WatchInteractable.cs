@@ -2,17 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PixelCrushers.DialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
+using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardUIResponseButton;
 
 [ExecuteInEditMode]
 public class WatchInteractable : MonoBehaviour
 {
 
+    
     public Image image;
+    private DialogueEntry associatedDialogueEntry;
     [SerializeField] private Transform pointerHand;
     [SerializeField] private Button button;
     [SerializeReference] private Side watchSide;
@@ -52,6 +56,14 @@ public class WatchInteractable : MonoBehaviour
     {
         angleIndex = angle;
     }
+
+    private void OnEnable()
+    {
+        if (GetComponent<StandardUIResponseButton>() != null && GetComponent<StandardUIResponseButton>().response != null)
+        {
+            associatedDialogueEntry = GetComponent<StandardUIResponseButton>().response.destinationEntry;
+        }
+    }
     
     // Start is called before the first frame update
 
@@ -62,9 +74,12 @@ public class WatchInteractable : MonoBehaviour
         image ??= GetComponent<Image>();
         button ??= GetComponent<Button>();
         image.alphaHitTestMinimumThreshold = 2;
+
+       
+       
     }
 
-    private bool isButtonActive = false;
+    [NonSerialized] public bool isButtonActive = false;
     
     
     private void Update()

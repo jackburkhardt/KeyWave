@@ -16,13 +16,19 @@ public class SubtitleContentElement : MonoBehaviour
 
     private void Awake()
     {
-        timeText.text = mainClock.text;
+       // timeText.text = GameManager.instance.HoursMinutes(GameManager.instance.gameStateManager.gameState.clock);
+        
     }
 
     public void UpdateTime()
     {
-        if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) timeText.text = mainClock.text.Replace(" ", ":");
+       if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) timeText.text = mainClock.text.Replace(" ", ":");
         
+    }
+
+    public void Update()
+    {if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent)
+        timeText.text = GameManager.instance.HoursMinutes(GameManager.instance.gameStateManager.gameState.clock);
     }
 
 

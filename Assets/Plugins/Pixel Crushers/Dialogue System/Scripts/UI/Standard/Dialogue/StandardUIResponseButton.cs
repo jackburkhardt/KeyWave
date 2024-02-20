@@ -1,6 +1,7 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using System.Linq;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,7 +15,7 @@ namespace PixelCrushers.DialogueSystem
     [AddComponentMenu("")] // Use wrapper.
     public class StandardUIResponseButton : MonoBehaviour, ISelectHandler
     {
-        public UITextField timeEstimate;
+        public bool isButtonActive = false;
 
         [HelpBox("If Button's OnClick() event is empty, this Standard UI Response Button component will automatically assign its OnClick method at runtime. If Button's OnClick() event has other elements, you *must* manually assign the StandardUIResponseButton.OnClick method to it.", HelpBoxMessageType.Info)]
         public UnityEngine.UI.Button button;
@@ -93,7 +94,7 @@ namespace PixelCrushers.DialogueSystem
 
         public virtual void Start()
         {
-            timeEstimate.gameObject.SetActive(false);
+            
             
             if (button != null && button.onClick.GetPersistentEventCount() == 0)
             {
@@ -137,19 +138,16 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        public void ShowTimeEstimate()
+        public void SetButtonActive()
         {
-            var time = Field.LookupInt(response.destinationEntry.fields, "Time Estimate");
-            timeEstimate.gameObject.SetActive(true);
-            timeEstimate.text = $"Time Estimate: {time} minutes";
-        }
-        
-        public void HideTimeEstimate()
-        {
-            
-            //timeEstimate.gameObject.SetActive(false);
+            isButtonActive = true;
         }
 
+        public void SetButtonInactive()
+        {
+            isButtonActive = false;
+        }
+       
      
 
         public virtual void OnSelect(BaseEventData eventData)
