@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     private PlayerEventStack playerEventStack;
     public List<GameLocation> locations;
     public List<GameObjective> Objectives;
+
+    public static GameState gameState;
+    
     public struct TimeScales
     {
         internal static int GlobalTimeScale = 15;
@@ -51,6 +54,8 @@ public class GameManager : MonoBehaviour
         {
             gameStateManager = this.AddComponent<GameStateManager>();
         }
+        
+        gameState = gameStateManager.gameState;
         
         if (playerEventStack == null)
         {
@@ -551,7 +556,6 @@ public class GameManager : MonoBehaviour
        var durationField = Field.LookupInt(node.fields, "Duration");
        return durationField == 0 ? GetLineAutoDuration(node.currentDialogueText) : durationField;
     }
-    
     
     public string GetEtaToLocation(Locations location)
     {

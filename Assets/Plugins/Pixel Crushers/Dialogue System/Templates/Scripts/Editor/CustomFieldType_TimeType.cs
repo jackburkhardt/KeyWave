@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEditor.Build.Content;
 
 namespace PixelCrushers.DialogueSystem
@@ -135,18 +136,20 @@ namespace PixelCrushers.DialogueSystem
 
             if (currentValue == string.Empty) return "00:00";
             
-            var hour = Int32.Parse(currentValue.Split(':')[0]) == null ? 0 : Int32.Parse(currentValue.Split(':')[0]);
-            var minute = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
+            var hourFromValue = Int32.Parse(currentValue.Split(':')[0]) == null ? 0 : Int32.Parse(currentValue.Split(':')[0]);
+            var minuteFromValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
+            
 
            
-            var _hour = EditorGUILayout.EnumPopup((Hour)hour, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false)).ToString().Substring(1);
+            var hour = EditorGUILayout.EnumPopup((Hour)hourFromValue, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false)).ToString();
             EditorGUILayout.LabelField(":", GUILayout.MinWidth(0),GUILayout.ExpandWidth(false),GUILayout.MaxWidth(10));
-            var _minute = EditorGUILayout.EnumPopup((Minute)minute, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false)).ToString().Substring(1);
+            var minute = EditorGUILayout.EnumPopup((Minute)minuteFromValue, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false)).ToString();
+            
+            hour = hour.First() == '_' ? hour.Substring(1) : hour;
+            minute = minute.First() == '_' ? minute.Substring(1) : minute;
+            
             EditorGUILayout.EndHorizontal();
-
-            return $"{_hour}:{_minute}";
-
-
+            return $"{hour}:{minute}";
             //return EditorGUILayout.TextField(currentValue);
         }
 
