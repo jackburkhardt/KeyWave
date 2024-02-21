@@ -583,9 +583,9 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 10 AM
-      type: 0
-      typeString: CustomFieldType_Text
+      value: 10:00
+      type: 9
+      typeString: CustomFieldType_TimeType
     - title: Description
       value: 
       type: 0
@@ -688,8 +688,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 674.5841
-        y: 152.91983
+        x: 684.43286
+        y: 149.96523
         width: 160
         height: 30
     - id: 1
@@ -767,8 +767,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 673.1168
-        y: 283.37186
+        x: 683.9505
+        y: 259.73483
         width: 160
         height: 30
     - id: 2
@@ -998,7 +998,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 1102.1373
-        y: 381.324
+        y: 380.3391
         width: 160
         height: 30
     - id: 7
@@ -1051,8 +1051,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 297.51465, y: 540.3139}
-    canvasZoom: 0.5810286
+    canvasScrollPosition: {x: 764.1065, y: 0}
+    canvasZoom: 1.015357
   - id: 11
     fields:
     - title: Title
@@ -2295,7 +2295,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 553.17847, y: 0}
+    canvasScrollPosition: {x: 743.8613, y: 0}
     canvasZoom: 0.7866463
   - id: 10
     fields:
@@ -3366,8 +3366,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 100.760025, y: 4.115425}
-    canvasZoom: 1.1799998
+    canvasScrollPosition: {x: 328.48715, y: 0}
+    canvasZoom: 0.7670003
   - id: 19
     fields:
     - title: Title
@@ -3712,8 +3712,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 70.287415, y: 116.07666}
-    canvasZoom: 1.06
+    canvasScrollPosition: {x: 7.3692193, y: 68.08442}
+    canvasZoom: 0.7955
   - id: 20
     fields:
     - title: Title
@@ -5886,8 +5886,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 74.79075, y: 100.33063}
-    canvasZoom: 0.6052462
+    canvasScrollPosition: {x: 153.2758, y: 133.71445}
+    canvasZoom: 0.6987457
   - id: 22
     fields:
     - title: Title
@@ -6309,8 +6309,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 296.14874
-        y: 418.03003
+        x: 303.81308
+        y: 441.87482
         width: 160
         height: 30
     - id: 6
@@ -6425,8 +6425,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 295.88843
-        y: 492.65552
+        x: 309.51392
+        y: 509.68756
         width: 160
         height: 30
     - id: 8
@@ -6547,8 +6547,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 298.33984
-        y: 569.77765
+        x: 306.00418
+        y: 575.73895
         width: 160
         height: 30
     - id: 10
@@ -6651,14 +6651,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: Variable["douglasMeetingTime"] = "10 AM"
+      userScript: Variable["douglasMeetingTime"] = "10:00"
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 175.27205
-        y: 669.1122
+        x: 173.56886
+        y: 668.26056
         width: 160
         height: 30
     - id: 12
@@ -6706,13 +6706,13 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: Variable["douglasMeetingTime"] = "4 PM"
+      userScript: Variable["douglasMeetingTime"] = "16:00"
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 412.19916
+        x: 413.05072
         y: 670.7894
         width: 160
         height: 30
@@ -6776,7 +6776,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
+    canvasScrollPosition: {x: 131.99695, y: 320.19904}
     canvasZoom: 1.1742697
   - id: 24
     fields:
@@ -7159,6 +7159,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Response Menu Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 24
       isRoot: 0
       isGroup: 0
@@ -7173,15 +7177,15 @@ MonoBehaviour:
         destinationDialogueID: 6
         isConnector: 0
         priority: 2
-      conditionsString: CurrentQuestState("MeetDouglas") == "active" and (CurrentQuestEntryState("MeetDouglas",
-        1) ~= "failure") and WithinGracePeriod("10:00", 30)
+      conditionsString: WithinTimeRange("10:00", "10:30") == true and (CurrentQuestState("MeetDouglas")
+        == "active")
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 728.3017
+        x: 727.22656
         y: 195.13318
         width: 160
         height: 30
@@ -7237,7 +7241,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 723.70087
-        y: 256.91516
+        y: 259.0655
         width: 160
         height: 30
     - id: 7
@@ -7292,7 +7296,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 722.6555
-        y: 314.1103
+        y: 315.18546
         width: 160
         height: 30
     - id: 8
@@ -7349,8 +7353,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 25.012136, y: 34.111282}
-    canvasZoom: 1.4499999
+    canvasScrollPosition: {x: 524.93726, y: 130.8229}
+    canvasZoom: 0.9960924
   syncInfo:
     syncActors: 0
     syncItems: 0

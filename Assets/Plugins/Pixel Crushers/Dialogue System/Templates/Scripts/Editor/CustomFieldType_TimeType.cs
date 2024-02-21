@@ -159,20 +159,31 @@ namespace PixelCrushers.DialogueSystem
         // uses an absolute Rect position instead of auto-layout.
         public override string Draw(Rect rect, string currentValue, DialogueDatabase database)
         {
-            
-            Rect r = EditorGUILayout.BeginHorizontal("TextField", GUILayout.Width(5));
+           
+            //Rect r = 
+          //  Rect r = EditorGUILayout.BeginHorizontal("IntField");
             //EditorGUILayout.TextField("Conversation,Entry", currentValue);
 
             if (currentValue == string.Empty) return "00:00";
             
-            var hour = Int32.Parse(currentValue.Split(':')[0]) == null ? 0 : Int32.Parse(currentValue.Split(':')[0]);
-            var minute = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
+            var hourFromValue = Int32.Parse(currentValue.Split(':')[0]) == null ? 0 : Int32.Parse(currentValue.Split(':')[0]);
+            var minuteFromValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
 
-            var _hour = EditorGUILayout.EnumPopup("Hour", (Hour)hour).ToString().Substring(1);
-            var _minute = EditorGUILayout.EnumPopup("Minute", (Minute)minute).ToString().Substring(1);
-            EditorGUILayout.EndHorizontal();
+            var firstRectHalf = new Rect(rect.position, new Vector2(rect.width / 2, rect.height));
+            
+            var secondRectHalf = new Rect(new Vector2(rect.position.x + rect.width / 2, rect.position.y), new Vector2(rect.width / 2, rect.height));
 
-            return $"{_hour}:{_minute}";
+            var hour = EditorGUI.EnumPopup(firstRectHalf, (Hour)hourFromValue).ToString();
+            
+            var minute = EditorGUI.EnumPopup(secondRectHalf, (Minute)minuteFromValue).ToString();
+            
+           
+           
+            hour = hour.First() == '_' ? hour.Substring(1) : hour;
+            minute = minute.First() == '_' ? minute.Substring(1) : minute;
+            
+            
+            return $"{hour}:{minute}";
         }
     }
 }

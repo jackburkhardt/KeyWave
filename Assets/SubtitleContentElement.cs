@@ -28,7 +28,7 @@ public class SubtitleContentElement : MonoBehaviour
 
     public void Update()
     {if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent)
-        timeText.text = GameManager.instance.HoursMinutes(GameManager.instance.gameStateManager.gameState.clock);
+        timeText.text = Clock.CurrentTime;
     }
 
 

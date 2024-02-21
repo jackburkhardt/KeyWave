@@ -17,7 +17,6 @@ public class DebugUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        luaTime.text = GameManager.instance.HoursMinutes(DialogueLua.GetVariable("clock").asInt);
-        gameStateTime.text = GameManager.instance.HoursMinutes(GameManager.instance.gameStateManager.gameState.clock);
+        luaTime.text = Clock.CurrentTime;
     }
 }

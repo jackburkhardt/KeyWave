@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameStateManager gameStateManager;
     private PlayerEventStack playerEventStack;
+    private CustomLuaFunctions _customLuaFunctions;
     public List<GameLocation> locations;
     public List<GameObjective> Objectives;
 
@@ -62,8 +63,9 @@ public class GameManager : MonoBehaviour
             playerEventStack = this.AddComponent<PlayerEventStack>();
         }
 
-        DontDestroyOnLoad(gameObject);
 
+
+        _customLuaFunctions = GetComponent<CustomLuaFunctions>() ?? gameObject.AddComponent<CustomLuaFunctions>();
         
 
         foreach (var location in locations)
@@ -76,63 +78,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void OnEnable()
-    {
-        RegisterLuaFunctions();
-    }
-
-    private void OnDisable()
-    {
-        DeregisterLuaFunctions();
-    }
-
-    private void RegisterLuaFunctions()
-    {
-        Lua.RegisterFunction(nameof(SurpassedTime), this, SymbolExtensions.GetMethodInfo(() => SurpassedTime(string.Empty)));
-        Lua.RegisterFunction(nameof(BehindTime), this, SymbolExtensions.GetMethodInfo(() => BehindTime(string.Empty)));
-        Lua.RegisterFunction(nameof(WithinTimeRange), this, SymbolExtensions.GetMethodInfo(() => WithinTimeRange(string.Empty, string.Empty)));
-        Lua.RegisterFunction(nameof(WithinGracePeriod), this, SymbolExtensions.GetMethodInfo(() => WithinGracePeriod(string.Empty, 0)));
-    }
-
-    private void DeregisterLuaFunctions()
-    {
-        Lua.UnregisterFunction(nameof(SurpassedTime));
-        Lua.UnregisterFunction(nameof(BehindTime));
-        Lua.UnregisterFunction(nameof(WithinTimeRange));
-        Lua.UnregisterFunction(nameof(WithinGracePeriod));
-    }
-
-    private bool SurpassedTime(string time)
-    {
-        var clock = DialogueLua.GetVariable("clock").asInt;
-        var timeInSeconds = Seconds(time);
-
-        return clock > timeInSeconds;
-    }
-    
-    private bool BehindTime(string time)
-    {
-        var clock = DialogueLua.GetVariable("clock").asInt;
-        var timeInSeconds = Seconds(time);
-
-        return clock < timeInSeconds;
-    }
-    
-    private bool WithinTimeRange(string time1, string time2)
-    {
-        var clock = DialogueLua.GetVariable("clock").asInt;
-        var time1InSeconds = Seconds(time1);
-        var time2InSeconds = Seconds(time2);
-
-        return clock > time1InSeconds && clock < time2InSeconds;
-    }
-    
-    private bool WithinGracePeriod(string time, double gracePeriod)
-    {
-        var clock = DialogueLua.GetVariable("clock").asInt;
-        var timeInSeconds = Seconds(time);
-        return clock > timeInSeconds - (int)gracePeriod && clock < timeInSeconds + (int)gracePeriod;
-    }
+   
     
 
     public enum Region {
@@ -280,29 +226,7 @@ public class GameManager : MonoBehaviour
         _58 = 58,
         _59 = 59
     }
-    
-    public string HoursMinutes(int seconds)
-    {
-        var hours = seconds / 3600;
-        var minutes = (seconds % 3600) / 60;
-        
-        var minutesString = minutes < 10 ? $"0{minutes}" : minutes.ToString();
-        var hoursString = hours < 10 ? $"0{hours}" : hours.ToString();
-        
-        return $"{hoursString}:{minutesString}";
-    }
-
-    public int Seconds(string hoursMinutes)
-    {
-        if (hoursMinutes.Length != 5) Debug.LogError("Invalid time format");
-        
-        var hours = int.Parse(hoursMinutes.Substring(0, 2));
-        
-        var minutes = int.Parse(hoursMinutes.Substring(3, 2));
-        
-        return (hours * 3600 + minutes * 60);
-    }
-
+  
     private void Start()
     {
         StartCoroutine(StartHandler());
@@ -560,7 +484,7 @@ public class GameManager : MonoBehaviour
     public string GetEtaToLocation(Locations location)
     {
         var distance = GetPlayerDistanceFromLocation(location);
-        return HoursMinutes(distance * TimeScales.GlobalTimeScale + DialogueLua.GetVariable("clock").asInt);
+        return Clock.To24HourClock(distance * TimeScales.GlobalTimeScale + Clock.CurrentTimeRaw);
     }
 
     public IEnumerator LoadSceneHandler(string newScene, string currentScene = "")
