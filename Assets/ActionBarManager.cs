@@ -12,18 +12,28 @@ public class ActionBarManager : MonoBehaviour
     private int businessResearchScore = 0;
 
     private int maxScore = 1000;
+    
+    public enum OrbType
+    {
+        Wellness,
+        LocalKnowledge,
+        BusinessResearch
+    }
 
     [SerializeField] private RectTransform wellnessBar;
     [SerializeField] private RectTransform localKnowledgeBar;
     [SerializeField] private RectTransform businessResearchBar;
 
     private float maxBarWidth;
+
+    public RectTransform orbTemplate;
     
     
     // Start is called before the first frame update
     void Start()
     {
         maxBarWidth = GetComponent<RectTransform>().rect.width;
+        orbTemplate.gameObject.SetActive(false);
     }
     
     public void UpdateWellnessScore(int score)
@@ -53,21 +63,33 @@ public class ActionBarManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.U))
+    }
+    
+    public void AddWellnessPoints(int points)
+    {
+        StartCoroutine(SpawnOrbHandler(points, OrbType.Wellness));
+    }
+    
+    public void AddLocalKnowledgePoints(int points)
+    {
+        StartCoroutine(SpawnOrbHandler(points, OrbType.LocalKnowledge));
+    }
+    
+    public void AddBusinessResearchPoints(int points)
+    {
+        StartCoroutine(SpawnOrbHandler(points, OrbType.BusinessResearch));
+    }
+
+    IEnumerator SpawnOrbHandler(int count, OrbType type)
+    {
+        for (int i = 0; i < count; i++)
         {
-            UpdateWellnessScore(30);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            UpdateLocalKnowledgeScore(30);
-            // local savvy
-        }
-        
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            UpdateBusinessResearchScore(30);
-            // a.k.a. preparedness
+            var orb = Instantiate(orbTemplate, transform.parent);
+            orb.gameObject.SetActive(true);
+            orb.GetComponent<PointOrb>().SetOrbProperties(type);
+            
+            yield return new WaitForSeconds(0.02f);
         }
     }
+   
 }
