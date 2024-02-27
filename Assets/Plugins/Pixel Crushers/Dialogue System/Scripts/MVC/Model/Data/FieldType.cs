@@ -56,7 +56,9 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         Node,
         
-        Time
+        Time,
+        
+        Points
     }
 
 }

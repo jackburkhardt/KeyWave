@@ -8,10 +8,28 @@ public class PointerArrow : MonoBehaviour
 
     [SerializeField] private float minimumDistance = 750;
     public bool isMouseOver = false;
+    public bool isFrozen = false;
+
+    public void OnEnable()
+    {
+       Unfreeze();
+    }
+
+
+    public void Freeze()
+    {
+        isFrozen = true;
+    }
+
+    public void Unfreeze()
+    {
+       isFrozen = false;
+    }
 
     // Update is called once per frame
     void Update()
     {
+       if (isFrozen) return;
        // rotate self to point at the mouse cursor
         
         Vector3 mousePos = Input.mousePosition;

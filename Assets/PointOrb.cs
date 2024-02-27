@@ -18,21 +18,21 @@ public class PointOrb : MonoBehaviour
     [SerializeField] private Color wellnessColor, localKnowledgeColor, businessResearchColor;
     [SerializeField] private Image image;
     
-    private ActionBarManager.OrbType _orbType;
+    private Points.Type _orbType;
 
-    public void SetOrbProperties(ActionBarManager.OrbType orbType)
+    public void SetOrbProperties(Points.Type orbType)
     {
         _orbType = orbType;
         
         switch (orbType)
         {
-            case ActionBarManager.OrbType.Wellness:
+            case Points.Type.Wellness:
                 image.color = wellnessColor;
                 break;
-            case ActionBarManager.OrbType.LocalKnowledge:
+            case Points.Type.LocalSavvy:
                 image.color = localKnowledgeColor;
                 break;
-            case ActionBarManager.OrbType.BusinessResearch:
+            case Points.Type.Business:
                 image.color = businessResearchColor;
                 break;
         }
@@ -118,7 +118,7 @@ public class PointOrb : MonoBehaviour
         {
             var obj = Instantiate(trackingOrbTemplate, transform.parent);
             obj.gameObject.SetActive(true);
-            obj.GetComponent<TrackingOrb>().SetOrbProperties(_orbType, image.color);
+            obj.GetComponent<TrackingOrb>().SetOrbProperties(_orbType);
             Destroy(gameObject);
         }
         

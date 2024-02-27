@@ -1,37 +1,100 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngineInternal;
 using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardUIResponseButton;
 
 public class CustomResponsePanel : MonoBehaviour
 {
     [SerializeField] private UITextField timeEstimate;
+    [SerializeField] Animator responseMenuAnimator;
+    [SerializeField] private PointerArrow mousePointerHand;
     private DialogueEntry currentlySelectedDialogueEntry;
+    private StandardUIResponseButton currentlySelectedButton;
+    private Color defaultDisabledColor;
 
+  
+
+    private void OnEnable()
+    {
+        Points.OnAnimationStart+= StartPointsAnimation;
+        Points.OnAnimationComplete += FinishPointsAnimation;
+        
+    }
+
+    private void OnDisable()
+    {
+        Points.OnAnimationStart -= StartPointsAnimation;
+        Points.OnAnimationComplete -= FinishPointsAnimation;
+    }
+    
+    
     public void SetCurrentResponseButton(StandardUIResponseButton responseButton)
     {
-        
+        currentlySelectedButton = responseButton;
         currentlySelectedDialogueEntry = responseButton.response.destinationEntry;
+       
+        if (Field.FieldExists(currentlySelectedDialogueEntry.fields, "Time Estimate")) ShowTimeEstimate();
+        else HideTimeEstimate();
+    }
+
+    private void ShowTimeEstimate()
+    {
+        timeEstimate.gameObject.SetActive(true);
+        timeEstimate.text = CalculateTimeEstimate(currentlySelectedDialogueEntry);
+    }
+
+    private void HideTimeEstimate()
+    {
+        timeEstimate.gameObject.SetActive(false);
+    }
+    
+    
+
+    private void SetButtonDisabledColor(Button button, Color color)
+    {
+        defaultDisabledColor = button.colors.disabledColor;
+        var block = button.colors;
+        block.disabledColor = color;
+        button.colors = block;
+    }
+
+
+    private void StartPointsAnimation(Points.Type pointsType)
+    {
+        SetButtonDisabledColor(currentlySelectedButton.GetComponent<Button>(), Points.Color(pointsType));
+        HideTimeEstimate();
+        mousePointerHand.Freeze();
+        responseMenuAnimator.SetBool("Points", true);
+        responseMenuAnimator.Play("Points");
         
-        if (Field.LookupBool(currentlySelectedDialogueEntry.fields, "Time Estimate"))
+    }
+    
+    private void FinishPointsAnimation()
+    {
+        SetButtonDisabledColor(currentlySelectedButton.GetComponent<Button>(), defaultDisabledColor);
+        responseMenuAnimator.SetBool("Points", false);
+        mousePointerHand.Unfreeze();
+        
+    }
+    
+    public void OnClick()
+    {
+        foreach (var field in currentlySelectedDialogueEntry.fields)
         {
-            timeEstimate.gameObject.SetActive(true);
-            ShowTimeEstimate(currentlySelectedDialogueEntry);
-            //print all links
-            foreach (var link in currentlySelectedDialogueEntry.outgoingLinks)
+            if (field.title == "Points")
             {
-                Debug.Log(link.destinationConversationID);
+                var pointsType = (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
+                var pointsValue = int.Parse(field.value.Split(':')[1]);
+                Points.AddPoints(pointsType, pointsValue);
+                if (!Points.IsAnimating) Points.AnimationStart(pointsType,currentlySelectedButton.label.gameObject.transform.position);
+                
             }
         }
-
-        else
-        {
-            timeEstimate.gameObject.SetActive(false);
-        }
-        
     }
     
     public void UnsetResponseButton()
@@ -46,41 +109,42 @@ public class CustomResponsePanel : MonoBehaviour
             }
         }
         
-        if (!anyButtonActive)
+        if (!anyButtonActive) HideTimeEstimate();
+    }
+
+    public string CalculateTimeEstimate(DialogueEntry dialogueEntry)
+    {
+        var minTimeEstimate = int.MaxValue;
+        var maxTimeEstimate = 0;
+
+        var output = string.Empty;
+        
+        foreach (var field in dialogueEntry.fields)
         {
-            timeEstimate.gameObject.SetActive(false); 
+            if (field.title == "Time Estimate" && field.type == FieldType.Node)
+            {
+                var entry = DialogueUtility.GetDialogueEntryFromNodeField(field);
+                var timeEstimate = DialogueUtility.DurationRangeBetweenNodes(dialogueEntry, entry);
+                
+                if (timeEstimate.Item1 < minTimeEstimate) minTimeEstimate = timeEstimate.Item1;
+                if (timeEstimate.Item2 > maxTimeEstimate) maxTimeEstimate = timeEstimate.Item2;
+            }
         }
         
-    }
-        
-    
-    public void ShowTimeEstimate(DialogueEntry dialogueEntry)
-    {
-        var timeRange = GameManager.instance.FindDurationRange(dialogueEntry);
-        
-       
-        
-        if (timeRange.Item2 == timeRange.Item1)
+        if (minTimeEstimate == maxTimeEstimate)
         {
-            timeEstimate.text = (timeRange.Item1/60).ToString();
+            output = (minTimeEstimate/60).ToString();
         }
         else
         {
-            timeEstimate.text = timeRange.Item1/60 + " - " + timeRange.Item2/60;
+            output = minTimeEstimate/60 + " - " + maxTimeEstimate/60;
         }
         
-        timeEstimate.text += " minutes";
+        output += " minutes";
+        return output;
     }
-   
-    // Start is called before the first frame update
-    void Start()
-    {
-     timeEstimate.gameObject.SetActive(false);   
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
+    
+    
+    
 }

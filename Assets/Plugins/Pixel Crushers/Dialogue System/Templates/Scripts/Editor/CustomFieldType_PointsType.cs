@@ -11,20 +11,27 @@ using UnityEngine.Rendering;
 namespace PixelCrushers.DialogueSystem
 {
 
+    public enum PointsType
+    {
+        Wellness,
+        Savvy,
+        Business
+    }
     
     
     // STEP 1: Name your type below, replacing "My Type":
-    [CustomFieldTypeService.Name("Node")]
+    [CustomFieldTypeService.Name("Points")]
 
     // STEP 2: Rename the class by changing TemplateType to your type name:
-    public class CustomFieldType_NodeType : CustomFieldType
+    public class CustomFieldType_PointsType : CustomFieldType
     {
+        
         
         public override FieldType storeFieldAsType
         {
             get
             {
-                return FieldType.Node;
+                return FieldType.Points;
             }
         }
         
@@ -33,28 +40,22 @@ namespace PixelCrushers.DialogueSystem
         // it as a plain text field. This is the GUILayout version.
         public override string Draw(string currentValue, DialogueDatabase database)
         {
+            
+            if (currentValue == string.Empty || currentValue.Split(':').Length < 2) return "Business:0";
            
-            Rect r = EditorGUILayout.BeginVertical("TextField");
-            //EditorGUILayout.TextField("Conversation,Entry", currentValue);
+            Rect r = EditorGUILayout.BeginHorizontal();
 
-            if (currentValue == string.Empty) return "0,0";
+            var pointType =
+                Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Business" : currentValue.Split(':')[0]);
+            var pointValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
             
-            var conversationID = Int32.Parse(currentValue.Split(',')[0]) == null ? 0 : Int32.Parse(currentValue.Split(',')[0]);
-            var entryID = Int32.Parse(currentValue.Split(',')[1]) == null ? 0 : Int32.Parse(currentValue.Split(',')[1]);
-
-            var label1 = "Conversation ID";
-            var label2 = "Entry ID";
+            var type = EditorGUILayout.EnumPopup(pointType, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false));
+            var value = EditorGUILayout.IntField(pointValue, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false));
             
-            GUIContent label = new GUIContent(label1);
-            EditorGUIUtility.labelWidth = GUI.skin.label.CalcSize(label).x;
+            EditorGUILayout.EndHorizontal();
             
-            var conversation = EditorGUILayout.IntField(label1, conversationID);
             
-            var entry = EditorGUILayout.IntField(label2, entryID);
-            EditorGUILayout.EndVertical();
-
-
-            return $"{conversation},{entry}";
+            return $"{type}:{value}";
 
 
             //return EditorGUILayout.TextField(currentValue);
@@ -66,19 +67,20 @@ namespace PixelCrushers.DialogueSystem
         // uses an absolute Rect position instead of auto-layout.
         public override string Draw(Rect rect, string currentValue, DialogueDatabase database)
         {
+            if (currentValue == string.Empty || currentValue.Split(':').Length < 2) return "Business:0";
             
             //Rect r = EditorGUILayout.BeginVertical("TextField");
             //EditorGUILayout.TextField("Conversation,Entry", currentValue);
             
-            if (currentValue == string.Empty) return "0,0";
+          //  if (currentValue == string.Empty) return "0,0";
             
-            var conversationID = Int32.Parse(currentValue.Split(',')[0]) == null ? 0 : Int32.Parse(currentValue.Split(',')[0]);
-            var entryID = Int32.Parse(currentValue.Split(',')[1]) == null ? 0 : Int32.Parse(currentValue.Split(',')[1]);
+            var pointsType = Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Business" : currentValue.Split(':')[0]);
+            var pointsValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
 
-            var label1 = "Conversation ID";
-            var label2 = " Entry ID";
-            
-            var firstRectHalfPercentage = (float)label1.Length / ((float)label1.Length + (float)label2.Length);
+            var label1 = "";
+            var label2 = " Amount";
+
+            var firstRectHalfPercentage = 0.5f; //(float)label1.Length / ((float)label1.Length + (float)label2.Length);
             
             var firstRectHalf = new Rect(rect.position, new Vector2(rect.width * firstRectHalfPercentage, rect.height));
             
@@ -100,16 +102,15 @@ namespace PixelCrushers.DialogueSystem
             GUIContent label = new GUIContent(label1);
             EditorGUIUtility.labelWidth = GUI.skin.label.CalcSize(label).x;
            
-            var conversation = EditorGUI.IntField(firstRectHalf, label1, conversationID);
+            var type = EditorGUI.EnumPopup(firstRectHalf, label1, pointsType);
             
             
             label = new GUIContent(label2);
             EditorGUIUtility.labelWidth = GUI.skin.label.CalcSize(label).x;
           
-            var entry = EditorGUI.IntField(secondRectHalf, label2, entryID);
+            var value = EditorGUI.IntField(secondRectHalf, label2, pointsValue);
 
-            return $"{conversation},{entry}";
-
+            return $"{type}:{value}";
         }
     }
 }

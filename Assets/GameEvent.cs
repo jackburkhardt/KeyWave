@@ -154,7 +154,7 @@ public static class GameEvent
         var conversationID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.conversationID;
         var actorName = DialogueManager.instance.conversationController.actorInfo.Name;
         var conversantName = DialogueManager.instance.conversationController.conversantInfo.Name;
-        var durationSeconds = GameManager.instance.GetNodeDuration(conversationID, dialogueEntryID);
+        var durationSeconds = DialogueUtility.GetNodeDuration(conversationID, dialogueEntryID);
         SerializePlayerEvent("conversation_line", actorName, conversantName, dialogueEntryID.ToString(), durationSeconds, $"{actorName}: {text}");
         
         

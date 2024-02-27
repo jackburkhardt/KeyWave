@@ -14,6 +14,9 @@ public class InvokeConversationEvents : MonoBehaviour
         if (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id == 0) return; 
         
         GameEvent.OnConversationLine();
+        
+        if (!Points.IsAnimating) Sequencer.Message("Animated");
+        
     //   StartCoroutine(DelayedBroadcast("line"));
     }
 

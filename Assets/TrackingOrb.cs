@@ -2,43 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder;
 using UnityEngine.UI;
+using Random = System.Random;
 
 public class TrackingOrb : MonoBehaviour
 {
     [SerializeField] private ActionBarManager pointsBar;
     [SerializeField] private Image image;
-
-    private ActionBarManager.OrbType _orbType;
     
-    public void SetOrbProperties(ActionBarManager.OrbType orbType, Color color)
+    [SerializeField] private Color wellnessColor, localKnowledgeColor, businessResearchColor;
+
+    private Points.Type _orbType;
+    
+    public void SetOrbProperties(Points.Type orbType)
     {
         _orbType = orbType;
-        image.color = color;
+        image.color = Points.Color(orbType);
+
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = Mouse.current.position.ReadValue();
-        LeanTween.move(gameObject, pointsBar.transform.position, 1.25f).setEaseInExpo().setOnComplete(() =>
+        transform.position = Points.SpawnPosition;
+
+        StartCoroutine(AnimateOrb());
+    }
+    
+    
+    IEnumerator AnimateOrb()
+    {
+        var firstAnimTarget = Vector3.Lerp(transform.position, pointsBar.transform.position, 0.15f);
+        
+        
+        
+        
+        LeanTween.move(gameObject, firstAnimTarget, 0.75f).setEaseOutCirc();
+
+        yield return new WaitForSeconds(0.75f);
+        
+        LeanTween.move(gameObject, pointsBar.transform.position, 1.5f).setEaseInCubic().setOnComplete(() =>
         {
-            switch ( _orbType)
-            {
-                case ActionBarManager.OrbType.Wellness:
-                    pointsBar.UpdateWellnessScore(1);
-                    break;
-                case ActionBarManager.OrbType.LocalKnowledge:
-                    pointsBar.UpdateLocalKnowledgeScore(1);
-                    break;
-                case ActionBarManager.OrbType.BusinessResearch:
-                    pointsBar.UpdateBusinessResearchScore(1);
-                    break;
-            }
-           
+            pointsBar.AddToBar(_orbType, 1);
             Destroy(gameObject);
         });
-        
+
     }
 
 }

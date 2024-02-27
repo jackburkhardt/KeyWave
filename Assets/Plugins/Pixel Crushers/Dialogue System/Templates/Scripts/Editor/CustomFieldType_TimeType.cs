@@ -12,10 +12,6 @@ using UnityEditor.Build.Content;
 namespace PixelCrushers.DialogueSystem
 {
 
- 
-
-   
-
     public enum Hour
     {
         _0 = 0,
@@ -140,6 +136,7 @@ namespace PixelCrushers.DialogueSystem
             var minuteFromValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
             
 
+            
            
             var hour = EditorGUILayout.EnumPopup((Hour)hourFromValue, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false)).ToString();
             EditorGUILayout.LabelField(":", GUILayout.MinWidth(0),GUILayout.ExpandWidth(false),GUILayout.MaxWidth(10));

@@ -1,0 +1,141 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using PixelCrushers.DialogueSystem;
+
+public static class DialogueUtility
+{
+
+    private static List<List<DialogueEntry>> FindAllPathsBetweenNodes(DialogueEntry node1, DialogueEntry node2)
+    {
+
+        var stack = new List<DialogueEntry>();
+        var visited = new List<DialogueEntry>();
+        var paths = new List<List<DialogueEntry>>();
+
+        var currentNode = node1;
+
+        stack.Add(currentNode);
+
+        // get all paths from node1 to node2 using DFS algorithm
+
+
+        void DFS(DialogueEntry node)
+        {
+            if (node == node2)
+            {
+                paths.Add(new List<DialogueEntry>(stack));
+                return;
+            }
+
+            visited.Add(node);
+
+            foreach (var link in node.outgoingLinks)
+            {
+                var nextNode = GetDialogueEntryByID(link.destinationConversationID, link.destinationDialogueID);
+                if (visited.Contains(nextNode)) continue;
+
+                stack.Add(nextNode);
+                DFS(nextNode);
+                stack.Remove(nextNode);
+            }
+        }
+
+        DFS(currentNode);
+        
+        return paths;
+        
+    }
+    
+    private static int FindShortestDurationBetweenPaths(List<List<DialogueEntry>> paths)
+    {
+        var shortestDistance = int.MaxValue;
+        
+        foreach (var path in paths)
+        {
+            var distance = 0;
+            
+            for (int i = 0; i < path.Count; i++)
+            {
+                distance += GetNodeDuration(path[i].conversationID, path[i].id);
+            }
+            
+            if (distance < shortestDistance) shortestDistance = distance;
+        }
+        return shortestDistance;
+    }
+    
+    private static int FindLargestDurationBetweenPaths(List<List<DialogueEntry>> paths)
+    {
+        var largestDistance = 0;
+        
+        foreach (var path in paths)
+        {
+            var distance = 0;
+            
+            for (int i = 0; i < path.Count; i++)
+            {
+                distance += GetNodeDuration(path[i].conversationID, path[i].id);
+            }
+            
+            if (distance > largestDistance) largestDistance = distance;
+        }
+        
+        return largestDistance;
+    }
+    
+    public static (int, int) DurationRangeBetweenNodes(DialogueEntry node1, DialogueEntry node2)
+    {
+        var paths = FindAllPathsBetweenNodes(node1, node2);
+        var shortest = FindShortestDurationBetweenPaths(paths);
+        var largest = FindLargestDurationBetweenPaths(paths);
+        return (shortest, largest);
+    }
+    
+    
+    
+    public static DialogueEntry GetDialogueEntryByID(int conversationID, int entryID) => GetDialogueEntryByID(GetConversationByID(conversationID), entryID);
+    
+    public static DialogueEntry GetDialogueEntryByID(Conversation conversation, int id)
+    {
+        return conversation.dialogueEntries.Find(
+            entry => entry.id == id);
+    }
+    
+    public static DialogueEntry GetDialogueEntryFromNodeField(Field field)
+    {
+        if (field.type != FieldType.Node) return null;
+        
+        var conversationID = field.value.Split(',')[0] == null ? 0 : int.Parse(field.value.Split(',')[0]);
+        
+        var entryID = field.value.Split(',')[1] == null ? 0 : int.Parse(field.value.Split(',')[1]);
+        
+        return GetDialogueEntryByID(conversationID, entryID);
+    }
+    
+    
+    public static Conversation GetConversationByID(int id)
+    {
+        return DialogueManager.masterDatabase.conversations.Find(
+            conversation => conversation.id == id);
+    }
+    
+    private static int GetLineAutoDuration(string line)
+    {
+        if (line == string.Empty) return 0;
+        return (line.Length / GameManager.TimeScales.SpokenCharactersPerSecond +
+                GameManager.TimeScales.SecondsBetweenLines) * GameManager.TimeScales.GlobalTimeScale;
+    }
+    
+    public static int GetNodeDuration(int conversationID, int nodeID)
+    {
+        var node = GetDialogueEntryByID(conversationID, nodeID);
+       
+        var durationField = Field.LookupInt(node.fields, "Duration");
+        return durationField == 0 ? GetLineAutoDuration(node.currentDialogueText) : durationField;
+    }
+    
+    
+
+    
+}
