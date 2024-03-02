@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
@@ -15,7 +16,14 @@ public class CustomResponsePanel : MonoBehaviour
     [SerializeField] private PointerArrow mousePointerHand;
     private DialogueEntry currentlySelectedDialogueEntry;
     private StandardUIResponseButton currentlySelectedButton;
-    private Color defaultDisabledColor;
+    
+    private List<StandardUIResponseButton> nonSelectedButtons {
+        get
+        {
+            return GameObject.FindObjectsOfType<StandardUIResponseButton>().ToList().FindAll(button => button != currentlySelectedButton);
+        }
+}
+    private Color defaultDisabledColor, defaultTextColor;
 
   
 
@@ -31,6 +39,11 @@ public class CustomResponsePanel : MonoBehaviour
         Points.OnAnimationStart -= StartPointsAnimation;
         Points.OnAnimationComplete -= FinishPointsAnimation;
     }
+
+    public void PauseDialogueSystem()
+    {
+        DialogueManager.Pause();
+    }
     
     
     public void SetCurrentResponseButton(StandardUIResponseButton responseButton)
@@ -40,6 +53,12 @@ public class CustomResponsePanel : MonoBehaviour
        
         if (Field.FieldExists(currentlySelectedDialogueEntry.fields, "Time Estimate")) ShowTimeEstimate();
         else HideTimeEstimate();
+    }
+
+    public void SetCurrentResponseButton(Transform transform)
+    {
+        var responseButton = transform.GetComponent<StandardUIResponseButton>();
+        SetCurrentResponseButton(responseButton);
     }
 
     private void ShowTimeEstimate()
@@ -63,6 +82,11 @@ public class CustomResponsePanel : MonoBehaviour
         button.colors = block;
     }
 
+    private void HideNonSelectedButtonsText()
+    {
+        
+    }
+
 
     private void StartPointsAnimation(Points.Type pointsType)
     {
@@ -81,9 +105,17 @@ public class CustomResponsePanel : MonoBehaviour
         mousePointerHand.Unfreeze();
         
     }
+
+    public void SendSequencerMessage(string message)
+    {
+        Sequencer.Message(message);
+    }
+    
+    
     
     public void OnClick()
     {
+        if (!currentlySelectedButton.isButtonActive) return;
         foreach (var field in currentlySelectedDialogueEntry.fields)
         {
             if (field.title == "Points")

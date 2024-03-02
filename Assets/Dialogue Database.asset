@@ -739,6 +739,12 @@ MonoBehaviour:
       - originConversationID: 16
         originDialogueID: 1
         destinationConversationID: 16
+        destinationDialogueID: 8
+        isConnector: 0
+        priority: 2
+      - originConversationID: 16
+        originDialogueID: 1
+        destinationConversationID: 16
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
@@ -767,8 +773,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
+<<<<<<< Updated upstream
         x: 683.9505
         y: 234.2869
+=======
+        x: 682.01013
+        y: 233.14453
+>>>>>>> Stashed changes
         width: 160
         height: 30
     - id: 2
@@ -1042,8 +1053,72 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
+<<<<<<< Updated upstream
         x: 896.4457
         y: 373.38257
+=======
+        x: 1057.521
+        y: 385.94876
+        width: 160
+        height: 30
+    - id: 8
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Use the computer again.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Time Estimate
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      conversationID: 16
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 16
+        originDialogueID: 8
+        destinationConversationID: 11
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["wasComputerUsed?"] == true
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 298.6244
+        y: 407.46222
+>>>>>>> Stashed changes
         width: 160
         height: 30
     entryGroups: []
@@ -1189,7 +1264,7 @@ MonoBehaviour:
       - title: EventGuid
         value: 5580d4ce-ee96-4e03-8d11-5c03129258a0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 11
       isRoot: 0
       isGroup: 0
@@ -2307,8 +2382,13 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
+<<<<<<< Updated upstream
     canvasScrollPosition: {x: 644.47894, y: 312.8893}
     canvasZoom: 1.0866462
+=======
+    canvasScrollPosition: {x: 1.4981434, y: 300.33682}
+    canvasZoom: 1.0281017
+>>>>>>> Stashed changes
   - id: 10
     fields:
     - title: Title
@@ -7077,7 +7157,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 194.61293
-        y: 202.24628
+        y: 166.53479
         width: 160
         height: 30
     - id: 2
@@ -7118,6 +7198,14 @@ MonoBehaviour:
         value: 1200
         type: 1
         typeString: CustomFieldType_Number
+      - title: Points
+        value: Wellness:10
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 24,4
+        type: 8
+        typeString: CustomFieldType_NodeType
       conversationID: 24
       isRoot: 0
       isGroup: 0
@@ -7139,7 +7227,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 64.44827
+        x: 62.528
         y: 373.702
         width: 160
         height: 30
@@ -7223,7 +7311,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: Delay({0})
+        value: Delay({0.1})
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 24
@@ -7259,8 +7347,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 194.16295
-        y: 290.69687
+        x: 193.3127
+        y: 281.34387
         width: 160
         height: 30
     - id: 5
@@ -7487,8 +7575,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 55.399475}
-    canvasZoom: 1.1760923
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.92109245
   syncInfo:
     syncActors: 0
     syncItems: 0

@@ -11,7 +11,7 @@ using UnityEngine.Events;
 using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardUIResponseButton;
 
 [ExecuteInEditMode]
-public class WatchInteractable : MonoBehaviour
+public class CircularUIButton : MonoBehaviour
 {
 
     
@@ -25,7 +25,7 @@ public class WatchInteractable : MonoBehaviour
     [SerializeField] private bool syncSpacingWithWatchSide = true;
     [NonSerialized] public float angleIndex;
     [NonSerialized] public Spacing masterSpacing = Spacing.Spread;
-    List<WatchInteractable> matchedSideInteractables = new List<WatchInteractable>();
+    List<CircularUIButton> matchedSideInteractables = new List<CircularUIButton>();
     [SerializeField] private float _padding;
     public UnityEvent onHover, onClick, onMouseExit;
     
@@ -74,9 +74,6 @@ public class WatchInteractable : MonoBehaviour
         image ??= GetComponent<Image>();
         button ??= GetComponent<Button>();
         image.alphaHitTestMinimumThreshold = 2;
-
-       
-       
     }
 
     [NonSerialized] public bool isButtonActive = false;
@@ -84,7 +81,7 @@ public class WatchInteractable : MonoBehaviour
     
     private void Update()
     {
-        var sameSideInteractables = FindObjectsOfType<WatchInteractable>().ToList().Where(watchInteractable => watchInteractable.watchSide == watchSide).ToList();
+        var sameSideInteractables = FindObjectsOfType<CircularUIButton>().ToList().Where(watchInteractable => watchInteractable.watchSide == watchSide).ToList();
         sameSideInteractables.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
         
         var currentIndex = 0;
@@ -131,9 +128,7 @@ public class WatchInteractable : MonoBehaviour
                 var zAngle = 90 * (SideIndex[watchSide] + 2f * ((currentIndex + 1f) / (sameSideInteractables.Count + 1f) - image.fillAmount) - 1);
                 var center = 90 * (SideIndex[watchSide] - image.fillAmount * 2);
                 zAngle = Mathf.Lerp(zAngle, center, _padding);
-                
                 transform.localRotation = Quaternion.Euler(0, 0, zAngle);
-                
                 break;
             case Spacing.Clustered:
                 transform.localRotation = Quaternion.Euler(0, 0, angleIndex + SideIndex[watchSide] * 90 - degreeSum / 2);

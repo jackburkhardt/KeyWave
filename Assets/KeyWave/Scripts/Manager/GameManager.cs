@@ -25,14 +25,6 @@ public class GameManager : MonoBehaviour
     public List<GameObjective> Objectives;
 
     public static GameState gameState;
-    
-    public struct TimeScales
-    {
-        internal static int GlobalTimeScale = 15;
-        internal static int SpokenCharactersPerSecond = 5;
-        internal static int SecondsBetweenLines = 15;
-        internal static int SecondsPerInteract = 30;
-    }
 
     // Start is called before the first frame update
     private void Awake()

@@ -583,9 +583,9 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 10 AM
-      type: 0
-      typeString: CustomFieldType_Text
+      value: 10:00
+      type: 9
+      typeString: CustomFieldType_TimeType
     - title: Description
       value: 
       type: 0
@@ -688,8 +688,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 674.5841
-        y: 152.91983
+        x: 682.9787
+        y: 162.32565
         width: 160
         height: 30
     - id: 1
@@ -760,6 +760,12 @@ MonoBehaviour:
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
+      - originConversationID: 16
+        originDialogueID: 1
+        destinationConversationID: 16
+        destinationDialogueID: 8
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -767,8 +773,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 673.1168
-        y: 283.37186
+        x: 683.9505
+        y: 233.14453
         width: 160
         height: 30
     - id: 2
@@ -802,9 +808,13 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Time Estimate
-        value: 20
-        type: 1
-        typeString: CustomFieldType_Number
+        value: 11,6
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Points
+        value: Business:10
+        type: 10
+        typeString: CustomFieldType_PointsType
       conversationID: 16
       isRoot: 0
       isGroup: 0
@@ -819,15 +829,15 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: Variable["wasComputerUsed?"] == false
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 279.97012
-        y: 375.26505
+        x: 203.14075
+        y: 316.26715
         width: 160
         height: 30
     - id: 3
@@ -860,10 +870,6 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      - title: Time Estimate
-        value: 12
-        type: 1
-        typeString: CustomFieldType_Number
       conversationID: 16
       isRoot: 0
       isGroup: 0
@@ -885,8 +891,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 484.37534
-        y: 382.46088
+        x: 619.2017
+        y: 378.86655
         width: 160
         height: 30
     - id: 4
@@ -940,8 +946,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 681.8083
-        y: 383.23502
+        x: 844.9895
+        y: 385.41095
         width: 160
         height: 30
     - id: 5
@@ -993,8 +999,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1102.1375
-        y: 383.43033
+        x: 1264.9233
+        y: 383.9856
         width: 160
         height: 30
     - id: 7
@@ -1042,13 +1048,72 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 888.02313
-        y: 384.5626
+        x: 1057.521
+        y: 385.94876
+        width: 160
+        height: 30
+    - id: 8
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Use the computer again.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Time Estimate
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      conversationID: 16
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 16
+        originDialogueID: 8
+        destinationConversationID: 11
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["wasComputerUsed?"] == true
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 296.68402
+        y: 438.50806
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 195.33272, y: 0}
-    canvasZoom: 1.1627823
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.5153667
   - id: 11
     fields:
     - title: Title
@@ -1152,8 +1217,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 910.89233
-        y: 4.2976227
+        x: 894.799
+        y: 1
         width: 160
         height: 30
     - id: 1
@@ -1186,6 +1251,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: EventGuid
+        value: 5580d4ce-ee96-4e03-8d11-5c03129258a0
+        type: 0
+        typeString: 
       conversationID: 11
       isRoot: 0
       isGroup: 0
@@ -1204,11 +1273,23 @@ MonoBehaviour:
       userScript: 
       onExecute:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 0}
+            m_TargetAssemblyTypeName: 
+            m_MethodName: 
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: 
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 1151.6847
-        y: 90.16569
+        x: 1144.198
+        y: 80.696815
         width: 160
         height: 30
     - id: 2
@@ -1262,8 +1343,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1153.0801
-        y: 143.26848
+        x: 1144.266
+        y: 128.26675
         width: 160
         height: 30
     - id: 3
@@ -1317,8 +1398,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1152.1039
-        y: 196.86568
+        x: 1147.1035
+        y: 179.53
         width: 160
         height: 30
     - id: 4
@@ -1372,8 +1453,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1154.4614
-        y: 255.69934
+        x: 1145.339
+        y: 231.47621
         width: 160
         height: 30
     - id: 5
@@ -1427,8 +1508,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1154.4615
-        y: 307.4959
+        x: 1148.3151
+        y: 287.003
         width: 160
         height: 30
     - id: 6
@@ -1482,8 +1563,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1154.0289
-        y: 360.7642
+        x: 1146.29
+        y: 336.3917
         width: 160
         height: 30
     - id: 7
@@ -1537,8 +1618,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 309.7119
-        y: 497.06488
+        x: 262.14212
+        y: 478.4505
         width: 160
         height: 30
     - id: 8
@@ -1571,6 +1652,14 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Time Estimate
+        value: 23,15
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Time Estimate
+        value: 23,10
+        type: 8
+        typeString: CustomFieldType_NodeType
       conversationID: 11
       isRoot: 0
       isGroup: 0
@@ -1592,8 +1681,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1184.1047
-        y: 594.06024
+        x: 1078.1625
+        y: 632.50684
         width: 160
         height: 30
     - id: 12
@@ -1665,8 +1754,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 307.49255
-        y: 592.6543
+        x: 259.92276
+        y: 546.3633
         width: 160
         height: 30
     - id: 13
@@ -1699,6 +1788,14 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Time Estimate
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: j
+        value: 11,28
+        type: 8
+        typeString: CustomFieldType_NodeType
       conversationID: 11
       isRoot: 0
       isGroup: 0
@@ -1720,8 +1817,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 66.46289
-        y: 707.8114
+        x: 56.686005
+        y: 644.7907
         width: 160
         height: 30
     - id: 14
@@ -1775,8 +1872,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 293.53522
-        y: 710.209
+        x: 263.05768
+        y: 646.2183
         width: 160
         height: 30
     - id: 15
@@ -1830,8 +1927,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1536
-        y: 638
+        x: 1533.6494
+        y: 605.09094
         width: 160
         height: 30
     - id: 16
@@ -1959,8 +2056,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 806.1313
-        y: 721.3013
+        x: 863.726
+        y: 707.1974
         width: 160
         height: 30
     - id: 18
@@ -2014,8 +2111,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 521.6064
-        y: 724.088
+        x: 464.66278
+        y: 645.2057
         width: 160
         height: 30
     - id: 19
@@ -2037,11 +2134,11 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: What time should it be?
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: 
+        value: What time should it be?
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -2081,8 +2178,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 288.07794
-        y: 861.91406
+        x: 273.37833
+        y: 739.6992
         width: 160
         height: 30
     - id: 20
@@ -2136,8 +2233,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 152.4033
-        y: 1011.4038
+        x: 259.14932
+        y: 899.6908
         width: 160
         height: 30
     - id: 21
@@ -2191,8 +2288,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 400.90045
-        y: 1012.1637
+        x: 554.2634
+        y: 908.072
         width: 160
         height: 30
     - id: 28
@@ -2229,6 +2326,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: 
+        value: 18:51
+        type: 9
+        typeString: CustomFieldType_TimeType
       conversationID: 11
       isRoot: 0
       isGroup: 0
@@ -2262,13 +2363,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 905.0721
-        y: 405.30664
+        x: 872.66486
+        y: 400.93768
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 109.1398, y: 255.17831}
-    canvasZoom: 1.3597453
+    canvasScrollPosition: {x: 367.0463, y: 0}
+    canvasZoom: 0.8766462
   - id: 10
     fields:
     - title: Title
@@ -2742,8 +2843,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 328.16553, y: 13.144623}
-    canvasZoom: 0.98899996
+    canvasScrollPosition: {x: 149.91354, y: 134.00543}
+    canvasZoom: 1.4024993
   - id: 17
     fields:
     - title: Title
@@ -2956,7 +3057,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 520.9686, y: 92.396675}
+    canvasScrollPosition: {x: 439.37354, y: 0}
     canvasZoom: 1.6299994
   - id: 18
     fields:
@@ -3055,8 +3156,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 472.37946
-        y: 130.71185
+        x: 484.81543
+        y: 113.88669
         width: 160
         height: 30
     - id: 1
@@ -3169,8 +3270,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 478.6949
-        y: 631.1356
+        x: 486.34595
+        y: 468.167
         width: 160
         height: 30
     - id: 3
@@ -3228,8 +3329,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 155.2099
-        y: 339.4589
+        x: 253.90921
+        y: 334.1031
         width: 160
         height: 30
     - id: 4
@@ -3338,8 +3439,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 100.760025, y: 4.115425}
-    canvasZoom: 1.1799998
+    canvasScrollPosition: {x: 0, y: 95.638824}
+    canvasZoom: 1.3069998
   - id: 19
     fields:
     - title: Title
@@ -3684,8 +3785,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 70.287415, y: 116.07666}
-    canvasZoom: 1.06
+    canvasScrollPosition: {x: 7.3692193, y: 68.08442}
+    canvasZoom: 0.7955
   - id: 20
     fields:
     - title: Title
@@ -4855,22 +4956,6 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      - title: Display Time Estimate
-        value: True
-        type: 2
-        typeString: CustomFieldType_Boolean
-      - title: Target Node
-        value: 0
-        type: 1
-        typeString: CustomFieldType_Number
-      - title: Target Node
-        value: 37
-        type: 1
-        typeString: CustomFieldType_Number
-      - title: Target Node
-        value: 25
-        type: 1
-        typeString: CustomFieldType_Number
       conversationID: 21
       isRoot: 0
       isGroup: 0
@@ -4993,6 +5078,14 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Time Estimate
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Target
+        value: 21,37
+        type: 8
+        typeString: CustomFieldType_NodeType
       conversationID: 21
       isRoot: 0
       isGroup: 0
@@ -5014,8 +5107,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 322.48358
-        y: 808.38873
+        x: 322.43774
+        y: 724.48676
         width: 160
         height: 30
     - id: 22
@@ -5067,8 +5160,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 588.5037
-        y: 763.4793
+        x: 583.50995
+        y: 726.8583
         width: 160
         height: 30
     - id: 24
@@ -5256,7 +5349,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 322.04898
+        x: 323.71356
         y: 868.5425
         width: 160
         height: 30
@@ -5866,8 +5959,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 49.67151, y: 124.99106}
-    canvasZoom: 0.60974467
+    canvasScrollPosition: {x: 153.2758, y: 133.71445}
+    canvasZoom: 0.6987457
   - id: 22
     fields:
     - title: Title
@@ -6063,7 +6156,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 460.32043
+        x: 457.07202
         y: 111.469864
         width: 160
         height: 30
@@ -6118,8 +6211,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 461.56555
-        y: 177.37863
+        x: 462.70673
+        y: 178.15125
         width: 160
         height: 30
     - id: 2
@@ -6173,7 +6266,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 461.02655
+        x: 459.48126
         y: 237.72281
         width: 160
         height: 30
@@ -6289,8 +6382,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 296.14874
-        y: 418.03003
+        x: 303.81308
+        y: 441.87482
         width: 160
         height: 30
     - id: 6
@@ -6344,8 +6437,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 649.4414
-        y: 415.16006
+        x: 642.2174
+        y: 438.27698
         width: 160
         height: 30
     - id: 7
@@ -6405,8 +6498,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 295.88843
-        y: 492.65552
+        x: 309.51392
+        y: 507.3186
         width: 160
         height: 30
     - id: 8
@@ -6466,8 +6559,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 644.461
-        y: 486.87506
+        x: 645.9058
+        y: 509.26953
         width: 160
         height: 30
     - id: 9
@@ -6527,8 +6620,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 298.33984
-        y: 569.77765
+        x: 306.00418
+        y: 575.73895
         width: 160
         height: 30
     - id: 10
@@ -6582,8 +6675,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 648.3007
-        y: 559.3284
+        x: 645.41113
+        y: 582.4454
         width: 160
         height: 30
     - id: 11
@@ -6616,6 +6709,14 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: EventGuid
+        value: d542a221-5d54-4d5b-ac90-e1cc0f69881d
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Points
+        value: Business:15
+        type: 10
+        typeString: CustomFieldType_PointsType
       conversationID: 23
       isRoot: 0
       isGroup: 0
@@ -6631,14 +6732,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: Variable["douglasMeetingTime"] = "10 AM"
+      userScript: Variable["douglasMeetingTime"] = "10:00"
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 175.27205
-        y: 669.1122
+        x: 174.52675
+        y: 662.31165
         width: 160
         height: 30
     - id: 12
@@ -6671,6 +6772,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Points
+        value: Business:15
+        type: 10
+        typeString: CustomFieldType_PointsType
       conversationID: 23
       isRoot: 0
       isGroup: 0
@@ -6686,14 +6791,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: Variable["douglasMeetingTime"] = "4 PM"
+      userScript: Variable["douglasMeetingTime"] = "16:00"
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 412.19916
-        y: 670.7894
+        x: 413.77313
+        y: 660.6758
         width: 160
         height: 30
     - id: 13
@@ -6740,8 +6845,8 @@ MonoBehaviour:
       outgoingLinks:
       - originConversationID: 23
         originDialogueID: 13
-        destinationConversationID: 11
-        destinationDialogueID: 0
+        destinationConversationID: 23
+        destinationDialogueID: 14
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -6751,13 +6856,131 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 293.66693
-        y: 768.0301
+        x: 296.8308
+        y: 770.3177
+        width: 160
+        height: 30
+    - id: 14
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 5
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: that would be great!
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Time Estimate
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      conversationID: 23
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 23
+        originDialogueID: 14
+        destinationConversationID: 23
+        destinationDialogueID: 15
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 296.03983
+        y: 839.30096
+        width: 160
+        height: 30
+    - id: 15
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 5
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: See you then!
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Time Estimate
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      conversationID: 23
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 23
+        originDialogueID: 15
+        destinationConversationID: 11
+        destinationDialogueID: 28
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 296.8308
+        y: 894.8561
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1.074766
+    canvasScrollPosition: {x: 75.063095, y: 0}
+    canvasZoom: 0.9942697
   - id: 24
     fields:
     - title: Title
@@ -6922,8 +7145,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 238.82716
-        y: 198.84518
+        x: 194.61293
+        y: 202.24628
         width: 160
         height: 30
     - id: 2
@@ -6985,8 +7208,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 129.05759
-        y: 370.9434
+        x: 64.44827
+        y: 373.702
         width: 160
         height: 30
     - id: 3
@@ -7092,6 +7315,12 @@ MonoBehaviour:
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
+      - originConversationID: 24
+        originDialogueID: 4
+        destinationConversationID: 24
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 4
       conditionsString: 
       userScript: 
       onExecute:
@@ -7099,8 +7328,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 241.15486
-        y: 288.3348
+        x: 194.16295
+        y: 290.69687
         width: 160
         height: 30
     - id: 5
@@ -7133,6 +7362,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Response Menu Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 24
       isRoot: 0
       isGroup: 0
@@ -7147,16 +7380,16 @@ MonoBehaviour:
         destinationDialogueID: 6
         isConnector: 0
         priority: 2
-      conditionsString: CurrentQuestState("MeetDouglas") == "active" and (CurrentQuestEntryState("MeetDouglas",
-        1) ~= "failure") and WithinGracePeriod("10:00", 30)
+      conditionsString: WithinTimeRange("10:00", "10:30") == true and (CurrentQuestState("MeetDouglas")
+        == "active")
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 730.37067
-        y: 197.20215
+        x: 727.22656
+        y: 195.13318
         width: 160
         height: 30
     - id: 6
@@ -7210,8 +7443,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 725.08014
-        y: 270.0186
+        x: 723.70087
+        y: 259.0655
         width: 160
         height: 30
     - id: 7
@@ -7265,8 +7498,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 728.1728
-        y: 333.42062
+        x: 722.6555
+        y: 315.18546
         width: 160
         height: 30
     - id: 8
@@ -7318,13 +7551,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 724.049
-        y: 395.79178
+        x: 723.3594
+        y: 388.20557
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1.39
+    canvasScrollPosition: {x: 0, y: 55.399475}
+    canvasZoom: 1.1760923
   syncInfo:
     syncActors: 0
     syncItems: 0
@@ -7343,4 +7576,5 @@ MonoBehaviour:
     Coordinate","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"isRegion","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"etaFromPlayer","value":"","type":0,"typeString":"CustomFieldType_Text"}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Initial
     Value","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"}],"conversationFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"0","type":5,"typeString":"CustomFieldType_Actor"}],"dialogueEntryFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Menu
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Dialogue
-    Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'
+    Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Time
+    Estimate","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'

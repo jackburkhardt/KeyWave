@@ -69,19 +69,29 @@ public class MapAnimator : MonoBehaviour
     {
         if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(location);
     }
+    
+    
 
+<<<<<<< Updated upstream
     public void ShowPersistentHeroPanel(GameManager.Locations location)
+=======
+    public void ShowPersistentInfoPanel(Location location)
+>>>>>>> Stashed changes
     {
         ShowInfoPanel(location);
         ShowConfirmationButtons();
         ZoomInOnCoordinates(GameManager.GetGameLocation(location).coordinates);
     }
     
-    public void ShowPersistentHeroPanel(string location)
+    public void ShowPersistentInfoPanel(string location)
     {
+<<<<<<< Updated upstream
         var locationEnum = (GameManager.Locations) Enum.Parse(typeof(GameManager.Locations), location);
         ShowPersistentHeroPanel(locationEnum);
        
+=======
+         ShowPersistentInfoPanel(Location.FromString(location));
+>>>>>>> Stashed changes
     }
     
     public void HideFleetingInfoPanel()
@@ -103,8 +113,8 @@ public class MapAnimator : MonoBehaviour
     {
         _locationName.text = location.ToString();
         _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
-        _etaText.text = $"ETA: {DialogueLua.GetLocationField(location.ToString(), "ETA").asString}";
-        _descriptionText.text = DialogueLua.GetLocationField(location.ToString(), "Description").asString;
+        _etaText.text = $"ETA: {Clock.EstimatedArrivalTime(location)}";
+        _descriptionText.text = location.description;
         _infoPanel.gameObject.SetActive(true);
 
         foreach (var objective in _objectivePanel.GetComponentsInChildren<InfoPanelObjective>())

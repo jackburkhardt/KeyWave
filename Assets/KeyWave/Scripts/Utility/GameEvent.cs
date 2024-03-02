@@ -73,15 +73,22 @@ public static class GameEvent
     {
         if (interactable.TryGetComponent(out DialogueSystemTrigger dialogueSystemTrigger))
         {
-            SerializePlayerEvent("interact", "player", interactable.name, "DialogueSystemTrigger", GameManager.TimeScales.SecondsPerInteract);
+            SerializePlayerEvent("interact", "player", interactable.name, "DialogueSystemTrigger", Clock.TimeScales.SecondsPerInteract);
             dialogueSystemTrigger.OnUse();
         }
     }
     
    public static void OnMove(string sender, string value, int duration = 0)
    {
-       SerializePlayerEvent("move", sender, "player", value, duration * GameManager.TimeScales.GlobalTimeScale);
+       SerializePlayerEvent("move", sender, "player", value, duration);
    }
+   
+   public static void OnMove(string sender, Location location)
+   {
+       SerializePlayerEvent("move", sender, "player", location.name, location.TravelTime);
+   }
+   
+   
    
    public static void OnWait(int duration)
     {

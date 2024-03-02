@@ -15,7 +15,7 @@ public class InvokeConversationEvents : MonoBehaviour
         
         GameEvent.OnConversationLine();
         
-        if (!Points.IsAnimating) Sequencer.Message("Animated");
+       // if (!Points.IsAnimating) Sequencer.Message("Animated");
         
     //   StartCoroutine(DelayedBroadcast("line"));
     }

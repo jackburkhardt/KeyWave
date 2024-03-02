@@ -11,8 +11,11 @@ public class SubtitleContentElement : MonoBehaviour
     [SerializeField] private SubtitleManager subtitleManager;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TextMeshProTypewriterEffect typewriterEffect;
+    [SerializeField] private List<Animator> _animatorsToWaitFor;
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private TMP_Text mainClock;
+
+    private bool _isAnimationPlaying = false;
 
     private void Awake()
     {

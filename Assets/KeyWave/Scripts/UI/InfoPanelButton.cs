@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class InfoPanelButton : MonoBehaviour
 {
-    private List<WatchInteractable> watchEdgeButtons;
+    private List<CircularUIButton> watchEdgeButtons;
     
     private bool _isMouseOver;
 
@@ -23,7 +23,7 @@ public class InfoPanelButton : MonoBehaviour
 
     private void OnEnable()
     {
-        watchEdgeButtons = FindObjectsOfType<WatchInteractable>().ToList();
+        watchEdgeButtons = FindObjectsOfType<CircularUIButton>().ToList();
     }
 
     private void OnDisable()

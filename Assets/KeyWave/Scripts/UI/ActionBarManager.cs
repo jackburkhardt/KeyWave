@@ -25,12 +25,12 @@ public class ActionBarManager : MonoBehaviour
 
     private void OnEnable()
     {
-        
+        Points.OnPointsIncrease += AddPoints;
     }
 
     private void OnDisable()
     {
-        
+        Points.OnPointsIncrease -= AddPoints;
     }
 
     // Start is called before the first frame update
@@ -85,27 +85,27 @@ public class ActionBarManager : MonoBehaviour
     {
     }
 
-    public void AddPoints(int points, Points.Type type)
+    public void AddPoints(Points.Type type, int points)
     {
-        StartCoroutine(SpawnOrbHandler(points, type));
+        StartCoroutine(SpawnOrbHandler(type, points));
     }
     
     public void AddWellnessPoints(int points)
     {
-       AddPoints(points, Points.Type.Wellness);
+       AddPoints(Points.Type.Wellness, points);
     }
     
     public void AddLocalKnowledgePoints(int points)
     {
-       AddPoints(points, Points.Type.LocalSavvy);
+       AddPoints( Points.Type.LocalSavvy, points);
     }
     
     public void AddBusinessResearchPoints(int points)
     {
-        AddPoints(points, Points.Type.Business);
+        AddPoints(Points.Type.Business, points);
     }
 
-    IEnumerator SpawnOrbHandler(int count, Points.Type type)
+    IEnumerator SpawnOrbHandler(Points.Type type, int count)
     {
         
         for (int i = 0; i < count; i++)

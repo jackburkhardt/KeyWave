@@ -123,8 +123,8 @@ public static class DialogueUtility
     private static int GetLineAutoDuration(string line)
     {
         if (line == string.Empty) return 0;
-        return (line.Length / GameManager.TimeScales.SpokenCharactersPerSecond +
-                GameManager.TimeScales.SecondsBetweenLines) * GameManager.TimeScales.GlobalTimeScale;
+        return (line.Length / Clock.TimeScales.SpokenCharactersPerSecond +
+                Clock.TimeScales.SecondsBetweenLines) * Clock.TimeScales.GlobalTimeScale;
     }
     
     public static int GetNodeDuration(int conversationID, int nodeID)

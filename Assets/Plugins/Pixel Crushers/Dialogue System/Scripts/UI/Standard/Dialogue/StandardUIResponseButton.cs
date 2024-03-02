@@ -1,5 +1,6 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using System.Collections;
 using System.Linq;
 using UnityEditor.Build.Content;
 using UnityEngine;
@@ -28,6 +29,8 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("Set button's text to this color by default.")]
         public Color defaultColor = Color.white;
+
+        public int delayTime = 0;
 
         /// <summary>
         /// Gets or sets the response text element.
@@ -131,6 +134,13 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public virtual void OnClick()
         {
+            StartCoroutine(DelayThenClick());
+        }
+
+        private IEnumerator DelayThenClick()
+        {
+            yield return new WaitForSeconds(delayTime);
+            
             if (target != null)
             {
                 SetCurrentResponse();
