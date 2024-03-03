@@ -59,8 +59,8 @@ public class InvokeMovePlayer : PlayerEventHandler
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
        
-        if (playerEvent.Type != "move" || playerEvent.Value != _destination.ToString()) return;
-        GameManager.instance.TravelTo(_destination.ToString());
+        if (playerEvent.Type != "move" || playerEvent.Value != _destination.name) return;
+        GameManager.instance.TravelTo(_destination.name);
          /*
         _playerLocationName = playerEvent.Value;
        _playerLocationTransform = FindTransformMatchingString(_playerLocationName);
@@ -69,18 +69,17 @@ public class InvokeMovePlayer : PlayerEventHandler
        */
     }
 
-    [SerializeReference] private GameManager.Locations _destination;
+    [SerializeReference] private Location _destination;
 
     
     
 
     public void MovePlayer()
     {
-        var distanceInSeconds =  GameManager.instance.GetPlayerDistanceFromLocation(_destination);
-        GameEvent.OnMove(gameObject.name, _destination.ToString(), distanceInSeconds);
+        GameEvent.OnMove("InvokeMovePlayer", _destination);
     }
 
-    public void SetDestination(GameManager.Locations location)
+    public void SetDestination(Location location)
     {
         _destination = location;
     }

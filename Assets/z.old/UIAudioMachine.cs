@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
 public class UIAudioMachine : AudioMachine
+
+
 {
+    /*
     AudioSource m_AudioSource;
 
     [SerializeField]
@@ -45,5 +48,7 @@ public class UIAudioMachine : AudioMachine
 
     void PlayCardTurnsBlue() => m_AudioSource.PlayOneShot(cardBlue);
     void PlayCardTurnsRed() => m_AudioSource.PlayOneShot(cardRed);
+    
+    */
 
-}
+

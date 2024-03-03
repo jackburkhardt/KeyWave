@@ -8,8 +8,8 @@ public class GameObjective : ScriptableObject
 
     public GameManager.Locations location;
     public string objectiveTitle;
-    public GameManager.Hour hour;
-    public GameManager.Minute minute;
+    public Clock.Hour hour;
+    public Clock.Minute minute;
 
     public enum State
     {

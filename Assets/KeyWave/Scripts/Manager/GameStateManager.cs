@@ -266,7 +266,7 @@ public class GameStateManager : PlayerEventHandler
 
         foreach (var location in GameManager.instance.locations)
         {
-            DialogueLua.SetLocationField(location.name, "ETA", GameManager.instance.GetEtaToLocation(location.location));
+            DialogueLua.SetLocationField(location.name, "ETA", Clock.EstimatedTimeOfArrival(location));
         }
         
     }

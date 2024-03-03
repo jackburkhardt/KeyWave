@@ -441,19 +441,7 @@ MonoBehaviour:
   - guid: 5580d4ce-ee96-4e03-8d11-5c03129258a0
     onExecute:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1916957364}
-          m_TargetAssemblyTypeName: ActionBarManager, Assembly-CSharp
-          m_MethodName: AddBusinessResearchPoints
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 8
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   - guid: d542a221-5d54-4d5b-ac90-e1cc0f69881d
     onExecute:
       m_PersistentCalls:
@@ -712,6 +700,7 @@ MonoBehaviour:
     m_textMeshProUGUI: {fileID: 2939381656283194820}
   setLabelColor: 0
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  delayTime: 0
 --- !u!1 &452712483
 GameObject:
   m_ObjectHideFlags: 0
@@ -4381,9 +4370,45 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
       propertyPath: Objectives.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 5331c390d6361429da8b0179a432ace2, type: 2}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7016f5fe0a970418ca076ed0a635ec25, type: 2}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 53e7f0ff2516c4e1290f6f01670a6539, type: 2}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: cf0cb6f429c184964a397a5239800c7e, type: 2}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 70fa58db97b6947b2be9f1ed2e8f873a, type: 2}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 01c673249f3b448e1a908b9cce658fce, type: 2}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3377666481183439f9ad7d6671152b05, type: 2}
+    - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
+      propertyPath: locations.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: c6c97c501770740dfb55c0be71ca661a, type: 2}
     - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
       propertyPath: Objectives.Array.data[0]
       value: 
@@ -9114,6 +9139,7 @@ MonoBehaviour:
   subtitleManager: {fileID: 946838708}
   canvasGroup: {fileID: 8855634174230699967}
   typewriterEffect: {fileID: 988945256890025558}
+  _animatorsToWaitFor: []
   timeText: {fileID: 8817825637212020147}
   mainClock: {fileID: 590976170}
 --- !u!225 &8855634174230699967

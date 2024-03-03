@@ -61,37 +61,27 @@ public class MapAnimator : MonoBehaviour
     
     public void ShowFleetingInfoPanel(string location)
     {
-        var locationEnum = (GameManager.Locations) Enum.Parse(typeof(GameManager.Locations), location);
-        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(locationEnum);
+        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(Location.FromString(location));
     }
     
-    public void ShowFleetingInfoPanel(GameManager.Locations location)
+    public void ShowFleetingInfoPanel(Location location)
     {
         if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(location);
     }
     
     
 
-<<<<<<< Updated upstream
-    public void ShowPersistentHeroPanel(GameManager.Locations location)
-=======
     public void ShowPersistentInfoPanel(Location location)
->>>>>>> Stashed changes
     {
         ShowInfoPanel(location);
         ShowConfirmationButtons();
-        ZoomInOnCoordinates(GameManager.GetGameLocation(location).coordinates);
+        ZoomInOnCoordinates(location.coordinates);
     }
     
     public void ShowPersistentInfoPanel(string location)
     {
-<<<<<<< Updated upstream
-        var locationEnum = (GameManager.Locations) Enum.Parse(typeof(GameManager.Locations), location);
-        ShowPersistentHeroPanel(locationEnum);
-       
-=======
+
          ShowPersistentInfoPanel(Location.FromString(location));
->>>>>>> Stashed changes
     }
     
     public void HideFleetingInfoPanel()
@@ -109,11 +99,11 @@ public class MapAnimator : MonoBehaviour
     
     
     
-    private void ShowInfoPanel(GameManager.Locations location)  
+    private void ShowInfoPanel(Location location)  
     {
-        _locationName.text = location.ToString();
+        _locationName.text = location.name;
         _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
-        _etaText.text = $"ETA: {Clock.EstimatedArrivalTime(location)}";
+        _etaText.text = $"ETA: {Clock.EstimatedTimeOfArrival(location)}";
         _descriptionText.text = location.description;
         _infoPanel.gameObject.SetActive(true);
 
@@ -124,7 +114,7 @@ public class MapAnimator : MonoBehaviour
             Destroy(objective.gameObject);
         }
 
-        foreach (var objective in GameManager.GetLocationObjectives(location))
+        foreach (var objective in location.objectives)
         {
             var objectiveItem = Instantiate(_objectivePrefab.gameObject, _objectivePanel);
             objectiveItem.SetActive(true);

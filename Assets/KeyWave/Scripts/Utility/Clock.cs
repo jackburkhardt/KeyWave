@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Clock
 {
-<<<<<<< Updated upstream
-=======
     
     public enum Hour
     {
@@ -106,8 +104,6 @@ public class Clock
         internal static int SecondsBetweenLines = 15;
         internal static int SecondsPerInteract = 30;
     }
-    
->>>>>>> Stashed changes
     public static int CurrentTimeRaw => GameManager.gameState.clock;
 
     public static string CurrentTime => To24HourClock(CurrentTimeRaw);
@@ -133,6 +129,16 @@ public class Clock
         var hoursString = hours < 10 ? $"0{hours}" : hours.ToString();
         
         return $"{hoursString}:{minutesString}";
+    }
+
+    public static string EstimatedTimeOfArrival(Location location)
+    {
+       return To24HourClock(location.TravelTime + CurrentTimeRaw);
+    }
+    
+    public static int EstimatedTimeOfArrivalRaw(Location location)
+    {
+        return location.TravelTime + CurrentTimeRaw;
     }
     
 }

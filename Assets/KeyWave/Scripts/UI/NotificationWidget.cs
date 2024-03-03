@@ -36,6 +36,8 @@ public class NotificationWidget : MonoBehaviour
         }
         _objective = objective;
     }
+    
+    /*
 
     // Update is called once per frame
     void Update()
@@ -43,4 +45,5 @@ public class NotificationWidget : MonoBehaviour
         _taskText.text = $"{_objective.objectiveTitle} at the {_objective.location} at {_objective.hour}:{_objective.minute}";
         _etaText.text = $"Earliest ETA: {GameManager.instance.GetEtaToLocation(_objective.location)}";
     }
+    */
 }
