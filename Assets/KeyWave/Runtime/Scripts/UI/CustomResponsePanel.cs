@@ -120,11 +120,8 @@ public class CustomResponsePanel : MonoBehaviour
         {
             if (field.title == "Points")
             {
-                var pointsType = (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
-                var pointsValue = int.Parse(field.value.Split(':')[1]);
-                Points.AddPoints(pointsType, pointsValue);
-                if (!Points.IsAnimating) Points.AnimationStart(pointsType,currentlySelectedButton.label.gameObject.transform.position);
-                
+                Points.SetSpawnPosition(currentlySelectedButton.transform.position);
+                GameEvent.OnPointsIncrease(DialogueUtility.GetPointsField(field).type, DialogueUtility.GetPointsField(field).points);
             }
         }
     }
@@ -175,8 +172,4 @@ public class CustomResponsePanel : MonoBehaviour
         output += " minutes";
         return output;
     }
-    
-    
-    
-    
 }

@@ -20,6 +20,9 @@ public class GameState
     public Type type = Type.Normal;
     public int clock = 21600;
     public int day = 1;
+    public int business_score = 0;
+    public int local_savvy_score = 0;
+    public int wellness_score = 0;
     public string player_location = "Hotel";
     public string current_conversation_title = string.Empty;
     public string current_conversation_actor;
@@ -79,6 +82,21 @@ public class GameStateManager : PlayerEventHandler
                     break;
                 case "state_change":
                     gameState.type = Enum.Parse<GameState.Type>(playerEvent.Value);
+                    break;
+                case "points":
+                    var type = (Points.Type) Enum.Parse(typeof(Points.Type), playerEvent.Receiver);
+                    switch (type)
+                    {
+                        case Points.Type.Wellness:
+                            gameState.wellness_score += int.Parse(playerEvent.Value);
+                            break;
+                        case Points.Type.LocalSavvy:
+                            gameState.local_savvy_score += int.Parse(playerEvent.Value);
+                            break;
+                        case Points.Type.Business:
+                            gameState.business_score += int.Parse(playerEvent.Value);
+                            break;
+                    }
                     break;
             }
 

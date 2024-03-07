@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PixelCrushers.DialogueSystem;
+using UnityEngine.SocialPlatforms.Impl;
 
 public static class Points
 {
@@ -18,24 +19,40 @@ public static class Points
         LocalSavvy,
         Business
     }
+
+    public static int Score(Type type)
+    {
+        var score = 0;
+        switch (type)
+        {
+            case Type.Business:
+                score = GameStateManager.instance.gameState.business_score;
+                break;
+            case Type.LocalSavvy:
+                score = GameStateManager.instance.gameState.local_savvy_score;
+                break;
+            case Type.Wellness:
+                score = GameStateManager.instance.gameState.wellness_score;
+                break;
+        }
+
+        return score;
+    }
     
     private static bool isAnimating;
     public static bool IsAnimating => isAnimating;
     
-    public static Action<Type, int> OnPointsIncrease;
-
     private static Vector2 spawnPosition;
     
+    public static void SetSpawnPosition(Vector2 position)
+    {
+        spawnPosition = position;
+    }
    
     /// <summary>
     /// Gets the position currently used for spawning orbs in animations.
     /// </summary>
     public static Vector2 SpawnPosition => spawnPosition;
-    public static void AddPoints(Type pointsType, int pointsCount)
-    {
-        
-        OnPointsIncrease?.Invoke(pointsType, pointsCount);
-    }
 
     /// <summary>
     /// Color associated with a given point type.

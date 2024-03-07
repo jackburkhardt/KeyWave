@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,31 @@ using PixelCrushers.DialogueSystem;
 
 public static class DialogueUtility
 {
+    
+    public enum QuestState
+    {
+        unassigned,
+        active,
+        failure,
+        success,
+        done,
+        abandoned,
+        grantable,
+        returnToNPC,
+    }
+    
+    public struct PointsField
+    {
+        public Points.Type type;
+        public int points;
+    }
+    
+    public static PointsField GetPointsField(Field field)
+    {
+        var pointsType = (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
+        var pointsValue = int.Parse(field.value.Split(':')[1]);
+        return new PointsField {type = pointsType, points = pointsValue};
+    }
 
     private static List<List<DialogueEntry>> FindAllPathsBetweenNodes(DialogueEntry node1, DialogueEntry node2)
     {

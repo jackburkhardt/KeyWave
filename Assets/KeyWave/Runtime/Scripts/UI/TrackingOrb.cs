@@ -8,7 +8,7 @@ using Random = System.Random;
 
 public class TrackingOrb : MonoBehaviour
 {
-    [SerializeField] private ActionBarManager pointsBar;
+    [SerializeField] private PointsBarManager pointsBar;
     [SerializeField] private Image image;
     
     [SerializeField] private Color wellnessColor, localKnowledgeColor, businessResearchColor;
@@ -44,7 +44,7 @@ public class TrackingOrb : MonoBehaviour
         
         LeanTween.move(gameObject, pointsBar.transform.position, 1.5f).setEaseInCubic().setOnComplete(() =>
         {
-            pointsBar.AddToBar(_orbType, 1);
+            pointsBar.OnHit(_orbType);
             Destroy(gameObject);
         });
 

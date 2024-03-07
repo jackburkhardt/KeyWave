@@ -92,7 +92,12 @@ public static class GameEvent
    {
        SerializePlayerEvent("move", sender, "player", location.name, location.TravelTime);
    }
-   
+
+   public static void OnPointsIncrease(Points.Type type, int points)
+   {
+         if (Points.IsAnimating == false) Points.AnimationStart(type);
+         SerializePlayerEvent("points", GameStateManager.instance.gameState.most_recent_response_node, type.ToString(), points.ToString());
+   }
    
    
    public static void OnWait(int duration)
