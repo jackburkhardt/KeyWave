@@ -19,6 +19,7 @@ public class GameState
     
     public Type type = Type.Normal;
     public int clock = 21600;
+    public int day = 1;
     public string player_location = "Hotel";
     public string current_conversation_title = string.Empty;
     public string current_conversation_actor;

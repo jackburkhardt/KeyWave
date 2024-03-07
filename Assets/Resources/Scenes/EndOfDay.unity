@@ -994,7 +994,7 @@ GameObject:
   m_Component:
   - component: {fileID: 901358864}
   m_Layer: 5
-  m_Name: GameTitle (2)
+  m_Name: EndOfDay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1309,6 +1309,7 @@ GameObject:
   - component: {fileID: 1808745135}
   - component: {fileID: 1808745137}
   - component: {fileID: 1808745136}
+  - component: {fileID: 1808745138}
   m_Layer: 5
   m_Name: Perils
   m_TagString: Untagged
@@ -1356,7 +1357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: End of Day 1
+  m_text: End of Day {0}
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4577609e07deb9429644dc05e7bfdb8, type: 2}
   m_sharedMaterial: {fileID: 3689533377796605181, guid: f4577609e07deb9429644dc05e7bfdb8, type: 2}
@@ -1433,6 +1434,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1808745134}
   m_CullTransparentMesh: 1
+--- !u!114 &1808745138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808745134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a477f1d1af904450dbce4d34ac3465e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 1808745136}
+  _0: day
+  _1: 
+  _2: 
 --- !u!1 &1809262471
 GameObject:
   m_ObjectHideFlags: 0
@@ -1654,7 +1673,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1921409136}
   m_Layer: 5
-  m_Name: GameTitle (1)
+  m_Name: CurrentProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

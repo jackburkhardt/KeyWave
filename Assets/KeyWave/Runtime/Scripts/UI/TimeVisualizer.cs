@@ -24,13 +24,14 @@ public class TimeVisualizer : MonoBehaviour
     
     IEnumerator ShowClockDelay()
     {
-        _canvasGroup.alpha = 0;
-        yield return new WaitForEndOfFrame();
-        _verticalLayoutGroup.enabled = false;
-        yield return new WaitForEndOfFrame();
-        _verticalLayoutGroup.enabled = true;
-        _canvasGroup.alpha = 1;
-        
+        if (_canvasGroup != null && _verticalLayoutGroup != null) {
+            _canvasGroup.alpha = 0;
+            yield return new WaitForEndOfFrame();
+            _verticalLayoutGroup.enabled = false;
+            yield return new WaitForEndOfFrame();
+            _verticalLayoutGroup.enabled = true;
+            _canvasGroup.alpha = 1;
+        }
         _clock = GameManager.instance.gameStateManager.gameState.clock;
         timeText.text = ConvertClockToHourMinutes(_clock);
     }
