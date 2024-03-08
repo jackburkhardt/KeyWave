@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayerEvent = PlayerEvents.PlayerEvent;
 
-public class PointsBarManager : PlayerEventHandler
+public class PointsBar : PlayerEventHandler
 {
     private int visualizedWellnessScore, visualizedLocalKnowledgeScore, visualizedBusinessResearchScore;
     
@@ -22,8 +22,9 @@ public class PointsBarManager : PlayerEventHandler
     public RectTransform orbTemplate;
 
 
-    private void OnEnable()
+    private new void OnEnable()
     {
+        base.OnEnable();
         visualizedWellnessScore = Points.Score(Points.Type.Wellness);
         visualizedLocalKnowledgeScore = Points.Score(Points.Type.LocalSavvy);
         visualizedBusinessResearchScore = Points.Score(Points.Type.Business);
@@ -43,6 +44,8 @@ public class PointsBarManager : PlayerEventHandler
                         visualizedBusinessResearchScore += amount;
                         break;
                 }
+
+        UpdateBar(amount);
     }
 
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
@@ -50,8 +53,8 @@ public class PointsBarManager : PlayerEventHandler
         switch (playerEvent.Type)
         {
             case "points":
-                var type = (Points.Type) Enum.Parse(typeof(Points.Type), playerEvent.Receiver);
-                AddPoints(type, int.Parse(playerEvent.Value));
+                var type = Points.TypeFromString(playerEvent.Receiver);
+                SpawnOrbs(type, int.Parse(playerEvent.Value));
                 break;
         }
     }
@@ -83,7 +86,6 @@ public class PointsBarManager : PlayerEventHandler
         SetRectWidth(localKnowledgeBar, maxBarWidth * visualizedLocalKnowledgeScore / maxScore);
         SetRectWidth(businessResearchBar, maxBarWidth * visualizedBusinessResearchScore / maxScore);
 
-
         spawnedOrbCount -= amount;
         
         if (spawnedOrbCount <= 0)
@@ -98,21 +100,9 @@ public class PointsBarManager : PlayerEventHandler
         Points.AnimationComplete();
         OnEnable();
     }
-    public void AddPoints(Points.Type type, int points)
+    public void SpawnOrbs(Points.Type type, int points)
     {
         StartCoroutine(SpawnOrbHandler(type, points));
-    }
-    public void AddWellnessPoints(int points)
-    {
-       AddPoints(Points.Type.Wellness, points);
-    }
-    public void AddLocalKnowledgePoints(int points)
-    {
-       AddPoints( Points.Type.LocalSavvy, points);
-    }
-    public void AddBusinessResearchPoints(int points)
-    {
-        AddPoints(Points.Type.Business, points);
     }
 
     IEnumerator SpawnOrbHandler(Points.Type type, int count)

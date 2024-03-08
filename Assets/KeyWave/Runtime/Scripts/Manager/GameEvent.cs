@@ -96,7 +96,7 @@ public static class GameEvent
    public static void OnPointsIncrease(Points.Type type, int points)
    {
          if (Points.IsAnimating == false) Points.AnimationStart(type);
-         SerializePlayerEvent("points", GameStateManager.instance.gameState.most_recent_response_node, type.ToString(), points.ToString());
+         SerializePlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, type.ToString(), points.ToString());
    }
    
    

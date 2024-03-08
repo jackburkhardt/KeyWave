@@ -108,7 +108,7 @@ public class Clock
 
     public static string CurrentTime => To24HourClock(CurrentTimeRaw);
 
-    public static int DailyLimit => ToSeconds("06:15");
+    public static int DailyLimit => ToSeconds("06:30");
 
     /// <summary>
     /// Converts a string in the format "HH:MM" to seconds. e.g. "07:30" to 27000

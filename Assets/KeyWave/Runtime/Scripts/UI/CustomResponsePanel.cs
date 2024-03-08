@@ -100,10 +100,9 @@ public class CustomResponsePanel : MonoBehaviour
     
     private void FinishPointsAnimation()
     {
-        SetButtonDisabledColor(currentlySelectedButton.GetComponent<Button>(), defaultDisabledColor);
+        if (currentlySelectedButton != null) SetButtonDisabledColor(currentlySelectedButton.GetComponent<Button>(), defaultDisabledColor);
         responseMenuAnimator.SetBool("Points", false);
         mousePointerHand.Unfreeze();
-        
     }
 
     public void SendSequencerMessage(string message)
@@ -111,7 +110,10 @@ public class CustomResponsePanel : MonoBehaviour
         Sequencer.Message(message);
     }
     
-    
+    private Vector2 ResponseButtonPosition(StandardUIResponseButton responseButton)
+    {
+        return responseButton.label.gameObject.transform.position;
+    }
     
     public void OnClick()
     {
@@ -120,7 +122,7 @@ public class CustomResponsePanel : MonoBehaviour
         {
             if (field.title == "Points")
             {
-                Points.SetSpawnPosition(currentlySelectedButton.transform.position);
+                Points.SetSpawnPosition(ResponseButtonPosition(currentlySelectedButton));
                 GameEvent.OnPointsIncrease(DialogueUtility.GetPointsField(field).type, DialogueUtility.GetPointsField(field).points);
             }
         }

@@ -73,6 +73,11 @@ public static class Points
                 return UnityEngine.Color.white;
         }
     }
+    
+    public static Type TypeFromString(string type)
+    {
+        return (Type) Enum.Parse(typeof(Type), type);
+    }
 
     public static Action<Type> OnAnimationStart;
 

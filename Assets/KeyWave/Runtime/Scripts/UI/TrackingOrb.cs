@@ -8,7 +8,7 @@ using Random = System.Random;
 
 public class TrackingOrb : MonoBehaviour
 {
-    [SerializeField] private PointsBarManager pointsBar;
+    [SerializeField] private PointsBar pointsBar;
     [SerializeField] private Image image;
     
     [SerializeField] private Color wellnessColor, localKnowledgeColor, businessResearchColor;
