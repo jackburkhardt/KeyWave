@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 101843602}
   - component: {fileID: 101843601}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Tick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -500,11 +500,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 275479989}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Script: {fileID: 11500000, guid: 20483fe4b66ec284b912fe75004a3983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 0
+  panel: {fileID: 275479991}
+  objectivePanelItem: {fileID: 1251289866}
+  day: 0
+  activeColor: {r: 0.8745098, g: 0.88235295, b: 0.8980392, a: 0.78039217}
+  inactiveColor: {r: 0.11372549, g: 0.11372549, b: 0.16078432, a: 0.7882353}
 --- !u!1 &298621653
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,7 +914,7 @@ GameObject:
   - component: {fileID: 514387736}
   - component: {fileID: 514387739}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1018,7 +1021,7 @@ GameObject:
   - component: {fileID: 515379742}
   - component: {fileID: 515379743}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1064,7 +1067,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Objective title.
+  m_text: 'Objective title. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
   m_sharedMaterial: {fileID: -8244711549486602402, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
@@ -1622,6 +1625,8 @@ MonoBehaviour:
   questTitle:
     m_uiText: {fileID: 0}
     m_textMeshProUGUI: {fileID: 515379740}
+  tickImage: {fileID: 101843602}
+  boxImage: {fileID: 514387737}
   day: 0
   textColorActive: {r: 0, g: 0, b: 0, a: 0}
   tickSpriteActive: {fileID: 0}

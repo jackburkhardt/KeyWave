@@ -1,53 +1,50 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using PixelCrushers;
-using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
-using UnityEngine.UIElements;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class ObjectivePanel : MonoBehaviour
 {
-   
-    public QuestState questState;
-    public UITextField questTitle;
-
+    [SerializeReference] private Image panel;
+    [SerializeReference] private ObjectivePanelItem objectivePanelItem;
     public enum Day
     {
-        Day1,
-        Day2,
-        Day3
+        Day1 = 1,
+        Day2 = 2,
+        Day3 = 3
     }
-
+    
     public Day day;
 
-
-    [Foldout("Active")] [Label("Text Color")] public Color textColorActive;
-    [Foldout("Active")] [Label("Tick Sprite")] public Sprite tickSpriteActive;
-    
-    [Foldout("Failure")] [Label("Text Color")] public Color textColorFailure;
-    [Foldout("Failure")] [Label("Tick Sprite")] public Sprite tickSpriteFailure;
-    
-    [Foldout("Success")] [Label("Text Color")] public Color textColorSuccess;
-    [Foldout("Success")] [Label("Tick Sprite")] public Sprite tickSpriteSuccess;
-    
-    
- 
+    public Color activeColor, inactiveColor;
     
     // Start is called before the first frame update
-
-
     private void OnEnable()
+    {
+        var day = DialogueLua.GetVariable("day").asInt;
+        if (day <= (int) this.day) ShowActivePanel();
+        else ShowInactivePanel(); 
+    }
+
+    private void ShowActivePanel()
     {
         var allQuests = QuestLog.GetAllQuests();
         
         foreach (var quest in allQuests)
         {
-            if (QuestLog.GetQuestState(quest) != QuestState.Success) continue;
+            
+            var questTitle = QuestLog.GetQuestTitle(quest);
+           
+            
             
         }
         
+    }
+
+    private void ShowInactivePanel()
+    {
         
     }
 }
