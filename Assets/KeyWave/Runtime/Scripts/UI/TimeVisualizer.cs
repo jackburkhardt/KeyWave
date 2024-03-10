@@ -19,7 +19,10 @@ public class TimeVisualizer : MonoBehaviour
     
     protected void Start()
     {
-        StartCoroutine(ShowClockDelay());
+        if (GameStateManager.instance.gameState.type == GameState.Type.EndOfDay)
+        {
+            return;
+        }
     }
     
     IEnumerator ShowClockDelay()
@@ -40,11 +43,20 @@ public class TimeVisualizer : MonoBehaviour
 
     private void Update()
     {
-        if (_clock != Clock.CurrentTimeRaw)
+        if (GameStateManager.instance.gameState.type == GameState.Type.EndOfDay && _clock != Clock.DailyLimit)
+        {
+            StartCoroutine(UpdateTimeTextHandler(Clock.DailyLimit));
+            _clock = Clock.DailyLimit;
+        }
+        
+        else if (_clock != Clock.CurrentTimeRaw)
         {
             StartCoroutine(UpdateTimeTextHandler(Clock.CurrentTimeRaw));
             _clock = Clock.CurrentTimeRaw;
         }
+        
+       
+        
     }
 
     IEnumerator UpdateTimeTextHandler(int time)

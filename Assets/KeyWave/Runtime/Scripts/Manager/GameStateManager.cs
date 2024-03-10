@@ -126,6 +126,15 @@ public class GameStateManager : PlayerEventHandler
         }
     }
 
+    public void StartNextDay()
+    {
+        gameState.day += 1;
+        gameState.clock = 21600;
+        gameState.player_location = "Hotel";
+        gameState.current_conversation_title = string.Empty;
+        gameState.type = GameState.Type.Normal;
+    }
+
     public IEnumerator LoadGameState()
     {
         yield return GameManager.instance.LoadSceneHandler(gameState.player_location);

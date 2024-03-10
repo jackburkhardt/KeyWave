@@ -101,6 +101,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartNewDay()
+    {
+        GameStateManager.instance.StartNextDay();
+        LoadScene("StartOfDay");
+    }
+
 
     IEnumerator StartHandler()
     {

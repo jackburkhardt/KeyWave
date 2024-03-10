@@ -10,9 +10,12 @@ using UnityEngine.UI;
 public class ObjectivePanelItem : MonoBehaviour
 {
    
+    [ReadOnly]
+    [SerializeReference] private string _quest;
     public QuestState questState;
     public UITextField questTitle;
     public Image tickImage, boxImage;
+    
 
     public enum Day
     {
@@ -20,6 +23,33 @@ public class ObjectivePanelItem : MonoBehaviour
         Day2,
         Day3
     }
+
+    public void SuccessState(string quest)
+    {
+        _quest = quest;
+        questTitle.color = textColorSuccess;
+        tickImage.sprite = tickSpriteSuccess;
+        questTitle.text = QuestLog.GetQuestTitle(quest);
+        
+    }
+    
+    public void FailureState(string quest)
+    {
+        _quest = quest;
+        questTitle.color = textColorFailure;
+        tickImage.sprite = tickSpriteFailure;
+        questTitle.text = QuestLog.GetQuestTitle(quest);
+    }
+    
+    public void ActiveState(string quest)
+    {
+        _quest = quest;
+        questTitle.color = textColorActive;
+        tickImage.sprite = tickSpriteActive;
+        questTitle.text = QuestLog.GetQuestTitle(quest);
+    }
+    
+    
 
     public Day day;
 
@@ -41,13 +71,7 @@ public class ObjectivePanelItem : MonoBehaviour
 
     private void OnEnable()
     {
-        var allQuests = QuestLog.GetAllQuests();
         
-        foreach (var quest in allQuests)
-        {
-            if (QuestLog.GetQuestState(quest) != QuestState.Success) continue;
-            
-        }
         
         
     }
