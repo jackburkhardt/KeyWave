@@ -104,6 +104,11 @@ public class Clock
         internal static int SecondsBetweenLines = 15;
         internal static int SecondsPerInteract = 30;
     }
+
+    public static int HoursToSeconds(int hours) => hours * 3600;
+
+    public static int CurrentVisualizedTimeRaw = ClockUI.CurrentVisualizedTimeRaw;
+    
     public static int CurrentTimeRaw => GameManager.gameState.clock;
 
     public static string CurrentTime => To24HourClock(CurrentTimeRaw);

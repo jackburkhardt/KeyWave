@@ -56,19 +56,6 @@ public class GameManager : MonoBehaviour
 
     }
   
-    public static void RefreshLayoutGroupsImmediateAndRecursive(GameObject root)
-
-    {
-        var componentsInChildren = root.GetComponentsInChildren<LayoutGroup>(true);
-        foreach (var layoutGroup in componentsInChildren)
-        {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
-        }
-
-        var parent = root.GetComponent<LayoutGroup>();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
-    }
-  
     private void Start()
     {
         StartCoroutine(StartHandler());
@@ -104,7 +91,7 @@ public class GameManager : MonoBehaviour
     public void StartNewDay()
     {
         GameStateManager.instance.StartNextDay();
-        LoadScene("StartOfDay");
+        ChangeScene(gameState.current_scene, "StartOfDay");
     }
 
 
@@ -139,9 +126,9 @@ public class GameManager : MonoBehaviour
     
     public void ChangeScene(string currentScene, string newScene) => StartCoroutine(LoadSceneHandler(newScene, currentScene));
 
-    public void OpenMap() => ChangeScene(gameStateManager.gameState.player_location, "Map");
+    public void OpenMap() => ChangeScene(gameStateManager.gameState.current_scene, "Map");
 
-    public void EndOfDay() => ChangeScene(gameStateManager.gameState.player_location, "EndOfDay");
+    public void EndOfDay() => ChangeScene(gameStateManager.gameState.current_scene, "EndOfDay");
     
     public void TravelTo(string newLocation, string currentScene = "Map")
     {
@@ -164,10 +151,16 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator LoadSceneHandler(string newScene, string currentScene = "")
     {
+       // if (currentScene == "" && gameState.current_scene != string.Empty) currentScene = gameState.current_scene;
+        
         var currentSceneName = $"Resources/Scenes/{currentScene}";
         var newSceneName = $"Resources/Scenes/{newScene}";
         var loadingSceneName = $"Resources/Scenes/Loading";
+        
+        
+        
         var loadingScene = SceneManager.LoadSceneAsync(loadingSceneName, LoadSceneMode.Additive);
+        yield return null;
         
         while (!loadingScene.isDone)
         {
@@ -175,11 +168,13 @@ public class GameManager : MonoBehaviour
         }
 
         var LoadingScreen = FindObjectOfType<LoadingScreen>();
-        
+
         if (LoadingScreen != null)
         {
             yield return StartCoroutine(LoadingScreen.FadeCanvasIn());
         }
+
+        else Debug.LogError("no loading screen");
         
         if (currentScene != "") {
         
@@ -205,10 +200,9 @@ public class GameManager : MonoBehaviour
 
         var unloadLoadingScreen = SceneManager.UnloadSceneAsync(loadingSceneName);
         
-           while (!unloadLoadingScreen.isDone)
-           {
-               yield return null;
-           }
+        while (!unloadLoadingScreen.isDone) yield return null;
+           
+        gameState.current_scene = newScene;
     }
     
    

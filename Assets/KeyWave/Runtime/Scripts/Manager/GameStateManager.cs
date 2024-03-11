@@ -24,6 +24,7 @@ public class GameState
     public int local_savvy_score = 0;
     public int wellness_score = 0;
     public string player_location = "Hotel";
+    public string current_scene = string.Empty;
     public string current_conversation_title = string.Empty;
     public string current_conversation_actor;
     public string current_conversation_conversant;

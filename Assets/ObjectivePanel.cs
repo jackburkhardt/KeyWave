@@ -32,7 +32,6 @@ public class ObjectivePanel : MonoBehaviour
 
     private void ShowActivePanel()
     {
-        Debug.Log("active");
         panel.color = activeColor;
         var allQuests = QuestLog.GetAllQuests();
 
@@ -71,7 +70,7 @@ public class ObjectivePanel : MonoBehaviour
             questItem.ActiveState(activeQuest);
         }
         
-        GameManager.RefreshLayoutGroupsImmediateAndRecursive(this.gameObject);
+        RefreshLayoutGroups.Refresh(this.gameObject);
 
     }
 

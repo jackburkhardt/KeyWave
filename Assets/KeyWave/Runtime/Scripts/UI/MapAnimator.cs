@@ -121,7 +121,7 @@ public class MapAnimator : MonoBehaviour
             objectiveItem.GetComponent<InfoPanelObjective>().SetObjectiveText(objective.ToString());
         }
         
-        GameManager.RefreshLayoutGroupsImmediateAndRecursive(_objectivePanel.gameObject);
+        RefreshLayoutGroups.Refresh(_objectivePanel.gameObject);
         
         
     }
