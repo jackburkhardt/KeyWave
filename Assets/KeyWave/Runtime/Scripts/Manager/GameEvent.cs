@@ -51,9 +51,6 @@ public static class GameEvent
     public static event PlayerEventDelegate OnPlayerEvent;
 
     public static event PlayerEventDelegate OnSerializePlayerEvent;
-    
-    
-
 
     private static void SerializePlayerEvent(string type, string sender, string value, int duration = 0,
         string log = "") => SerializePlayerEvent(type, sender, string.Empty, value, duration, log);

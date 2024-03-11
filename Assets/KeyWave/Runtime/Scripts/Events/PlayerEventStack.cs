@@ -26,7 +26,7 @@ public class PlayerEvents
         [SerializeField] private string type;
         [SerializeField] private string sender;
         [SerializeField] private string receiver;
-        [SerializeField] private string value;
+        [SerializeField] private string value; 
         [SerializeField] private int duration;
        [SerializeField] private string timeStamp;
        [SerializeField] private string log;
@@ -86,9 +86,7 @@ public class PlayerEventStack : JsonSerializer
         {
             GameEvent.RunPlayerEvent(playerEvent);
         }
-        
         yield return null;
-        
     }
 
     protected override void OnPlayerEvent(PlayerEvents.PlayerEvent playerEvent)

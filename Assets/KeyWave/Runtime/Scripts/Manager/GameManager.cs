@@ -157,8 +157,6 @@ public class GameManager : MonoBehaviour
         var newSceneName = $"Resources/Scenes/{newScene}";
         var loadingSceneName = $"Resources/Scenes/Loading";
         
-        
-        
         var loadingScene = SceneManager.LoadSceneAsync(loadingSceneName, LoadSceneMode.Additive);
         yield return null;
         
