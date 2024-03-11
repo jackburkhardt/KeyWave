@@ -20,7 +20,7 @@ public class GameState
     public Type type = Type.Normal;
     public int clock = 21600;
     public int day = 1;
-    public int business_score = 0;
+    public int business_score = 0;  
     public int local_savvy_score = 0;
     public int wellness_score = 0;
     public string player_location = "Hotel";

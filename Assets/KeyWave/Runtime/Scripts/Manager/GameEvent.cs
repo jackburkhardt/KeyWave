@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Apps;
-using Apps.Phone;
-using Assignments;
-using Interaction;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.UI;
@@ -198,90 +194,6 @@ public static class GameEvent
     public static void UIElementMouseHover(Transform element) => OnUIElementMouseHover?.Invoke(element);
     public static void UIElementMouseExit(Transform element) => OnUIElementMouseExit?.Invoke(element);
 
-
-
-
-
-
-
-
-    // DELEGATES
-    public delegate void InteractionDelegate(IInteractable interacObj);
-    public delegate void PopupViewChangeDelegate();
-    public delegate void PopupDelegate();
-    public delegate void ChapterDelegate(int chapter);
-    public delegate void EmailDelegate(EmailBackend.Email email);
-    public delegate void GameSaveDelegate();
-    public delegate void GameLoadDelegate();
-    public delegate void TextDelegate(TextBackend.TextConversation convo);
-    public delegate void PCEventDelegate();
-    public delegate void PCScreenEventDelegate(string screen);
-    public delegate void PhoneEventDelegate();
-    public delegate void PhoneScreenEventDelegate(string screen);
-    public delegate void AssignmentDelegate(Assignment assignment);
-    public delegate void DelegationEventDelegate(Assignment assignment, Character character);
-    public delegate void TimeDelegate(TimeSpan time);
-    public delegate void SearchDelegate(string query, bool success);
-
-
-
-    // EVENTS
-    public static event InteractionDelegate OnInteractionStart;
-    public static event InteractionDelegate OnInteractionEnd;
-    public static event PopupViewChangeDelegate OnPopupViewChange;
-    public static event PopupDelegate OnPopupCreate;
-    public static event PopupDelegate OnPopupClose;
-    public static event ChapterDelegate OnChapterStart;
-    public static event ChapterDelegate OnChapterEnd;
-    public static event EmailDelegate OnEmailDeliver;
-    public static event EmailDelegate OnEmailOpen;
-    public static event GameSaveDelegate OnGameSave;
-    public static event GameLoadDelegate OnGameLoad;
-    public static event TextDelegate OnTextSend;
-    public static event TextDelegate OnTextReceive;
-    public static event TextDelegate OnConversationOpen;
-    public static event PCEventDelegate OnPCOpen;
-    public static event PCEventDelegate OnPCClose;
-    public static event PCEventDelegate OnPCUnlock;
-    public static event PCScreenEventDelegate OnPCScreenChange;
-    public static event PhoneEventDelegate OnPhoneOpen;
-    public static event PhoneEventDelegate OnPhoneClose;
-    public static event PhoneScreenEventDelegate OnPhoneScreenChange;
-    public static event AssignmentDelegate OnAssignmentActive;
-    public static event AssignmentDelegate OnAssignmentComplete;
-    public static event AssignmentDelegate OnAssignmentFail;
-    public static event DelegationEventDelegate OnAssignmentDelegate;
-    public static event TimeDelegate OnTimeChange;
-    public static event SearchDelegate OnSearch;
-
-    // TRIGGERS
-    public static void InteractionStart(IInteractable interacObj) => OnInteractionStart?.Invoke(interacObj);
-    public static void InteractionEnd(IInteractable interacObj) => OnInteractionEnd?.Invoke(interacObj);
-    public static void ChangePopupView() => OnPopupViewChange?.Invoke();
-    public static void PopupCreated() => OnPopupCreate?.Invoke();
-    public static void PopupClose() => OnPopupClose?.Invoke();
-    public static void StartChapter(int chapter) => OnChapterStart?.Invoke(chapter);
-    public static void EndChapter(int chapter) => OnChapterEnd?.Invoke(chapter);
-    public static void DeliverEmail(EmailBackend.Email email) => OnEmailDeliver?.Invoke(email);
-    public static void OpenEmail(EmailBackend.Email email) => OnEmailOpen?.Invoke(email);
-    public static void SaveGame() => OnGameSave?.Invoke();
-    public static void LoadGame() => OnGameLoad?.Invoke();
-    public static void SendText(TextBackend.TextConversation convo) => OnTextSend?.Invoke(convo);
-    public static void ReceiveText(TextBackend.TextConversation convo) => OnTextReceive?.Invoke(convo);
-    public static void OpenConversation(TextBackend.TextConversation convo) => OnConversationOpen?.Invoke(convo);
-    public static void OpenPC() => OnPCOpen?.Invoke();
-    public static void ClosePC() => OnPCClose?.Invoke();
-    public static void UnlockPC() => OnPCUnlock?.Invoke();
-    public static void ChangePCScreen(string screen) => OnPCScreenChange?.Invoke(screen);
-    public static void OpenPhone() => OnPhoneOpen?.Invoke();
-    public static void ClosePhone() => OnPhoneClose?.Invoke();
-    public static void ChangePhoneScreen(string screen) => OnPhoneScreenChange?.Invoke(screen);
-    public static void StartAssignment(Assignment assignment) => OnAssignmentActive?.Invoke(assignment);
-    public static void FailAssignment(Assignment assignment) => OnAssignmentFail?.Invoke(assignment);
-    public static void CompleteAssignment(Assignment assignment) => OnAssignmentComplete?.Invoke(assignment);
-    public static void DelegateAssignment(Assignment assignment, Character character) => OnAssignmentDelegate?.Invoke(assignment, character);
-    public static void ChangeTime(TimeSpan time) => OnTimeChange?.Invoke(time);
-    public static void Search(string query, bool success) => OnSearch?.Invoke(query, success);
 
 
 }

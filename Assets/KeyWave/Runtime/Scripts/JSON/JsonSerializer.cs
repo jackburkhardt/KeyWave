@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Recorder;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class JsonSerializer : PlayerEventHandler
 {
@@ -48,12 +49,12 @@ public class JsonSerializer : PlayerEventHandler
 
     protected void Deserialize<T>(ref T rootObject)
     {
-        rootObject = DataManager.DeserializeData<T>(Path);
+       // rootObject = DataManager.DeserializeData<T>(Path);
     }
     
     protected void Serialize<T>(T rootObject)
     {
-        DataManager.SerializeData(rootObject, Path);
+        //DataManager.SerializeData(rootObject, Path);
     }
 
     protected void SetPath(string file)
