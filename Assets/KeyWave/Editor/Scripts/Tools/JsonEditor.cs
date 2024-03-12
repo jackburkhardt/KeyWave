@@ -22,7 +22,7 @@ public class JsonEditor : EditorWindow
 
     public static void ClearSave()
     {
-        File.WriteAllText(Application.dataPath + _path, "{ \"events\": [] }");
+        File.Delete(Application.dataPath + _path);
         Debug.Log("Save cleared.");
     }
 
