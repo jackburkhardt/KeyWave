@@ -149,19 +149,7 @@ public static class GameEvent
         {
             RegisterPlayerEvent("conversation_script", nodeValue, nodeScript);
         }
-            
-        if (text == string.Empty) return;
-        
-       // var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
-        var dialogueEntryID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
-        var conversationID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.conversationID;
-        var actorName = DialogueManager.instance.conversationController.actorInfo.Name;
-        var conversantName = DialogueManager.instance.conversationController.conversantInfo.Name;
-        var durationSeconds = DialogueUtility.GetNodeDuration(conversationID, dialogueEntryID);
-        RegisterPlayerEvent("conversation_line", actorName, conversantName, dialogueEntryID.ToString(), durationSeconds, $"{actorName}: {text}");
-        
-        
- }
+    }
     
 
   
