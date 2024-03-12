@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using PixelCrushers.DialogueSystem;
-using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine;
 
 public static class Points
 {

@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using PixelCrushers.DialogueSystem.Wrappers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

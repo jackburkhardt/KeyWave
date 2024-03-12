@@ -1,15 +1,12 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using FMODUnity;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
-using UnityEngine;
 
- 
-	using System;
-	
-		using System.Collections;
-
-	
-	public class LoadAllBanks : MonoBehaviour
+public class LoadAllBanks : MonoBehaviour
 {
     public List<AssetReference> Banks = new List<AssetReference>();
     public string Scene;
@@ -29,12 +26,12 @@ using UnityEngine;
     IEnumerator LoadBanksAsync()
     {
 
-        Banks.ForEach(b => FMODUnity.RuntimeManager.LoadBank(b, true, Callback));
+        Banks.ForEach(b => RuntimeManager.LoadBank(b, true, Callback));
 
         while (numberOfCompletedCallbacks < Banks.Count)
             yield return null;
 
-        while (FMODUnity.RuntimeManager.AnySampleDataLoading())
+        while (RuntimeManager.AnySampleDataLoading())
             yield return null;
 
         AsyncOperation async = SceneManager.LoadSceneAsync(Scene);

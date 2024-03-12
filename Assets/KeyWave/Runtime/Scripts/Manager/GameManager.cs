@@ -1,18 +1,12 @@
-using PixelCrushers.DialogueSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using PixelCrushers.DialogueSystem;
 using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
-[System.Serializable]
+[Serializable]
 
 
 public class GameManager : MonoBehaviour
@@ -50,7 +44,7 @@ public class GameManager : MonoBehaviour
         
         if (playerEventStack == null)
         {
-            playerEventStack = this.AddComponent<PlayerEventStack>();
+            playerEventStack = ScriptableObject.CreateInstance<PlayerEventStack>();
         }
         _customLuaFunctions = GetComponent<CustomLuaFunctions>() ?? gameObject.AddComponent<CustomLuaFunctions>();
 

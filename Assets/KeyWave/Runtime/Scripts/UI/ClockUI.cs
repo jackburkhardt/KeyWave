@@ -1,12 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using PixelCrushers.DialogueSystem;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using PlayerEvent = PlayerEvents.PlayerEvent;
 
 public class ClockUI : MonoBehaviour
 {

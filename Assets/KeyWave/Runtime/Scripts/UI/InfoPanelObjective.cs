@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Language.Lua;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.UI;

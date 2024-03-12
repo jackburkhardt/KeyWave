@@ -1,13 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using PixelCrushers.DialogueSystem;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using PlayerEvent = PlayerEvents.PlayerEvent;
-
 
 public class InvokeMovePlayer : PlayerEventHandler
 {

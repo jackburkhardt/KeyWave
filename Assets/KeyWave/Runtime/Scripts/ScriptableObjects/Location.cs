@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEditor;
-
 
 [CreateAssetMenu(fileName = "New Location", menuName = "Location")]
 public class Location : ScriptableObject

@@ -1,7 +1,3 @@
-using PixelCrushers.DialogueSystem;
-using PixelCrushers.DialogueSystem.ChatMapper;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InvokeEvent : MonoBehaviour

@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using NaughtyAttributes;
 using PixelCrushers;
-using UnityEngine;
-using UnityEngine.UIElements;
 using PixelCrushers.DialogueSystem;
 using HelpBoxMessageType = PixelCrushers.HelpBoxMessageType;
-using PlayerEvent = PlayerEvents.PlayerEvent;
 
 public class StringLuaReplacer : PlayerEventHandler
 {

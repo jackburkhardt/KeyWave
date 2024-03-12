@@ -1,11 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using PixelCrushers.DialogueSystem;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 [RequireComponent(typeof(RectTransform))]
 public class MapAnimator : MonoBehaviour
 {
@@ -18,7 +15,7 @@ public class MapAnimator : MonoBehaviour
     
     
     [SerializeField] private RectTransform _infoPanel, _confirmButton, _cancelButton, _objectivePrefab;
-    [SerializeField] private TMPro.TMP_Text _locationName, _etaText, _descriptionText;
+    [SerializeField] private TMP_Text _locationName, _etaText, _descriptionText;
     private RectTransform _objectivePanel;
     
     private void Start()
@@ -163,7 +160,7 @@ public class MapAnimator : MonoBehaviour
         CancelAnimations();
         LeanTween.scale(transform.parent.gameObject, new Vector3(1, 1, 1), 0.5f).setEaseInOutSine();
         _standby = true;
-        _direction = new Vector3(UnityEngine.Random.Range(-10f, 10f), UnityEngine.Random.Range(-10f, 10f), 0f).normalized;
+        _direction = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), 0f).normalized;
         HideConfirmationButtons();
         HideInfoPanel();
     }
@@ -194,12 +191,12 @@ public class MapAnimator : MonoBehaviour
         if (distanceToHorizontalEdge < 30 || distanceToVerticalEdge < 30)
         {
             var newXdirection = _rectTransform.localPosition.x > 0
-                ? UnityEngine.Random.Range(-10f, 0)
-                : UnityEngine.Random.Range(0, 10f);
+                ? Random.Range(-10f, 0)
+                : Random.Range(0, 10f);
             
             var newYdirection = _rectTransform.localPosition.y > 0
-                ? UnityEngine.Random.Range(-10f, 0)
-                : UnityEngine.Random.Range(0, 10f);
+                ? Random.Range(-10f, 0)
+                : Random.Range(0, 10f);
             
             _direction = new Vector3(newXdirection, newYdirection, 0f).normalized;
         }

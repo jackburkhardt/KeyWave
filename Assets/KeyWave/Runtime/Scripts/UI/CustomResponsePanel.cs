@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngineInternal;
 using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardUIResponseButton;
 
 public class CustomResponsePanel : MonoBehaviour
@@ -20,7 +17,7 @@ public class CustomResponsePanel : MonoBehaviour
     private List<StandardUIResponseButton> nonSelectedButtons {
         get
         {
-            return GameObject.FindObjectsOfType<StandardUIResponseButton>().ToList().FindAll(button => button != currentlySelectedButton);
+            return FindObjectsOfType<StandardUIResponseButton>().ToList().FindAll(button => button != currentlySelectedButton);
         }
 }
     private Color defaultDisabledColor, defaultTextColor;

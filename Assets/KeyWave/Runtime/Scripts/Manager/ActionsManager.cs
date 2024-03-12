@@ -1,22 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using PixelCrushers.DialogueSystem;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Windows;
-using UnityEngine.UI;
-using TMPro;
 
-[System.Serializable]
+[Serializable]
 public class ActionsWrapper
 {
     
     public List<Action> actions = new();
    
     
-    [System.Serializable]     
+    [Serializable]     
     public class Action
     {
         [SerializeField] private string title;

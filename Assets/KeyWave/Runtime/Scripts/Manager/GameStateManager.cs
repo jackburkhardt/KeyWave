@@ -2,10 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
 
 public class GameState
 {
@@ -52,7 +49,7 @@ public class GameStateManager : PlayerEventHandler
     }
 
     public GameState gameState = new GameState();
-    protected override void OnPlayerEvent(PlayerEvents.PlayerEvent playerEvent)
+    protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
        switch (playerEvent.Type)
             {

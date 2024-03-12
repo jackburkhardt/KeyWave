@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
-using PlayerEvent = PlayerEvents.PlayerEvent;
 
 public static class GameEvent
 {
@@ -42,28 +35,28 @@ public static class GameEvent
     public static void LoadStart() => OnLoadStart?.Invoke();
     public static void LoadEnd() => OnLoadEnd?.Invoke();
     
-    public delegate void PlayerEventDelegate(PlayerEvents.PlayerEvent playerEvent);
+    public delegate void PlayerEventDelegate(PlayerEvent playerEvent);
     
     public static event PlayerEventDelegate OnPlayerEvent;
 
-    public static event PlayerEventDelegate OnSerializePlayerEvent;
+    public static event PlayerEventDelegate OnRegisterPlayerEvent;
 
-    private static void SerializePlayerEvent(string type, string sender, string value, int duration = 0,
-        string log = "") => SerializePlayerEvent(type, sender, string.Empty, value, duration, log);
-    private static void SerializePlayerEvent(string type, string sender, string receiver, string value, int duration = 0, string log = "")
+    private static void RegisterPlayerEvent(string type, string sender, string value, int duration = 0,
+        string log = "") => RegisterPlayerEvent(type, sender, string.Empty, value, duration, log);
+    private static void RegisterPlayerEvent(string type, string sender, string receiver, string value, int duration = 0, string log = "")
     {
         var playerEvent = new PlayerEvent(type, sender, receiver, value, duration, log);
-        OnSerializePlayerEvent?.Invoke(playerEvent);
+        OnRegisterPlayerEvent?.Invoke(playerEvent);
     }
     
-    public static void RunPlayerEvent(PlayerEvents.PlayerEvent playerEvent)
+    public static void RunPlayerEvent(PlayerEvent playerEvent)
     {
         OnPlayerEvent?.Invoke(playerEvent);
     }
 
     public static void OnGameStateChange(string state)
     {
-        SerializePlayerEvent("state_change", "GameStateManager", state);
+        RegisterPlayerEvent("state_change", "GameStateManager", state);
     }
     
     
@@ -71,43 +64,43 @@ public static class GameEvent
     {
         if (interactable.TryGetComponent(out DialogueSystemTrigger dialogueSystemTrigger))
         {
-            SerializePlayerEvent("interact", "player", interactable.name, "DialogueSystemTrigger", Clock.TimeScales.SecondsPerInteract);
+            RegisterPlayerEvent("interact", "player", interactable.name, "DialogueSystemTrigger", Clock.TimeScales.SecondsPerInteract);
             dialogueSystemTrigger.OnUse();
         }
     }
     
    public static void OnMove(string sender, string value, int duration = 0)
    {
-       SerializePlayerEvent("move", sender, "player", value, duration);
+       RegisterPlayerEvent("move", sender, "player", value, duration);
    }
    
    public static void OnMove(string sender, Location location)
    {
-       SerializePlayerEvent("move", sender, "player", location.name, location.TravelTime);
+       RegisterPlayerEvent("move", sender, "player", location.name, location.TravelTime);
    }
 
    public static void OnPointsIncrease(Points.Type type, int points)
    {
          if (Points.IsAnimating == false) Points.AnimationStart(type);
-         SerializePlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, type.ToString(), points.ToString());
+         RegisterPlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, type.ToString(), points.ToString());
    }
    
    
    public static void OnWait(int duration)
     {
-        SerializePlayerEvent("wait", "player", duration.ToString(), duration);
+        RegisterPlayerEvent("wait", "player", duration.ToString(), duration);
     }
    
     public static void OnConversationDecision(string decision)
     {
         var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
         var currentNode = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title;
-        SerializePlayerEvent("decision", conversationTitle, currentNode, decision);
+        RegisterPlayerEvent("decision", conversationTitle, currentNode, decision);
     }
 
     public static void OnAction(int index, string title)
     {
-        SerializePlayerEvent("action", "player", title, index.ToString());
+        RegisterPlayerEvent("action", "player", title, index.ToString());
     }
 
     public static void OnConversationStart(string eventSender = "")
@@ -116,14 +109,14 @@ public static class GameEvent
         
         int conversationID = DialogueManager.currentConversationState.subtitle.dialogueEntry.conversationID;
         var conversationTitle = DialogueManager.masterDatabase.GetConversation(conversationID).Title;
-        SerializePlayerEvent("conversation_start",  eventSender, "", conversationTitle);
+        RegisterPlayerEvent("conversation_start",  eventSender, "", conversationTitle);
     }
     
     public static void OnConversationEnd()
     {
         var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
         var currentEntry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
-        SerializePlayerEvent("conversation_end",  "DialogueManager", conversationTitle, currentEntry.ToString());
+        RegisterPlayerEvent("conversation_end",  "DialogueManager", conversationTitle, currentEntry.ToString());
     }
 
     public static void OnConversationResponseMenu()
@@ -135,7 +128,7 @@ public static class GameEvent
             if (responses.Length != 0) responses += ",";
             responses += response.destinationEntry.Title; 
         }
-        SerializePlayerEvent("awaiting_response", String.Join(",", responses), "", dialogueEntryNodeTitle);
+        RegisterPlayerEvent("awaiting_response", String.Join(",", responses), "", dialogueEntryNodeTitle);
     }
 
     public static void OnConversationLine()
@@ -147,14 +140,14 @@ public static class GameEvent
 
         if (mostRecentResponseNode != string.Empty)
         {  
-            SerializePlayerEvent("conversation_decision", "player", mostRecentResponseNode, nodeValue);
+            RegisterPlayerEvent("conversation_decision", "player", mostRecentResponseNode, nodeValue);
         }
 
         var nodeScript = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.userScript;
         
         if (nodeScript != string.Empty)
         {
-            SerializePlayerEvent("conversation_script", nodeValue, nodeScript);
+            RegisterPlayerEvent("conversation_script", nodeValue, nodeScript);
         }
             
         if (text == string.Empty) return;
@@ -165,7 +158,7 @@ public static class GameEvent
         var actorName = DialogueManager.instance.conversationController.actorInfo.Name;
         var conversantName = DialogueManager.instance.conversationController.conversantInfo.Name;
         var durationSeconds = DialogueUtility.GetNodeDuration(conversationID, dialogueEntryID);
-        SerializePlayerEvent("conversation_line", actorName, conversantName, dialogueEntryID.ToString(), durationSeconds, $"{actorName}: {text}");
+        RegisterPlayerEvent("conversation_line", actorName, conversantName, dialogueEntryID.ToString(), durationSeconds, $"{actorName}: {text}");
         
         
  }

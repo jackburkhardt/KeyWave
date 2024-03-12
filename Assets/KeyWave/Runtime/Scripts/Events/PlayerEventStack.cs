@@ -1,102 +1,73 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using PixelCrushers.DialogueSystem;
-using UnityEditor;
-using UnityEditor.PackageManager;
+using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Playables;
 
-[System.Serializable]
-
-public class PlayerEvents
+[Serializable]
+public class PlayerEvent
 {
-    /*
-     * This class has one field: a list of PlayerEvent objects.
-     * A PlayerEvent object has five fields: the type of event, the sender of the event, the receiver, the value, the duration, and the timestamp of the event.
-     * The list of PlayerEvents is serialized and saved to a JSON file.
-    */
-
-    public List<PlayerEvent> events = new();
-
-    [System.Serializable]
-    public class PlayerEvent
-    {
-        [SerializeField] private string type;
-        [SerializeField] private string sender;
-        [SerializeField] private string receiver;
-        [SerializeField] private string value; 
-        [SerializeField] private int duration;
-       [SerializeField] private string timeStamp;
-       [SerializeField] private string log;
+    [SerializeField] private string type;
+    [SerializeField] private string sender;
+    [SerializeField] private string receiver;
+    [SerializeField] private string value; 
+    [SerializeField] private int duration;
+    [SerializeField] private DateTime timeStamp;
+    [SerializeField] private string log;
 
         
-        public string Type => type;
-        public string Sender => sender;
-        public string Receiver => receiver;
-        public string Value => value;
-        public int Duration => duration;
+    public string Type => type;
+    public string Sender => sender;
+    public string Receiver => receiver;
+    public string Value => value;
+    public int Duration => duration;
+    public DateTime TimeStamp => timeStamp;
 
-        public PlayerEvent(string type, string sender, string receiver, string value, int duration = 0, string log = "",  string timeStamp = null)
-        {
-            this.value = value;
-            this.type = type;
-            this.sender = sender;
-            this.receiver = receiver;
-            this.duration = duration;
-            this.log = log;
-            this.timeStamp = System.DateTime.Now.ToString();
-        }
+    public PlayerEvent(string type, string sender, string receiver, string value, int duration = 0, string log = "")
+    {
+        this.value = value;
+        this.type = type;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.duration = duration;
+        this.log = log;
+        this.timeStamp = DateTime.Now;
     }
-    public int Count() => events.Count;
+
+    public override string ToString()
+    {
+        return JsonConvert.SerializeObject(this);
+    }
 }
 
-public class PlayerEventStack : JsonSerializer
+public class PlayerEventStack : ScriptableObject
 {
-    public static PlayerEvents eventsWrapper;
-
     private static PlayerEventStack instance;
- 
-    protected override void Awake()
+
+    public List<PlayerEvent> RegisteredEvents { get; private set; } = new();
+
+    private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        
-        else if (instance != this)
-        {
-            Destroy(this);
-        }
-        
-        FileName =  "PlayerEventStack.json";
+        GameEvent.OnPlayerEvent += RegisterPlayerEvent;
+    }
+
+    private void RegisterPlayerEvent(PlayerEvent e)
+    {
+        RegisteredEvents.Add(e);
     }
     
-    protected override void OnSerializePlayerEvent(PlayerEvents.PlayerEvent playerEvent)
+    public IEnumerator RunEvents()
     {
-        eventsWrapper.events.Add(playerEvent);
-        Serialize(eventsWrapper);
-        GameEvent.RunPlayerEvent(playerEvent);
-    }
-    
-    public IEnumerator RunEvents() //called by GameManager
-    {
-        foreach (var playerEvent in eventsWrapper.events)
+        foreach (var playerEvent in RegisteredEvents)
         {
             GameEvent.RunPlayerEvent(playerEvent);
         }
         yield return null;
     }
 
-    protected override void OnPlayerEvent(PlayerEvents.PlayerEvent playerEvent)
+    private void OnDestroy()
     {
-        
-    }
-
-    protected override void OnLoad()
-    {
-       Deserialize(ref eventsWrapper);
+        GameEvent.OnPlayerEvent -= RegisterPlayerEvent;
     }
 }
 

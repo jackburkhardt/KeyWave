@@ -1,10 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.ProBuilder;
 using UnityEngine.UI;
-using Random = System.Random;
 
 public class TrackingOrb : MonoBehaviour
 {

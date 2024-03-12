@@ -1,6 +1,6 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
 
 public class JsonEditor : EditorWindow
 {

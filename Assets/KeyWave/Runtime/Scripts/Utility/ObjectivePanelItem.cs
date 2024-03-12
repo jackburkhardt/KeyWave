@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using PixelCrushers;
 using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ObjectivePanelItem : MonoBehaviour
