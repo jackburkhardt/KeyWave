@@ -68,6 +68,7 @@ public class GameStateManager : PlayerEventHandler
                     gameState.lua_scripts.Add(playerEvent.Value);
                     break;
                 case "conversation_line":
+                    // note: removed, this should not trigger
                     gameState.current_conversation_actor = playerEvent.Sender;
                     gameState.current_conversation_conversant = playerEvent.Receiver;
                     gameState.current_conversation_line = int.Parse(playerEvent.Value);

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -48,12 +49,13 @@ public class PlayerEventStack : ScriptableObject
 
     private void Awake()
     {
-        GameEvent.OnPlayerEvent += RegisterPlayerEvent;
+        GameEvent.OnRegisterPlayerEvent += RegisterPlayerEvent;
     }
 
     private void RegisterPlayerEvent(PlayerEvent e)
     {
         RegisteredEvents.Add(e);
+        GameEvent.RunPlayerEvent(e);
     }
     
     public IEnumerator RunEvents()
@@ -67,7 +69,7 @@ public class PlayerEventStack : ScriptableObject
 
     private void OnDestroy()
     {
-        GameEvent.OnPlayerEvent -= RegisterPlayerEvent;
+        GameEvent.OnRegisterPlayerEvent -= RegisterPlayerEvent;
     }
 }
 
