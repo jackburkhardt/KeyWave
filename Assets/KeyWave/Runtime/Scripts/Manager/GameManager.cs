@@ -147,9 +147,9 @@ public class GameManager : MonoBehaviour
     {
        // if (currentScene == "" && gameState.current_scene != string.Empty) currentScene = gameState.current_scene;
         
-        var currentSceneName = $"Resources/Scenes/{currentScene}";
-        var newSceneName = $"Resources/Scenes/{newScene}";
-        var loadingSceneName = $"Resources/Scenes/Loading";
+        var currentSceneName = $"{currentScene}";
+        var newSceneName = $"{newScene}";
+        var loadingSceneName = $"Loading";
         
         var loadingScene = SceneManager.LoadSceneAsync(loadingSceneName, LoadSceneMode.Additive);
         yield return null;
