@@ -11,6 +11,7 @@ public class SubtitleContentElement : MonoBehaviour
     [SerializeField] private List<Animator> _animatorsToWaitFor;
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private TMP_Text mainClock;
+    
 
     private bool _isAnimationPlaying = false;
 
