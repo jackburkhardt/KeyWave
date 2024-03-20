@@ -23,8 +23,10 @@ public static class DialogueUtility
         public int points;
     }
     
-    public static PointsField GetPointsField(Field field)
+    public static PointsField GetPointsField(DialogueEntry dialogueEntry)
     {
+        var field = Field.Lookup(dialogueEntry.fields, "Points");
+        if (field == null) return new PointsField {type = Points.Type.Null, points = 0};
         var pointsType = (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
         var pointsValue = int.Parse(field.value.Split(':')[1]);
         return new PointsField {type = pointsType, points = pointsValue};
@@ -114,6 +116,27 @@ public static class DialogueUtility
         var shortest = FindShortestDurationBetweenPaths(paths);
         var largest = FindLargestDurationBetweenPaths(paths);
         return (shortest, largest);
+    }
+
+    public static (int, int) TimeEstimate(DialogueEntry node)
+    {
+        var minTimeEstimate = int.MaxValue;
+        var maxTimeEstimate = 0;
+        
+        
+        foreach (var field in node.fields)
+        {
+            if (field.title == "Time Estimate" && field.type == FieldType.Node)
+            {
+                var entry = DialogueUtility.GetDialogueEntryFromNodeField(field);
+                var timeEstimate = DialogueUtility.DurationRangeBetweenNodes(node, entry);
+                
+                if (timeEstimate.Item1 < minTimeEstimate) minTimeEstimate = timeEstimate.Item1;
+                if (timeEstimate.Item2 > maxTimeEstimate) maxTimeEstimate = timeEstimate.Item2;
+            }
+        }
+
+        return (minTimeEstimate, maxTimeEstimate);
     }
     
     
