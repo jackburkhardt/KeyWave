@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngineInternal;
@@ -14,17 +15,41 @@ public class CustomResponsePanel : MonoBehaviour
     [SerializeField] private UITextField timeEstimate;
     [SerializeField] Animator responseMenuAnimator;
     [SerializeField] private PointerArrow mousePointerHand;
-    private DialogueEntry currentlySelectedDialogueEntry;
-    private StandardUIResponseButton currentlySelectedButton;
+    
     
     private List<StandardUIResponseButton> nonSelectedButtons {
         get
         {
-            return GameObject.FindObjectsOfType<StandardUIResponseButton>().ToList().FindAll(button => button != currentlySelectedButton);
+            return GameObject.FindObjectsOfType<StandardUIResponseButton>().ToList().FindAll(button => button != currentlySelectedResponseButton.Button);
         }
 }
-    private Color defaultDisabledColor, defaultTextColor;
 
+    private Color defaultDisabledColor, defaultTextColor, defaultHoverColor;
+    
+
+    private ResponseButton currentlySelectedResponseButton = new ResponseButton(null);
+
+    private struct ResponseButton
+    {
+        private StandardUIResponseButton StandardUIResponseButton;
+        public StandardUIResponseButton Button => StandardUIResponseButton;
+        public Button UnityButton => StandardUIResponseButton.GetComponent<Button>();
+        public DialogueEntry DialogueEntry => StandardUIResponseButton.response.destinationEntry;
+
+        public Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
+        public string TimeEstimate => TimeEstimateText(DialogueEntry);
+        public Points.Type PointsType => DialogueUtility.GetPointsField(DialogueEntry).type;
+        
+        public Color DefaultDisabledColor;
+        public Color DefaultHighlightColor;
+        
+        public ResponseButton(StandardUIResponseButton standardUiResponseButton) : this()
+        {
+            StandardUIResponseButton = standardUiResponseButton;
+            DefaultDisabledColor = UnityButton.colors.disabledColor;
+            DefaultHighlightColor = UnityButton.colors.highlightedColor;
+        }
+    }
   
 
     private void OnEnable()
@@ -48,50 +73,42 @@ public class CustomResponsePanel : MonoBehaviour
     
     public void SetCurrentResponseButton(StandardUIResponseButton responseButton)
     {
-        currentlySelectedButton = responseButton;
-        currentlySelectedDialogueEntry = responseButton.response.destinationEntry;
-       
-        if (Field.FieldExists(currentlySelectedDialogueEntry.fields, "Time Estimate")) ShowTimeEstimate();
-        else HideTimeEstimate();
-    }
+        OnButtonDeselection();
+            
+        currentlySelectedResponseButton = new ResponseButton(responseButton);
 
-    public void SetCurrentResponseButton(Transform transform)
-    {
-        var responseButton = transform.GetComponent<StandardUIResponseButton>();
-        SetCurrentResponseButton(responseButton);
-    }
-
-    private void ShowTimeEstimate()
-    {
-        timeEstimate.gameObject.SetActive(true);
-        timeEstimate.text = CalculateTimeEstimate(currentlySelectedDialogueEntry);
-    }
-
-    private void HideTimeEstimate()
-    {
-        timeEstimate.gameObject.SetActive(false);
+        OnButtonSelection();
     }
     
-    
 
-    private void SetButtonDisabledColor(Button button, Color color)
+    private void OnButtonSelection()
     {
-        defaultDisabledColor = button.colors.disabledColor;
-        var block = button.colors;
-        block.disabledColor = color;
-        button.colors = block;
-    }
-
-    private void HideNonSelectedButtonsText()
-    {
+        if (currentlySelectedResponseButton.Button == null) return;
+        timeEstimate.text = currentlySelectedResponseButton.TimeEstimate;
         
+        if (currentlySelectedResponseButton.PointsType != Points.Type.Null)
+        {
+            var block = currentlySelectedResponseButton.UnityButton.colors;
+            block.highlightedColor = Color.Lerp(currentlySelectedResponseButton.DefaultHighlightColor, Points.Color(currentlySelectedResponseButton.PointsType), 0.3f);
+            block.disabledColor = Color.Lerp(currentlySelectedResponseButton.DefaultDisabledColor, Points.Color(currentlySelectedResponseButton.PointsType), 0.95f);
+            currentlySelectedResponseButton.UnityButton.colors = block;
+        }
     }
 
-
+    private void OnButtonDeselection()
+    {
+        if (currentlySelectedResponseButton.Button == null) return;
+        
+        timeEstimate.text = "";
+        
+        var block = currentlySelectedResponseButton.UnityButton.colors;
+        block.highlightedColor = currentlySelectedResponseButton.DefaultHighlightColor;
+        block.disabledColor = currentlySelectedResponseButton.DefaultDisabledColor;
+        currentlySelectedResponseButton.UnityButton.colors = block;
+    }
+    
     private void StartPointsAnimation(Points.Type pointsType)
     {
-        SetButtonDisabledColor(currentlySelectedButton.GetComponent<Button>(), Points.Color(pointsType));
-        HideTimeEstimate();
         mousePointerHand.Freeze();
         responseMenuAnimator.SetBool("Points", true);
         responseMenuAnimator.Play("Points");
@@ -100,7 +117,7 @@ public class CustomResponsePanel : MonoBehaviour
     
     private void FinishPointsAnimation()
     {
-        if (currentlySelectedButton != null) SetButtonDisabledColor(currentlySelectedButton.GetComponent<Button>(), defaultDisabledColor);
+        OnButtonDeselection();
         responseMenuAnimator.SetBool("Points", false);
         mousePointerHand.Unfreeze();
     }
@@ -110,21 +127,14 @@ public class CustomResponsePanel : MonoBehaviour
         Sequencer.Message(message);
     }
     
-    private Vector2 ResponseButtonPosition(StandardUIResponseButton responseButton)
-    {
-        return responseButton.label.gameObject.transform.position;
-    }
-    
     public void OnClick()
     {
-        if (!currentlySelectedButton.isButtonActive) return;
-        foreach (var field in currentlySelectedDialogueEntry.fields)
+        if (!currentlySelectedResponseButton.Button.isButtonActive) return;
+
+        if (currentlySelectedResponseButton.PointsType != Points.Type.Null)
         {
-            if (field.title == "Points")
-            {
-                Points.SetSpawnPosition(ResponseButtonPosition(currentlySelectedButton));
-                GameEvent.OnPointsIncrease(DialogueUtility.GetPointsField(field).type, DialogueUtility.GetPointsField(field).points);
-            }
+            Points.SetSpawnPosition(currentlySelectedResponseButton.Position);
+            GameEvent.OnPointsIncrease(currentlySelectedResponseButton.PointsType, DialogueUtility.GetPointsField(currentlySelectedResponseButton.DialogueEntry).points);
         }
     }
     
@@ -139,39 +149,17 @@ public class CustomResponsePanel : MonoBehaviour
                 anyButtonActive = true;
             }
         }
-        
-        if (!anyButtonActive) HideTimeEstimate();
+        if (!anyButtonActive) OnButtonDeselection();
     }
 
-    public string CalculateTimeEstimate(DialogueEntry dialogueEntry)
+    private static string TimeEstimateText(DialogueEntry dialogueEntry)
     {
-        var minTimeEstimate = int.MaxValue;
-        var maxTimeEstimate = 0;
-
-        var output = string.Empty;
+        var estimate = DialogueUtility.TimeEstimate(dialogueEntry);
+        var minTime = estimate.Item1 / 60;
+        var maxTime = estimate.Item2 / 60;
         
-        foreach (var field in dialogueEntry.fields)
-        {
-            if (field.title == "Time Estimate" && field.type == FieldType.Node)
-            {
-                var entry = DialogueUtility.GetDialogueEntryFromNodeField(field);
-                var timeEstimate = DialogueUtility.DurationRangeBetweenNodes(dialogueEntry, entry);
-                
-                if (timeEstimate.Item1 < minTimeEstimate) minTimeEstimate = timeEstimate.Item1;
-                if (timeEstimate.Item2 > maxTimeEstimate) maxTimeEstimate = timeEstimate.Item2;
-            }
-        }
-        
-        if (minTimeEstimate == maxTimeEstimate)
-        {
-            output = (minTimeEstimate/60).ToString();
-        }
-        else
-        {
-            output = minTimeEstimate/60 + " - " + maxTimeEstimate/60;
-        }
-        
-        output += " minutes";
-        return output;
+        if (minTime > maxTime) return "";
+        if (minTime == maxTime) return $"{minTime} minutes";
+        return $"{minTime}-{maxTime} minutes";
     }
 }

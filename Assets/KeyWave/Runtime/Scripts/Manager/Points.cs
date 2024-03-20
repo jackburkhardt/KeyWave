@@ -17,7 +17,8 @@ public static class Points
     {
         Wellness,
         Savvy,
-        Business
+        Business,
+        Null
     }
 
     public static int Score(Type type)
