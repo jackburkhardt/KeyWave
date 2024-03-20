@@ -24,6 +24,7 @@ public class GameState
     public int local_savvy_score = 0;
     public int wellness_score = 0;
     public string player_location = "Hotel";
+    public string player_sublocation = string.Empty;
     public string current_scene = string.Empty;
     public string current_conversation_title = string.Empty;
     public string current_conversation_actor;
@@ -57,7 +58,9 @@ public class GameStateManager : PlayerEventHandler
        switch (playerEvent.Type)
             {
                 case "move":
-                    gameState.player_location = playerEvent.Value;
+                    var location = Location.FromString(playerEvent.Value);
+                    if (location.isSublocation) gameState.player_sublocation = playerEvent.Value;
+                    else { gameState.player_location = playerEvent.Value; gameState.player_sublocation = string.Empty; }
                     break;
                 case "conversation_start":
                     gameState.current_conversation_title = playerEvent.Value;
@@ -91,7 +94,7 @@ public class GameStateManager : PlayerEventHandler
                         case Points.Type.Wellness:
                             gameState.wellness_score += int.Parse(playerEvent.Value);
                             break;
-                        case Points.Type.LocalSavvy:
+                        case Points.Type.Savvy:
                             gameState.local_savvy_score += int.Parse(playerEvent.Value);
                             break;
                         case Points.Type.Business:
@@ -152,6 +155,7 @@ public class GameStateManager : PlayerEventHandler
         }
         
         yield return new WaitForSeconds(0.5f);
+        /*
         
         //load conversation -- order matters here
         if (gameState.current_conversation_title != string.Empty)
@@ -160,6 +164,10 @@ public class GameStateManager : PlayerEventHandler
         }
         
         else DialogueManager.StartConversation($"{gameState.player_location}/Base");
+        
+        */
+        
+        DialogueManager.StartConversation("Intro");
         
         IEnumerator StartConversationHandler()
         {

@@ -16,7 +16,7 @@ public static class Points
     public enum Type
     {
         Wellness,
-        LocalSavvy,
+        Savvy,
         Business
     }
 
@@ -28,7 +28,7 @@ public static class Points
             case Type.Business:
                 score = GameStateManager.instance.gameState.business_score;
                 break;
-            case Type.LocalSavvy:
+            case Type.Savvy:
                 score = GameStateManager.instance.gameState.local_savvy_score;
                 break;
             case Type.Wellness:
@@ -65,7 +65,7 @@ public static class Points
         {
             case Type.Wellness:
                 return UnityEngine.Color.green;
-            case Type.LocalSavvy:
+            case Type.Savvy:
                 return UnityEngine.Color.red;
             case Type.Business:
                 return new Color(0, 153, 255, 255);

@@ -26,7 +26,7 @@ public class PointsBar : PlayerEventHandler
     {
         base.OnEnable();
         visualizedWellnessScore = Points.Score(Points.Type.Wellness);
-        visualizedLocalKnowledgeScore = Points.Score(Points.Type.LocalSavvy);
+        visualizedLocalKnowledgeScore = Points.Score(Points.Type.Savvy);
         visualizedBusinessResearchScore = Points.Score(Points.Type.Business);
     }
 
@@ -37,7 +37,7 @@ public class PointsBar : PlayerEventHandler
                     case Points.Type.Wellness:
                         visualizedWellnessScore += amount;
                         break;
-                    case Points.Type.LocalSavvy:
+                    case Points.Type.Savvy:
                         visualizedLocalKnowledgeScore += amount;
                         break;
                     case Points.Type.Business:
