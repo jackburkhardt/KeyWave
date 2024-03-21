@@ -18,16 +18,16 @@ public class SubtitleContentElement : MonoBehaviour
 
     private bool _isAnimationPlaying = false;
 
-    private void Awake()
+    public void Clear()
     {
-       // timeText.text = GameManager.instance.HoursMinutes(GameManager.instance.gameStateManager.gameState.clock);
-        
+        typewriterEffect.GetComponent<TMP_Text>().text = string.Empty;
     }
 
     public void UpdateTime()
     {
        if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) timeText.text = mainClock.text.Replace(" ", ":");
-        
+       canvasGroup.alpha = 1;
+
     }
 
     public void Update()

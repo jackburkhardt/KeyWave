@@ -818,7 +818,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: Use the computer.
+        value: Check your emails.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -858,8 +858,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 366.77667
-        y: 614.53235
+        x: 179.57138
+        y: 606.7684
         width: 160
         height: 30
     - id: 3
@@ -1134,8 +1134,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 119.43157, y: 67.11214}
-    canvasZoom: 0.95000094
+    canvasScrollPosition: {x: 42.406345, y: 0}
+    canvasZoom: 0.6440003
   - id: 11
     fields:
     - title: Title
@@ -9440,6 +9440,12 @@ MonoBehaviour:
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
+      - originConversationID: 28
+        originDialogueID: 0
+        destinationConversationID: 28
+        destinationDialogueID: 20
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -9625,7 +9631,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 1021.8728
-        y: 466.51276
+        y: 468.27954
         width: 160
         height: 30
     - id: 5
@@ -10043,8 +10049,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 755.29626
-        y: 340.88312
+        x: 759.0699
+        y: 342.14096
         width: 160
         height: 30
     - id: 19
@@ -10089,6 +10095,116 @@ MonoBehaviour:
       outgoingLinks:
       - originConversationID: 28
         originDialogueID: 19
+        destinationConversationID: 28
+        destinationDialogueID: 21
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1235.7246
+        y: 461.18054
+        width: 160
+        height: 30
+    - id: 20
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 28
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 765.85956
+        y: 142.35428
+        width: 160
+        height: 30
+    - id: 21
+      fields:
+      - title: Title
+        value: Fade
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 'Fade(stay, 0.5);
+
+          Fade(unstay, 0.5)@1;
+
+          ClearPanel()@0.5;
+
+          Delay(3);'
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 28
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 28
+        originDialogueID: 21
         destinationConversationID: 16
         destinationDialogueID: 0
         isConnector: 0
@@ -10100,13 +10216,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1246.1243
-        y: 464.03906
+        x: 1239.2
+        y: 531.24805
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 301.13943, y: 127.296974}
-    canvasZoom: 0.57299876
+    canvasScrollPosition: {x: 693.6954, y: 165.405}
+    canvasZoom: 0.56600124
   syncInfo:
     syncActors: 0
     syncItems: 0
