@@ -12,6 +12,9 @@ public class SubtitleManager : MonoBehaviour
       {
          Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
       }
+      
+      subtitleContentElement.Clear();
+      
    }
 
    public void AddSubtitleContent()
