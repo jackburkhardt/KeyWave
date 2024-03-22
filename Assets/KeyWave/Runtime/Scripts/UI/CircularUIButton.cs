@@ -14,7 +14,10 @@ public class CircularUIButton : MonoBehaviour
 
     
     public Image image;
-    private DialogueEntry associatedDialogueEntry;
+    
+ 
+
+   
     [SerializeField] private Transform pointerHand;
     [SerializeField] private Button button;
     [SerializeReference] private Side watchSide;
@@ -26,7 +29,7 @@ public class CircularUIButton : MonoBehaviour
     List<CircularUIButton> matchedSideInteractables = new List<CircularUIButton>();
     [SerializeField] private float _padding;
     public UnityEvent onHover, onClick, onMouseExit;
-    
+   
     public enum Side
     {
         Right,
@@ -49,19 +52,20 @@ public class CircularUIButton : MonoBehaviour
         Clustered
     };
 
+    
+
+    public Color ButtonColor
+    {
+        get => image.color;
+        set => image.color = value;
+    }
 
     public void SetAngleIndex(float angle)
     {
         angleIndex = angle;
     }
 
-    private void OnEnable()
-    {
-        if (GetComponent<StandardUIResponseButton>() != null && GetComponent<StandardUIResponseButton>().response != null)
-        {
-            associatedDialogueEntry = GetComponent<StandardUIResponseButton>().response.destinationEntry;
-        }
-    }
+  
     
     // Start is called before the first frame update
 
@@ -72,6 +76,12 @@ public class CircularUIButton : MonoBehaviour
         image ??= GetComponent<Image>();
         button ??= GetComponent<Button>();
         image.alphaHitTestMinimumThreshold = 2;
+    }
+
+    private void OnEnable()
+    {
+        
+      //  if (associatedDialogueEntry != null) ButtonColor = DialogueUtility.NodeColor(associatedDialogueEntry);
     }
 
     [NonSerialized] public bool isButtonActive = false;

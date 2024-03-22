@@ -17,6 +17,20 @@ public static class DialogueUtility
         returnToNPC,
     }
     
+
+    public static Color NodeColor(DialogueEntry node)
+    {
+        var visitedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
+        var leaveColor = new Color(0.2f, 0.05f, 0.05f, 1f);
+        var defaultColor = Location.PlayerLocation.responseMenuButtonColor;
+        
+        if (node == null) return Color.white;
+        if (Field.FieldExists(node.fields, "Visited") && Field.LookupBool(node.fields, "Visited"))
+            return Color.Lerp(visitedColor, defaultColor, 0.4f);
+        if (node.Title == "Leave") return Color.Lerp(leaveColor, defaultColor, 0.2f);
+        return defaultColor;
+    }
+    
     public struct PointsField
     {
         public Points.Type type;

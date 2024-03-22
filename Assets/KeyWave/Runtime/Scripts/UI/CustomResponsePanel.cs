@@ -15,14 +15,14 @@ public class CustomResponsePanel : MonoBehaviour
     [SerializeField] private UITextField timeEstimate;
     [SerializeField] Animator responseMenuAnimator;
     [SerializeField] private PointerArrow mousePointerHand;
-    
-    
-    private List<StandardUIResponseButton> nonSelectedButtons {
+
+    private List<StandardUIResponseButton> ResponseButtons => FindObjectsOfType<StandardUIResponseButton>().ToList();
+    private List<StandardUIResponseButton> NonSelectedButtons  {
         get
         {
-            return GameObject.FindObjectsOfType<StandardUIResponseButton>().ToList().FindAll(button => button != currentlySelectedResponseButton.Button);
+            return ResponseButtons.FindAll(button => button != currentlySelectedResponseButton.Button);
         }
-}
+    }
 
     private Color defaultDisabledColor, defaultTextColor, defaultHoverColor;
     
@@ -35,6 +35,8 @@ public class CustomResponsePanel : MonoBehaviour
         public StandardUIResponseButton Button => StandardUIResponseButton;
         public Button UnityButton => StandardUIResponseButton.GetComponent<Button>();
         public DialogueEntry DialogueEntry => StandardUIResponseButton.response.destinationEntry;
+        
+        public CircularUIButton CircularUIButton => StandardUIResponseButton.GetComponent<CircularUIButton>();
 
         public Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
         public string TimeEstimate => TimeEstimateText(DialogueEntry);
@@ -43,8 +45,11 @@ public class CustomResponsePanel : MonoBehaviour
         public Color DefaultDisabledColor;
         public Color DefaultHighlightColor;
         
+        public bool MarkAsVisited => Field.LookupBool(DialogueEntry.fields, "Mark Visited");
+        
         public ResponseButton(StandardUIResponseButton standardUiResponseButton) : this()
         {
+            if (standardUiResponseButton == null) return;
             StandardUIResponseButton = standardUiResponseButton;
             DefaultDisabledColor = UnityButton.colors.disabledColor;
             DefaultHighlightColor = UnityButton.colors.highlightedColor;
@@ -79,6 +84,15 @@ public class CustomResponsePanel : MonoBehaviour
 
         OnButtonSelection();
     }
+
+    public void OnResponsePanelChange()
+    {
+        foreach (var responseButton in ResponseButtons)
+        {
+            var button = new ResponseButton(responseButton);
+            button.CircularUIButton.ButtonColor = DialogueUtility.NodeColor(button.DialogueEntry);
+        }
+    }
     
 
     private void OnButtonSelection()
@@ -93,6 +107,9 @@ public class CustomResponsePanel : MonoBehaviour
             block.disabledColor = Color.Lerp(currentlySelectedResponseButton.DefaultDisabledColor, Points.Color(currentlySelectedResponseButton.PointsType), 0.95f);
             currentlySelectedResponseButton.UnityButton.colors = block;
         }
+        
+        
+        
     }
 
     private void OnButtonDeselection()
@@ -130,12 +147,22 @@ public class CustomResponsePanel : MonoBehaviour
     public void OnClick()
     {
         if (!currentlySelectedResponseButton.Button.isButtonActive) return;
+        
+        if (currentlySelectedResponseButton.MarkAsVisited)
+        {
+            Debug.Log("Marked as visited");
+            Field.SetValue(currentlySelectedResponseButton.DialogueEntry.fields, "Visited", true);
+        }
+        
+        else Debug.Log(currentlySelectedResponseButton.MarkAsVisited);
 
         if (currentlySelectedResponseButton.PointsType != Points.Type.Null)
         {
             Points.SetSpawnPosition(currentlySelectedResponseButton.Position);
             GameEvent.OnPointsIncrease(currentlySelectedResponseButton.PointsType, DialogueUtility.GetPointsField(currentlySelectedResponseButton.DialogueEntry).points);
         }
+
+        
     }
     
     public void UnsetResponseButton()
