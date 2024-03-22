@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KeyWave.Runtime.Scripts.AssetLoading;
 using PixelCrushers.DialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,7 +17,8 @@ public class GameManager : MonoBehaviour
     private PlayerEventStack playerEventStack;
     private CustomLuaFunctions _customLuaFunctions;
     public List<Location> locations;
-
+    public AddressableLoader AddressableLoader;
+    
     public static GameState gameState;
 
     // Start is called before the first frame update
@@ -166,7 +168,7 @@ public class GameManager : MonoBehaviour
             yield return StartCoroutine(LoadingScreen.FadeCanvasIn());
         }
 
-        else Debug.LogError("no loading screen");
+        else Debug.LogError("Unable to get the canvas group for the loading screen!");
         
         if (currentScene != "") {
         
@@ -179,8 +181,9 @@ public class GameManager : MonoBehaviour
         }
         
         var loadNewScene = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
+        AddressableLoader = ScriptableObject.CreateInstance<AddressableLoader>();
         
-        while (!loadNewScene.isDone)
+        while (!loadNewScene.isDone || !AddressableLoader.IsQueueEmpty())
         {
             yield return null;
         }
