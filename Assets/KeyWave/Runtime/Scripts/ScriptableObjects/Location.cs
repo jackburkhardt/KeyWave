@@ -14,6 +14,8 @@ public class Location : ScriptableObject
 {
     public new string name => area.ToString();
 
+    public Color responseMenuButtonColor;
+
     public static Location PlayerLocation => FromString(GameManager.gameState.player_location);
     
     public enum Area {
