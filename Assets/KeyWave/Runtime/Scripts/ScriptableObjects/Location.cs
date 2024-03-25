@@ -1,19 +1,22 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using PixelCrushers.DialogueSystem;
+using UnityEditor;
+using NaughtyAttributes;
+
 
 [CreateAssetMenu(fileName = "New Location", menuName = "Location")]
 public class Location : ScriptableObject
 {
     public new string name => area.ToString();
 
-    public static Location PlayerLocation
-    {
-        get
-        {
-            return FromString(GameManager.gameState.player_location);
-        }
-    }
+    public Color responseMenuButtonColor;
+
+    public static Location PlayerLocation => FromString(GameManager.gameState.player_location);
     
     public enum Area {
         Hotel,
@@ -32,9 +35,25 @@ public class Location : ScriptableObject
     public Color buttonTint;
     public List<Scene> scenes;
     public List<Objective> objectives;
+    [Tooltip("Sublocation coordinates are relative to another set of coordinates.")]
+    public bool isSublocation;
+    [ShowIf("isSublocation")]
+    public bool relativeToPlayerLocation;
+    [ShowIf("relativeCoordinates")][DisableIf("relativeToPlayerLocation")]
+    public Area relativeTo;
     public Vector2 coordinates;
+    
     public bool isUnlocked;
 
+    public Vector2 Coordinates {
+        get
+        {
+            var baseCoordinates = isSublocation
+                ? (relativeToPlayerLocation ? PlayerLocation.coordinates : FromArea(relativeTo).coordinates)
+                : Vector2.zero;
+            return baseCoordinates + coordinates;
+        }
+    }
 
     public enum Objective
     {
@@ -64,7 +83,6 @@ public class Location : ScriptableObject
     }
     
     public static List<Objective> Objectives(Area area) => Objectives(area.ToString());
-    
     
     public static int GetDistanceFromPlayer(string location)
     {

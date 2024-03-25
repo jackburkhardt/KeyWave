@@ -25,7 +25,7 @@ public class PointOrb : MonoBehaviour
             case Points.Type.Wellness:
                 image.color = wellnessColor;
                 break;
-            case Points.Type.LocalSavvy:
+            case Points.Type.Savvy:
                 image.color = localKnowledgeColor;
                 break;
             case Points.Type.Business:
