@@ -127,6 +127,11 @@ public class GameStateManager : PlayerEventHandler
                 break;
         }
     }
+    
+    public void AddTime(int duration)
+    {
+        gameState.clock += duration;
+    }
 
     public void StartNextDay()
     {
@@ -140,6 +145,8 @@ public class GameStateManager : PlayerEventHandler
     public IEnumerator LoadGameState()
     {
         yield return GameManager.instance.LoadSceneHandler(gameState.player_location);
+        
+        
         
         //run lua scripts
         foreach (var script in gameState.lua_scripts)

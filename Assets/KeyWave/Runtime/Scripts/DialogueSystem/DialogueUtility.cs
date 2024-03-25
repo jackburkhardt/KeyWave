@@ -6,6 +6,7 @@ using UnityEngine;
 public static class DialogueUtility
 {
     
+    
     public enum QuestState
     {
         unassigned,
@@ -134,6 +135,11 @@ public static class DialogueUtility
         return (shortest, largest);
     }
 
+    public static DialogueEntry CurrentDialogueEntry =>
+        DialogueManager.instance.currentConversationState.subtitle.dialogueEntry;
+
+    public static int CurrentNodeDuration => GetNodeDuration(CurrentDialogueEntry);
+
     public static (int, int) TimeEstimate(DialogueEntry node)
     {
         var minTimeEstimate = int.MaxValue;
@@ -189,13 +195,17 @@ public static class DialogueUtility
         return (line.Length / Clock.TimeScales.SpokenCharactersPerSecond +
                 Clock.TimeScales.SecondsBetweenLines) * Clock.TimeScales.GlobalTimeScale;
     }
+
+    public static int GetNodeDuration(DialogueEntry dialogueEntry)
+    {
+        var durationField = Field.LookupInt(dialogueEntry.fields, "Duration");
+        return durationField == 0 ? GetLineAutoDuration(dialogueEntry.currentDialogueText) : durationField;
+    }
     
     public static int GetNodeDuration(int conversationID, int nodeID)
     {
         var node = GetDialogueEntryByID(conversationID, nodeID);
-       
-        var durationField = Field.LookupInt(node.fields, "Duration");
-        return durationField == 0 ? GetLineAutoDuration(node.currentDialogueText) : durationField;
+        return GetNodeDuration(node);
     }
     
     

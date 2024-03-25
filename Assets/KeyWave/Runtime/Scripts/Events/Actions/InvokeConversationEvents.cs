@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class InvokeConversationEvents : MonoBehaviour
 {
-    // Start is called before the first frame update
     public void BroadcastLine()
     {
-        if (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id == 0) return; 
+       
+        if (DialogueUtility.CurrentDialogueEntry.id == 0) return; 
         
         GameEvent.OnConversationLine();
+        
+        GameStateManager.instance.AddTime(DialogueUtility.CurrentNodeDuration);
         
        // if (!Points.IsAnimating) Sequencer.Message("Animated");
         
