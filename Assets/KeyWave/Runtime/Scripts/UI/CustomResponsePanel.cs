@@ -33,19 +33,23 @@ public class CustomResponsePanel : MonoBehaviour
     {
         private StandardUIResponseButton StandardUIResponseButton;
         public StandardUIResponseButton Button => StandardUIResponseButton;
-        public Button UnityButton => StandardUIResponseButton.GetComponent<Button>();
+        public Button UnityButton => StandardUIResponseButton?.GetComponent<Button>();
         public DialogueEntry DialogueEntry => StandardUIResponseButton.response.destinationEntry;
         
         public CircularUIButton CircularUIButton => StandardUIResponseButton.GetComponent<CircularUIButton>();
 
         public Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
-        public string TimeEstimate => TimeEstimateText(DialogueEntry);
+        public string TimeEstimate => WasVisited ? string.Empty : TimeEstimateText(DialogueEntry);
         public Points.Type PointsType => DialogueUtility.GetPointsField(DialogueEntry).type;
         
         public Color DefaultDisabledColor;
         public Color DefaultHighlightColor;
         
-        public bool MarkAsVisited => Field.LookupBool(DialogueEntry.fields, "Mark Visited");
+       // public bool MarkAsVisited => Field.LookupBool(DialogueEntry.fields, "Mark Visited");
+       
+        public string VisitedCheck => Field.Lookup(DialogueEntry.fields, "Visit Var")?.value;
+        
+        public bool WasVisited => DialogueLua.GetVariable(VisitedCheck, false);
         
         public ResponseButton(StandardUIResponseButton standardUiResponseButton) : this()
         {
@@ -100,43 +104,46 @@ public class CustomResponsePanel : MonoBehaviour
         if (currentlySelectedResponseButton.Button == null) return;
         timeEstimate.text = currentlySelectedResponseButton.TimeEstimate;
         
-        if (currentlySelectedResponseButton.PointsType != Points.Type.Null)
-        {
-            var block = currentlySelectedResponseButton.UnityButton.colors;
-            block.highlightedColor = Color.Lerp(currentlySelectedResponseButton.DefaultHighlightColor, Points.Color(currentlySelectedResponseButton.PointsType), 0.3f);
-            block.disabledColor = Color.Lerp(currentlySelectedResponseButton.DefaultDisabledColor, Points.Color(currentlySelectedResponseButton.PointsType), 0.95f);
-            currentlySelectedResponseButton.UnityButton.colors = block;
-        }
-        
-        
-        
+        if (currentlySelectedResponseButton.PointsType != Points.Type.Null && !currentlySelectedResponseButton.WasVisited) SetButtonColors(Points.Color(currentlySelectedResponseButton.PointsType), Points.Color(currentlySelectedResponseButton.PointsType));
     }
 
     private void OnButtonDeselection()
     {
         if (currentlySelectedResponseButton.Button == null) return;
-        
+        ResetButtonColors();
         timeEstimate.text = "";
-        
-        var block = currentlySelectedResponseButton.UnityButton.colors;
-        block.highlightedColor = currentlySelectedResponseButton.DefaultHighlightColor;
-        block.disabledColor = currentlySelectedResponseButton.DefaultDisabledColor;
-        currentlySelectedResponseButton.UnityButton.colors = block;
     }
     
     private void StartPointsAnimation(Points.Type pointsType)
     {
+        
         mousePointerHand.Freeze();
         responseMenuAnimator.SetBool("Points", true);
         responseMenuAnimator.Play("Points");
         
     }
+
+    private void SetButtonColors(Color highlightColor, Color disabledColor)
+    {
+        var block = currentlySelectedResponseButton.UnityButton.colors;
+        block.highlightedColor = Color.Lerp(currentlySelectedResponseButton.DefaultHighlightColor, highlightColor, 0.3f);
+        block.disabledColor =    block.disabledColor = Color.Lerp(currentlySelectedResponseButton.DefaultDisabledColor, disabledColor, 0.9f);
+        currentlySelectedResponseButton.UnityButton.colors = block;
+    }
+    
+    private void ResetButtonColors() =>  SetButtonColors(currentlySelectedResponseButton.DefaultHighlightColor, currentlySelectedResponseButton.DefaultDisabledColor);
+    
     
     private void FinishPointsAnimation()
     {
         OnButtonDeselection();
+        ResetButtonColors();
         responseMenuAnimator.SetBool("Points", false);
         mousePointerHand.Unfreeze();
+        
+            // if (currentlySelectedResponseButton.MarkAsVisited) currentlySelectedResponseButton.DialogueEntry.fields.Remove(
+          //  Field.Lookup(currentlySelectedResponseButton.DialogueEntry.fields, "Points"));
+       
     }
 
     public void SendSequencerMessage(string message)
@@ -148,15 +155,16 @@ public class CustomResponsePanel : MonoBehaviour
     {
         if (!currentlySelectedResponseButton.Button.isButtonActive) return;
         
+        /*
+        
         if (currentlySelectedResponseButton.MarkAsVisited)
         {
-            Debug.Log("Marked as visited");
-            Field.SetValue(currentlySelectedResponseButton.DialogueEntry.fields, "Visited", true);
+          Field.SetValue(currentlySelectedResponseButton.DialogueEntry.fields, "Visited", true);
         }
         
-        else Debug.Log(currentlySelectedResponseButton.MarkAsVisited);
-
-        if (currentlySelectedResponseButton.PointsType != Points.Type.Null)
+        */
+        
+       if (currentlySelectedResponseButton.PointsType != Points.Type.Null && !currentlySelectedResponseButton.WasVisited)
         {
             Points.SetSpawnPosition(currentlySelectedResponseButton.Position);
             GameEvent.OnPointsIncrease(currentlySelectedResponseButton.PointsType, DialogueUtility.GetPointsField(currentlySelectedResponseButton.DialogueEntry).points);

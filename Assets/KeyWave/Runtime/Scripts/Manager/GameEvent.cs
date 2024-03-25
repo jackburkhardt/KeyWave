@@ -161,7 +161,7 @@ public static class GameEvent
             SerializePlayerEvent("conversation_script", nodeValue, nodeScript);
         }
             
-        if (text == string.Empty) return;
+       // if (text == string.Empty) return;
         
        // var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
         var dialogueEntryID = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
