@@ -148,7 +148,7 @@ public class GameStateManager : PlayerEventHandler
             foreach (var line in parsedScript)
             {
                 if (line.Contains("ShowAlert")) continue;
-                Lua.Run(line);
+               // Lua.Run(line);
             }
         }
         

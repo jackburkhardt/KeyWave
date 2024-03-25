@@ -765,19 +765,7 @@ MonoBehaviour:
   - guid: c9a15c89-358b-494f-a9f8-f1252c02f9f6
     onExecute:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1395439610}
-          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-          m_MethodName: OpenMap
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   - guid: bcb54f7b-7531-43f2-98d6-17601df557a0
     onExecute:
       m_PersistentCalls:
@@ -977,6 +965,22 @@ MonoBehaviour:
         - m_Target: {fileID: 1395439610}
           m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
           m_MethodName: EndOfDay
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - guid: dbc74a75-1b7d-4932-9914-6c9edcc1fe6c
+    onExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1395439610}
+          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+          m_MethodName: OpenMap
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -3038,7 +3042,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 20
+  m_SortingOrder: 32767
   m_TargetDisplay: 0
 --- !u!95 &763870724
 Animator:
@@ -12282,6 +12286,7 @@ GameObject:
   - component: {fileID: 7017755129011352231}
   - component: {fileID: 7017755129011352233}
   - component: {fileID: 215454645915691792}
+  - component: {fileID: 7017755129737115589}
   m_Layer: 0
   m_Name: Dialogue Manager
   m_TagString: Untagged
@@ -12506,6 +12511,32 @@ MonoBehaviour:
   - {fileID: 2733487787229777991, guid: 381fbe413d6ce4f829e570f4c505cfc3, type: 3}
   - {fileID: 162630, guid: f40d1072f56eeb04f9c104b7c4a8811f, type: 3}
   m_position: 0
+--- !u!114 &7017755129737115589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7017755129726702734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bd27235dca69114baf4bc6283f3adaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shortcuts:
+  - shortcut: fade
+    value: 'Fade(stay, 0.5);
+
+      Fade(unstay, 0.5)@1.5;
+
+      Delay(3);'
+  - shortcut: fade
+    value: 'Fade(stay, 0.5);
+
+      Fade(unstay, 0.5)@1.5;
+
+      Delay(3);'
+  referencedSubjects: []
 --- !u!223 &7017755129748936334
 Canvas:
   m_ObjectHideFlags: 0

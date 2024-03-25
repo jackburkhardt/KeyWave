@@ -26,7 +26,8 @@ public static class DialogueUtility
         var defaultColor = Location.PlayerLocation.responseMenuButtonColor;
         
         if (node == null) return Color.white;
-        if (Field.FieldExists(node.fields, "Visited") && Field.LookupBool(node.fields, "Visited"))
+
+        if (Field.FieldExists(node.fields, "Visit Var") && DialogueLua.GetVariable(Field.Lookup(node.fields, "Visit Var").value, false)) 
             return Color.Lerp(visitedColor, defaultColor, 0.4f);
         if (node.Title == "Leave") return Color.Lerp(leaveColor, defaultColor, 0.2f);
         return defaultColor;

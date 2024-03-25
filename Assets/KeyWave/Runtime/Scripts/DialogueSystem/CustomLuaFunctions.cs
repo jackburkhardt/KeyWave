@@ -31,6 +31,7 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(BehindTime), this, SymbolExtensions.GetMethodInfo(() => BehindTime(string.Empty)));
         Lua.RegisterFunction(nameof(WithinTimeRange), this, SymbolExtensions.GetMethodInfo(() => WithinTimeRange(string.Empty, string.Empty)));
         Lua.RegisterFunction(nameof(WithinGracePeriod), this, SymbolExtensions.GetMethodInfo(() => WithinGracePeriod(string.Empty, 0)));
+        Lua.RegisterFunction(nameof(FreezeClock), this, SymbolExtensions.GetMethodInfo(() => FreezeClock(false)));
     }
 
     private void DeregisterLuaFunctions()
@@ -39,10 +40,16 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.UnregisterFunction(nameof(BehindTime));
         Lua.UnregisterFunction(nameof(WithinTimeRange));
         Lua.UnregisterFunction(nameof(WithinGracePeriod));
+        Lua.UnregisterFunction(nameof(FreezeClock));
     }
     
     
     //lua functions
+    
+    public void FreezeClock(bool freeze)
+    {
+        Clock.Freeze(freeze);
+    }
     
     public bool SurpassedTime(string time)
     {

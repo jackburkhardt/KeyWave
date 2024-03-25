@@ -95,12 +95,20 @@ public class Clock
         _59 = 59
     }
     
+    
+    
     public struct TimeScales
     {
-        internal static int GlobalTimeScale = 15;
+        internal static int Modifier = 1;
+        internal static int GlobalTimeScale => 15 * Modifier;
+    
         internal static int SpokenCharactersPerSecond = 5;
         internal static int SecondsBetweenLines = 15;
         internal static int SecondsPerInteract = 30;
+    }
+    public static void Freeze(bool freeze)
+    {
+       TimeScales.Modifier = freeze ? 0 : 1;
     }
 
     public static int HoursToSeconds(int hours) => hours * 3600;
