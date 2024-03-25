@@ -1041,7 +1041,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 20
+  m_SortingOrder: 32767
   m_TargetDisplay: 0
 --- !u!95 &763870724
 Animator:
@@ -1424,6 +1424,34 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1044224750 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3877651550808022240, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+  m_PrefabInstance: {fileID: 2097243116918498964}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0025674c84db4838aa88641afc80d63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1175315065 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8970876454653293082, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+  m_PrefabInstance: {fileID: 2097243116918498964}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1175315074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1175315065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dc97c1dc789a4351b2c1e568e56e084, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1230800396
 GameObject:
   m_ObjectHideFlags: 0
@@ -3054,17 +3082,45 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2097243117103746465, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097243117103746465, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097243117103746465, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1044224750}
+    - target: {fileID: 2097243117103746465, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097243117103746465, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnResponsePanelChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097243117103746465, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CustomResponsePanel, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097243117103746465, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3877651548987241849, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1162.5
+      value: -1137.5
       objectReference: {fileID: 0}
     - target: {fileID: 3877651548987241849, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.6547827
+      value: 0.6512553
       objectReference: {fileID: 0}
     - target: {fileID: 3877651548987241849, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.7558172
+      value: 0.7588587
       objectReference: {fileID: 0}
     - target: {fileID: 3877651549228721503, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3098,13 +3154,25 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3877651550878706934, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877651550878706934, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877651550878706934, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3877651550878706935, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.65478265
+      value: -0.6512553
       objectReference: {fileID: 0}
     - target: {fileID: 3877651550878706935, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.75581723
+      value: 0.7588587
       objectReference: {fileID: 0}
     - target: {fileID: 5441892853526528398, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_AnchorMax.y
