@@ -32,6 +32,9 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(WithinTimeRange), this, SymbolExtensions.GetMethodInfo(() => WithinTimeRange(string.Empty, string.Empty)));
         Lua.RegisterFunction(nameof(WithinGracePeriod), this, SymbolExtensions.GetMethodInfo(() => WithinGracePeriod(string.Empty, 0)));
         Lua.RegisterFunction(nameof(FreezeClock), this, SymbolExtensions.GetMethodInfo(() => FreezeClock(false)));
+        Lua.RegisterFunction(nameof(QuestInProgress), this, SymbolExtensions.GetMethodInfo(() => QuestInProgress(string.Empty)));
+        Lua.RegisterFunction(nameof(QuestPartiallyComplete), this, SymbolExtensions.GetMethodInfo(() => QuestPartiallyComplete(string.Empty)));
+        Lua.RegisterFunction(nameof(QuestInProgressButNascent), this, SymbolExtensions.GetMethodInfo(() => QuestInProgressButNascent(string.Empty)));
     }
 
     private void DeregisterLuaFunctions()
@@ -45,6 +48,20 @@ public class CustomLuaFunctions : MonoBehaviour
     
     
     //lua functions
+    
+    public bool QuestInProgressButNascent(string quest) => QuestUtility.QuestInProgressButNascent(quest);
+
+    public bool QuestInProgress(string quest)
+    {
+        return QuestUtility.QuestInProgress(quest);
+    }
+
+    public bool QuestPartiallyComplete(string quest)
+    {
+        return QuestUtility.QuestPartiallyComplete(quest);
+    }
+    
+    
     
     public void FreezeClock(bool freeze)
     {

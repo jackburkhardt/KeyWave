@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Language.Lua;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using Field = PixelCrushers.DialogueSystem.Field;
 
 public static class DialogueUtility
 {
@@ -17,6 +19,11 @@ public static class DialogueUtility
         abandoned,
         grantable,
         returnToNPC,
+    }
+    
+    public static bool Empty(DialogueEntry node)
+    {
+        return node.currentDialogueText == string.Empty && node.currentMenuText == string.Empty;
     }
     
 
@@ -160,6 +167,10 @@ public static class DialogueUtility
 
         return (minTimeEstimate, maxTimeEstimate);
     }
+    
+    
+    
+    
     
     
     

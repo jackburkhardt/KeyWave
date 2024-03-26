@@ -514,6 +514,110 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 11
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: EatBreakfastDay1
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: Eat breakfast before leaving.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Day
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry Count
+      value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Display Name
+      value: Eat breakfast before leaving.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry  eat_breakfast
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 2 State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: Drink coffee.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 1
+      value: Eat breakfast.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 1 State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+  - id: 12
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: New Quest 12
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Day
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
   locations: []
   variables:
   - id: 2
@@ -649,7 +753,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Description
@@ -772,7 +876,7 @@ MonoBehaviour:
       - originConversationID: 16
         originDialogueID: 0
         destinationConversationID: 16
-        destinationDialogueID: 1
+        destinationDialogueID: 17
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -782,8 +886,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 587.1739
-        y: 15.217804
+        x: 569.46674
+        y: 9.769516
         width: 160
         height: 30
     - id: 1
@@ -848,6 +952,12 @@ MonoBehaviour:
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
+      - originConversationID: 16
+        originDialogueID: 1
+        destinationConversationID: 16
+        destinationDialogueID: 16
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -855,8 +965,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 580.639
-        y: 128.21162
+        x: 576.0578
+        y: 146.06853
         width: 160
         height: 30
     - id: 2
@@ -922,8 +1032,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 220.01842
-        y: 130.81425
+        x: 224.10466
+        y: 143.07298
         width: 160
         height: 30
     - id: 3
@@ -1400,15 +1510,15 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: QuestPartiallyComplete("EatBreakfastDay1")  == false
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 575.3948
-        y: 274.91714
+        x: 421.18872
+        y: 386.55594
         width: 160
         height: 30
     - id: 13
@@ -1521,7 +1631,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 792.2699
+        x: 796.8941
         y: 336.6736
         width: 160
         height: 30
@@ -1576,13 +1686,123 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1001.6658
-        y: 333.98907
+        x: 1036.3472
+        y: 345.54968
+        width: 160
+        height: 30
+    - id: 16
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Finish breakfast.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 16
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 16
+        originDialogueID: 16
+        destinationConversationID: 30
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: QuestPartiallyComplete("EatBreakfastDay1")  == true
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 572.3596
+        y: 460.4422
+        width: 160
+        height: 30
+    - id: 17
+      fields:
+      - title: Title
+        value: AssignQuests
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 16
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 16
+        originDialogueID: 17
+        destinationConversationID: 16
+        destinationDialogueID: 1
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: SetQuestState("EatBreakfastDay1", "active")
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 569.16986
+        y: 78.04263
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 268.69595, y: 76.08015}
-    canvasZoom: 0.6640035
+    canvasScrollPosition: {x: 181.77036, y: 34.446617}
+    canvasZoom: 0.6061639
   - id: 11
     fields:
     - title: Title
@@ -6857,8 +7077,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 153.2758, y: 133.71445}
-    canvasZoom: 0.6987457
+    canvasScrollPosition: {x: 262.1973, y: 172.98941}
+    canvasZoom: 0.62644064
   - id: 22
     fields:
     - title: Title
@@ -8454,8 +8674,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 88.821465}
-    canvasZoom: 1.5800004
+    canvasScrollPosition: {x: 14.416858, y: 7.445665}
+    canvasZoom: 0.6602902
   - id: 25
     fields:
     - title: Title
@@ -10337,8 +10557,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 778.74603
-        y: 52.546318
+        x: 753.60236
+        y: 96.91767
         width: 160
         height: 30
     - id: 1
@@ -10396,8 +10616,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 368.26385
-        y: 464.3305
+        x: 366.787
+        y: 461.37677
         width: 160
         height: 30
     - id: 3
@@ -10571,8 +10791,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 762.13306
-        y: 165.36288
+        x: 751.7798
+        y: 166.84192
         width: 160
         height: 30
     - id: 10
@@ -10631,8 +10851,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 766.0928
-        y: 225.71246
+        x: 755.7395
+        y: 227.1915
         width: 160
         height: 30
     - id: 11
@@ -10691,8 +10911,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 764.5325
-        y: 280.92288
+        x: 754.1792
+        y: 282.40192
         width: 160
         height: 30
     - id: 13
@@ -10933,8 +11153,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 756.49255
-        y: 336.98636
+        x: 749.0973
+        y: 353.25583
         width: 160
         height: 30
     - id: 19
@@ -10990,8 +11210,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1146.8073
-        y: 343.91266
+        x: 1151.2379
+        y: 358.68124
         width: 160
         height: 30
     - id: 21
@@ -11106,13 +11326,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1423.075
-        y: 339.6595
+        x: 1430.4594
+        y: 349.9975
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 135.43752, y: 105.61392}
-    canvasZoom: 0.49699605
+    canvasScrollPosition: {x: 351.83774, y: 87.92937}
+    canvasZoom: 0.6771124
   - id: 29
     fields:
     - title: Title
@@ -11524,7 +11744,7 @@ MonoBehaviour:
       - originConversationID: 30
         originDialogueID: 0
         destinationConversationID: 30
-        destinationDialogueID: 1
+        destinationDialogueID: 19
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -11534,63 +11754,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 344.16724
-        y: 2.279251
-        width: 160
-        height: 30
-    - id: 1
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: It's good to eat before a productive day.
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      conversationID: 30
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 30
-        originDialogueID: 1
-        destinationConversationID: 30
-        destinationDialogueID: 4
-        isConnector: 0
-        priority: 2
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 341.89886
-        y: 56.45501
+        x: 337.03354
+        y: 1
         width: 160
         height: 30
     - id: 2
@@ -11645,15 +11810,15 @@ MonoBehaviour:
         destinationDialogueID: 11
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: CurrentQuestEntryState("EatBreakfastDay1", 2) ~= "success"
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 60.209793
-        y: 211.24896
+        x: 61.951355
+        y: 209.54883
         width: 160
         height: 30
     - id: 3
@@ -11712,15 +11877,15 @@ MonoBehaviour:
         destinationDialogueID: 14
         isConnector: 0
         priority: 2
-      conditionsString: Variable["eatBreakfast?"] == false
+      conditionsString: CurrentQuestEntryState("EatBreakfastDay1", 1) ~= "success"
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 338.55206
-        y: 241.51782
+        x: 347.05255
+        y: 253.41861
         width: 160
         height: 30
     - id: 4
@@ -11742,11 +11907,11 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
+        value: What should I have for breakfast?
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: What should I have for breakfast?
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -11774,14 +11939,14 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 340.1395
-        y: 100.72484
+        x: 338.2727
+        y: 98.99155
         width: 160
         height: 30
     - id: 5
       fields:
       - title: Title
-        value: 
+        value: End breakfast.
         type: 0
         typeString: CustomFieldType_Text
       - title: Description
@@ -11829,8 +11994,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 718.5133
-        y: 228.05258
+        x: 721.8192
+        y: 205.73853
         width: 160
         height: 30
     - id: 8
@@ -11941,14 +12106,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestEntryState("EatBreakfastDay1", 1, "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
         x: 775.79083
-        y: 544.7504
+        y: 546.49194
         width: 160
         height: 30
     - id: 10
@@ -12110,14 +12275,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestEntryState("EatBreakfastDay1", 2, "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 63.30838
-        y: 335.08932
+        x: 60.580765
+        y: 388.35623
         width: 160
         height: 30
     - id: 13
@@ -12244,7 +12409,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 637.1199
+        x: 672.8223
         y: 312.71768
         width: 160
         height: 30
@@ -12467,19 +12632,77 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestEntryState("EatBreakfastDay1", 1, "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 330.62296
-        y: 533.13556
+        x: 388.7352
+        y: 633.75055
+        width: 160
+        height: 30
+    - id: 19
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 30
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Passthrough
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 30
+        originDialogueID: 19
+        destinationConversationID: 30
+        destinationDialogueID: 4
+        isConnector: 0
+        priority: 2
+      conditionsString: QuestInProgress("EatBreakfastDay1")  == false
+      userScript: 'SetQuestEntryState("EatBreakfastDay1", 1, "active");
+
+        SetQuestEntryState("EatBreakfastDay1",
+        2, "active")'
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 337.03363
+        y: 49.158684
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 31.404968, y: 0}
-    canvasZoom: 1.2099997
+    canvasScrollPosition: {x: 36.09307, y: 0}
+    canvasZoom: 0.574198
   - id: 31
     fields:
     - title: Title
@@ -12577,8 +12800,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 549
-        y: 57
+        x: 537.7352
+        y: 67.326035
         width: 160
         height: 30
     - id: 2
@@ -12700,8 +12923,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 544.9418
-        y: 209.05823
+        x: 538.3707
+        y: 195.91602
         width: 160
         height: 30
     - id: 5
@@ -12741,7 +12964,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 31
+        originDialogueID: 5
+        destinationConversationID: 32
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -12749,8 +12978,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 300.28152
-        y: 318.28162
+        x: 237.3865
+        y: 299.507
         width: 160
         height: 30
     - id: 6
@@ -12847,17 +13076,17 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 772.1262
+        x: 813.4304
         y: 314.39807
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 153.95847, y: 16.048756}
-    canvasZoom: 1.03
+    canvasScrollPosition: {x: 197.42728, y: 2.4532049}
+    canvasZoom: 0.9025256
   - id: 32
     fields:
     - title: Title
-      value: New Conversation 32
+      value: Park/FindCopy
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -13398,8 +13627,106 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 83.77176, y: 15.775312}
-    canvasZoom: 0.97
+    canvasScrollPosition: {x: 83.7717, y: 15.775198}
+    canvasZoom: 0.9699998
+  - id: 33
+    fields:
+    - title: Title
+      value: Neighborhood/Base
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Actor
+      value: 1
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Conversant
+      value: 2
+      type: 5
+      typeString: CustomFieldType_Actor
+    overrideSettings:
+      useOverrides: 0
+      overrideSubtitleSettings: 0
+      showNPCSubtitlesDuringLine: 1
+      showNPCSubtitlesWithResponses: 1
+      showPCSubtitlesDuringLine: 0
+      skipPCSubtitleAfterResponseMenu: 0
+      subtitleCharsPerSecond: 30
+      minSubtitleSeconds: 2
+      continueButton: 0
+      overrideSequenceSettings: 0
+      defaultSequence: 
+      defaultPlayerSequence: 
+      defaultResponseMenuSequence: 
+      overrideInputSettings: 0
+      alwaysForceResponseMenu: 1
+      includeInvalidEntries: 0
+      responseTimeout: 0
+      emTagForOldResponses: 0
+      emTagForInvalidResponses: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
+    nodeColor: 
+    dialogueEntries:
+    - id: 0
+      fields:
+      - title: Title
+        value: START
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: None()
+        type: 0
+        typeString: 
+      conversationID: 0
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: 
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 160
+        y: 30
+        width: 160
+        height: 30
+    entryGroups: []
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 1
   syncInfo:
     syncActors: 0
     syncItems: 0
