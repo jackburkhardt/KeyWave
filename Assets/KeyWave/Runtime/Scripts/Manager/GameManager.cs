@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     private PlayerEventStack playerEventStack;
     private CustomLuaFunctions _customLuaFunctions;
     public List<Location> locations;
-    public AddressableLoader AddressableLoader;
     
     public static GameState gameState;
 
@@ -181,7 +180,6 @@ public class GameManager : MonoBehaviour
         }
         
         var loadNewScene = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
-        AddressableLoader = ScriptableObject.CreateInstance<AddressableLoader>();
         
         while (!loadNewScene.isDone || !AddressableLoader.IsQueueEmpty())
         {

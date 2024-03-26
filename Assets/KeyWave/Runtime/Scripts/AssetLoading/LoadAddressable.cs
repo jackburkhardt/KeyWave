@@ -2,26 +2,44 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 
 namespace KeyWave.Runtime.Scripts.AssetLoading
 {
-    public class AddressableLoader : ScriptableObject
+    public static class AddressableLoader
     {
-        private List<object> _activeObjects = new();
-        private List<object> _loadQueue = new();
-
-        public void RequestLoad<T>(AssetReference reference, Action<T> callback)
+        private static Dictionary<string, object> _activeObjects = new();
+        private static List<object> _loadQueue = new();
+        private static bool _isInitialized = false;
+        
+        private static void Initialize()
         {
-            if (_activeObjects.Contains(reference))
+            _isInitialized = true;
+            SceneManager.sceneLoaded += (scene, mode) =>
             {
-                callback?.Invoke((T) _activeObjects.Find(x => x.ToString() == reference.ToString()));
+                Debug.Log("AddressableLoader: unloading unused assets");
+                Resources.UnloadUnusedAssets();
+            };
+        }
+
+        /// <summary>
+        ///  Loads an asset of type T or returns the asset if it is already loaded.
+        ///  Assets are loaded asynchronously, and once ready the callback is invoked.
+        /// </summary>
+        public static void RequestLoad<T>(AssetReference reference, Action<T> callback)
+        {
+            if (!_isInitialized) Initialize();
+            
+            if (_activeObjects.TryGetValue(reference.AssetGUID, out var obj))
+            {
+                callback?.Invoke((T) obj);
             }
             else
             {
                 _loadQueue.Add(reference);
                 reference.LoadAssetAsync<T>().Completed += handle =>
                 {
-                    _activeObjects.Add(handle.Result);
+                    _activeObjects[reference.AssetGUID] = handle.Result;
                     _loadQueue.Remove(reference);
                     callback?.Invoke(handle.Result);
                 };
@@ -29,38 +47,35 @@ namespace KeyWave.Runtime.Scripts.AssetLoading
             
         }
         
-        public void RequestLoad<T>(string address, Action<T> callback)
+        /// <summary>
+        ///  Loads an asset of type T or returns the asset if it is already loaded.
+        ///  Assets are loaded asynchronously, and once ready the callback is invoked.
+        /// </summary>
+        public static void RequestLoad<T>(string address, Action<T> callback)
         {
-            if (_activeObjects.Contains(address))
+            if (!_isInitialized) Initialize();
+            
+            if (_activeObjects.TryGetValue(address, out var obj))
             {
-                callback?.Invoke((T) _activeObjects.Find(x => x.ToString() == address));
+                callback?.Invoke((T) obj);
             }
             else
             {
                 _loadQueue.Add(address);
-                Addressables.LoadAssetAsync<T>(address).Completed += handle =>
+                var operation = Addressables.LoadAssetAsync<T>(address);
+                operation.Completed += handle =>
                 {
-                    _activeObjects.Add(handle.Result);
+                    _activeObjects[address] = handle.Result;
                     _loadQueue.Remove(address);
                     callback?.Invoke(handle.Result);
                 };
             }
         }
         
-        public void Release(object obj) => Addressables.Release(obj);
+        public static void Release(object obj) => Addressables.Release(obj);
         
-        public bool IsQueueEmpty() => _loadQueue.Count == 0;
+        public static bool IsQueueEmpty() => _loadQueue.Count == 0;
         
-        public void ClearQueue() => _loadQueue.Clear();
-
-        private void OnDestroy()
-        {
-            foreach (var obj in _activeObjects)
-            {
-                Addressables.Release(obj);
-            }
-
-            Resources.UnloadUnusedAssets();
-        }
+        public static void ClearQueue() => _loadQueue.Clear();
     }
 }
