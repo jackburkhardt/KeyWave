@@ -11,10 +11,13 @@ public class InvokeConversationEvents : MonoBehaviour
         GameEvent.OnConversationLine();
         
         GameStateManager.instance.AddTime(DialogueUtility.CurrentNodeDuration);
-        
-       // if (!Points.IsAnimating) Sequencer.Message("Animated");
-        
-    //   StartCoroutine(DelayedBroadcast("line"));
+
+        if (DialogueUtility.Empty(DialogueUtility.CurrentDialogueEntry) &&
+            DialogueUtility.CurrentDialogueEntry.Sequence == string.Empty) DialogueManager.PlaySequence("Continue()");
+
+        // if (!Points.IsAnimating) Sequencer.Message("Animated");
+
+        //   StartCoroutine(DelayedBroadcast("line"));
     }
 
     public void BroadcastConversationStart()
