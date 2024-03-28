@@ -10,7 +10,7 @@ namespace Project.Editor.Scripts.Tools
 {
     public class UnlinkedNodeFinder : EditorWindow
     {
-        [MenuItem("Tools/Pixel Crushers/Dialogue System/Tools/Unlinked Node Finder")]
+        [MenuItem("Tools/Perils and Pitfalls/Unlinked Node Finder")]
         private static void ShowWindow()
         {
             var window = GetWindow<UnlinkedNodeFinder>();
@@ -23,6 +23,9 @@ namespace Project.Editor.Scripts.Tools
 
         private void OnGUI()
         {
+            EditorGUILayout.LabelField("Searches for all nodes with no outgoing links or scene events, which may lead to a softlock.");
+            EditorGUILayout.Space(5);
+            
             EditorGUILayout.BeginHorizontal();
             selectedDB = EditorGUILayout.ObjectField("Dialogue Database", selectedDB, typeof(DialogueDatabase), false, GUILayout.Width(400)) as DialogueDatabase;
 
@@ -42,7 +45,7 @@ namespace Project.Editor.Scripts.Tools
             
             if (unlinkedNodes.Count > 0)
             {
-                EditorGUILayout.LabelField("Unlinked nodes:");
+                EditorGUILayout.LabelField("Unlinked nodes:", new GUIStyle { fontStyle = FontStyle.Bold });
                 scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                 foreach (var item in unlinkedNodes)
                 {
