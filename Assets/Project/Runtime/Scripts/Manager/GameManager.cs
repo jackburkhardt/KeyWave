@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using KeyWave.Runtime.Scripts.AssetLoading;
+using Language.Lua;
 using PixelCrushers.DialogueSystem;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -124,9 +125,18 @@ public class GameManager : MonoBehaviour
     public void OpenMap() => ChangeScene(gameStateManager.gameState.current_scene, "Map");
 
     public void EndOfDay() => ChangeScene(gameStateManager.gameState.current_scene, "EndOfDay");
-    
-    public void TravelTo(string newLocation, string currentScene = "Map")
+
+    public void StartOfDay() => ChangeScene(gameStateManager.gameState.current_scene, "StartOfDay");
+
+    public void TravelTo(Location location)
     {
+        TravelTo(location.name);
+    }
+    
+    public void TravelTo(string newLocation, string currentScene = "")
+    {
+
+        if (currentScene == "") currentScene = gameState.current_scene;
         StartCoroutine(TravelToHandler());
 
         IEnumerator TravelToHandler()

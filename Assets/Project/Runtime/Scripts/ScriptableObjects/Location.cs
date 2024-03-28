@@ -92,6 +92,12 @@ public class Location : ScriptableObject
         return (int)Vector2.Distance(playerCoordinates, targetCoordinates);
     }
 
+    public void MoveHere()
+    {
+        GameEvent.OnMove(this.name, this);
+        GameManager.instance.TravelTo(this);
+    }
+
     private int Distance
     {
         get

@@ -61,11 +61,9 @@ public class GameStateManager : PlayerEventHandler
                     break;
                 case "conversation_start":
                     gameState.current_conversation_title = playerEvent.Value;
-                 //   gameState.AddLuaVariable($"{playerEvent.Value}_cycle", 0, false);
                     break;
                 case "conversation_end":
                     gameState.current_conversation_title = string.Empty;
-                   // gameState.IncrementLuaVariable($"{playerEvent.Value}_cycle");
                     break;
                 case "conversation_script":
                     gameState.lua_scripts.Add(playerEvent.Value);

@@ -31,6 +31,7 @@ public static class DialogueUtility
     {
         var visitedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
         var leaveColor = new Color(0.2f, 0.05f, 0.05f, 1f);
+        var backColor = new Color(0.5f, 0.5f, 0.5f, 1);
         var defaultColor = Location.PlayerLocation.responseMenuButtonColor;
         
         if (node == null) return Color.white;
@@ -38,6 +39,7 @@ public static class DialogueUtility
         if (Field.FieldExists(node.fields, "Visit Var") && DialogueLua.GetVariable(Field.Lookup(node.fields, "Visit Var").value, false)) 
             return Color.Lerp(visitedColor, defaultColor, 0.4f);
         if (node.Title == "Leave") return Color.Lerp(leaveColor, defaultColor, 0.2f);
+        if (node.Title == "Back") return Color.Lerp(backColor, defaultColor, 0.2f);
         return defaultColor;
     }
     
