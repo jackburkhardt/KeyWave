@@ -56,9 +56,20 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         Node,
         
+        /// <summary>
+        /// Formatted as "hours:seconds"
+        /// </summary>
         Time,
         
-        Points
+        Points,
+        /// <summary>
+        /// Formatted as "pointsType:pointsValue"
+        /// </summary>
+        
+        Timespan
+        /// <summary>
+        /// Formatted as "value:unit"
+        /// </summary>
     }
 
 }

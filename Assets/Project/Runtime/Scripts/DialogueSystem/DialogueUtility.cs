@@ -53,9 +53,34 @@ public static class DialogueUtility
     {
         var field = Field.Lookup(dialogueEntry.fields, "Points");
         if (field == null) return new PointsField {type = Points.Type.Null, points = 0};
-        var pointsType = (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
         var pointsValue = int.Parse(field.value.Split(':')[1]);
+        var pointsType = pointsValue == 0 ? Points.Type.Null : (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
         return new PointsField {type = pointsType, points = pointsValue};
+    }
+
+    public static int GetTimespan(DialogueEntry dialogueEntry)
+    {
+        if (!Field.FieldExists(dialogueEntry.fields, "Timespan")) return -1;
+        
+        var timespanField = Field.Lookup(dialogueEntry.fields, "Timespan");
+        
+        var value = timespanField.value.Split(':')[0] == null ? 0 : int.Parse(timespanField.value.Split(':')[0]);
+
+        var unit = timespanField.value.Split(':')[1];
+
+        switch (unit)
+        {
+            case "seconds":
+                break;
+            case "minutes":
+                value *= 60;
+                break;
+            case "hours":
+                value *= 3600;
+                break;
+        }
+
+        return value;
     }
 
     private static List<List<DialogueEntry>> FindAllPathsBetweenNodes(DialogueEntry node1, DialogueEntry node2)
@@ -159,6 +184,7 @@ public static class DialogueUtility
         {
             if (field.title == "Time Estimate" && field.type == FieldType.Node)
             {
+                if (field.value == "0:0") continue;
                 var entry = DialogueUtility.GetDialogueEntryFromNodeField(field);
                 var timeEstimate = DialogueUtility.DurationRangeBetweenNodes(node, entry);
                 
@@ -211,8 +237,10 @@ public static class DialogueUtility
 
     public static int GetNodeDuration(DialogueEntry dialogueEntry)
     {
-        var durationField = Field.LookupInt(dialogueEntry.fields, "Duration");
-        return durationField == 0 ? GetLineAutoDuration(dialogueEntry.currentDialogueText) : durationField;
+        var timespan = GetTimespan(dialogueEntry);
+        if (timespan != -1) return timespan;
+        if (Field.FieldExists(dialogueEntry.fields, "Duration")) return Field.LookupInt(dialogueEntry.fields, "Duration");
+        return GetLineAutoDuration(dialogueEntry.currentDialogueText);
     }
     
     public static int GetNodeDuration(int conversationID, int nodeID)

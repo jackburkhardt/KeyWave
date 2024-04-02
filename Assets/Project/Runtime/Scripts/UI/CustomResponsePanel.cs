@@ -189,12 +189,11 @@ public class CustomResponsePanel : MonoBehaviour
 
     private static string TimeEstimateText(DialogueEntry dialogueEntry)
     {
-        var estimate = DialogueUtility.TimeEstimate(dialogueEntry);
-        var minTime = estimate.Item1 / 60;
-        var maxTime = estimate.Item2 / 60;
+        if (!Field.FieldExists(dialogueEntry.fields, "Time Estimate")) return "";
         
-        if (minTime > maxTime) return "";
-        if (minTime == maxTime) return $"{minTime} minutes";
-        return $"{minTime}-{maxTime} minutes";
+        var estimate = DialogueUtility.TimeEstimate(dialogueEntry);
+        if (estimate.Item1 > estimate.Item2) return "";
+        if (estimate.Item1 == estimate.Item2) return $"{estimate.Item1 / 60} minutes";
+        return $"{estimate.Item1 / 60}-{estimate.Item2 / 60} minutes";
     }
 }
