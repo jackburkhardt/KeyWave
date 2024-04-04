@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.App;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameState
 {
@@ -142,7 +144,7 @@ public class GameStateManager : PlayerEventHandler
 
     public IEnumerator LoadGameState()
     {
-        yield return GameManager.instance.LoadSceneHandler(gameState.player_location);
+        yield return SceneManager.LoadSceneAsync(gameState.player_location, LoadSceneMode.Additive);
         
         
         

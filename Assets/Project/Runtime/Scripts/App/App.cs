@@ -1,0 +1,93 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using KeyWave.Runtime.Scripts.AssetLoading;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace Project.Runtime.Scripts.App
+{
+    public sealed class App : MonoBehaviour
+    {
+        public static App Instance
+        {
+            get
+            {
+                if (_instance) return _instance;
+                
+                var go = new GameObject("App (Lazy Init)");
+                _instance = go.AddComponent<App>();
+                Debug.LogWarning("App instance not found, a new one has been initialized. This is OK for the Editor, but should not happen otherwise.");
+                return _instance;
+            }
+        }
+        
+        private static App _instance;
+        
+        private void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
+            _instance = this;
+        }
+
+        public void BeginGame()
+        {
+            ChangeScene("Base", "StartMenu");
+        }
+        
+        
+        
+        /// <summary>
+        /// Loads a scene additively to the current scene
+        /// </summary>
+        public Coroutine LoadScene(string sceneToLoad) => StartCoroutine(LoadSceneHandler(sceneToLoad)); 
+        
+        /// <summary>
+        ///  Unloads the current scene and loads a new scene
+        /// </summary>
+        public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload));
+        
+        private IEnumerator LoadSceneHandler(string sceneToLoad, string sceneToUnload = "")
+        {
+            
+        
+            var loadingScene = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
+
+            while (!loadingScene.isDone) yield return null;
+
+            var LoadingScreen = FindObjectOfType<LoadingScreen>();
+
+            if (LoadingScreen != null)
+            {
+                yield return StartCoroutine(LoadingScreen.FadeCanvasIn());
+            }
+
+            else Debug.LogError("Unable to get the canvas group for the loading screen!");
+        
+            if (sceneToUnload != "") {
+        
+                var unloadCurrentScene = SceneManager.UnloadSceneAsync(sceneToUnload);
+            
+                while (!unloadCurrentScene.isDone)
+                {
+                    yield return null;
+                }
+            }
+        
+            var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+
+            while (!newScene.isDone || !AddressableLoader.IsQueueEmpty()) yield return null;
+            
+            if (LoadingScreen != null)
+            {
+                yield return StartCoroutine(LoadingScreen.FadeCanvasOut());
+            }
+
+            var unloadLoadingScreen = SceneManager.UnloadSceneAsync("Loading");
+        
+            while (!unloadLoadingScreen.isDone) yield return null;
+            Debug.Log("Load complete");
+
+        }
+    }
+}
