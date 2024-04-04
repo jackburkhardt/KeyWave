@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using KeyWave.Runtime.Scripts.AssetLoading;
 using Language.Lua;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.App;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [Serializable]
 
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
     public void StartNewDay()
     {
         GameStateManager.instance.StartNextDay();
-        ChangeScene(gameState.current_scene, "StartOfDay");
+        App.Instance.ChangeScene("StartOfDay", gameState.current_scene);
     }
 
 
@@ -115,18 +115,13 @@ public class GameManager : MonoBehaviour
 
         return value;
     }
-
-   
-
-    public void LoadScene(string sceneName) => StartCoroutine(LoadSceneHandler(sceneName));
     
-    public void ChangeScene(string currentScene, string newScene) => StartCoroutine(LoadSceneHandler(newScene, currentScene));
 
-    public void OpenMap() => ChangeScene(gameStateManager.gameState.current_scene, "Map");
+    public void OpenMap() => App.Instance.ChangeScene("Map", gameStateManager.gameState.current_scene);
 
-    public void EndOfDay() => ChangeScene(gameStateManager.gameState.current_scene, "EndOfDay");
+    public void EndOfDay() => App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene);
 
-    public void StartOfDay() => ChangeScene(gameStateManager.gameState.current_scene, "StartOfDay");
+    public void StartOfDay() => App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
 
     public void TravelTo(Location location)
     {
@@ -141,7 +136,7 @@ public class GameManager : MonoBehaviour
 
         IEnumerator TravelToHandler()
         {
-            yield return StartCoroutine(LoadSceneHandler(newLocation, currentScene));
+            yield return App.Instance.ChangeScene(newLocation, currentScene);
             
             yield return new WaitForSeconds(0.5f);
             
@@ -153,61 +148,5 @@ public class GameManager : MonoBehaviour
     {
        GameEvent.OnWait(duration);
     }
-
-    public IEnumerator LoadSceneHandler(string newScene, string currentScene = "")
-    {
-       // if (currentScene == "" && gameState.current_scene != string.Empty) currentScene = gameState.current_scene;
-        
-        var currentSceneName = $"{currentScene}";
-        var newSceneName = $"{newScene}";
-        var loadingSceneName = $"Loading";
-        
-        var loadingScene = SceneManager.LoadSceneAsync(loadingSceneName, LoadSceneMode.Additive);
-        yield return null;
-        
-        while (!loadingScene.isDone)
-        {
-            yield return null;
-        }
-
-        var LoadingScreen = FindObjectOfType<LoadingScreen>();
-
-        if (LoadingScreen != null)
-        {
-            yield return StartCoroutine(LoadingScreen.FadeCanvasIn());
-        }
-
-        else Debug.LogError("Unable to get the canvas group for the loading screen!");
-        
-        if (currentScene != "") {
-        
-            var unloadCurrentScene = SceneManager.UnloadSceneAsync(currentSceneName);
-            
-            while (!unloadCurrentScene.isDone)
-            {
-                yield return null;
-            }
-        }
-        
-        var loadNewScene = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
-        
-        while (!loadNewScene.isDone || !AddressableLoader.IsQueueEmpty())
-        {
-            yield return null;
-        }
-        
-        if (LoadingScreen != null)
-        {
-            yield return StartCoroutine(LoadingScreen.FadeCanvasOut());
-        }
-
-        var unloadLoadingScreen = SceneManager.UnloadSceneAsync(loadingSceneName);
-        
-        while (!unloadLoadingScreen.isDone) yield return null;
-           
-        gameState.current_scene = newScene;
-    }
-    
-   
     
 }

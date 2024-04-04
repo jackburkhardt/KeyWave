@@ -16,13 +16,7 @@ public class GameManagerProxy : MonoBehaviour
             Debug.LogError("GameManager not found in scene");
         }
     }
-
-    // Update is called once per frame
-    public void LoadScene(string sceneName)
-    {
-        gameManager.LoadScene(sceneName);
-    }
-
+    
     public void StartNextDay()
     {
         gameManager.StartNewDay();
