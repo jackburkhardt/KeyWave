@@ -28,7 +28,7 @@ public class CustomLuaFunctions : MonoBehaviour
     private void RegisterLuaFunctions()
     {
         Lua.RegisterFunction(nameof(SurpassedTime), this, SymbolExtensions.GetMethodInfo(() => SurpassedTime(string.Empty)));
-        Lua.RegisterFunction(nameof(BehindTime), this, SymbolExtensions.GetMethodInfo(() => BehindTime(string.Empty)));
+        Lua.RegisterFunction(nameof(BeforeTimeslot), this, SymbolExtensions.GetMethodInfo(() => BeforeTimeslot(string.Empty)));
         Lua.RegisterFunction(nameof(WithinTimeRange), this, SymbolExtensions.GetMethodInfo(() => WithinTimeRange(string.Empty, string.Empty)));
         Lua.RegisterFunction(nameof(WithinGracePeriod), this, SymbolExtensions.GetMethodInfo(() => WithinGracePeriod(string.Empty, 0)));
         Lua.RegisterFunction(nameof(FreezeClock), this, SymbolExtensions.GetMethodInfo(() => FreezeClock(false)));
@@ -40,7 +40,7 @@ public class CustomLuaFunctions : MonoBehaviour
     private void DeregisterLuaFunctions()
     {
         Lua.UnregisterFunction(nameof(SurpassedTime));
-        Lua.UnregisterFunction(nameof(BehindTime));
+        Lua.UnregisterFunction(nameof(BeforeTimeslot));
         Lua.UnregisterFunction(nameof(WithinTimeRange));
         Lua.UnregisterFunction(nameof(WithinGracePeriod));
         Lua.UnregisterFunction(nameof(FreezeClock));
@@ -76,7 +76,7 @@ public class CustomLuaFunctions : MonoBehaviour
         return Clock.CurrentTimeRaw > timeInSeconds;
     }
     
-    public bool BehindTime(string time)
+    public bool BeforeTimeslot(string time)
     {
        
         var timeInSeconds = Clock.ToSeconds(time);
