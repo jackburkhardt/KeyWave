@@ -22,7 +22,11 @@ namespace Project.Runtime.Scripts.App
             }
         }
         
+        public static string PlayerID => playerID;
+        
         private static App _instance;
+        private static string playerID;
+        private static PlayerEventStack playerEventStack;
         
         private void Awake()
         {
@@ -33,6 +37,12 @@ namespace Project.Runtime.Scripts.App
         public void BeginGame()
         {
             ChangeScene("Base", "StartMenu");
+            GameEvent.OnRegisterPlayerEvent += SendPlayerEvent;
+        }
+        
+        private void SendPlayerEvent(PlayerEvent e)
+        {
+            // todo: send this through the web socket
         }
         
         

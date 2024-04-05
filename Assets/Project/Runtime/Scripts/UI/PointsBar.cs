@@ -50,7 +50,7 @@ public class PointsBar : PlayerEventHandler
         switch (playerEvent.Type)
         {
             case "points":
-                var type = Points.TypeFromString(playerEvent.Receiver);
+                var type = Points.TypeFromString(playerEvent.Target);
                 SpawnOrbs(type, int.Parse(playerEvent.Value));
                 break;
         }

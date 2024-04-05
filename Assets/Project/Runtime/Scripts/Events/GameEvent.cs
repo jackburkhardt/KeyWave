@@ -41,11 +41,11 @@ public static class GameEvent
 
     public static event PlayerEventDelegate OnRegisterPlayerEvent;
 
-    private static void RegisterPlayerEvent(string type, string sender, string value, int duration = 0,
-        string log = "") => RegisterPlayerEvent(type, sender, string.Empty, value, duration, log);
-    private static void RegisterPlayerEvent(string type, string sender, string receiver, string value, int duration = 0, string log = "")
+    private static void RegisterPlayerEvent(string type, string source, string target, int duration = 0,
+        string log = "") => RegisterPlayerEvent(type, source, string.Empty, target, duration, log);
+    private static void RegisterPlayerEvent(string type, string source, string target, string value, int duration = 0, string log = "")
     {
-        var playerEvent = new PlayerEvent(type, sender, receiver, value, duration, log);
+        var playerEvent = new PlayerEvent(type, source, target, value, duration, log);
         OnRegisterPlayerEvent?.Invoke(playerEvent);
     }
     

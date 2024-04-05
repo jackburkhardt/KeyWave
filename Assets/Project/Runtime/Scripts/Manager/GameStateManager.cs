@@ -72,8 +72,8 @@ public class GameStateManager : PlayerEventHandler
                     break;
                 case "conversation_line":
                     // note: removed, this should not trigger
-                    gameState.current_conversation_actor = playerEvent.Sender;
-                    gameState.current_conversation_conversant = playerEvent.Receiver;
+                    gameState.current_conversation_actor = playerEvent.Source;
+                    gameState.current_conversation_conversant = playerEvent.Target;
                     gameState.current_conversation_line = int.Parse(playerEvent.Value);
                     break;
                 case "awaiting_response":
@@ -86,7 +86,7 @@ public class GameStateManager : PlayerEventHandler
                     gameState.type = Enum.Parse<GameState.Type>(playerEvent.Value);
                     break;
                 case "points":
-                    var type = (Points.Type) Enum.Parse(typeof(Points.Type), playerEvent.Receiver);
+                    var type = (Points.Type) Enum.Parse(typeof(Points.Type), playerEvent.Target);
                     switch (type)
                     {
                         case Points.Type.Wellness:

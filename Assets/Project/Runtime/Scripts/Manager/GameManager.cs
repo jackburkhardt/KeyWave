@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public GameStateManager gameStateManager;
-    private PlayerEventStack playerEventStack;
+    public PlayerEventStack playerEventStack;
     private CustomLuaFunctions _customLuaFunctions;
     public List<Location> locations;
     

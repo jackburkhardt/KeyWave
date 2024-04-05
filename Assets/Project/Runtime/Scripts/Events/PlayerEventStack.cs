@@ -2,49 +2,43 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Project.Runtime.Scripts.App;
 using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
 public class PlayerEvent
 {
-    [SerializeField] private string type;
-    [SerializeField] private string sender;
-    [SerializeField] private string receiver;
-    [SerializeField] private string value; 
-    [SerializeField] private int duration;
-    [SerializeField] private DateTime timeStamp;
-    [SerializeField] private string log;
+    private string log;
+    private string playerID;
+    public string Type { get; }
+    public string Source { get; }
+    public string Target { get; }
+    public string Value { get; }
+    public int Duration { get; }
+    public DateTime TimeStamp { get; }
 
-        
-    public string Type => type;
-    public string Sender => sender;
-    public string Receiver => receiver;
-    public string Value => value;
-    public int Duration => duration;
-    public DateTime TimeStamp => timeStamp;
-
-    public PlayerEvent(string type, string sender, string receiver, string value, int duration = 0, string log = "")
+    public PlayerEvent(string type, string source, string target, string value, int duration = 0, string log = "")
     {
-        this.value = value;
-        this.type = type;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.duration = duration;
+        this.Value = value;
+        this.Type = type;
+        this.Source = source;
+        this.Target = target;
+        this.Duration = duration;
         this.log = log;
-        this.timeStamp = DateTime.Now;
+        this.TimeStamp = DateTime.Now;
+        this.playerID = App.PlayerID;
     }
 
     public override string ToString()
     {
-        return JsonConvert.SerializeObject(this);
+        return JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }
 
+[Serializable]
 public class PlayerEventStack : ScriptableObject
 {
-    private static PlayerEventStack instance;
-
     public List<PlayerEvent> RegisteredEvents { get; private set; } = new();
 
     private void Awake()
@@ -56,6 +50,11 @@ public class PlayerEventStack : ScriptableObject
     {
         RegisteredEvents.Add(e);
         GameEvent.RunPlayerEvent(e);
+    }
+    
+    public string SerializeEvents()
+    {
+        return JsonConvert.SerializeObject(RegisteredEvents, Formatting.Indented);
     }
     
     public IEnumerator RunEvents()
