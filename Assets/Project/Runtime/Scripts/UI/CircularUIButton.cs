@@ -78,6 +78,13 @@ public class CircularUIButton : MonoBehaviour
         image.alphaHitTestMinimumThreshold = 2;
     }
 
+    private void OnDisable()
+    {
+        if (GetComponent<StandardUIResponseButton>() != CustomResponsePanel.Instance.buttonTemplate)
+        Destroy(gameObject);
+    }
+
+
     private void OnEnable()
     {
         

@@ -35,6 +35,7 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(QuestInProgress), this, SymbolExtensions.GetMethodInfo(() => QuestInProgress(string.Empty)));
         Lua.RegisterFunction(nameof(QuestPartiallyComplete), this, SymbolExtensions.GetMethodInfo(() => QuestPartiallyComplete(string.Empty)));
         Lua.RegisterFunction(nameof(QuestInProgressButNascent), this, SymbolExtensions.GetMethodInfo(() => QuestInProgressButNascent(string.Empty)));
+        Lua.RegisterFunction(nameof(LocationIDToName), this, SymbolExtensions.GetMethodInfo(() => LocationIDToName(0)));
     }
 
     private void DeregisterLuaFunctions()
@@ -44,10 +45,20 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.UnregisterFunction(nameof(WithinTimeRange));
         Lua.UnregisterFunction(nameof(WithinGracePeriod));
         Lua.UnregisterFunction(nameof(FreezeClock));
+        Lua.UnregisterFunction(nameof(QuestInProgress));
+        Lua.UnregisterFunction(nameof(QuestPartiallyComplete));
+        Lua.UnregisterFunction(nameof(QuestInProgressButNascent));
+        Lua.UnregisterFunction(nameof(LocationIDToName));
+        
     }
     
     
     //lua functions
+    
+    public string LocationIDToName(System.Single locationID)
+    {
+        return DialogueManager.DatabaseManager.masterDatabase.GetLocation((int)locationID).Name;
+    }
     
     public bool QuestInProgressButNascent(string quest) => QuestUtility.QuestInProgressButNascent(quest);
 

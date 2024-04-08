@@ -21,7 +21,7 @@ public class Location : ScriptableObject
     public enum Area {
         Hotel,
         Beach,
-        Airport,
+        Neighborhood,
         Mall,
         Park,
         Island,

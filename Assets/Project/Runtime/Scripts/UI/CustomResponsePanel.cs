@@ -15,6 +15,9 @@ public class CustomResponsePanel : MonoBehaviour
     [SerializeField] private UITextField timeEstimate;
     [SerializeField] Animator responseMenuAnimator;
     [SerializeField] private PointerArrow mousePointerHand;
+    public StandardUIResponseButton buttonTemplate => GetComponent<StandardUIMenuPanel>().buttonTemplate as StandardUIResponseButton;
+    
+    public static CustomResponsePanel Instance;
 
     private List<StandardUIResponseButton> ResponseButtons => FindObjectsOfType<StandardUIResponseButton>().ToList();
     private List<StandardUIResponseButton> NonSelectedButtons  {
@@ -59,7 +62,17 @@ public class CustomResponsePanel : MonoBehaviour
             DefaultHighlightColor = UnityButton.colors.highlightedColor;
         }
     }
-  
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        
+        else if (Instance != this)
+        {
+            Destroy(this);
+        }
+    }
+
 
     private void OnEnable()
     {

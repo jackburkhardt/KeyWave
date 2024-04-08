@@ -131,6 +131,7 @@ public class GameManager : MonoBehaviour
     public void TravelTo(string newLocation, string currentScene = "")
     {
 
+        DialogueManager.StopConversation();
         if (currentScene == "") currentScene = gameState.current_scene;
         StartCoroutine(TravelToHandler());
 

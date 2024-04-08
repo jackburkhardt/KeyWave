@@ -184,7 +184,7 @@ public static class DialogueUtility
         {
             if (field.title == "Time Estimate" && field.type == FieldType.Node)
             {
-                if (field.value == "0:0") continue;
+                if (field.value == "0,0") continue;
                 var entry = DialogueUtility.GetDialogueEntryFromNodeField(field);
                 var timeEstimate = DialogueUtility.DurationRangeBetweenNodes(node, entry);
                 
