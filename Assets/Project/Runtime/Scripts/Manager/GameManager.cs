@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
     }
     
 
-    public void OpenMap() => App.Instance.ChangeScene("Map", gameStateManager.gameState.current_scene);
+    public void OpenMap() => App.Instance.LoadScene("Map");
 
     public void EndOfDay() => App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene);
 
