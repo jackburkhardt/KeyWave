@@ -22,7 +22,7 @@ public class StringLuaReplacer : PlayerEventHandler
 
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
-        switch (playerEvent.Type)
+        switch (playerEvent.EventType)
         {
             case "conversation_script":
                 UpdateText();

@@ -47,7 +47,7 @@ public class PointsBar : PlayerEventHandler
 
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
-        switch (playerEvent.Type)
+        switch (playerEvent.EventType)
         {
             case "points":
                 var type = Points.TypeFromString(playerEvent.Target);

@@ -40,12 +40,10 @@ public static class GameEvent
     public static event PlayerEventDelegate OnPlayerEvent;
 
     public static event PlayerEventDelegate OnRegisterPlayerEvent;
-
-    private static void RegisterPlayerEvent(string type, string source, string target, int duration = 0,
-        string log = "") => RegisterPlayerEvent(type, source, string.Empty, target, duration, log);
-    private static void RegisterPlayerEvent(string type, string source, string target, string value, int duration = 0, string log = "")
+    
+    private static void RegisterPlayerEvent(string eventType, string source, string target, params object[] data)
     {
-        var playerEvent = new PlayerEvent(type, source, target, value, duration, log);
+        var playerEvent = new PlayerEvent(eventType, source, target, data);
         OnRegisterPlayerEvent?.Invoke(playerEvent);
     }
     
@@ -136,14 +134,22 @@ public static class GameEvent
         
         var text = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.currentDialogueText;
         var mostRecentResponseNode = GameManager.instance.gameStateManager.gameState.most_recent_response_node;
-        var nodeValue = GameManager.GetHighestDialogueNodeValue();
+        
+        var entry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry;
+        bool entryHasPoints = Field.Lookup(entry.fields, "Points") != null;
 
-        if (mostRecentResponseNode != string.Empty)
-        {  
-            RegisterPlayerEvent("conversation_decision", "player", mostRecentResponseNode, nodeValue);
+        if (mostRecentResponseNode != string.Empty && entryHasPoints)
+        {
+            var pointsField = DialogueUtility.GetPointsField(entry);
+            RegisterPlayerEvent("conversation_decision", "player", mostRecentResponseNode, pointsField);
+        }
+        else {
+            RegisterPlayerEvent("conversation_decision", "player", mostRecentResponseNode);
         }
 
-        var nodeScript = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.userScript;
+
+        var nodeScript = entry.userScript;
+        var nodeValue = GameManager.GetHighestDialogueNodeValue();
         
         if (nodeScript != string.Empty)
         {

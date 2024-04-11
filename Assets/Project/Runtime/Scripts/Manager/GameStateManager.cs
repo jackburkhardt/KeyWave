@@ -54,7 +54,7 @@ public class GameStateManager : PlayerEventHandler
     public GameState gameState = new GameState();
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
-       switch (playerEvent.Type)
+       switch (playerEvent.EventType)
             {
                 case "move":
                     var location = Location.FromString(playerEvent.Value);

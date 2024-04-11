@@ -50,7 +50,7 @@ public class InvokeMovePlayer : PlayerEventHandler
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
        
-        if (playerEvent.Type != "move" || playerEvent.Value != _destination.name) return;
+        if (playerEvent.EventType != "move" || playerEvent.Target != _destination.name) return;
         GameManager.instance.TravelTo(_destination.name);
          /*
         _playerLocationName = playerEvent.Value;
