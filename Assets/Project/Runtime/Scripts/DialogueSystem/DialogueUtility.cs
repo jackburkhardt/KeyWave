@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Language.Lua;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -46,8 +48,12 @@ public static class DialogueUtility
     
     public struct PointsField
     {
-        [FormerlySerializedAs("type")] public Points.Type Type;
-        [FormerlySerializedAs("points")] public int Points;
+        [FormerlySerializedAs("type")] 
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Points.Type Type;
+        
+        [FormerlySerializedAs("points")] 
+        public int Points;
     }
     
     public static PointsField GetPointsField(DialogueEntry dialogueEntry)
