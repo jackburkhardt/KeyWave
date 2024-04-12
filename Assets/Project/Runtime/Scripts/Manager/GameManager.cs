@@ -56,16 +56,6 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(StartHandler());
     }
-
-    private void OnEnable()
-    {
-       GameStateManager.OnGameStateChanged += OnGameStateChange;
-    }
-    
-    private void OnDisable()
-    {
-        GameStateManager.OnGameStateChanged -= OnGameStateChange;
-    }
     
     private void OnGameStateChange(GameState gameState)
     {
@@ -142,6 +132,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             
             DialogueManager.StartConversation($"{newLocation}/Base");
+            gameState.current_scene = newLocation;
         }
     }
     

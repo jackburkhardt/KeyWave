@@ -1,6 +1,8 @@
 using System.Collections;
+using Project.Runtime.Scripts.App;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(RectTransform))]
@@ -152,6 +154,12 @@ public class MapAnimator : MonoBehaviour
     {
         LeanTween.cancel(gameObject);
         LeanTween.cancel(transform.parent.gameObject);
+    }
+
+    public void CancelButton()
+    {
+        CancelAnimations();
+        App.Instance.UnloadScene("Map");
     }
    
 

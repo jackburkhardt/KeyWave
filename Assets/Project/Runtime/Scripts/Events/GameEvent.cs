@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 
@@ -41,9 +42,9 @@ public static class GameEvent
 
     public static event PlayerEventDelegate OnRegisterPlayerEvent;
     
-    private static void RegisterPlayerEvent(string eventType, string source, string target, params object[] data)
+    private static void RegisterPlayerEvent(string eventType, string source, string target, object data = null, int duration = 0)
     {
-        var playerEvent = new PlayerEvent(eventType, source, target, data);
+        var playerEvent = new PlayerEvent(eventType, source, target, data, duration);
         OnRegisterPlayerEvent?.Invoke(playerEvent);
     }
     
@@ -51,55 +52,33 @@ public static class GameEvent
     {
         OnPlayerEvent?.Invoke(playerEvent);
     }
-
-    public static void OnGameStateChange(string state)
-    {
-        RegisterPlayerEvent("state_change", "GameStateManager", state);
-    }
     
     
     public static void OnInteraction(GameObject interactable)
     {
         if (interactable.TryGetComponent(out DialogueSystemTrigger dialogueSystemTrigger))
         {
-            RegisterPlayerEvent("interact", "player", interactable.name, "DialogueSystemTrigger", Clock.TimeScales.SecondsPerInteract);
+            RegisterPlayerEvent("interact", "player", interactable.name, dialogueSystemTrigger, Clock.TimeScales.SecondsPerInteract);
             dialogueSystemTrigger.OnUse();
         }
     }
-    
-   public static void OnMove(string sender, string value, int duration = 0)
-   {
-       RegisterPlayerEvent("move", sender, "player", value, duration);
-   }
    
    public static void OnMove(string sender, Location location)
    {
-       RegisterPlayerEvent("move", sender, "player", location.name, location.TravelTime);
+       RegisterPlayerEvent("move", sender, "player", location);
    }
 
-   public static void OnPointsIncrease(Points.Type type, int points)
+   public static void OnPointsIncrease(DialogueUtility.PointsField pointData)
    {
-         if (Points.IsAnimating == false) Points.AnimationStart(type);
-         RegisterPlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, type.ToString(), points.ToString());
+         if (Points.IsAnimating == false) Points.AnimationStart(pointData.Type);
+         RegisterPlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, "player", pointData);
    }
    
    
    public static void OnWait(int duration)
-    {
-        RegisterPlayerEvent("wait", "player", duration.ToString(), duration);
-    }
-   
-    public static void OnConversationDecision(string decision)
-    {
-        var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
-        var currentNode = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title;
-        RegisterPlayerEvent("decision", conversationTitle, currentNode, decision);
-    }
-
-    public static void OnAction(int index, string title)
-    {
-        RegisterPlayerEvent("action", "player", title, index.ToString());
-    }
+   {
+       RegisterPlayerEvent("wait", "player", "player", duration, duration);
+   }
 
     public static void OnConversationStart(string eventSender = "")
     {
@@ -141,10 +120,10 @@ public static class GameEvent
         if (mostRecentResponseNode != string.Empty && entryHasPoints)
         {
             var pointsField = DialogueUtility.GetPointsField(entry);
-            RegisterPlayerEvent("conversation_decision", "player", mostRecentResponseNode, pointsField);
+            RegisterPlayerEvent("conversation_decision", entry.MenuText, mostRecentResponseNode, pointsField);
         }
-        else {
-            RegisterPlayerEvent("conversation_decision", "player", mostRecentResponseNode);
+        else if (mostRecentResponseNode != string.Empty) {
+            RegisterPlayerEvent("conversation_decision", entry.MenuText, mostRecentResponseNode);
         }
 
 

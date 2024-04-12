@@ -14,7 +14,8 @@ public class PlayerEvent
     public string Source { get; }
     public string Target { get; } 
     public DateTime LocalTimeStamp { get; }
-    public string Data { get; }
+    public object Data { get; }
+    public int Duration { get; }
 
     /// <summary>
     /// An event that was triggered by a player action. Used mostly for server data logging.
@@ -22,15 +23,17 @@ public class PlayerEvent
     /// <param name="eventType">What happened?</param>
     /// <param name="source">Where did it come from?</param>
     /// <param name="target">Who is it directed to?</param>
-    /// <param name="data">Other information relevant to this event (points, duration, etc)</param>
-    public PlayerEvent(string eventType, string source, string target, params object[] data)
+    /// <param name="data">Other information relevant to this event (point information, dialogue nodes, location details)</param>
+    /// <param name="duration">How much time did this event take?</param>
+    public PlayerEvent(string eventType, string source, string target, object data = null, int duration = 0)
     {
         this.EventType = eventType;
         this.Source = source;
         this.Target = target;
         this.LocalTimeStamp = DateTime.Now;
         this.PlayerID = App.PlayerID;
-        this.Data = JsonConvert.SerializeObject(data);
+        this.Data = data;
+        this.Duration = duration;
     }
 
     public override string ToString()

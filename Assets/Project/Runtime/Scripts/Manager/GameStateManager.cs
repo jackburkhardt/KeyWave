@@ -24,7 +24,7 @@ public class GameState
     public int wellness_score = 0;
     public string player_location = "Hotel";
     public string player_sublocation = string.Empty;
-    public string current_scene = string.Empty;
+    public string current_scene = "Hotel";
     public string current_conversation_title = string.Empty;
     public string current_conversation_actor;
     public string current_conversation_conversant;
@@ -57,46 +57,45 @@ public class GameStateManager : PlayerEventHandler
        switch (playerEvent.EventType)
             {
                 case "move":
-                    var location = Location.FromString(playerEvent.Value);
-                    if (location.isSublocation) gameState.player_sublocation = playerEvent.Value;
-                    else { gameState.player_location = playerEvent.Value; gameState.player_sublocation = string.Empty; }
+                    var location = (Location)playerEvent.Data;
+                    if (location.isSublocation) gameState.player_sublocation = location.name;
+                    else { 
+                        gameState.player_location = location.name; 
+                        gameState.player_sublocation = string.Empty; }
                     break;
                 case "conversation_start":
-                    gameState.current_conversation_title = playerEvent.Value;
+                    gameState.current_conversation_title = (string)playerEvent.Data;
                     break;
                 case "conversation_end":
                     gameState.current_conversation_title = string.Empty;
                     break;
                 case "conversation_script":
-                    gameState.lua_scripts.Add(playerEvent.Value);
+                    gameState.lua_scripts.Add((string)playerEvent.Data);
                     break;
                 case "conversation_line":
                     // note: removed, this should not trigger
                     gameState.current_conversation_actor = playerEvent.Source;
                     gameState.current_conversation_conversant = playerEvent.Target;
-                    gameState.current_conversation_line = int.Parse(playerEvent.Value);
+                    gameState.current_conversation_line = (int)playerEvent.Data;
                     break;
                 case "awaiting_response":
-                    gameState.most_recent_response_node = playerEvent.Value;
+                    gameState.most_recent_response_node = (string)playerEvent.Data;
                     break;
                 case "conversation_decision":
                     gameState.most_recent_response_node = string.Empty;
                     break;
-                case "state_change":
-                    gameState.type = Enum.Parse<GameState.Type>(playerEvent.Value);
-                    break;
                 case "points":
-                    var type = (Points.Type) Enum.Parse(typeof(Points.Type), playerEvent.Target);
-                    switch (type)
+                    var pointsField = (DialogueUtility.PointsField)playerEvent.Data;
+                    switch (pointsField.Type)
                     {
                         case Points.Type.Wellness:
-                            gameState.wellness_score += int.Parse(playerEvent.Value);
+                            gameState.wellness_score += pointsField.Points;
                             break;
                         case Points.Type.Savvy:
-                            gameState.local_savvy_score += int.Parse(playerEvent.Value);
+                            gameState.local_savvy_score += pointsField.Points;
                             break;
                         case Points.Type.Business:
-                            gameState.business_score += int.Parse(playerEvent.Value);
+                            gameState.business_score += pointsField.Points;
                             break;
                     }
                     break;

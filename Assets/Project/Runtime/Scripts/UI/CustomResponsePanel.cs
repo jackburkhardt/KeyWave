@@ -43,7 +43,7 @@ public class CustomResponsePanel : MonoBehaviour
 
         public Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
         public string TimeEstimate => WasVisited ? string.Empty : TimeEstimateText(DialogueEntry);
-        public Points.Type PointsType => DialogueUtility.GetPointsField(DialogueEntry).type;
+        public Points.Type PointsType => DialogueUtility.GetPointsField(DialogueEntry).Type;
         
         public Color DefaultDisabledColor;
         public Color DefaultHighlightColor;
@@ -180,7 +180,7 @@ public class CustomResponsePanel : MonoBehaviour
        if (currentlySelectedResponseButton.PointsType != Points.Type.Null && !currentlySelectedResponseButton.WasVisited)
         {
             Points.SetSpawnPosition(currentlySelectedResponseButton.Position);
-            GameEvent.OnPointsIncrease(currentlySelectedResponseButton.PointsType, DialogueUtility.GetPointsField(currentlySelectedResponseButton.DialogueEntry).points);
+            GameEvent.OnPointsIncrease(DialogueUtility.GetPointsField(currentlySelectedResponseButton.DialogueEntry));
         }
 
         

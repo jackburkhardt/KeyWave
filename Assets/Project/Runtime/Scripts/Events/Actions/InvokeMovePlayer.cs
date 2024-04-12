@@ -1,3 +1,4 @@
+using Project.Runtime.Scripts.App;
 using UnityEngine;
 
 public class InvokeMovePlayer : PlayerEventHandler
@@ -50,7 +51,7 @@ public class InvokeMovePlayer : PlayerEventHandler
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
        
-        if (playerEvent.EventType != "move" || playerEvent.Target != _destination.name) return;
+        if (playerEvent.EventType != "move" || ((Location)playerEvent.Data).name != _destination.name) return;
         GameManager.instance.TravelTo(_destination.name);
          /*
         _playerLocationName = playerEvent.Value;
@@ -68,6 +69,7 @@ public class InvokeMovePlayer : PlayerEventHandler
     public void MovePlayer()
     {
         GameEvent.OnMove("InvokeMovePlayer", _destination);
+        App.Instance.UnloadScene("Map");
     }
 
     public void SetDestination(Location location)
