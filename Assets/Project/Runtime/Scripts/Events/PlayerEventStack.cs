@@ -9,25 +9,31 @@ using UnityEngine;
 [Serializable]
 public class PlayerEvent
 {
-    private string log;
-    private string playerID;
-    public string Type { get; }
+    private string PlayerID;
+    public string EventType { get; }
     public string Source { get; }
-    public string Target { get; }
-    public string Value { get; }
+    public string Target { get; } 
+    public DateTime LocalTimeStamp { get; }
+    public object Data { get; }
     public int Duration { get; }
-    public DateTime TimeStamp { get; }
 
-    public PlayerEvent(string type, string source, string target, string value, int duration = 0, string log = "")
+    /// <summary>
+    /// An event that was triggered by a player action. Used mostly for server data logging.
+    /// </summary>
+    /// <param name="eventType">What happened?</param>
+    /// <param name="source">Where did it come from?</param>
+    /// <param name="target">Who is it directed to?</param>
+    /// <param name="data">Other information relevant to this event (point information, dialogue nodes, location details)</param>
+    /// <param name="duration">How much time did this event take?</param>
+    public PlayerEvent(string eventType, string source, string target, object data = null, int duration = 0)
     {
-        this.Value = value;
-        this.Type = type;
+        this.EventType = eventType;
         this.Source = source;
         this.Target = target;
+        this.LocalTimeStamp = DateTime.Now;
+        this.PlayerID = App.PlayerID;
+        this.Data = data;
         this.Duration = duration;
-        this.log = log;
-        this.TimeStamp = DateTime.Now;
-        this.playerID = App.PlayerID;
     }
 
     public override string ToString()

@@ -50,7 +50,12 @@ namespace Project.Runtime.Scripts.App
         /// <summary>
         /// Loads a scene additively to the current scene
         /// </summary>
-        public Coroutine LoadScene(string sceneToLoad) => StartCoroutine(LoadSceneHandler(sceneToLoad)); 
+        public Coroutine LoadScene(string sceneToLoad) => StartCoroutine(LoadSceneHandler(sceneToLoad));
+        
+        public void UnloadScene(string sceneToUnload)
+        {
+            SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(sceneToUnload));
+        }
         
         /// <summary>
         ///  Unloads the current scene and loads a new scene
@@ -76,7 +81,7 @@ namespace Project.Runtime.Scripts.App
         
             if (sceneToUnload != "") {
         
-                var unloadCurrentScene = SceneManager.UnloadSceneAsync(sceneToUnload);
+                var unloadCurrentScene = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(sceneToUnload));
             
                 while (!unloadCurrentScene.isDone)
                 {
@@ -93,7 +98,7 @@ namespace Project.Runtime.Scripts.App
                 yield return StartCoroutine(LoadingScreen.FadeCanvasOut());
             }
 
-            var unloadLoadingScreen = SceneManager.UnloadSceneAsync("Loading");
+            var unloadLoadingScreen = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Loading"));
         
             while (!unloadLoadingScreen.isDone) yield return null;
             Debug.Log("Load complete");

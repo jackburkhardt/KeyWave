@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Language.Lua;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Field = PixelCrushers.DialogueSystem.Field;
 
 public static class DialogueUtility
@@ -45,17 +48,21 @@ public static class DialogueUtility
     
     public struct PointsField
     {
-        public Points.Type type;
-        public int points;
+        [FormerlySerializedAs("type")] 
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Points.Type Type;
+        
+        [FormerlySerializedAs("points")] 
+        public int Points;
     }
     
     public static PointsField GetPointsField(DialogueEntry dialogueEntry)
     {
         var field = Field.Lookup(dialogueEntry.fields, "Points");
-        if (field == null) return new PointsField {type = Points.Type.Null, points = 0};
+        if (field == null) return new PointsField {Type = Points.Type.Null, Points = 0};
         var pointsValue = int.Parse(field.value.Split(':')[1]);
         var pointsType = pointsValue == 0 ? Points.Type.Null : (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
-        return new PointsField {type = pointsType, points = pointsValue};
+        return new PointsField {Type = pointsType, Points = pointsValue};
     }
 
     public static int GetTimespan(DialogueEntry dialogueEntry)

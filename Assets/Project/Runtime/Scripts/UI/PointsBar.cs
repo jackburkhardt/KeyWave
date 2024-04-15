@@ -47,11 +47,11 @@ public class PointsBar : PlayerEventHandler
 
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
-        switch (playerEvent.Type)
+        switch (playerEvent.EventType)
         {
             case "points":
-                var type = Points.TypeFromString(playerEvent.Target);
-                SpawnOrbs(type, int.Parse(playerEvent.Value));
+                var pointsInfo = (DialogueUtility.PointsField)playerEvent.Data;
+                SpawnOrbs(pointsInfo.Type, pointsInfo.Points);
                 break;
         }
     }
