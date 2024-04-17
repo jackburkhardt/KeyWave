@@ -54,6 +54,11 @@ public static class DialogueUtility
         
         [FormerlySerializedAs("points")] 
         public int Points;
+        
+        public override string ToString()
+        {
+            return $"{Enum.GetName(typeof(Points.Type), this)}:{Points}";
+        }
     }
     
     public static PointsField GetPointsField(DialogueEntry dialogueEntry)

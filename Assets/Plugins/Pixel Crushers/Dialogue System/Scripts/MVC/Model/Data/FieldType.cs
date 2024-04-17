@@ -66,10 +66,12 @@ namespace PixelCrushers.DialogueSystem
         /// Formatted as "pointsType:pointsValue"
         /// </summary>
         
-        Timespan
+        Timespan,
         /// <summary>
         /// Formatted as "value:unit"
         /// </summary>
+        ///
+        QuestState
     }
 
 }
