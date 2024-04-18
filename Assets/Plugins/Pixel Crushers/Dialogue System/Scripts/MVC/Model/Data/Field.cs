@@ -502,6 +502,12 @@ namespace PixelCrushers.DialogueSystem
                     return "CustomFieldType_Location";
                 case FieldType.Number:
                     return "CustomFieldType_Number";
+                case FieldType.QuestState:
+                    return "CustomFieldType_QuestState";
+                case FieldType.Points:
+                    return "CustomFieldType_PointsType";
+                case FieldType.Timespan:
+                    return "CustomFieldType_TimespanType";
                 case FieldType.Text:
                 default:
                     return string.Empty;
