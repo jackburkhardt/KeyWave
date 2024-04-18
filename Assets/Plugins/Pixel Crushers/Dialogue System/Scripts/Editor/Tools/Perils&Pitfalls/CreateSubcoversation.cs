@@ -83,7 +83,16 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             var newConvo = template.CreateConversation(template.GetNextConversationID(db), _internalName);
             newConvo.ActorID = 1;
             newConvo.ConversantID = -1;
+            
+            var startNode = template.CreateDialogueEntry(0, newConvo.id, "START");
+            startNode.ActorID = 1;
+            startNode.ConversantID = -1;
+            startNode.Sequence = "None()"; // START node usually shouldn't play a sequence.
+            newConvo.dialogueEntries.Add(startNode);
+            
             db.AddConversation(newConvo);
+            
+            DialogueEditorWindow.instance.RefreshConversation();
 
             // dialogue entry and link to new conversation
             var newNode = template.CreateDialogueEntry(
@@ -93,7 +102,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             newNode.MenuText = _menuText;
             newNode.DialogueText = _dialogueText;
             
-            var newConvLink = new Link
+            var newConvoLink = new Link
             {
                 destinationConversationID = newConvo.id,
                 destinationDialogueID = 0,
@@ -101,7 +110,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
                 originConversationID = _originConversation.id
             };
             
-            newNode.outgoingLinks.Add(newConvLink);
+            newNode.outgoingLinks.Add(newConvoLink);
             _originConversation.dialogueEntries.Add(newNode);
             
             // if this was created as a child of another node, establish that link
