@@ -51,7 +51,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             
             if (string.IsNullOrEmpty(_internalName))
             {
-                EditorGUILayout.HelpBox("Internal Name cannot be empty.", MessageType.Error);
+                EditorGUILayout.HelpBox("Internal Name cannot be empty. This name is shared by the node, quest, and conversation created with this tool.", MessageType.Error);
             } else if (GUILayout.Button("Create"))
             {
                 Create();
@@ -84,6 +84,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             newConvo.ActorID = 1;
             newConvo.ConversantID = -1;
             
+            // all conversations should have a START node
             var startNode = template.CreateDialogueEntry(0, newConvo.id, "START");
             startNode.ActorID = 1;
             startNode.ConversantID = -1;
@@ -101,6 +102,8 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             newNode.ConversantID = -1;
             newNode.MenuText = _menuText;
             newNode.DialogueText = _dialogueText;
+            newNode.canvasRect.x = _originNode.canvasRect.x;
+            newNode.canvasRect.y = _originNode.canvasRect.y + 70;
             
             var newConvoLink = new Link
             {
@@ -125,7 +128,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
                 };
                 
                 _originNode.outgoingLinks.Add(childNodeLink);
-                _originConversation.dialogueEntries.Add(_originNode);
+                //_originConversation.dialogueEntries.Add(_originNode);
             }
             
             
