@@ -168,15 +168,6 @@ public class CustomResponsePanel : MonoBehaviour
     {
         if (!currentlySelectedResponseButton.Button.isButtonActive) return;
         
-        /*
-        
-        if (currentlySelectedResponseButton.MarkAsVisited)
-        {
-          Field.SetValue(currentlySelectedResponseButton.DialogueEntry.fields, "Visited", true);
-        }
-        
-        */
-        
        if (currentlySelectedResponseButton.PointsType != Points.Type.Null && !currentlySelectedResponseButton.WasVisited)
         {
             Points.SetSpawnPosition(currentlySelectedResponseButton.Position);

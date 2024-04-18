@@ -5,6 +5,7 @@ using PixelCrushers.DialogueSystem.DialogueEditor;
 using UnityEditor;
 using UnityEngine;
 using DialogueEntry = PixelCrushers.DialogueSystem.DialogueEntry;
+using NaughtyAttributes;
 
 namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pitfalls
 {
@@ -28,8 +29,10 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
         
         string _internalName;
         string _displayName;
+        private bool _useDisplayNameAsMenuText = true;
         private string _menuText;
         string _dialogueText;
+        private string _questDescription;
         private string _defaultReturnLocation;
         int _questTimeAmount;
         int _questTimeType;
@@ -41,8 +44,12 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
         {
             _internalName = EditorGUILayout.TextField("Internal Name", _internalName);
             _displayName = EditorGUILayout.TextField("Display Name", _displayName);
-            _menuText = EditorGUILayout.TextField("Menu Text", _menuText);
+            _useDisplayNameAsMenuText = EditorGUILayout.Toggle("Use Display Name as Menu Text", _useDisplayNameAsMenuText);
+            _questDescription = EditorGUILayout.TextField("Quest Description", _questDescription);
+            EditorGUILayout.Separator();
+            _menuText = _useDisplayNameAsMenuText ? _displayName : EditorGUILayout.TextField("Menu Text", _menuText);
             _dialogueText = EditorGUILayout.TextField("Dialogue Text", _dialogueText);
+            
             EditorGUILayout.BeginHorizontal();
                 _questTimeAmount = EditorGUILayout.IntField("Quest Time", _questTimeAmount);
                 _questTimeType = EditorGUILayout.Popup(_questTimeType, questTimeOptions);
@@ -77,6 +84,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             var item = template.CreateQuest(template.GetNextQuestID(db), _internalName);
             Field.SetValue(item.fields, "State", "active", FieldType.QuestState);
             Field.SetValue(item.fields, "Display Name", _displayName);
+            Field.SetValue(item.fields, "Description", _questDescription);
 
             if (_points != 0)
             {
