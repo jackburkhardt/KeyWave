@@ -4,7 +4,6 @@ using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.DialogueEditor;
 using UnityEditor;
 using UnityEngine;
-using DialogueDatabase = PixelCrushers.DialogueSystem.Wrappers.DialogueDatabase;
 
 namespace Project.Editor.Scripts.Tools
 {
@@ -37,17 +36,17 @@ namespace Project.Editor.Scripts.Tools
                 }
                 else
                 {
-                    SearchForMissingLinks(selectedDB);   
+                    foundNodes = SearchForMissingLinks(selectedDB);   
                 }
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space(20);
             
-            if (unlinkedNodes.Count > 0)
+            if (foundNodes.Count > 0)
             {
                 EditorGUILayout.LabelField("Unlinked nodes:", new GUIStyle { fontStyle = FontStyle.Bold });
                 scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-                foreach (var item in unlinkedNodes)
+                foreach (var item in foundNodes)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{item.Converstion} ({item.Entry.subtitleText})", GUILayout.Width(400));
@@ -61,11 +60,11 @@ namespace Project.Editor.Scripts.Tools
             }
         }
 
-        private List<(string Converstion, DialogueEntry Entry)> unlinkedNodes = new();
+        private List<(string Converstion, DialogueEntry Entry)> foundNodes = new();
 
-        private void SearchForMissingLinks(DialogueDatabase database)
+        public static List<(string Converstion, DialogueEntry Entry)> SearchForMissingLinks(DialogueDatabase database)
         {
-            unlinkedNodes.Clear();
+            var unlinkedNodes = new List<(string Converstion, DialogueEntry Entry)>();
             foreach (var conversation in database.conversations)
             {
                 foreach (var entry in conversation.dialogueEntries)
@@ -77,6 +76,8 @@ namespace Project.Editor.Scripts.Tools
                     }
                 }
             }
+
+            return unlinkedNodes;
         }
     }
 }

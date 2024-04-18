@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.DialogueEditor;
 using UnityEditor;
@@ -10,15 +11,15 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
     public class CreateSubcoversation : EditorWindow
     {
         static Conversation _originConversation;
-        static DialogueEntry _originNode;
-        string[] questTimeOptions = new []{ "minutes", "hours", "seconds" };
-        string[] pointTypeOptions = new []{"Wellness", "Savvy", "Business", "Null"};
+        static DialogueEntry _originEntry;
+        string[] questTimeOptions = { "minutes", "hours", "seconds" };
+        string[] pointTypeOptions = { "Wellness", "Savvy", "Business", "Null" };
         
         public static void ShowSubconversationWindow(object targetConv)
         {
             if (targetConv is not Tuple<Conversation, DialogueEntry> targetData) return;
             _originConversation = targetData.Item1;
-            _originNode = targetData.Item2;
+            _originEntry = targetData.Item2;
             
             var window = GetWindow<CreateSubcoversation>();
             window.titleContent = new GUIContent("Enter information");
@@ -29,10 +30,12 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
         string _displayName;
         private string _menuText;
         string _dialogueText;
+        private string _defaultReturnLocation;
         int _questTimeAmount;
         int _questTimeType;
         int _points;
         int _type;
+        private bool _revistable;
 
         private void OnGUI()
         {
@@ -48,11 +51,18 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
                 _points = EditorGUILayout.IntField("Points", _points);
                 _type = EditorGUILayout.Popup(_type, pointTypeOptions);
             EditorGUILayout.EndHorizontal();
+            _defaultReturnLocation = EditorGUILayout.TextField("Default Return Location (ConvoID:EntryID)", _defaultReturnLocation);
+            _revistable = EditorGUILayout.Toggle("Revisitable", _revistable);
             
             if (string.IsNullOrEmpty(_internalName))
             {
                 EditorGUILayout.HelpBox("Internal Name cannot be empty. This name is shared by the node, quest, and conversation created with this tool.", MessageType.Error);
-            } else if (GUILayout.Button("Create"))
+            } else if (!string.IsNullOrEmpty(_defaultReturnLocation) && !Regex.IsMatch(_defaultReturnLocation, @"[0-9]+:[0-9]+"))
+            {
+                EditorGUILayout.HelpBox("Return Location must be in the format 'ConversationID:EntryID'.",
+                    MessageType.Error);
+            }
+            else if (GUILayout.Button("Create"))
             {
                 Create();
             }
@@ -89,6 +99,11 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             startNode.ActorID = 1;
             startNode.ConversantID = -1;
             startNode.Sequence = "None()"; // START node usually shouldn't play a sequence.
+            Field.SetValue(startNode.fields, "Return Location",
+                !string.IsNullOrEmpty(_defaultReturnLocation)
+                    ? _defaultReturnLocation
+                    : $"{_originConversation.id}:{_originEntry.id}");
+
             newConvo.dialogueEntries.Add(startNode);
             
             db.AddConversation(newConvo);
@@ -102,8 +117,12 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             newNode.ConversantID = -1;
             newNode.MenuText = _menuText;
             newNode.DialogueText = _dialogueText;
-            newNode.canvasRect.x = _originNode.canvasRect.x;
-            newNode.canvasRect.y = _originNode.canvasRect.y + 70;
+            newNode.canvasRect.x = _originEntry.canvasRect.x;
+            newNode.canvasRect.y = _originEntry.canvasRect.y + 70;
+            if (!_revistable)
+            {
+                newNode.conditionsString = $"CurrentQuestState(\"{_internalName}\") == \"active\"";
+            }
             
             var newConvoLink = new Link
             {
@@ -117,17 +136,17 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             _originConversation.dialogueEntries.Add(newNode);
             
             // if this was created as a child of another node, establish that link
-            if (_originNode != null)
+            if (_originEntry != null)
             {
                 var childNodeLink = new Link
                 {
                     destinationConversationID = _originConversation.id,
                     destinationDialogueID = newNode.id,
-                    originDialogueID = _originNode.id,
+                    originDialogueID = _originEntry.id,
                     originConversationID = _originConversation.id
                 };
                 
-                _originNode.outgoingLinks.Add(childNodeLink);
+                _originEntry.outgoingLinks.Add(childNodeLink);
                 //_originConversation.dialogueEntries.Add(_originNode);
             }
             
