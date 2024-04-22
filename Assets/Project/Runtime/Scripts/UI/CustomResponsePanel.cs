@@ -42,18 +42,31 @@ public class CustomResponsePanel : MonoBehaviour
         public CircularUIButton CircularUIButton => StandardUIResponseButton.GetComponent<CircularUIButton>();
 
         public Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
-        public string TimeEstimate => WasVisited ? string.Empty : TimeEstimateText(DialogueEntry);
+        public string TimeEstimate => TimeEstimateText(DialogueEntry);
         public Points.Type PointsType => DialogueUtility.GetPointsField(DialogueEntry).Type;
         
         public Color DefaultDisabledColor;
         public Color DefaultHighlightColor;
         
-       // public bool MarkAsVisited => Field.LookupBool(DialogueEntry.fields, "Mark Visited");
-       
-        public string VisitedCheck => Field.Lookup(DialogueEntry.fields, "Visit Var")?.value;
+        public void SetButtonColors(Color highlightColor, Color disabledColor)
+        {
+            var block = UnityButton.colors;
+            block.highlightedColor = Color.Lerp(DefaultHighlightColor, highlightColor, 0.3f);
+            block.disabledColor =    block.disabledColor = Color.Lerp(DefaultDisabledColor, disabledColor, 0.9f);
+            UnityButton.colors = block;
+        }
+
+        public void SetButtonColors(Color color) => SetButtonColors(color, color);
+        public void ResetButtonColors()
+        {
+            var block = UnityButton.colors;
+            block.highlightedColor = DefaultHighlightColor;
+            block.disabledColor = DefaultDisabledColor;
+            UnityButton.colors = block;
+        }
         
-        public bool WasVisited => DialogueLua.GetVariable(VisitedCheck, false);
-        
+        public Color CurrentDisabledColor => UnityButton.colors.disabledColor;
+        public Color CurrentHighlightColor => UnityButton.colors.highlightedColor;
         public ResponseButton(StandardUIResponseButton standardUiResponseButton) : this()
         {
             if (standardUiResponseButton == null) return;
@@ -72,38 +85,21 @@ public class CustomResponsePanel : MonoBehaviour
             Destroy(this);
         }
     }
-
-
-    private void OnEnable()
-    {
-        Points.OnAnimationStart+= StartPointsAnimation;
-        Points.OnAnimationComplete += FinishPointsAnimation;
-        
-    }
-
-    private void OnDisable()
-    {
-        Points.OnAnimationStart -= StartPointsAnimation;
-        Points.OnAnimationComplete -= FinishPointsAnimation;
-    }
-
-    public void PauseDialogueSystem()
-    {
-        DialogueManager.Pause();
-    }
     
     
     public void SetCurrentResponseButton(StandardUIResponseButton responseButton)
     {
-        OnButtonDeselection();
+        OnButtonExit();
             
         currentlySelectedResponseButton = new ResponseButton(responseButton);
 
-        OnButtonSelection();
+        OnButtonHover();
     }
 
     public void OnResponsePanelChange()
     {
+        mousePointerHand.Unfreeze();
+        
         foreach (var responseButton in ResponseButtons)
         {
             var button = new ResponseButton(responseButton);
@@ -112,50 +108,38 @@ public class CustomResponsePanel : MonoBehaviour
     }
     
 
-    private void OnButtonSelection()
+    private void OnButtonHover()
     {
         if (currentlySelectedResponseButton.Button == null) return;
         timeEstimate.text = currentlySelectedResponseButton.TimeEstimate;
         
-        if (currentlySelectedResponseButton.PointsType != Points.Type.Null && !currentlySelectedResponseButton.WasVisited) SetButtonColors(Points.Color(currentlySelectedResponseButton.PointsType), Points.Color(currentlySelectedResponseButton.PointsType));
+        if (currentlySelectedResponseButton.PointsType != Points.Type.Null) currentlySelectedResponseButton.SetButtonColors(Points.Color(currentlySelectedResponseButton.PointsType), Points.Color(currentlySelectedResponseButton.PointsType));
     }
 
-    private void OnButtonDeselection()
+    private void OnButtonExit()
     {
         if (currentlySelectedResponseButton.Button == null) return;
-        ResetButtonColors();
+        currentlySelectedResponseButton.ResetButtonColors();
         timeEstimate.text = "";
     }
     
     private void StartPointsAnimation(Points.Type pointsType)
     {
         
-        mousePointerHand.Freeze();
-        responseMenuAnimator.SetBool("Points", true);
-        responseMenuAnimator.Play("Points");
+      //  mousePointerHand.Freeze();
+       // responseMenuAnimator.SetBool("Points", true);
+      //  responseMenuAnimator.Play("Points");
         
     }
 
-    private void SetButtonColors(Color highlightColor, Color disabledColor)
-    {
-        var block = currentlySelectedResponseButton.UnityButton.colors;
-        block.highlightedColor = Color.Lerp(currentlySelectedResponseButton.DefaultHighlightColor, highlightColor, 0.3f);
-        block.disabledColor =    block.disabledColor = Color.Lerp(currentlySelectedResponseButton.DefaultDisabledColor, disabledColor, 0.9f);
-        currentlySelectedResponseButton.UnityButton.colors = block;
-    }
-    
-    private void ResetButtonColors() =>  SetButtonColors(currentlySelectedResponseButton.DefaultHighlightColor, currentlySelectedResponseButton.DefaultDisabledColor);
-    
+
     
     private void FinishPointsAnimation()
     {
-        OnButtonDeselection();
-        ResetButtonColors();
+        OnButtonExit();
+        currentlySelectedResponseButton.ResetButtonColors();
         responseMenuAnimator.SetBool("Points", false);
         mousePointerHand.Unfreeze();
-        
-            // if (currentlySelectedResponseButton.MarkAsVisited) currentlySelectedResponseButton.DialogueEntry.fields.Remove(
-          //  Field.Lookup(currentlySelectedResponseButton.DialogueEntry.fields, "Points"));
        
     }
 
@@ -166,9 +150,18 @@ public class CustomResponsePanel : MonoBehaviour
     
     public void OnClick()
     {
-        if (!currentlySelectedResponseButton.Button.isButtonActive) return;
         
-       if (currentlySelectedResponseButton.PointsType != Points.Type.Null && !currentlySelectedResponseButton.WasVisited)
+       if (!currentlySelectedResponseButton.Button.isButtonActive) return;
+       currentlySelectedResponseButton.SetButtonColors(currentlySelectedResponseButton.CurrentHighlightColor);
+       
+       foreach (var button in NonSelectedButtons)
+       {
+           button.label.color = Color.clear;
+       }
+       
+       mousePointerHand.Freeze();
+        
+       if (currentlySelectedResponseButton.PointsType != Points.Type.Null)
         {
             Points.SetSpawnPosition(currentlySelectedResponseButton.Position);
             GameEvent.OnPointsIncrease(DialogueUtility.GetPointsField(currentlySelectedResponseButton.DialogueEntry));
@@ -188,7 +181,7 @@ public class CustomResponsePanel : MonoBehaviour
                 anyButtonActive = true;
             }
         }
-        if (!anyButtonActive) OnButtonDeselection();
+        if (!anyButtonActive) OnButtonExit();
     }
 
     private static string TimeEstimateText(DialogueEntry dialogueEntry)

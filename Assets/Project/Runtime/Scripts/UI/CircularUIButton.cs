@@ -11,12 +11,7 @@ using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardU
 [ExecuteInEditMode]
 public class CircularUIButton : MonoBehaviour
 {
-
-    
     public Image image;
-    
- 
-
    
     [SerializeField] private Transform pointerHand;
     [SerializeField] private Button button;
