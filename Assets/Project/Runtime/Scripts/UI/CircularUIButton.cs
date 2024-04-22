@@ -12,7 +12,6 @@ using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardU
 public class CircularUIButton : MonoBehaviour
 {
     public Image image;
-   
     [SerializeField] private Transform pointerHand;
     [SerializeField] private Button button;
     [SerializeReference] private Side watchSide;
@@ -24,6 +23,10 @@ public class CircularUIButton : MonoBehaviour
     List<CircularUIButton> matchedSideInteractables = new List<CircularUIButton>();
     [SerializeField] private float _padding;
     public UnityEvent onHover, onClick, onMouseExit;
+    public static float globalOffset;
+  
+    
+    
    
     public enum Side
     {
@@ -72,22 +75,22 @@ public class CircularUIButton : MonoBehaviour
         button ??= GetComponent<Button>();
         image.alphaHitTestMinimumThreshold = 2;
     }
+    
 
     private void OnDisable()
     {
-        if (GetComponent<StandardUIResponseButton>() != CustomResponsePanel.Instance.buttonTemplate)
-        Destroy(gameObject);
+        if (GetComponent<StandardUIResponseButton>() == null || CustomResponsePanel.Instance == null) return;
+        if (GetComponent<StandardUIResponseButton>() != CustomResponsePanel.Instance.buttonTemplate) Destroy(gameObject);
     }
 
 
     private void OnEnable()
     {
-        
-      //  if (associatedDialogueEntry != null) ButtonColor = DialogueUtility.NodeColor(associatedDialogueEntry);
+      
     }
 
     [NonSerialized] public bool isButtonActive = false;
-    
+
     
     private void Update()
     {
@@ -110,7 +113,7 @@ public class CircularUIButton : MonoBehaviour
         
         matchedSideInteractables = sameSideInteractables;
         
-        
+     
         
        // sync spacing
         
@@ -141,11 +144,9 @@ public class CircularUIButton : MonoBehaviour
                 transform.localRotation = Quaternion.Euler(0, 0, zAngle);
                 break;
             case Spacing.Clustered:
-                transform.localRotation = Quaternion.Euler(0, 0, angleIndex + SideIndex[watchSide] * 90 - degreeSum / 2);
+                transform.localRotation = Quaternion.Euler(0, 0, angleIndex + SideIndex[watchSide] * 90 - degreeSum / 2 + globalOffset);
                 break;
         }
-
-        
 
         
         _interactAngleThreshold = image.fillAmount * 360;
@@ -175,7 +176,7 @@ public class CircularUIButton : MonoBehaviour
         {
             ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerClickHandler);
             onClick.Invoke();
-        }
+           }
     
         if (!isArrowPointingAtButton && isButtonActive)
         {

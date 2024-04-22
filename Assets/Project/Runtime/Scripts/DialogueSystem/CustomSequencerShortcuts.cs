@@ -9,5 +9,8 @@ public class CustomSequencerShortcuts : MonoBehaviour
     private void Awake()
     {
         Sequencer.RegisterShortcut("fade", "Fade(stay, 0.5); Fade(unstay, 0.5)@1; Delay(3)");
+        
+        Sequencer.RegisterShortcut("typed", "Continue()@Message(Typed)");
+        
     }
 }

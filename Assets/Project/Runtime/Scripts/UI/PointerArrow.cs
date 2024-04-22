@@ -6,6 +6,10 @@ public class PointerArrow : MonoBehaviour
     [SerializeField] private float minimumDistance = 750;
     public bool isMouseOver = false;
     public bool isFrozen = false;
+    public bool stickToWatchTicks = false;
+    
+    
+    public float AngleCenteredSouth => transform.rotation.eulerAngles.z - 270;
 
     public void OnEnable()
     {
@@ -48,17 +52,19 @@ public class PointerArrow : MonoBehaviour
         
         if (mousePos.x < screenPos.x) angle += Mathf.PI;
         
-//        Debug.Log(angle);
+       
         angle *= Mathf.Rad2Deg;
         
        // if (mousePos.y > screenPos.y) angle 
 
-        var minAngle = angle - (angle % 6);
-        var maxAngle = (minAngle + 6);
+       if (stickToWatchTicks)
+       {
+           var minAngle = angle - (angle % 6);
+           var maxAngle = (minAngle + 6);
+           angle = Mathf.RoundToInt((angle - minAngle < maxAngle - angle) ? minAngle : maxAngle);
+       }
+
         
-      
-        
-       angle = Mathf.RoundToInt((angle - minAngle < maxAngle - angle) ? minAngle : maxAngle);
 
       //var angleOffset = mousePos.y >= screenPos.y ? (90 - angle) * 2f: 0;
         // smooth rotation
@@ -67,8 +73,9 @@ public class PointerArrow : MonoBehaviour
         
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, (angle))), Time.deltaTime * 20);
         
+        //Debug.Log(angle);
+        
        // transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
        
-        
     }
 }
