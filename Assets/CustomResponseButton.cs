@@ -15,7 +15,9 @@ public class CustomResponseButton : MonoBehaviour
     private Button UnityButton => GetComponent<Button>();
     private CircularUIButton CircularUIButton => GetComponent<CircularUIButton>();
     private Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
-    private DialogueEntry DialogueEntry
+    
+    
+    private DialogueEntry DestinationEntry
     {
         get
         {
@@ -25,8 +27,19 @@ public class CustomResponseButton : MonoBehaviour
 
 }
 
-    private bool DialogueEntryInvalid => DialogueEntry != null && DialogueEntry.conditionsString.Length != 0 &&
-                                         !Lua.IsTrue(DialogueEntry.conditionsString);
+    private DialogueEntry FollowupEntry
+    {
+        get
+        {
+            if (DestinationEntry != null && DestinationEntry.outgoingLinks.Count == 1) {
+                return DialogueUtility.GetDialogueEntryByLink(DestinationEntry.outgoingLinks[0]);
+            }
+            return null;
+        }
+    }
+
+    private bool DialogueEntryInvalid => DestinationEntry != null && DestinationEntry.conditionsString.Length != 0 &&
+                                         !Lua.IsTrue(DestinationEntry.conditionsString);
 
     private void Start()
     {
@@ -37,7 +50,12 @@ public class CustomResponseButton : MonoBehaviour
     {
         get
         {
-            if (DialogueEntry != null) return DialogueUtility.GetPointsField(DialogueEntry).Type;
+            if (DestinationEntry != null && FollowupEntry != null)
+            {
+                var conversation = DialogueUtility.GetConversationByDialogueEntry(FollowupEntry).Title;
+                return QuestUtility.GetPoints(conversation).Type;
+                
+            }
             return Points.Type.Null;
         }
     } 
@@ -56,7 +74,7 @@ public class CustomResponseButton : MonoBehaviour
     {
         get
         {
-            if (DialogueEntry != null) return  DialogueUtility.NodeColor(DialogueEntry);
+            if (DestinationEntry != null) return  DialogueUtility.NodeColor(DestinationEntry);
             return Color.white;
         }
     }
@@ -66,12 +84,12 @@ public class CustomResponseButton : MonoBehaviour
 
         if (DialogueEntryInvalid)
         {
-            if ( !Field.LookupBool(DialogueEntry.fields, "Show If Invalid")) Destroy(gameObject);
+            if ( !Field.LookupBool(DestinationEntry.fields, "Show If Invalid")) Destroy(gameObject);
             
             
-            if (Field.FieldExists(DialogueEntry.fields, "Invalid Text"))
+            if (Field.FieldExists(DestinationEntry.fields, "Invalid Text"))
             {
-                var invalidText = Field.LookupValue(DialogueEntry.fields, "Invalid Text");
+                var invalidText = Field.LookupValue(DestinationEntry.fields, "Invalid Text");
                 
                 StandardUIResponseButton.label.text = invalidText;
             }

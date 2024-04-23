@@ -1,9 +1,27 @@
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public static class Points
 {
+    
+    public struct PointsField
+    {
+        [FormerlySerializedAs("type")] 
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Points.Type Type;
+        
+        [FormerlySerializedAs("points")] 
+        public int Points;
+        
+        public override string ToString()
+        {
+            return $"{Enum.GetName(typeof(Points.Type), this)}:{Points}";
+        }
+    }
     
     /// <summary>
     /// Type of points given to player.
@@ -46,6 +64,9 @@ public static class Points
     {
         spawnPosition = position;
     }
+
+
+
    
     /// <summary>
     /// Gets the position currently used for spawning orbs in animations.

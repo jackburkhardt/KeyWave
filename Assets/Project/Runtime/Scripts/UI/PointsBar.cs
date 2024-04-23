@@ -50,7 +50,7 @@ public class PointsBar : PlayerEventHandler
         switch (playerEvent.EventType)
         {
             case "points":
-                var pointsInfo = (DialogueUtility.PointsField)playerEvent.Data;
+                var pointsInfo = (Points.PointsField)playerEvent.Data;
                 SpawnOrbs(pointsInfo.Type, pointsInfo.Points);
                 break;
         }

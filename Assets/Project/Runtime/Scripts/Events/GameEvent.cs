@@ -68,7 +68,7 @@ public static class GameEvent
        RegisterPlayerEvent("move", sender, "player", location);
    }
 
-   public static void OnPointsIncrease(DialogueUtility.PointsField pointData)
+   public static void OnPointsIncrease(Points.PointsField pointData)
    {
          if (Points.IsAnimating == false) Points.AnimationStart(pointData.Type);
          RegisterPlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, "player", pointData);
@@ -96,6 +96,8 @@ public static class GameEvent
         RegisterPlayerEvent("conversation_end",  "DialogueManager", conversationTitle, currentEntry.ToString());
     }
 
+  
+
     public static void OnConversationResponseMenu()
     {
         var dialogueEntryNodeTitle = GameManager.GetHighestDialogueNodeValue();
@@ -119,7 +121,7 @@ public static class GameEvent
 
         if (mostRecentResponseNode != string.Empty && entryHasPoints)
         {
-            var pointsField = DialogueUtility.GetPointsField(entry);
+            var pointsField = QuestUtility.GetPoints(entry);
             RegisterPlayerEvent("conversation_decision", entry.MenuText, mostRecentResponseNode, pointsField);
         }
         else if (mostRecentResponseNode != string.Empty) {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,25 @@ using PixelCrushers.DialogueSystem;
 public class QuestUtility
 {
 
+    public static Points.PointsField GetPoints(string questTitle)
+    {
+        var points = GetField(questTitle, "Points").asString;
+        if (string.IsNullOrEmpty(points)) return new Points.PointsField {Type = Points.Type.Null, Points = 0};
+        var pointsValue = int.Parse(points.Split(':')[1]);
+        var pointsType = pointsValue == 0 ? Points.Type.Null : (Points.Type) Enum.Parse(typeof(Points.Type), points.Split(':')[0]);
+        return new Points.PointsField {Type = pointsType, Points = pointsValue};
+    }
+    
+    public static Points.PointsField GetPoints(DialogueEntry dialogueEntry)
+    {
+        return GetPoints(DialogueUtility.GetConversationByDialogueEntry(dialogueEntry).Title);
+    }
+
+
+    public static Lua.Result GetField(string questTitle, string questField)
+    {
+        return DialogueLua.GetQuestField(questTitle, questField);
+    }
  
     
     /// <summary>

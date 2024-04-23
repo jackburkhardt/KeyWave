@@ -39,36 +39,25 @@ public static class DialogueUtility
         
         if (node == null) return Color.white;
 
-        if (Field.FieldExists(node.fields, "Visit Var") && DialogueLua.GetVariable(Field.Lookup(node.fields, "Visit Var").value, false)) 
-            return Color.Lerp(visitedColor, defaultColor, 0.4f);
+       // if (Field.FieldExists(node.fields, "Visit Var") && DialogueLua.GetVariable(Field.Lookup(node.fields, "Visit Var").value, false)) 
+        //    return Color.Lerp(visitedColor, defaultColor, 0.4f);
         if (node.Title == "Leave") return Color.Lerp(leaveColor, defaultColor, 0.2f);
         if (node.Title == "Back") return Color.Lerp(backColor, defaultColor, 0.2f);
         return defaultColor;
     }
     
-    public struct PointsField
-    {
-        [FormerlySerializedAs("type")] 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Points.Type Type;
-        
-        [FormerlySerializedAs("points")] 
-        public int Points;
-        
-        public override string ToString()
-        {
-            return $"{Enum.GetName(typeof(Points.Type), this)}:{Points}";
-        }
-    }
+    /*
     
-    public static PointsField GetPointsField(DialogueEntry dialogueEntry)
+    public static PointsField GetPointsField(string questTitle)
     {
-        var field = Field.Lookup(dialogueEntry.fields, "Points");
+        var field = QuestUtility.GetField(questTitle, "Points").asString;
         if (field == null) return new PointsField {Type = Points.Type.Null, Points = 0};
         var pointsValue = int.Parse(field.value.Split(':')[1]);
         var pointsType = pointsValue == 0 ? Points.Type.Null : (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
         return new PointsField {Type = pointsType, Points = pointsValue};
     }
+    
+    */
 
     public static int GetTimespan(DialogueEntry dialogueEntry)
     {
@@ -221,6 +210,11 @@ public static class DialogueUtility
         return conversation.dialogueEntries.Find(
             entry => entry.id == id);
     }
+
+    public static DialogueEntry GetDialogueEntryByLink(Link outgoingLink)
+    {
+        return GetDialogueEntryByID( outgoingLink.destinationConversationID, outgoingLink.destinationDialogueID);
+    }
     
     public static DialogueEntry GetDialogueEntryFromNodeField(Field field)
     {
@@ -238,6 +232,11 @@ public static class DialogueUtility
     {
         return DialogueManager.masterDatabase.conversations.Find(
             conversation => conversation.id == id);
+    }
+
+    public static Conversation GetConversationByDialogueEntry(DialogueEntry dialogueEntry)
+    {
+        return GetConversationByID(dialogueEntry.conversationID);
     }
     
     private static int GetLineAutoDuration(string line)

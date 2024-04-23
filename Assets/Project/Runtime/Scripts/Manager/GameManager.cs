@@ -22,6 +22,12 @@ public class GameManager : MonoBehaviour
     public static GameState gameState;
 
     // Start is called before the first frame update
+
+    private void OnEnable()
+    {
+       
+    }
+
     private void Awake()
     {
         //if instance of GameManager already exists, destroy it
@@ -106,6 +112,11 @@ public class GameManager : MonoBehaviour
         return value;
     }
     
+    
+    public static void OnQuestStateChange(string questName)
+    {
+        
+    }
 
     public void OpenMap() => App.Instance.LoadScene("Map");
 

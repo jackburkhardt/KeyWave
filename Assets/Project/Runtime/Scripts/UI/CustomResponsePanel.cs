@@ -53,7 +53,6 @@ public class CustomResponsePanel : MonoBehaviour
     private struct ResponseButton
     {
        
-        
      
     }
 
@@ -61,15 +60,11 @@ public class CustomResponsePanel : MonoBehaviour
     {
         if (Instance == null) Instance = this;
     }
-    
-    
-    
 
     public void OnResponsePanelChange()
     {
         mousePointerHand.Unfreeze();
         CustomResponseButton.RefreshButtonColors();
-        Debug.Log(CircularUIDegreeSum);
     }
     
 /*
@@ -118,6 +113,11 @@ public class CustomResponsePanel : MonoBehaviour
         return $"{estimate.Item1 / 60}-{estimate.Item2 / 60} minutes";
     }
 
+    public void OnQuestStateChange(string questTitle)
+    {
+        Debug.Log("questChange");
+    }
+
     private void Update()
     {
 
@@ -137,7 +137,5 @@ public class CustomResponsePanel : MonoBehaviour
 
 
         }
-        
-        
     }
 }

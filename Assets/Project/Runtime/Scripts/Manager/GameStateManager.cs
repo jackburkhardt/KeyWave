@@ -85,7 +85,7 @@ public class GameStateManager : PlayerEventHandler
                     gameState.most_recent_response_node = string.Empty;
                     break;
                 case "points":
-                    var pointsField = (DialogueUtility.PointsField)playerEvent.Data;
+                    var pointsField = (Points.PointsField)playerEvent.Data;
                     switch (pointsField.Type)
                     {
                         case Points.Type.Wellness:

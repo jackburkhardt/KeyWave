@@ -117,7 +117,7 @@ namespace Project.Editor.Scripts.Tools
             {
                 foreach (var entry in conversation.dialogueEntries)
                 {
-                    var pointsField = DialogueUtility.GetPointsField(entry);
+                    var pointsField = QuestUtility.GetPoints(entry);
                     if (pointsField.Type == Points.Type.Null) continue;
 
                     var points = pointsField.Points;
