@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
@@ -21,6 +22,15 @@ public class CustomResponseButton : MonoBehaviour
             if (StandardUIResponseButton != null && StandardUIResponseButton.response != null) return StandardUIResponseButton.response.destinationEntry;
             return null;
         }
+
+}
+
+    private bool DialogueEntryInvalid => DialogueEntry != null && DialogueEntry.conditionsString.Length != 0 &&
+                                         !Lua.IsTrue(DialogueEntry.conditionsString);
+
+    private void Start()
+    {
+      
     }
 
     public Points.Type PointsType
@@ -51,8 +61,24 @@ public class CustomResponseButton : MonoBehaviour
         }
     }
 
-    private void RefreshButtonColor()
+    private void RefreshButton()
     {
+
+        if (DialogueEntryInvalid)
+        {
+            if ( !Field.LookupBool(DialogueEntry.fields, "Show If Invalid")) Destroy(gameObject);
+            
+            
+            if (Field.FieldExists(DialogueEntry.fields, "Invalid Text"))
+            {
+                var invalidText = Field.LookupValue(DialogueEntry.fields, "Invalid Text");
+                
+                StandardUIResponseButton.label.text = invalidText;
+            }
+        } 
+        
+        
+        
         if (PointsType != Points.Type.Null && isHighlighted)
         {
             ButtonColor = Points.Color(PointsType);
@@ -65,14 +91,15 @@ public class CustomResponseButton : MonoBehaviour
     {
         foreach (var button in FindObjectsOfType<CustomResponseButton>())
         {
-            button.RefreshButtonColor();
+            button.RefreshButton();
         }
     }
 
  
     private void OnEnable()
     {
-        RefreshButtonColor();
+        
+        RefreshButton();
         CustomResponsePanel.OnCustomResponseButtonClick += OnButtonClick;
     }
     
@@ -98,7 +125,7 @@ public class CustomResponseButton : MonoBehaviour
     public void OnButtonExit(CustomResponseButton button)
     {
         isHighlighted = false;
-        RefreshButtonColor();
+        RefreshButton();
     }
 
     public void OnButtonSubmit(CustomResponseButton button)
@@ -110,7 +137,7 @@ public class CustomResponseButton : MonoBehaviour
     public void OnButtonHover(CustomResponseButton button)
     {
         isHighlighted = button == this;
-        RefreshButtonColor();
+        RefreshButton();
     }
     
     private static string TimeEstimateText(DialogueEntry dialogueEntry)
