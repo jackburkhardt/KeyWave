@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 935899b62f48ae5498594680ed17d133, type: 3}
-  m_Name: Dialogue Database (Auto-Backup)
+  m_Name: Dialogue Database
   m_EditorClassIdentifier: 
   version: 
   author: 
@@ -752,6 +752,40 @@ MonoBehaviour:
       value: True
       type: 2
       typeString: CustomFieldType_Boolean
+  - id: 34
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: Mall/Retail/BuySuit
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
   - id: 31
     fields:
     - title: Pictures
@@ -818,40 +852,6 @@ MonoBehaviour:
       value: Get to know your new staff.
       type: 0
       typeString: CustomFieldType_Text
-  - id: 34
-    fields:
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Location
-      value: 
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Name
-      value: Mall/Retail/BuySuit
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: unassigned
-      type: 0
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
   - id: 36
     fields:
     - title: Pictures
@@ -1637,7 +1637,7 @@ MonoBehaviour:
     - title: Name
       value: Store/Talk/RegularStaffMember
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
@@ -1645,19 +1645,19 @@ MonoBehaviour:
     - title: Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: active
       type: 12
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
@@ -1665,7 +1665,7 @@ MonoBehaviour:
     - title: Display Name
       value: Approach the nearest staff member.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Group
       value: Store
       type: 0
@@ -2464,8 +2464,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 206.52884
-        y: 263.23834
+        x: 249.78479
+        y: 319.1106
         width: 160
         height: 30
     - id: 3
@@ -2748,8 +2748,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 255.50623
-        y: 327.5246
+        x: 286.14594
+        y: 377.98987
         width: 160
         height: 30
     - id: 12
@@ -2803,8 +2803,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 388.2608
-        y: 394.29633
+        x: 401.7783
+        y: 426.73822
         width: 160
         height: 30
     - id: 13
@@ -3027,8 +3027,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 552.3257
-        y: 475.0855
+        x: 537.0056
+        y: 481.39362
         width: 160
         height: 30
     - id: 17
@@ -3234,8 +3234,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 230.98643, y: 37.836872}
-    canvasZoom: 1.109674
+    canvasScrollPosition: {x: 213.77573, y: 5.884005}
+    canvasZoom: 0.8576732
   - id: 11
     fields:
     - title: Title
@@ -29607,7 +29607,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 280.80005
-        y: 236.19998
+        y: 237.19998
         width: 160
         height: 30
     entryGroups: []
@@ -33064,8 +33064,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 512.9196
-        y: 134.34016
+        x: 500.5739
+        y: 174.834
         width: 160
         height: 30
     - id: 1
@@ -33204,8 +33204,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 273.94022
-        y: 331.56226
+        x: 282.8291
+        y: 318.10547
         width: 160
         height: 30
     - id: 6
@@ -33279,8 +33279,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 414.19016
-        y: 460.16388
+        x: 378.6346
+        y: 377.81818
         width: 160
         height: 30
     - id: 7
@@ -33350,8 +33350,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 599.4456
-        y: 427.50232
+        x: 593.9518
+        y: 384.5393
         width: 160
         height: 30
     - id: 8
@@ -33425,13 +33425,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 745.49915
-        y: 369.67883
+        x: 770.1905
+        y: 316.7776
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 199.28593, y: 101.38068}
-    canvasZoom: 1.2399998
+    canvasScrollPosition: {x: 222.07796, y: 0}
+    canvasZoom: 1.6199994
   - id: 67
     fields:
     - title: Title
@@ -33607,8 +33607,8 @@ MonoBehaviour:
       outgoingLinks:
       - originConversationID: 67
         originDialogueID: 3
-        destinationConversationID: -1
-        destinationDialogueID: -1
+        destinationConversationID: 68
+        destinationDialogueID: 0
         isConnector: 0
         priority: 2
       conditionsString: CurrentQuestState("Store/Talk/RegularStaffMember/RevealYourself")
@@ -33619,7 +33619,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 134.998
+        x: 134.02713
         y: 412.5631
         width: 160
         height: 30
@@ -33674,7 +33674,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 313.60004
+        x: 314.5709
         y: 576.00006
         width: 160
         height: 30
@@ -33912,7 +33912,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 384.80002
+        x: 339.80002
         y: 222.8
         width: 160
         height: 30
@@ -33965,7 +33965,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 68
+        originDialogueID: 1
+        destinationConversationID: 67
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: SetQuestState("Store/Talk/RegularStaffMember/RevealYourself", "success")
       onExecute:
@@ -33974,7 +33980,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 364.80002
-        y: 398.40002
+        y: 400.40002
         width: 160
         height: 30
     entryGroups: []
@@ -34205,7 +34211,7 @@ MonoBehaviour:
     syncItemsDatabase: {fileID: 0}
     syncLocationsDatabase: {fileID: 0}
     syncVariablesDatabase: {fileID: 0}
-  templateJson: '{"treatItemsAsQuests":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Is
+  templateJson: '{"treatItemsAsQuests":false,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Is
     Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"questFields":[{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Location","value":"","type":7,"typeString":"CustomFieldType_Location"},{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Success
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Failure
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unassigned","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Is
