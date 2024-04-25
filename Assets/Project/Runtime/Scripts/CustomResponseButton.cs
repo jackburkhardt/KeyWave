@@ -3,21 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(StandardUIResponseButton))]
 [RequireComponent(typeof(Button))]
 [RequireComponent(typeof(CircularUIButton))]
-public class CustomResponseButton : MonoBehaviour
+public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     
     private StandardUIResponseButton StandardUIResponseButton => GetComponent<StandardUIResponseButton>();
     private Button UnityButton => GetComponent<Button>();
     private CircularUIButton CircularUIButton => GetComponent<CircularUIButton>();
     private Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
+
+    private Color HighlightColor
+    {
+        get => UnityButton.colors.highlightedColor;
+        set
+        {
+            var block = UnityButton.colors;
+            block.highlightedColor = value;
+            UnityButton.colors = block;
+        }
+    }
     
-    
-    private DialogueEntry DestinationEntry
+    private Color DisabledColor
+    {
+        get => UnityButton.colors.disabledColor;
+        set
+        {
+            var block = UnityButton.colors;
+            block.disabledColor = value;
+            UnityButton.colors = block;
+        }
+    }
+
+    public DialogueEntry DestinationEntry
     {
         get
         {
@@ -116,22 +138,22 @@ public class CustomResponseButton : MonoBehaviour
  
     private void OnEnable()
     {
-        
         RefreshButton();
-        CustomResponsePanel.OnCustomResponseButtonClick += OnButtonClick;
+        CustomResponsePanel.OnCustomResponseButtonClick += OnButtonSubmit;
     }
     
     private void OnDisable()
     {
-        CustomResponsePanel.OnCustomResponseButtonClick -= OnButtonClick;
+        CustomResponsePanel.OnCustomResponseButtonClick -= OnButtonSubmit;
     }
     
     
-    private void OnButtonClick(CustomResponseButton button)
+
+    public void OnButtonSubmit(CustomResponseButton button)
     {
         if (button == this)
         {
-            
+            DisabledColor = HighlightColor;
         }
 
         else
@@ -139,25 +161,9 @@ public class CustomResponseButton : MonoBehaviour
             StandardUIResponseButton.label.color = Color.clear;
         }
     }
-    
-    public void OnButtonExit(CustomResponseButton button)
-    {
-        isHighlighted = false;
-        RefreshButton();
-    }
-
-    public void OnButtonSubmit(CustomResponseButton button)
-    {
-        CustomResponsePanel.Instance.OnPlayerResponse(button);
-    }
 
 
-    public void OnButtonHover(CustomResponseButton button)
-    {
-        isHighlighted = button == this;
-        RefreshButton();
-    }
-    
+  
     private static string TimeEstimateText(DialogueEntry dialogueEntry)
     {
         if (!Field.FieldExists(dialogueEntry.fields, "Time Estimate")) return "";
@@ -167,6 +173,22 @@ public class CustomResponseButton : MonoBehaviour
         if (estimate.Item1 == estimate.Item2) return $"{estimate.Item1 / 60} minutes";
         return $"{estimate.Item1 / 60}-{estimate.Item2 / 60} minutes";
     }
-    
-    
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        isHighlighted = true;
+        RefreshButton();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isHighlighted = false;
+        RefreshButton();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        CustomResponsePanel.ButtonClick(this);
+    }
 }

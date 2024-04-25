@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardUIResponseButton;
 
+[RequireComponent(typeof(Button))]
 [ExecuteInEditMode]
 public class CircularUIButton : MonoBehaviour
 {

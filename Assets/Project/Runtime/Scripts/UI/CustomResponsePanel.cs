@@ -13,7 +13,15 @@ using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardU
 public class CustomResponsePanel : MonoBehaviour
 {
     public static Action<CustomResponseButton> OnCustomResponseButtonClick;
-    public static void ButtonClick(CustomResponseButton button) => OnCustomResponseButtonClick?.Invoke(button);
+
+    public static void ButtonClick(CustomResponseButton button)
+    {
+        SelectedResponseButton = button;
+        Instance.mousePointerHand.Freeze();
+        OnCustomResponseButtonClick?.Invoke(button);
+    } 
+
+    public static CustomResponseButton SelectedResponseButton;
 
     public AnimationCurve offsetCurve;
     
@@ -66,43 +74,6 @@ public class CustomResponsePanel : MonoBehaviour
         mousePointerHand.Unfreeze();
         CustomResponseButton.RefreshButtonColors();
     }
-    
-/*
-    
-    private void StartPointsAnimation(Points.Type pointsType)
-    {
-        
-      //  mousePointerHand.Freeze();
-       // responseMenuAnimator.SetBool("Points", true);
-      //  responseMenuAnimator.Play("Points");
-        
-    }
-
-
-    
-    private void FinishPointsAnimation()
-    {
-        currentlySelectedResponseButton.ResetButtonColors();
-        responseMenuAnimator.SetBool("Points", false);
-        mousePointerHand.Unfreeze();
-       
-    }
-
-    public void SendSequencerMessage(string message)
-    {
-        Sequencer.Message(message);
-    }
-    
-    */
-    
-    public void OnPlayerResponse(CustomResponseButton button)
-    {
-        
-       mousePointerHand.Freeze();
-    }
-    
-    
-
     private static string TimeEstimateText(DialogueEntry dialogueEntry)
     {
         if (!Field.FieldExists(dialogueEntry.fields, "Time Estimate")) return "";
@@ -121,7 +92,11 @@ public class CustomResponsePanel : MonoBehaviour
     private void Update()
     {
 
-        if (CircularUIDegreeSum < maxVisibleDegreeSum) return;
+        if (CircularUIDegreeSum < maxVisibleDegreeSum)
+        {
+            CircularUIButton.globalOffset = 0;
+            return;
+        }
 
         else
         {

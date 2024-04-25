@@ -88,7 +88,6 @@
             {
                 _particleDeadAll?.Invoke();
                 _isDead = true;
-                Debug.Log("death");
             }
         }
 

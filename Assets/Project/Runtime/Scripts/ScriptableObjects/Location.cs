@@ -42,6 +42,7 @@ public class Location : ScriptableObject
     [ShowIf("relativeCoordinates")][DisableIf("relativeToPlayerLocation")]
     public Area relativeTo;
     public Vector2 coordinates;
+    public Material DialoguePanelMaterial;
     
     public bool isUnlocked;
 

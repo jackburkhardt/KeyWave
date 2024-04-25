@@ -1,10 +1,18 @@
+using System;
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
 
 public class SubtitleManager : MonoBehaviour
 {
-   [SerializeField] private SubtitleContentElement subtitleContentElement;
+   private void Awake()
+   {
+      
+      RefreshContents();
+   }
+
+   [SerializeField] private SubtitleContentElement templateSubtitleContentElement;
    public Transform duplicatedSubtitleContentContainer;
-   private SubtitleContentElement mostRecentSubtitleContentElement;
+   private SubtitleContentElement mostRecentDuplicate;
    
    public void ClearContents()
    {
@@ -13,20 +21,46 @@ public class SubtitleManager : MonoBehaviour
          Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
       }
       
-      subtitleContentElement.Clear();
+      templateSubtitleContentElement.Clear();
+      
+   }
+   
+   public void RefreshContents()
+   {
+      if (!templateSubtitleContentElement.portrait.gameObject.activeSelf) templateSubtitleContentElement.HidePortraitHelper();
+      else templateSubtitleContentElement.ShowPortraitHelper();
+      RefreshLayoutGroups.Refresh(gameObject);
       
    }
 
-   public void AddSubtitleContent()
+   public void AddHiddenDuplicate()
    {
-      mostRecentSubtitleContentElement = Instantiate(subtitleContentElement, duplicatedSubtitleContentContainer);
-      mostRecentSubtitleContentElement.gameObject.SetActive(false);
+      mostRecentDuplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
+      mostRecentDuplicate.gameObject.SetActive(false);
+     RefreshContents();
    }
    
-   public void RevealSubtitleContent()
+   public void RevealDuplicate()
    {
-      if (mostRecentSubtitleContentElement == null) return;
-      mostRecentSubtitleContentElement.gameObject.SetActive(true);
+      if (mostRecentDuplicate == null || duplicatedSubtitleContentContainer.childCount == 0) return;
+      mostRecentDuplicate.gameObject.SetActive(true);
+      RefreshContents();
+   }
+   
+   private void OnConversationLineEnd(Subtitle subtitle)
+   {
+      RefreshLayoutGroups.Refresh(gameObject);
+      if (subtitle.formattedText.text == string.Empty) return;
+      if (CustomResponsePanel.SelectedResponseButton != null && subtitle.dialogueEntry == CustomResponsePanel.SelectedResponseButton.DestinationEntry) return;
+      if (CustomResponsePanel.SelectedResponseButton != null) Debug.Log($"CustomResponsePanel = {CustomResponsePanel.SelectedResponseButton.DestinationEntry.id}, subtitle.dialogueEntry = {subtitle.dialogueEntry.id}");
+      AddHiddenDuplicate();
+      mostRecentDuplicate.UpdateTime();
+   }
+
+   private void OnConversationLine(Subtitle subtitle)
+   {
+      if (subtitle.formattedText.text == string.Empty) return;
+      RevealDuplicate();
    }
    
 }
