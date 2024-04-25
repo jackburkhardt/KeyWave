@@ -64,6 +64,8 @@ namespace Project.Editor.Scripts.Tools
 
         public static List<(string Converstion, DialogueEntry Entry)> SearchForMissingLinks(DialogueDatabase database)
         {
+            if (database == null) return new List<(string Converstion, DialogueEntry Entry)>();
+            
             var unlinkedNodes = new List<(string Converstion, DialogueEntry Entry)>();
             foreach (var conversation in database.conversations)
             {

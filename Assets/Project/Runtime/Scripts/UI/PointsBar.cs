@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
-public class PointsBar : PlayerEventHandler
+public class PointsBar : MonoBehaviour
 {
     private int visualizedWellnessScore, visualizedLocalKnowledgeScore, visualizedBusinessResearchScore;
     
@@ -19,9 +20,8 @@ public class PointsBar : PlayerEventHandler
     public RectTransform orbTemplate;
 
 
-    private new void OnEnable()
+    private void OnEnable()
     {
-        base.OnEnable();
         visualizedWellnessScore = Points.Score(Points.Type.Wellness);
         visualizedLocalKnowledgeScore = Points.Score(Points.Type.Savvy);
         visualizedBusinessResearchScore = Points.Score(Points.Type.Business);
@@ -44,17 +44,7 @@ public class PointsBar : PlayerEventHandler
 
         UpdateBar(amount);
     }
-
-    protected override void OnPlayerEvent(PlayerEvent playerEvent)
-    {
-        switch (playerEvent.EventType)
-        {
-            case "points":
-                var pointsInfo = (Points.PointsField)playerEvent.Data;
-                SpawnOrbs(pointsInfo.Type, pointsInfo.Points);
-                break;
-        }
-    }
+    
 
     // Start is called before the first frame update
     void Start()
@@ -96,22 +86,5 @@ public class PointsBar : PlayerEventHandler
         yield return new WaitForSeconds(1);
         Points.AnimationComplete();
         OnEnable();
-    }
-    public void SpawnOrbs(Points.Type type, int points)
-    {
-        StartCoroutine(SpawnOrbHandler(type, points));
-    }
-
-    IEnumerator SpawnOrbHandler(Points.Type type, int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            spawnedOrbCount++;
-            var orb = Instantiate(orbTemplate, transform.parent);
-            orb.gameObject.SetActive(true);
-            orb.GetComponent<TrackingOrb>().SetOrbProperties(type);
-            
-            yield return new WaitForSeconds(0.02f);
-        }
     }
 }

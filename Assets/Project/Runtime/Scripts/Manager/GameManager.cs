@@ -115,7 +115,13 @@ public class GameManager : MonoBehaviour
     
     public static void OnQuestStateChange(string questName)
     {
+        if (!QuestLog.IsQuestSuccessful(questName)) return;
         
+        var quest = DialogueUtility.GetQuestByName(questName);
+        var points = DialogueUtility.GetPointsFromField(quest.fields);
+        if (points.Type == Points.Type.Null) return;
+        
+        GameEvent.OnPointsIncrease(points);
     }
 
     public void OpenMap() => App.Instance.LoadScene("Map");

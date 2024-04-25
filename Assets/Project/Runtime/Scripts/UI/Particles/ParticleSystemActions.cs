@@ -10,6 +10,7 @@
         
         [Header("Events")]
         [SerializeField] UnityEvent _particleSystemStart, _particleWasBorn, _particleDead, _particleDeadAll = new UnityEvent();
+        [SerializeField] private PointToParticle _pointToParticle;
         
         public ParticleSystemCustomData customDataSlot
         {
@@ -31,9 +32,41 @@
             {
                 Debug.LogError("Missing particle system!", this);
             }
-            
-            
-            
+
+            GameEvent.OnPlayerEvent += OnPlayerEvent;
+        }
+        
+        private void OnPlayerEvent(PlayerEvent playerEvent)
+        {
+            if (playerEvent.EventType == "points")
+            {
+                Points.PointsField pointsInfo = (Points.PointsField)playerEvent.Data;
+                ParticleSystem.Burst pointBurst = _particleSystem.emission.GetBurst(0);
+                pointBurst.cycleCount = pointsInfo.Points;
+                _particleSystem.emission.SetBurst(0, pointBurst);
+
+                var color = pointsInfo.Type switch
+                {
+                    Points.Type.Business => _pointToParticle._particleColorB,
+                    Points.Type.Savvy => _pointToParticle._particleColorS,
+                    Points.Type.Wellness => _pointToParticle._particleColorW,
+                    _ => Color.white
+                };
+                
+                var main = _particleSystem.main;
+                main.startColor = color;
+
+    
+                // set custom2 to point type
+                _particleSystem.GetCustomParticleData(_customData, _customDataSlot);
+                for (var i = 0; i < _particleSystem.particleCount; i++)
+                {
+                    _customData[i] = new Vector4(_customData[i].x, (int)pointsInfo.Type, 0, 0);
+                }
+                _particleSystem.SetCustomParticleData(_customData, _customDataSlot);
+                
+                _particleSystem.Play();
+            }
         }
    
         private void LateUpdate()

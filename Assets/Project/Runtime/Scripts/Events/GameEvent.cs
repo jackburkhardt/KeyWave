@@ -70,8 +70,7 @@ public static class GameEvent
 
    public static void OnPointsIncrease(Points.PointsField pointData)
    {
-         if (Points.IsAnimating == false) Points.AnimationStart(pointData.Type);
-         RegisterPlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, "player", pointData);
+       RegisterPlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, "player", pointData);
    }
    
    

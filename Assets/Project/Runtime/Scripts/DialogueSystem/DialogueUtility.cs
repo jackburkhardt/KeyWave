@@ -46,18 +46,31 @@ public static class DialogueUtility
         return defaultColor;
     }
     
-    /*
-    
-    public static PointsField GetPointsField(string questTitle)
+    public static Points.PointsField GetPointsFromField(List<Field> fields)
     {
-        var field = QuestUtility.GetField(questTitle, "Points").asString;
-        if (field == null) return new PointsField {Type = Points.Type.Null, Points = 0};
-        var pointsValue = int.Parse(field.value.Split(':')[1]);
-        var pointsType = pointsValue == 0 ? Points.Type.Null : (Points.Type) Enum.Parse(typeof(Points.Type), field.value.Split(':')[0]);
-        return new PointsField {Type = pointsType, Points = pointsValue};
+        if (!Field.FieldExists(fields, "Points")) return new Points.PointsField
+        {
+
+            Type = Points.Type.Null,
+            Points = 0
+        };
+        
+        var pointsField = Field.Lookup(fields, "Points");
+        var pointsType = Enum.Parse<Points.Type>(pointsField.value.Split(':')[0]);
+        var pointsValue = pointsField.value.Split(':')[1] == null ? 0 : int.Parse(pointsField.value.Split(':')[1]);
+        var pointsFieldData = new Points.PointsField
+        {
+            Type = pointsType,
+            Points = pointsValue
+        };
+        
+        return pointsFieldData;
     }
     
-    */
+    public static Item GetQuestByName(string questName)
+    {
+        return DialogueManager.Instance.masterDatabase.items.Find(item => item.Name == questName);
+    }
 
     public static int GetTimespan(DialogueEntry dialogueEntry)
     {

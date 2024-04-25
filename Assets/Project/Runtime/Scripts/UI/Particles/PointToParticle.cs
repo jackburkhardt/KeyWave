@@ -13,29 +13,11 @@ public class PointToParticle : MonoBehaviour, IParticle
     [SerializeField] private ParticleSystemCustomData _customDataSlot;
 
     [HorizontalLine(color: EColor.Blue)][BoxGroup("Business")]
-    [Label("Particle Color")] public Color _particleColor0 = Points.Color(Points.Type.Business);
+    [Label("Particle Color")] public Color _particleColorB = Points.Color(Points.Type.Business);
     
     [HorizontalLine(color: EColor.Red)][BoxGroup("Local Savvy")]
-    [Label("Particle Color")] public Color _particleColor1 = Points.Color(Points.Type.Savvy);
+    [Label("Particle Color")] public Color _particleColorS = Points.Color(Points.Type.Savvy);
     
     [HorizontalLine(color: EColor.Green)] [BoxGroup("Wellness")]
-    [Label("Particle Color")] public Color _particleColor2 = Points.Color(Points.Type.Wellness);
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-    
-    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    
-    
-    
+    [Label("Particle Color")] public Color _particleColorW = Points.Color(Points.Type.Wellness);
 }
