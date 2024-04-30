@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PointsBar : MonoBehaviour
@@ -9,8 +10,6 @@ public class PointsBar : MonoBehaviour
 
     private int maxScore = 1000;
 
-    private int spawnedOrbCount;
-
     [SerializeField] private RectTransform wellnessBar;
     [SerializeField] private RectTransform localKnowledgeBar;
     [SerializeField] private RectTransform businessResearchBar;
@@ -19,12 +18,25 @@ public class PointsBar : MonoBehaviour
 
     public RectTransform orbTemplate;
 
+    public LinkedList<(Points.Type type, int amt)> pointQueue = new();
 
     private void OnEnable()
     {
         visualizedWellnessScore = Points.Score(Points.Type.Wellness);
         visualizedLocalKnowledgeScore = Points.Score(Points.Type.Savvy);
         visualizedBusinessResearchScore = Points.Score(Points.Type.Business);
+        
+        GameEvent.OnPlayerEvent += OnPlayerEvent;
+    }
+    
+    private void OnPlayerEvent(PlayerEvent playerEvent)
+    {
+        if (playerEvent.EventType == "points")
+        {
+            Debug.Log("got point event");
+            Points.PointsField pointsInfo = (Points.PointsField)playerEvent.Data;
+            pointQueue.AddLast((pointsInfo.Type, pointsInfo.Points));
+        }
     }
 
     public void OnHit(Points.Type type, int amount = 1)
@@ -42,7 +54,7 @@ public class PointsBar : MonoBehaviour
                         break;
                 }
 
-        UpdateBar(amount);
+        UpdateBar();
     }
     
 
@@ -65,20 +77,40 @@ public class PointsBar : MonoBehaviour
         SetRectWidth(localKnowledgeBar, 0);
         SetRectWidth(businessResearchBar, 0);
     }
+
+    public void OnParticleAttracted()
+    {
+        // reduce whatever is in the queue by 1 and then update the bar
+        // if queue entry has no more points, remove it
+        // if queue is empty, call AnimationCompleteHandler
+        
+        if (pointQueue.Count > 0)
+        {
+            var first = pointQueue.First.Value;
+            if (first.amt > 0)
+            {
+                pointQueue.First.Value = (first.type, first.amt - 1);
+                Debug.Log("points left: " + first.amt + " for " + first.type + " type");
+                OnHit(first.type);
+            }
+            else
+            {
+                pointQueue.RemoveFirst();
+            }
+        }
+        else
+        {
+            StartCoroutine(AnimationCompleteHandler());
+        }
+        
+    }
     
     
-    public void UpdateBar(int amount)
+    private void UpdateBar()
     {
         SetRectWidth(wellnessBar, maxBarWidth * visualizedWellnessScore / maxScore);
         SetRectWidth(localKnowledgeBar, maxBarWidth * visualizedLocalKnowledgeScore / maxScore);
         SetRectWidth(businessResearchBar, maxBarWidth * visualizedBusinessResearchScore / maxScore);
-
-        spawnedOrbCount -= amount;
-        
-        if (spawnedOrbCount <= 0)
-        {
-            StartCoroutine(AnimationCompleteHandler());
-        }
     }
 
     IEnumerator AnimationCompleteHandler()

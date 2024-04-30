@@ -57,6 +57,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 2
@@ -2263,7 +2264,7 @@ CanvasGroup:
   m_IgnoreParentGroups: 0
 --- !u!95 &1228224696
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2280,7 +2281,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1295633688
 GameObject:
   m_ObjectHideFlags: 0
@@ -2418,7 +2420,7 @@ MonoBehaviour:
   m_VerticalFit: 2
 --- !u!95 &1295633690
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2435,7 +2437,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1295633689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2966,12 +2969,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05399fb241106df4fbea2cb9b72f8a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isButtonActive: 0
   button: {fileID: 1679012890}
   label:
     m_uiText: {fileID: 546958322}
     m_textMeshProUGUI: {fileID: 0}
   setLabelColor: 0
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  delayTime: 0
 --- !u!114 &3630759489087704224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3533,7 +3538,7 @@ CanvasGroup:
   m_IgnoreParentGroups: 0
 --- !u!95 &2080405072
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3550,7 +3555,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2080405071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3827,7 +3833,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3913664802051195622, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 295.3
       objectReference: {fileID: 0}
     - target: {fileID: 3913664802051195622, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -3835,7 +3841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3913664802051195622, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 147.65
       objectReference: {fileID: 0}
     - target: {fileID: 3913664802051195622, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3883,15 +3889,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6238801074974296353, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6238801074974296353, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6238801074974296353, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 19.78
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6238801074974296353, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -3899,7 +3905,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6238801074974296353, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -59.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7887714076383126440, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
       propertyPath: m_Pivot.x
@@ -4057,6 +4063,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fa862b8cb974cd4e8bf96ef19c3f95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portrait: {fileID: 0}
+  subtitleManager: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  typewriterEffect: {fileID: 0}
+  timeText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
+  portraitText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
+  mainClock: {fileID: 0}
 --- !u!224 &6568195833543772599 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7887714076383126440, guid: 61b1deb86a7c8774097109270063f06e, type: 3}
