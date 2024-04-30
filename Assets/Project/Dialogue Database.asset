@@ -50,7 +50,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: IsPlayer
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
@@ -1275,7 +1275,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Points
-      value: Savvy:3
+      value: Savvy:15
       type: 10
       typeString: CustomFieldType_PointsType
   - id: 15
@@ -8716,7 +8716,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Actor
-      value: 1
+      value: -1
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conversant
@@ -8762,7 +8762,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: -1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -8802,8 +8802,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1213.093
-        y: 17.914894
+        x: 1094.24
+        y: 4.4088516
         width: 160
         height: 30
     - id: 38
@@ -8818,11 +8818,11 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       - title: Actor
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
-        type: 5
+        value: -1
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
@@ -8839,7 +8839,7 @@ MonoBehaviour:
       - title: Response Menu Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 21
       isRoot: 0
       isGroup: 0
@@ -8851,43 +8851,25 @@ MonoBehaviour:
       - originConversationID: 21
         originDialogueID: 38
         destinationConversationID: 21
-        destinationDialogueID: 42
+        destinationDialogueID: 58
         isConnector: 0
         priority: 2
       - originConversationID: 21
         originDialogueID: 38
         destinationConversationID: 21
-        destinationDialogueID: 43
+        destinationDialogueID: 59
         isConnector: 0
         priority: 2
       - originConversationID: 21
         originDialogueID: 38
         destinationConversationID: 21
-        destinationDialogueID: 47
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 38
-        destinationConversationID: 21
-        destinationDialogueID: 48
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 38
-        destinationConversationID: 21
-        destinationDialogueID: 46
+        destinationDialogueID: 60
         isConnector: 0
         priority: 2
       - originConversationID: 21
         originDialogueID: 38
         destinationConversationID: 21
         destinationDialogueID: 44
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 38
-        destinationConversationID: 21
-        destinationDialogueID: 57
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -8897,93 +8879,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1206.2861
-        y: 182.08034
-        width: 160
-        height: 30
-    - id: 41
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: Talk to staff.
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: Delay(0)
-        type: 0
-        typeString: CustomFieldType_Text
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 41
-        destinationConversationID: 21
-        destinationDialogueID: 49
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 41
-        destinationConversationID: 21
-        destinationDialogueID: 50
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 41
-        destinationConversationID: 21
-        destinationDialogueID: 51
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 41
-        destinationConversationID: 21
-        destinationDialogueID: 52
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 41
-        destinationConversationID: 21
-        destinationDialogueID: 53
-        isConnector: 0
-        priority: 2
-      - originConversationID: 21
-        originDialogueID: 41
-        destinationConversationID: 21
-        destinationDialogueID: 55
-        isConnector: 0
-        priority: 2
-      conditionsString: CurrentQuestState("Store/TalkToStaff") ~= "success"
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 1031.3936
-        y: 609.3869
+        x: 1091.4203
+        y: 176.80667
         width: 160
         height: 30
     - id: 42
@@ -8997,12 +8894,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Eavesdrop on customers.
@@ -9037,8 +8934,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1203.2516
-        y: 449.63544
+        x: 1199.5138
+        y: 724.8168
         width: 160
         height: 30
     - id: 43
@@ -9052,12 +8949,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Sneak to the back and find old manager's office.
@@ -9092,8 +8989,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1421.1433
-        y: 424.92206
+        x: 1199.6914
+        y: 841.4549
         width: 160
         height: 30
     - id: 44
@@ -9107,12 +9004,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Leave.
@@ -9157,8 +9054,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1648.1493
-        y: 448.30005
+        x: 1280.6355
+        y: 356.73773
         width: 160
         height: 30
     - id: 47
@@ -9172,12 +9069,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Talk to Maria.
@@ -9224,8 +9121,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 545.8781
-        y: 386.103
+        x: 962.4981
+        y: 723.6944
         width: 160
         height: 30
     - id: 48
@@ -9239,12 +9136,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Talk to Roberta.
@@ -9291,477 +9188,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 664.13293
-        y: 463.21326
-        width: 160
-        height: 30
-    - id: 49
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: Approach the nearest staff member.
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 49
-        destinationConversationID: 50
-        destinationDialogueID: 0
-        isConnector: 0
-        priority: 2
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 665.7332
-        y: 641.62524
-        width: 160
-        height: 30
-    - id: 50
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: ???
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 50
-        destinationConversationID: 21
-        destinationDialogueID: 54
-        isConnector: 0
-        priority: 2
-      conditionsString: CurrentQuestEntryState("Main/NewStaff", 1) == "unassigned"
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 638.9877
-        y: 780.98315
-        width: 160
-        height: 30
-    - id: 51
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: ???
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 51
-        destinationConversationID: 21
-        destinationDialogueID: 54
-        isConnector: 0
-        priority: 2
-      conditionsString: CurrentQuestEntryState("Main/NewStaff", 2) == "unassigned"
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 829.1031
-        y: 726.0308
-        width: 160
-        height: 30
-    - id: 52
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: Talk to Maria.
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 52
-        destinationConversationID: 59
-        destinationDialogueID: 0
-        isConnector: 0
-        priority: 2
-      conditionsString: CurrentQuestEntryState("Main/NewStaff", 1) == "active"
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 1012.7916
-        y: 788.50183
-        width: 160
-        height: 30
-    - id: 53
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: Talk to Roberta.
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 53
-        destinationConversationID: 60
-        destinationDialogueID: 0
-        isConnector: 0
-        priority: 2
-      conditionsString: CurrentQuestEntryState("Main/NewStaff", 2) == "active"
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 1164.6958
-        y: 721.14166
-        width: 160
-        height: 30
-    - id: 54
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 7
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 7
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: This option will be available after discovering more info.
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 54
-        destinationConversationID: 21
-        destinationDialogueID: 41
-        isConnector: 0
-        priority: 2
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 882.87524
-        y: 885.4838
-        width: 160
-        height: 30
-    - id: 55
-      fields:
-      - title: Title
-        value: Back
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: Nevermind.
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 55
-        destinationConversationID: 21
-        destinationDialogueID: 38
-        isConnector: 0
-        priority: 2
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 1410.446
-        y: 581.1821
+        x: 964.7008
+        y: 840.1617
         width: 160
         height: 30
     - id: 56
@@ -9775,12 +9203,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
@@ -9827,8 +9255,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1209.7015
-        y: 105.22288
+        x: 1095.5433
+        y: 79.19709
         width: 160
         height: 30
     - id: 57
@@ -9842,12 +9270,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: -1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Talk to staff.
@@ -9882,8 +9310,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 908.5621
-        y: 483.34872
+        x: 773.7013
+        y: 615.1414
         width: 160
         height: 30
     - id: 46
@@ -9897,12 +9325,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Observe merchandising and displays.
@@ -9943,13 +9371,220 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1847.4073
-        y: 314.63086
+        x: 1373.8318
+        y: 973.6185
+        width: 160
+        height: 30
+    - id: 58
+      fields:
+      - title: Title
+        value: Look
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Observe
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 21
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 647.9652
+        y: 267.60168
+        width: 160
+        height: 30
+    - id: 59
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Talk
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 21
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 910.3616
+        y: 357.19592
+        width: 160
+        height: 30
+    - id: 60
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Inspect
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 21
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1092.0244
+        y: 435.83557
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 290.49765, y: 196.21976}
-    canvasZoom: 0.64299333
+    canvasScrollPosition: {x: 535.30164, y: 23.577307}
+    canvasZoom: 0.42369953
   - id: 22
     fields:
     - title: Title

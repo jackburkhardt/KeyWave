@@ -63,7 +63,6 @@ public class SubtitleContentElement : MonoBehaviour
         {
             _rectTransform.sizeDelta = new Vector2(_defaultWidth, _defaultHeight);
         }
-        
     }
 
     private TextElement _timeTextElement;
