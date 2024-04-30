@@ -16,7 +16,7 @@ public class InvokeConversationEvents : MonoBehaviour
             DialogueUtility.CurrentDialogueEntry.Sequence == string.Empty) DialogueManager.PlaySequence("Continue()");
 
         // if (!Points.IsAnimating) Sequencer.Message("Animated");
-
+       
         //   StartCoroutine(DelayedBroadcast("line"));
     }
 

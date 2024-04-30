@@ -15,9 +15,9 @@ public class SubtitleContentElement : MonoBehaviour
     [SerializeField] private UITextField timeText;
     [SerializeField] private UITextField portraitText;
     [SerializeField] private TMP_Text mainClock;
+    public bool PortraitActive => portrait != null && portrait.gameObject.activeSelf;
 
-    
-    
+
     private struct TextElement
     {
         public TextElement(UITextField text)
@@ -65,17 +65,17 @@ public class SubtitleContentElement : MonoBehaviour
         }
     }
 
-    private TextElement _timeTextElement;
-    private TextElement _portraitTextElement;
-    private RectElement _containerRect;
+    private TextElement? _timeTextElement;
+    private TextElement? _portraitTextElement;
+    private RectElement? _containerRect;
     
     private bool _isAnimationPlaying = false;
 
     private void Awake()
     {
-        _timeTextElement = new TextElement(timeText);
-        _portraitTextElement = new TextElement(portraitText);
-        _containerRect = new RectElement(portrait.transform.parent.GetComponent<RectTransform>());
+        if (timeText != null) _timeTextElement = new TextElement(timeText);
+        if (portraitText != null) _portraitTextElement = new TextElement(portraitText);
+        if (portrait != null) _containerRect = new RectElement(portrait.transform.parent.GetComponent<RectTransform>());
     }
 
     public void Clear()
@@ -93,17 +93,17 @@ public class SubtitleContentElement : MonoBehaviour
     
     public void HidePortraitHelper()
     {
-        _portraitTextElement.Clear();
-        _timeTextElement.Clear();
-        _containerRect.Clear();
+        _portraitTextElement?.Clear();
+        _timeTextElement?.Clear();
+        _containerRect?.Clear();
     }
 
     
     public void ShowPortraitHelper()
     {
-        _portraitTextElement.Show();
-        _timeTextElement.Show();
-        _containerRect.Show();
+        _portraitTextElement?.Show();
+        _timeTextElement?.Show();
+        _containerRect?.Show();
     }
 
     public void Update()

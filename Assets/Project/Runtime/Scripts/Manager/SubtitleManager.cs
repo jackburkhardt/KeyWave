@@ -27,7 +27,7 @@ public class SubtitleManager : MonoBehaviour
    
    public void RefreshContents()
    {
-      if (!templateSubtitleContentElement.portrait.gameObject.activeSelf) templateSubtitleContentElement.HidePortraitHelper();
+      if (!templateSubtitleContentElement.PortraitActive) templateSubtitleContentElement.HidePortraitHelper();
       else templateSubtitleContentElement.ShowPortraitHelper();
       RefreshLayoutGroups.Refresh(gameObject);
       
