@@ -74,7 +74,7 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
           button.SetResponseText();
         }
     }
-
+    
 
     private static string TimeEstimateText(DialogueEntry dialogueEntry)
     {
@@ -88,12 +88,14 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
 
     public void OnQuestStateChange(string questTitle)
     {
-        Debug.Log("questChange");
+       // Debug.Log("questChange");
     }
 
     public void OnConversationEnd()
     {
         responseMenuAnimator.SetTrigger("Hide");
+        Debug.Log("ending");
+        //onHide.Invoke();
         //gameObject.SetActive(false);
     }
 

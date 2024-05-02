@@ -13,6 +13,7 @@ public class SubtitleManager : MonoBehaviour
    [SerializeField] private SubtitleContentElement templateSubtitleContentElement;
    public Transform duplicatedSubtitleContentContainer;
    private SubtitleContentElement mostRecentDuplicate;
+   private Subtitle mostRecentSubtitle;
    
    public void ClearContents()
    {
@@ -35,32 +36,43 @@ public class SubtitleManager : MonoBehaviour
 
    public void AddHiddenDuplicate()
    {
+      RefreshLayoutGroups.Refresh(gameObject);
+      //if (subtitle.formattedText.text == string.Empty) return;
+   //   if (CustomUIMenuPanel.SelectedResponseButton != null && subtitle.dialogueEntry == CustomUIMenuPanel.SelectedResponseButton.DestinationEntry) return;
+   //   if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == subtitle.formattedText.text) return;
       mostRecentDuplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
       mostRecentDuplicate.gameObject.SetActive(false);
-     RefreshContents();
+      RefreshContents();
+      
+      mostRecentDuplicate.UpdateTime();
+      
    }
    
    public void RevealDuplicate()
    {
       if (mostRecentDuplicate == null || duplicatedSubtitleContentContainer.childCount == 0) return;
+      if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() ==
+          templateSubtitleContentElement.SubtitleText.ToString()) return;
       mostRecentDuplicate.gameObject.SetActive(true);
       RefreshContents();
    }
    
+   /*
    private void OnConversationLineEnd(Subtitle subtitle)
    {
-      RefreshLayoutGroups.Refresh(gameObject);
-      if (subtitle.formattedText.text == string.Empty) return;
-      if (CustomUIMenuPanel.SelectedResponseButton != null && subtitle.dialogueEntry == CustomUIMenuPanel.SelectedResponseButton.DestinationEntry) return;
-      if (CustomUIMenuPanel.SelectedResponseButton != null) Debug.Log($"CustomResponsePanel = {CustomUIMenuPanel.SelectedResponseButton.DestinationEntry.id}, subtitle.dialogueEntry = {subtitle.dialogueEntry.id}");
+     
       AddHiddenDuplicate();
-      mostRecentDuplicate.UpdateTime();
+      
    }
+   */
 
    private void OnConversationLine(Subtitle subtitle)
    {
-      if (subtitle.formattedText.text == string.Empty) return;
-      RevealDuplicate();
+      //if (subtitle.formattedText.text == string.Empty) return;
+    //  if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == subtitle.formattedText.text) return;
+     
+     // if (subtitle.formattedText.text == mostRecentDuplicate.)
+    //  RevealDuplicate();
    }
    
 }
