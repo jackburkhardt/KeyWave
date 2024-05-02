@@ -124,7 +124,12 @@ public class GameManager : MonoBehaviour
         GameEvent.OnPointsIncrease(points);
     }
 
-    public void OpenMap() => App.Instance.LoadScene("Map");
+    public void OpenMap()
+    {
+        DialogueManager.StopConversation();
+        DialogueManager.instance.PlaySequence("SetDialoguePanel(false)");
+        App.Instance.LoadScene("Map");
+    }
 
     public void EndOfDay() => App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene);
 

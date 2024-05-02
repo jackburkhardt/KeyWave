@@ -88,6 +88,8 @@ namespace Project.Runtime.Scripts.App
                     yield return null;
                 }
             }
+            
+            
         
             var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 

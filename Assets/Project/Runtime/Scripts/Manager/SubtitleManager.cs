@@ -51,8 +51,8 @@ public class SubtitleManager : MonoBehaviour
    {
       RefreshLayoutGroups.Refresh(gameObject);
       if (subtitle.formattedText.text == string.Empty) return;
-      if (CustomResponsePanel.SelectedResponseButton != null && subtitle.dialogueEntry == CustomResponsePanel.SelectedResponseButton.DestinationEntry) return;
-      if (CustomResponsePanel.SelectedResponseButton != null) Debug.Log($"CustomResponsePanel = {CustomResponsePanel.SelectedResponseButton.DestinationEntry.id}, subtitle.dialogueEntry = {subtitle.dialogueEntry.id}");
+      if (CustomUIMenuPanel.SelectedResponseButton != null && subtitle.dialogueEntry == CustomUIMenuPanel.SelectedResponseButton.DestinationEntry) return;
+      if (CustomUIMenuPanel.SelectedResponseButton != null) Debug.Log($"CustomResponsePanel = {CustomUIMenuPanel.SelectedResponseButton.DestinationEntry.id}, subtitle.dialogueEntry = {subtitle.dialogueEntry.id}");
       AddHiddenDuplicate();
       mostRecentDuplicate.UpdateTime();
    }

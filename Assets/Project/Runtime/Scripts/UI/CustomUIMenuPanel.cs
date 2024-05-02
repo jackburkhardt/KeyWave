@@ -8,10 +8,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngineInternal;
-using StandardUIResponseButton = PixelCrushers.DialogueSystem.Wrappers.StandardUIResponseButton;
+using UnityEngine.Events;
 
-public class CustomResponsePanel : MonoBehaviour
+public class CustomUIMenuPanel : StandardUIMenuPanel
 {
+    public static List<string> CustomFields = new List<string>
+    {
+        "offsetCurve", 
+        "timeEstimate",
+        "responseMenuAnimator",
+        "mousePointerHand"
+    };
+    
     public static Action<CustomResponseButton> OnCustomResponseButtonClick;
 
     public static void ButtonClick(CustomResponseButton button)
@@ -23,7 +31,7 @@ public class CustomResponsePanel : MonoBehaviour
 
     public static CustomResponseButton SelectedResponseButton;
 
-    public AnimationCurve offsetCurve;
+    [SerializeField] public AnimationCurve offsetCurve;
     
     [SerializeField] private UITextField timeEstimate;
     [SerializeField] Animator responseMenuAnimator;
@@ -31,49 +39,43 @@ public class CustomResponsePanel : MonoBehaviour
     
     public float globalOffset;
 
-    public StandardUIResponseButton buttonTemplate
-    {
-        get
-        {
-            if (GetComponent<StandardUIMenuPanel>().buttonTemplate != null ) return GetComponent<StandardUIMenuPanel>().buttonTemplate as StandardUIResponseButton;
-            return null;
-        }
-    }
 
-
-    public static CustomResponsePanel Instance;
+    public static CustomUIMenuPanel Instance;
     private float maxVisibleDegreeSum = 85;
 
-    public float CircularUIDegreeSum
-    {
-        get
-        {
-            var degreeSum = 0f;
-            foreach (var circularUIButton in FindObjectsOfType<CircularUIButton>())
-            {
-               degreeSum += circularUIButton.image.fillAmount * 360f;
-            }
+    public UnityEvent onHide;
+    public UnityEvent onShow;
+    
 
-            return degreeSum;
-        }
-    }
-
-    private struct ResponseButton
+    public override void Awake()
     {
-       
-     
-    }
-
-    private void Awake()
-    {
+        base.Awake();
         if (Instance == null) Instance = this;
     }
 
-    public void OnResponsePanelChange()
+    protected override void OnEnable()
+    { 
+        base.OnEnable();
+       onContentChanged.AddListener(OnContentChanged);
+    }
+
+    protected override void OnDisable()
+    { 
+        base.OnDisable();
+       onContentChanged.RemoveListener(OnContentChanged);
+    }
+    
+    private void OnContentChanged()
     {
         mousePointerHand.Unfreeze();
         CustomResponseButton.RefreshButtonColors();
+        foreach (var button in FindObjectsOfType<CustomResponseButton>())
+        {
+          button.SetResponseText();
+        }
     }
+
+
     private static string TimeEstimateText(DialogueEntry dialogueEntry)
     {
         if (!Field.FieldExists(dialogueEntry.fields, "Time Estimate")) return "";
@@ -89,28 +91,31 @@ public class CustomResponsePanel : MonoBehaviour
         Debug.Log("questChange");
     }
 
-    private void Update()
+    public void OnConversationEnd()
     {
+        responseMenuAnimator.SetTrigger("Hide");
+        //gameObject.SetActive(false);
+    }
 
-        if (CircularUIDegreeSum < maxVisibleDegreeSum)
+    protected override void Update()
+    { 
+        base.Update();
+        
+        if (CircularUIButton.CircularUIDegreeSum < maxVisibleDegreeSum)
         {
             CircularUIButton.globalOffset = 0;
             return;
         }
-
-        else
-        {
-            var normalizedPointerAngle = mousePointerHand.AngleCenteredSouth / maxVisibleDegreeSum * 2f; 
-
-            var offsetRange = CircularUIDegreeSum - maxVisibleDegreeSum;
-            
-           
-           
-            var offset = offsetRange * - (offsetCurve.Evaluate(Mathf.Abs(normalizedPointerAngle)) *  MathF.Sign(normalizedPointerAngle) * 0.5f);
-
-            CircularUIButton.globalOffset = offset;
+        
+        var normalizedPointerAngle = mousePointerHand.AngleCenteredSouth / maxVisibleDegreeSum * 2f; 
+        var offsetRange = CircularUIButton.CircularUIDegreeSum - maxVisibleDegreeSum;
+        var offset = offsetRange * - (offsetCurve.Evaluate(Mathf.Abs(normalizedPointerAngle)) *  MathF.Sign(normalizedPointerAngle) * 0.5f); 
+        CircularUIButton.globalOffset = offset;
 
 
         }
     }
-}
+    
+
+    
+

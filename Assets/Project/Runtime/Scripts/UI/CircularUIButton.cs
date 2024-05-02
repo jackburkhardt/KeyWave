@@ -27,6 +27,19 @@ public class CircularUIButton : MonoBehaviour
     public static float globalOffset;
   
     
+    public static float CircularUIDegreeSum
+    {
+        get
+        {
+            var degreeSum = 0f;
+            foreach (var circularUIButton in FindObjectsOfType<CircularUIButton>())
+            {
+                degreeSum += circularUIButton.image.fillAmount * 360f;
+            }
+
+            return degreeSum;
+        }
+    }
     
    
     public enum Side
@@ -80,8 +93,8 @@ public class CircularUIButton : MonoBehaviour
 
     private void OnDisable()
     {
-        if (GetComponent<StandardUIResponseButton>() == null || CustomResponsePanel.Instance == null) return;
-        if (GetComponent<StandardUIResponseButton>() != CustomResponsePanel.Instance.buttonTemplate) Destroy(gameObject);
+        if (GetComponent<StandardUIResponseButton>() == null || CustomUIMenuPanel.Instance == null) return;
+        if (GetComponent<StandardUIResponseButton>() != CustomUIMenuPanel.Instance.buttonTemplate) Destroy(gameObject);
     }
 
 
@@ -95,6 +108,13 @@ public class CircularUIButton : MonoBehaviour
     
     private void Update()
     {
+        
+        
+        
+        
+        
+        
+        
         var sameSideInteractables = FindObjectsOfType<CircularUIButton>().ToList().Where(watchInteractable => watchInteractable.watchSide == watchSide).ToList();
         sameSideInteractables.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
         

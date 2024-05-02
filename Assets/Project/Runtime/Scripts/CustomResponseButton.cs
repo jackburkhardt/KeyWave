@@ -17,6 +17,10 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
     private CircularUIButton CircularUIButton => GetComponent<CircularUIButton>();
     private Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
 
+    public void SetResponseText()
+    {
+        StandardUIResponseButton.label.text = StandardUIResponseButton.response.formattedText.text;
+    }
     private Color HighlightColor
     {
         get => UnityButton.colors.highlightedColor;
@@ -139,12 +143,12 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
     private void OnEnable()
     {
         RefreshButton();
-        CustomResponsePanel.OnCustomResponseButtonClick += OnButtonSubmit;
+        CustomUIMenuPanel.OnCustomResponseButtonClick += OnButtonSubmit;
     }
     
     private void OnDisable()
     {
-        CustomResponsePanel.OnCustomResponseButtonClick -= OnButtonSubmit;
+        CustomUIMenuPanel.OnCustomResponseButtonClick -= OnButtonSubmit;
     }
     
     
@@ -189,6 +193,6 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        CustomResponsePanel.ButtonClick(this);
+        CustomUIMenuPanel.ButtonClick(this);
     }
 }
