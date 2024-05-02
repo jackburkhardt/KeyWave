@@ -362,7 +362,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1512195335621636051}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7588587, w: -0.6512553}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7496852, w: -0.6617946}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -830,11 +830,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0025674c84db4838aa88641afc80d63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offsetCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   timeEstimate:
     m_uiText: {fileID: 0}
     m_textMeshProUGUI: {fileID: 4338846260443963867}
   responseMenuAnimator: {fileID: 4338846262393491075}
   mousePointerHand: {fileID: 1512195336186015758}
+  globalOffset: 0
 --- !u!223 &1512195335689297858
 Canvas:
   m_ObjectHideFlags: 0
@@ -1149,6 +1156,7 @@ MonoBehaviour:
   minimumDistance: 0
   isMouseOver: 0
   isFrozen: 0
+  stickToWatchTicks: 0
 --- !u!1 &2125986332406390334
 GameObject:
   m_ObjectHideFlags: 0
@@ -3202,11 +3210,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fa862b8cb974cd4e8bf96ef19c3f95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portrait: {fileID: 0}
   subtitleManager: {fileID: 4338846262321487050}
   canvasGroup: {fileID: 4338846260733598835}
   typewriterEffect: {fileID: 4338846261596855639}
-  _animatorsToWaitFor: []
-  timeText: {fileID: 4338846262441748095}
+  timeText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
+  portraitText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
   mainClock: {fileID: 0}
 --- !u!225 &4338846260733598835
 CanvasGroup:
@@ -3802,11 +3815,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fa862b8cb974cd4e8bf96ef19c3f95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portrait: {fileID: 0}
   subtitleManager: {fileID: 4338846262119415211}
   canvasGroup: {fileID: 4338846261238036921}
   typewriterEffect: {fileID: 4338846261408461047}
-  _animatorsToWaitFor: []
-  timeText: {fileID: 4338846261882513054}
+  timeText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
+  portraitText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
   mainClock: {fileID: 0}
 --- !u!225 &4338846261238036921
 CanvasGroup:
@@ -5766,7 +5784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1052d9aeda2b23648a72a8043836d192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subtitleContentElement: {fileID: 4338846261238036922}
+  templateSubtitleContentElement: {fileID: 0}
   duplicatedSubtitleContentContainer: {fileID: 4338846261965666738}
 --- !u!1 &4338846262198082077
 GameObject:
@@ -6290,7 +6308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1052d9aeda2b23648a72a8043836d192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subtitleContentElement: {fileID: 4338846260733598836}
+  templateSubtitleContentElement: {fileID: 0}
   duplicatedSubtitleContentContainer: {fileID: 4338846261478496153}
 --- !u!1 &4338846262400705462
 GameObject:
@@ -6804,7 +6822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1052d9aeda2b23648a72a8043836d192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subtitleContentElement: {fileID: 5103464529795168777}
+  templateSubtitleContentElement: {fileID: 0}
   duplicatedSubtitleContentContainer: {fileID: 4338846260447490506}
 --- !u!1 &6724646874000175254
 GameObject:
@@ -10166,11 +10184,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fa862b8cb974cd4e8bf96ef19c3f95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portrait: {fileID: 0}
   subtitleManager: {fileID: 4338846261664037123}
   canvasGroup: {fileID: 5103464529795168776}
   typewriterEffect: {fileID: 3571316946539865057}
-  _animatorsToWaitFor: []
-  timeText: {fileID: 5073753706951964676}
+  timeText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
+  portraitText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
   mainClock: {fileID: 0}
 --- !u!225 &5103464529795168776
 CanvasGroup:
