@@ -15,10 +15,14 @@ public class SubtitleContentElement : MonoBehaviour
     [SerializeField] private UITextField timeText;
     [SerializeField] private UITextField portraitText;
     [SerializeField] private TMP_Text mainClock;
+    [SerializeField] private UITextField subtitleText;
+
+   
+   
     public bool PortraitActive => portrait != null && portrait.gameObject.activeSelf;
 
 
-    private struct TextElement
+    public struct TextElement
     {
         public TextElement(UITextField text)
         {
@@ -37,6 +41,11 @@ public class SubtitleContentElement : MonoBehaviour
         public void Show()
         {
             this._text.color = this._defaultColor;
+        }
+
+        public new string ToString()
+        {
+            return _text.text;
         }
         
     }
@@ -68,6 +77,7 @@ public class SubtitleContentElement : MonoBehaviour
     private TextElement? _timeTextElement;
     private TextElement? _portraitTextElement;
     private RectElement? _containerRect;
+    public TextElement SubtitleText;
     
     private bool _isAnimationPlaying = false;
 
@@ -76,6 +86,8 @@ public class SubtitleContentElement : MonoBehaviour
         if (timeText != null) _timeTextElement = new TextElement(timeText);
         if (portraitText != null) _portraitTextElement = new TextElement(portraitText);
         if (portrait != null) _containerRect = new RectElement(portrait.transform.parent.GetComponent<RectTransform>());
+        if (subtitleText != null) SubtitleText = new TextElement(subtitleText);
+       // else subtitleText = GetComponentInChildren<UITextField>();
     }
 
     public void Clear()
