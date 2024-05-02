@@ -1691,7 +1691,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             GenericMenu contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Create Node"), false, AddChildCallback, null);
-            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubcoversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry>(currentConversation, null));
+            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry>(currentConversation, null));
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Vertically"), false, ArrangeNodesCallback, AutoArrangeStyle.Vertically);
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Vertically (alternate)"), false, ArrangeNodesCallback, AutoArrangeStyle.VerticallyOld);
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Horizontally"), false, ArrangeNodesCallback, AutoArrangeStyle.Horizontally);
@@ -1753,7 +1753,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             GenericMenu contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Create Child Node"), false, AddChildCallback, entry);
-            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubcoversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry>(currentConversation, currentEntry));
+            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry>(currentConversation, currentEntry));
 
             contextMenu.AddItem(new GUIContent("Make Link"), false, MakeLinkCallback, entry);
             if ((multinodeSelection.nodes.Count > 1) && (multinodeSelection.nodes.Contains(entry)))

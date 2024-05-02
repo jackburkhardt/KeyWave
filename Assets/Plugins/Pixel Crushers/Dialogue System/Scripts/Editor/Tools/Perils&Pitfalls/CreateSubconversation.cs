@@ -9,7 +9,7 @@ using NaughtyAttributes;
 
 namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pitfalls
 {
-    public class CreateSubcoversation : EditorWindow
+    public class CreateSubconversation : EditorWindow
     {
         static Conversation _originConversation;
         static DialogueEntry _originEntry;
@@ -22,12 +22,13 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             _originConversation = targetData.Item1;
             _originEntry = targetData.Item2;
             
-            var window = GetWindow<CreateSubcoversation>();
+            var window = GetWindow<CreateSubconversation>();
             window.titleContent = new GUIContent("Enter information");
             window.Show();
         }
         
-        string _internalName;
+        string _defaultInternalName  = $"{_originConversation.Title.Replace("/Base", "")}/";
+        string _internalName = $"{_originConversation.Title.Replace("/Base", "")}/";
         string _displayName;
         private bool _useDisplayNameAsMenuText = true;
         private string _menuText;
@@ -42,6 +43,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
 
         private void OnGUI()
         {
+          
             _internalName = EditorGUILayout.TextField("Internal Name", _internalName);
             _displayName = EditorGUILayout.TextField("Display Name", _displayName);
             _useDisplayNameAsMenuText = EditorGUILayout.Toggle("Use Display Name as Menu Text", _useDisplayNameAsMenuText);
@@ -61,6 +63,12 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             _defaultReturnLocation = EditorGUILayout.TextField("Default Return Location (ConvoID:EntryID)", _defaultReturnLocation);
             _revistable = EditorGUILayout.Toggle("Revisitable", _revistable);
             
+            if (!string.IsNullOrEmpty(_internalName) && !string.IsNullOrEmpty(_defaultInternalName) && !_internalName.Contains(_defaultInternalName))
+            {
+                EditorGUILayout.HelpBox("Internal Name does not seem to contain the origin conversation name. Make sure you've written it correctly.",
+                    MessageType.Info);
+            }
+            
             if (string.IsNullOrEmpty(_internalName))
             {
                 EditorGUILayout.HelpBox("Internal Name cannot be empty. This name is shared by the node, quest, and conversation created with this tool.", MessageType.Error);
@@ -69,6 +77,13 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
                 EditorGUILayout.HelpBox("Return Location must be in the format 'ConversationID:EntryID'.",
                     MessageType.Error);
             }
+            
+            else if (_internalName == _defaultInternalName)
+            {
+                EditorGUILayout.HelpBox("Internal Name must be unique. Please change the name to something other than the default.",
+                    MessageType.Error);
+            }
+            
             else if (GUILayout.Button("Create"))
             {
                 Create();

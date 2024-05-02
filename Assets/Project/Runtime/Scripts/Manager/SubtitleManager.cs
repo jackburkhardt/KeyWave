@@ -68,11 +68,7 @@ public class SubtitleManager : MonoBehaviour
 
    private void OnConversationLine(Subtitle subtitle)
    {
-      //if (subtitle.formattedText.text == string.Empty) return;
-    //  if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == subtitle.formattedText.text) return;
-     
-     // if (subtitle.formattedText.text == mostRecentDuplicate.)
-    //  RevealDuplicate();
+      RefreshContents();
    }
    
 }

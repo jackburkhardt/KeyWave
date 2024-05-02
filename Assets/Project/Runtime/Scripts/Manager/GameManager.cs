@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KeyWave.Runtime.Scripts.AssetLoading;
 using Language.Lua;
+using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.App;
 using Unity.VisualScripting;
@@ -18,6 +19,10 @@ public class GameManager : MonoBehaviour
     public PlayerEventStack playerEventStack;
     private CustomLuaFunctions _customLuaFunctions;
     public List<Location> locations;
+    public bool capFramerate = false;
+    
+    [ShowIf("capFramerate")]
+    public int framerateLimit;
     
     public static GameState gameState;
 
@@ -30,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+       
         //if instance of GameManager already exists, destroy it
 
         if (instance == null)
@@ -162,5 +168,9 @@ public class GameManager : MonoBehaviour
     {
        GameEvent.OnWait(duration);
     }
-    
+
+    private void Update()
+    {
+        if (capFramerate) Application.targetFrameRate = framerateLimit;
+    }
 }
