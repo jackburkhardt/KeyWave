@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pitfalls;
+using Plugins.Pixel_Crushers.Dialogue_System.Scripts.Utility;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Graphs;
@@ -1753,7 +1755,35 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             GenericMenu contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Create Child Node"), false, AddChildCallback, entry);
+            if (multinodeSelection.nodes.Count == 2  && (multinodeSelection.nodes.Contains(entry)))
+            {
+                contextMenu.AddItem(new GUIContent("Create In-between node"), false, CreateBetweenNodeCallback, entry);
+            }
+            contextMenu.AddSeparator("");
             contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry>(currentConversation, currentEntry));
+
+            var sequenceOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/SequenceOptions.asset");
+            var titleOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/TitleOptions.asset");
+
+            if (sequenceOpts)
+            {
+                foreach (var item in sequenceOpts.strings)
+                {
+                    contextMenu.AddItem(new GUIContent("Set Sequence/" + item), false, SetSequenceCallback,
+                        new Tuple<DialogueEntry, string>(entry, item));
+                }
+            }
+
+            if (titleOpts)
+            {
+                foreach (var item in titleOpts.strings)
+                {
+                    contextMenu.AddItem(new GUIContent("Set Title/" + item), false, SetTitleCallback,
+                        new Tuple<DialogueEntry, string>(entry, item));
+                }
+            }
+
+            contextMenu.AddSeparator("");
 
             contextMenu.AddItem(new GUIContent("Make Link"), false, MakeLinkCallback, entry);
             if ((multinodeSelection.nodes.Count > 1) && (multinodeSelection.nodes.Contains(entry)))
@@ -2051,6 +2081,30 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             RemoveOutgoingLinksFromClipboard();
         }
 
+        private void CreateBetweenNodeCallback(object o)
+        {
+            if (multinodeSelection.nodes.Count != 2) return;
+
+            int convoID = currentConversation.id;
+            var node0 = multinodeSelection.nodes[0];
+            var node1 = multinodeSelection.nodes[1];
+            
+            var newNode =
+                template.CreateDialogueEntry(template.GetNextDialogueEntryID(currentConversation), convoID, "");
+            newNode.canvasRect.x = node0.canvasRect.x + 20;
+            newNode.canvasRect.y = node0.canvasRect.y + 20;
+            currentConversation.dialogueEntries.Add(newNode);
+            var inLink = new Link(convoID, node0.id, convoID, newNode.id);
+            node0.outgoingLinks.Add(inLink);
+            var outLink = new Link(convoID, newNode.id, convoID, node1.id);
+            newNode.outgoingLinks.Add(outLink);
+
+            Link dirtyLink = node0.outgoingLinks.FirstOrDefault(link => link.destinationDialogueID == node1.id);
+            node0.outgoingLinks.Remove(dirtyLink);
+            
+            SetDatabaseDirty("Created inbetween node");
+        }
+
         private void RemoveOutgoingLinksFromClipboard()
         {
             if (nodeClipboard == null) return;
@@ -2073,6 +2127,24 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void PasteMultipleEntriesCallback(object o)
         {
             PasteClipboardNodes(o as DialogueEntry);
+        }
+        
+        private void SetTitleCallback(object o)
+        {
+            var tuple = o as Tuple<DialogueEntry, string>;
+            if (tuple == null) return;
+            
+            tuple.Item1.Title = tuple.Item2;
+            SetDatabaseDirty("Set Title");
+        }
+        
+        private void SetSequenceCallback(object o)
+        {
+            var tuple = o as Tuple<DialogueEntry, string>;
+            if (tuple == null) return;
+            
+            tuple.Item1.Sequence = tuple.Item2;
+            SetDatabaseDirty("Set Sequence");
         }
 
         private DialogueEntry DuplicateEntryForClipboard(DialogueEntry entry)

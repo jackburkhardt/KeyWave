@@ -61,10 +61,16 @@ namespace Project.Runtime.Scripts.App
         ///  Unloads the current scene and loads a new scene
         /// </summary>
         public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload));
-        
+
+        private bool isLoading = false;
         private IEnumerator LoadSceneHandler(string sceneToLoad, string sceneToUnload = "")
         {
-            
+            if (isLoading)
+            {
+                Debug.LogError($"Attempted to load scene {sceneToLoad} while another scene was loading! Aborting.");
+                yield break;
+            }
+            isLoading = true;
         
             var loadingScene = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
 
@@ -104,6 +110,8 @@ namespace Project.Runtime.Scripts.App
         
             while (!unloadLoadingScreen.isDone) yield return null;
             Debug.Log("Load complete");
+            
+            isLoading = false;
 
         }
     }
