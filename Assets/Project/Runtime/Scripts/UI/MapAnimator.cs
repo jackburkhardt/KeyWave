@@ -100,7 +100,7 @@ public class MapAnimator : MonoBehaviour
     
     private void ShowInfoPanel(Location location)  
     {
-        _locationName.text = location.name;
+        _locationName.text = location.Name;
         _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
         _etaText.text = $"ETA: {Clock.EstimatedTimeOfArrival(location)}";
         _descriptionText.text = location.description;

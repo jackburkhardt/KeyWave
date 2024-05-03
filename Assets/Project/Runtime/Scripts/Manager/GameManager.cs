@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
 
     public void TravelTo(Location location)
     {
-        TravelTo(location.name);
+        TravelTo(location.Name);
     }
     
     public void TravelTo(string newLocation, string currentScene = "")

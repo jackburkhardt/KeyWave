@@ -3,72 +3,17 @@ using UnityEngine;
 
 public class InvokeMovePlayer : PlayerEventHandler
 {
-
-   
-    
-    protected void Start()
-    {
-        /*
-        _playerLocationName = GameManager.instance.gameStateManager.gameState.player_location;
-        _playerLocationTransform =  FindTransformMatchingString(_playerLocationName);
-        UpdateText();
-        */
-    }
-    
-    /*
-
-    private void UpdateText()
-    {
-        minutesAway = GetDistanceToTransform(_playerLocationTransform);
-        _minutesAwayText.text = transform == _playerLocationTransform
-            ? "You are here."
-            : $"{minutesAway} minutes away.";
-    }
-    
-   
-    
-    Transform FindTransformMatchingString(string locationName)
-    {
-        Transform currentPlayerLocation = null;
-        var allMapButtons = FindObjectsOfType<InvokeMovePlayer>();
-        foreach (var mapButton in allMapButtons)
-        {
-            if (mapButton._locationNameText.text == locationName) currentPlayerLocation = mapButton.transform;
-        }
-        return currentPlayerLocation;
-    }
-
-
-    public int GetDistanceToTransform(Transform currentPlayerCoordinates)
-    {
-        var distance = Vector2.Distance(currentPlayerCoordinates.position, transform.position);
-        var minutesAway = Mathf.RoundToInt(distance / 10);
-        return minutesAway;
-    }
-    
-    */
+    [SerializeReference] private Location _destination;
     
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
-       
-        if (playerEvent.EventType != "move" || ((Location)playerEvent.Data).name != _destination.name) return;
-        GameManager.instance.TravelTo(_destination.name);
-         /*
-        _playerLocationName = playerEvent.Value;
-       _playerLocationTransform = FindTransformMatchingString(_playerLocationName);
-
-
-       */
+        if (playerEvent.EventType != "move" || ((Location)playerEvent.Data).Name != _destination.Name) return;
+        GameManager.instance.TravelTo(_destination.Name);
     }
-
-    [SerializeReference] private Location _destination;
-
     
-    
-
     public void MovePlayer()
     {
-        GameEvent.OnMove("InvokeMovePlayer", _destination);
+        GameEvent.OnMove("InvokeMovePlayer", _destination, _destination.TravelTime);
         App.Instance.UnloadScene("Map");
     }
 

@@ -58,9 +58,9 @@ public class GameStateManager : PlayerEventHandler
             {
                 case "move":
                     var location = (Location)playerEvent.Data;
-                    if (location.isSublocation) gameState.player_sublocation = location.name;
+                    if (location.isSublocation) gameState.player_sublocation = location.Name;
                     else { 
-                        gameState.player_location = location.name; 
+                        gameState.player_location = location.Name; 
                         gameState.player_sublocation = string.Empty; }
                     break;
                 case "conversation_start":

@@ -12,7 +12,7 @@ using NaughtyAttributes;
 [CreateAssetMenu(fileName = "New Location", menuName = "Location")]
 public class Location : ScriptableObject
 {
-    public new string name => area.ToString();
+    public string Name => area.ToString();
 
     public Color responseMenuButtonColor;
 
@@ -31,9 +31,6 @@ public class Location : ScriptableObject
 
     public Area area;
     public string description;
-    public Sprite pin;
-    public Color buttonTint;
-    public List<Scene> scenes;
     public List<Objective> objectives;
     [Tooltip("Sublocation coordinates are relative to another set of coordinates.")]
     public bool isSublocation;
@@ -42,9 +39,6 @@ public class Location : ScriptableObject
     [ShowIf("relativeCoordinates")][DisableIf("relativeToPlayerLocation")]
     public Area relativeTo;
     public Vector2 coordinates;
-    public Material DialoguePanelMaterial;
-    
-    public bool isUnlocked;
 
     public Vector2 Coordinates {
         get
@@ -75,7 +69,7 @@ public class Location : ScriptableObject
     }
     
     public static Location FromArea(Area area) =>  FromString(area.ToString());
-
+    public const int TimeToNearestCafe = 5;
     
     public static List<Objective> Objectives(string location)
     {
@@ -95,7 +89,7 @@ public class Location : ScriptableObject
 
     public void MoveHere()
     {
-        GameEvent.OnMove(this.name, this);
+        GameEvent.OnMove(this.Name, this, this.TravelTime);
         GameManager.instance.TravelTo(this);
     }
 
@@ -108,7 +102,16 @@ public class Location : ScriptableObject
         }
     }
     
-    public int TravelTime => Distance * Clock.TimeScales.GlobalTimeScale;
+    public int TravelTime {
+        get
+        {
+            if (area == Area.Café)
+            {
+                return TimeToNearestCafe;
+            } 
+            return Distance * Clock.TimeScales.GlobalTimeScale;
+        }
+    }
 
     public static int GetTravelTime(string location) => FromString(location).TravelTime;
     

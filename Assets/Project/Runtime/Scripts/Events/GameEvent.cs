@@ -63,9 +63,9 @@ public static class GameEvent
         }
     }
    
-   public static void OnMove(string sender, Location location)
+   public static void OnMove(string sender, Location location, int duration)
    {
-       RegisterPlayerEvent("move", sender, "player", location);
+       RegisterPlayerEvent("move", sender, "player", location, duration);
    }
 
    public static void OnPointsIncrease(Points.PointsField pointData)
