@@ -15,8 +15,6 @@ namespace PixelCrushers.DialogueSystem
     [AddComponentMenu("")] // Use wrapper.
     public class StandardUIResponseButton : MonoBehaviour, ISelectHandler
     {
-        public bool isButtonActive = false;
-
         [HelpBox("If Button's OnClick() event is empty, this Standard UI Response Button component will automatically assign its OnClick method at runtime. If Button's OnClick() event has other elements, you *must* manually assign the StandardUIResponseButton.OnClick method to it.", HelpBoxMessageType.Info)]
         public UnityEngine.UI.Button button;
 
@@ -146,18 +144,6 @@ namespace PixelCrushers.DialogueSystem
                 target.SendMessage("OnClick", response, SendMessageOptions.RequireReceiver);
             }
         }
-
-        public void SetButtonActive()
-        {
-            isButtonActive = true;
-        }
-
-        public void SetButtonInactive()
-        {
-            isButtonActive = false;
-        }
-       
-     
 
         public virtual void OnSelect(BaseEventData eventData)
         {

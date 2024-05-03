@@ -94,9 +94,6 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
     public void OnConversationEnd()
     {
         responseMenuAnimator.SetTrigger("Hide");
-        Debug.Log("ending");
-        //onHide.Invoke();
-        //gameObject.SetActive(false);
     }
 
     protected override void Update()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,10 +18,12 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
     private CircularUIButton CircularUIButton => GetComponent<CircularUIButton>();
     private Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
 
+    [SerializeField] private UITextField autonumberText;
+
     public void SetResponseText()
     {
-        StandardUIResponseButton.label.text = StandardUIResponseButton.response.formattedText.text;
-    }
+        //StandardUIResponseButton.label.text = StandardUIResponseButton.response.formattedText.text;
+      }
     private Color HighlightColor
     {
         get => UnityButton.colors.highlightedColor;
@@ -67,10 +70,6 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
     private bool DialogueEntryInvalid => DestinationEntry != null && DestinationEntry.conditionsString.Length != 0 &&
                                          !Lua.IsTrue(DestinationEntry.conditionsString);
 
-    private void Start()
-    {
-      
-    }
 
     public Points.Type PointsType
     {
