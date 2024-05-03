@@ -69,7 +69,9 @@ public class Location : ScriptableObject
     }
     
     public static Location FromArea(Area area) =>  FromString(area.ToString());
-    public const int TimeToNearestCafe = 5;
+    
+    // formula for time to distance: minutes * 4 (5 mins * 4 = 20)
+    public const int DistanceToNearestCafe = 20;
     
     public static List<Objective> Objectives(string location)
     {
@@ -107,7 +109,7 @@ public class Location : ScriptableObject
         {
             if (area == Area.Café)
             {
-                return TimeToNearestCafe;
+                return DistanceToNearestCafe * Clock.TimeScales.GlobalTimeScale;
             } 
             return Distance * Clock.TimeScales.GlobalTimeScale;
         }
