@@ -35,6 +35,32 @@ MonoBehaviour:
     underline: 0
   baseID: 1
   actors:
+  - id: 13
+    fields:
+    - title: Name
+      value: ' Narrator'
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: Narrator.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: ' '
+      type: 0
+      typeString: CustomFieldType_Text
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
   - id: 7
     fields:
     - title: Name
@@ -1995,7 +2021,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Description
@@ -2009,7 +2035,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 3
+      value: -1
       type: 7
       typeString: CustomFieldType_Location
     - title: Description
@@ -16702,21 +16728,9 @@ MonoBehaviour:
       - originConversationID: 28
         originDialogueID: 0
         destinationConversationID: 28
-        destinationDialogueID: 5
+        destinationDialogueID: 32
         isConnector: 0
         priority: 2
-      - originConversationID: 28
-        originDialogueID: 0
-        destinationConversationID: 28
-        destinationDialogueID: 22
-        isConnector: 0
-        priority: 3
-      - originConversationID: 28
-        originDialogueID: 0
-        destinationConversationID: 28
-        destinationDialogueID: 23
-        isConnector: 0
-        priority: 4
       conditionsString: 
       userScript: 
       onExecute:
@@ -16724,8 +16738,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 758.5732
-        y: 53.667183
+        x: 671.08575
+        y: 204.38681
         width: 160
         height: 30
     - id: 1
@@ -16783,8 +16797,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 356.56223
-        y: 757.3454
+        x: 504.85602
+        y: 1263.4812
         width: 160
         height: 30
     - id: 3
@@ -16842,8 +16856,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 738.25995
-        y: 757.86224
+        x: 743.1075
+        y: 1448.8967
         width: 160
         height: 30
     - id: 4
@@ -16901,8 +16915,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1020.31274
-        y: 761.63184
+        x: 982.7794
+        y: 1239.4417
         width: 160
         height: 30
     - id: 5
@@ -16958,8 +16972,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 752.71625
-        y: 452.29855
+        x: 766.839
+        y: 1120.4879
         width: 160
         height: 30
     - id: 10
@@ -17018,8 +17032,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 751.29126
-        y: 511.8789
+        x: 756.1388
+        y: 1202.9136
         width: 160
         height: 30
     - id: 11
@@ -17078,8 +17092,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 749.73096
-        y: 567.08936
+        x: 754.5785
+        y: 1258.124
         width: 160
         height: 30
     - id: 13
@@ -17135,8 +17149,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 357.6493
-        y: 900.62335
+        x: 510.64893
+        y: 1343.2302
         width: 160
         height: 30
     - id: 15
@@ -17191,8 +17205,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 736.546
-        y: 886.7759
+        x: 743.74646
+        y: 1577.8103
         width: 160
         height: 30
     - id: 16
@@ -17247,8 +17261,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1021.4806
-        y: 883.8357
+        x: 983.94727
+        y: 1361.6455
         width: 160
         height: 30
     - id: 17
@@ -17320,8 +17334,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 744.64905
-        y: 637.94324
+        x: 749.4966
+        y: 1328.9778
         width: 160
         height: 30
     - id: 19
@@ -17377,8 +17391,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1196.1705
-        y: 659.3982
+        x: 1154.6251
+        y: 1247.5376
         width: 160
         height: 30
     - id: 21
@@ -17438,8 +17452,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1241.195
-        y: 813.35815
+        x: 1199.6495
+        y: 1401.4974
         width: 160
         height: 30
     - id: 22
@@ -17493,8 +17507,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1355.0117
-        y: 444.719
+        x: 1359.8593
+        y: 868.9553
         width: 160
         height: 30
     - id: 23
@@ -17600,8 +17614,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2086.1926
-        y: 145.06964
+        x: 1675.2448
+        y: 193.90387
         width: 160
         height: 30
     - id: 24
@@ -17666,8 +17680,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 1667.7416
-        y: 318.71573
+        x: 1571.7683
+        y: 1642.5083
         width: 160
         height: 30
     - id: 25
@@ -17740,8 +17754,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 1780.6091
-        y: 395.80313
+        x: 1646.2314
+        y: 1722.5498
         width: 160
         height: 30
     - id: 26
@@ -17814,8 +17828,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 1954.7784
-        y: 430.00507
+        x: 1708.1417
+        y: 1806.9729
         width: 160
         height: 30
     - id: 27
@@ -17888,8 +17902,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 2062.608
-        y: 487.3179
+        x: 1780.5212
+        y: 1882.0111
         width: 160
         height: 30
     - id: 28
@@ -17962,8 +17976,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 2176.5964
-        y: 409.49786
+        x: 1734.9839
+        y: 1963.7174
         width: 160
         height: 30
     - id: 29
@@ -18036,8 +18050,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 2297.9866
-        y: 475.19196
+        x: 1856.3756
+        y: 2029.4115
         width: 160
         height: 30
     - id: 30
@@ -18110,8 +18124,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 2415.642
-        y: 409.31827
+        x: 1974.0308
+        y: 1963.5377
         width: 160
         height: 30
     - id: 31
@@ -18184,13 +18198,91 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 2572.023
-        y: 350.75787
+        x: 2132.622
+        y: 1904.9774
+        width: 160
+        height: 30
+    - id: 32
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: "Vitoria. \n\nA city of promise, and the prospect of prosperity. At
+          least, that's what it means to you: Daniel Oliviera, selected future manager
+          of Clothing and Accessories.\n\nYou are currently residing in a hotel.
+          By dawn, you will officially be manager, so use your next 24 hours wisely."
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 28
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 28
+        originDialogueID: 32
+        destinationConversationID: 16
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 662.4257
+        y: 361.39362
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 530.348, y: 0}
-    canvasZoom: 0.53000176
+    canvasScrollPosition: {x: 108.246086, y: 59.809986}
+    canvasZoom: 0.54950094
   - id: 29
     fields:
     - title: Title
