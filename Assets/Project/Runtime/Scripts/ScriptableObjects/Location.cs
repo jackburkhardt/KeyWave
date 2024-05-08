@@ -15,8 +15,6 @@ public class Location : ScriptableObject
     public string Name => area.ToString();
 
     public Color responseMenuButtonColor;
-
-    public static Location PlayerLocation => FromString(GameManager.gameState.player_location);
     
     public enum Area {
         Hotel,
@@ -31,64 +29,12 @@ public class Location : ScriptableObject
 
     public Area area;
     public string description;
-    public List<Objective> objectives;
-    [Tooltip("Sublocation coordinates are relative to another set of coordinates.")]
-    public bool isSublocation;
-    [ShowIf("isSublocation")]
-    public bool relativeToPlayerLocation;
+    public List<Item> objectives;
     public bool unlocked;
-    [ShowIf("relativeCoordinates")][DisableIf("relativeToPlayerLocation")]
-    public Area relativeTo;
     public Vector2 coordinates;
-
-    public Vector2 Coordinates {
-        get
-        {
-            var baseCoordinates = isSublocation
-                ? (relativeToPlayerLocation ? PlayerLocation.coordinates : FromArea(relativeTo).coordinates)
-                : Vector2.zero;
-            return baseCoordinates + coordinates;
-        }
-    }
-
-    public enum Objective
-    {
-        WatchFilm,
-        BeMysteryShopper,
-        MeetDouglas,
-        MeetPrado,
-        WinBowling,
-        GetHaircut
-    }
-    
-    public static Location FromString(string location)
-    {
-        // get all locations and return the one with the same name
-        var locations = GameManager.instance.locations;
-        foreach (Location loc in locations) if (loc.area.ToString() == location) return loc;
-        return null;
-    }
-    
-    public static Location FromArea(Area area) =>  FromString(area.ToString());
-    
+ 
     // formula for time to distance: minutes * 4 (5 mins * 4 = 20)
     public const int DistanceToNearestCafe = 20;
-    
-    public static List<Objective> Objectives(string location)
-    {
-        Location loc = FromString(location);
-        return loc.objectives;
-    }
-    
-    public static List<Objective> Objectives(Area area) => Objectives(area.ToString());
-    
-    public static int GetDistanceFromPlayer(string location)
-    {
-        var playerCoordinates = PlayerLocation.coordinates;
-        var targetLocation = FromString(location);
-        var targetCoordinates = targetLocation.coordinates;
-        return (int)Vector2.Distance(playerCoordinates, targetCoordinates);
-    }
 
     public void MoveHere()
     {
@@ -116,8 +62,39 @@ public class Location : ScriptableObject
         }
     }
 
+    #region Static Methods
+    
     public static int GetTravelTime(string location) => FromString(location).TravelTime;
     
     public static int GetTravelTime(Area area) => FromArea(area).TravelTime;
     
+    public static List<Item> Objectives(string location)
+    {
+        Location loc = FromString(location);
+        return loc.objectives;
+    }
+    
+    public static List<Item> Objectives(Area area) => Objectives(area.ToString());
+    
+    public static int GetDistanceFromPlayer(string location)
+    {
+        var playerCoordinates = PlayerLocation.coordinates;
+        var targetLocation = FromString(location);
+        var targetCoordinates = targetLocation.coordinates;
+        return (int)Vector2.Distance(playerCoordinates, targetCoordinates);
+    }
+    
+    public static Location FromString(string location)
+    {
+        // get all locations and return the one with the same name
+        var locations = GameManager.instance.locations;
+        foreach (Location loc in locations) if (loc.area.ToString() == location) return loc;
+        return null;
+    }
+    
+    public static Location FromArea(Area area) =>  FromString(area.ToString());
+    
+    public static Location PlayerLocation => FromString(GameManager.gameState.player_location);
+    
+    #endregion
 }

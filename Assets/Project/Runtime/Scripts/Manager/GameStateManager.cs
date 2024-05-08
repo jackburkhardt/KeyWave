@@ -23,7 +23,6 @@ public class GameState
     public int local_savvy_score = 0;
     public int wellness_score = 0;
     public string player_location = "Hotel";
-    public string player_sublocation = string.Empty;
     public string current_scene = "Hotel";
     public string current_conversation_title = string.Empty;
     public string current_conversation_actor;
@@ -58,10 +57,7 @@ public class GameStateManager : PlayerEventHandler
             {
                 case "move":
                     var location = (Location)playerEvent.Data;
-                    if (location.isSublocation) gameState.player_sublocation = location.Name;
-                    else { 
-                        gameState.player_location = location.Name; 
-                        gameState.player_sublocation = string.Empty; }
+                    gameState.player_location = location.Name; 
                     break;
                 case "conversation_start":
                     gameState.current_conversation_title = (string)playerEvent.Data;
