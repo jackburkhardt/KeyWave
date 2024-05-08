@@ -36,6 +36,7 @@ public class Location : ScriptableObject
     public bool isSublocation;
     [ShowIf("isSublocation")]
     public bool relativeToPlayerLocation;
+    public bool unlocked;
     [ShowIf("relativeCoordinates")][DisableIf("relativeToPlayerLocation")]
     public Area relativeTo;
     public Vector2 coordinates;
@@ -107,7 +108,7 @@ public class Location : ScriptableObject
     public int TravelTime {
         get
         {
-            if (area == Area.Café)
+            if (area == Area.Café || GameManager.gameState.player_location == "Café")
             {
                 return DistanceToNearestCafe * Clock.TimeScales.GlobalTimeScale;
             } 
