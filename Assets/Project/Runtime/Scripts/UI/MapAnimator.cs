@@ -72,6 +72,8 @@ public class MapAnimator : MonoBehaviour
 
     public void ShowPersistentInfoPanel(Location location)
     {
+        if (!location.unlocked) return;
+        
         ShowInfoPanel(location);
         ShowConfirmationButtons();
         ZoomInOnCoordinates(location.coordinates);
@@ -88,22 +90,23 @@ public class MapAnimator : MonoBehaviour
         if (!_confirmButton.gameObject.activeSelf) HideInfoPanel();
        
     }
-
-  
-    
-
-   
-
-    
-    
-    
     
     private void ShowInfoPanel(Location location)  
     {
-        _locationName.text = location.Name;
-        _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
-        _etaText.text = $"ETA: {Clock.EstimatedTimeOfArrival(location)}";
-        _descriptionText.text = location.description;
+        if (location.unlocked)
+        {
+            _locationName.text = location.Name;
+            _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
+            _etaText.text = $"ETA: {Clock.EstimatedTimeOfArrival(location)}";
+            _descriptionText.text = location.description;
+        }
+        else
+        {
+            _locationName.text = "???";
+            _etaText.text = $"ETA: Unknown";
+            _descriptionText.text = "You don't know anything about this location yet...";
+        }
+        
         _infoPanel.gameObject.SetActive(true);
 
         foreach (var objective in _objectivePanel.GetComponentsInChildren<InfoPanelObjective>())
