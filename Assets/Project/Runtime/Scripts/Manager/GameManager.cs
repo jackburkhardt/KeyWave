@@ -121,13 +121,23 @@ public class GameManager : MonoBehaviour
     
     public static void OnQuestStateChange(string questName)
     {
-        if (!QuestLog.IsQuestSuccessful(questName)) return;
-        
         var quest = DialogueUtility.GetQuestByName(questName);
+        var state = QuestLog.GetQuestState(questName);
         var points = DialogueUtility.GetPointsFromField(quest.fields);
-        if (points.Type == Points.Type.Null) return;
+
+        if (state == QuestState.Success && points.Points > 0)
+        {
+            GameEvent.OnPointsIncrease(points, questName);
+        }
         
-        GameEvent.OnPointsIncrease(points);
+        var duration = DialogueUtility.GetQuestDuration(quest);
+        
+        if (state == QuestState.Success && duration > 0)
+        {
+            gameState.clock += duration;
+        }
+        
+        GameEvent.OnQuestStateChange(questName, state, duration);
     }
 
     private string last_convo = string.Empty;

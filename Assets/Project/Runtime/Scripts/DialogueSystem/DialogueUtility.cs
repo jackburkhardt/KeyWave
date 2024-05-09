@@ -74,7 +74,7 @@ public static class DialogueUtility
 
     public static int GetTimespan(DialogueEntry dialogueEntry)
     {
-        if (!Field.FieldExists(dialogueEntry.fields, "Timespan")) return -1;
+        if (!Field.FieldExists(dialogueEntry.fields, "Duration")) return 0;
         
         var timespanField = Field.Lookup(dialogueEntry.fields, "Timespan");
         
@@ -95,6 +95,20 @@ public static class DialogueUtility
         }
 
         return value;
+    }
+
+    public static int GetQuestDuration(Item quest)
+    {
+        var durationField = quest.AssignedField("Duration");
+        var unit = durationField.value.Split(':')[1];
+        var questTime = int.Parse(durationField.value.Split(':')[0]);
+        var duration = 0;
+
+        if (unit == "seconds") duration = questTime;
+        else if (unit == "minutes") duration = questTime * 60;
+        else if (unit == "hours") duration = questTime * 3600;
+        
+        return duration;
     }
 
     private static List<List<DialogueEntry>> FindAllPathsBetweenNodes(DialogueEntry node1, DialogueEntry node2)

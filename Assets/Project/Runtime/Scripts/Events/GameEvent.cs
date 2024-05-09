@@ -68,11 +68,16 @@ public static class GameEvent
        RegisterPlayerEvent("move", sender, "player", location, duration);
    }
 
-   public static void OnPointsIncrease(Points.PointsField pointData)
+   public static void OnPointsIncrease(Points.PointsField pointData, string source)
    {
-       RegisterPlayerEvent("points", DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title, "player", pointData);
+       RegisterPlayerEvent("points", source, "player", pointData);
    }
    
+   public static void OnQuestStateChange(string questName, QuestState state, int duration)
+   {
+       var quest = DialogueUtility.GetQuestByName(questName);
+       RegisterPlayerEvent("quest_state_change", questName, state.ToString(), quest, duration);
+   }
    
    public static void OnWait(int duration)
    {
