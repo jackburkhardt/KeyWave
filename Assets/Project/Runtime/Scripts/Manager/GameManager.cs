@@ -130,12 +130,25 @@ public class GameManager : MonoBehaviour
         GameEvent.OnPointsIncrease(points);
     }
 
+    private string last_convo = string.Empty;
     public void OpenMap()
     {
+        last_convo = gameState.current_conversation_title;
         DialogueManager.StopConversation();
         DialogueManager.instance.PlaySequence("SetDialoguePanel(false)");
         App.Instance.LoadScene("Map");
     }
+
+    public void CloseMap(bool returnToConvo)
+    {
+        App.Instance.UnloadScene("Map");
+        if (returnToConvo)
+        {
+            DialogueManager.instance.PlaySequence("SetDialoguePanel(true)");
+            DialogueManager.StartConversation(last_convo);
+        }
+    }
+
 
     public void EndOfDay() => App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene);
 

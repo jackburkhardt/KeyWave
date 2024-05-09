@@ -11,6 +11,7 @@ public class CircularButtonTextPanel : MonoBehaviour
     [SerializeField] private RectTransform watchContainer;
     
     private RectTransform _rectTransform;
+    private VerticalLayoutGroup _verticalLayoutGroup;
     private string previousText = string.Empty;
     [SerializeField] private bool widthLimitReached;
     private bool adjustedWidthOnLimit;
@@ -26,16 +27,20 @@ public class CircularButtonTextPanel : MonoBehaviour
         Horizontal,
         Vertical
     }
+    
+    void Start()
+    {
+        _rectTransform = GetComponent<RectTransform>();
+        _tmpText = GetComponentInChildren<TMP_Text>();
+        _verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        _rectTransform ??= GetComponent<RectTransform>();
-        _tmpText ??= GetComponentInChildren<TMP_Text>();
-
-        GetComponent<VerticalLayoutGroup>().childControlWidth = expansion == Expansion.Horizontal;
-        GetComponent<VerticalLayoutGroup>().childControlHeight = expansion == Expansion.Vertical;
-        GetComponent<VerticalLayoutGroup>().childAlignment = expansion == Expansion.Horizontal ? TextAnchor.LowerCenter : TextAnchor.MiddleLeft;
+        _verticalLayoutGroup.childControlWidth = expansion == Expansion.Horizontal;
+        _verticalLayoutGroup.childControlHeight = expansion == Expansion.Vertical;
+        _verticalLayoutGroup.childAlignment = expansion == Expansion.Horizontal ? TextAnchor.LowerCenter : TextAnchor.MiddleLeft;
 
         parentImage.fillAmount = expansion == Expansion.Horizontal ? _rectTransform.rect.width / watchContainer.rect.width / Mathf.PI : _rectTransform.rect.height / watchContainer.rect.height / Mathf.PI;
         _rectTransform.localEulerAngles = expansion == Expansion.Horizontal ? new Vector3(0, 0, 90 + parentImage.fillAmount * 360 / 2f) :  new Vector3(0, 0, 180 + parentImage.fillAmount * 360 / 2f);

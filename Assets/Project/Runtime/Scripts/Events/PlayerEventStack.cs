@@ -38,7 +38,11 @@ public class PlayerEvent
 
     public override string ToString()
     {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
+        var settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+        return JsonConvert.SerializeObject(this, Formatting.Indented, settings);
     }
 }
 

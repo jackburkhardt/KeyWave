@@ -1,5 +1,6 @@
 using System.Collections;
 using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.UI.Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,9 +30,6 @@ public class MapAnimator : MonoBehaviour
         SpawnPins();
         _objectivePanel = _objectivePrefab.parent.GetComponent<RectTransform>();
         _objectivePrefab.gameObject.SetActive(false);
-
-        // Start the coroutine to move the object
-       // StartCoroutine(MoveObject());
     }
 
     private void SpawnPins()
@@ -42,47 +40,32 @@ public class MapAnimator : MonoBehaviour
             var pin = Instantiate(pinPrefab.gameObject, transform, false);
             pin.transform.localPosition = coordinates;
         }
-        
+
         pinPrefab.gameObject.SetActive(false);
-        
-    }
-    
-    /*
 
-    public void ShowInfoPanelHandler(Transform locationTransform, GameManager.Locations location, string descriptionText,
-        int distanceInSeconds, bool onClick = false)
-    {
-        if (!_confirmButton.gameObject.activeSelf && !onClick || _confirmButton.gameObject.activeSelf && onClick) 
-            ShowInfoPanel(locationTransform, location, descriptionText, distanceInSeconds);
     }
     
-    */
-    
-    public void ShowFleetingInfoPanel(string location)
+    public void ShowFleetingInfoPanel(MapLocationInfo info)
     {
-        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(Location.FromString(location));
+        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(info);
     }
-    
-    public void ShowFleetingInfoPanel(Location location)
-    {
-        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(location);
-    }
-    
     
 
-    public void ShowPersistentInfoPanel(Location location)
+    public void ShowPersistentInfoPanel(MapLocationInfo info)
     {
+        var location = info.location;
         if (!location.unlocked) return;
         
-        ShowInfoPanel(location);
+        ShowInfoPanel(info);
         ShowConfirmationButtons();
         ZoomInOnCoordinates(location.coordinates);
     }
     
-    public void ShowPersistentInfoPanel(string location)
+    public void HidePersistentInfoPanel()
     {
-
-         ShowPersistentInfoPanel(Location.FromString(location));
+        HideInfoPanel();
+        HideConfirmationButtons();
+        ResetAnimation();
     }
     
     public void HideFleetingInfoPanel()
@@ -91,8 +74,9 @@ public class MapAnimator : MonoBehaviour
        
     }
     
-    private void ShowInfoPanel(Location location)  
+    private void ShowInfoPanel(MapLocationInfo info)
     {
+        var location = info.location;
         if (location.unlocked)
         {
             _locationName.text = location.Name;
@@ -124,8 +108,6 @@ public class MapAnimator : MonoBehaviour
         }
         
         RefreshLayoutGroups.Refresh(_objectivePanel.gameObject);
-        
-        
     }
 
     private void HideInfoPanel()
@@ -135,16 +117,12 @@ public class MapAnimator : MonoBehaviour
 
     private void ShowConfirmationButtons() {
         _confirmButton.gameObject.SetActive(true);
-        _cancelButton.gameObject.SetActive(true);
     }
 
     private void HideConfirmationButtons()
     {
         _confirmButton.gameObject.SetActive(false);
-        _cancelButton.gameObject.SetActive(false);
     }
-    
-    
 
     public void ZoomInOnCoordinates(Vector2 coordinates)
     {
@@ -161,11 +139,16 @@ public class MapAnimator : MonoBehaviour
 
     public void CancelButton()
     {
-        CancelAnimations();
-        App.Instance.UnloadScene("Map");
+        if (_infoPanel.gameObject.activeSelf)
+        {
+            HidePersistentInfoPanel();
+        }
+        else
+        {
+            GameManager.instance.CloseMap(true);
+        }
     }
-   
-
+    
     public void ResetAnimation()
     {
         CancelAnimations();
@@ -175,16 +158,6 @@ public class MapAnimator : MonoBehaviour
         HideConfirmationButtons();
         HideInfoPanel();
     }
-    
-
-    IEnumerator ShowLocationHandler(Vector3 location)
-    {
-        _standby = false;
-        _infoPanel.gameObject.SetActive(false);
-        //LeanTween.scale(transform.parent.gameObject, new Vector3(1, 1, 1), 0.5f).setEaseInOutSine();
-        yield return new WaitForSeconds(0.75f);
-    }
-
 
     private void Update()
     {
@@ -195,7 +168,6 @@ public class MapAnimator : MonoBehaviour
         var distanceToHorizontalEdge = (_rectTransform.rect.width - _parentRectTransform.rect.width) / 2f - Mathf.Abs(_rectTransform.localPosition.x);
         var distanceToVerticalEdge = (_rectTransform.rect.height - _parentRectTransform.rect.height) / 2f - Mathf.Abs(_rectTransform.localPosition.y);
         
-      //  Debug.Log((_rectTransform.rect.width - _parentRectTransform.rect.width) / 2f);
         transform.localPosition += _direction * (_animationSpeed * Time.deltaTime);
         
         
@@ -212,37 +184,5 @@ public class MapAnimator : MonoBehaviour
             _direction = new Vector3(newXdirection, newYdirection, 0f).normalized;
         }
     }
-
-    /*
-
-    private IEnumerator MoveObject()
-    {
-        float totalMovementTime = 60f; // The amount of time you want the movement to take
-        float currentMovementTime = 0f; // The amount of time that has passed
-
-        while (true)
-        {
-            // Generate a new random destination position
-            destination = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), 0f);
-
-            // Move towards the destination using Lerp
-            while (Vector3.Distance(transform.position, destination) > 0)
-            {
-                currentMovementTime += Time.deltaTime;
-                transform.position = Vector3.Lerp(origin, destination, currentMovementTime / totalMovementTime);
-                yield return null;
-            }
-
-            // Set the new origin for the next movement
-            origin = destination;
-
-            // Wait for a brief pause before picking the next random position
-            yield return new WaitForSeconds(1f);
-        }
-    }
     
-    
-    
-    
-    */
 }

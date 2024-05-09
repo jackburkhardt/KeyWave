@@ -3,10 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using PixelCrushers.DialogueSystem;
-using UnityEditor;
-using NaughtyAttributes;
 
 
 [CreateAssetMenu(fileName = "New Location", menuName = "Location")]
@@ -38,6 +34,7 @@ public class Location : ScriptableObject
 
     public void MoveHere()
     {
+        LastLocation = FromString(GameManager.gameState.player_location);
         GameEvent.OnMove(this.Name, this, this.TravelTime);
         GameManager.instance.TravelTo(this);
     }
@@ -46,6 +43,11 @@ public class Location : ScriptableObject
     {
         get
         {
+            // if cafe, distance is relative to current location
+            if (area == Area.Café || area == LastLocation.area)
+            {
+                return DistanceToNearestCafe;
+            }
             var playerCoordinates = PlayerLocation.coordinates;
             return (int)Vector2.Distance(playerCoordinates, coordinates);
         }
@@ -54,10 +56,6 @@ public class Location : ScriptableObject
     public int TravelTime {
         get
         {
-            if (area == Area.Café || GameManager.gameState.player_location == "Café")
-            {
-                return DistanceToNearestCafe * Clock.TimeScales.GlobalTimeScale;
-            } 
             return Distance * Clock.TimeScales.GlobalTimeScale;
         }
     }
@@ -95,6 +93,8 @@ public class Location : ScriptableObject
     public static Location FromArea(Area area) =>  FromString(area.ToString());
     
     public static Location PlayerLocation => FromString(GameManager.gameState.player_location);
-    
+
+    public static Location LastLocation;
+
     #endregion
 }

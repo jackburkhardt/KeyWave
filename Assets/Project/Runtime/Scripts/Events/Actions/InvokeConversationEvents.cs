@@ -5,7 +5,6 @@ public class InvokeConversationEvents : MonoBehaviour
 {
     public void BroadcastLine()
     {
-       
         if (DialogueUtility.CurrentDialogueEntry.id == 0) return; 
         
         GameEvent.OnConversationLine();
@@ -14,25 +13,16 @@ public class InvokeConversationEvents : MonoBehaviour
 
         if (DialogueUtility.Empty(DialogueUtility.CurrentDialogueEntry) &&
             DialogueUtility.CurrentDialogueEntry.Sequence == string.Empty) DialogueManager.PlaySequence("Continue()");
-
-        // if (!Points.IsAnimating) Sequencer.Message("Animated");
-       
-        //   StartCoroutine(DelayedBroadcast("line"));
     }
 
     public void BroadcastConversationStart()
     {
         GameEvent.OnConversationStart();
-        //  StartCoroutine(DelayedBroadcast("start"));
-
     }
-
-
     
     public void BroadcastConversationEnd()
     {
        GameEvent.OnConversationEnd();
-       // StartCoroutine(DelayedBroadcast("end"));
     }
 
     public void BroadcastResponseMenu()

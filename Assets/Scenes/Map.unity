@@ -360,7 +360,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 23
+  m_SortingOrder: 11
   m_TargetDisplay: 0
 --- !u!1 &114324940
 GameObject:
@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 114324941}
   - component: {fileID: 114324945}
   - component: {fileID: 114324942}
+  - component: {fileID: 114324946}
   - component: {fileID: 114324944}
   - component: {fileID: 114324943}
   m_Layer: 0
@@ -505,8 +506,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: c6c97c501770740dfb55c0be71ca661a, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 114324946}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Store
@@ -520,8 +522,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: c6c97c501770740dfb55c0be71ca661a, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 114324946}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Store
@@ -550,6 +553,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114324940}
   m_CullTransparentMesh: 1
+--- !u!114 &114324946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114324940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: c6c97c501770740dfb55c0be71ca661a, type: 2}
+  _text: {fileID: 740648367}
 --- !u!1 &161103645
 GameObject:
   m_ObjectHideFlags: 0
@@ -684,10 +701,11 @@ GameObject:
   - component: {fileID: 233017100}
   - component: {fileID: 233017102}
   - component: {fileID: 233017101}
+  - component: {fileID: 233017106}
   - component: {fileID: 233017104}
   - component: {fileID: 233017105}
   m_Layer: 0
-  m_Name: MapButton Beach
+  m_Name: MapButton Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -700,7 +718,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 233017099}
-  m_LocalRotation: {x: 0, y: 0, z: 0.07448627, w: 0.99722207}
+  m_LocalRotation: {x: 0, y: 0, z: 0.09210556, w: 0.9957493}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -739,7 +757,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.04253661
+  m_FillAmount: 0.03128056
   m_FillClockwise: 0
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
@@ -780,8 +798,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 7016f5fe0a970418ca076ed0a635ec25, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 233017106}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Beach
@@ -795,8 +814,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 7016f5fe0a970418ca076ed0a635ec25, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 233017106}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Beach
@@ -861,6 +881,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &233017106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233017099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: 7016f5fe0a970418ca076ed0a635ec25, type: 2}
+  _text: {fileID: 1287512235}
 --- !u!1 &316427472
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,7 +954,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 6
+  m_SortingOrder: 11
   m_TargetDisplay: 0
 --- !u!114 &316427475
 MonoBehaviour:
@@ -1030,7 +1064,6 @@ GameObject:
   - component: {fileID: 321997962}
   - component: {fileID: 321997967}
   - component: {fileID: 321997965}
-  - component: {fileID: 321997964}
   - component: {fileID: 321997963}
   m_Layer: 5
   m_Name: TextContainer
@@ -1081,24 +1114,6 @@ MonoBehaviour:
   flipText: 1
   expansion: 0
   padding: 0
---- !u!114 &321997964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 321997961}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a88fcdd7e75cf5445b6dde639f0591d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _text: {fileID: 0}
-  _tmpText: {fileID: 637152075}
-  _rectTransform: {fileID: 321997962}
-  lineCount: 8
-  lastVisibleCharacter: 0
-  _minWidth: 0
 --- !u!114 &321997965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1240,7 +1255,6 @@ GameObject:
   - component: {fileID: 470171708}
   - component: {fileID: 470171712}
   - component: {fileID: 470171711}
-  - component: {fileID: 470171710}
   - component: {fileID: 470171709}
   m_Layer: 5
   m_Name: TextContainer
@@ -1291,24 +1305,6 @@ MonoBehaviour:
   flipText: 0
   expansion: 0
   padding: 0
---- !u!114 &470171710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470171707}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a88fcdd7e75cf5445b6dde639f0591d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _text: {fileID: 0}
-  _tmpText: {fileID: 1221356248}
-  _rectTransform: {fileID: 470171708}
-  lineCount: 8
-  lastVisibleCharacter: 0
-  _minWidth: 0
 --- !u!114 &470171711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1366,6 +1362,7 @@ GameObject:
   - component: {fileID: 508176274}
   - component: {fileID: 508176278}
   - component: {fileID: 508176275}
+  - component: {fileID: 508176279}
   - component: {fileID: 508176277}
   - component: {fileID: 508176276}
   m_Layer: 0
@@ -1386,7 +1383,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1722475070}
   m_Father: {fileID: 39167633}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 47.07}
@@ -1497,8 +1495,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 53e7f0ff2516c4e1290f6f01670a6539, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 508176279}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: "Caf\xE9"
@@ -1512,8 +1511,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 53e7f0ff2516c4e1290f6f01670a6539, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 508176279}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: "Caf\xE9"
@@ -1542,6 +1542,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508176273}
   m_CullTransparentMesh: 1
+--- !u!114 &508176279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508176273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: 53e7f0ff2516c4e1290f6f01670a6539, type: 2}
+  _text: {fileID: 1678962336}
 --- !u!1 &555852673
 GameObject:
   m_ObjectHideFlags: 0
@@ -2133,7 +2147,6 @@ GameObject:
   - component: {fileID: 688023931}
   - component: {fileID: 688023930}
   - component: {fileID: 688023929}
-  - component: {fileID: 688023928}
   - component: {fileID: 688023927}
   m_Layer: 5
   m_Name: TextContainer
@@ -2184,24 +2197,6 @@ MonoBehaviour:
   flipText: 0
   expansion: 0
   padding: 0
---- !u!114 &688023928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 688023925}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a88fcdd7e75cf5445b6dde639f0591d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _text: {fileID: 0}
-  _tmpText: {fileID: 842286171}
-  _rectTransform: {fileID: 688023926}
-  lineCount: 8
-  lastVisibleCharacter: 0
-  _minWidth: 0
 --- !u!114 &688023929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2274,7 +2269,6 @@ GameObject:
   - component: {fileID: 699078462}
   - component: {fileID: 699078461}
   - component: {fileID: 699078460}
-  - component: {fileID: 699078459}
   - component: {fileID: 699078458}
   m_Layer: 5
   m_Name: TextContainer
@@ -2290,7 +2284,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 699078456}
-  m_LocalRotation: {x: 0, y: 0, z: 0.75564265, w: 0.6549841}
+  m_LocalRotation: {x: 0, y: 0, z: 0.783847, w: 0.62095404}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -2302,7 +2296,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1212.5, y: 0}
+  m_SizeDelta: {x: -1087.5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &699078458
 MonoBehaviour:
@@ -2325,24 +2319,6 @@ MonoBehaviour:
   flipText: 1
   expansion: 0
   padding: 0
---- !u!114 &699078459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 699078456}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a88fcdd7e75cf5445b6dde639f0591d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _text: {fileID: 0}
-  _tmpText: {fileID: 1527430972}
-  _rectTransform: {fileID: 699078457}
-  lineCount: 8
-  lastVisibleCharacter: 0
-  _minWidth: 0
 --- !u!114 &699078460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2777,6 +2753,7 @@ GameObject:
   - component: {fileID: 890241481}
   - component: {fileID: 890241486}
   - component: {fileID: 890241482}
+  - component: {fileID: 890241487}
   - component: {fileID: 890241484}
   - component: {fileID: 890241483}
   m_Layer: 0
@@ -2909,8 +2886,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: cf0cb6f429c184964a397a5239800c7e, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 890241487}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Hotel
@@ -2924,8 +2902,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: cf0cb6f429c184964a397a5239800c7e, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 890241487}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Hotel
@@ -2954,6 +2933,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 890241480}
   m_CullTransparentMesh: 1
+--- !u!114 &890241487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 890241480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: cf0cb6f429c184964a397a5239800c7e, type: 2}
+  _text: {fileID: 1221356248}
 --- !u!1 &904945160
 GameObject:
   m_ObjectHideFlags: 0
@@ -2988,6 +2981,7 @@ RectTransform:
   m_Children:
   - {fileID: 16160997}
   - {fileID: 2036691772}
+  - {fileID: 2135543450}
   - {fileID: 1807271588}
   - {fileID: 1364337822}
   m_Father: {fileID: 161103646}
@@ -3074,7 +3068,6 @@ GameObject:
   - component: {fileID: 1008986877}
   - component: {fileID: 1008986881}
   - component: {fileID: 1008986880}
-  - component: {fileID: 1008986879}
   - component: {fileID: 1008986878}
   m_Layer: 5
   m_Name: TextContainer
@@ -3125,24 +3118,6 @@ MonoBehaviour:
   flipText: 1
   expansion: 0
   padding: 0
---- !u!114 &1008986879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1008986876}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a88fcdd7e75cf5445b6dde639f0591d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _text: {fileID: 0}
-  _tmpText: {fileID: 740648367}
-  _rectTransform: {fileID: 1008986877}
-  lineCount: 8
-  lastVisibleCharacter: 0
-  _minWidth: 0
 --- !u!114 &1008986880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3200,6 +3175,7 @@ GameObject:
   - component: {fileID: 1034931053}
   - component: {fileID: 1034931057}
   - component: {fileID: 1034931054}
+  - component: {fileID: 1034931058}
   - component: {fileID: 1034931056}
   - component: {fileID: 1034931055}
   m_Layer: 0
@@ -3332,8 +3308,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 3377666481183439f9ad7d6671152b05, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 1034931058}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Park
@@ -3347,8 +3324,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 3377666481183439f9ad7d6671152b05, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 1034931058}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Park
@@ -3377,6 +3355,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034931052}
   m_CullTransparentMesh: 1
+--- !u!114 &1034931058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034931052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: 3377666481183439f9ad7d6671152b05, type: 2}
+  _text: {fileID: 842286171}
 --- !u!1 &1076309351
 GameObject:
   m_ObjectHideFlags: 0
@@ -4239,7 +4231,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Beach
+  m_text: ???
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
   m_sharedMaterial: {fileID: -8244711549486602402, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
@@ -4539,18 +4531,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1990484478}
         m_TargetAssemblyTypeName: MapAnimator, Assembly-CSharp
-        m_MethodName: ResetAnimation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1990484478}
-        m_TargetAssemblyTypeName: MapAnimator, Assembly-CSharp
         m_MethodName: CancelButton
         m_Mode: 1
         m_Arguments:
@@ -4581,7 +4561,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &1348363461
 MonoBehaviour:
@@ -4667,7 +4647,7 @@ RectTransform:
   - {fileID: 721932501}
   - {fileID: 1281642195}
   m_Father: {fileID: 904945161}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4860,7 +4840,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Airport
+  m_text: Neighborhood
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
   m_sharedMaterial: {fileID: -8244711549486602402, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
@@ -4937,6 +4917,141 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1527430970}
   m_CullTransparentMesh: 0
+--- !u!1 &1678962334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678962335}
+  - component: {fileID: 1678962337}
+  - component: {fileID: 1678962336}
+  m_Layer: 5
+  m_Name: Response Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1678962335
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678962334}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1722475070}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 127.42499}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1678962336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678962334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "Caf\xE9"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
+  m_sharedMaterial: {fileID: -8244711549486602402, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 40.17
+  m_fontSizeBase: 40.17
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 3
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1678962337
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678962334}
+  m_CullTransparentMesh: 0
 --- !u!1 &1703349795
 GameObject:
   m_ObjectHideFlags: 0
@@ -4999,6 +5114,113 @@ MonoBehaviour:
   m_Spacing: {x: 30.7, y: 7.6}
   m_Constraint: 1
   m_ConstraintCount: 2
+--- !u!1 &1722475069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1722475070}
+  - component: {fileID: 1722475073}
+  - component: {fileID: 1722475072}
+  - component: {fileID: 1722475071}
+  m_Layer: 5
+  m_Name: TextContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1722475070
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722475069}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7468909, w: 0.6649466}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 1678962335}
+  m_Father: {fileID: 508176274}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 450}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -1250, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1722475071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722475069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7b7b7f5e84327b489e7d9b8e7b79bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tmpText: {fileID: 1678962336}
+  watchFace: {fileID: 904945161}
+  watchContainer: {fileID: 161103646}
+  widthLimitReached: 1
+  parentImage: {fileID: 508176275}
+  shrinkRate: 3.125
+  flipText: 0
+  expansion: 0
+  padding: 0
+--- !u!114 &1722475072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722475069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!114 &1722475073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722475069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 30
+    m_Right: 30
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 7
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1807271587
 GameObject:
   m_ObjectHideFlags: 0
@@ -5031,7 +5253,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 904945161}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5148,7 +5370,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Island
+  m_text: ???
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
   m_sharedMaterial: {fileID: -8244711549486602402, guid: e589ca76f28026d4da4d8efbd7c1fe0a, type: 2}
@@ -5262,8 +5484,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 98.44772, y: 0}
-  m_SizeDelta: {x: 57.49546, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1904934156
 MonoBehaviour:
@@ -5353,7 +5575,6 @@ GameObject:
   - component: {fileID: 1972123325}
   - component: {fileID: 1972123324}
   - component: {fileID: 1972123323}
-  - component: {fileID: 1972123322}
   - component: {fileID: 1972123321}
   m_Layer: 5
   m_Name: TextContainer
@@ -5369,7 +5590,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1972123319}
-  m_LocalRotation: {x: 0, y: 0, z: 0.75274014, w: 0.65831786}
+  m_LocalRotation: {x: 0, y: 0, z: 0.74098337, w: 0.6715234}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -5381,7 +5602,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1225, y: 0}
+  m_SizeDelta: {x: -1275, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1972123321
 MonoBehaviour:
@@ -5404,24 +5625,6 @@ MonoBehaviour:
   flipText: 0
   expansion: 0
   padding: 0
---- !u!114 &1972123322
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972123319}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a88fcdd7e75cf5445b6dde639f0591d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _text: {fileID: 0}
-  _tmpText: {fileID: 1822357118}
-  _rectTransform: {fileID: 1972123320}
-  lineCount: 8
-  lastVisibleCharacter: 0
-  _minWidth: 0
 --- !u!114 &1972123323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5591,6 +5794,7 @@ GameObject:
   - component: {fileID: 2016705314}
   - component: {fileID: 2016705319}
   - component: {fileID: 2016705318}
+  - component: {fileID: 2016705320}
   - component: {fileID: 2016705316}
   - component: {fileID: 2016705315}
   m_Layer: 0
@@ -5693,8 +5897,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 01c673249f3b448e1a908b9cce658fce, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 2016705320}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Mall
@@ -5708,8 +5913,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 01c673249f3b448e1a908b9cce658fce, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 2016705320}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Mall
@@ -5768,6 +5974,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016705313}
   m_CullTransparentMesh: 1
+--- !u!114 &2016705320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016705313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: 01c673249f3b448e1a908b9cce658fce, type: 2}
+  _text: {fileID: 637152075}
 --- !u!1 &2036691771
 GameObject:
   m_ObjectHideFlags: 0
@@ -5803,7 +6023,6 @@ RectTransform:
   - {fileID: 1078411039}
   - {fileID: 555852674}
   - {fileID: 1703349796}
-  - {fileID: 2135543450}
   m_Father: {fileID: 904945161}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5874,6 +6093,7 @@ GameObject:
   - component: {fileID: 2098037447}
   - component: {fileID: 2098037451}
   - component: {fileID: 2098037448}
+  - component: {fileID: 2098037452}
   - component: {fileID: 2098037450}
   - component: {fileID: 2098037449}
   m_Layer: 0
@@ -5890,7 +6110,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098037446}
-  m_LocalRotation: {x: 0, y: 0, z: -0.38636157, w: 0.9223474}
+  m_LocalRotation: {x: 0, y: 0, z: -0.36999404, w: 0.9290341}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.9999999, y: 0.9999999, z: 1}
   m_ConstrainProportionsScale: 1
@@ -5929,7 +6149,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.04253661
+  m_FillAmount: 0.03128056
   m_FillClockwise: 0
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
@@ -6006,8 +6226,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 70fa58db97b6947b2be9f1ed2e8f873a, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 2098037452}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Island
@@ -6021,8 +6242,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 70fa58db97b6947b2be9f1ed2e8f873a, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 2098037452}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Island
@@ -6051,6 +6273,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098037446}
   m_CullTransparentMesh: 1
+--- !u!114 &2098037452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098037446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: 70fa58db97b6947b2be9f1ed2e8f873a, type: 2}
+  _text: {fileID: 1822357118}
 --- !u!1 &2099058305
 GameObject:
   m_ObjectHideFlags: 0
@@ -6063,7 +6299,6 @@ GameObject:
   - component: {fileID: 2099058311}
   - component: {fileID: 2099058310}
   - component: {fileID: 2099058309}
-  - component: {fileID: 2099058308}
   - component: {fileID: 2099058307}
   m_Layer: 5
   m_Name: TextContainer
@@ -6079,7 +6314,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2099058305}
-  m_LocalRotation: {x: 0, y: 0, z: 0.75274014, w: 0.65831786}
+  m_LocalRotation: {x: 0, y: 0, z: 0.74098337, w: 0.6715234}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -6091,7 +6326,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -1225, y: 0}
+  m_SizeDelta: {x: -1275, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2099058307
 MonoBehaviour:
@@ -6114,24 +6349,6 @@ MonoBehaviour:
   flipText: 1
   expansion: 0
   padding: 0
---- !u!114 &2099058308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2099058305}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a88fcdd7e75cf5445b6dde639f0591d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _text: {fileID: 0}
-  _tmpText: {fileID: 1287512235}
-  _rectTransform: {fileID: 2099058306}
-  lineCount: 8
-  lastVisibleCharacter: 0
-  _minWidth: 0
 --- !u!114 &2099058309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6363,7 +6580,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &2114904894
 MonoBehaviour:
@@ -6403,10 +6620,11 @@ GameObject:
   - component: {fileID: 2121881534}
   - component: {fileID: 2121881539}
   - component: {fileID: 2121881538}
+  - component: {fileID: 2121881540}
   - component: {fileID: 2121881536}
   - component: {fileID: 2121881535}
   m_Layer: 0
-  m_Name: MapButton Airport
+  m_Name: MapButton Neighborhood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6419,7 +6637,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2121881533}
-  m_LocalRotation: {x: 0, y: 0, z: 0.255757, w: 0.96674114}
+  m_LocalRotation: {x: 0, y: 0, z: 0.21278876, w: 0.9770982}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6505,8 +6723,9 @@ MonoBehaviour:
         m_MethodName: ShowFleetingInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 5331c390d6361429da8b0179a432ace2, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 2121881540}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Airport
@@ -6520,8 +6739,9 @@ MonoBehaviour:
         m_MethodName: ShowPersistentInfoPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 5331c390d6361429da8b0179a432ace2, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Location, Assembly-CSharp
+          m_ObjectArgument: {fileID: 2121881540}
+          m_ObjectArgumentAssemblyTypeName: Project.Runtime.Scripts.UI.Map.MapLocationInfo,
+            Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Airport
@@ -6567,7 +6787,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.045350622
+  m_FillAmount: 0.073490754
   m_FillClockwise: 0
   m_FillOrigin: 1
   m_UseSpriteMesh: 0
@@ -6580,6 +6800,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2121881533}
   m_CullTransparentMesh: 1
+--- !u!114 &2121881540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2121881533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12c07ed20c34310a338516d21314994, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  location: {fileID: 11400000, guid: 5331c390d6361429da8b0179a432ace2, type: 2}
+  _text: {fileID: 1527430972}
 --- !u!1 &2135543449
 GameObject:
   m_ObjectHideFlags: 0
@@ -6605,19 +6839,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2135543449}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2114904888}
   - {fileID: 1348363458}
-  m_Father: {fileID: 2036691772}
-  m_RootOrder: 4
+  m_Father: {fileID: 904945161}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -93.1}
+  m_AnchoredPosition: {x: 0, y: 269.50003}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2135543451
