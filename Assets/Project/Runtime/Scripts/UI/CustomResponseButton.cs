@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
 [RequireComponent(typeof(StandardUIResponseButton))]
 [RequireComponent(typeof(Button))]
@@ -18,12 +21,15 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
     private CircularUIButton CircularUIButton => GetComponent<CircularUIButton>();
     private Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
 
+    private UIButtonKeyTrigger[] ButtonKeyTriggers => GetComponents<UIButtonKeyTrigger>();
+
     [SerializeField] private UITextField autonumberText;
 
     public void SetResponseText()
     {
         //StandardUIResponseButton.label.text = StandardUIResponseButton.response.formattedText.text;
       }
+
     private Color HighlightColor
     {
         get => UnityButton.colors.highlightedColor;
@@ -33,6 +39,61 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
             block.highlightedColor = value;
             UnityButton.colors = block;
         }
+    }
+
+   
+
+    public void SetAutonumber()
+    {
+        
+       
+       
+       
+        int GetAutonumber()
+        {
+            var buttons = transform.parent.GetComponentsInChildren<CustomResponseButton>().ToList();
+            // remove all buttons that are invalid
+            buttons.RemoveAll(button => !button.transform.gameObject.activeSelf || button.DestinationEntry != null && button.DestinationEntry.conditionsString.Length != 0 &&
+                                        !Lua.IsTrue(button.DestinationEntry.conditionsString));
+            
+            if (!buttons.Contains(this)) return -1;
+
+            var siblingIndices = buttons.Select(button => button.transform.GetSiblingIndex()).OrderBy(n => n).ToList();
+
+            var siblingIndex = transform.GetSiblingIndex();
+            
+            
+            var autoNumber = siblingIndices.IndexOf(siblingIndex) == 9 ? 0 : siblingIndices.IndexOf(siblingIndex) + 1;
+          
+            return autoNumber;
+
+        }
+        
+        KeyCode intToKeyCodeAlpha(int i)
+        {
+            if (i < 0 || i > 9) return KeyCode.None;
+            var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Alpha" + i);
+            return key;
+        }
+
+        KeyCode intToKeyCodeKeypad(int i)
+        {
+            if (i < 0 || i > 9) return KeyCode.None;
+            var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Keypad" + i);
+            return key;
+        }
+        
+        
+        var autoNumber = GetAutonumber();
+        
+        foreach (var trigger in ButtonKeyTriggers)
+        { 
+           if (trigger.key.ToString().Contains("Alpha")) trigger.key = intToKeyCodeAlpha(autoNumber);
+           if (trigger.key.ToString().Contains("Keypad")) trigger.key = intToKeyCodeKeypad(autoNumber);
+        }
+
+        if (autoNumber < 0 || autoNumber > 9) autonumberText.text = "";
+        else autonumberText.text = $"{autoNumber}.";
     }
     
     private Color DisabledColor
@@ -128,6 +189,8 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
         }
 
         else ButtonColor = BaseColor;
+        
+        SetAutonumber();
     }
     
     public static void RefreshButtonColors()

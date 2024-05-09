@@ -4,9 +4,10 @@ using PixelCrushers;
 using PixelCrushers.DialogueSystem.Wrappers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SubtitleContentElement : MonoBehaviour
+public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Image portrait;
     [SerializeField] private SubtitleManager subtitleManager;
@@ -123,6 +124,8 @@ public class SubtitleContentElement : MonoBehaviour
         timeText.text = Clock.CurrentTime;
     }
 
+    private float _alpha;
+
 
     private void OnEnable()
     {
@@ -131,5 +134,19 @@ public class SubtitleContentElement : MonoBehaviour
         Destroy(typewriterEffect);
         canvasGroup.alpha = 0.25f;
         
+    }
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
+        _alpha = canvasGroup.alpha;
+        canvasGroup.alpha = 1;
+    }
+    
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
+        canvasGroup.alpha = _alpha;
     }
 }

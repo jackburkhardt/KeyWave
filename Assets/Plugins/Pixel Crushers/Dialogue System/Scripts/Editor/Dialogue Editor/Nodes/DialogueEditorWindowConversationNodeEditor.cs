@@ -1764,15 +1764,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             var sequenceOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/SequenceOptions.asset");
             var titleOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/TitleOptions.asset");
-
-            if (sequenceOpts)
-            {
-                foreach (var item in sequenceOpts.strings)
-                {
-                    contextMenu.AddItem(new GUIContent("Set Sequence/" + item), false, SetSequenceCallback,
-                        new Tuple<DialogueEntry, string>(entry, item));
-                }
-            }
+            var menuTextOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/MenuTextOptions.asset");
 
             if (titleOpts)
             {
@@ -1782,6 +1774,30 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         new Tuple<DialogueEntry, string>(entry, item));
                 }
             }
+
+            if (sequenceOpts)
+            {
+                foreach (var item in sequenceOpts.strings)
+                {
+                    contextMenu.AddItem(new GUIContent("Set Sequence/" + item), false, SetSequenceCallback,
+                        new Tuple<DialogueEntry, string>(entry, item));
+                }
+            }
+            
+            if (menuTextOpts)
+            {
+                foreach (var item in menuTextOpts.strings)
+                {
+                    contextMenu.AddItem(new GUIContent("Set Menu Text/" + item), false, SetMenuTextCallback,
+                        new Tuple<DialogueEntry, string>(entry, item));
+                }
+            }
+            
+            contextMenu.AddSeparator("");
+            
+            contextMenu.AddItem(new GUIContent("Auto Script/Set Quest Success"), false, SetQuestSuccessCallback, entry);
+
+
 
             contextMenu.AddSeparator("");
 
@@ -2136,6 +2152,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             tuple.Item1.Title = tuple.Item2;
             SetDatabaseDirty("Set Title");
+            RefreshConversation();
         }
         
         private void SetSequenceCallback(object o)
@@ -2145,6 +2162,25 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             tuple.Item1.Sequence = tuple.Item2;
             SetDatabaseDirty("Set Sequence");
+            RefreshConversation();
+        }
+        
+        private void SetMenuTextCallback(object o)
+        {
+            var tuple = o as Tuple<DialogueEntry, string>;
+            if (tuple == null) return;
+            
+            tuple.Item1.MenuText = tuple.Item2;
+            SetDatabaseDirty("Set Menu Text");
+            RefreshConversation();
+        }
+
+        private void SetQuestSuccessCallback(object o)
+        {
+            var entry = o as DialogueEntry;
+            entry.userScript = "SetQuestState(\"" + currentConversation.Title + "\", \"Success\");";
+            SetDatabaseDirty("Set User Script");
+            RefreshConversation();
         }
 
         private DialogueEntry DuplicateEntryForClipboard(DialogueEntry entry)

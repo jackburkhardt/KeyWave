@@ -114,12 +114,12 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             
             // creating the conversation
             var newConvo = template.CreateConversation(template.GetNextConversationID(db), _internalName);
-            newConvo.ActorID = 1;
+            newConvo.ActorID = -1;
             newConvo.ConversantID = -1;
             
             // all conversations should have a START node
             var startNode = template.CreateDialogueEntry(0, newConvo.id, "START");
-            startNode.ActorID = 1;
+            startNode.ActorID = -1;
             startNode.ConversantID = -1;
             startNode.Sequence = "None()"; // START node usually shouldn't play a sequence.
             Field.SetValue(startNode.fields, "Return Location",
@@ -136,7 +136,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             // dialogue entry and link to new conversation
             var newNode = template.CreateDialogueEntry(
                 template.GetNextDialogueEntryID(_originConversation), _originConversation.id, _internalName);
-            newNode.ActorID = 1;
+            newNode.ActorID = -1;
             newNode.ConversantID = -1;
             newNode.MenuText = _menuText;
             newNode.DialogueText = _dialogueText;

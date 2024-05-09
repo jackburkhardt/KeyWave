@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using TMPro;
 using UnityEditor.Experimental;
 using UnityEngine;
@@ -14,6 +15,20 @@ public class TextMeshSplitter : MonoBehaviour
     [SerializeReference] private List<TMP_Text> _textMeshes = new List<TMP_Text>();
     
     [SerializeField] private string splitter = "~~~";
+
+
+    
+    public enum SplitNullAction
+    {
+        doNothing,
+        setAllTextToMeshIndex
+    }
+    
+    public SplitNullAction splitNullAction;
+    
+    [ShowIf("splitNullAction", SplitNullAction.setAllTextToMeshIndex)]
+    public int meshIndex;
+    
 
 
     private string currentText;
@@ -38,7 +53,30 @@ public class TextMeshSplitter : MonoBehaviour
 
     void SplitText()
     {
+        var text = _textMesh.text;
         var strings = _textMesh.text.Split(splitter);
+
+        if (!_textMesh.text.Contains(splitter))
+        {
+            if (splitNullAction == SplitNullAction.setAllTextToMeshIndex)
+            {
+                for (int i = 0; i < _textMeshes.Count; i++)
+                {
+                    if (i == meshIndex)
+                    {
+                        _textMeshes[i].text = text;
+                    }
+                    else
+                    {
+                        _textMeshes[i].text = "";
+                    }
+                }
+
+                return;
+            }
+        }
+        
+        
 
         for (int i = 0; i < _textMeshes.Count; i++)
         {
@@ -80,6 +118,8 @@ public class TextMeshSplitter : MonoBehaviour
             
             
         }
+        
+        
     }
 
     // Update is called once per frame
