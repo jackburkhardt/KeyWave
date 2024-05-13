@@ -32,10 +32,12 @@ namespace Project.Runtime.Scripts.App
         {
             DontDestroyOnLoad(this.gameObject);
             _instance = this;
+            //BrowserInterface.getSocketLibrarySource();
         }
 
         public void BeginGame()
         {
+            BrowserInterface.canYouHearMe();
             ChangeScene("Base", "StartMenu");
             GameEvent.OnRegisterPlayerEvent += SendPlayerEvent;
         }
