@@ -100,6 +100,8 @@ public static class DialogueUtility
     public static int GetQuestDuration(Item quest)
     {
         var durationField = quest.AssignedField("Duration");
+        if (durationField == null) return 0;
+        
         var unit = durationField.value.Split(':')[1];
         var questTime = int.Parse(durationField.value.Split(':')[0]);
         var duration = 0;

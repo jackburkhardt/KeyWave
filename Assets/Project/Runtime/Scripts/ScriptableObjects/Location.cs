@@ -44,7 +44,7 @@ public class Location : ScriptableObject
         get
         {
             // if cafe, distance is relative to current location
-            if (area == Area.Café || area == LastLocation.area)
+            if (area == Area.Café || (LastLocation && area == LastLocation.area))
             {
                 return DistanceToNearestCafe;
             }
