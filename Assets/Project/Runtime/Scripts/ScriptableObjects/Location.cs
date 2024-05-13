@@ -14,11 +14,11 @@ public class Location : ScriptableObject
     
     public enum Area {
         Hotel,
-        Beach,
+        Promenade,
         Neighborhood,
         Mall,
         Park,
-        Island,
+        Harbor,
         Café,
         Store
     }
