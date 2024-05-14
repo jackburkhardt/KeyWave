@@ -24,15 +24,19 @@ public class CircularUIButton : MonoBehaviour
     List<CircularUIButton> matchedSideInteractables = new List<CircularUIButton>();
     [SerializeField] private float _padding;
     public UnityEvent onHover, onClick, onMouseExit;
-    public static float globalOffset;
-  
-    
-    public static float CircularUIDegreeSum
+    private float offset;
+    public float Offset
+    {
+        get => offset;
+        set => offset = value;
+    }
+
+    public float CircularUIDegreeSum
     {
         get
         {
             var degreeSum = 0f;
-            foreach (var circularUIButton in FindObjectsOfType<CircularUIButton>())
+            foreach (var circularUIButton in transform.parent.GetComponentsInChildren<CircularUIButton>())
             {
                 degreeSum += circularUIButton.image.fillAmount * 360f;
             }
@@ -83,7 +87,7 @@ public class CircularUIButton : MonoBehaviour
 
     private float _interactAngleThreshold;
 
-    private void Start()
+    private void Awake()
     {
         image ??= GetComponent<Image>();
         button ??= GetComponent<Button>();
@@ -108,12 +112,6 @@ public class CircularUIButton : MonoBehaviour
     
     private void Update()
     {
-        
-        
-        
-        
-        
-        
         
         var sameSideInteractables = FindObjectsOfType<CircularUIButton>().ToList().Where(watchInteractable => watchInteractable.watchSide == watchSide).ToList();
         sameSideInteractables.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
@@ -148,10 +146,6 @@ public class CircularUIButton : MonoBehaviour
 
         currentIndex = sameSideInteractables.IndexOf(this);
 
-
-        //spacing = masterSpacing;
-        
-        // get the index of the current button
         
         image.fillOrigin = 1;
         
@@ -165,7 +159,7 @@ public class CircularUIButton : MonoBehaviour
                 transform.localRotation = Quaternion.Euler(0, 0, zAngle);
                 break;
             case Spacing.Clustered:
-                transform.localRotation = Quaternion.Euler(0, 0, angleIndex + SideIndex[watchSide] * 90 - degreeSum / 2 + globalOffset);
+                transform.localRotation = Quaternion.Euler(0, 0, angleIndex + SideIndex[watchSide] * 90 - degreeSum / 2 + offset);
                 break;
         }
 

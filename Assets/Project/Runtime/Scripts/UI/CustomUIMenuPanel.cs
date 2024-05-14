@@ -99,21 +99,22 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
     protected override void Update()
     { 
         base.Update();
-        
-        if (CircularUIButton.CircularUIDegreeSum < maxVisibleDegreeSum)
+
+        var circularButtons = GetComponentsInChildren<CircularUIButton>();
+
+        foreach (var circularButton in circularButtons)
         {
-            CircularUIButton.globalOffset = 0;
-            return;
-        }
-        
-        var normalizedPointerAngle = mousePointerHand.AngleCenteredSouth / maxVisibleDegreeSum * 2f; 
-        var offsetRange = CircularUIButton.CircularUIDegreeSum - maxVisibleDegreeSum;
-        var offset = offsetRange * - (offsetCurve.Evaluate(Mathf.Abs(normalizedPointerAngle)) *  MathF.Sign(normalizedPointerAngle) * 0.5f); 
-        CircularUIButton.globalOffset = offset;
-
-
+            if (circularButton.CircularUIDegreeSum < maxVisibleDegreeSum)  circularButton.Offset = 0;
+            else
+            {
+                var normalizedPointerAngle = mousePointerHand.AngleCenteredSouth / maxVisibleDegreeSum * 2f; 
+                var offsetRange = circularButton.CircularUIDegreeSum - maxVisibleDegreeSum;
+                var offset = offsetRange * - (offsetCurve.Evaluate(Mathf.Abs(normalizedPointerAngle)) *  MathF.Sign(normalizedPointerAngle) * 0.5f); 
+                circularButton.Offset = offset;
+            }
         }
     }
+}
     
 
     
