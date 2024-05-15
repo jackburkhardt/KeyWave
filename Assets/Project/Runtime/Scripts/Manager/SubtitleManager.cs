@@ -1,6 +1,9 @@
 using System;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using NaughtyAttributes;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class SubtitleManager : MonoBehaviour
 {
@@ -10,7 +13,19 @@ public class SubtitleManager : MonoBehaviour
       RefreshContents();
    }
 
-   [SerializeField] private SubtitleContentElement templateSubtitleContentElement;
+   public UnityEvent onDuplicateAdded;
+   //public UnityEvent onDuplicateReveal;
+   
+   
+   
+   [Button("SetScrollRect")]
+   public void SetScrollRect()
+   {
+      var scrollRect = transform.parent.GetComponent<ScrollRect>();
+      scrollRect.verticalNormalizedPosition = 0;
+   }
+
+   public SubtitleContentElement templateSubtitleContentElement;
    public Transform duplicatedSubtitleContentContainer;
    private SubtitleContentElement mostRecentDuplicate;
    private Subtitle mostRecentSubtitle;
@@ -36,15 +51,15 @@ public class SubtitleManager : MonoBehaviour
 
    public void AddHiddenDuplicate()
    {
-      RefreshLayoutGroups.Refresh(gameObject);
-      //if (subtitle.formattedText.text == string.Empty) return;
-   //   if (CustomUIMenuPanel.SelectedResponseButton != null && subtitle.dialogueEntry == CustomUIMenuPanel.SelectedResponseButton.DestinationEntry) return;
-   //   if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == subtitle.formattedText.text) return;
+     // RefreshLayoutGroups.Refresh(gameObject);
+      if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == templateSubtitleContentElement.SubtitleText.ToString()) return;
       mostRecentDuplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
       mostRecentDuplicate.gameObject.SetActive(false);
       RefreshContents();
       
       mostRecentDuplicate.UpdateTime();
+      
+      onDuplicateAdded.Invoke();
       
    }
    

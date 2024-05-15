@@ -46,6 +46,7 @@ namespace PixelCrushers.DialogueSystem
         public AutoScrollSettings autoScrollSettings = new AutoScrollSettings();
 
         public UnityEvent onBegin = new UnityEvent();
+        public UnityEvent onFirstCharacter = new UnityEvent();
         public UnityEvent onCharacter = new UnityEvent();
         public UnityEvent onEnd = new UnityEvent();
 
@@ -321,6 +322,7 @@ namespace PixelCrushers.DialogueSystem
                                 }
                             }
                             onCharacter.Invoke();
+                            if (totalVisibleCharacters == 1) onFirstCharacter.Invoke();
                             charactersTyped++;
                             textComponent.maxVisibleCharacters = charactersTyped;
                             if (IsFullPauseCharacter(typedCharacter)) yield return DialogueTime.WaitForSeconds(fullPauseDuration);

@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers;
-using PixelCrushers.DialogueSystem.Wrappers;
+using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.UnityGUI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TextMeshProTypewriterEffect = PixelCrushers.DialogueSystem.Wrappers.TextMeshProTypewriterEffect;
 
 public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -18,7 +21,8 @@ public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPoin
     [SerializeField] private TMP_Text mainClock;
     [SerializeField] private UITextField subtitleText;
 
-   
+    private List<SubtitleContentElement> DuplicatedSubtitles =>
+        subtitleManager.GetComponentsInChildren<SubtitleContentElement>().ToList();
    
     public bool PortraitActive => portrait != null && portrait.gameObject.activeSelf;
 
@@ -142,11 +146,26 @@ public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPoin
         if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
         _alpha = canvasGroup.alpha;
         canvasGroup.alpha = 1;
+        
+        DialogueManager.Pause();
+        
+         
+        subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Pause();
     }
     
     public void OnPointerExit(PointerEventData eventData)
     {
         if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
         canvasGroup.alpha = _alpha;
+
+        var isPointerOnAnySubtitle = false;
+        
+        DialogueManager.Unpause();
+        
+        subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Unpause();
+
+
+
+
     }
 }
