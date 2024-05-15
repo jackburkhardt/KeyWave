@@ -68,14 +68,10 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
             return autoNumber;
 
         }
-        
-        KeyCode intToKeyCodeAlpha(int i)
-        {
-            if (i < 0 || i > 9) return KeyCode.None;
-            var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Alpha" + i);
-            return key;
-        }
 
+        string extraKeys = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        
+        
         KeyCode intToKeyCodeKeypad(int i)
         {
             if (i < 0 || i > 9) return KeyCode.None;
@@ -83,17 +79,35 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
             return key;
         }
         
+        KeyCode intToKeyCodeAlpha(int i)
+        {
+            if (i < 0) return KeyCode.None;
+            if (i < 10)
+            {
+                var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Alpha" + i);
+                return key;
+            }
+
+            else
+            {
+                var key = (KeyCode)Enum.Parse(typeof(KeyCode), extraKeys[i - 10].ToString());
+                return key;
+            }
+        }
+
+        
         
         var autoNumber = GetAutonumber();
         
         foreach (var trigger in ButtonKeyTriggers)
         { 
-           if (trigger.key.ToString().Contains("Alpha")) trigger.key = intToKeyCodeAlpha(autoNumber);
-           if (trigger.key.ToString().Contains("Keypad")) trigger.key = intToKeyCodeKeypad(autoNumber);
+           if (trigger.key.ToString().Contains("Keypad")) {trigger.key = intToKeyCodeKeypad(autoNumber); continue; }
+           trigger.key = intToKeyCodeAlpha(autoNumber);
         }
 
-        if (autoNumber < 0 || autoNumber > 9) autonumberText.text = "";
-        else autonumberText.text = $"{autoNumber}.";
+        if (autoNumber < 0) autonumberText.text = "";
+        else if (autoNumber < 10) autonumberText.text = $"{autoNumber}.";
+        else autonumberText.text = extraKeys[autoNumber - 10].ToString();
     }
     
     private Color DisabledColor

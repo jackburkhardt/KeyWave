@@ -65,10 +65,13 @@ public class SubtitleManager : MonoBehaviour
    
    public void RevealDuplicate()
    {
+    
       if (mostRecentDuplicate == null || duplicatedSubtitleContentContainer.childCount == 0) return;
-      if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() ==
-          templateSubtitleContentElement.SubtitleText.ToString()) return;
+     // if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() ==
+      //    templateSubtitleContentElement.SubtitleText.ToString()) return;
+      
       mostRecentDuplicate.gameObject.SetActive(true);
+      Debug.Log("revealing " + mostRecentDuplicate.SubtitleText.ToString());
       RefreshContents();
    }
    

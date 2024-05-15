@@ -36,6 +36,8 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(QuestPartiallyComplete), this, SymbolExtensions.GetMethodInfo(() => QuestPartiallyComplete(string.Empty)));
         Lua.RegisterFunction(nameof(QuestInProgressButNascent), this, SymbolExtensions.GetMethodInfo(() => QuestInProgressButNascent(string.Empty)));
         Lua.RegisterFunction(nameof(LocationIDToName), this, SymbolExtensions.GetMethodInfo(() => LocationIDToName(0)));
+        Lua.RegisterFunction(nameof(HourMinuteToTime), this, SymbolExtensions.GetMethodInfo(() => HourMinuteToTime(0, 0)));
+      
     }
 
     private void DeregisterLuaFunctions()
@@ -49,11 +51,23 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.UnregisterFunction(nameof(QuestPartiallyComplete));
         Lua.UnregisterFunction(nameof(QuestInProgressButNascent));
         Lua.UnregisterFunction(nameof(LocationIDToName));
+        Lua.UnregisterFunction(nameof(HourMinuteToTime));
         
     }
     
     
     //lua functions
+    
+    public string HourMinuteToTime(double hour, double minute)
+    {
+        var hourString = hour.ToString();
+        if (hourString.Length == 1) hourString = "0" + hourString;
+        
+        var minuteString = minute.ToString();
+        if (minuteString.Length == 1) minuteString = "0" + minuteString;
+
+        return hourString + ":" + minuteString;
+    }
     
     public string LocationIDToName(System.Single locationID)
     {

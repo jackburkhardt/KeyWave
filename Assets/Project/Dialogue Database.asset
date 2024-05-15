@@ -50,7 +50,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: IsPlayer
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
@@ -1947,7 +1947,7 @@ MonoBehaviour:
     - title: Name
       value: Hotel/Talk/Prado
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
@@ -1955,19 +1955,19 @@ MonoBehaviour:
     - title: Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
-      value: unassigned
+      value: active
       type: 12
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
@@ -1975,7 +1975,7 @@ MonoBehaviour:
     - title: Display Name
       value: Call Prado
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
   - id: 56
     fields:
     - title: Name
@@ -2512,20 +2512,6 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
   variables:
-  - id: 2
-    fields:
-    - title: Name
-      value: VendingMachineItem
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: -1
-      type: 6
-      typeString: CustomFieldType_Item
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
   - id: 3
     fields:
     - title: Name
@@ -2540,48 +2526,6 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 4
-    fields:
-    - title: Name
-      value: wasComputerUsed?
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 5
-    fields:
-    - title: Name
-      value: hasVisitedBeach?
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 6
-    fields:
-    - title: Name
-      value: wasDogSpotted?
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
   - id: 15
     fields:
     - title: Name
@@ -2624,48 +2568,6 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 19
-    fields:
-    - title: Name
-      value: checkedEmailsOnDay1?
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 20
-    fields:
-    - title: Name
-      value: eatBreakfast?
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 21
-    fields:
-    - title: Name
-      value: visited_park
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
   - id: 18
     fields:
     - title: Name
@@ -2698,20 +2600,6 @@ MonoBehaviour:
     fields:
     - title: Name
       value: debug_disable_leave_nodes
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 23
-    fields:
-    - title: Name
-      value: park_read_billboard
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
@@ -2858,6 +2746,48 @@ MonoBehaviour:
       value: 
       type: 5
       typeString: CustomFieldType_Actor
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 35
+    fields:
+    - title: Name
+      value: prado_appointment_hour
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 36
+    fields:
+    - title: Name
+      value: prado_appointment_minute
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 37
+    fields:
+    - title: Name
+      value: prado_appointment
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 0:00
+      type: 9
+      typeString: CustomFieldType_TimeType
     - title: Description
       value: 
       type: 0
@@ -3490,8 +3420,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 799.552
-        y: 317.26093
+        x: 800.9772
+        y: 315.12317
         width: 160
         height: 30
     - id: 25
@@ -3545,8 +3475,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 653.38043
-        y: 374.3359
+        x: 654.8056
+        y: 372.19815
         width: 160
         height: 30
     - id: 26
@@ -3600,8 +3530,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 801.12335
-        y: 446.9478
+        x: 806.1114
+        y: 409.89404
         width: 160
         height: 30
     - id: 27
@@ -3675,8 +3605,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 439.6869
-        y: 444.61542
+        x: 456.78864
+        y: 409.69934
         width: 160
         height: 30
     - id: 28
@@ -3750,8 +3680,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 970.53784
-        y: 375.49875
+        x: 971.963
+        y: 373.361
         width: 160
         height: 30
     - id: 29
@@ -3825,8 +3755,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 21.881165
-        y: 361.01764
+        x: 67.85225
+        y: 374.7415
         width: 160
         height: 30
     - id: 30
@@ -3900,8 +3830,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 93.693016
-        y: 436.56863
+        x: 149.67278
+        y: 436.1006
         width: 160
         height: 30
     - id: 31
@@ -3975,13 +3905,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 246.49951
-        y: 500.77448
+        x: 268.56393
+        y: 507.5636
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 25.843842, y: 63.6474}
-    canvasZoom: 0.94269395
+    canvasScrollPosition: {x: 56.927155, y: 74.574165}
+    canvasZoom: 1.2426934
   - id: 18
     fields:
     - title: Title
@@ -32928,8 +32858,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 225.03326, y: 0}
-    canvasZoom: 0.94652677
+    canvasScrollPosition: {x: 239.42906, y: 47.328426}
+    canvasZoom: 1.0365267
   - id: 78
     fields:
     - title: Title
@@ -33031,8 +32961,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 371.44965
-        y: 173.8182
+        x: 1831.8568
+        y: 46.124435
         width: 160
         height: 30
     - id: 1
@@ -33062,7 +32992,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: 
+        value: Delay(2)
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -33096,7 +33026,7 @@ MonoBehaviour:
       - originConversationID: 78
         originDialogueID: 1
         destinationConversationID: 78
-        destinationDialogueID: 2
+        destinationDialogueID: 83
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -33106,14 +33036,14 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 371.44977
-        y: 228.82397
+        x: 1835.2286
+        y: 127.71333
         width: 160
         height: 30
     - id: 2
       fields:
       - title: Title
-        value: 
+        value: ShowOptions
         type: 0
         typeString: CustomFieldType_Text
       - title: Description
@@ -33121,11 +33051,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 18
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 18
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -33133,7 +33063,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Hello, you've reached Prado and Associates! How can I help?
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -33183,12 +33113,6 @@ MonoBehaviour:
       - originConversationID: 78
         originDialogueID: 2
         destinationConversationID: 78
-        destinationDialogueID: 5
-        isConnector: 0
-        priority: 2
-      - originConversationID: 78
-        originDialogueID: 2
-        destinationConversationID: 78
         destinationDialogueID: 6
         isConnector: 0
         priority: 2
@@ -33199,8 +33123,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 371.44977
-        y: 290.46222
+        x: 1838.4596
+        y: 273.3269
         width: 160
         height: 30
     - id: 3
@@ -33260,7 +33184,19 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 3
+        destinationConversationID: 78
+        destinationDialogueID: 14
+        isConnector: 0
+        priority: 3
+      - originConversationID: 78
+        originDialogueID: 3
+        destinationConversationID: 78
+        destinationDialogueID: 89
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -33268,8 +33204,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 115.2616
-        y: 580.5427
+        x: 1729.8314
+        y: 367.39807
         width: 160
         height: 30
     - id: 4
@@ -33343,77 +33279,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 161.88553
-        y: 824.1891
-        width: 160
-        height: 30
-    - id: 5
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 18
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: '"Associates?" Who are these associates? And why am I not one of them?'
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      - title: Show If Invalid
-        value: False
-        type: 2
-        typeString: CustomFieldType_Boolean
-      - title: Invalid Text
-        value: ???
-        type: 0
-        typeString: CustomFieldType_Text
-      conversationID: 78
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks: []
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 395.05252
-        y: 699.2125
+        x: 1909.5934
+        y: 684.55963
         width: 160
         height: 30
     - id: 6
@@ -33487,8 +33354,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 727.1987
-        y: 394.0238
+        x: 2509.6006
+        y: 314.96988
         width: 160
         height: 30
     - id: 7
@@ -33574,8 +33441,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 740.95776
-        y: 467.24564
+        x: 2507.0515
+        y: 382.1976
         width: 160
         height: 30
     - id: 8
@@ -33635,7 +33502,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 8
+        destinationConversationID: 78
+        destinationDialogueID: 93
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -33643,8 +33516,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 623.3099
-        y: 598.52277
+        x: 2243.9475
+        y: 434.9536
         width: 160
         height: 30
     - id: 9
@@ -33718,8 +33591,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 757.2832
-        y: 726.5377
+        x: 2535.3542
+        y: 617.62854
         width: 160
         height: 30
     - id: 10
@@ -33795,8 +33668,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 947.32166
-        y: 566.1102
+        x: 2736.4924
+        y: 467.46017
         width: 160
         height: 30
     - id: 11
@@ -33870,8 +33743,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 976.34216
-        y: 754.2313
+        x: 2758.2542
+        y: 602.7817
         width: 160
         height: 30
     - id: 12
@@ -33935,7 +33808,7 @@ MonoBehaviour:
       - originConversationID: 78
         originDialogueID: 12
         destinationConversationID: 78
-        destinationDialogueID: 13
+        destinationDialogueID: 23
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -33945,11 +33818,98 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 291.15353
-        y: 916.32745
+        x: 2073.36
+        y: 804.6181
         width: 160
         height: 30
-    - id: 13
+    - id: 14
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: Maybe, but I would rather you introduce yourself, first.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 14
+        destinationConversationID: 78
+        destinationDialogueID: 15
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 14
+        destinationConversationID: 78
+        destinationDialogueID: 16
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 14
+        destinationConversationID: 78
+        destinationDialogueID: 85
+        isConnector: 0
+        priority: 2
+      conditionsString: Dialog[7].SimStatus == "Untouched"
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1516.3151
+        y: 384.57504
+        width: 160
+        height: 30
+    - id: 15
       fields:
       - title: Title
         value: 
@@ -33968,7 +33928,1849 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
+        value: 'The name''s Oliviera. Daniel Oliviera. '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
         value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 15
+        destinationConversationID: 78
+        destinationDialogueID: 17
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1204.6346
+        y: 534.32086
+        width: 160
+        height: 30
+    - id: 16
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: My name is Douglas Fischer.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 16
+        destinationConversationID: 78
+        destinationDialogueID: 18
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1431.4186
+        y: 495.82562
+        width: 160
+        height: 30
+    - id: 17
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 'Thanks for that. Francisco Prado currently out of town, but I''d
+          be happy to schedule you an appointment. '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 17
+        destinationConversationID: 78
+        destinationDialogueID: 23
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 17
+        destinationConversationID: 78
+        destinationDialogueID: 86
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 17
+        destinationConversationID: 78
+        destinationDialogueID: 87
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1225.6661
+        y: 639.2253
+        width: 160
+        height: 30
+    - id: 18
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 'Absolutely hilarious, Mr. Oliviera. But this is modern times and
+          things like Caller ID exist. You''re lucky I have Francisco''s memos right
+          in front of me. '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 18
+        destinationConversationID: 78
+        destinationDialogueID: 89
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1582.4724
+        y: 560.0382
+        width: 160
+        height: 30
+    - id: 19
+      fields:
+      - title: Title
+        value: ShowOptions
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 20
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 24
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 25
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 26
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 27
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 28
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 29
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 30
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 31
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 32
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 33
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 34
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 35
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 36
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 37
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 38
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 39
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 19
+        destinationConversationID: 78
+        destinationDialogueID: 40
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1729.6886
+        y: 1042.4463
+        width: 160
+        height: 30
+    - id: 20
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 6AM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 20
+        destinationConversationID: 78
+        destinationDialogueID: 41
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 87.44641
+        y: 1171.0791
+        width: 160
+        height: 30
+    - id: 23
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Choose the hour of your appointment.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: '{{typed}}'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 23
+        destinationConversationID: 78
+        destinationDialogueID: 19
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1728.5004
+        y: 939.79486
+        width: 160
+        height: 30
+    - id: 24
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: ' 7AM'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 24
+        destinationConversationID: 78
+        destinationDialogueID: 42
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 259.10083
+        y: 1173.82
+        width: 160
+        height: 30
+    - id: 25
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 8AM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 25
+        destinationConversationID: 78
+        destinationDialogueID: 43
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 411.3386
+        y: 1175.208
+        width: 160
+        height: 30
+    - id: 26
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 9AM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 26
+        destinationConversationID: 78
+        destinationDialogueID: 44
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 591.83276
+        y: 1172.7794
+        width: 160
+        height: 30
+    - id: 27
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 10AM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 27
+        destinationConversationID: 78
+        destinationDialogueID: 45
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 777.67487
+        y: 1176.4556
+        width: 160
+        height: 30
+    - id: 28
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 11AM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 28
+        destinationConversationID: 78
+        destinationDialogueID: 46
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 967.3803
+        y: 1162.7577
+        width: 160
+        height: 30
+    - id: 29
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 12PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 29
+        destinationConversationID: 78
+        destinationDialogueID: 47
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1189.3282
+        y: 1181.6892
+        width: 160
+        height: 30
+    - id: 30
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 1PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 30
+        destinationConversationID: 78
+        destinationDialogueID: 48
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1377.4482
+        y: 1182.5671
+        width: 160
+        height: 30
+    - id: 31
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 2PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 31
+        destinationConversationID: 78
+        destinationDialogueID: 49
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1571.3638
+        y: 1176.0839
+        width: 160
+        height: 30
+    - id: 32
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 3PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 32
+        destinationConversationID: 78
+        destinationDialogueID: 50
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1761.6956
+        y: 1164.789
+        width: 160
+        height: 30
+    - id: 33
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 4PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 33
+        destinationConversationID: 78
+        destinationDialogueID: 51
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2016.5181
+        y: 1154.6761
+        width: 160
+        height: 30
+    - id: 34
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 5PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 34
+        destinationConversationID: 78
+        destinationDialogueID: 52
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2220.3494
+        y: 1154.5188
+        width: 160
+        height: 30
+    - id: 35
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 6PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 35
+        destinationConversationID: 78
+        destinationDialogueID: 53
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2421.0535
+        y: 1147.1327
+        width: 160
+        height: 30
+    - id: 36
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 7PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 36
+        destinationConversationID: 78
+        destinationDialogueID: 54
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2613.6199
+        y: 1145.785
+        width: 160
+        height: 30
+    - id: 37
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 8PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 37
+        destinationConversationID: 78
+        destinationDialogueID: 55
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2823.2231
+        y: 1149.8137
+        width: 160
+        height: 30
+    - id: 38
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 9PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 38
+        destinationConversationID: 78
+        destinationDialogueID: 56
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 3013.3237
+        y: 1140.5465
+        width: 160
+        height: 30
+    - id: 39
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 10PM
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 39
+        destinationConversationID: 78
+        destinationDialogueID: 57
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 3249.6992
+        y: 1142.5509
+        width: 160
+        height: 30
+    - id: 40
+      fields:
+      - title: Title
+        value: Back
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Cancel appointment.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -34014,13 +35816,4759 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 305.48447
-        y: 1030.8167
+        x: 3498.0369
+        y: 1135.2323
+        width: 160
+        height: 30
+    - id: 41
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 41
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 6
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 80.30997
+        y: 1242.2601
+        width: 160
+        height: 30
+    - id: 42
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 42
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 7
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 264.83322
+        y: 1242.1633
+        width: 160
+        height: 30
+    - id: 43
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 43
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 8
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 423.94983
+        y: 1248.1375
+        width: 160
+        height: 30
+    - id: 44
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 44
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 9
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 596.4187
+        y: 1255.3859
+        width: 160
+        height: 30
+    - id: 45
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 45
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 10
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 784.18945
+        y: 1270.0765
+        width: 160
+        height: 30
+    - id: 46
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 46
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 11
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 962.383
+        y: 1273.3807
+        width: 160
+        height: 30
+    - id: 47
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 47
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 12
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1183.0131
+        y: 1260.9149
+        width: 160
+        height: 30
+    - id: 48
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 48
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 13
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1392.0706
+        y: 1271.5074
+        width: 160
+        height: 30
+    - id: 49
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 49
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 14
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1574.5762
+        y: 1269.7977
+        width: 160
+        height: 30
+    - id: 50
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 50
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 16
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1771.9204
+        y: 1259.9554
+        width: 160
+        height: 30
+    - id: 51
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 51
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 16
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2005.0535
+        y: 1255.4241
+        width: 160
+        height: 30
+    - id: 52
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 52
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 17
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2216.5242
+        y: 1270.549
+        width: 160
+        height: 30
+    - id: 53
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 53
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 18
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2410.3364
+        y: 1276.1362
+        width: 160
+        height: 30
+    - id: 54
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 54
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 19
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2601.9868
+        y: 1256.445
+        width: 160
+        height: 30
+    - id: 55
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 55
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 20
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2820.3877
+        y: 1247.139
+        width: 160
+        height: 30
+    - id: 56
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 56
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 21
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 3005.1577
+        y: 1207.8502
+        width: 160
+        height: 30
+    - id: 57
+      fields:
+      - title: Title
+        value: SetAppointmentHour
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 57
+        destinationConversationID: 78
+        destinationDialogueID: 58
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_hour"] = 22
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 3233.8735
+        y: 1216.0425
+        width: 160
+        height: 30
+    - id: 58
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Choose the minute of your meeting.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: '{{typed}}'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 58
+        destinationConversationID: 78
+        destinationDialogueID: 84
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1640.7152
+        y: 1485.1365
+        width: 160
+        height: 30
+    - id: 59
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :00
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 59
+        destinationConversationID: 78
+        destinationDialogueID: 71
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 659.61084
+        y: 1725.5592
+        width: 160
+        height: 30
+    - id: 60
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 0
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :05
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 60
+        destinationConversationID: 78
+        destinationDialogueID: 72
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 853.6891
+        y: 1734.914
+        width: 160
+        height: 30
+    - id: 61
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :10
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 61
+        destinationConversationID: 78
+        destinationDialogueID: 73
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1027.9236
+        y: 1739.1116
+        width: 160
+        height: 30
+    - id: 62
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :15
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 62
+        destinationConversationID: 78
+        destinationDialogueID: 74
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1203.9808
+        y: 1743.2191
+        width: 160
+        height: 30
+    - id: 63
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :20
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 63
+        destinationConversationID: 78
+        destinationDialogueID: 75
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1336.1539
+        y: 1746.5974
+        width: 160
+        height: 30
+    - id: 64
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :25
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 64
+        destinationConversationID: 78
+        destinationDialogueID: 76
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1495.7015
+        y: 1737.4727
+        width: 160
+        height: 30
+    - id: 65
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :30
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 65
+        destinationConversationID: 78
+        destinationDialogueID: 77
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1688.4766
+        y: 1734.0027
+        width: 160
+        height: 30
+    - id: 66
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :35
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 66
+        destinationConversationID: 78
+        destinationDialogueID: 78
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1842.9363
+        y: 1727.7672
+        width: 160
+        height: 30
+    - id: 67
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :40
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 67
+        destinationConversationID: 78
+        destinationDialogueID: 79
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2006.8828
+        y: 1733.4998
+        width: 160
+        height: 30
+    - id: 68
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :45
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 68
+        destinationConversationID: 78
+        destinationDialogueID: 80
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2190.3193
+        y: 1742.6718
+        width: 160
+        height: 30
+    - id: 69
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :50
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 69
+        destinationConversationID: 78
+        destinationDialogueID: 81
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2366.2017
+        y: 1725.4744
+        width: 160
+        height: 30
+    - id: 70
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 0
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: :55
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 70
+        destinationConversationID: 78
+        destinationDialogueID: 82
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2564.0718
+        y: 1706.4543
+        width: 160
+        height: 30
+    - id: 71
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 71
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 0
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 634.9473
+        y: 1840.1954
+        width: 160
+        height: 30
+    - id: 72
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 0
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 72
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 5
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 847.68774
+        y: 1836.0139
+        width: 160
+        height: 30
+    - id: 73
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 73
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 10
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1015.92896
+        y: 1828.7047
+        width: 160
+        height: 30
+    - id: 74
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 74
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 15
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1214.5845
+        y: 1840.4181
+        width: 160
+        height: 30
+    - id: 75
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 75
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 20
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1347.0906
+        y: 1828.4958
+        width: 160
+        height: 30
+    - id: 76
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 76
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 25
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1521.2202
+        y: 1818.4597
+        width: 160
+        height: 30
+    - id: 77
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 77
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 30
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1698.4666
+        y: 1809.4514
+        width: 160
+        height: 30
+    - id: 78
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 78
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 35
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1879.3918
+        y: 1809.3148
+        width: 160
+        height: 30
+    - id: 79
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 79
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 40
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2043.3379
+        y: 1807.1958
+        width: 160
+        height: 30
+    - id: 80
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 80
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 45
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2193.9648
+        y: 1806.3425
+        width: 160
+        height: 30
+    - id: 81
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 81
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 50
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2378.0496
+        y: 1805.5499
+        width: 160
+        height: 30
+    - id: 82
+      fields:
+      - title: Title
+        value: SetAppointmentMinute
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 82
+        destinationConversationID: 78
+        destinationDialogueID: 94
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment_minute"] = 55
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2569.0664
+        y: 1812.9302
+        width: 160
+        height: 30
+    - id: 83
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: Hello, you've reached Prado and Associates! How can I help?
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 83
+        destinationConversationID: 78
+        destinationDialogueID: 2
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1835.1699
+        y: 204.06287
+        width: 160
+        height: 30
+    - id: 84
+      fields:
+      - title: Title
+        value: ShowOptions
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 59
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 60
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 61
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 62
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 63
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 64
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 65
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 66
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 67
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 68
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 69
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 84
+        destinationConversationID: 78
+        destinationDialogueID: 70
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1637.3624
+        y: 1601.1527
+        width: 160
+        height: 30
+    - id: 85
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: This is the president speaking. Of the United States. And Brazil.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 85
+        destinationConversationID: 78
+        destinationDialogueID: 18
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1629.8738
+        y: 495.7597
+        width: 160
+        height: 30
+    - id: 86
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 'But I need to meet him today! '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 86
+        destinationConversationID: 78
+        destinationDialogueID: 88
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1136.6517
+        y: 722.1445
+        width: 160
+        height: 30
+    - id: 87
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: Actually, I'm good. (Hang up)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 87
+        destinationConversationID: 16
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1383.3024
+        y: 732.98364
+        width: 160
+        height: 30
+    - id: 88
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 'Oh, I''m aware of your circumstance, but don''t worry: you will see
+          him today. This is Prado, after all. What time are you available?'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 88
+        destinationConversationID: 78
+        destinationDialogueID: 23
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1289.3018
+        y: 822.5891
+        width: 160
+        height: 30
+    - id: 89
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: Francisco is not currently in town, but I'm happy to arrange an appointment
+          for you.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 89
+        destinationConversationID: 78
+        destinationDialogueID: 90
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 89
+        destinationConversationID: 78
+        destinationDialogueID: 91
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 89
+        destinationConversationID: 78
+        destinationDialogueID: 87
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1721.8992
+        y: 660.51404
+        width: 160
+        height: 30
+    - id: 90
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: Let's arrange this appointment!
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 90
+        destinationConversationID: 78
+        destinationDialogueID: 23
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1569.6193
+        y: 754.7617
+        width: 160
+        height: 30
+    - id: 91
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: How will I be seeing him if he's out of town?
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 91
+        destinationConversationID: 78
+        destinationDialogueID: 92
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1769.1815
+        y: 759.653
+        width: 160
+        height: 30
+    - id: 92
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: This is Prado we're talking about. He'll make it.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 92
+        destinationConversationID: 78
+        destinationDialogueID: 23
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1770.1603
+        y: 815.52264
+        width: 160
+        height: 30
+    - id: 93
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 'Ideally, yes. But now that I think about it, I think I do recognize
+          your name from somewhere... Aha! Daniel Oliviera, new president of Vitoria''s
+          Clothes and Accessories store. '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 93
+        destinationConversationID: 78
+        destinationDialogueID: 89
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2235.0876
+        y: 503.04132
+        width: 160
+        height: 30
+    - id: 94
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: Delay(0)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 94
+        destinationConversationID: 78
+        destinationDialogueID: 95
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: Variable["prado_appointment"] = HourMinuteToTime(Variable["prado_appointment_hour"],
+        Variable["prado_appointment_minute"] )
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1775.1224
+        y: 2019.7051
+        width: 160
+        height: 30
+    - id: 95
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: The appointment is set to [var=prado_appointment]. Is this alright?
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 95
+        destinationConversationID: 78
+        destinationDialogueID: 97
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1770.8956
+        y: 2088.8132
+        width: 160
+        height: 30
+    - id: 96
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Yup!
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 96
+        destinationConversationID: 78
+        destinationDialogueID: 101
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1406.8225
+        y: 2289.0923
+        width: 160
+        height: 30
+    - id: 97
+      fields:
+      - title: Title
+        value: Show Options
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 97
+        destinationConversationID: 78
+        destinationDialogueID: 96
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 97
+        destinationConversationID: 78
+        destinationDialogueID: 99
+        isConnector: 0
+        priority: 2
+      - originConversationID: 78
+        originDialogueID: 97
+        destinationConversationID: 78
+        destinationDialogueID: 98
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1747.1149
+        y: 2173.5505
+        width: 160
+        height: 30
+    - id: 98
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Actually, I don't really want an appointment.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 98
+        destinationConversationID: 78
+        destinationDialogueID: 103
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2034.1377
+        y: 2273.173
+        width: 160
+        height: 30
+    - id: 99
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: I want a different timeslot.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 99
+        destinationConversationID: 78
+        destinationDialogueID: 84
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1752.762
+        y: 2253.0076
+        width: 160
+        height: 30
+    - id: 101
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 18
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 'Perfect! He''ll show up at your hotel lobby. <b>Try not to be late</b>.
+          You know how Prado is! '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 101
+        destinationConversationID: 78
+        destinationDialogueID: 102
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1384.7847
+        y: 2354.9924
+        width: 160
+        height: 30
+    - id: 102
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 15
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: Felipe hangs up the phone.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 102
+        destinationConversationID: 16
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1533.9032
+        y: 2496.079
+        width: 160
+        height: 30
+    - id: 103
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: -1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Oh, okay! Well if you ever change your mind, do let me know!
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 78
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 103
+        destinationConversationID: 78
+        destinationDialogueID: 102
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2031.6577
+        y: 2334.746
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 117.74189, y: 195.65152}
-    canvasZoom: 0.6977891
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.27778745
   - id: 79
     fields:
     - title: Title
