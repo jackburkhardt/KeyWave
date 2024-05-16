@@ -128,11 +128,13 @@ public class Clock
     /// <returns></returns>
     public static int ToSeconds(string hoursMinutes)
     {
-        if (hoursMinutes.Length != 5 || hoursMinutes.Substring(2, 1) != ":") Debug.LogError("Invalid time format");
+        var split = hoursMinutes.Split(':');
         
-        var hours = int.Parse(hoursMinutes.Substring(0, 2));
+        if (split.Length != 2 || split[0].Length > 2 || split[1].Length != 2) Debug.LogError($"Invalid time format. {hoursMinutes} does not match HH:MM");
+        if (split[0].Length == 1) split[0] = "0" + split[0];
         
-        var minutes = int.Parse(hoursMinutes.Substring(3, 2));
+        var hours = int.Parse(split[0]);
+        var minutes = int.Parse(split[1]);
         
         return (hours * 3600 + minutes * 60);
     }

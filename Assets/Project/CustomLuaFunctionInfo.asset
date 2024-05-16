@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CustomLuaFunctionInfo
   m_EditorClassIdentifier: 
   conditionFunctions:
-  - functionName: Time/WithinTimeRange
+  - functionName: Time/WithinTimeslotRange
     parameters: 0200000002000000
     returnValue: 1
   - functionName: Quest/QuestInProgress
@@ -31,10 +31,22 @@ MonoBehaviour:
   - functionName: Location/LocationIDToName
     parameters: 02000000
     returnValue: 3
-  - functionName: Time/HourMinuteToTime
-    parameters: 0100000001000000
-    returnValue: 3
+  - functionName: Time/AfterTimeslot
+    parameters: 02000000
+    returnValue: 1
+  - functionName: Location/IsLocationUnlocked
+    parameters: 02000000
+    returnValue: 1
   scriptFunctions:
   - functionName: FreezeClock
     parameters: 00000000
+    returnValue: 0
+  - functionName: Location/UnlockLocation
+    parameters: 02000000
+    returnValue: 0
+  - functionName: Time/WithinSeconds
+    parameters: 0200000001000000
+    returnValue: 0
+  - functionName: Time/WithinMinutes
+    parameters: 0200000001000000
     returnValue: 0
