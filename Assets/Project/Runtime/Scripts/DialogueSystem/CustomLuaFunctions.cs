@@ -29,35 +29,66 @@ public class CustomLuaFunctions : MonoBehaviour
     {
         Lua.RegisterFunction(nameof(SurpassedTime), this, SymbolExtensions.GetMethodInfo(() => SurpassedTime(string.Empty)));
         Lua.RegisterFunction(nameof(BeforeTimeslot), this, SymbolExtensions.GetMethodInfo(() => BeforeTimeslot(string.Empty)));
-        Lua.RegisterFunction(nameof(WithinTimeRange), this, SymbolExtensions.GetMethodInfo(() => WithinTimeRange(string.Empty, string.Empty)));
-        Lua.RegisterFunction(nameof(WithinGracePeriod), this, SymbolExtensions.GetMethodInfo(() => WithinGracePeriod(string.Empty, 0)));
+        Lua.RegisterFunction(nameof(AfterTimeslot), this, SymbolExtensions.GetMethodInfo(() => AfterTimeslot(string.Empty)));
+        Lua.RegisterFunction(nameof(WithinTimeslotRange), this, SymbolExtensions.GetMethodInfo(() => WithinTimeslotRange(string.Empty, string.Empty)));
+        Lua.RegisterFunction(nameof(WithinSeconds), this, SymbolExtensions.GetMethodInfo(() => WithinSeconds(string.Empty, 0)));
+        Lua.RegisterFunction(nameof(WithinMinutes), this, SymbolExtensions.GetMethodInfo(() => WithinMinutes(string.Empty, 0)));
         Lua.RegisterFunction(nameof(FreezeClock), this, SymbolExtensions.GetMethodInfo(() => FreezeClock(false)));
         Lua.RegisterFunction(nameof(QuestInProgress), this, SymbolExtensions.GetMethodInfo(() => QuestInProgress(string.Empty)));
         Lua.RegisterFunction(nameof(QuestPartiallyComplete), this, SymbolExtensions.GetMethodInfo(() => QuestPartiallyComplete(string.Empty)));
         Lua.RegisterFunction(nameof(QuestInProgressButNascent), this, SymbolExtensions.GetMethodInfo(() => QuestInProgressButNascent(string.Empty)));
         Lua.RegisterFunction(nameof(LocationIDToName), this, SymbolExtensions.GetMethodInfo(() => LocationIDToName(0)));
+        Lua.RegisterFunction(nameof(HourMinuteToTime), this, SymbolExtensions.GetMethodInfo(() => HourMinuteToTime(0, 0)));
+        Lua.RegisterFunction(nameof(UnlockLocation), this, SymbolExtensions.GetMethodInfo(() => UnlockLocation(string.Empty)));
+        Lua.RegisterFunction(nameof(IsLocationUnlocked), this, SymbolExtensions.GetMethodInfo(() => IsLocationUnlocked(string.Empty)));
+      
     }
 
     private void DeregisterLuaFunctions()
     {
         Lua.UnregisterFunction(nameof(SurpassedTime));
         Lua.UnregisterFunction(nameof(BeforeTimeslot));
-        Lua.UnregisterFunction(nameof(WithinTimeRange));
-        Lua.UnregisterFunction(nameof(WithinGracePeriod));
+        Lua.UnregisterFunction(nameof(AfterTimeslot));
+        Lua.UnregisterFunction(nameof(WithinTimeslotRange));
+        Lua.UnregisterFunction(nameof(WithinSeconds));
+        Lua.UnregisterFunction(nameof(WithinMinutes));
         Lua.UnregisterFunction(nameof(FreezeClock));
         Lua.UnregisterFunction(nameof(QuestInProgress));
         Lua.UnregisterFunction(nameof(QuestPartiallyComplete));
         Lua.UnregisterFunction(nameof(QuestInProgressButNascent));
         Lua.UnregisterFunction(nameof(LocationIDToName));
-        
+        Lua.UnregisterFunction(nameof(HourMinuteToTime));
+        Lua.UnregisterFunction(nameof(UnlockLocation));
+        Lua.UnregisterFunction(nameof(IsLocationUnlocked));
     }
     
     
     //lua functions
     
+    public string HourMinuteToTime(double hour, double minute)
+    {
+        var hourString = hour.ToString();
+        if (hourString.Length == 1) hourString = "0" + hourString;
+        
+        var minuteString = minute.ToString();
+        if (minuteString.Length == 1) minuteString = "0" + minuteString;
+
+        return hourString + ":" + minuteString;
+    }
+    
     public string LocationIDToName(System.Single locationID)
     {
         return DialogueManager.DatabaseManager.masterDatabase.GetLocation((int)locationID).Name;
+    }
+    
+    public void UnlockLocation(string location)
+    {
+        Location.FromString(location).unlocked = true;
+    }
+    
+    public bool IsLocationUnlocked(string location)
+    {
+        return Location.FromString(location).unlocked;
     }
     
     public bool QuestInProgressButNascent(string quest) => QuestUtility.QuestInProgressButNascent(quest);
@@ -95,7 +126,15 @@ public class CustomLuaFunctions : MonoBehaviour
         return Clock.CurrentTimeRaw < timeInSeconds;
     }
     
-    public bool WithinTimeRange(string time1, string time2)
+    public bool AfterTimeslot(string time)
+    {
+       
+        var timeInSeconds = Clock.ToSeconds(time);
+
+        return Clock.CurrentTimeRaw >= timeInSeconds;
+    }
+    
+    public bool WithinTimeslotRange(string time1, string time2)
     {
         
         var time1InSeconds = Clock.ToSeconds(time1);
@@ -104,10 +143,15 @@ public class CustomLuaFunctions : MonoBehaviour
         return Clock.CurrentTimeRaw > time1InSeconds && Clock.CurrentTimeRaw < time2InSeconds;
     }
     
-    public bool WithinGracePeriod(string time, double gracePeriod)
+    public bool WithinSeconds(string time, double gracePeriod)
     {
         
         var timeInSeconds = Clock.ToSeconds(time);
         return Clock.CurrentTimeRaw > timeInSeconds - (int)gracePeriod && Clock.CurrentTimeRaw < timeInSeconds + (int)gracePeriod;
+    }
+    
+    public bool WithinMinutes(string time, double gracePeriod)
+    {
+        return WithinSeconds(time, gracePeriod * 60);
     }
 }
