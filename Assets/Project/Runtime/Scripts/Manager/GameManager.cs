@@ -6,6 +6,7 @@ using Language.Lua;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.Manager;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     private CustomLuaFunctions _customLuaFunctions;
     public List<Location> locations;
     public bool capFramerate = false;
+    public DailyReport dailyReport;
     
     [ShowIf("capFramerate")]
     public int framerateLimit;
@@ -67,34 +69,29 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(StartHandler());
+        GameEvent.OnPlayerEvent += OnPlayerEvent;
     }
     
-    private void OnGameStateChange(GameState gameState)
+    private void OnPlayerEvent(PlayerEvent e)
     {
-        switch (gameState.type)
+        if (gameState.clock > Clock.DailyLimit)
         {
-            case GameState.Type.Normal:
-                if (gameState.clock > Clock.DailyLimit)
-                {
-                    gameStateManager.SetGameStateType(GameState.Type.EndOfDay);
-                    DialogueManager.StopConversation();
-                    DialogueManager.StartConversation("EndOfDay");
-                }
-                break;
-            case GameState.Type.EndOfDay:
-                break;
+            GameEvent.OnDayEnd();
+            DialogueManager.StopAllConversations();
+            EndOfDay();
         }
     }
 
     public void StartNewDay()
     {
         GameStateManager.instance.StartNextDay();
-        App.Instance.ChangeScene("StartOfDay", gameState.current_scene);
+        dailyReport = new DailyReport(gameState.day);
+        App.Instance.ChangeScene("Hotel", "EndOfDay");
     }
-
 
     IEnumerator StartHandler()
     {
+        dailyReport = new DailyReport(gameState.day);
         yield return StartCoroutine(playerEventStack.RunEvents());
 
         yield return StartCoroutine(gameStateManager.LoadGameState());
@@ -181,8 +178,9 @@ public class GameManager : MonoBehaviour
             yield return App.Instance.ChangeScene(newLocation, currentScene);
             
             yield return new WaitForSeconds(0.5f);
-            
+
             DialogueManager.StartConversation($"{newLocation}/Base");
+
             gameState.current_scene = newLocation;
         }
     }

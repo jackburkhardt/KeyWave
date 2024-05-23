@@ -520,6 +520,7 @@ namespace PixelCrushers.DialogueSystem
         public static void StartConversation(string title)
         {
             if (!hasInstance) return;
+            Debug.Log("Starting conversation: " + title);
             instance.StartConversation(title, null, null);
         }
 

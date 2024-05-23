@@ -64,7 +64,11 @@ public class PlayerEventStack : ScriptableObject
     
     public string SerializeEvents()
     {
-        return JsonConvert.SerializeObject(RegisteredEvents, Formatting.Indented);
+        var settings = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
+        return JsonConvert.SerializeObject(RegisteredEvents, Formatting.Indented, settings);
     }
     
     public IEnumerator RunEvents()

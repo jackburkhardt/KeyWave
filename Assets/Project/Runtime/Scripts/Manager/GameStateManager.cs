@@ -17,7 +17,7 @@ public class GameState
     //default values
     
     public Type type = Type.Normal;
-    public int clock = 21600;
+    public int clock = 86000;
     public int day = 1;
     public int business_score = 0;  
     public int local_savvy_score = 0;
@@ -77,6 +77,9 @@ public class GameStateManager : PlayerEventHandler
                 case "awaiting_response":
                     gameState.most_recent_response_node = (string)playerEvent.Data;
                     break;
+                case "end_day":
+                    gameState.type = GameState.Type.EndOfDay;
+                    break;
                 case "conversation_decision":
                     gameState.most_recent_response_node = string.Empty;
                     break;
@@ -108,19 +111,6 @@ public class GameStateManager : PlayerEventHandler
             }
         
         OnGameStateChanged?.Invoke(gameState);
-    }
-    
-    public void SetGameStateType(GameState.Type type)
-    {
-        gameState.type = type;
-        switch (type)
-        {
-            case GameState.Type.Normal:
-                break;
-            case GameState.Type.EndOfDay:
-                gameState.clock = Clock.DailyLimit;
-                break;
-        }
     }
     
     public void AddTime(int duration)

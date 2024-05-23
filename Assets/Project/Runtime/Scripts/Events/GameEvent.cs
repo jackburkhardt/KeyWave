@@ -84,6 +84,11 @@ public static class GameEvent
        RegisterPlayerEvent("wait", "player", "player", duration, duration);
    }
 
+   public static void OnDayEnd()
+   {
+       RegisterPlayerEvent("end_day", "", "");
+   }
+
     public static void OnConversationStart(string eventSender = "")
     {
         //get linked conversation start title
