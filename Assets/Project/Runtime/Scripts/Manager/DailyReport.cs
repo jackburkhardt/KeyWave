@@ -47,13 +47,13 @@ namespace Project.Runtime.Scripts.Manager
                     
                         switch (playerEvent.Target)
                         {
-                            case "success":
+                            case "Success":
                                 _completedTasks.Add(displayName);
                                 break;
-                            case "active":
+                            case "Active":
                                 _activeTasks.Add(displayName);
                                 break;
-                            case "failure":
+                            case "Failure":
                                 _failedTasks.Add(displayName);
                                 break;
                         }
