@@ -76,22 +76,9 @@ public class GameManager : MonoBehaviour
     {
         if (gameState.clock > Clock.DailyLimit)
         {
-<<<<<<< HEAD
-            case GameState.Type.Normal:
-                if (gameState.Clock > Clock.DailyLimit)
-                {
-                    gameStateManager.SetGameStateType(GameState.Type.EndOfDay);
-                    DialogueManager.StopConversation();
-                    DialogueManager.StartConversation("EndOfDay");
-                }
-                break;
-            case GameState.Type.EndOfDay:
-                break;
-=======
             GameEvent.OnDayEnd();
             DialogueManager.StopAllConversations();
             EndOfDay();
->>>>>>> c821dcf65bb16e46b0eb63cf686a49632da4c310
         }
     }
 
@@ -140,13 +127,11 @@ public class GameManager : MonoBehaviour
             GameEvent.OnPointsIncrease(points, questName);
         }
         
-        var duration= state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
-        
-        Debug.Log("Quest State Change: " + questName + " " + state + " " + duration);
+        var duration = DialogueUtility.GetQuestDuration(quest);
         
         if (state == QuestState.Success && duration > 0)
         {
-            //gameState.Clock += duration;
+            gameState.clock += duration;
         }
         
         GameEvent.OnQuestStateChange(questName, state, duration);
