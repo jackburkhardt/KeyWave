@@ -71,7 +71,10 @@ namespace PixelCrushers.DialogueSystem
         /// Formatted as "value:unit"
         /// </summary>
         ///
-        QuestState
+        QuestState,
+        
+        
+        EmailState,
     }
 
 }

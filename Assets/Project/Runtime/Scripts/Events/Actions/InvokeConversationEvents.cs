@@ -10,6 +10,8 @@ public class InvokeConversationEvents : MonoBehaviour
         GameEvent.OnConversationLine();
         
         GameStateManager.instance.AddTime(DialogueUtility.CurrentNodeDuration);
+        
+     //   Debug.Log("Current Node Duration: " + DialogueUtility.CurrentNodeDuration);
 
         if (DialogueUtility.Empty(DialogueUtility.CurrentDialogueEntry) &&
             DialogueUtility.CurrentDialogueEntry.Sequence == string.Empty) DialogueManager.PlaySequence("Continue()");

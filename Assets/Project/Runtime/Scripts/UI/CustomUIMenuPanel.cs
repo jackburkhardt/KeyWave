@@ -20,16 +20,13 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
         "mousePointerHand"
     };
     
-    public static Action<CustomResponseButton> OnCustomResponseButtonClick;
+    public static Action<CustomUIResponseButton> OnCustomResponseButtonClick;
 
-    public static void ButtonClick(CustomResponseButton button)
+    public static void ButtonClick(CustomUIResponseButton button)
     {
-        SelectedResponseButton = button;
         Instance.mousePointerHand.Freeze();
         OnCustomResponseButtonClick?.Invoke(button);
     } 
-
-    public static CustomResponseButton SelectedResponseButton;
 
     [SerializeField] public AnimationCurve offsetCurve;
     
@@ -37,15 +34,9 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
     [SerializeField] Animator responseMenuAnimator;
     [SerializeField] private PointerArrow mousePointerHand;
     
-    public float globalOffset;
-
-
+   
     public static CustomUIMenuPanel Instance;
     private float maxVisibleDegreeSum = 85;
-
-    public UnityEvent onHide;
-    public UnityEvent onShow;
-    
 
     public override void Awake()
     {
@@ -68,23 +59,14 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
     private void OnContentChanged()
     {
         mousePointerHand.Unfreeze();
-        CustomResponseButton.RefreshButtonColors();
-        foreach (var button in FindObjectsOfType<CustomResponseButton>())
+        CustomUIResponseButton.RefreshButtonColors();
+        foreach (var button in FindObjectsOfType<CustomUIResponseButton>())
         {
           button.SetResponseText();
         }
     }
     
-
-    private static string TimeEstimateText(DialogueEntry dialogueEntry)
-    {
-        if (!Field.FieldExists(dialogueEntry.fields, "Time Estimate")) return "";
-        
-        var estimate = DialogueUtility.TimeEstimate(dialogueEntry);
-        if (estimate.Item1 > estimate.Item2) return "";
-        if (estimate.Item1 == estimate.Item2) return $"{estimate.Item1 / 60} minutes";
-        return $"{estimate.Item1 / 60}-{estimate.Item2 / 60} minutes";
-    }
+  
 
     public void OnQuestStateChange(string questTitle)
     {
@@ -96,11 +78,20 @@ public class CustomUIMenuPanel : StandardUIMenuPanel
         responseMenuAnimator.SetTrigger("Hide");
     }
 
+    public static void OnButtonHover(CustomUIResponseButton button)
+    {
+        if (button == null)
+        {   Instance.timeEstimate.text = "";
+            return;
+        } Instance.timeEstimate.text = button.TimeEstimateText;
+    }
+
     protected override void Update()
     { 
         base.Update();
-
-        var circularButtons = GetComponentsInChildren<CircularUIButton>();
+        
+        
+ var circularButtons = GetComponentsInChildren<CircularUIButton>();
 
         foreach (var circularButton in circularButtons)
         {

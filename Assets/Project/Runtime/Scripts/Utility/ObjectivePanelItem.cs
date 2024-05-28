@@ -1,56 +1,33 @@
 using NaughtyAttributes;
-using PixelCrushers;
-using PixelCrushers.DialogueSystem;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ObjectivePanelItem : MonoBehaviour
 {
-   
-    [ReadOnly]
-    [SerializeReference] private string _quest;
-    public QuestState questState;
-    public UITextField questTitle;
+    public TMP_Text questTitle;
     public Image tickImage, boxImage;
     
-
-    public enum Day
+    public void SetVisibleElements(string state, string questName)
     {
-        Day1,
-        Day2,
-        Day3
-    }
-
-    public void SuccessState(string quest)
-    {
-        _quest = quest;
-        questTitle.color = textColorSuccess;
-        tickImage.sprite = tickSpriteSuccess;
-        questTitle.text = QuestLog.GetQuestTitle(quest);
-        
-    }
-    
-    public void FailureState(string quest)
-    {
-        _quest = quest;
-        questTitle.color = textColorFailure;
-        tickImage.sprite = tickSpriteFailure;
-        questTitle.text = QuestLog.GetQuestTitle(quest);
+        questTitle.text = questName;
+        switch (state)
+        {
+            case "active":
+                questTitle.color = textColorActive;
+                tickImage.sprite = tickSpriteActive;
+                break;
+            case "failure":
+                questTitle.color = textColorFailure;
+                tickImage.sprite = tickSpriteFailure;
+                break;
+            case "success":
+                questTitle.color = textColorSuccess;
+                tickImage.sprite = tickSpriteSuccess;
+                break;
+        }
     }
     
-    public void ActiveState(string quest)
-    {
-        _quest = quest;
-        questTitle.color = textColorActive;
-        tickImage.sprite = tickSpriteActive;
-        questTitle.text = QuestLog.GetQuestTitle(quest);
-    }
-    
-    
-
-    public Day day;
-
-
     [Foldout("Active")] [Label("Text Color")] public Color textColorActive;
     [Foldout("Active")] [Label("Tick Sprite")] public Sprite tickSpriteActive;
     
@@ -59,17 +36,4 @@ public class ObjectivePanelItem : MonoBehaviour
     
     [Foldout("Success")] [Label("Text Color")] public Color textColorSuccess;
     [Foldout("Success")] [Label("Tick Sprite")] public Sprite tickSpriteSuccess;
-    
-    
- 
-    
-    // Start is called before the first frame update
-
-
-    private void OnEnable()
-    {
-        
-        
-        
-    }
 }

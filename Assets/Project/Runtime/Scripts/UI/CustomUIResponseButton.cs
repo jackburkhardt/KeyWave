@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,16 +11,19 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
-[RequireComponent(typeof(StandardUIResponseButton))]
 [RequireComponent(typeof(Button))]
 [RequireComponent(typeof(CircularUIButton))]
-public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class CustomUIResponseButton : StandardUIResponseButton, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     
-    private StandardUIResponseButton StandardUIResponseButton => GetComponent<StandardUIResponseButton>();
+    //private StandardUIResponseButton StandardUIResponseButton => GetComponent<StandardUIResponseButton>();
+    
+    private static CustomUIResponseButton _hoveredButton;
     private Button UnityButton => GetComponent<Button>();
     private CircularUIButton CircularUIButton => GetComponent<CircularUIButton>();
-    private Vector2 Position => StandardUIResponseButton.label.gameObject.transform.position;
+    private Vector2 Position => label.gameObject.transform.position;
+    
+    private Item? AssociatedQuest => DialogueManager.Instance.masterDatabase.items.Find(item => item.Name == FollowupEntry?.GetConversation().Title);
 
     private UIButtonKeyTrigger[] ButtonKeyTriggers => GetComponents<UIButtonKeyTrigger>();
 
@@ -45,13 +49,9 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void SetAutonumber()
     {
-        
-       
-       
-       
         int GetAutonumber()
         {
-            var buttons = transform.parent.GetComponentsInChildren<CustomResponseButton>().ToList();
+            var buttons = transform.parent.GetComponentsInChildren<CustomUIResponseButton>().ToList();
             // remove all buttons that are invalid
             buttons.RemoveAll(button => !button.transform.gameObject.activeSelf || button.DestinationEntry != null && button.DestinationEntry.conditionsString.Length != 0 &&
                                         !Lua.IsTrue(button.DestinationEntry.conditionsString));
@@ -121,26 +121,15 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
         }
     }
 
-    public DialogueEntry DestinationEntry
-    {
+    private DialogueEntry? DestinationEntry => response?.destinationEntry;
+    private DialogueEntry? FollowupEntry {
         get
         {
-            if (StandardUIResponseButton != null && StandardUIResponseButton.response != null) return StandardUIResponseButton.response.destinationEntry;
-            return null;
-        }
-
-}
-
-    private DialogueEntry FollowupEntry
-    {
-        get
-        {
-            if (DestinationEntry != null && DestinationEntry.outgoingLinks.Count == 1) {
-                return DialogueUtility.GetDialogueEntryByLink(DestinationEntry.outgoingLinks[0]);
-            }
-            return null;
-        }
-    }
+            var entry = DestinationEntry?.outgoingLinks.Count == 1
+                ? DestinationEntry?.outgoingLinks[0].GetDestinationEntry()
+                : null;
+            return entry;
+        }}
 
     private bool DialogueEntryInvalid => DestinationEntry != null && DestinationEntry.conditionsString.Length != 0 &&
                                          !Lua.IsTrue(DestinationEntry.conditionsString);
@@ -152,7 +141,7 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
         {
             if (DestinationEntry != null && FollowupEntry != null)
             {
-                var conversation = DialogueUtility.GetConversationByDialogueEntry(FollowupEntry).Title;
+                var conversation = FollowupEntry.GetConversation().Title;
                 return QuestUtility.GetPoints(conversation).Type;
                 
             }
@@ -184,20 +173,18 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
 
         if (DialogueEntryInvalid)
         {
-            if ( !Field.LookupBool(DestinationEntry.fields, "Show If Invalid")) Destroy(gameObject);
+            if ( !Field.LookupBool(DestinationEntry?.fields, "Show If Invalid")) Destroy(gameObject);
             
             
-            if (Field.FieldExists(DestinationEntry.fields, "Invalid Text"))
+            if (Field.FieldExists(DestinationEntry?.fields, "Invalid Text"))
             {
-                var invalidText = Field.LookupValue(DestinationEntry.fields, "Invalid Text");
+                var invalidText = Field.LookupValue(DestinationEntry?.fields, "Invalid Text");
                 
-                StandardUIResponseButton.label.text = invalidText;
+                label.text = invalidText;
             }
         } 
-        
-        
-        
-        if (PointsType != Points.Type.Null && isHighlighted)
+      
+        if (PointsType != Points.Type.Null && isHighlighted && AssociatedQuest?.GetQuestState() == QuestState.Active)
         {
             ButtonColor = Points.Color(PointsType);
         }
@@ -209,7 +196,7 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
     
     public static void RefreshButtonColors()
     {
-        foreach (var button in FindObjectsOfType<CustomResponseButton>())
+        foreach (var button in FindObjectsOfType<CustomUIResponseButton>())
         {
             button.RefreshButton();
         }
@@ -229,42 +216,60 @@ public class CustomResponseButton : MonoBehaviour, IPointerEnterHandler, IPointe
     
     
 
-    public void OnButtonSubmit(CustomResponseButton button)
+    public void OnButtonSubmit(CustomUIResponseButton button)
     {
         if (button == this)
         {
             DisabledColor = HighlightColor;
         }
 
-        else
         {
-            StandardUIResponseButton.label.color = Color.clear;
+            label.color = Color.clear;
         }
     }
-
-
   
-    private static string TimeEstimateText(DialogueEntry dialogueEntry)
+    public string TimeEstimateText
     {
-        if (!Field.FieldExists(dialogueEntry.fields, "Time Estimate")) return "";
-        
-        var estimate = DialogueUtility.TimeEstimate(dialogueEntry);
-        if (estimate.Item1 > estimate.Item2) return "";
-        if (estimate.Item1 == estimate.Item2) return $"{estimate.Item1 / 60} minutes";
-        return $"{estimate.Item1 / 60}-{estimate.Item2 / 60} minutes";
-    }
+        get
+        {
+            if (FollowupEntry == null) return "";
+            
+            if (AssociatedQuest == null) return "";
+            
+            
+            if (DestinationEntry?.GetConversation().Title == AssociatedQuest.Name) return "";
+            if (AssociatedQuest.GetQuestState() != QuestState.Active) return "";
+            
+            var timespan = AssociatedQuest.Timespan("Duration");
+            if (timespan <= 0) return "";
+            var unit = timespan > 60 ? "minutes" : "seconds";
+            var duration = timespan > 60 ? timespan / 60 : timespan;
+            return $"{duration} {unit}";
+        }
+     }
 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        
         isHighlighted = true;
+        _hoveredButton = this;
         RefreshButton();
+        CustomUIMenuPanel.OnButtonHover(_hoveredButton);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         isHighlighted = false;
         RefreshButton();
+        StartCoroutine(HoveredButtonCheck());
+    }
+    
+    private IEnumerator HoveredButtonCheck()
+    {
+        yield return new WaitForEndOfFrame();
+        if (_hoveredButton == this) _hoveredButton = null;
+        CustomUIMenuPanel.OnButtonHover(_hoveredButton);
     }
 
     public void OnPointerClick(PointerEventData eventData)

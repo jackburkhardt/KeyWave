@@ -11,12 +11,9 @@ public class ClockUI : MonoBehaviour
     [SerializeField] private TMP_Text timeText;
     private int _clock;
     
-   
-   
-    
     protected void Start()
     {
-        CurrentVisualizedTimeRaw = GameStateManager.instance.gameState.clock;
+        CurrentVisualizedTimeRaw = GameStateManager.instance.gameState.Clock;
         timeText.text = CurrentVisualizedTime;
     }
 
@@ -29,8 +26,8 @@ public class ClockUI : MonoBehaviour
         
         if (CurrentVisualizedTimeRaw < Clock.CurrentTimeRaw) StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
 
-        else if (CurrentVisualizedTimeRaw > Clock.CurrentTimeRaw)
-            StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw + Clock.HoursToSeconds(24)));
+    //    else if (CurrentVisualizedTimeRaw > Clock.CurrentTimeRaw)
+           // StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw + Clock.HoursToSeconds(24)));
     }
 
     private string RemoveColon(string time)
@@ -38,23 +35,16 @@ public class ClockUI : MonoBehaviour
         return time.Replace(":", " ");
     }
     
-    /*
-
-    IEnumerator UpdateTimeTextHandler(int time)
-    {
-        while (timeIsUpdating) yield return null;
-        yield return UpdateTimeText(time);
-    }
-    */
-    
+ 
 
     IEnumerator UpdateVisualizedTime(int newTime)
     {
         timeIsUpdating = true;
         var timeDifference = newTime - CurrentVisualizedTimeRaw;
         while (CurrentVisualizedTimeRaw < newTime)
-        {
-           timeText.text = RemoveColon(Clock.To24HourClock(CurrentVisualizedTimeRaw));
+        { 
+            if (CurrentVisualizedTimeRaw == 0) break; // handles overflow
+           timeText.text = RemoveColon(Clock.To24HourClock(CurrentVisualizedTimeRaw)); 
            CurrentVisualizedTimeRaw += (int)(2 * Mathf.Pow((Mathf.Pow(timeDifference, 0.5f) / 10f), 2f));
            yield return new WaitForSeconds(0.01f);
         }
@@ -62,7 +52,7 @@ public class ClockUI : MonoBehaviour
         CurrentVisualizedTimeRaw = newTime % Clock.HoursToSeconds(24);
         timeText.text = CurrentVisualizedTime;
         timeIsUpdating = false;
-    }
+      }
 
   
   

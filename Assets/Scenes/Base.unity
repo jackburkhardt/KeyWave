@@ -711,6 +711,53 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls: []
+<<<<<<< HEAD
+  - guid: 23d15093-3847-4b76-aa2e-103a90a5a472
+=======
+  - guid: 11b2328f-2fc3-49ae-9b20-28f42381a72a
+>>>>>>> c821dcf65bb16e46b0eb63cf686a49632da4c310
+    onExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1395439610}
+          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+<<<<<<< HEAD
+          m_MethodName: OpenMap
+=======
+          m_MethodName: EndOfDay
+>>>>>>> c821dcf65bb16e46b0eb63cf686a49632da4c310
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+<<<<<<< HEAD
+  - guid: 6627acf3-dee9-4760-a401-2564c7f56658
+    onExecute:
+      m_PersistentCalls:
+        m_Calls: []
+=======
+  - guid: c6de1eae-4164-4815-b39f-79db50e956e6
+    onExecute:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1395439610}
+          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+          m_MethodName: EndOfDay
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+>>>>>>> c821dcf65bb16e46b0eb63cf686a49632da4c310
 --- !u!4 &257485737
 Transform:
   m_ObjectHideFlags: 0
@@ -1357,7 +1404,7 @@ GameObject:
   - component: {fileID: 763870725}
   - component: {fileID: 763870726}
   m_Layer: 5
-  m_Name: ClockContainer
+  m_Name: Clock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2488,7 +2535,40 @@ MonoBehaviour:
     menuPanelNumber: 3
     customMenuPanel: {fileID: 0}
     customMenuPanelOffset: {x: 0, y: 0, z: 0}
-    useMenuPanelFor: 0
+    useMenuPanelFor: 1
+    portraitAnimatorController: {fileID: 0}
+    setSubtitleColor: 0
+    applyColorToPrependedName: 0
+    prependActorNameSeparator: ': '
+    prependActorNameFormat: '{0}{1}'
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1395439614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808952153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64578247383140469c45370654a984a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actor: Game (NPC)
+  persistentDataName: 
+  portrait: {fileID: 0}
+  spritePortrait: {fileID: 0}
+  barkUISettings:
+    barkUI: {fileID: 0}
+    barkUIOffset: {x: 0, y: 2, z: 0}
+  standardDialogueUISettings:
+    subtitlePanelNumber: 4
+    customSubtitlePanel: {fileID: 0}
+    customSubtitlePanelOffset: {x: 0, y: 0, z: 0}
+    menuPanelNumber: 3
+    customMenuPanel: {fileID: 0}
+    customMenuPanelOffset: {x: 0, y: 0, z: 0}
+    useMenuPanelFor: 1
     portraitAnimatorController: {fileID: 0}
     setSubtitleColor: 0
     applyColorToPrependedName: 0
@@ -2784,6 +2864,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &1523876150 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1451149855, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+  m_PrefabInstance: {fileID: 2097243116918498964}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523876141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1531161668 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1894093671803610686, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
@@ -3162,6 +3253,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1654263288}
   m_CullTransparentMesh: 1
+--- !u!114 &1725789394 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3877651550878706922, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+  m_PrefabInstance: {fileID: 2097243116918498964}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1725789395 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 453908272, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+  m_PrefabInstance: {fileID: 2097243116918498964}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b9e8838eb4721d46a47f6a87357ae26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1783584470
 GameObject:
   m_ObjectHideFlags: 0
@@ -8664,6 +8777,46 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 354926416, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 354926416, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 354926416, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1523876150}
+    - target: {fileID: 354926416, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 354926416, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_verticalNormalizedPosition
+      objectReference: {fileID: 0}
+    - target: {fileID: 354926416, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: UnityEngine.UI.ScrollRect, UnityEngine.UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 354926416, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: onContentChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 453908272, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: button
+      value: 
+      objectReference: {fileID: 1725789394}
+    - target: {fileID: 453908272, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: setLabelColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 453908272, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: label.m_textMeshProUGUI
+      value: 
+      objectReference: {fileID: 657136692}
     - target: {fileID: 453908272, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: autonumberText.m_textMeshProUGUI
       value: 
@@ -9120,6 +9273,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3877651550808022240, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: buttonTemplate
+      value: 
+      objectReference: {fileID: 1725789395}
     - target: {fileID: 3877651550808022240, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: autonumber.format
       value: '{1}'
@@ -9774,5 +9931,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -39.969997
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2097243117059316331, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}

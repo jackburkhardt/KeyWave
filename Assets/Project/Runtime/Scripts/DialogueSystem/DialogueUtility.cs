@@ -35,6 +35,7 @@ public static class DialogueUtility
         var visitedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
         var leaveColor = new Color(0.2f, 0.05f, 0.05f, 1f);
         var backColor = new Color(0.5f, 0.5f, 0.5f, 1);
+        var proceduralColor = new Color(1, 1, 1, 1);
         var defaultColor = Location.PlayerLocation.responseMenuButtonColor;
         
         if (node == null) return Color.white;
@@ -43,6 +44,8 @@ public static class DialogueUtility
         //    return Color.Lerp(visitedColor, defaultColor, 0.4f);
         if (node.Title == "Leave") return Color.Lerp(leaveColor, defaultColor, 0.2f);
         if (node.Title == "Back") return Color.Lerp(backColor, defaultColor, 0.2f);
+      
+        if (node.GetSubconversationQuest()!= null && node.GetSubconversationQuest()!.FieldExists("Is Procedural") && node.GetSubconversationQuest()!.GetLuaField("Is Procedural")!.Value.asBool)  return Color.Lerp(proceduralColor, defaultColor, 0.2f);
         return defaultColor;
     }
     
@@ -74,7 +77,7 @@ public static class DialogueUtility
 
     public static int GetTimespan(DialogueEntry dialogueEntry)
     {
-        if (!Field.FieldExists(dialogueEntry.fields, "Duration")) return 0;
+        if (!Field.FieldExists(dialogueEntry.fields, "Timespan")) return -1;
         
         var timespanField = Field.Lookup(dialogueEntry.fields, "Timespan");
         
@@ -100,6 +103,7 @@ public static class DialogueUtility
     public static int GetQuestDuration(Item quest)
     {
         var durationField = quest.AssignedField("Duration");
+       // if (quest.GetQuestState() == PixelCrushers.DialogueSystem.QuestState.Success) return 0;
         if (durationField == null) return 0;
         
         var unit = durationField.value.Split(':')[1];
@@ -270,16 +274,35 @@ public static class DialogueUtility
     
     private static int GetLineAutoDuration(string line)
     {
-        if (line == string.Empty) return 0;
-        return (line.Length / Clock.TimeScales.SpokenCharactersPerSecond +
+
+        if (line == string.Empty)
+        {
+            
+            return 0;
+        }
+        //Debug.Log($"Auto Node Duration from Line: {line.Length / Clock.TimeScales.SpokenCharactersPerSecond + Clock.TimeScales.SecondsBetweenLines}");
+        return ((int)(line.Length * Clock.TimeScales.SecondsPercharacter) +
                 Clock.TimeScales.SecondsBetweenLines) * Clock.TimeScales.GlobalTimeScale;
     }
 
     public static int GetNodeDuration(DialogueEntry dialogueEntry)
     {
         var timespan = GetTimespan(dialogueEntry);
-        if (timespan != -1) return timespan;
-        if (Field.FieldExists(dialogueEntry.fields, "Duration")) return Field.LookupInt(dialogueEntry.fields, "Duration");
+        var t = dialogueEntry.Timespan();
+        if (timespan != -1)
+        {
+            /*Debug.Log($"Node Duration from Timespan: {timespan}"); */
+            return timespan;
+        }
+
+        if (Field.FieldExists(dialogueEntry.fields, "Duration"))
+        {
+            //Debug.Log($"Node Duration from Duration Field: {Field.LookupInt(dialogueEntry.fields, "Duration")}");
+            return Field.LookupInt(dialogueEntry.fields, "Duration");
+        }
+        
+        if (dialogueEntry.Visited()) return 0;
+        
         return GetLineAutoDuration(dialogueEntry.currentDialogueText);
     }
     

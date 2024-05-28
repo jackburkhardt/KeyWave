@@ -37,7 +37,9 @@ namespace Project.Runtime.Scripts.App
 
         public void BeginGame()
         {
+            #if !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
+            #endif
             ChangeScene("Base", "StartMenu");
             GameEvent.OnRegisterPlayerEvent += SendPlayerEvent;
         }

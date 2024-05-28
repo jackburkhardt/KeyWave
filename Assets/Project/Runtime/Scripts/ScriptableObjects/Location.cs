@@ -30,7 +30,7 @@ public class Location : ScriptableObject
     public Vector2 coordinates;
  
     // formula for time to distance: minutes * 4 (5 mins * 4 = 20)
-    public const int DistanceToNearestCafe = 20;
+    public const int DistanceToNearestCafe = 300;
 
     public void MoveHere()
     {
@@ -46,7 +46,7 @@ public class Location : ScriptableObject
             // if cafe, distance is relative to current location
             if (area == Area.Café || (LastLocation && area == LastLocation.area))
             {
-                return DistanceToNearestCafe;
+                return DistanceToNearestCafe / Clock.TimeScales.GlobalTimeScale;
             }
             var playerCoordinates = PlayerLocation.coordinates;
             return (int)Vector2.Distance(playerCoordinates, coordinates);

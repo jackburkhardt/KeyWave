@@ -17,7 +17,19 @@ public class GameState
     //default values
     
     public Type type = Type.Normal;
-    public int clock = 21600;
+    private int clock => DialogueLua.GetVariable("clock").AsInt;
+
+    public int Clock
+    {
+        get
+        {
+            return clock;
+        }
+        set
+        {
+            DialogueLua.SetVariable("clock", value);
+        }
+    }
     public int day = 1;
     public int business_score = 0;  
     public int local_savvy_score = 0;
@@ -77,6 +89,9 @@ public class GameStateManager : PlayerEventHandler
                 case "awaiting_response":
                     gameState.most_recent_response_node = (string)playerEvent.Data;
                     break;
+                case "end_day":
+                    gameState.type = GameState.Type.EndOfDay;
+                    break;
                 case "conversation_decision":
                     gameState.most_recent_response_node = string.Empty;
                     break;
@@ -100,16 +115,17 @@ public class GameStateManager : PlayerEventHandler
             switch (gameState.type)
             {
                 case GameState.Type.Normal:
-                    gameState.clock += playerEvent.Duration;
+                    gameState.Clock += playerEvent.Duration;
                     break;
                 case GameState.Type.EndOfDay:
-                    gameState.clock = Clock.DailyLimit;
+                    gameState.Clock = Clock.DailyLimit;
                     break;
             }
         
         OnGameStateChanged?.Invoke(gameState);
     }
     
+<<<<<<< HEAD
     public void SetGameStateType(GameState.Type type)
     {
         gameState.type = type;
@@ -118,20 +134,22 @@ public class GameStateManager : PlayerEventHandler
             case GameState.Type.Normal:
                 break;
             case GameState.Type.EndOfDay:
-                gameState.clock = Clock.DailyLimit;
+                gameState.Clock = Clock.DailyLimit;
                 break;
         }
     }
     
+=======
+>>>>>>> c821dcf65bb16e46b0eb63cf686a49632da4c310
     public void AddTime(int duration)
     {
-        gameState.clock += duration;
+        gameState.Clock += duration;
     }
 
     public void StartNextDay()
     {
         gameState.day += 1;
-        gameState.clock = 21600;
+        gameState.Clock = 21600;
         gameState.player_location = "Hotel";
         gameState.current_conversation_title = string.Empty;
         gameState.type = GameState.Type.Normal;

@@ -100,10 +100,10 @@ public class Clock
     public struct TimeScales
     {
         internal static int Modifier = 1;
-        internal static int GlobalTimeScale => 15 * Modifier;
+        internal static int GlobalTimeScale => 1 * Modifier;
     
-        internal static int SpokenCharactersPerSecond = 5;
-        internal static int SecondsBetweenLines = 15;
+        internal static float SecondsPercharacter = 1f;
+        internal static int SecondsBetweenLines = 50;
         internal static int SecondsPerInteract = 30;
     }
     public static void Freeze(bool freeze)
@@ -115,11 +115,11 @@ public class Clock
 
     public static int CurrentVisualizedTimeRaw = ClockUI.CurrentVisualizedTimeRaw;
     
-    public static int CurrentTimeRaw => GameManager.gameState.clock;
+    public static int CurrentTimeRaw => GameManager.gameState.Clock;
 
     public static string CurrentTime => To24HourClock(CurrentTimeRaw);
 
-    public static int DailyLimit => ToSeconds("18:00");
+    public static int DailyLimit => ToSeconds("24:00");
 
     /// <summary>
     /// Converts a string in the format "HH:MM" to seconds. e.g. "07:30" to 27000

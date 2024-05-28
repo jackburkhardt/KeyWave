@@ -41,6 +41,10 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(HourMinuteToTime), this, SymbolExtensions.GetMethodInfo(() => HourMinuteToTime(0, 0)));
         Lua.RegisterFunction(nameof(UnlockLocation), this, SymbolExtensions.GetMethodInfo(() => UnlockLocation(string.Empty)));
         Lua.RegisterFunction(nameof(IsLocationUnlocked), this, SymbolExtensions.GetMethodInfo(() => IsLocationUnlocked(string.Empty)));
+        Lua.RegisterFunction(nameof(EmailState), this, SymbolExtensions.GetMethodInfo(() => EmailState(string.Empty)));
+        Lua.RegisterFunction(nameof(CartItem), this, SymbolExtensions.GetMethodInfo(() => CartItem(string.Empty)));
+        Lua.RegisterFunction(nameof(Not), this, SymbolExtensions.GetMethodInfo(() => Not(false)));
+        Lua.RegisterFunction(nameof(ToggleInventoryItem), this, SymbolExtensions.GetMethodInfo(() => ToggleInventoryItem(string.Empty)));
       
     }
 
@@ -60,6 +64,10 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.UnregisterFunction(nameof(HourMinuteToTime));
         Lua.UnregisterFunction(nameof(UnlockLocation));
         Lua.UnregisterFunction(nameof(IsLocationUnlocked));
+        Lua.UnregisterFunction(nameof(EmailState));
+        Lua.UnregisterFunction(nameof(CartItem));
+        Lua.UnregisterFunction(nameof(Not));
+        Lua.UnregisterFunction(nameof(ToggleInventoryItem));
     }
     
     
@@ -80,6 +88,62 @@ public class CustomLuaFunctions : MonoBehaviour
     {
         return DialogueManager.DatabaseManager.masterDatabase.GetLocation((int)locationID).Name;
     }
+
+    public string EmailState(string itemName)
+    {
+        var emailState = QuestLog.GetQuestState(itemName);
+        
+        switch (emailState) {
+            case QuestState.Success:
+                return "[OPENED]";
+            case QuestState.Failure:
+                return "[OPENED]";
+            default:
+                return "[UNREAD]";
+        }
+    }
+
+    public string CartItem(string itemName)
+    {
+        var item = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.Name == itemName);
+        if (item == null) return string.Empty;
+        
+        var itemDisplayName = DialogueLua.GetItemField(itemName, "Display Name").asString;
+        
+        var itemCost = DialogueLua.GetItemField(itemName, "Cost").asInt;
+        
+        var isItemInCart =  DialogueLua.GetItemField(itemName, "In Inventory").asBool;
+        
+        var prefaceText = isItemInCart ? "[REMOVE]" : "[ADD]";
+
+        return $"{prefaceText} {itemDisplayName} - ${itemCost}";
+
+    }
+    
+    public void ToggleInventoryItem(string itemName)
+    {
+        var item = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.Name == itemName);
+        if (item == null) return;
+        
+        var isItemInCart =  DialogueLua.GetItemField(itemName, "In Inventory").asBool;
+        
+        var itemCost = DialogueLua.GetItemField(itemName, "Cost").asInt;
+        
+        DialogueLua.SetItemField(itemName, "In Inventory", !isItemInCart);
+
+        var inventory = DialogueLua.GetItemField(itemName, "Inventory").asInt;
+        
+        var inventoryItem = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.id == inventory);
+        
+       if (inventoryItem == null) return;
+        
+        var totalInventoryCost = DialogueLua.GetItemField(inventoryItem.Name, "Total").asInt;
+        
+        DialogueLua.SetItemField(inventoryItem.Name, "Total", isItemInCart ? totalInventoryCost - itemCost : totalInventoryCost + itemCost);
+        
+    }
+    
+    public bool Not(bool value) => !value;
     
     public void UnlockLocation(string location)
     {

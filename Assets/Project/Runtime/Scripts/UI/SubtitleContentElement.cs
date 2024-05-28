@@ -147,10 +147,10 @@ public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPoin
         _alpha = canvasGroup.alpha;
         canvasGroup.alpha = 1;
         
-        DialogueManager.Pause();
+        //DialogueManager.Pause();
         
          
-        subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Pause();
+       // subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Pause();
     }
     
     public void OnPointerExit(PointerEventData eventData)
@@ -160,9 +160,9 @@ public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPoin
 
         var isPointerOnAnySubtitle = false;
         
-        DialogueManager.Unpause();
+      //  DialogueManager.Unpause();
         
-        subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Unpause();
+      //  subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Unpause();
 
 
 
