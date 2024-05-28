@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
     
     private void OnPlayerEvent(PlayerEvent e)
     {
-        if (gameState.clock > Clock.DailyLimit)
+        if (gameState.Clock > Clock.DailyLimit)
         {
             GameEvent.OnDayEnd();
             DialogueManager.StopAllConversations();
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
         
         if (state == QuestState.Success && duration > 0)
         {
-            gameState.clock += duration;
+            gameState.Clock += duration;
         }
         
         GameEvent.OnQuestStateChange(questName, state, duration);

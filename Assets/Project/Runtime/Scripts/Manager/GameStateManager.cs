@@ -17,7 +17,13 @@ public class GameState
     //default values
     
     public Type type = Type.Normal;
-    public int clock = 21600;
+    private int clock = 21600;
+
+    public int Clock
+    {
+        get => DialogueLua.GetVariable("clock").asInt;
+        set => DialogueLua.SetVariable("clock", value);
+    }
     public int day = 1;
     public int business_score = 0;  
     public int local_savvy_score = 0;
@@ -103,10 +109,10 @@ public class GameStateManager : PlayerEventHandler
             switch (gameState.type)
             {
                 case GameState.Type.Normal:
-                    gameState.clock += playerEvent.Duration;
+                    gameState.Clock += playerEvent.Duration;
                     break;
                 case GameState.Type.EndOfDay:
-                    gameState.clock = Clock.DailyLimit;
+                    gameState.Clock = Clock.DailyLimit;
                     break;
             }
         
@@ -115,13 +121,13 @@ public class GameStateManager : PlayerEventHandler
     
     public void AddTime(int duration)
     {
-        gameState.clock += duration;
+        gameState.Clock += duration;
     }
 
     public void StartNextDay()
     {
         gameState.day += 1;
-        gameState.clock = 21600;
+        gameState.Clock = 21600;
         gameState.player_location = "Hotel";
         gameState.current_conversation_title = string.Empty;
         gameState.type = GameState.Type.Normal;
