@@ -131,8 +131,14 @@ public static class LuaFields
 
         var isActorPlayer = actor != null && (Field.FieldExists(actor.fields, "IsPlayer") &&
                                               Field.LookupBool(actor.fields, "IsPlayer"));
+        
+        var doesAnyMenuTextForceResponse = dialogueEntry.outgoingLinks.Exists(link =>
+        {
+            var destinationEntry = link.GetDestinationEntry(database);
+            return destinationEntry != null && destinationEntry.currentMenuText.Contains("[F]");
+        });
 
-       return (isActorPlayer && dialogueEntry.outgoingLinks.Count > 1);
+       return (isActorPlayer && dialogueEntry.outgoingLinks.Count > 1 || doesAnyMenuTextForceResponse);
     }
     
     public static QuestState GetQuestState(this Item quest)
@@ -161,6 +167,12 @@ public static class LuaFields
     public static Field? GetField(this DialogueEntry dialogueEntry, string fieldName)
     {
         return Field.Lookup(dialogueEntry.fields, fieldName);
+    }
+
+    public static bool IsEmpty(this DialogueEntry dialogueEntry)
+    {
+
+        return dialogueEntry is { subtitleText: "", currentMenuText: "" };
     }
     
     public static Lua.Result? GetLuaField(this Item item, string fieldName)

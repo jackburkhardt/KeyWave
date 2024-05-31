@@ -590,19 +590,7 @@ MonoBehaviour:
   - guid: 13a35f6a-8db4-49b2-a465-30c335e41ca4
     onExecute:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1395439610}
-          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-          m_MethodName: OpenMap
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
   - guid: 1a32bc75-5bf4-44d5-8160-7106318a003c
     onExecute:
       m_PersistentCalls:
@@ -711,29 +699,13 @@ MonoBehaviour:
     onExecute:
       m_PersistentCalls:
         m_Calls: []
- - guid: 11b2328f-2fc3-49ae-9b20-28f42381a72a
+  - guid: 0b1ae96a-1dba-4fcc-8574-09815773aad6
     onExecute:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1395439610}
           m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-         m_MethodName: EndOfDay
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-- guid: c6de1eae-4164-4815-b39f-79db50e956e6
-    onExecute:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1395439610}
-          m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-          m_MethodName: EndOfDay
+          m_MethodName: OpenMap
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -3118,6 +3090,52 @@ MonoBehaviour:
   localKnowledgeColor: {r: 0.9622642, g: 0.24873616, b: 0.24873616, a: 1}
   businessResearchColor: {r: 0.1147739, g: 0.9811321, b: 0.9556596, a: 1}
   image: {fileID: 1612912508}
+--- !u!1 &1642847573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8970876454653293082, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+  m_PrefabInstance: {fileID: 2097243116918498964}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1642847583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642847573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a98125502f715b4b83cfb77b434e436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 0}
 --- !u!1 &1654263288
 GameObject:
   m_ObjectHideFlags: 0
@@ -9728,14 +9746,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: displaySettings.cameraSettings.defaultSequence
-      value: 'Delay({{end}});
+      value: 'SetContinueMode(false);
 
-        WaitForMessage(Typed)'
+        SetContinueMode(original)@Message(Typed);
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: displaySettings.cameraSettings.sequencerCamera
       value: 
       objectReference: {fileID: 2129988279}
+    - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: displaySettings.subtitleSettings.continueButton
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: displaySettings.inputSettings.includeInvalidEntries
       value: 1
@@ -9747,6 +9771,14 @@ PrefabInstance:
     - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: displaySettings.subtitleSettings.subtitleCharsPerSecond
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: displaySettings.cameraSettings.defaultResponseMenuSequence
+      value: Continue()
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: displaySettings.subtitleSettings.requireContinueOnLastLine
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8970876454652995386, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_RootOrder
@@ -9863,6 +9895,30 @@ PrefabInstance:
     - target: {fileID: 8970876456196894667, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876456277588785, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876456277588798, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876456277588798, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876456277588798, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876456277588798, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8970876456277588798, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8970876456455033907, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: conversationEvents.runOnConversationEndEventsAtEndOfFrame

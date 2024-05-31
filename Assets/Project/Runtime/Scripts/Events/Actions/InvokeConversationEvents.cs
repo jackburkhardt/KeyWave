@@ -13,9 +13,23 @@ public class InvokeConversationEvents : MonoBehaviour
         
      //   Debug.Log("Current Node Duration: " + DialogueUtility.CurrentNodeDuration);
 
-        if (DialogueUtility.Empty(DialogueUtility.CurrentDialogueEntry) &&
-            DialogueUtility.CurrentDialogueEntry.Sequence == string.Empty) DialogueManager.PlaySequence("Continue()");
+       // if (DialogueUtility.CurrentDialogueEntry.IsEmpty()) DialogueManager.PlaySequence("Continue()");
     }
+
+    public void OnSequenceStart()
+    {
+        if (DialogueUtility.CurrentDialogueEntry.IsEmpty()) DialogueManager.PlaySequence("Continue()");
+    }
+
+    public void OnSequenceEnd()
+    {
+       // if (DialogueUtility.CurrentDialogueEntry.outgoingLinks.Count == 1 && DialogueUtility.CurrentDialogueEntry.outgoingLinks[0].GetDestinationEntry().IsResponseRoot())
+       // {
+     //       DialogueManager.PlaySequence("Continue()");
+       // }
+    }
+
+    
 
     public void BroadcastConversationStart()
     {

@@ -35,7 +35,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
         string[] questTimeOptions = { "minutes", "hours", "seconds" };
         string[] pointTypeOptions = { "Wellness", "Savvy", "Business", "Null" };
         static bool _editMode;
-        static string _defaultInternalName;
+        private static string DefaultInternalName => $"{_originConversation.Title.Replace("/Base", "")}/";
 
         public static void ShowSubconversationWindow(object targetConv)
         {
@@ -46,7 +46,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             var window = GetWindow<CreateSubconversation>();
             window.titleContent = new GUIContent("Enter information"); ;
             _editMode = targetData.Item3;
-            _defaultInternalName = $"{_originConversation.Title.Replace("/Base", "")}/";
+            //_defaultInternalName = $"{_originConversation.Title.Replace("/Base", "")}/";
 
             if (_editMode)
             {
@@ -63,7 +63,11 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
         }
 
         // this is the default for a new subconversation
-        private SubconversationData _subconvData;
+        private SubconversationData _subconvData = new()
+        {
+            internalName = DefaultInternalName,
+            useDisplayNameAsMenuText = true
+        };
 
         private void OnGUI()
         {
@@ -86,7 +90,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             _subconvData.defaultReturnLocation = EditorGUILayout.TextField("Default Return Location (ConvoID:EntryID)", _subconvData.defaultReturnLocation);
             _subconvData.revistable = EditorGUILayout.Toggle("Revisitable", _subconvData.revistable);
             
-            if (!string.IsNullOrEmpty(_subconvData.internalName) && !_subconvData.internalName.Contains(_defaultInternalName))
+            if (!string.IsNullOrEmpty(_subconvData.internalName) && !_subconvData.internalName.Contains(DefaultInternalName))
             {
                 EditorGUILayout.HelpBox("Internal Name does not seem to contain the origin conversation name. Make sure you've written it correctly.",
                     MessageType.Info);
@@ -113,7 +117,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
                     MessageType.Error);
             }
             
-            else if (_subconvData.internalName == _defaultInternalName)
+            else if (_subconvData.internalName == DefaultInternalName)
             {
                 EditorGUILayout.HelpBox("Internal Name must be unique. Please change the name to something other than the default.",
                     MessageType.Error);
@@ -134,12 +138,6 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
         {
             var db = DialogueEditorWindow.GetCurrentlyEditedDatabase();
             var template = Template.FromDefault();
-             _subconvData = new()
-            {
-                internalName = _defaultInternalName,
-                useDisplayNameAsMenuText = true
-            };
-
             CreateQuest(db, template);
             int newConvoId = CreateConversation(db, template);
             CreateNewNode(db, template, newConvoId);

@@ -45,6 +45,7 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(CartItem), this, SymbolExtensions.GetMethodInfo(() => CartItem(string.Empty)));
         Lua.RegisterFunction(nameof(Not), this, SymbolExtensions.GetMethodInfo(() => Not(false)));
         Lua.RegisterFunction(nameof(ToggleInventoryItem), this, SymbolExtensions.GetMethodInfo(() => ToggleInventoryItem(string.Empty)));
+        Lua.RegisterFunction(nameof(ClearInventory), this, SymbolExtensions.GetMethodInfo(() => ClearInventory(string.Empty)));
       
     }
 
@@ -68,6 +69,7 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.UnregisterFunction(nameof(CartItem));
         Lua.UnregisterFunction(nameof(Not));
         Lua.UnregisterFunction(nameof(ToggleInventoryItem));
+        Lua.UnregisterFunction(nameof(ClearInventory));
     }
     
     
@@ -118,6 +120,28 @@ public class CustomLuaFunctions : MonoBehaviour
 
         return $"{prefaceText} {itemDisplayName} - ${itemCost}";
 
+    }
+    
+    public void ClearInventory(string cartName)
+    {
+        var cart = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.Name == cartName);
+        if (cart == null) return;
+        
+        // get all items that have an "Inventory" field and check if that field is equal to the cart name
+        
+        var cartItems = DialogueManager.DatabaseManager.masterDatabase.items.FindAll(i => i.fields.Exists(f => f.title == "Inventory" && f.value == cart.id.ToString()));
+        
+   
+        foreach (var item in cartItems)
+        {
+            //if the item has a field "In Inventory" and it's true, set it to false
+            if (item.FieldExists("In Inventory") && item.LookupBool("In Inventory"))
+            {
+                DialogueLua.SetItemField(item.Name, "In Inventory", false);
+            }
+        }
+        
+        DialogueLua.SetItemField(cartName, "Total", 0);
     }
     
     public void ToggleInventoryItem(string itemName)
