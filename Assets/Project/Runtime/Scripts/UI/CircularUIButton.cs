@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,6 +24,8 @@ public class CircularUIButton : MonoBehaviour
     [NonSerialized] public Spacing masterSpacing = Spacing.Spread;
     List<CircularUIButton> matchedSideInteractables = new List<CircularUIButton>();
     [SerializeField] private float _padding;
+    [SerializeField] private bool _mouseEvents = true;
+    [ShowIf(nameof(_mouseEvents))]
     public UnityEvent onHover, onClick, onMouseExit;
     private float offset;
     public float Offset
@@ -97,8 +100,7 @@ public class CircularUIButton : MonoBehaviour
 
     private void OnDisable()
     {
-        if (GetComponent<StandardUIResponseButton>() == null || CustomUIMenuPanel.Instance == null) return;
-        if (GetComponent<StandardUIResponseButton>() != CustomUIMenuPanel.Instance.buttonTemplate) Destroy(gameObject);
+        
     }
 
 
@@ -184,19 +186,19 @@ public class CircularUIButton : MonoBehaviour
         {
             isButtonActive = true;
             ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerEnterHandler);
-            onHover.Invoke();
+            if (_mouseEvents) onHover.Invoke();
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && isButtonActive && button.interactable)
         {
             ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerClickHandler);
-            onClick.Invoke();
+            if (_mouseEvents) onClick.Invoke();
            }
     
         if (!isArrowPointingAtButton && isButtonActive)
         {
             ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerExitHandler);
-            onMouseExit.Invoke();
+            if (_mouseEvents) onMouseExit.Invoke();
             isButtonActive = false;
         }
         

@@ -10,6 +10,21 @@ public class CustomResponseMenu : StateMachineBehaviour
         {
             animator.SetBool("Active", true);
         }
+        
+        if (stateInfo.IsName("Focus"))
+        {
+           WatchHandCursor.Unfreeze();
+        }
+        
+        if (stateInfo.IsName("Unfocus"))
+        {
+            WatchHandCursor.Freeze();
+        }
+        
+        if (stateInfo.IsName("Hide"))
+        {
+            animator.SetBool("Active", false);
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

@@ -206,7 +206,6 @@ GameObject:
   - component: {fileID: 9041938662412639117}
   - component: {fileID: 9041938662412639118}
   - component: {fileID: 9041938662412639119}
-  - component: {fileID: 9041938662412639116}
   m_Layer: 5
   m_Name: Text View
   m_TagString: Untagged
@@ -305,18 +304,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9041938662412639116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9041938662412639105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a902e3b5cc6e4f10bf95d48512958737, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9041938662491711256
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,7 +697,6 @@ GameObject:
   - component: {fileID: 9041938662817956532}
   - component: {fileID: 9041938662817956533}
   - component: {fileID: 9041938662817956534}
-  - component: {fileID: 9041938662817956531}
   m_Layer: 5
   m_Name: PopUp
   m_TagString: Untagged
@@ -757,6 +743,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: -1
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -801,21 +788,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &9041938662817956531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9041938662817956168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8996b425ca748c281c3080b3e7103ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _imageView: {fileID: 9041938663799447042}
-  _textView: {fileID: 9041938662412639105}
-  TextViewActive: 0
 --- !u!1 &9041938662906356948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,7 +985,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9041938662268109919}
   m_HandleRect: {fileID: 9041938662268109904}
   m_Direction: 2
-  m_Value: 0.99999976
+  m_Value: 1
   m_Size: 0.58389693
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1353,47 +1325,46 @@ MonoBehaviour:
   m_text: 'I have a large amount of text and wanted to put it in a Scroll View so
     the user can scroll through it.
 
-    
-
-    I did not find any docs about how
-    to do it, but found a blogger who said to do the following: Add Canvas > Panel
-    > ScrollView > Text, and drag the Text as the ScrollView Content property. I
-    did that and added a large body of text. But the run result is that only the
-    text in view is visible, and it doesn''t scroll at all.
-
-    
-
-    If I grab
-    the text with my mouse during execution, it lets me drag it, which affects the
-    scroll bars, but it just snaps back. ie. it doesn''t scroll. The scroll bars
-    do not show the large amount of text within the ScrollView.
-
-    
-
-    What
-    could be wrong? Here is a picture of how it is setup. Everything is basically
-    at the default.
 
 
-    I have a large amount of text and wanted to put it in a
-    Scroll View so the user can scroll through it.
+    I did not find any docs about how to do
+    it, but found a blogger who said to do the following: Add Canvas > Panel > ScrollView
+    > Text, and drag the Text as the ScrollView Content property. I did that and
+    added a large body of text. But the run result is that only the text in view
+    is visible, and it doesn''t scroll at all.
 
-    
 
-    I did not find any
-    docs about how to do it, but found a blogger who said to do the following: Add
-    Canvas > Panel > ScrollView > Text, and drag the Text as the ScrollView Content
-    property. I did that and added a large body of text. But the run result is that
-    only the text in view is visible, and it doesn''t scroll at all.
 
-    
+    If I grab the text with my
+    mouse during execution, it lets me drag it, which affects the scroll bars, but
+    it just snaps back. ie. it doesn''t scroll. The scroll bars do not show the large
+    amount of text within the ScrollView.
 
-    If
-    I grab the text with my mouse during execution, it lets me drag it, which affects
-    the scroll bars, but it just snaps back. ie. it doesn''t scroll. The scroll bars
-    do not show the large amount of text within the ScrollView.
 
-    
+
+    What could be wrong? Here is a picture
+    of how it is setup. Everything is basically at the default.
+
+
+    I have a large
+    amount of text and wanted to put it in a Scroll View so the user can scroll through
+    it.
+
+
+
+    I did not find any docs about how to do it, but found a blogger who
+    said to do the following: Add Canvas > Panel > ScrollView > Text, and drag the
+    Text as the ScrollView Content property. I did that and added a large body of
+    text. But the run result is that only the text in view is visible, and it doesn''t
+    scroll at all.
+
+
+
+    If I grab the text with my mouse during execution, it lets
+    me drag it, which affects the scroll bars, but it just snaps back. ie. it doesn''t
+    scroll. The scroll bars do not show the large amount of text within the ScrollView.
+
+
 
     What
     could be wrong? Here is a picture of how it is setup. Everything is basically
@@ -1518,7 +1489,6 @@ GameObject:
   - component: {fileID: 9041938663799447054}
   - component: {fileID: 9041938663799447055}
   - component: {fileID: 9041938663799447040}
-  - component: {fileID: 9041938663799447053}
   m_Layer: 5
   m_Name: Image View
   m_TagString: Untagged
@@ -1617,18 +1587,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9041938663799447053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9041938663799447042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a902e3b5cc6e4f10bf95d48512958737, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9041938663863138737
 GameObject:
   m_ObjectHideFlags: 0

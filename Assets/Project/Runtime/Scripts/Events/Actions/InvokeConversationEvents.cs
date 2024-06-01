@@ -18,15 +18,27 @@ public class InvokeConversationEvents : MonoBehaviour
 
     public void OnSequenceStart()
     {
-        if (DialogueUtility.CurrentDialogueEntry.IsEmpty()) DialogueManager.PlaySequence("Continue()");
+      
+        if (DialogueUtility.CurrentDialogueEntry.IsEmpty())
+        {
+            //Debug.Log("Empty node: continuing...");
+            DialogueManager.PlaySequence("Continue()");
+        }
+        
+        
+        var currentEntry = DialogueUtility.CurrentDialogueEntry;
+        if (currentEntry.outgoingLinks.Count != 1) return;
+        var nextEntry = currentEntry.outgoingLinks[0].GetDestinationEntry();
+        
+        if (nextEntry.Title.Contains("Show") && nextEntry.Title.Contains("Options") && !currentEntry.GetActor()!.IsPlayer && !currentEntry.IsEmpty())
+        {
+            DialogueManager.PlaySequence("Continue()@Message(Typed)");
+        }
     }
 
     public void OnSequenceEnd()
     {
-       // if (DialogueUtility.CurrentDialogueEntry.outgoingLinks.Count == 1 && DialogueUtility.CurrentDialogueEntry.outgoingLinks[0].GetDestinationEntry().IsResponseRoot())
-       // {
-     //       DialogueManager.PlaySequence("Continue()");
-       // }
+        
     }
 
     

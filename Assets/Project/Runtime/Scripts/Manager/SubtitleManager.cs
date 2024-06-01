@@ -46,7 +46,6 @@ public class SubtitleManager : MonoBehaviour
       if (!templateSubtitleContentElement.PortraitActive) templateSubtitleContentElement.HidePortraitHelper();
       else templateSubtitleContentElement.ShowPortraitHelper();
       RefreshLayoutGroups.Refresh(gameObject);
-      
    }
 
    public void AddHiddenDuplicate()
@@ -67,22 +66,11 @@ public class SubtitleManager : MonoBehaviour
    {
     
       if (mostRecentDuplicate == null || duplicatedSubtitleContentContainer.childCount == 0) return;
-     // if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() ==
-      //    templateSubtitleContentElement.SubtitleText.ToString()) return;
-      
       mostRecentDuplicate.gameObject.SetActive(true);
-      Debug.Log("revealing " + mostRecentDuplicate.SubtitleText.ToString());
       RefreshContents();
    }
    
-   /*
-   private void OnConversationLineEnd(Subtitle subtitle)
-   {
-     
-      AddHiddenDuplicate();
-      
-   }
-   */
+
 
    private void OnConversationLine(Subtitle subtitle)
    {

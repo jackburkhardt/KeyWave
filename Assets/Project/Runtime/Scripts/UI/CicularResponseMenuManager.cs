@@ -91,7 +91,7 @@ public class CicularResponseMenuManager : MonoBehaviour
         
         var lowerBound = 0f;
         Button ActiveButton = null;
-        var isMouseOver = pointerArrow.GetComponent<PointerArrow>().isMouseOver;
+        var isMouseOver = pointerArrow.GetComponent<WatchHandCursor>().isMouseOver;
         
         for (int i = 0; i < menuItems.Length; i++)
         {

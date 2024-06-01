@@ -95,7 +95,6 @@ namespace PixelCrushers.DialogueSystem
         public virtual void Start()
         {
             
-            
             if (button != null && button.onClick.GetPersistentEventCount() == 0)
             {
                 button.onClick.AddListener(OnClick);
