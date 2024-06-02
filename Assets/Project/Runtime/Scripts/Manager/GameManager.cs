@@ -129,10 +129,14 @@ public class GameManager : MonoBehaviour
         
         var duration = DialogueUtility.GetQuestDuration(quest);
         
+        /*
+        
         if (state == QuestState.Success && duration > 0)
         {
             gameState.Clock += duration;
         }
+        
+        */
         
         GameEvent.OnQuestStateChange(questName, state, duration);
     }

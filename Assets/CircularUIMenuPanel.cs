@@ -91,7 +91,7 @@ public class CircularUIMenuPanel : CustomUIMenuPanel
             Animator!.SetBool("Focus", false);
             
         }
-        else if (distance < 1.65f)
+        else if (distance < 1.65f && !WatchHandCursor.Frozen)
         {
             Animator!.SetBool("Focus", true);
             _firstFocus = true;

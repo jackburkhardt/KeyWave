@@ -6,6 +6,8 @@ public class WatchHandCursor : MonoBehaviour
     [SerializeField] private float minimumDistance = 750;
     public bool isMouseOver = false;
     private static bool isFrozen = false;
+    private static bool globalFreeze = false;
+    public static bool Frozen => isFrozen && globalFreeze || globalFreeze;
     public bool stickToWatchTicks = false;
     
     
@@ -14,6 +16,16 @@ public class WatchHandCursor : MonoBehaviour
     public void OnEnable()
     {
        Unfreeze();
+    }
+    
+    public static void GlobalFreeze()
+    {
+        globalFreeze = true;
+    }
+    
+    public static void GlobalUnfreeze()
+    {
+        globalFreeze = false;
     }
 
 
@@ -30,6 +42,7 @@ public class WatchHandCursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (globalFreeze) return;
        if (isFrozen) return;
        // rotate self to point at the mouse cursor
         

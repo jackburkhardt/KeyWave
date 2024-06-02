@@ -171,7 +171,7 @@ public class CircularUIButton : MonoBehaviour
         var minAngle = image.transform.localEulerAngles.z;
             
         minAngle =  minAngle  > 0 ? minAngle : minAngle + 360;
-        var maxAngle = minAngle + _interactAngleThreshold;
+        var maxAngle = minAngle + _interactAngleThreshold; maxAngle = maxAngle > 360 ? maxAngle - 360 : maxAngle;
         
         
         
@@ -180,7 +180,7 @@ public class CircularUIButton : MonoBehaviour
         //check if pointer is not already on top of another button
 
 
-        var isArrowPointingAtButton = watchHandAngle < maxAngle && watchHandAngle > minAngle;
+        var isArrowPointingAtButton = minAngle < maxAngle ? watchHandAngle < maxAngle && watchHandAngle > minAngle : watchHandAngle > 0 && watchHandAngle < maxAngle || watchHandAngle > minAngle && watchHandAngle < 360;
 
         if (isArrowPointingAtButton && button.interactable && !isButtonActive)
         {
@@ -189,11 +189,11 @@ public class CircularUIButton : MonoBehaviour
             if (_mouseEvents) onHover.Invoke();
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && isButtonActive && button.interactable)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && isButtonActive && button.interactable && !WatchHandCursor.Frozen)
         {
             ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerClickHandler);
             if (_mouseEvents) onClick.Invoke();
-           }
+        }
     
         if (!isArrowPointingAtButton && isButtonActive)
         {

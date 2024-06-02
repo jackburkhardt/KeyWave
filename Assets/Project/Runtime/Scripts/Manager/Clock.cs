@@ -102,9 +102,9 @@ public class Clock
         internal static int Modifier = 1;
         internal static int GlobalTimeScale => 1 * Modifier;
     
-        internal static float SecondsPercharacter = 1f;
-        internal static int SecondsBetweenLines = 50;
-        internal static int SecondsPerInteract = 30;
+        internal static float SecondsPercharacter = 1.5f;
+        internal static int SecondsBetweenLines = 60;
+        internal static int SecondsPerInteract = 45;
     }
     public static void Freeze(bool freeze)
     {

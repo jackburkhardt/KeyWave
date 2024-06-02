@@ -1,4 +1,5 @@
 using PixelCrushers.DialogueSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InvokeConversationEvents : MonoBehaviour
@@ -8,8 +9,18 @@ public class InvokeConversationEvents : MonoBehaviour
         if (DialogueUtility.CurrentDialogueEntry.id == 0) return; 
         
         GameEvent.OnConversationLine();
+
+        if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Action"))
+        {
+            TutorialPanel.instance.PlayTutorial("ActionTutorial");
+        }
         
-        GameStateManager.instance.AddTime(DialogueUtility.CurrentNodeDuration);
+        if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Talk"))
+        {
+            TutorialPanel.instance.PlayTutorial("TalkTutorial");
+        }
+        
+        GameStateManager.instance.gameState.Clock += (DialogueUtility.CurrentNodeDuration);
         
      //   Debug.Log("Current Node Duration: " + DialogueUtility.CurrentNodeDuration);
 

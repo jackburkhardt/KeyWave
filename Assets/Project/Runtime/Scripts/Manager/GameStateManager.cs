@@ -119,10 +119,7 @@ public class GameStateManager : PlayerEventHandler
         OnGameStateChanged?.Invoke(gameState);
     }
     
-    public void AddTime(int duration)
-    {
-        gameState.Clock += duration;
-    }
+
 
     public void StartNextDay()
     {
