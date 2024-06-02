@@ -8,6 +8,15 @@ using UnityEngine.Serialization;
 public static class Points
 {
     
+    public const int MaxScore = 1000;
+    
+    public static int BusinessScore => GameStateManager.instance.gameState.business_score;
+    public static int SavvyScore => GameStateManager.instance.gameState.local_savvy_score;
+    public static int WellnessScore => GameStateManager.instance.gameState.wellness_score;
+    
+    public static int TotalScore =>  BusinessScore + SavvyScore + WellnessScore;
+    
+    
     public struct PointsField
     {
         [FormerlySerializedAs("type")] 
@@ -35,6 +44,8 @@ public static class Points
         Business,
         Null
     }
+    
+   
 
     public static int Score(Type type)
     {

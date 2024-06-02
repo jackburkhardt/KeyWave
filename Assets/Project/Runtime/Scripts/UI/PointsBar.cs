@@ -1,30 +1,76 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PointsBar : MonoBehaviour
 {
-    private int visualizedWellnessScore, visualizedLocalKnowledgeScore, visualizedBusinessResearchScore;
+   
+   
     
+    [SerializeField] private HorizontalOrVerticalLayoutGroup layoutGroup;
+    [SerializeField] private RectTransform pointsBarUnitTemplate;
 
-    private int maxScore = 1000;
+    private List<RectTransform> PointsBarUnits => layoutGroup.GetComponentsInChildren<RectTransform>().Where(p => p.transform != layoutGroup.transform && p.gameObject.activeSelf).ToList();
+    private float UnitMinWidth =>  layoutGroup.GetComponent<RectTransform>().rect.width / Points.MaxScore;
+    private float LayoutGroupWidth => layoutGroup.GetComponent<RectTransform>().rect.width;
 
-    [SerializeField] private RectTransform wellnessBar;
-    [SerializeField] private RectTransform localKnowledgeBar;
-    [SerializeField] private RectTransform businessResearchBar;
+    private float TotalUnitWidth
+    {
+        get
+        {
+            var currentWidth = 0f;
+            foreach (var barUnit in PointsBarUnits)
+            {
+                currentWidth += barUnit.rect.width;
 
-    private float maxBarWidth;
+            }
 
-    public RectTransform orbTemplate;
+            return currentWidth;
+        }
+    }
+
 
     public LinkedList<(Points.Type type, int amt)> pointQueue = new();
 
+    public void OnParticleDeath(ParticleSystem.Particle particle)
+    {
+        AddOrExpandUnit(particle.startColor);
+        
+        void AddOrExpandUnit(Color color)
+        {
+            var unit = PointsBarUnits.FirstOrDefault(p => p.GetComponent<Image>().color == color);
+        
+            if (unit == null)
+            {
+                unit = Instantiate(pointsBarUnitTemplate, layoutGroup.transform);
+                unit.gameObject.SetActive(true);
+                unit.gameObject.name = color.ToString();
+                unit.GetComponent<Image>().color = color;
+                unit.GetComponent<RectTransform>().sizeDelta = new Vector2(0, unit.GetComponent<RectTransform>().rect.height);
+            }
+            
+            var unitRectTransform = unit.GetComponent<RectTransform>();
+            var rect = unitRectTransform.rect;
+            unitRectTransform.sizeDelta = new Vector2(rect.width + UnitMinWidth,rect.height);
+
+            if (TotalUnitWidth > LayoutGroupWidth)
+            {
+                foreach (var barUnit in PointsBarUnits)
+                {
+                    barUnit.sizeDelta = new Vector2(barUnit.rect.width * (LayoutGroupWidth) / (TotalUnitWidth), barUnit.rect.height);
+                }
+            }
+        }
+    }
+
+    
+
     private void OnEnable()
     {
-        visualizedWellnessScore = Points.Score(Points.Type.Wellness);
-        visualizedLocalKnowledgeScore = Points.Score(Points.Type.Savvy);
-        visualizedBusinessResearchScore = Points.Score(Points.Type.Business);
+       
         
         GameEvent.OnPlayerEvent += OnPlayerEvent;
     }
@@ -39,44 +85,24 @@ public class PointsBar : MonoBehaviour
         }
     }
 
-    public void OnHit(Points.Type type, int amount = 1)
-    {
-        switch (type)
-                {
-                    case Points.Type.Wellness:
-                        visualizedWellnessScore += amount;
-                        break;
-                    case Points.Type.Savvy:
-                        visualizedLocalKnowledgeScore += amount;
-                        break;
-                    case Points.Type.Business:
-                        visualizedBusinessResearchScore += amount;
-                        break;
-                }
+   
 
-        UpdateBar();
-    }
     
 
     // Start is called before the first frame update
     void Start()
     {
-        maxBarWidth = GetComponent<RectTransform>().rect.width;
-        orbTemplate.gameObject.SetActive(false);
+        pointsBarUnitTemplate.gameObject.SetActive(false);
+       
+        
     }
 
 
-    private void SetRectWidth(RectTransform rectTransform, float width)
-    {
-        rectTransform.sizeDelta = new Vector2(width, rectTransform.rect.height);
-    }
 
-    private void ClearBar()
-    {
-        SetRectWidth(wellnessBar, 0);
-        SetRectWidth(localKnowledgeBar, 0);
-        SetRectWidth(businessResearchBar, 0);
-    }
+
+  
+    
+    /*
 
     public void OnParticleAttracted()
     {
@@ -105,18 +131,9 @@ public class PointsBar : MonoBehaviour
         
     }
     
+    */
     
-    private void UpdateBar()
-    {
-        SetRectWidth(wellnessBar, maxBarWidth * visualizedWellnessScore / maxScore);
-        SetRectWidth(localKnowledgeBar, maxBarWidth * visualizedLocalKnowledgeScore / maxScore);
-        SetRectWidth(businessResearchBar, maxBarWidth * visualizedBusinessResearchScore / maxScore);
-    }
+    
 
-    IEnumerator AnimationCompleteHandler()
-    {
-        yield return new WaitForSeconds(1);
-        Points.AnimationComplete();
-        OnEnable();
-    }
+  
 }

@@ -28,7 +28,7 @@ public class InfoPanelButton : MonoBehaviour
     {
         foreach (var button in watchEdgeButtons)
         {
-            button.GetComponent<Button>().interactable = true;
+            button!.GetComponent<Button>()!.interactable = true;
         }
     }
 
