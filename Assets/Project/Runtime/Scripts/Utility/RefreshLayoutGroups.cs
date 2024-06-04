@@ -19,6 +19,7 @@ public class RefreshLayoutGroups : MonoBehaviour
         }
 
         var parent = root.GetComponent<LayoutGroup>();
+        
         LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
     }
 }

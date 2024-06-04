@@ -23,11 +23,14 @@ public class ClockUI : MonoBehaviour
     {
         timeText.text = CurrentVisualizedTime;
         if (timeIsUpdating) return;
-        
-        if (CurrentVisualizedTimeRaw < Clock.CurrentTimeRaw) StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
 
-    //    else if (CurrentVisualizedTimeRaw > Clock.CurrentTimeRaw)
-           // StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw + Clock.HoursToSeconds(24)));
+        if (CurrentVisualizedTimeRaw < Clock.CurrentTimeRaw)
+        {
+            BroadcastMessage("OnTimeChange", (CurrentVisualizedTimeRaw,Clock.CurrentTimeRaw));
+            StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
+        }
+
+  
     }
 
     private string RemoveColon(string time)
@@ -52,6 +55,9 @@ public class ClockUI : MonoBehaviour
         CurrentVisualizedTimeRaw = newTime % Clock.HoursToSeconds(24);
         timeText.text = CurrentVisualizedTime;
         timeIsUpdating = false;
+        
+        BroadcastMessage("OnTimeChanged");
+        
       }
 
   

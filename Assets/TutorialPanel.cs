@@ -101,7 +101,7 @@ public class TutorialPanel : MonoBehaviour
     public void OnNextTutorialIndex()
     {
         _currentTutorialIndex++;
-        _backButton.gameObject.SetActive(true);
+        if (_tutorial.tutorialText.Count > 1) _backButton.gameObject.SetActive(true);
         if (_currentTutorialIndex >= _tutorial.tutorialText.Count)
         {
             _completedTutorials.Add(_tutorial.name);
