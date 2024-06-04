@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using KeyWave.Runtime.Scripts.AssetLoading;
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -35,12 +36,23 @@ namespace Project.Runtime.Scripts.App
             //BrowserInterface.getSocketLibrarySource();
         }
 
-        public void BeginGame()
+        public void BeginGame() => StartCoroutine(BeginGameSequence());
+
+        private IEnumerator BeginGameSequence()
         {
             #if !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
             #endif
-            ChangeScene("Base", "StartMenu");
+            yield return ChangeScene("Base", "StartMenu");
+            if (PixelCrushers.SaveSystem.HasSavedGameInSlot(1))
+            {
+                PixelCrushers.SaveSystem.LoadFromSlot(1);
+            }
+            else
+            {
+                yield return LoadScene("Hotel");
+                DialogueManager.StartConversation("Intro");
+            }
             GameEvent.OnRegisterPlayerEvent += SendPlayerEvent;
         }
         

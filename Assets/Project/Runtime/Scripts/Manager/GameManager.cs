@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
   
     private void Start()
     {
-        StartCoroutine(StartHandler());
+        dailyReport = new DailyReport(gameState.day);
         GameEvent.OnPlayerEvent += OnPlayerEvent;
     }
     
@@ -87,14 +87,6 @@ public class GameManager : MonoBehaviour
         GameStateManager.instance.StartNextDay();
         dailyReport = new DailyReport(gameState.day);
         App.Instance.ChangeScene("Hotel", "EndOfDay");
-    }
-
-    IEnumerator StartHandler()
-    {
-        dailyReport = new DailyReport(gameState.day);
-        yield return StartCoroutine(playerEventStack.RunEvents());
-
-        yield return StartCoroutine(gameStateManager.LoadGameState());
     }
 
     public static string GetHighestDialogueNodeValue()

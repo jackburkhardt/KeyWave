@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.Wrappers;
 using Project.Runtime.Scripts.App;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,6 +55,11 @@ public class GameStateManager : PlayerEventHandler
         {
             Destroy(this);
         }
+    }
+
+    private void Start()
+    {
+        
     }
 
     public GameState gameState = new GameState();
@@ -128,53 +134,6 @@ public class GameStateManager : PlayerEventHandler
         gameState.player_location = "Hotel";
         gameState.current_conversation_title = string.Empty;
         gameState.type = GameState.Type.Normal;
-    }
-
-    public IEnumerator LoadGameState()
-    {
-        yield return SceneManager.LoadSceneAsync(gameState.player_location, LoadSceneMode.Additive);
-        
-        
-        
-        //run lua scripts
-        foreach (var script in gameState.lua_scripts)
-        {
-            var parsedScript = script.Split(";");
-            foreach (var line in parsedScript)
-            {
-                if (line.Contains("ShowAlert")) continue;
-               // Lua.Run(line);
-            }
-        }
-        
-        yield return new WaitForSeconds(0.5f);
-        /*
-        
-        //load conversation -- order matters here
-        if (gameState.current_conversation_title != string.Empty)
-        {
-            StartCoroutine(StartConversationHandler());
-        }
-        
-        else DialogueManager.StartConversation($"{gameState.player_location}/Base");
-        
-        */
-        
-        DialogueManager.StartConversation("Intro");
-        
-        IEnumerator StartConversationHandler()
-        {
-            var actor = string.IsNullOrEmpty(gameState.current_conversation_actor)
-                ? null
-                : GameObject.Find(gameState.current_conversation_actor);
-            var conversant = string.IsNullOrEmpty(gameState.current_conversation_conversant)
-                ? null
-                : GameObject.Find(gameState.current_conversation_conversant);
-            var actorTransform = (actor != null) ? actor.transform : null;
-            var conversantTransform = (conversant != null) ? conversant.transform : null;
-            yield return new WaitForEndOfFrame();
-            DialogueManager.StartConversation(gameState.current_conversation_title, actorTransform, conversantTransform, gameState.current_conversation_line);
-        }
     }
 
 }

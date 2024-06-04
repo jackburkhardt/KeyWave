@@ -3395,6 +3395,38 @@ MonoBehaviour:
     prependActorNameSeparator: ': '
     prependActorNameFormat: '{0}{1}'
     subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1395439616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808952153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d7231f408a4bc3b90f124c55cf81de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_key: gameState
+  m_appendSaverTypeToKey: 0
+  m_saveAcrossSceneChanges: 1
+  m_restoreStateOnStart: 0
+--- !u!114 &1395439617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808952153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c959f8ca2841e1a873e40fb20f3449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_key: dayReport
+  m_appendSaverTypeToKey: 0
+  m_saveAcrossSceneChanges: 1
+  m_restoreStateOnStart: 0
 --- !u!1 &1415705593
 GameObject:
   m_ObjectHideFlags: 0
@@ -9906,15 +9938,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3877651548987241849, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -1200
+      value: -1162.5
       objectReference: {fileID: 0}
     - target: {fileID: 3877651548987241849, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.61153895
+      value: 0.6582958
       objectReference: {fileID: 0}
     - target: {fileID: 3877651548987241849, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.79121435
+      value: 0.75275934
       objectReference: {fileID: 0}
     - target: {fileID: 3877651549228721503, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_SizeDelta.y
@@ -9950,11 +9982,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3877651550878706935, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.61153895
+      value: -0.65829575
       objectReference: {fileID: 0}
     - target: {fileID: 3877651550878706935, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.7912143
+      value: 0.7527594
       objectReference: {fileID: 0}
     - target: {fileID: 5441892853526528398, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10024,6 +10056,10 @@ PrefabInstance:
       propertyPath: scrollRect
       value: 
       objectReference: {fileID: 8970876454370924110, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+    - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+      propertyPath: persistentDataSettings.includeAllItemData
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8970876454647218334, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
       propertyPath: displaySettings.cameraSettings.sequencerCamera
       value: 
@@ -10158,3 +10194,42 @@ PrefabInstance:
       objectReference: {fileID: 1395439610}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+--- !u!1 &2097243116918498965 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8970876454653293082, guid: bb77d9459bf3a80408d5d74a939f9899, type: 3}
+  m_PrefabInstance: {fileID: 2097243116918498964}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2097243116918498966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097243116918498965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bba65d9207a8049b448b6c05eea7bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_key: conversationState
+  m_appendSaverTypeToKey: 0
+  m_saveAcrossSceneChanges: 1
+  m_restoreStateOnStart: 1
+--- !u!114 &2097243116918498967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097243116918498965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 689b4b1238e337d4590a91183947bcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_key: dialogueSystem
+  m_appendSaverTypeToKey: 0
+  m_saveAcrossSceneChanges: 1
+  m_restoreStateOnStart: 1
+  skipApplyDataAfterFramesIfApplyImmediate: 1
+  saveRawData: 0
