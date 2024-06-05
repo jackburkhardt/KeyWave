@@ -35,14 +35,12 @@ namespace Project.Runtime.Scripts.SaveSystem
 
             if (string.IsNullOrEmpty(s))
             {
-                App.App.Instance.LoadScene("Hotel");
-                DialogueManager.StartConversation("Intro");
                 return;
             }; // No data to apply.
             GameState data = PixelCrushers.SaveSystem.Deserialize<GameState>(s);
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
-
+            
             App.App.Instance.LoadScene(data.current_scene);
         }
 
@@ -58,7 +56,6 @@ namespace Project.Runtime.Scripts.SaveSystem
             var s = PixelCrushers.SaveSystem.currentSavedGameData.GetData("gameState");
             if (string.IsNullOrEmpty(s))
             {
-                App.App.Instance.LoadScene("Hotel");
                 return;
             }; // No data to apply.
             GameState data = PixelCrushers.SaveSystem.Deserialize<GameState>(s);

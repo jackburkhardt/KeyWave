@@ -44,6 +44,11 @@ namespace Project.Runtime.Scripts.App
             BrowserInterface.canYouHearMe();
             #endif
             yield return ChangeScene("Base", "StartMenu");
+            while (!DialogueManager.Instance.isInitialized)
+            {
+                yield return null;
+            }
+            
             if (PixelCrushers.SaveSystem.HasSavedGameInSlot(1))
             {
                 PixelCrushers.SaveSystem.LoadFromSlot(1);
