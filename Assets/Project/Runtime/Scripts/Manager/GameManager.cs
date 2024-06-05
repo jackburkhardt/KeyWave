@@ -35,6 +35,19 @@ public class GameManager : MonoBehaviour
        
     }
 
+    public void PauseDialogueSystem()
+    {
+        DialogueManager.instance.Pause();
+        WatchHandCursor.GlobalFreeze();
+    }
+    
+    public void UnpauseDialogueSystem()
+    {
+        DialogueManager.instance.Unpause();
+        WatchHandCursor.GlobalUnfreeze();
+    }
+
+
     private void Awake()
     {
        

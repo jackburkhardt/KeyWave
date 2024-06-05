@@ -130,8 +130,7 @@ public class TutorialPanel : MonoBehaviour
         _tutorial = _tutorials.FirstOrDefault(p => p.name == tutorialName);
         _tutorial ??= _tutorials.FirstOrDefault(p => p.name.Contains(tutorialName));
 
-        Debug.Log(_tutorial);
-        
+            
         if (_completedTutorials.Count > 0 && _completedTutorials.Contains(_tutorial.name))
         {
             return;
