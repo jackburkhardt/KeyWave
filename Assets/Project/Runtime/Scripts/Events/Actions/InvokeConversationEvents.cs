@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class InvokeConversationEvents : MonoBehaviour
 {
-    public void BroadcastLine()
+    private string currentConversationTitle = string.Empty;
+    public void BroadcastLine(Subtitle subtitle)
     {
         if (DialogueUtility.CurrentDialogueEntry.id == 0) return; 
         
@@ -21,6 +22,11 @@ public class InvokeConversationEvents : MonoBehaviour
         }
         
         GameStateManager.instance.gameState.Clock += (DialogueUtility.CurrentNodeDuration);
+        
+        if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
+        {
+            PixelCrushers.SaveSystem.SaveToSlot(1);
+        }
         
      //   Debug.Log("Current Node Duration: " + DialogueUtility.CurrentNodeDuration);
 
@@ -50,6 +56,13 @@ public class InvokeConversationEvents : MonoBehaviour
     public void OnSequenceEnd()
     {
         
+    }
+
+   
+    
+    public void OnConversationLine()
+    {
+       
     }
 
     

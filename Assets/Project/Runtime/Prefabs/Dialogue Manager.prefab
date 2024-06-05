@@ -6432,18 +6432,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ec176e581bf99b4fb66211614f0305a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pointToParticle: {fileID: 1753999180}
   _customDataSlot: 0
+  _customDataToInvoke: 0
   _particleSystemStart:
+    m_PersistentCalls:
+      m_Calls: []
+  _particleDeadAll:
     m_PersistentCalls:
       m_Calls: []
   _particleWasBorn:
     m_PersistentCalls:
       m_Calls: []
   _particleDead:
-    m_PersistentCalls:
-      m_Calls: []
-  _particleDeadAll:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1753999180
@@ -6458,7 +6458,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51aa78ba5b5170046ae102eb31283436, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _customDataSlot: 1
   _particleColorB: {r: 0, g: 153, b: 255, a: 255}
   _particleColorS: {r: 1, g: 0, b: 0, a: 1}
   _particleColorW: {r: 0, g: 1, b: 0, a: 1}
@@ -11090,7 +11089,7 @@ MonoBehaviour:
   dontHideImmediateDuringWarmup: 0
   dontDestroyOnLoad: 1
   allowOnlyOneInstance: 1
-  onStartTriggerWaitForSaveDataApplied: 1
+  onStartTriggerWaitForSaveDataApplied: 0
   dialogueTimeMode: 0
   debugLevel: 0
 --- !u!114 &8970876454647140688
