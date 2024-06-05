@@ -33,6 +33,7 @@ namespace Project.Runtime.Scripts.App
         {
             DontDestroyOnLoad(this.gameObject);
             _instance = this;
+            Camera.current.backgroundColor = Color.black;
             #if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.getSocketLibrarySource();
             #endif
