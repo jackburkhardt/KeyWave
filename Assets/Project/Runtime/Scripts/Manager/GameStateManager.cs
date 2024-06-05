@@ -36,7 +36,6 @@ public class GameState
     public string current_conversation_conversant;
     public int current_conversation_line;
     public string most_recent_response_node = string.Empty;
-    public List<string> lua_scripts = new List<string>();
 }
 
 public class GameStateManager : PlayerEventHandler
@@ -76,9 +75,6 @@ public class GameStateManager : PlayerEventHandler
                     break;
                 case "conversation_end":
                     gameState.current_conversation_title = string.Empty;
-                    break;
-                case "conversation_script":
-                    gameState.lua_scripts.Add((string)playerEvent.Data);
                     break;
                 case "conversation_line":
                     // note: removed, this should not trigger
@@ -124,8 +120,6 @@ public class GameStateManager : PlayerEventHandler
         
         OnGameStateChanged?.Invoke(gameState);
     }
-    
-
 
     public void StartNextDay()
     {

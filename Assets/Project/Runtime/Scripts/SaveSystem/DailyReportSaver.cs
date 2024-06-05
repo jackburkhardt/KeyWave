@@ -1,6 +1,8 @@
+using System;
 using Newtonsoft.Json;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
+using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
 {
@@ -22,7 +24,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             /// 
             /// If you use a class to hold the data, use SaveSystem.Serialize to return a 
             /// serialized version:
-
+            
             return JsonConvert.SerializeObject(GameManager.instance.dailyReport);
         }
 
@@ -37,7 +39,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             {
                 return;
             }; // No data to apply.
-            DailyReport data = PixelCrushers.SaveSystem.Deserialize<DailyReport>(s);
+            DailyReport data = JsonConvert.DeserializeObject<DailyReport>(s);
             if (data == null) return; // Serialized string isn't valid.
             GameManager.instance.dailyReport = data;
         }
@@ -51,7 +53,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             // the Saver's data; your method must look it up manually by calling 
             // SaveSystem.savedGameData.GetData(key).
             
-            var s = PixelCrushers.SaveSystem.currentSavedGameData.GetData("report");
+            var s = PixelCrushers.SaveSystem.currentSavedGameData.GetData("dayReport");
             if (string.IsNullOrEmpty(s))
             {
                 return;

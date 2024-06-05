@@ -33,7 +33,9 @@ namespace Project.Runtime.Scripts.App
         {
             DontDestroyOnLoad(this.gameObject);
             _instance = this;
-            //BrowserInterface.getSocketLibrarySource();
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            BrowserInterface.getSocketLibrarySource();
+            #endif
         }
 
         public void BeginGame() => StartCoroutine(BeginGameSequence());
@@ -43,7 +45,7 @@ namespace Project.Runtime.Scripts.App
             #if !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
             #endif
-            yield return ChangeScene("Base", "StartMenu");
+            yield return SceneManager.LoadSceneAsync("Base");
             while (!DialogueManager.Instance.isInitialized)
             {
                 yield return null;
@@ -55,18 +57,17 @@ namespace Project.Runtime.Scripts.App
             }
             else
             {
-                yield return LoadScene("Hotel");
-                DialogueManager.StartConversation("Intro");
+                StartCoroutine(GameManager.instance.StartNewSave());
             }
             GameEvent.OnRegisterPlayerEvent += SendPlayerEvent;
         }
         
         private void SendPlayerEvent(PlayerEvent e)
         {
-            // todo: send this through the web socket
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            BrowserInterface.sendPlayerEvent(e.ToString());
+            #endif
         }
-        
-        
         
         /// <summary>
         /// Loads a scene additively to the current scene

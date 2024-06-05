@@ -5,6 +5,7 @@ var SocketPlugin = {
        document.head.appendChild(script);
     },
     socket: null,
+    userID: null,
     connect: function(url) {
         this.socket = io(url);
     },
@@ -22,7 +23,23 @@ var SocketPlugin = {
     },
     canYouHearMe: function() {
         console.log("Yes, I can hear you!");
-    }
+    },
+    sendSaveGame: function(slot, data){
+        this.emit("putSaveGame", {user: this.userID, slot: slot, data: data});
+    },
+    saveGameExists: function(slot){
+        this.emit("saveGameExists", {user: this.userID, slot: slot}, (response) =>{
+            return response;
+        });
+    },
+    getSaveGame: function(slot){
+        this.emit("getSaveGame", {user: this.userID, slot: slot}, (response) =>{
+            return response;
+        });
+    },
+    sendPlayerEvent: function(data){
+        this.emit("playerEvent", {user: this.userID, data: data});
+    },
 };
 
 mergeInto(LibraryManager.library, SocketPlugin);

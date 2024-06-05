@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     [ShowIf("capFramerate")]
     public int framerateLimit;
     
-    public static GameState gameState;
+    public static GameState gameState => GameStateManager.instance.gameState;
 
     // Start is called before the first frame update
 
@@ -69,8 +69,6 @@ public class GameManager : MonoBehaviour
             gameStateManager = this.AddComponent<GameStateManager>();
         }
         
-        gameState = gameStateManager.gameState;
-        
         if (playerEventStack == null)
         {
             playerEventStack = ScriptableObject.CreateInstance<PlayerEventStack>();
@@ -81,8 +79,15 @@ public class GameManager : MonoBehaviour
   
     private void Start()
     {
-        dailyReport = new DailyReport(gameState.day);
         GameEvent.OnPlayerEvent += OnPlayerEvent;
+        //OnSaveDataApplied();
+    }
+
+    public void OnSaveDataApplied()
+    {
+        dailyReport ??= new DailyReport(gameState.day);
+
+        FindObjectOfType<PointsBar>().ApplySaveData();
     }
     
     private void OnPlayerEvent(PlayerEvent e)
@@ -100,6 +105,13 @@ public class GameManager : MonoBehaviour
         GameStateManager.instance.StartNextDay();
         dailyReport = new DailyReport(gameState.day);
         App.Instance.ChangeScene("Hotel", "EndOfDay");
+    }
+
+    public IEnumerator StartNewSave()
+    {
+        yield return App.Instance.LoadScene("Hotel");
+        dailyReport = new DailyReport(gameState.day);
+        DialogueManager.StartConversation("Intro");
     }
 
     public static string GetHighestDialogueNodeValue()

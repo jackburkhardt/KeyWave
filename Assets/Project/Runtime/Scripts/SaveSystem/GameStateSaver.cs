@@ -58,7 +58,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             {
                 return;
             }; // No data to apply.
-            GameState data = PixelCrushers.SaveSystem.Deserialize<GameState>(s);
+            GameState data = JsonConvert.DeserializeObject<GameState>(s);
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
 

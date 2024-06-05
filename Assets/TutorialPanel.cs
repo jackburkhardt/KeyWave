@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +26,8 @@ public class TutorialPanel : MonoBehaviour
     
     
     private int _currentTutorialIndex = 0;
-    
+    private static readonly int Hide = Animator.StringToHash("Hide");
+
     void SetupTutorial()
     {
         _currentTutorialIndex = 0;
@@ -39,7 +39,6 @@ public class TutorialPanel : MonoBehaviour
         {
             var dot = Instantiate(_dotTemplate, _dotTemplate.transform.parent);
             dot.gameObject.SetActive(true);
-            dot.GetComponent<Image>().color = dot.GetComponent<Image>().color.WithAlpha(0.5f);
             _backButton.gameObject.SetActive(false);
         }
         
@@ -53,8 +52,6 @@ public class TutorialPanel : MonoBehaviour
         _tutorialText.text = _tutorial.tutorialText[_currentTutorialIndex];
         SetTutorialImage(_tutorial.tutorialSprites[_currentTutorialIndex]);
         
-        Dots.ForEach(p => p.color = p.color.WithAlpha(0.5f));
-        Dots[_currentTutorialIndex].color = Dots[_currentTutorialIndex].color.WithAlpha(1f);
         
         RefreshLayoutGroups.Refresh(gameObject);
     }
@@ -105,7 +102,7 @@ public class TutorialPanel : MonoBehaviour
         if (_currentTutorialIndex >= _tutorial.tutorialText.Count)
         {
             _completedTutorials.Add(_tutorial.name);
-            GetComponent<Animator>().SetTrigger("Hide");
+            GetComponent<Animator>().SetTrigger(Hide);
             
             return;
         }
