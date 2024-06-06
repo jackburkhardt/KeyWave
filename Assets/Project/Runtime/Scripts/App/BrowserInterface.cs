@@ -6,9 +6,6 @@ namespace Project.Runtime.Scripts.App
     {
         [DllImport("__Internal")]
         public static extern void canYouHearMe();
-
-        [DllImport("__Internal")]
-        public static extern void getSocketLibrarySource();
         
         [DllImport("__Internal")]
         public static extern void sendPlayerEvent(string playerEvent);

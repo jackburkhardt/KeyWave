@@ -3,7 +3,7 @@ var SocketPlugin = {
         window.dispatchEvent(new CustomEvent("disconnect"));
     },
     canYouHearMe: function() {
-        console.log("Yes, I can hear you!");
+        window.dispatchEvent(new CustomEvent("canYouHearMe"));
     },
     sendSaveGame: function(slot, data){
         window.dispatchEvent(new CustomEvent("putSaveGame", {slot: slot, data: data}));
