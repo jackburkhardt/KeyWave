@@ -11,8 +11,9 @@ public class Location : ScriptableObject
     public string Name => area.ToString();
 
     public Color responseMenuButtonColor;
-    
-    public enum Area {
+
+    public enum Area
+    {
         Hotel,
         Promenade,
         Neighborhood,
@@ -22,6 +23,21 @@ public class Location : ScriptableObject
         Café,
         Store
     }
+
+
+    //private List<Field> _luaFields;
+
+    public List<Field> luaFields
+    {
+        get => DialogueManager.instance.masterDatabase.locations.Find(n => n.Name == Name).fields;
+        set {
+        var fields = DialogueManager.instance.masterDatabase.locations.Find(n => n.Name == Name).fields;
+        foreach (var field in value) Field.SetValue(fields, field.title, field.value);
+        }
+    }
+
+
+
 
     public Area area;
     public string description;
@@ -34,9 +50,11 @@ public class Location : ScriptableObject
 
     public void MoveHere()
     {
-        LastLocation = FromString(GameManager.gameState.player_location);
+        LastLocation = FromString(GameManager.gameState.PlayerLocation);
         GameEvent.OnMove(this.Name, this, this.TravelTime);
         GameManager.instance.TravelTo(this);
+        
+        
     }
 
     private int Distance
@@ -71,6 +89,7 @@ public class Location : ScriptableObject
         Location loc = FromString(location);
         return loc.objectives;
     }
+   
     
     public static List<Item> Objectives(Area area) => Objectives(area.ToString());
     
@@ -92,7 +111,7 @@ public class Location : ScriptableObject
     
     public static Location FromArea(Area area) =>  FromString(area.ToString());
     
-    public static Location PlayerLocation => FromString(GameManager.gameState.player_location);
+    public static Location PlayerLocation => FromString(GameManager.gameState.PlayerLocation);
 
     public static Location LastLocation;
 

@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour
     private string last_convo = string.Empty;
     public void OpenMap()
     {
-        last_convo = gameState.current_conversation_title;
+        //last_convo = gameState.current_conversation_title;
         DialogueManager.StopConversation();
         DialogueManager.instance.PlaySequence("SetDialoguePanel(false)");
         App.Instance.LoadScene("Map");

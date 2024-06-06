@@ -9,7 +9,8 @@ public class InvokeConversationEvents : MonoBehaviour
     {
         if (DialogueUtility.CurrentDialogueEntry.id == 0) return; 
         
-        GameEvent.OnConversationLine();
+        
+       
 
         if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Action"))
         {

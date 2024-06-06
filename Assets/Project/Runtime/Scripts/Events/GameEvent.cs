@@ -118,34 +118,6 @@ public static class GameEvent
         }
         RegisterPlayerEvent("awaiting_response", String.Join(",", responses), "", dialogueEntryNodeTitle);
     }
-
-    public static void OnConversationLine()
-    {
-        
-        var text = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.currentDialogueText;
-        var mostRecentResponseNode = GameManager.instance.gameStateManager.gameState.most_recent_response_node;
-        
-        var entry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry;
-        bool entryHasPoints = Field.Lookup(entry.fields, "Points") != null;
-
-        if (mostRecentResponseNode != string.Empty && entryHasPoints)
-        {
-            var pointsField = QuestUtility.GetPoints(entry);
-            RegisterPlayerEvent("conversation_decision", entry.MenuText, mostRecentResponseNode, pointsField);
-        }
-        else if (mostRecentResponseNode != string.Empty) {
-            RegisterPlayerEvent("conversation_decision", entry.MenuText, mostRecentResponseNode);
-        }
-
-
-        var nodeScript = entry.userScript;
-        var nodeValue = GameManager.GetHighestDialogueNodeValue();
-        
-        if (nodeScript != string.Empty)
-        {
-            RegisterPlayerEvent("conversation_script", nodeValue, nodeScript);
-        }
-    }
     
 
   

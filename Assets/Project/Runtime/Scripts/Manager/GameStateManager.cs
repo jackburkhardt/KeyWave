@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.Wrappers;
 using Project.Runtime.Scripts.App;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,7 +19,7 @@ public class GameState
     //default values
     
     public Type type = Type.Normal;
-    private int clock = 21600;
+   
 
     public int Clock
     {
@@ -29,13 +30,19 @@ public class GameState
     public int business_score = 0;  
     public int local_savvy_score = 0;
     public int wellness_score = 0;
-    public string player_location = "Hotel";
+
+    public string PlayerLocation
+    {
+        get => DialogueLua.GetVariable("player_location").asString;
+        set => DialogueLua.SetVariable("player_location", value);
+    }
+
+
     public string current_scene = "Hotel";
-    public string current_conversation_title = string.Empty;
-    public string current_conversation_actor;
-    public string current_conversation_conversant;
-    public int current_conversation_line;
-    public string most_recent_response_node = string.Empty;
+   
+
+
+
 }
 
 public class GameStateManager : PlayerEventHandler
@@ -68,28 +75,28 @@ public class GameStateManager : PlayerEventHandler
             {
                 case "move":
                     var location = (Location)playerEvent.Data;
-                    gameState.player_location = location.Name; 
+                    gameState.PlayerLocation = location.Name; 
                     break;
                 case "conversation_start":
-                    gameState.current_conversation_title = (string)playerEvent.Data;
+                    //gameState.current_conversation_title = (string)playerEvent.Data;
                     break;
                 case "conversation_end":
-                    gameState.current_conversation_title = string.Empty;
+                    //gameState.current_conversation_title = string.Empty;
                     break;
                 case "conversation_line":
                     // note: removed, this should not trigger
-                    gameState.current_conversation_actor = playerEvent.Source;
-                    gameState.current_conversation_conversant = playerEvent.Target;
-                    gameState.current_conversation_line = (int)playerEvent.Data;
+                    // gameState.current_conversation_actor = playerEvent.Source;
+                   // gameState.current_conversation_conversant = playerEvent.Target;
+                  //  gameState.current_conversation_line = (int)playerEvent.Data;
                     break;
                 case "awaiting_response":
-                    gameState.most_recent_response_node = (string)playerEvent.Data;
+                   // gameState.most_recent_response_node = (string)playerEvent.Data;
                     break;
                 case "end_day":
                     gameState.type = GameState.Type.EndOfDay;
                     break;
                 case "conversation_decision":
-                    gameState.most_recent_response_node = string.Empty;
+                 //   gameState.most_recent_response_node = string.Empty;
                     break;
                 case "points":
                     var pointsField = (Points.PointsField)playerEvent.Data;
@@ -125,8 +132,8 @@ public class GameStateManager : PlayerEventHandler
     {
         gameState.day += 1;
         gameState.Clock = 21600;
-        gameState.player_location = "Hotel";
-        gameState.current_conversation_title = string.Empty;
+        gameState.PlayerLocation = "Hotel";
+       // gameState.current_conversation_title = string.Empty;
         gameState.type = GameState.Type.Normal;
     }
 

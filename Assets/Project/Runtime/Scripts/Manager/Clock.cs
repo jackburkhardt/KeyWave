@@ -117,6 +117,7 @@ public class Clock
     
     public static int CurrentTimeRaw => GameManager.gameState.Clock;
 
+
     public static string CurrentTime => To24HourClock(CurrentTimeRaw);
 
     public static int DailyLimit => ToSeconds("24:00");
