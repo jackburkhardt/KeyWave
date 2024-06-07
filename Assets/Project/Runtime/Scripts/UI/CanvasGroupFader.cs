@@ -41,7 +41,17 @@ public class CanvasGroupFader : MonoBehaviour
         }
         OnFadedIn.Invoke();
     }
-    
+
+    private void Awake()
+    {
+     //   gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        FadeIn();
+    }
+
     private IEnumerator FadeOut(CanvasGroup canvasGroup, float duration, float alpha)
     {
         canvasGroup.alpha = alpha;
@@ -51,10 +61,12 @@ public class CanvasGroupFader : MonoBehaviour
             yield return null;
         }
         OnFadedOut.Invoke();
+        gameObject.SetActive(false);
     }
 
     private void Start()
     {
         GetComponent<CanvasGroup>().alpha = 0;
+        
     }
 }

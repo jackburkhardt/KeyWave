@@ -2,10 +2,11 @@ using System;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using HelpBoxMessageType = PixelCrushers.HelpBoxMessageType;
 
-public class StringLuaReplacer : PlayerEventHandler
+public class StringLuaReplacer : MonoBehaviour
 {
     
     
@@ -40,51 +41,49 @@ public class StringLuaReplacer : PlayerEventHandler
     private string _text;
     
 
-    void OnEnable()
+    private void OnEnable()
     {
         if (overrideText)
         {
-            
-            text.text = startString;
+
+            //text.text = startString;
+            _text = startString;
+
         }
-        
-        _text = text.text;
-        
-      // s  Language.Lua.Assignment.
 
-      //  var b = new Language.Lua.Assignment();
-        
-       // DialogueManager.masterDatabase.variables.ForEach(variable => D
-        //   DialogueManager.masterDatabase.variables.ForEach(variable => Language.Lua.Assignment.Add(DialogueLua.StringToTableIndex(variable.Name)));
-        // Language.Lua.Assignment.VariableChanged += OnVariableChanged;
+        else _text = text.text;
+      
+       UpdateText();
+    }
+    
+    private void OnDisable()
+    {
+       
     }
 
-    protected override void OnPlayerEvent(PlayerEvent playerEvent)
+    private void Update()
     {
-        
+       UpdateText();
     }
 
-    private void OnValidate()
-    {
-        TextUpdate();
-    }
+   
 
-    private void TextUpdate()
+    private void UpdateText()
     {
         
+        //return;
         if (onlyVariables) {
-            text.text = _text.Replace("{0}", DialogueLua.GetVariable(_0).asString);
-            text.text = _text.Replace("{1}", DialogueLua.GetVariable(_1).asString);
-            text.text = _text.Replace("{2}", DialogueLua.GetVariable(_2).asString);
+            if (_0 != string.Empty) text.text = _text.Replace("{0}", DialogueLua.GetVariable(_0).asString);
+            if (_1 != string.Empty) text.text = text.text.Replace("{1}", DialogueLua.GetVariable(_1).asString);
+            if (_2 != string.Empty) text.text = text.text.Replace("{2}", DialogueLua.GetVariable(_2).asString);
         }
 
         else
         {
-            text.text = _text.Replace("{0}", Lua.Run("return " + _0).asString);
-          //  Debug.Log(Lua.Run("return " + _0).asString);
-            text.text = _text.Replace("{1}", Lua.Run("return " + _1).asString);
-            text.text = _text.Replace("{2}", Lua.Run("return " + _2).asString);
+          
+            if (_0 != string.Empty) text.text = _text.Replace("{0}", Lua.Run("return " + _0).asString);
+            if (_1 != string.Empty) text.text = text.text.Replace("{1}", Lua.Run("return " + _1).asString);
+            if (_2 != string.Empty) text.text = text.text.Replace("{2}", Lua.Run("return " + _2).asString);
         }
-        
     }
 }

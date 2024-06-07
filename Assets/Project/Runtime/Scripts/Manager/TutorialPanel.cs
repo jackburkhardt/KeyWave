@@ -16,6 +16,7 @@ public class TutorialPanel : MonoBehaviour
     private List<string> _completedTutorials = new List<string>();
     private Tutorial _tutorial = null;
     [SerializeField] private Image _dotTemplate;
+    private List<Image> _dots = new List<Image>();
     private List<Image> Dots => _dotTemplate.transform.parent.GetComponentsInChildren<Image>().Where(p => p.transform != _dotTemplate.transform && p.transform !=  _dotTemplate.transform.parent).ToList();
     [SerializeField] private Button _forwardButton;
     [SerializeField] private Button _backButton;
@@ -34,12 +35,15 @@ public class TutorialPanel : MonoBehaviour
         
 
         _tutorial ??= _tutorials[0];
+
+        _dots = new List<Image>();
         
         for (int i = 0; i < _tutorial.tutorialText.Count; i++)
         {
             var dot = Instantiate(_dotTemplate, _dotTemplate.transform.parent);
             dot.gameObject.SetActive(true);
             _backButton.gameObject.SetActive(false);
+            _dots.Add(dot.GetComponent<Image>());
         }
         
         RefreshPanel();
@@ -52,6 +56,10 @@ public class TutorialPanel : MonoBehaviour
         _tutorialText.text = _tutorial.tutorialText[_currentTutorialIndex];
         SetTutorialImage(_tutorial.tutorialSprites[_currentTutorialIndex]);
         
+        for (int i = 0; i< _dots.Count; i++)
+        {
+            _dots[i].color = i == _currentTutorialIndex ? Color.white : new Color(1f, 1f, 1f, 0.5f);
+        }
         
         RefreshLayoutGroups.Refresh(gameObject);
     }
