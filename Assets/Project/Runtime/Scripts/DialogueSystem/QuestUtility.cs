@@ -9,11 +9,8 @@ public class QuestUtility
 
     public static Points.PointsField GetPoints(string questTitle)
     {
-        var points = GetField(questTitle, "Points").asString;
-        if (string.IsNullOrEmpty(points)) return new Points.PointsField {Type = Points.Type.Null, Points = 0};
-        var pointsValue = int.Parse(points.Split(':')[1]);
-        var pointsType = pointsValue == 0 ? Points.Type.Null : (Points.Type) Enum.Parse(typeof(Points.Type), points.Split(':')[0]);
-        return new Points.PointsField {Type = pointsType, Points = pointsValue};
+        var pointFieldData = GetField(questTitle, "Points").asString;
+        return Points.PointsField.FromString(pointFieldData);
     }
     
     public static Points.PointsField GetPoints(DialogueEntry dialogueEntry)

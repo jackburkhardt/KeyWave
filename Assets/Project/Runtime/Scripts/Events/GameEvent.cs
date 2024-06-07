@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 
@@ -42,7 +43,7 @@ public static class GameEvent
 
     public static event PlayerEventDelegate OnRegisterPlayerEvent;
     
-    private static void RegisterPlayerEvent(string eventType, string source, string target, object data = null, int duration = 0)
+    private static void RegisterPlayerEvent(string eventType, string source, string target, string data = null, int duration = 0)
     {
         var playerEvent = new PlayerEvent(eventType, source, target, data, duration);
         OnRegisterPlayerEvent?.Invoke(playerEvent);
@@ -58,30 +59,30 @@ public static class GameEvent
     {
         if (interactable.TryGetComponent(out DialogueSystemTrigger dialogueSystemTrigger))
         {
-            RegisterPlayerEvent("interact", "player", interactable.name, dialogueSystemTrigger, Clock.TimeScales.SecondsPerInteract);
+            RegisterPlayerEvent("interact", "player", interactable.name, dialogueSystemTrigger.ToString(), Clock.TimeScales.SecondsPerInteract);
             dialogueSystemTrigger.OnUse();
         }
     }
    
-   public static void OnMove(string sender, Location location, int duration)
+   public static void OnMove(string locName, Location lastLocation, int duration)
    {
-       RegisterPlayerEvent("move", sender, "player", location, duration);
+       RegisterPlayerEvent("move", "player", locName, "{\"previous_location\":\""+ lastLocation.ToString() +"\"}", duration);
    }
 
    public static void OnPointsIncrease(Points.PointsField pointData, string source)
    {
-       RegisterPlayerEvent("points", source, "player", pointData);
+       RegisterPlayerEvent("points", source, "player", pointData.ToString());
    }
    
    public static void OnQuestStateChange(string questName, QuestState state, int duration)
    {
        var quest = DialogueUtility.GetQuestByName(questName);
-       RegisterPlayerEvent("quest_state_change", questName, state.ToString(), quest, duration);
+       RegisterPlayerEvent("quest_state_change", questName, state.ToString(), JsonConvert.SerializeObject(quest), duration);
    }
    
    public static void OnWait(int duration)
    {
-       RegisterPlayerEvent("wait", "player", "player", duration, duration);
+       RegisterPlayerEvent("wait", "player", "player", duration.ToString(), duration);
    }
 
    public static void OnDayEnd()
@@ -118,10 +119,7 @@ public static class GameEvent
         }
         RegisterPlayerEvent("awaiting_response", String.Join(",", responses), "", dialogueEntryNodeTitle);
     }
-    
-
-  
-
+ 
     //UI SCREEN
     public delegate void OnUIScreen(Transform UIscreen);
     public static event OnUIScreen onUIScreenOpen;
@@ -142,7 +140,4 @@ public static class GameEvent
     public static void UIElementMouseClick(Transform element) => OnUIElementMouseClick?.Invoke(element);
     public static void UIElementMouseHover(Transform element) => OnUIElementMouseHover?.Invoke(element);
     public static void UIElementMouseExit(Transform element) => OnUIElementMouseExit?.Invoke(element);
-
-
-
 }

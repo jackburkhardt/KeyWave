@@ -59,15 +59,7 @@ public static class DialogueUtility
         };
         
         var pointsField = Field.Lookup(fields, "Points");
-        var pointsType = Enum.Parse<Points.Type>(pointsField.value.Split(':')[0]);
-        var pointsValue = pointsField.value.Split(':')[1] == null ? 0 : int.Parse(pointsField.value.Split(':')[1]);
-        var pointsFieldData = new Points.PointsField
-        {
-            Type = pointsType,
-            Points = pointsValue
-        };
-        
-        return pointsFieldData;
+        return Points.PointsField.FromString(pointsField.value);
     }
     
     public static Item GetQuestByName(string questName)

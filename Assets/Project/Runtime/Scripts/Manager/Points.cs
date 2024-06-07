@@ -7,13 +7,10 @@ using UnityEngine.Serialization;
 
 public static class Points
 {
-    
     public const int MaxScore = 1000;
-    
     public static int BusinessScore => GameStateManager.instance.gameState.business_score;
     public static int SavvyScore => GameStateManager.instance.gameState.local_savvy_score;
     public static int WellnessScore => GameStateManager.instance.gameState.wellness_score;
-    
     public static int TotalScore =>  BusinessScore + SavvyScore + WellnessScore;
     
     
@@ -30,6 +27,15 @@ public static class Points
         {
             return $"{Enum.GetName(typeof(Points.Type), this)}:{Points}";
         }
+        
+        public static PointsField FromString(string data)
+        {
+            if (string.IsNullOrEmpty(data)) return new PointsField {Type = Type.Null, Points = 0};
+            var split = data.Split(':');
+            var type = (Points.Type) Enum.Parse(typeof(Points.Type), split[0]);
+            var points = int.Parse(split[1]);
+            return new PointsField {Type = type, Points = points};
+        }
     }
     
     /// <summary>
@@ -44,9 +50,6 @@ public static class Points
         Business,
         Null
     }
-    
-   
-
     public static int Score(Type type)
     {
         var score = 0;
@@ -75,9 +78,6 @@ public static class Points
     {
         spawnPosition = position;
     }
-
-
-
    
     /// <summary>
     /// Gets the position currently used for spawning orbs in animations.
@@ -102,11 +102,6 @@ public static class Points
             default:
                 return UnityEngine.Color.white;
         }
-    }
-    
-    public static Type TypeFromString(string type)
-    {
-        return (Type) Enum.Parse(typeof(Type), type);
     }
 
     public static Action<Type> OnAnimationStart;

@@ -45,7 +45,7 @@ public class PointToParticle : MonoBehaviour
     {
         if (playerEvent.EventType == "points")
         {
-            Points.PointsField pointsInfo = (Points.PointsField)playerEvent.Data;
+            Points.PointsField pointsInfo = Points.PointsField.FromString(playerEvent.Data);
             ParticleSystem.Burst pointBurst = _particleSystem.emission.GetBurst(0);
             pointBurst.cycleCount = pointsInfo.Points;
             _particleSystem.emission.SetBurst(0, pointBurst);
