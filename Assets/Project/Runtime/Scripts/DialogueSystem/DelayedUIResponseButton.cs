@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class DelayedUIResponseButton : StandardUIResponseButton
 {
-    public int delayTime;
-
+    public int buttonDelayTime;
     private bool isPaused = false;
 
     public override void OnClick()
@@ -14,7 +13,7 @@ public class DelayedUIResponseButton : StandardUIResponseButton
     }
     IEnumerator DelayThenClick()
     {
-        yield return new WaitForSeconds(delayTime);
+        yield return new WaitForSeconds(buttonDelayTime);
         base.OnClick();
     }
 }
