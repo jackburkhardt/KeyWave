@@ -53,8 +53,10 @@ public class Location : ScriptableObject
         LastLocation = FromString(GameManager.gameState.PlayerLocation);
         GameEvent.OnMove(this.Name, this, this.TravelTime);
         GameManager.instance.TravelTo(this);
-        
-        
+        Debug.Log(TravelTime);
+        GameManager.gameState.Clock += TravelTime;
+
+
     }
 
     private int Distance
@@ -74,7 +76,7 @@ public class Location : ScriptableObject
     public int TravelTime {
         get
         {
-            return Distance * Clock.TimeScales.GlobalTimeScale;
+            return Distance;
         }
     }
 

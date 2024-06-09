@@ -203,6 +203,8 @@ public class GameManager : MonoBehaviour
             DialogueManager.StartConversation($"{newLocation}/Base");
 
             gameState.current_scene = newLocation;
+            
+            
         }
     }
     
