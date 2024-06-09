@@ -74,7 +74,7 @@ public class GameStateManager : PlayerEventHandler
        switch (playerEvent.EventType)
             {
                 case "move":
-                    var location = (Location)playerEvent.Data;
+                    var location = Location.FromString(playerEvent.Target);
                     gameState.PlayerLocation = location.Name; 
                     break;
                 case "conversation_start":
@@ -99,7 +99,7 @@ public class GameStateManager : PlayerEventHandler
                  //   gameState.most_recent_response_node = string.Empty;
                     break;
                 case "points":
-                    var pointsField = (Points.PointsField)playerEvent.Data;
+                    var pointsField = Points.PointsField.FromString(playerEvent.Data);
                     switch (pointsField.Type)
                     {
                         case Points.Type.Wellness:

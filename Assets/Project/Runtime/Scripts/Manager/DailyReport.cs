@@ -34,29 +34,26 @@ namespace Project.Runtime.Scripts.Manager
             {
                 case "points":
                 {
-                    Points.PointsField pointsInfo = (Points.PointsField)playerEvent.Data;
+                    Points.PointsField pointsInfo = Points.PointsField.FromString(playerEvent.Data);
                     EarnedPoints[pointsInfo.Type] += pointsInfo.Points;
                     break;
                 }
                 case "quest_state_change":
                 {
-                    if (playerEvent.Data is Item quest)
+                    string displayName = QuestLog.GetQuestTitle(playerEvent.Source);
+                    if (string.IsNullOrEmpty(displayName)) return;
+                
+                    switch (playerEvent.Target)
                     {
-                        string displayName = quest.LookupValue("Display Name");
-                        if (string.IsNullOrEmpty(displayName)) return;
-                    
-                        switch (playerEvent.Target)
-                        {
-                            case "Success":
-                                _completedTasks.Add(displayName);
-                                break;
-                            case "Active":
-                                _activeTasks.Add(displayName);
-                                break;
-                            case "Failure":
-                                _failedTasks.Add(displayName);
-                                break;
-                        }
+                        case "Success":
+                            _completedTasks.Add(displayName);
+                            break;
+                        case "Active":
+                            _activeTasks.Add(displayName);
+                            break;
+                        case "Failure":
+                            _failedTasks.Add(displayName);
+                            break;
                     }
                     break;
                 }

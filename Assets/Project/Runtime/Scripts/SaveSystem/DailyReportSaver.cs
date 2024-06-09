@@ -58,7 +58,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             {
                 return;
             }; // No data to apply.
-            DailyReport data = PixelCrushers.SaveSystem.Deserialize<DailyReport>(s);
+            DailyReport data = JsonConvert.DeserializeObject<DailyReport>(s);
             if (data == null) return; // Serialized string isn't valid.
             GameManager.instance.dailyReport = data;
         }

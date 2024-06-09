@@ -36,9 +36,6 @@ public class Location : ScriptableObject
         }
     }
 
-
-
-
     public Area area;
     public string description;
     public List<Item> objectives;
@@ -51,12 +48,9 @@ public class Location : ScriptableObject
     public void MoveHere()
     {
         LastLocation = FromString(GameManager.gameState.PlayerLocation);
-        GameEvent.OnMove(this.Name, this, this.TravelTime);
+        GameEvent.OnMove(this.Name, LastLocation, this.TravelTime);
         GameManager.instance.TravelTo(this);
-        Debug.Log(TravelTime);
         GameManager.gameState.Clock += TravelTime;
-
-
     }
 
     private int Distance
@@ -118,4 +112,9 @@ public class Location : ScriptableObject
     public static Location LastLocation;
 
     #endregion
+    
+    public override string ToString()
+    {
+        return Name;
+    }
 }

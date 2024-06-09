@@ -6,16 +6,16 @@ var SocketPlugin = {
         window.dispatchEvent(new CustomEvent("canYouHearMe"));
     },
     sendSaveGame: function(slot, data){
-        window.dispatchEvent(new CustomEvent("putSaveGame", {slot: slot, data: data}));
+        window.dispatchEvent(new CustomEvent("putSaveGame", {detail: {slot: slot, data: data}}));
     },
     saveGameExists: function(slot){
-        window.dispatchEvent(new CustomEvent("saveGameExists", {slot: slot}));
+        window.dispatchEvent(new CustomEvent("saveGameExists", {detail:{slot: slot}}));
     },
     getSaveGame: function(slot){
-        window.dispatchEvent(new CustomEvent("getSaveGame", {slot: slot}));
+        window.dispatchEvent(new CustomEvent("getSaveGame", {detail:{slot: slot}}));
     },
     sendPlayerEvent: function(data){
-        window.dispatchEvent(new CustomEvent("playerEvent", {data: data}));
+        window.dispatchEvent(new CustomEvent("playerEvent", {detail:{data: data}}));
     },
 };
 

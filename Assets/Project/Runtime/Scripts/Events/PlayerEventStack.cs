@@ -14,7 +14,7 @@ public class PlayerEvent
     public string Source { get; }
     public string Target { get; } 
     public DateTime LocalTimeStamp { get; }
-    public object Data { get; }
+    public string Data { get; }
     public int Duration { get; }
 
     /// <summary>
@@ -25,7 +25,7 @@ public class PlayerEvent
     /// <param name="target">Who is it directed to?</param>
     /// <param name="data">Other information relevant to this event (point information, dialogue nodes, location details)</param>
     /// <param name="duration">How much time did this event take?</param>
-    public PlayerEvent(string eventType, string source, string target, object data = null, int duration = 0)
+    public PlayerEvent(string eventType, string source, string target, string data = "", int duration = 0)
     {
         this.EventType = eventType;
         this.Source = source;
@@ -40,7 +40,7 @@ public class PlayerEvent
     {
         var settings = new JsonSerializerSettings
         {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
         };
         return JsonConvert.SerializeObject(this, Formatting.Indented, settings);
     }
