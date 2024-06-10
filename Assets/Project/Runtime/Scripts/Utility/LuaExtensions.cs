@@ -156,6 +156,13 @@ public static class LuaExtensions
         return questState;
     }
     
+    public static List<Item> GetQuests(this DialogueDatabase database, string? group)
+    {
+        var quests = database.items.FindAll(i => i.IsItem != true);
+      if (group != null) quests = quests.FindAll(i => i.Group == group);
+        return quests;
+    }
+    
     public static DialogueEntry? GetNextDialogueEntry(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
     {
         database ??= DialogueManager.MasterDatabase;

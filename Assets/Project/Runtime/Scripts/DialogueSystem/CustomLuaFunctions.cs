@@ -46,6 +46,10 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(Not), this, SymbolExtensions.GetMethodInfo(() => Not(false)));
         Lua.RegisterFunction(nameof(ToggleInventoryItem), this, SymbolExtensions.GetMethodInfo(() => ToggleInventoryItem(string.Empty)));
         Lua.RegisterFunction(nameof(ClearInventory), this, SymbolExtensions.GetMethodInfo(() => ClearInventory(string.Empty)));
+        Lua.RegisterFunction(nameof(MainQuestCount), this, SymbolExtensions.GetMethodInfo(() => MainQuestCount()));
+        Lua.RegisterFunction(nameof(ActiveMainQuestCount), this, SymbolExtensions.GetMethodInfo(() => ActiveMainQuestCount()));
+        Lua.RegisterFunction(nameof(CompletedMainQuestCount), this, SymbolExtensions.GetMethodInfo(() => CompletedMainQuestCount()));
+        Lua.RegisterFunction(nameof(CompletedActionQuestCount), this, SymbolExtensions.GetMethodInfo(() => CompletedActionQuestCount()));
       
     }
 
@@ -70,6 +74,10 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.UnregisterFunction(nameof(Not));
         Lua.UnregisterFunction(nameof(ToggleInventoryItem));
         Lua.UnregisterFunction(nameof(ClearInventory));
+        Lua.UnregisterFunction(nameof(MainQuestCount));
+        Lua.UnregisterFunction(nameof(ActiveMainQuestCount));
+        Lua.UnregisterFunction(nameof(CompletedMainQuestCount));
+        Lua.UnregisterFunction(nameof(CompletedActionQuestCount));
     }
     
     
@@ -241,5 +249,25 @@ public class CustomLuaFunctions : MonoBehaviour
     public bool WithinMinutes(string time, double gracePeriod)
     {
         return WithinSeconds(time, gracePeriod * 60);
+    }
+
+    public int MainQuestCount()
+    {
+        return DialogueManager.masterDatabase.GetQuests(group: "Main Task").Count;
+    }
+    
+    public int ActiveMainQuestCount()
+    {
+        return DialogueManager.masterDatabase.GetQuests(group: "Main Task").FindAll(i => i.GetQuestState() != QuestState.Unassigned).Count;
+    }
+    
+    public int CompletedMainQuestCount()
+    {
+        return DialogueManager.masterDatabase.GetQuests(group: "Main Task").FindAll(i => i.GetQuestState() == QuestState.Success).Count;
+    }
+    
+    public int CompletedActionQuestCount()
+    {
+        return DialogueManager.masterDatabase.GetQuests(group: "Action").FindAll(i => i.GetQuestState() == QuestState.Success).Count;
     }
 }

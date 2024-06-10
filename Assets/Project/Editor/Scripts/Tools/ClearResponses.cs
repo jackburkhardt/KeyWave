@@ -7,7 +7,7 @@ namespace Project.Editor.Scripts.Tools
 {
     public class ClearResponses : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Clear Responses")]
+        [MenuItem("Tools/Perils and Pitfalls/Database Editor/Clear Responses")]
         private static void ShowWindow()
         {
             var window = GetWindow<ClearResponses>();

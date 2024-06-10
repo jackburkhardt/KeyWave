@@ -45,12 +45,14 @@ public static class GameEvent
     
     private static void RegisterPlayerEvent(string eventType, string source, string target, string data = null, int duration = 0)
     {
+        Debug.Log("Registering player event: " + eventType);
         var playerEvent = new PlayerEvent(eventType, source, target, data, duration);
         OnRegisterPlayerEvent?.Invoke(playerEvent);
     }
     
     public static void RunPlayerEvent(PlayerEvent playerEvent)
     {
+        Debug.Log("Running player event: " + playerEvent.EventType);
         OnPlayerEvent?.Invoke(playerEvent);
     }
     

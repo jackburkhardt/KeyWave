@@ -7,20 +7,20 @@ using PixelCrushers.DialogueSystem;
 public class StartConversation : MonoBehaviour
 {
 
-    [MenuItem("Tools/Perils and Pitfalls/Start Conversation/Intro")]
+    [MenuItem("Tools/Perils and Pitfalls/Game/Start Conversation/Intro")]
     private static void Intro()
     {
         DialogueManager.StartConversation("Intro");
     }
     
-    [MenuItem("Tools/Perils and Pitfalls/Start Conversation/Hotel")]
+    [MenuItem("Tools/Perils and Pitfalls/Game/Start Conversation/Hotel")]
     private static void Hotel()
     {
         DialogueManager.StartConversation("Hotel");
     }
     
     
-    [MenuItem("Tools/Perils and Pitfalls/Start Conversation/Store")]
+    [MenuItem("Tools/Perils and Pitfalls/Game/Start Conversation/Store")]
     private static void Store()
     {
         DialogueManager.StartConversation("Store");

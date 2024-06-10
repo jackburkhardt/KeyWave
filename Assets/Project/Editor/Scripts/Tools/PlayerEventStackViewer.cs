@@ -6,7 +6,7 @@ namespace Project.Editor.Scripts.Tools
 {
     public class PlayerEventStackViewer : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Player Event Stack Viewer")]
+        [MenuItem("Tools/Perils and Pitfalls/Viewer/Player Event Stack Viewer")]
         private static void ShowWindow()
         {
             var window = GetWindow<PlayerEventStackViewer>();
@@ -24,13 +24,13 @@ namespace Project.Editor.Scripts.Tools
                 return;
             }
             
-            if (GameManager.instance.playerEventStack == null)
+            if (GameManager.playerEventStack == null)
             {
                 EditorGUILayout.LabelField("The player event stack is not initialized.");
                 return;
             }
             
-            var eventStack = GameManager.instance.playerEventStack;
+            var eventStack = GameManager.playerEventStack;
 
             if (GUILayout.Button("Save to Disk (KeyWave/Logs)"))
             {

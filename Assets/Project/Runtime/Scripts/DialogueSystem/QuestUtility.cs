@@ -23,6 +23,18 @@ public class QuestUtility
     {
         return DialogueLua.GetQuestField(questTitle, questField);
     }
+
+    public static List<Item> GetAllQuessts()
+    {
+        var quests = DialogueManager.masterDatabase.items.FindAll(i => i.IsItem == false);
+        return quests;
+    }
+
+    public static List<Item> GetQuestsByGroup(string groupName)
+    {
+        var quests = GetAllQuessts().FindAll(i => i.Group == groupName);
+        return quests;
+    }
  
     
     /// <summary>

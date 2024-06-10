@@ -9,7 +9,7 @@ namespace Project.Editor.Scripts.Tools
 {
     public class PointDistributionViewer : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Point Distribution Viewer")]
+        [MenuItem("Tools/Perils and Pitfalls/Viewer/Point Distribution Viewer")]
         private static void ShowWindow()
         {
             var window = GetWindow<PointDistributionViewer>();

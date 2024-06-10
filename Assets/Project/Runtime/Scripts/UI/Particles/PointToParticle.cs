@@ -49,8 +49,7 @@ public class PointToParticle : MonoBehaviour
             ParticleSystem.Burst pointBurst = _particleSystem.emission.GetBurst(0);
             pointBurst.cycleCount = pointsInfo.Points;
             _particleSystem.emission.SetBurst(0, pointBurst);
-            Debug.Log("Set burst to " + pointsInfo.Points + " for " + pointsInfo.Type);
-
+            
             var color = pointsInfo.Type switch
             {
                 Points.Type.Business => _particleColorB,

@@ -7,7 +7,7 @@ namespace Project.Editor.Scripts.Tools
 {
     public class TypedPopulator : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Node Typed Populator")]
+        [MenuItem("Tools/Perils and Pitfalls/Database Editor/Node Typed Populator")]
         private static void ShowWindow()
         {
             var window = GetWindow<TypedPopulator>();

@@ -71,6 +71,7 @@ public class GameStateManager : PlayerEventHandler
     public GameState gameState = new GameState();
     protected override void OnPlayerEvent(PlayerEvent playerEvent)
     {
+        Debug.Log("Player event received: " + playerEvent.EventType + " " + playerEvent.Target + " " + playerEvent.Data + " " + playerEvent.Duration);
        switch (playerEvent.EventType)
             {
                 case "move":

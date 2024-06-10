@@ -51,7 +51,7 @@ public class PlayerEventStack : ScriptableObject
 {
     public List<PlayerEvent> RegisteredEvents { get; private set; } = new();
 
-    private void Awake()
+    private void OnEnable()
     {
         GameEvent.OnRegisterPlayerEvent += RegisterPlayerEvent;
     }
@@ -80,7 +80,7 @@ public class PlayerEventStack : ScriptableObject
         yield return null;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         GameEvent.OnRegisterPlayerEvent -= RegisterPlayerEvent;
     }

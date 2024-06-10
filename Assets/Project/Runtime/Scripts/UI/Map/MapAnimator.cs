@@ -1,10 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.UI.Map;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Button = UnityEngine.UIElements.Button;
 
 [RequireComponent(typeof(RectTransform))]
 public class MapAnimator : MonoBehaviour
@@ -19,7 +22,10 @@ public class MapAnimator : MonoBehaviour
     
     [SerializeField] private RectTransform _infoPanel, _confirmButton, _cancelButton, _objectivePrefab;
     [SerializeField] private TMP_Text _locationName, _etaText, _descriptionText;
+    [SerializeField] private GameObjectSwitcher _bannerSwitcher;
     private RectTransform _objectivePanel;
+    
+    private List<CircularUIButton> WatchEdgeButtons => FindObjectsOfType<CircularUIButton>().ToList();
     
     private void Start()
     {
@@ -77,21 +83,31 @@ public class MapAnimator : MonoBehaviour
     private void ShowInfoPanel(MapLocationInfo info)
     {
         var location = info.location;
+        _infoPanel.gameObject.SetActive(true);
+        
         if (location.unlocked)
         {
             _locationName.text = location.Name;
             _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
             _etaText.text = $"ETA: {Clock.EstimatedTimeOfArrival(location)}";
             _descriptionText.text = location.description;
+            _bannerSwitcher.ShowObject(info.banner.gameObject);
         }
         else
         {
             _locationName.text = "???";
             _etaText.text = $"ETA: Unknown";
             _descriptionText.text = "You don't know anything about this location yet...";
+            _bannerSwitcher.HideAll();
         }
         
-        _infoPanel.gameObject.SetActive(true);
+        
+
+        var infoColor = info.GetComponent<Image>().color;
+        var infoPanelColor = _infoPanel.GetComponent<Image>().color;
+        
+        _infoPanel.GetComponent<Image>().color = new Color(infoColor.r, infoColor.g, infoColor.b, infoPanelColor.a);
+        
 
         foreach (var objective in _objectivePanel.GetComponentsInChildren<InfoPanelObjective>())
         {
@@ -124,11 +140,31 @@ public class MapAnimator : MonoBehaviour
         _confirmButton.gameObject.SetActive(false);
     }
 
+    public void DisableCircularButtonsAndCursor()
+    {
+        foreach (var button in WatchEdgeButtons)
+        {
+            button.GetComponent<UnityEngine.UI.Button>().interactable = false;
+        }
+        
+        WatchHandCursor.GlobalFreeze();
+    }
+    
+    public void EnableCircularButtonsAndCursor()
+    {
+        foreach (var button in WatchEdgeButtons)
+        {
+            button.GetComponent<UnityEngine.UI.Button>().interactable = true;
+        }
+        WatchHandCursor.GlobalUnfreeze();
+    }
+
     public void ZoomInOnCoordinates(Vector2 coordinates)
     {
         CancelAnimations();
         LeanTween.moveLocal(gameObject, -coordinates * transform.localScale.x, 1f).setEaseInOutSine();
         LeanTween.scale(transform.parent.gameObject, new Vector3(2, 2, 1), 1f).setEaseInOutSine();
+        _standby = false;
     }
 
     public void CancelAnimations()
@@ -142,6 +178,7 @@ public class MapAnimator : MonoBehaviour
         if (_infoPanel.gameObject.activeSelf)
         {
             HidePersistentInfoPanel();
+            
         }
         else
         {

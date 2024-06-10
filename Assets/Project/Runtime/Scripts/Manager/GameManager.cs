@@ -16,8 +16,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public GameStateManager gameStateManager;
-    public PlayerEventStack playerEventStack;
+    public static GameStateManager gameStateManager;
+    public static PlayerEventStack playerEventStack;
     private CustomLuaFunctions _customLuaFunctions;
     public List<Location> locations;
     public bool capFramerate = false;
@@ -45,6 +45,12 @@ public class GameManager : MonoBehaviour
     {
         DialogueManager.instance.Unpause();
         WatchHandCursor.GlobalUnfreeze();
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(playerEventStack);
+        Destroy(gameStateManager);
     }
 
 
@@ -145,16 +151,8 @@ public class GameManager : MonoBehaviour
         }
         
         var duration = DialogueUtility.GetQuestDuration(quest);
-        
-        /*
-        
-        if (state == QuestState.Success && duration > 0)
-        {
-            gameState.Clock += duration;
-        }
-        
-        */
-        
+
+        Debug.Log("Quest State Change: " + questName + " " + state + " " + duration);
         GameEvent.OnQuestStateChange(questName, state, duration);
     }
 

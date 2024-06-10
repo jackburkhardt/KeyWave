@@ -7,7 +7,7 @@ namespace Project.Editor.Scripts.Tools
 {
     public class DelayPopulator : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Node Delay Populator")]
+        [MenuItem("Tools/Perils and Pitfalls/Database Editor/Node Delay Populator")]
         private static void ShowWindow()
         {
             var window = GetWindow<DelayPopulator>();

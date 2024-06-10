@@ -25,7 +25,7 @@ public static class Points
         
         public override string ToString()
         {
-            return $"{Enum.GetName(typeof(Points.Type), this)}:{Points}";
+            return $"{Enum.GetName(typeof(Points.Type), this.Type)}:{Points}";
         }
         
         public static PointsField FromString(string data)

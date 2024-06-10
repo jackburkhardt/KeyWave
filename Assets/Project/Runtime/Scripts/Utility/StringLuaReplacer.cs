@@ -13,7 +13,7 @@ public class StringLuaReplacer : MonoBehaviour
     
     public UITextField text;
 
-    [SerializeField] private bool overrideText;
+    [SerializeField] private bool overrideText = true;
     [ShowIf("overrideText")]
     [SerializeField] string startString;
     
@@ -26,7 +26,7 @@ public class StringLuaReplacer : MonoBehaviour
     public string _0_asVariable;
 
     [HideIf("onlyVariables")]
-    [HelpBox("This script replaces the following substrings with a result of a 'Lua.Run({i})' command.",
+    [HelpBox("This script replaces the following substrings with a result of a 'Lua.Run(return {i})' command.",
         HelpBoxMessageType.Info)]
     [Label("{0}")]
     public string _0_asLua;
@@ -53,7 +53,7 @@ public class StringLuaReplacer : MonoBehaviour
 
         else _text = text.text;
       
-       UpdateText();
+      
     }
     
     private void OnDisable()
@@ -61,9 +61,16 @@ public class StringLuaReplacer : MonoBehaviour
        
     }
 
+    private bool _isRunning;
+
     private void Update()
     {
-       UpdateText();
+        UpdateText();
+        return;
+      //  if (_isRunning) 
+        //else if (FindObjectOfType(typeof(CustomLuaFunctions)) == null) return;
+       // _isRunning = true;
+
     }
 
    

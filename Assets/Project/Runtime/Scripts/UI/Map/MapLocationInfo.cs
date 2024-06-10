@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.UI.Map
 {
@@ -11,6 +12,7 @@ namespace Project.Runtime.Scripts.UI.Map
     {
         [SerializeField] public Location location;
         [SerializeField] private TextMeshProUGUI _text;
+        [SerializeField] public Image banner;
 
         private void Start()
         {
