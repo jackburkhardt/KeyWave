@@ -59,9 +59,9 @@ public class CircularUIResponseButton : CustomUIResponseButton
         base.OnPointerEnter(eventData);
         Refresh();
 
-        if (PointsType != Points.Type.Null && AssociatedQuest?.GetQuestState() == QuestState.Active)
+        if (PointsData.Type != Points.Type.Null && AssociatedQuest?.GetQuestState() == QuestState.Active && PointsData.Points > 0)
         {
-            ButtonColor = Points.Color(PointsType);
+            ButtonColor = Points.Color(PointsData.Type);
         }
 
         else ButtonColor = BaseColor;
@@ -105,17 +105,17 @@ public class CircularUIResponseButton : CustomUIResponseButton
     
     private Item? AssociatedQuest => DialogueManager.Instance.masterDatabase.items.Find(item => item.Name == response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title);
 
-   private Points.Type PointsType
+   private Points.PointsField PointsData
     {
         get
         {
             if (response?.destinationEntry != null && response?.destinationEntry.GetNextDialogueEntry() != null)
             {
                 var conversation = response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title;
-                return QuestUtility.GetPoints(conversation).Type;
+                return QuestUtility.GetPoints(conversation);
                 
             }
-            return Points.Type.Null;
+            return new Points.PointsField();
         }
     }
     

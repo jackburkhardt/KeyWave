@@ -57,7 +57,6 @@ public static class DialogueUtility
             Type = Points.Type.Null,
             Points = 0
         };
-        
         var pointsField = Field.Lookup(fields, "Points");
         return Points.PointsField.FromString(pointsField.value);
     }

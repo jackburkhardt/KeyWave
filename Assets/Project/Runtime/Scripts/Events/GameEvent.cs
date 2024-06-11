@@ -73,6 +73,7 @@ public static class GameEvent
 
    public static void OnPointsIncrease(Points.PointsField pointData, string source)
    {
+       
        RegisterPlayerEvent("points", source, "player", pointData.ToString());
    }
    

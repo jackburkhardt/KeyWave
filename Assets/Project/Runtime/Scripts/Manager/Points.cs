@@ -36,6 +36,13 @@ public static class Points
             var points = int.Parse(split[1]);
             return new PointsField {Type = type, Points = points};
         }
+
+        
+    }
+    
+    public static string ToString(this PointsField field)
+    {
+        return $"{field.Type}:{field.Points}";
     }
     
     /// <summary>

@@ -139,11 +139,12 @@ public class GameManager : MonoBehaviour
         if (state == QuestState.Success && points.Points > 0)
         {
             GameEvent.OnPointsIncrease(points, questName);
+            points.Points = 0;
+            DialogueLua.SetItemField(questName, "Points", points.ToString());
         }
         
-        var duration = DialogueUtility.GetQuestDuration(quest);
-
-        Debug.Log("Quest State Change: " + questName + " " + state + " " + duration);
+        var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
+        
         GameEvent.OnQuestStateChange(questName, state, duration);
     }
 
