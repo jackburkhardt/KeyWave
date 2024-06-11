@@ -1,3 +1,4 @@
+using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using Object = UnityEngine.Object;
