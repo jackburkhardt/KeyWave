@@ -3,49 +3,82 @@ using UnityEngine;
 
 public class LoadingScreen : MonoBehaviour
 {
-    bool _loading = false;
+    public static bool loading = false;
     private float fadeInSpeed = 3;
     private float fadeOutSpeed = 1.5f;
     private float timeSinceLoadStart = 0;
-    [SerializeField] private CanvasGroup _canvasGroup;
-    
-    void Start()
+    private CanvasGroup CanvasGroup
     {
-        _canvasGroup.alpha = 0;
+        get
+        {
+            switch (loadingScreenType)
+            {
+                case LoadingScreenType.Default:
+                    return _defaultLoadingScreen.GetComponent<CanvasGroup>();
+                case LoadingScreenType.Black:
+                    return _blackLoadingScreen.GetComponent<CanvasGroup>();
+                default:
+                    return _defaultLoadingScreen.GetComponent<CanvasGroup>();
+            }
+        }
+    }
+
+    [SerializeField] private Transform _defaultLoadingScreen;
+    [SerializeField] private Transform _blackLoadingScreen;
+
+    public enum LoadingScreenType
+    {
+        Default,
+        Black,
     }
     
-    public IEnumerator FadeCanvasIn()
+    public LoadingScreenType loadingScreenType = LoadingScreenType.Default;
+    void Start()
     {
-        _loading = true;
+        _defaultLoadingScreen.GetComponent<CanvasGroup>().alpha = 0;
+        _blackLoadingScreen.GetComponent<CanvasGroup>().alpha = 0;
+    }
+    
+    public IEnumerator FadeCanvasIn(LoadingScreenType? type = LoadingScreenType.Default)
+    {
+        if (loading) yield break;
+        loading = true;
         timeSinceLoadStart = 0;
         
-        while (_canvasGroup.alpha < 1)
+        loadingScreenType = type ?? LoadingScreenType.Default;
+        
+        var canvasGroup = CanvasGroup;
+        
+        while (canvasGroup.alpha < 1)
         {
-            _canvasGroup.alpha += Time.deltaTime * fadeInSpeed;
+            canvasGroup.alpha += Time.deltaTime * fadeInSpeed;
             yield return null;
         }
     }
 
     public IEnumerator FadeCanvasOut()
     {
+        
         while (timeSinceLoadStart < 1.5f)
         {
             yield return null;
         }
         
-        while (_canvasGroup.alpha > 0)
+        var canvasGroup = CanvasGroup;
+        
+        while (canvasGroup.alpha > 0)
         {
-            _canvasGroup.alpha -= Time.deltaTime * fadeOutSpeed;
+            canvasGroup.alpha -= Time.deltaTime * fadeOutSpeed;
             yield return null;
         }
         
-        _loading = false;
+        loading = false;
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_loading) timeSinceLoadStart += Time.deltaTime;
+        if (loading) timeSinceLoadStart += Time.deltaTime;
     }
 }

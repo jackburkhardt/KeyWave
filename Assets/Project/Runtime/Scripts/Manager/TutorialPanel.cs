@@ -13,7 +13,6 @@ public class TutorialPanel : MonoBehaviour
     [SerializeField] private UITextField _tutorialText;
     [SerializeField] private Image _tutorialImage;
     [SerializeReference] private List<Tutorial> _tutorials;
-    private List<string> _completedTutorials = new List<string>();
     private Tutorial _tutorial = null;
     [SerializeField] private Image _dotTemplate;
     private List<Image> _dots = new List<Image>();
@@ -109,7 +108,7 @@ public class TutorialPanel : MonoBehaviour
         if (_tutorial.tutorialText.Count > 1) _backButton.gameObject.SetActive(true);
         if (_currentTutorialIndex >= _tutorial.tutorialText.Count)
         {
-            _completedTutorials.Add(_tutorial.name);
+            DialogueLua.SetVariable($"Tutorial/{_tutorial.name}", true);
             GetComponent<Animator>().SetTrigger(Hide);
             
             return;
@@ -135,12 +134,8 @@ public class TutorialPanel : MonoBehaviour
         _tutorial = _tutorials.FirstOrDefault(p => p.name == tutorialName);
         _tutorial ??= _tutorials.FirstOrDefault(p => p.name.Contains(tutorialName));
 
-            
-        if (_completedTutorials.Count > 0 && _completedTutorials.Contains(_tutorial.name))
-        {
-            return;
-        }
-        
+
+        if (DialogueLua.GetVariable($"Tutorial/{_tutorial.name}").asBool) return;
         if (_tutorial == null)
         {
             Debug.LogError($"Tutorial {tutorialName} not found");
@@ -173,7 +168,7 @@ public class TutorialPanel : MonoBehaviour
     void Start()
     {
         _dotTemplate.gameObject.SetActive(false);
-
+        _content.gameObject.SetActive(false);
         
         
     }

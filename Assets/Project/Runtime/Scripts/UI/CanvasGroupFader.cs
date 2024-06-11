@@ -45,6 +45,8 @@ public class CanvasGroupFader : MonoBehaviour
     private void Awake()
     {
      //   gameObject.SetActive(false);
+     GetComponent<CanvasGroup>().interactable = false;
+     GetComponent<CanvasGroup>().blocksRaycasts = false;
     }
 
     private void OnEnable()
@@ -61,7 +63,7 @@ public class CanvasGroupFader : MonoBehaviour
             yield return null;
         }
         OnFadedOut.Invoke();
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     private void Start()

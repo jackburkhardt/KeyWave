@@ -27,6 +27,7 @@ public class ButtonEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log("Hover end");
         OnHoverEnd.Invoke();
     }
 }

@@ -117,6 +117,16 @@ public class Clock
     
     public static int CurrentTimeRaw => GameManager.gameState.Clock;
 
+    public const int StartTime = 21600;
+    
+    public const int MaxDayTime = 86400;
+    
+    public static float DayProgress {
+        get
+        {
+            return (CurrentTimeRaw - StartTime)/(float)MaxDayTime;
+        }
+    }
 
     public static string CurrentTime => To24HourClock(CurrentTimeRaw);
 
@@ -148,6 +158,7 @@ public class Clock
 
     public static string To24HourClock(int clock)
     {
+        if (clock > MaxDayTime) clock -= MaxDayTime;
         var hours = clock / 3600;
         var minutes = (clock % 3600) / 60;
         

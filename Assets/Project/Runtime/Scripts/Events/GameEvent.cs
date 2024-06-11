@@ -110,17 +110,7 @@ public static class GameEvent
 
   
 
-    public static void OnConversationResponseMenu()
-    {
-        var dialogueEntryNodeTitle = GameManager.GetHighestDialogueNodeValue();
-        string responses = String.Empty;
-        foreach (var response in DialogueManager.instance.currentConversationState.pcResponses)
-        {
-            if (responses.Length != 0) responses += ",";
-            responses += response.destinationEntry.Title; 
-        }
-        RegisterPlayerEvent("awaiting_response", String.Join(",", responses), "", dialogueEntryNodeTitle);
-    }
+   
  
     //UI SCREEN
     public delegate void OnUIScreen(Transform UIscreen);

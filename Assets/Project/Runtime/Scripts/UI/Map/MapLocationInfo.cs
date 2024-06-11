@@ -12,11 +12,16 @@ namespace Project.Runtime.Scripts.UI.Map
     {
         [SerializeField] public Location location;
         [SerializeField] private TextMeshProUGUI _text;
-        [SerializeField] public Image banner;
+        [SerializeField] private Image _youAreHere;
+      
 
         private void Start()
         {
             _text.text = location.unlocked ? location.Name : "???";
+            GetComponent<Button>().interactable = location.unlocked;
+            _youAreHere.gameObject.SetActive(Location.PlayerLocation == location);
+
+
         }
     }
 }

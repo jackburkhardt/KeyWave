@@ -43,6 +43,8 @@ namespace Project.Runtime.Scripts.SaveSystem
             
             App.App.Instance.LoadScene(data.current_scene);
         }
+        
+        
 
         public override void ApplyDataImmediate()
         {

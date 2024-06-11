@@ -78,10 +78,7 @@ public class InvokeConversationEvents : MonoBehaviour
        GameEvent.OnConversationEnd();
     }
 
-    public void BroadcastResponseMenu()
-    {
-        GameEvent.OnConversationResponseMenu();
-    }
+   
     
 }
 

@@ -16,4 +16,10 @@ public class InvokeMovePlayer : MonoBehaviour
         _destination = location;
     }
     
+    public void SetDestination(string locationName)
+    {
+        SetDestination(Location.FromString(locationName));
+
+    }
+    
 }

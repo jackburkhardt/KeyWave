@@ -66,10 +66,6 @@ public class StringLuaReplacer : MonoBehaviour
     private void Update()
     {
         UpdateText();
-        return;
-      //  if (_isRunning) 
-        //else if (FindObjectOfType(typeof(CustomLuaFunctions)) == null) return;
-       // _isRunning = true;
 
     }
 
@@ -87,7 +83,6 @@ public class StringLuaReplacer : MonoBehaviour
 
         else
         {
-          
             if (_0 != string.Empty) text.text = _text.Replace("{0}", Lua.Run("return " + _0).asString);
             if (_1 != string.Empty) text.text = text.text.Replace("{1}", Lua.Run("return " + _1).asString);
             if (_2 != string.Empty) text.text = text.text.Replace("{2}", Lua.Run("return " + _2).asString);

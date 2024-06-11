@@ -18,14 +18,17 @@ public class MapAnimator : MonoBehaviour
     private bool _standby = true;
     private RectTransform _rectTransform, _parentRectTransform;
     private Vector3 _direction;
+    private bool _isFrozen;
+    
+   
     
     
-    [SerializeField] private RectTransform _infoPanel, _confirmButton, _cancelButton, _objectivePrefab;
+    [SerializeField] private RectTransform _infoPanel, _confirmButton, _cancelButton, _returnButton, _objectivePrefab;
     [SerializeField] private TMP_Text _locationName, _etaText, _descriptionText;
-    [SerializeField] private GameObjectSwitcher _bannerSwitcher;
+    [SerializeField] private GameObjectSwitcher _infoPanelSwitcher;
     private RectTransform _objectivePanel;
     
-    private List<CircularUIButton> WatchEdgeButtons => FindObjectsOfType<CircularUIButton>().ToList();
+    private List<MapLocationInfo> WatchEdgeButtons => FindObjectsOfType<MapLocationInfo>().ToList();
     
     private void Start()
     {
@@ -50,94 +53,57 @@ public class MapAnimator : MonoBehaviour
         pinPrefab.gameObject.SetActive(false);
 
     }
-    
-    public void ShowFleetingInfoPanel(MapLocationInfo info)
+
+    public void FreezeInfoPanel()
     {
-        if (!_confirmButton.gameObject.activeSelf) ShowInfoPanel(info);
+        _isFrozen = true;
+        ShowConfirmationButtons();
+    }
+
+    public void UnfreezeInfoPanel()
+    {
+        _isFrozen = false;
+    }
+    
+    public void ShowInfoPanelAndFreeze(GameObject infoPanel)
+    {
+        _infoPanelSwitcher.ShowObject(infoPanel);
+        FreezeInfoPanel();
+    }
+    
+    public void ShowInfoPanelIfNotFrozen(GameObject infoPanel)
+    {
+        if (_isFrozen) return;
+        _infoPanelSwitcher.ShowObject(infoPanel);
     }
     
 
-    public void ShowPersistentInfoPanel(MapLocationInfo info)
-    {
-        var location = info.location;
-        if (!location.unlocked) return;
-        
-        ShowInfoPanel(info);
-        ShowConfirmationButtons();
-        ZoomInOnCoordinates(location.coordinates);
-    }
     
-    public void HidePersistentInfoPanel()
+    public void HideInfoPanelIfNotFrozen(GameObject infoPanel)
     {
-        HideInfoPanel();
+        if (_isFrozen) return;
+        _infoPanelSwitcher.HideObject(infoPanel);
         HideConfirmationButtons();
-        ResetAnimation();
-    }
-    
-    public void HideFleetingInfoPanel()
-    {
-        if (!_confirmButton.gameObject.activeSelf) HideInfoPanel();
        
     }
     
-    private void ShowInfoPanel(MapLocationInfo info)
-    {
-        var location = info.location;
-        _infoPanel.gameObject.SetActive(true);
-        
-        if (location.unlocked)
-        {
-            _locationName.text = location.Name;
-            _confirmButton.GetComponent<InvokeMovePlayer>().SetDestination(location);
-            _etaText.text = $"ETA: {Clock.EstimatedTimeOfArrival(location)}";
-            _descriptionText.text = location.description;
-            _bannerSwitcher.ShowObject(info.banner.gameObject);
-        }
-        else
-        {
-            _locationName.text = "???";
-            _etaText.text = $"ETA: Unknown";
-            _descriptionText.text = "You don't know anything about this location yet...";
-            _bannerSwitcher.HideAll();
-        }
-        
-        
-
-        var infoColor = info.GetComponent<Image>().color;
-        var infoPanelColor = _infoPanel.GetComponent<Image>().color;
-        
-        _infoPanel.GetComponent<Image>().color = new Color(infoColor.r, infoColor.g, infoColor.b, infoPanelColor.a);
-        
-
-        foreach (var objective in _objectivePanel.GetComponentsInChildren<InfoPanelObjective>())
-        {
-            if (objective == _objectivePrefab.GetComponent<InfoPanelObjective>()) continue;
-            
-            Destroy(objective.gameObject);
-        }
-
-        foreach (var objective in location.objectives)
-        {
-            var objectiveItem = Instantiate(_objectivePrefab.gameObject, _objectivePanel);
-            objectiveItem.SetActive(true);
-            objectiveItem.GetComponent<InfoPanelObjective>().SetObjectiveText(objective.ToString());
-        }
-        
-        RefreshLayoutGroups.Refresh(_objectivePanel.gameObject);
-    }
-
-    private void HideInfoPanel()
-    {
-        _infoPanel.gameObject.SetActive(false);
-    }
-
     private void ShowConfirmationButtons() {
         _confirmButton.gameObject.SetActive(true);
+        _cancelButton.gameObject.SetActive(true);
+        //_returnButton.gameObject.SetActive(false);
+    }
+
+    public void ReturnButton()
+    {
+        Debug.Log(Location.PlayerLocation.name);
+        Location.PlayerLocation.MoveHere();
     }
 
     private void HideConfirmationButtons()
     {
         _confirmButton.gameObject.SetActive(false);
+        _cancelButton.gameObject.SetActive(false);
+        //_returnButton.gameObject.SetActive(true);
     }
 
     public void DisableCircularButtonsAndCursor()
@@ -154,7 +120,7 @@ public class MapAnimator : MonoBehaviour
     {
         foreach (var button in WatchEdgeButtons)
         {
-            button.GetComponent<UnityEngine.UI.Button>().interactable = true;
+            button.GetComponent<UnityEngine.UI.Button>().interactable = button.location.unlocked;
         }
         WatchHandCursor.GlobalUnfreeze();
     }
@@ -166,6 +132,16 @@ public class MapAnimator : MonoBehaviour
         LeanTween.scale(transform.parent.gameObject, new Vector3(2, 2, 1), 1f).setEaseInOutSine();
         _standby = false;
     }
+    
+    public void ZoomInOnLocation(Location location)
+    {
+        ZoomInOnCoordinates(location.coordinates);
+    }
+    
+    public void ZoomInOnLocation(string locationName)
+    {
+        ZoomInOnLocation(Location.FromString(locationName));
+    }
 
     public void CancelAnimations()
     {
@@ -175,14 +151,11 @@ public class MapAnimator : MonoBehaviour
 
     public void CancelButton()
     {
-        if (_infoPanel.gameObject.activeSelf)
+        if (_isFrozen)
         {
-            HidePersistentInfoPanel();
-            
-        }
-        else
-        {
-            GameManager.instance.CloseMap(true);
+            UnfreezeInfoPanel();
+            _infoPanelSwitcher.HideAll();
+            ResetAnimation();
         }
     }
     
@@ -193,7 +166,7 @@ public class MapAnimator : MonoBehaviour
         _standby = true;
         _direction = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), 0f).normalized;
         HideConfirmationButtons();
-        HideInfoPanel();
+        
     }
 
     private void Update()
@@ -220,6 +193,9 @@ public class MapAnimator : MonoBehaviour
             
             _direction = new Vector3(newXdirection, newYdirection, 0f).normalized;
         }
+        
+        
+        
     }
     
 }

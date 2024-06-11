@@ -117,26 +117,17 @@ public class GameManager : MonoBehaviour
     {
         yield return App.Instance.LoadScene("Hotel");
         dailyReport = new DailyReport(gameState.day);
+        
+        while (App.isLoading)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForSeconds(0.25f);
         DialogueManager.StartConversation("Intro");
     }
 
-    public static string GetHighestDialogueNodeValue()
-    {
-        string value = string.Empty;
-        
-        var dialogueText = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.currentDialogueText;
-        var dialogueEntryTitle = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.Title;
-        var menuText = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.currentMenuText;
-        string[] textToSerialize = { dialogueText, menuText, dialogueEntryTitle };
-
-        for (int i = 0; i < textToSerialize.Length; i++)
-        {
-            if (textToSerialize[i] == string.Empty) continue;
-            value = textToSerialize[i];
-        }
-
-        return value;
-    }
+    
     
     
     public static void OnQuestStateChange(string questName)
@@ -196,7 +187,12 @@ public class GameManager : MonoBehaviour
         {
             yield return App.Instance.ChangeScene(newLocation, currentScene);
             
-            yield return new WaitForSeconds(0.5f);
+            while (App.isLoading)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(1f);
 
             DialogueManager.StartConversation($"{newLocation}/Base");
 

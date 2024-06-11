@@ -28,6 +28,10 @@ namespace Project.Runtime.Scripts.App
         private static App _instance;
         private static string playerID;
         private static PlayerEventStack playerEventStack;
+
+        public static Action OnLoadStart;
+        public static Action OnLoadEnd;
+        
         
         private void Awake()
         {
@@ -43,7 +47,7 @@ namespace Project.Runtime.Scripts.App
             #if !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
             #endif
-            yield return SceneManager.LoadSceneAsync("Base");
+            yield return LoadSceneButKeepLoadingScreen("Base", sceneToUnload:"StartMenu", type: LoadingScreen.LoadingScreenType.Black);
             while (!DialogueManager.Instance.isInitialized)
             {
                 yield return null;
@@ -70,7 +74,10 @@ namespace Project.Runtime.Scripts.App
         /// <summary>
         /// Loads a scene additively to the current scene
         /// </summary>
-        public Coroutine LoadScene(string sceneToLoad) => StartCoroutine(LoadSceneHandler(sceneToLoad));
+        /// 
+        public Coroutine LoadScene(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? type = LoadingScreen.LoadingScreenType.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: type));
+        
+        public Coroutine LoadSceneButKeepLoadingScreen(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? type = LoadingScreen.LoadingScreenType.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: type, unloadLoadingScreen: false));
         
         public void UnloadScene(string sceneToUnload)
         {
@@ -82,28 +89,36 @@ namespace Project.Runtime.Scripts.App
         /// </summary>
         public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload));
 
-        private bool isLoading = false;
-        private IEnumerator LoadSceneHandler(string sceneToLoad, string sceneToUnload = "")
-        {
-            if (isLoading)
-            {
-                Debug.LogError($"Attempted to load scene {sceneToLoad} while another scene was loading! Aborting.");
-                yield break;
-            }
-            isLoading = true;
+        public static bool isLoading = false;
         
-            var loadingScene = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
-
-            while (!loadingScene.isDone) yield return null;
-
+        private IEnumerator LoadSceneHandler(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? loadingScreenType = LoadingScreen.LoadingScreenType.Default, bool? unloadLoadingScreen = true)
+        {
+            
+            isLoading = true;
+            
+            
+            
             var LoadingScreen = FindObjectOfType<LoadingScreen>();
+            
+            OnLoadStart?.Invoke();
+
+            if (LoadingScreen == null)
+            {
+                var loadingSceneLoad = SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+
+                while (!loadingSceneLoad.isDone) yield return null;
+                
+                LoadingScreen = FindObjectOfType<LoadingScreen>();
+            }
 
             if (LoadingScreen != null)
             {
-                yield return StartCoroutine(LoadingScreen.FadeCanvasIn());
+                yield return StartCoroutine(LoadingScreen.FadeCanvasIn(loadingScreenType));
             }
 
             else Debug.LogError("Unable to get the canvas group for the loading screen!");
+            
+            
         
             if (sceneToUnload != "") {
         
@@ -115,23 +130,30 @@ namespace Project.Runtime.Scripts.App
                 }
             }
             
-            
+           
         
             var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
             while (!newScene.isDone || !AddressableLoader.IsQueueEmpty()) yield return null;
             
-            if (LoadingScreen != null)
+            if (unloadLoadingScreen == true)
             {
-                yield return StartCoroutine(LoadingScreen.FadeCanvasOut());
-            }
+                if (LoadingScreen != null)
+                {
+                    yield return StartCoroutine(LoadingScreen.FadeCanvasOut());
+                }
 
-            var unloadLoadingScreen = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("Loading"));
+                var loadingScreenUnload = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("LoadingScreen"));
         
-            while (!unloadLoadingScreen.isDone) yield return null;
-            Debug.Log("Load complete");
+                while (!loadingScreenUnload.isDone) yield return null;
+                Debug.Log("Load complete");
+                
+                isLoading = false;
+                OnLoadEnd?.Invoke();
+               
+            }
             
-            isLoading = false;
+            
 
         }
     }

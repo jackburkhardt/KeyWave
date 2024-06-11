@@ -26,6 +26,12 @@ public class GameState
         get => DialogueLua.GetVariable("clock").asInt;
         set => DialogueLua.SetVariable("clock", value);
     }
+
+    public string LastNonCaféLocation
+    {
+        get => DialogueLua.GetVariable("last_non_café_location").asString;
+        set => DialogueLua.SetVariable("last_non_café_location", value);
+    }
     public int day = 1;
     public int business_score = 0;  
     public int local_savvy_score = 0;
@@ -119,6 +125,7 @@ public class GameStateManager : PlayerEventHandler
             switch (gameState.type)
             {
                 case GameState.Type.Normal:
+                    Debug.Log("Adding time: " + playerEvent.Duration);
                     gameState.Clock += playerEvent.Duration;
                     break;
                 case GameState.Type.EndOfDay:

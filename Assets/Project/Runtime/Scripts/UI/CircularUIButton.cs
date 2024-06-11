@@ -181,6 +181,13 @@ public class CircularUIButton : MonoBehaviour
 
 
         var isArrowPointingAtButton = minAngle < maxAngle ? watchHandAngle < maxAngle && watchHandAngle > minAngle : watchHandAngle > 0 && watchHandAngle < maxAngle || watchHandAngle > minAngle && watchHandAngle < 360;
+        
+        if (!isArrowPointingAtButton && isButtonActive)
+        {
+            ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerExitHandler);
+            if (_mouseEvents) onMouseExit.Invoke();
+            isButtonActive = false;
+        }
 
         if (isArrowPointingAtButton && button.interactable && !isButtonActive)
         {
@@ -195,12 +202,7 @@ public class CircularUIButton : MonoBehaviour
             if (_mouseEvents) onClick.Invoke();
         }
     
-        if (!isArrowPointingAtButton && isButtonActive)
-        {
-            ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerExitHandler);
-            if (_mouseEvents) onMouseExit.Invoke();
-            isButtonActive = false;
-        }
+       
         
     }
 }

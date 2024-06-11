@@ -50,6 +50,8 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.RegisterFunction(nameof(ActiveMainQuestCount), this, SymbolExtensions.GetMethodInfo(() => ActiveMainQuestCount()));
         Lua.RegisterFunction(nameof(CompletedMainQuestCount), this, SymbolExtensions.GetMethodInfo(() => CompletedMainQuestCount()));
         Lua.RegisterFunction(nameof(CompletedActionQuestCount), this, SymbolExtensions.GetMethodInfo(() => CompletedActionQuestCount()));
+        Lua.RegisterFunction(nameof(LocationETA), this, SymbolExtensions.GetMethodInfo(() => LocationETA(string.Empty)));
+        Lua.RegisterFunction(nameof(LocationDistanceInMinutes), this, SymbolExtensions.GetMethodInfo(() => LocationDistanceInMinutes(string.Empty)));
       
     }
 
@@ -78,6 +80,8 @@ public class CustomLuaFunctions : MonoBehaviour
         Lua.UnregisterFunction(nameof(ActiveMainQuestCount));
         Lua.UnregisterFunction(nameof(CompletedMainQuestCount));
         Lua.UnregisterFunction(nameof(CompletedActionQuestCount));
+        Lua.UnregisterFunction(nameof(LocationETA));
+        Lua.UnregisterFunction(nameof(LocationDistanceInMinutes));
     }
     
     
@@ -269,5 +273,17 @@ public class CustomLuaFunctions : MonoBehaviour
     public int CompletedActionQuestCount()
     {
         return DialogueManager.masterDatabase.GetQuests(group: "Action").FindAll(i => i.GetQuestState() == QuestState.Success).Count;
+    }
+    
+    public string LocationETA(string location)
+    {
+        var playerLocation = Location.FromString(location);
+        return Clock.EstimatedTimeOfArrival(playerLocation);
+    }
+    
+    public int LocationDistanceInMinutes(string location)
+    {
+        var playerLocation = Location.FromString(location);
+        return playerLocation.TravelTime / 60;
     }
 }

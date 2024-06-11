@@ -979,6 +979,7 @@ namespace PixelCrushers.DialogueSystem
         /// Example:
         /// <code>StartConversation("Shopkeeper Conversation", player, shopkeeper, 8);</code>
         /// </example>
+        //
         public void StartConversation(string title, Transform actor, Transform conversant, int initialDialogueEntryID)
         {
             if (warmupCoroutine != null)
@@ -1076,6 +1077,8 @@ namespace PixelCrushers.DialogueSystem
                 if (actor != this.transform) gameObject.BroadcastMessage(DialogueSystemMessages.OnConversationStart, target, SendMessageOptions.DontRequireReceiver);
             }
         }
+
+   
 
         /// <summary>
         /// Starts a conversation, which also broadcasts an OnConversationStart message to the 
