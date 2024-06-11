@@ -7,17 +7,11 @@ namespace Project.Editor.Scripts.Tools
 {
     public class DelayPopulator : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Database Editor/Node Delay Populator")]
-        private static void ShowWindow()
-        {
-            var window = GetWindow<DelayPopulator>();
-            window.titleContent = new GUIContent("Node Delay Populator");
-            window.Show();
-        }
+        private List<(string Conversation, int ID)> affectedNodes = new();
+        private bool hasRun;
+        private Vector2 scrollPos;
 
         private DialogueDatabase selectedDB;
-        private Vector2 scrollPos;
-        private bool hasRun;
 
         private void OnGUI()
         {
@@ -51,9 +45,15 @@ namespace Project.Editor.Scripts.Tools
                 EditorGUILayout.EndScrollView();
             }
         }
-        
-        private List<(string Conversation, int ID)> affectedNodes = new();
-        
+
+        [MenuItem("Tools/Perils and Pitfalls/Database Editor/Node Delay Populator")]
+        private static void ShowWindow()
+        {
+            var window = GetWindow<DelayPopulator>();
+            window.titleContent = new GUIContent("Node Delay Populator");
+            window.Show();
+        }
+
         private void UpdateDelays(DialogueDatabase database)
         {
             affectedNodes.Clear();

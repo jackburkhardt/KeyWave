@@ -2,23 +2,27 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DelayLayoutGroup : MonoBehaviour
+namespace Project.Runtime.Scripts.Utility
 {
-    private VerticalLayoutGroup _verticalLayoutGroup;
-    // Start is called before the first frame update
-    void Awake()
+    public class DelayLayoutGroup : MonoBehaviour
     {
-        _verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
-    }
-    
-    
-    public void EnableLayoutGroup() => StartCoroutine(LayoutGroup());
+        private VerticalLayoutGroup _verticalLayoutGroup;
 
-    IEnumerator LayoutGroup()
-    {
-        yield return null;
-        _verticalLayoutGroup.enabled = false;
-        yield return new WaitForEndOfFrame();
-        _verticalLayoutGroup.enabled = true;
+        // Start is called before the first frame update
+        void Awake()
+        {
+            _verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
+        }
+
+
+        public void EnableLayoutGroup() => StartCoroutine(LayoutGroup());
+
+        IEnumerator LayoutGroup()
+        {
+            yield return null;
+            _verticalLayoutGroup.enabled = false;
+            yield return new WaitForEndOfFrame();
+            _verticalLayoutGroup.enabled = true;
+        }
     }
 }

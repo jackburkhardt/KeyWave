@@ -1,4 +1,4 @@
-using PixelCrushers.Wrappers;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using SaveSystem = PixelCrushers.SaveSystem;
@@ -18,12 +18,11 @@ namespace Project.Editor.Scripts.Tools
         {
             SaveSystem.LoadFromSlot(1);
         }
-        
+
         [MenuItem("Tools/Perils and Pitfalls/Save System Debug/Delete Slot 1")]
         private static void Delete()
         {
-            System.IO.File.Delete(Application.dataPath + "/DebugSaves/" + 1 + ".json");
+            File.Delete(Application.dataPath + "/DebugSaves/" + 1 + ".json");
         }
-
     }
 }

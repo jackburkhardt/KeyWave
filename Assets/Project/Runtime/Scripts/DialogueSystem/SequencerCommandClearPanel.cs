@@ -1,14 +1,11 @@
+using PixelCrushers.DialogueSystem.SequencerCommands;
+using Project.Runtime.Scripts.Manager;
 
-using UnityEngine;
-using System.Collections;
-using PixelCrushers.DialogueSystem;
-
-namespace PixelCrushers.DialogueSystem.SequencerCommands
+namespace Project.Runtime.Scripts.DialogueSystem
 {
 
     public class SequencerCommandClearPanel : SequencerCommand
-    { 
-
+    {
         public void Awake()
         {
             var subtitleManager = FindObjectOfType<SubtitleManager>();
@@ -17,8 +14,6 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
 
             Stop();
         }
-
     }
 
 }
-

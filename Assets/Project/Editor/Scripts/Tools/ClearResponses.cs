@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem.Wrappers;
+using Project.Runtime.Scripts.Utility;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,17 +8,11 @@ namespace Project.Editor.Scripts.Tools
 {
     public class ClearResponses : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Database Editor/Clear Responses")]
-        private static void ShowWindow()
-        {
-            var window = GetWindow<ClearResponses>();
-            window.titleContent = new GUIContent("Clear Responses");
-            window.Show();
-        }
+        private List<(string Conversation, int ID)> affectedNodes = new();
+        private bool hasRun;
+        private Vector2 scrollPos;
 
         private DialogueDatabase selectedDB;
-        private Vector2 scrollPos;
-        private bool hasRun;
 
         private void OnGUI()
         {
@@ -51,9 +46,15 @@ namespace Project.Editor.Scripts.Tools
                 EditorGUILayout.EndScrollView();
             }
         }
-        
-        private List<(string Conversation, int ID)> affectedNodes = new();
-        
+
+        [MenuItem("Tools/Perils and Pitfalls/Database Editor/Clear Responses")]
+        private static void ShowWindow()
+        {
+            var window = GetWindow<ClearResponses>();
+            window.titleContent = new GUIContent("Clear Responses");
+            window.Show();
+        }
+
         private void UpdateResponses(DialogueDatabase database)
         {
             affectedNodes.Clear();

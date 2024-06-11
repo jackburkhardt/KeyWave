@@ -2,25 +2,28 @@ using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InfoPanelObjective : MonoBehaviour
+namespace Project.Runtime.Scripts.UI.Map
 {
-    [SerializeField] private Text _objectiveText;
-    
-    public void SetObjectiveText(string text)
+    public class InfoPanelObjective : MonoBehaviour
     {
-        _objectiveText.text = DialogueLua.GetQuestField(text, "State").asString == "unassigned" ? "???" : FormattedText.Parse(QuestLog.GetQuestTitle(text), DialogueManager.masterDatabase.emphasisSettings).text;
-    }
-    
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+        [SerializeField] private Text _objectiveText;
 
-    // Update is called once per frame
-    void Update()
-    {
+
+        // Start is called before the first frame update
+        void Start()
+        {
         
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+        
+        }
+
+        public void SetObjectiveText(string text)
+        {
+            _objectiveText.text = DialogueLua.GetQuestField(text, "State").asString == "unassigned" ? "???" : FormattedText.Parse(QuestLog.GetQuestTitle(text), DialogueManager.masterDatabase.emphasisSettings).text;
+        }
     }
 }

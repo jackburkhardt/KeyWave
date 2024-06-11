@@ -1,25 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.UI;
 using UnityEditor;
 
-[CustomEditor(typeof(CustomUIMenuPanel))]
-public class CustomMenuPanelEditor : StandardUIMenuPanelEditor
+namespace Project.Editor.Scripts
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(CustomUIMenuPanel))]
+    public class CustomMenuPanelEditor : StandardUIMenuPanelEditor
     {
-        base.OnInspectorGUI();
-        
-        serializedObject.Update();
-        
-        // Your code here to show your custom fields. Example:
-        
-        for (int i = 0; i < CustomUIMenuPanel.CustomFields.Count; i++)
+        public override void OnInspectorGUI()
         {
-           EditorGUILayout.PropertyField(serializedObject.FindProperty(CustomUIMenuPanel.CustomFields[i]), true);
-        }
+            base.OnInspectorGUI();
         
-        serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
+        
+            // Your code here to show your custom fields. Example:
+        
+            for (int i = 0; i < CustomUIMenuPanel.CustomFields.Count; i++)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty(CustomUIMenuPanel.CustomFields[i]), true);
+            }
+        
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }

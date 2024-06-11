@@ -1,16 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnableGameObjectsOnStart : MonoBehaviour
+namespace Project.Runtime.Scripts
 {
-    [SerializeReference] private List<GameObject> _gameObjectsToEnable;
-    // Start is called before the first frame update
-    void Start()
+    public class EnableGameObjectsOnStart : MonoBehaviour
     {
-        foreach (var gameObject in _gameObjectsToEnable)
+        [SerializeReference] private List<GameObject> _gameObjectsToEnable;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            gameObject!.SetActive(true);
+            foreach (var gameObject in _gameObjectsToEnable)
+            {
+                gameObject!.SetActive(true);
+            }
         }
     }
 }

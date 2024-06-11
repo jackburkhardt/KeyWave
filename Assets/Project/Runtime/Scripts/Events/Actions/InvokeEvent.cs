@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class InvokeEvent : MonoBehaviour
+namespace Project.Runtime.Scripts.Events.Actions
 {
-    
-    /*
+    public class InvokeEvent : MonoBehaviour
+    {
+        /*
     // Start is called before the first frame update
     public void OnPlayerInteract(string gameobject)
     {
@@ -27,12 +28,13 @@ public class InvokeEvent : MonoBehaviour
         GameEvent.PlayerEvent("conversation_start", conversation);
     }
 
-    public void OnConversationEnd() { 
-    
+    public void OnConversationEnd() {
+
         string conversation = DialogueManager.instance.activeConversation.conversationTitle;
         GameEvent.PlayerEvent("conversation_end", conversation);
 
     }
-    
+
     */
+    }
 }

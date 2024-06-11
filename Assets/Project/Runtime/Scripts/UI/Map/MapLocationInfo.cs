@@ -1,4 +1,4 @@
-using System;
+using Project.Runtime.Scripts.ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +13,7 @@ namespace Project.Runtime.Scripts.UI.Map
         [SerializeField] public Location location;
         [SerializeField] private TextMeshProUGUI _text;
         [SerializeField] private Image _youAreHere;
-      
+
 
         private void Start()
         {

@@ -1,25 +1,28 @@
-using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.ScriptableObjects;
 using UnityEngine;
 
-public class InvokeMovePlayer : MonoBehaviour
+namespace Project.Runtime.Scripts.Events.Actions
 {
-    [SerializeReference] private Location _destination;
-    
-    public void MovePlayer()
+    public class InvokeMovePlayer : MonoBehaviour
     {
-        _destination.MoveHere();
-        GameManager.instance.CloseMap(false);
-    }
+        [SerializeReference] private Location _destination;
 
-    public void SetDestination(Location location)
-    {
-        _destination = location;
-    }
-    
-    public void SetDestination(string locationName)
-    {
-        SetDestination(Location.FromString(locationName));
+        public void MovePlayer()
+        {
+            _destination.MoveHere();
+            GameManager.instance.CloseMap(false);
+        }
 
+        public void SetDestination(Location location)
+        {
+            _destination = location;
+        }
+
+        public void SetDestination(string locationName)
+        {
+            SetDestination(Location.FromString(locationName));
+
+        }
     }
-    
 }

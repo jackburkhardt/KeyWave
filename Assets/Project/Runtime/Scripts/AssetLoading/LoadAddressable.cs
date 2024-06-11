@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
-namespace KeyWave.Runtime.Scripts.AssetLoading
+namespace Project.Runtime.Scripts.AssetLoading
 {
     public static class AddressableLoader
     {
         private static Dictionary<string, object> _activeObjects = new();
         private static List<object> _loadQueue = new();
         private static bool _isInitialized = false;
-        
+
         private static void Initialize()
         {
             _isInitialized = true;
@@ -46,7 +46,7 @@ namespace KeyWave.Runtime.Scripts.AssetLoading
             }
             
         }
-        
+
         /// <summary>
         ///  Loads an asset of type T or returns the asset if it is already loaded.
         ///  Assets are loaded asynchronously, and once ready the callback is invoked.
@@ -71,11 +71,11 @@ namespace KeyWave.Runtime.Scripts.AssetLoading
                 };
             }
         }
-        
+
         public static void Release(object obj) => Addressables.Release(obj);
-        
+
         public static bool IsQueueEmpty() => _loadQueue.Count == 0;
-        
+
         public static void ClearQueue() => _loadQueue.Clear();
     }
 }

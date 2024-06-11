@@ -1,79 +1,79 @@
-using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
-using NaughtyAttributes;
 
-[ExecuteInEditMode]
-
-public class CustomVerticalLayoutGroup : VerticalLayoutGroup
+namespace Project.Runtime.Scripts.UI
 {
-     
-    public static List<string> CustomFields = new List<string>
+    [ExecuteInEditMode]
+
+    public class CustomVerticalLayoutGroup : VerticalLayoutGroup
     {
-        "leftPadding",
-        "rightPadding",
-        "topPadding",
-        "bottomPadding",
-        "reverseArrangement",
-        "childAlignment",
-        "controlChildWidth",
-        "controlChildHeight",
-        "useChildWidth",
-        "useChildHeight",
-        "childForceExpandWidth",
-        "childForceExpandHeight"
-    };
-    
-    [InfoBox("This component is identical to a normal Vertical Layout Group, but exposes all of its properties to animators. If you're not using an animator, you should probably just use a regular Vertical Layout Group.")]
+        public static List<string> CustomFields = new List<string>
+        {
+            "leftPadding",
+            "rightPadding",
+            "topPadding",
+            "bottomPadding",
+            "reverseArrangement",
+            "childAlignment",
+            "controlChildWidth",
+            "controlChildHeight",
+            "useChildWidth",
+            "useChildHeight",
+            "childForceExpandWidth",
+            "childForceExpandHeight"
+        };
 
-    public int leftPadding;
+        [InfoBox("This component is identical to a normal Vertical Layout Group, but exposes all of its properties to animators. If you're not using an animator, you should probably just use a regular Vertical Layout Group.")]
 
-    public int rightPadding;
+        public int leftPadding;
 
-    public int topPadding;
+        public int rightPadding;
 
-    public int bottomPadding;
-    
-   
-    public new bool reverseArrangement;
-    
-    public new TextAnchor childAlignment;
-    
-    public bool controlChildWidth;
-    
-    public bool controlChildHeight;
+        public int topPadding;
 
-    public bool useChildWidth;
+        public int bottomPadding;
 
-    public bool useChildHeight;
-    
-    public new bool childForceExpandWidth;
-    
-    public new bool childForceExpandHeight;
-    
-    
-    
-    // Start is called before the first frame update
-    void Start()
-    {
+
+        public new bool reverseArrangement;
+
+        public new TextAnchor childAlignment;
+
+        public bool controlChildWidth;
+
+        public bool controlChildHeight;
+
+        public bool useChildWidth;
+
+        public bool useChildHeight;
+
+        public new bool childForceExpandWidth;
+
+        public new bool childForceExpandHeight;
+
+
+        // Start is called before the first frame update
+        void Start()
+        {
         
-    }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        padding.left = leftPadding;
-        padding.right = rightPadding;
-        padding.top = topPadding;
-        padding.bottom = bottomPadding;
-        base.childAlignment = childAlignment;
-        base.reverseArrangement = reverseArrangement;
-        childControlHeight = controlChildHeight;
-        childControlWidth = controlChildWidth;
-        childScaleWidth = useChildWidth;
-        childScaleHeight = useChildHeight;
-        base.childForceExpandWidth = childForceExpandWidth;
-        base.childForceExpandHeight = childForceExpandHeight;
+        // Update is called once per frame
+        void Update()
+        {
+            padding.left = leftPadding;
+            padding.right = rightPadding;
+            padding.top = topPadding;
+            padding.bottom = bottomPadding;
+            base.childAlignment = childAlignment;
+            base.reverseArrangement = reverseArrangement;
+            childControlHeight = controlChildHeight;
+            childControlWidth = controlChildWidth;
+            childScaleWidth = useChildWidth;
+            childScaleHeight = useChildHeight;
+            base.childForceExpandWidth = childForceExpandWidth;
+            base.childForceExpandHeight = childForceExpandHeight;
+        }
     }
 }

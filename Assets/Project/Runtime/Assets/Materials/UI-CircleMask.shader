@@ -12,19 +12,19 @@ Shader "UI/CircleMask"
         _StencilReadMask ("Stencil Read Mask", Float) = 255
 
         _ColorMask ("Color Mask", Float) = 15
-        
+
         _Circle ("Circle", Range(0, 1)) = 1
-        
+
         _RadiusX ("Outer Radius X", Range(0,1)) = 1
         _RadiusY ("Outer Radius Y", Range(0,1)) = 1
-        
+
         _ScaleX ("Scale X", Float) = 1
         _ScaleY ("Scale Y", Float) = 1
-        
+
         _IRadiusX ("Inner Radius X", Range(0,1)) = 1
         _IRadiusY ("Inner Radius Y", Range(0,1)) = 1
-        
-      
+
+
         _AntialiasThreshold ("Antialias Threshold", Range(0, 0.9999)) = 0.96
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
@@ -60,7 +60,7 @@ Shader "UI/CircleMask"
         Pass
         {
             Name "Default"
-        CGPROGRAM
+            CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             #pragma target 2.0
@@ -73,17 +73,17 @@ Shader "UI/CircleMask"
 
             struct appdata_t
             {
-                float4 vertex   : POSITION;
-                float4 color    : COLOR;
+                float4 vertex : POSITION;
+                float4 color : COLOR;
                 float2 texcoord : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
             {
-                float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
-                float2 texcoord  : TEXCOORD0;
+                float4 vertex : SV_POSITION;
+                fixed4 color : COLOR;
+                float2 texcoord : TEXCOORD0;
                 float4 worldPosition : TEXCOORD1;
                 float2 originalTexcoord : TEXCOORD2;
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -104,22 +104,25 @@ Shader "UI/CircleMask"
             float _IScaleY;
             int _Circle;
 
-            float circleDelta(float2 texcoord) {
+            float circleDelta(float2 texcoord)
+            {
                 if (_RadiusX <= 0.0001 || _RadiusY <= 0.0001) return 0;
                 float x = (2 * (texcoord.x - 0.5)) / _RadiusX;
-                float y = _Circle == 1 ? (2 * (texcoord.y - 0.5)) / _RadiusX :  (2 * (texcoord.y - 0.5)) / _RadiusY;
+                float y = _Circle == 1 ? (2 * (texcoord.y - 0.5)) / _RadiusX : (2 * (texcoord.y - 0.5)) / _RadiusY;
 
-               
-                
+
                 float value = x * x + y * y;
 
                 value = smoothstep(1.0, _AntialiasThreshold, value);
 
                 float ivalue = 0;
 
-                if (_IRadiusX > 0.0001 && _IRadiusY > 0.0001) {
+                if (_IRadiusX > 0.0001 && _IRadiusY > 0.0001)
+                {
                     float ix = (2 * (texcoord.x - 0.5)) / _IRadiusX;
-                    float iy = _Circle == 1 ? (2 * (texcoord.y - 0.5)) / _IRadiusX : (2 * (texcoord.y - 0.5)) / _IRadiusY;
+                    float iy = _Circle == 1
+                   ? (2 * (texcoord.y - 0.5)) / _IRadiusX
+                   : (2 * (texcoord.y - 0.5)) / _IRadiusY;
                     ivalue = ix * ix + iy * iy;
                     ivalue = smoothstep(1.0, _AntialiasThreshold, ivalue);
                 }
@@ -148,7 +151,7 @@ Shader "UI/CircleMask"
                 float2 halfSize = size * 0.5;
                 float2 center = float2(0.5, 0.5);
                 half4 color = tex2D(_MainTex, IN.texcoord * size + center - halfSize) * IN.color;
-    
+
                 color.a *= circleDelta(IN.texcoord);
 
                 #ifdef UNITY_UI_CLIP_RECT
@@ -161,7 +164,7 @@ Shader "UI/CircleMask"
 
                 return color;
             }
-        ENDCG
+            ENDCG
         }
     }
 }

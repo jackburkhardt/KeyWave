@@ -1,24 +1,28 @@
+using Project.Runtime.Scripts.Utility;
 using UnityEditor;
 
-[CustomEditor(typeof(SortingLayerManager))]
-public class SortingLayerManagerEditor : Editor
+namespace Project.Editor.Scripts.Tools
 {
-    SerializedProperty sortingLayerProperty;
-
-    void OnEnable()
+    [CustomEditor(typeof(SortingLayerManager))]
+    public class SortingLayerManagerEditor : UnityEditor.Editor
     {
-        sortingLayerProperty = serializedObject.FindProperty("sortingLayer");
-    }
+        SerializedProperty sortingLayerProperty;
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-
-        EditorGUI.BeginChangeCheck();
-        EditorGUILayout.PropertyField(sortingLayerProperty);
-        if (EditorGUI.EndChangeCheck())
+        void OnEnable()
         {
-            serializedObject.ApplyModifiedProperties();
+            sortingLayerProperty = serializedObject.FindProperty("sortingLayer");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(sortingLayerProperty);
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
         }
     }
 }

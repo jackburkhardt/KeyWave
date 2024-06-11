@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.DialogueEditor;
+using Project.Runtime.Scripts.DialogueSystem;
+using Project.Runtime.Scripts.Manager;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,20 +11,22 @@ namespace Project.Editor.Scripts.Tools
 {
     public class PointDistributionViewer : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Viewer/Point Distribution Viewer")]
-        private static void ShowWindow()
-        {
-            var window = GetWindow<PointDistributionViewer>();
-            window.titleContent = new GUIContent("Point Distribution Viewer");
-            window.Show();
-        }
-        
-        private DialogueDatabase selectedDB;
+        private Dictionary<DialogueEntry, int> businessEntries = new();
+        private int businessTotal;
+        private Dictionary<DialogueEntry, int> savvyEntries = new();
+        private int savvyTotal;
         private Vector2 scrollPos;
-        private bool showWellness;
+
+        private DialogueDatabase selectedDB;
         private bool showBusiness;
-        private bool showSavvy;
         private bool showData;
+        private bool showSavvy;
+        private bool showWellness;
+        private int totalPoints;
+
+        private Dictionary<DialogueEntry, int> wellnessEntries = new();
+
+        private int wellnessTotal;
 
         private void OnGUI()
         {
@@ -100,15 +104,14 @@ namespace Project.Editor.Scripts.Tools
             EditorGUILayout.EndScrollView();
 
         }
-        
-        private Dictionary<DialogueEntry, int> wellnessEntries = new();
-        private Dictionary<DialogueEntry, int> businessEntries = new();
-        private Dictionary<DialogueEntry, int> savvyEntries = new();
-        
-        private int wellnessTotal;
-        private int businessTotal;
-        private int savvyTotal;
-        private int totalPoints;
+
+        [MenuItem("Tools/Perils and Pitfalls/Viewer/Point Distribution Viewer")]
+        private static void ShowWindow()
+        {
+            var window = GetWindow<PointDistributionViewer>();
+            window.titleContent = new GUIContent("Point Distribution Viewer");
+            window.Show();
+        }
 
         private void FindPoints(DialogueDatabase database)
         {
@@ -147,7 +150,7 @@ namespace Project.Editor.Scripts.Tools
             businessEntries = businessEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             savvyEntries = savvyEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
-        
+
         private void ResetPoints()
         {
             wellnessEntries.Clear();

@@ -1,45 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using PixelCrushers;
 using UnityEngine;
 
-public class TimeChangeAlert : MonoBehaviour
+namespace Project.Runtime.Scripts.UI
 {
-    [SerializeField] private UITextField _textField;
-    [SerializeField] Animator _animator;
-    
-    public void OnTimeChange((int, int) timeSpan)
+    public class TimeChangeAlert : MonoBehaviour
     {
+        [SerializeField] private UITextField _textField;
+        [SerializeField] Animator _animator;
+
+        // Update is called once per frame
+        void Update()
+        {
         
-        var hourDifference = string.Empty;
-        var minuteDifference = string.Empty;
-        var secondDifference = string.Empty;
+        }
+
+        public void OnTimeChange((int, int) timeSpan)
+        {
         
-        var oldTimeInMinutes = timeSpan.Item1 / 60;
-        var newTimeInMinutes = timeSpan.Item2 / 60;
+            var hourDifference = string.Empty;
+            var minuteDifference = string.Empty;
+            var secondDifference = string.Empty;
         
-        var difference = newTimeInMinutes - oldTimeInMinutes;
+            var oldTimeInMinutes = timeSpan.Item1 / 60;
+            var newTimeInMinutes = timeSpan.Item2 / 60;
+        
+            var difference = newTimeInMinutes - oldTimeInMinutes;
         
       
 
-        if (difference <= 0) return;
+            if (difference <= 0) return;
 
-        _textField.text = $"+{difference}";
-        _animator.SetTrigger("Show");
+            _textField.text = $"+{difference}";
+            _animator.SetTrigger("Show");
         
 
-    }
-    
-    
-    
-    public void OnTimeChanged()
-    {
-        _animator.SetTrigger("Hide");
-    }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
+        public void OnTimeChanged()
+        {
+            _animator.SetTrigger("Hide");
+        }
     }
 }

@@ -1,20 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
-[ExecuteInEditMode]
-public class CutoutMaskUI : Image
+namespace Project.Runtime.Scripts.UI
 {
-    // Start is called before the first frame update
-    public override Material materialForRendering
+    [ExecuteInEditMode]
+    public class CutoutMaskUI : Image
     {
-        get
+        // Start is called before the first frame update
+        public override Material materialForRendering
         {
-            var material = new Material(base.materialForRendering);
-            material.SetInt("_StencilComp", (int)CompareFunction.NotEqual);
-            return material;
+            get
+            {
+                var material = new Material(base.materialForRendering);
+                material.SetInt("_StencilComp", (int)CompareFunction.NotEqual);
+                return material;
+            }
         }
     }
 }

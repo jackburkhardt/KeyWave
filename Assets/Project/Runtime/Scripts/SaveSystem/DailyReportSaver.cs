@@ -1,8 +1,6 @@
-using System;
 using Newtonsoft.Json;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
-using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
 {
@@ -12,15 +10,14 @@ namespace Project.Runtime.Scripts.SaveSystem
     /// Then fill in your code where indicated below.
     public class DailyReportSaver : Saver // Rename this class.
     {
-
         public override string RecordData()
         {
             /// This method should return a string that represents the data you want to save.
             /// You can use SaveSystem.Serialize() to serialize a serializable object to a 
             /// string. This will use the serializer component on the Save System GameObject,
             /// which defaults to Unity's built-in JSON serialization. Remember that Unity
-			/// cannot directly serialize lists or arrays, so you must put them inside a
-			/// class.
+            /// cannot directly serialize lists or arrays, so you must put them inside a
+            /// class.
             /// 
             /// If you use a class to hold the data, use SaveSystem.Serialize to return a 
             /// serialized version:
@@ -76,7 +73,6 @@ namespace Project.Runtime.Scripts.SaveSystem
         //    // The Save System will call this method when restarting the game from the beginning.
         //    // Your Saver can reset things to a fresh state if necessary.
         //}
-
     }
 
 }

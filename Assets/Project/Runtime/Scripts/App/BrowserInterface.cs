@@ -11,19 +11,19 @@ namespace Project.Runtime.Scripts.App
     {
         [DllImport("__Internal")]
         public static extern void canYouHearMe();
-        
+
         [DllImport("__Internal")]
         public static extern void sendPlayerEvent(string playerEvent);
-        
+
         [DllImport("__Internal")]
         public static extern void sendSaveGame(int slot, string saveData);
-        
+
         [DllImport("__Internal")]
         public static extern void getSaveGame(int slot);
-        
+
         [DllImport("__Internal")]
         public static extern void getOccupiedSaveSlots();
-        
+
         // JSON data received from web interface. Updates the PixelCrushers save storer.
         public void getOccupiedSaveSlotsCallback(string jsonData)
         {
@@ -32,7 +32,7 @@ namespace Project.Runtime.Scripts.App
             if (slots == null) return;
             WebDataStorer.occupiedSlots = slots;
         }
-        
+
         public void getSaveGameCallback(string jsonData)
         {
             SavedGameData data = JsonConvert.DeserializeObject<SavedGameData>(jsonData);

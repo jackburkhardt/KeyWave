@@ -1,102 +1,102 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using PixelCrushers;
 using UnityEngine;
 
-public class CircularUIMenuPanel : CustomUIMenuPanel
+namespace Project.Runtime.Scripts.UI
 {
-    private const float MaxVisibleDegreeSum = 85;
-    [SerializeField] private WatchHandCursor mousePointerHand;
-    [SerializeField] public AnimationCurve offsetCurve;
-    [SerializeField] private UITextField timeEstimate;
-    private Animator? Animator => GetComponent<Animator>();
-    
-   
-    public new static List<string> CustomFields = new List<string>
+    public class CircularUIMenuPanel : CustomUIMenuPanel
     {
-        "offsetCurve", 
-        "timeEstimate",
-        "responseMenuAnimator",
-        "mousePointerHand"
-    };
-    
-    
-    public void OnChoiceSelection()
-    {
-        if (!Animator!.GetBool("Active")) return;
-        WatchHandCursor.Freeze();
-        Animator!.SetBool("Frozen", true);
-    }
-    
- 
+        private const float MaxVisibleDegreeSum = 85;
 
-    
-    protected override void OnContentChanged()
-    {
-        _firstFocus = false;
-        base.OnContentChanged();
-        WatchHandCursor.Unfreeze();
-       
-        Animator!.SetBool("Frozen", false);
-    }
 
-    public void SetPropertiesFromButton(CircularUIResponseButton button)
-    {
-        if (button == null)
+        public new static List<string> CustomFields = new List<string>
         {
-            timeEstimate.text = "";
-        }
+            "offsetCurve", 
+            "timeEstimate",
+            "responseMenuAnimator",
+            "mousePointerHand"
+        };
 
-        else
+        [SerializeField] private WatchHandCursor mousePointerHand;
+        [SerializeField] public AnimationCurve offsetCurve;
+        [SerializeField] private UITextField timeEstimate;
+
+        private bool _firstFocus = false;
+        private Animator? Animator => GetComponent<Animator>();
+
+
+        protected override void Update()
         {
-            timeEstimate.text = button.TimeEstimateText;
-        }
-    }
-
-    private bool _firstFocus = false;
-
-   
-    protected override void Update()
-    {
-        base.Update();
+            base.Update();
         
-        var circularButtons = GetComponentsInChildren<CircularUIButton>();
+            var circularButtons = GetComponentsInChildren<CircularUIButton>();
 
-        foreach (var circularButton in circularButtons)
-        {
-            if (circularButton.CircularUIDegreeSum < MaxVisibleDegreeSum)  circularButton.Offset = 0;
-            else
+            foreach (var circularButton in circularButtons)
             {
-                var normalizedPointerAngle = mousePointerHand.AngleCenteredSouth / MaxVisibleDegreeSum * 2f; 
-                var offsetRange = circularButton.CircularUIDegreeSum - MaxVisibleDegreeSum;
-                var offset = offsetRange * - (offsetCurve.Evaluate(Mathf.Abs(normalizedPointerAngle)) *  MathF.Sign(normalizedPointerAngle) * 0.5f); 
-                circularButton.Offset = offset;
+                if (circularButton.CircularUIDegreeSum < MaxVisibleDegreeSum)  circularButton.Offset = 0;
+                else
+                {
+                    var normalizedPointerAngle = mousePointerHand.AngleCenteredSouth / MaxVisibleDegreeSum * 2f; 
+                    var offsetRange = circularButton.CircularUIDegreeSum - MaxVisibleDegreeSum;
+                    var offset = offsetRange * - (offsetCurve.Evaluate(Mathf.Abs(normalizedPointerAngle)) *  MathF.Sign(normalizedPointerAngle) * 0.5f); 
+                    circularButton.Offset = offset;
+                }
             }
-        }
         
-        var normalizedMousePosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
+            var normalizedMousePosition = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
         
-        var normalizedMenuPosition = new Vector2(transform.position.x / Screen.width, transform.position.y / Screen.height);
+            var normalizedMenuPosition = new Vector2(transform.position.x / Screen.width, transform.position.y / Screen.height);
         
-        var distance = Vector2.Distance(normalizedMousePosition, normalizedMenuPosition);
+            var distance = Vector2.Distance(normalizedMousePosition, normalizedMenuPosition);
         
-        var active = Animator!.GetBool("Active");
+            var active = Animator!.GetBool("Active");
 
-        if (!active) return;
+            if (!active) return;
         
-        if (distance > 1.65f && _firstFocus)
-        {
-            Animator!.SetBool("Focus", false);
+            if (distance > 1.65f && _firstFocus)
+            {
+                Animator!.SetBool("Focus", false);
             
-        }
-        else if (distance < 1.65f && !WatchHandCursor.Frozen)
-        {
-            Animator!.SetBool("Focus", true);
-            _firstFocus = true;
-        }
+            }
+            else if (distance < 1.65f && !WatchHandCursor.Frozen)
+            {
+                Animator!.SetBool("Focus", true);
+                _firstFocus = true;
+            }
         
       
+        }
+
+
+        public void OnChoiceSelection()
+        {
+            if (!Animator!.GetBool("Active")) return;
+            WatchHandCursor.Freeze();
+            Animator!.SetBool("Frozen", true);
+        }
+
+
+        protected override void OnContentChanged()
+        {
+            _firstFocus = false;
+            base.OnContentChanged();
+            WatchHandCursor.Unfreeze();
+       
+            Animator!.SetBool("Frozen", false);
+        }
+
+        public void SetPropertiesFromButton(CircularUIResponseButton button)
+        {
+            if (button == null)
+            {
+                timeEstimate.text = "";
+            }
+
+            else
+            {
+                timeEstimate.text = button.TimeEstimateText;
+            }
+        }
     }
 }

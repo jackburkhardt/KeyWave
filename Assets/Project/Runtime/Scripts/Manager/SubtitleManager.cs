@@ -1,80 +1,81 @@
-using System;
-using PixelCrushers.DialogueSystem;
-using UnityEngine;
 using NaughtyAttributes;
+using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.UI;
+using Project.Runtime.Scripts.Utility;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class SubtitleManager : MonoBehaviour
+namespace Project.Runtime.Scripts.Manager
 {
-   private void Awake()
-   {
-      
-      RefreshContents();
-   }
+    public class SubtitleManager : MonoBehaviour
+    {
+        public UnityEvent onDuplicateAdded;
 
-   public UnityEvent onDuplicateAdded;
-   //public UnityEvent onDuplicateReveal;
-   
-   
-   
-   [Button("SetScrollRect")]
-   public void SetScrollRect()
-   {
-      var scrollRect = transform.parent.GetComponent<ScrollRect>();
-      scrollRect.verticalNormalizedPosition = 0;
-   }
+        public SubtitleContentElement templateSubtitleContentElement;
+        public Transform duplicatedSubtitleContentContainer;
+        private SubtitleContentElement mostRecentDuplicate;
+        private Subtitle mostRecentSubtitle;
 
-   public SubtitleContentElement templateSubtitleContentElement;
-   public Transform duplicatedSubtitleContentContainer;
-   private SubtitleContentElement mostRecentDuplicate;
-   private Subtitle mostRecentSubtitle;
-   
-   public void ClearContents()
-   {
-      for (int i = 0; i < duplicatedSubtitleContentContainer.childCount; i++)
-      {
-         Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
-      }
+        private void Awake()
+        {
       
-      templateSubtitleContentElement.Clear();
-      
-   }
-   
-   public void RefreshContents()
-   {
-      if (!templateSubtitleContentElement.PortraitActive) templateSubtitleContentElement.HidePortraitHelper();
-      else templateSubtitleContentElement.ShowPortraitHelper();
-      RefreshLayoutGroups.Refresh(gameObject);
-   }
+            RefreshContents();
+        }
+        //public UnityEvent onDuplicateReveal;
 
-   public void AddHiddenDuplicate()
-   {
-     // RefreshLayoutGroups.Refresh(gameObject);
-      if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == templateSubtitleContentElement.SubtitleText.ToString()) return;
-      mostRecentDuplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
-      mostRecentDuplicate.gameObject.SetActive(false);
-      RefreshContents();
+
+        [Button("SetScrollRect")]
+        public void SetScrollRect()
+        {
+            var scrollRect = transform.parent.GetComponent<ScrollRect>();
+            scrollRect.verticalNormalizedPosition = 0;
+        }
+
+        public void ClearContents()
+        {
+            for (int i = 0; i < duplicatedSubtitleContentContainer.childCount; i++)
+            {
+                Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
+            }
       
-      mostRecentDuplicate.UpdateTime();
+            templateSubtitleContentElement.Clear();
       
-      onDuplicateAdded.Invoke();
+        }
+
+        public void RefreshContents()
+        {
+            if (!templateSubtitleContentElement.PortraitActive) templateSubtitleContentElement.HidePortraitHelper();
+            else templateSubtitleContentElement.ShowPortraitHelper();
+            RefreshLayoutGroups.Refresh(gameObject);
+        }
+
+        public void AddHiddenDuplicate()
+        {
+            // RefreshLayoutGroups.Refresh(gameObject);
+            if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == templateSubtitleContentElement.SubtitleText.ToString()) return;
+            mostRecentDuplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
+            mostRecentDuplicate.gameObject.SetActive(false);
+            RefreshContents();
       
-   }
-   
-   public void RevealDuplicate()
-   {
+            mostRecentDuplicate.UpdateTime();
+      
+            onDuplicateAdded.Invoke();
+      
+        }
+
+        public void RevealDuplicate()
+        {
     
-      if (mostRecentDuplicate == null || duplicatedSubtitleContentContainer.childCount == 0) return;
-      mostRecentDuplicate.gameObject.SetActive(true);
-      RefreshContents();
-   }
-   
+            if (mostRecentDuplicate == null || duplicatedSubtitleContentContainer.childCount == 0) return;
+            mostRecentDuplicate.gameObject.SetActive(true);
+            RefreshContents();
+        }
 
 
-   private void OnConversationLine(Subtitle subtitle)
-   {
-      RefreshContents();
-   }
-   
+        private void OnConversationLine(Subtitle subtitle)
+        {
+            RefreshContents();
+        }
+    }
 }

@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public interface IParticle
+namespace Project.Runtime.Scripts.UI.Particles
 {
-    public ParticleSystemCustomData customDataSlot { get; }
+    public interface IParticle
+    {
+        public ParticleSystemCustomData customDataSlot { get; }
+    }
 }

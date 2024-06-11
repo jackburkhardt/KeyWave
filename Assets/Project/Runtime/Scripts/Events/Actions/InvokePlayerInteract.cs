@@ -1,10 +1,12 @@
 using UnityEngine;
 
-public class InvokePlayerInteract : MonoBehaviour
+namespace Project.Runtime.Scripts.Events.Actions
 {
-    public void OnPlayerInteract()
+    public class InvokePlayerInteract : MonoBehaviour
     {
-        GameEvent.OnInteraction(gameObject);
+        public void OnPlayerInteract()
+        {
+            GameEvent.OnInteraction(gameObject);
+        }
     }
-
 }

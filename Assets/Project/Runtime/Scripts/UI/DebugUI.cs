@@ -1,19 +1,25 @@
 using PixelCrushers;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
-public class DebugUI : MonoBehaviour
+namespace Project.Runtime.Scripts.UI
 {
-    [SerializeField] private UITextField luaTime;
-    [SerializeField] private UITextField gameStateTime;
-    // Start is called before the first frame update
-    void Start()
+    public class DebugUI : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private UITextField luaTime;
 
-    // Update is called once per frame
-    void Update()
-    {
-        luaTime.text = Clock.CurrentTime;
+        [SerializeField] private UITextField gameStateTime;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+        
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            luaTime.text = Clock.CurrentTime;
+        }
     }
 }

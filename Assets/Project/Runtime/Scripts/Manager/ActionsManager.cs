@@ -2,42 +2,43 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class ActionsWrapper
+namespace Project.Runtime.Scripts.Manager
 {
-    
-    public List<Action> actions = new();
-   
-    
-    [Serializable]     
-    public class Action
+    [Serializable]
+    public class ActionsWrapper
     {
-        [SerializeField] private string title;
-        [SerializeField] private string conversation;
-        [SerializeField] private bool available;
-        [SerializeField] private string location;
-        
-
-        public string Title => title;
-        public string Location => location;
-        public string Conversation => conversation;
-        public bool Available => available;
+        public List<Action> actions = new();
 
 
-        public Action(string title, string conversation, bool available, string location)
+        [Serializable]     
+        public class Action
         {
-            this.title = title;
-            this.conversation = conversation;
-            this.available = available;
-            this.location = location;
-        }
-       
-        
-        public void SetAvailable(bool available)
-        {
-            this.available = available;
-        }
+            [SerializeField] private string title;
+            [SerializeField] private string conversation;
+            [SerializeField] private bool available;
+            [SerializeField] private string location;
 
+
+            public Action(string title, string conversation, bool available, string location)
+            {
+                this.title = title;
+                this.conversation = conversation;
+                this.available = available;
+                this.location = location;
+            }
+
+
+            public string Title => title;
+            public string Location => location;
+            public string Conversation => conversation;
+            public bool Available => available;
+
+
+            public void SetAvailable(bool available)
+            {
+                this.available = available;
+            }
+        }
     }
 }
 
@@ -69,7 +70,7 @@ public class ActionsManager : IJsonSerializable, IEventable
             DialogueLua.SetVariable($"action_{i}", action.Available);
         }
     }
-    
+
     public void OnPlayerEvent(PlayerEvents.PlayerEvent playerEvent)
     {
        switch (playerEvent.Type)
@@ -102,16 +103,16 @@ public class ActionsManager : IJsonSerializable, IEventable
     public void CreateButtons(string playerLocation)
     {
         DestroyButtons();
-        
+
        if (DialogueLua.GetVariable("CurrentConversation").asString != string.Empty) return;
-        
+
         for (int i = 0; i < _actionsWrapper.actions.Count; i++)
         {
             var action = _actionsWrapper.actions[i];
             var doesLocationMatch = action.Location == playerLocation;
             var isActionAvailable = DialogueLua.GetVariable($"action_{i}").asBool;
             if (!doesLocationMatch || !isActionAvailable) continue;
-            
+
             var index = i;
             SpawnActionButton(action, index);
         }
@@ -134,7 +135,7 @@ public class ActionsManager : IJsonSerializable, IEventable
             Destroy(child.gameObject);
         }
     }
-    
+
     private void OnActionButtonClick(ActionsWrapper.Action action, int index)
     {
         action.SetAvailable(false);

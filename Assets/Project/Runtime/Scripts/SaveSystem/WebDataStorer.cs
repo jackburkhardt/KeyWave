@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.IO;
 using PixelCrushers;
-using Project.Runtime.Scripts.App;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
@@ -11,12 +10,12 @@ namespace Project.Runtime.Scripts.SaveSystem
         public static List<int> occupiedSlots = new List<int>();
         public static bool saveDataReady = false;
         public static SavedGameData saveData;
-        
+
         public override bool HasDataInSlot(int slotNumber)
         {
 #if UNITY_EDITOR
             // check if file exists
-            return System.IO.File.Exists(Application.dataPath + "/DebugSaves/" + slotNumber + ".json");
+            return File.Exists(Application.dataPath + "/DebugSaves/" + slotNumber + ".json");
 #elif UNITY_WEBGL
             return occupiedSlots.Contains(slotNumber);
 #endif
@@ -25,11 +24,11 @@ namespace Project.Runtime.Scripts.SaveSystem
         public override void StoreSavedGameData(int slotNumber, SavedGameData savedGameData)
         {
 #if UNITY_EDITOR
-            if (!System.IO.Directory.Exists(Application.dataPath + "/DebugSaves"))
+            if (!Directory.Exists(Application.dataPath + "/DebugSaves"))
             {
-                System.IO.Directory.CreateDirectory(Application.dataPath + "/DebugSaves");
+                Directory.CreateDirectory(Application.dataPath + "/DebugSaves");
             }
-            System.IO.File.WriteAllText(Application.dataPath + "/DebugSaves/" + slotNumber + ".json", JsonUtility.ToJson(savedGameData, true));
+            File.WriteAllText(Application.dataPath + "/DebugSaves/" + slotNumber + ".json", JsonUtility.ToJson(savedGameData, true));
 #elif UNITY_WEBGL
             BrowserInterface.sendSaveGame(slotNumber, JsonConvert.SerializeObject(savedGameData));
 #endif
@@ -38,11 +37,11 @@ namespace Project.Runtime.Scripts.SaveSystem
         public override SavedGameData RetrieveSavedGameData(int slotNumber)
         {
 #if UNITY_EDITOR
-            if (!System.IO.Directory.Exists(Application.dataPath + "/DebugSaves"))
+            if (!Directory.Exists(Application.dataPath + "/DebugSaves"))
             {
-                System.IO.Directory.CreateDirectory(Application.dataPath + "/DebugSaves");
+                Directory.CreateDirectory(Application.dataPath + "/DebugSaves");
             }
-            return JsonUtility.FromJson<SavedGameData>(System.IO.File.ReadAllText(Application.dataPath + "/DebugSaves/" + slotNumber + ".json"));
+            return JsonUtility.FromJson<SavedGameData>(File.ReadAllText(Application.dataPath + "/DebugSaves/" + slotNumber + ".json"));
 #elif UNITY_WEBGL
             saveDataReady = false;
             BrowserInterface.getSaveGame(slotNumber);
@@ -52,9 +51,9 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override void DeleteSavedGameData(int slotNumber)
         {
-            #if UNITY_EDITOR
-            System.IO.File.Delete(Application.dataPath + "/DebugSaves/" + slotNumber + ".json");
-            #endif
+#if UNITY_EDITOR
+            File.Delete(Application.dataPath + "/DebugSaves/" + slotNumber + ".json");
+#endif
         }
     }
 }

@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using KeyWave.Runtime.Scripts.AssetLoading;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.SaveSystem;
+using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Events;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +11,15 @@ namespace Project.Runtime.Scripts.App
 {
     public sealed class App : MonoBehaviour
     {
+        private static App _instance;
+        private static string playerID;
+        private static PlayerEventStack playerEventStack;
+
+        public static Action OnLoadStart;
+        public static Action OnLoadEnd;
+
+        public static bool isLoading = false;
+
         public static App Instance
         {
             get
@@ -23,25 +32,18 @@ namespace Project.Runtime.Scripts.App
                 return _instance;
             }
         }
-        
-        public static string PlayerID => playerID;
-        
-        private static App _instance;
-        private static string playerID;
-        private static PlayerEventStack playerEventStack;
 
-        public static Action OnLoadStart;
-        public static Action OnLoadEnd;
-        
-        
+        public static string PlayerID => playerID;
+
+
         private void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
             _instance = this;
             if (Camera.main != null) Camera.main.backgroundColor = Color.black;
-            #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.getOccupiedSaveSlots();
-            #endif
+#endif
         }
 
         public void BeginGame() => StartCoroutine(BeginGameSequence(-1));
@@ -49,9 +51,9 @@ namespace Project.Runtime.Scripts.App
 
         private IEnumerator BeginGameSequence(int slot)
         {
-            #if !UNITY_EDITOR
+#if !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
-            #endif
+#endif
             yield return LoadSceneButKeepLoadingScreen("Base", sceneToUnload:"StartMenu", type: LoadingScreen.LoadingScreenType.Black);
             while (!DialogueManager.Instance.isInitialized)
             {
@@ -61,12 +63,12 @@ namespace Project.Runtime.Scripts.App
             if (PixelCrushers.SaveSystem.HasSavedGameInSlot(slot))
             {
                 var data = PixelCrushers.SaveSystem.storer.RetrieveSavedGameData(slot);
-                #if !UNITY_EDITOR
+#if !UNITY_EDITOR
                 yield return new WaitUntil(() => WebDataStorer.saveDataReady);
                 PixelCrushers.SaveSystem.LoadGame(WebDataStorer.saveData);
-                #else
+#else
                 PixelCrushers.SaveSystem.LoadGame(data);
-                #endif
+#endif
             }
             else
             {
@@ -74,34 +76,32 @@ namespace Project.Runtime.Scripts.App
             }
             GameEvent.OnRegisterPlayerEvent += SendPlayerEvent;
         }
-        
+
         private void SendPlayerEvent(PlayerEvent e)
         {
-            #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.sendPlayerEvent(e.ToString());
-            #endif
+#endif
         }
-        
+
         /// <summary>
         /// Loads a scene additively to the current scene
         /// </summary>
         /// 
         public Coroutine LoadScene(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? type = LoadingScreen.LoadingScreenType.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: type));
-        
+
         public Coroutine LoadSceneButKeepLoadingScreen(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? type = LoadingScreen.LoadingScreenType.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: type, unloadLoadingScreen: false));
-        
+
         public void UnloadScene(string sceneToUnload)
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(sceneToUnload));
         }
-        
+
         /// <summary>
         ///  Unloads the current scene and loads a new scene
         /// </summary>
         public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload));
 
-        public static bool isLoading = false;
-        
         private IEnumerator LoadSceneHandler(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? loadingScreenType = LoadingScreen.LoadingScreenType.Default, bool? unloadLoadingScreen = true)
         {
             isLoading = true;

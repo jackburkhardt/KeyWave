@@ -1,19 +1,21 @@
 using System.Collections;
-using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 
-public class DialogueSystemCustomMethods : MonoBehaviour
+namespace Project.Runtime.Scripts.DialogueSystem
 {
-    public void PauseForSeconds(float seconds)
+    public class DialogueSystemCustomMethods : MonoBehaviour
     {
-        StartCoroutine(PauseForSecondsCoroutine(seconds));
-    }
-    
-    private IEnumerator PauseForSecondsCoroutine(float seconds)
-    {
-        DialogueManager.Pause();
-        yield return new WaitForSeconds(seconds);
-        DialogueManager.Unpause();
+        public void PauseForSeconds(float seconds)
+        {
+            StartCoroutine(PauseForSecondsCoroutine(seconds));
+        }
+
+        private IEnumerator PauseForSecondsCoroutine(float seconds)
+        {
+            DialogueManager.Pause();
+            yield return new WaitForSeconds(seconds);
+            DialogueManager.Unpause();
+        }
     }
 }

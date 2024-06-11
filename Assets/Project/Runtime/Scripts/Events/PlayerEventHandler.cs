@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public abstract class PlayerEventHandler : MonoBehaviour
+namespace Project.Runtime.Scripts.Events
 {
-    protected virtual void OnEnable()
+    public abstract class PlayerEventHandler : MonoBehaviour
     {
-        GameEvent.OnPlayerEvent += OnPlayerEvent;
-    }
+        protected virtual void OnEnable()
+        {
+            GameEvent.OnPlayerEvent += OnPlayerEvent;
+        }
 
-    protected virtual void OnDisable()
-    {
-        GameEvent.OnPlayerEvent -= OnPlayerEvent;
-    }
+        protected virtual void OnDisable()
+        {
+            GameEvent.OnPlayerEvent -= OnPlayerEvent;
+        }
 
-    protected abstract void OnPlayerEvent(PlayerEvent playerEvent);
+        protected abstract void OnPlayerEvent(PlayerEvent playerEvent);
+    }
 }

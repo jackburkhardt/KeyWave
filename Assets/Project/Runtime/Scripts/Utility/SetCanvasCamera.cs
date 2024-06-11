@@ -1,20 +1,22 @@
 using UnityEngine;
 
-public class SortingLayerManager : MonoBehaviour
+namespace Project.Runtime.Scripts.Utility
 {
-    public SortingLayer sortingLayer;
-}
-
-public class SetCanvasCamera : SortingLayerManager
-{
-
-  //  public SortingLayerManager sortingLayerManager;
-     [SerializeField] string sortingLayer;
-
-    // Start is called before the first frame update
-    private void Awake()
+    public class SortingLayerManager : MonoBehaviour
     {
-        GetComponent<Canvas>().worldCamera = Camera.main;
-      //  GetComponent<Canvas>().sortingLayerName = sortingLayer;
+        public SortingLayer sortingLayer;
+    }
+
+    public class SetCanvasCamera : SortingLayerManager
+    {
+        //  public SortingLayerManager sortingLayerManager;
+        [SerializeField] string sortingLayer;
+
+        // Start is called before the first frame update
+        private void Awake()
+        {
+            GetComponent<Canvas>().worldCamera = Camera.main;
+            //  GetComponent<Canvas>().sortingLayerName = sortingLayer;
+        }
     }
 }

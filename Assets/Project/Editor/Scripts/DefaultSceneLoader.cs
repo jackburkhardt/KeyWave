@@ -2,21 +2,24 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
-[InitializeOnLoadAttribute]
-public static class DefaultSceneLoader
+namespace Project.Editor.Scripts
 {
-    static DefaultSceneLoader(){
-        EditorApplication.playModeStateChanged += LoadDefaultScene;
-    }
-
-    static void LoadDefaultScene(PlayModeStateChange state){
-        if (state == PlayModeStateChange.ExitingEditMode) {
-            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo ();
+    [InitializeOnLoad]
+    public static class DefaultSceneLoader
+    {
+        static DefaultSceneLoader(){
+            EditorApplication.playModeStateChanged += LoadDefaultScene;
         }
 
-        if (state == PlayModeStateChange.EnteredPlayMode) {
+        static void LoadDefaultScene(PlayModeStateChange state){
+            if (state == PlayModeStateChange.ExitingEditMode) {
+                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo ();
+            }
+
+            if (state == PlayModeStateChange.EnteredPlayMode) {
            
-            EditorSceneManager.LoadScene (0);
+                EditorSceneManager.LoadScene (0);
+            }
         }
     }
 }

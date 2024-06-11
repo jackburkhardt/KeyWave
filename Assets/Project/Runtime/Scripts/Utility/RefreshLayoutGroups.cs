@@ -1,25 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RefreshLayoutGroups : MonoBehaviour
+namespace Project.Runtime.Scripts.Utility
 {
-    // Start is called before the first frame update
-    void Start()
+    public class RefreshLayoutGroups : MonoBehaviour
     {
-        Refresh(this.gameObject);
-    }
-    
-    public static void Refresh(GameObject root)
-
-    {
-        var componentsInChildren = root.GetComponentsInChildren<LayoutGroup>(true);
-        foreach (var layoutGroup in componentsInChildren)
+        // Start is called before the first frame update
+        void Start()
         {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
+            Refresh(this.gameObject);
         }
 
-        var parent = root.GetComponent<LayoutGroup>();
+        public static void Refresh(GameObject root)
+
+        {
+            var componentsInChildren = root.GetComponentsInChildren<LayoutGroup>(true);
+            foreach (var layoutGroup in componentsInChildren)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
+            }
+
+            var parent = root.GetComponent<LayoutGroup>();
         
-        LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
+        }
     }
 }

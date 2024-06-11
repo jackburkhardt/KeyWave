@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.DialogueEditor;
@@ -9,16 +8,10 @@ namespace Project.Editor.Scripts.Tools
 {
     public class UnlinkedNodeFinder : EditorWindow
     {
-        [MenuItem("Tools/Perils and Pitfalls/Unlinked Node Finder")]
-        private static void ShowWindow()
-        {
-            var window = GetWindow<UnlinkedNodeFinder>();
-            window.titleContent = new GUIContent("Unlinked Node Finder");
-            window.Show();
-        }
+        private List<(string Converstion, DialogueEntry Entry)> foundNodes = new();
+        private Vector2 scrollPos;
 
         private DialogueDatabase selectedDB;
-        private Vector2 scrollPos;
 
         private void OnGUI()
         {
@@ -60,7 +53,13 @@ namespace Project.Editor.Scripts.Tools
             }
         }
 
-        private List<(string Converstion, DialogueEntry Entry)> foundNodes = new();
+        [MenuItem("Tools/Perils and Pitfalls/Unlinked Node Finder")]
+        private static void ShowWindow()
+        {
+            var window = GetWindow<UnlinkedNodeFinder>();
+            window.titleContent = new GUIContent("Unlinked Node Finder");
+            window.Show();
+        }
 
         public static List<(string Converstion, DialogueEntry Entry)> SearchForMissingLinks(DialogueDatabase database)
         {

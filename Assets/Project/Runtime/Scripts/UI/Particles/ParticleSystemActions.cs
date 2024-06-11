@@ -1,44 +1,40 @@
-   using System;
-   using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
-    using UnityEngine.Events;
-   
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Events;
+
+namespace Project.Runtime.Scripts.UI.Particles
+{
     [RequireComponent(typeof(ParticleSystem))]
     
     [Serializable]
-    public class ParticleEvent : UnityEvent<ParticleSystem.Particle> { }
+    public class ParticleEvent : UnityEvent<ParticleSystem.Particle> {}
     [Serializable]
-    public class ParticleSystemEvent : UnityEvent<ParticleSystem> { }
+    public class ParticleSystemEvent : UnityEvent<ParticleSystem> {}
     public class ParticleSystemActions : MonoBehaviour, IParticle
     {
-        [SerializeField] private IParticle _particleCustomDataComponent;
-   
-        private ParticleSystem _particleSystem;
-        
-        
-   
-        private int _uniqueID;
-        
         [SerializeField] private ParticleSystemCustomData _customDataSlot;
         [SerializeField] private ParticleSystemCustomData _customDataToInvoke;
-        
+
         [Header("Events")]
         [SerializeField] ParticleSystemEvent _particleSystemStart = new ParticleSystemEvent();
+
         [SerializeField] ParticleSystemEvent _particleDeadAll = new ParticleSystemEvent();
         [SerializeField] ParticleEvent _particleWasBorn, _particleDead = new ParticleEvent();
-        
+
         private List<float> _currentParticlesIds = new List<float>();
         private List<Vector4> _customData = new List<Vector4>();
-        private ParticleSystem.Particle[] _particles = new ParticleSystem.Particle[]{ };
-        private ParticleSystem.Particle[] _oldParticles = new ParticleSystem.Particle[]{ };
         private bool _isDead = true;
-        
-        public ParticleSystemCustomData customDataSlot
-        {
-            get => _customDataSlot;
-        }
-   
+        private ParticleSystem.Particle[] _oldParticles = new ParticleSystem.Particle[]{ };
+        [SerializeField] private IParticle _particleCustomDataComponent;
+        private ParticleSystem.Particle[] _particles = new ParticleSystem.Particle[]{ };
+
+        private ParticleSystem _particleSystem;
+
+
+        private int _uniqueID;
+
         private void Awake()
         {
             _particleSystem = GetComponent<ParticleSystem>();
@@ -49,6 +45,7 @@
                 
             }
         }
+
         private void LateUpdate()
         {
             if (_particleSystem == null)
@@ -58,7 +55,12 @@
        
             UpdateLifeEvents();
         }
-   
+
+        public ParticleSystemCustomData customDataSlot
+        {
+            get => _customDataSlot;
+        }
+
         void UpdateLifeEvents()
         {
             _particleSystem.GetCustomParticleData(_customData, _customDataSlot);
@@ -115,6 +117,5 @@
             
             _oldParticles = _particles;
         }
-       
     }
-   
+}

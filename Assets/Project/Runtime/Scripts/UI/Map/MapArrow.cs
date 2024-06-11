@@ -1,34 +1,35 @@
 using UnityEngine;
 
-public class MapArrow : MonoBehaviour
+namespace Project.Runtime.Scripts.UI.Map
 {
-    Animator animator;
-    // Start is called before the first frame update
-    void Start()
+    public class MapArrow : MonoBehaviour
     {
-        animator = GetComponent<Animator>();
-    }
+        Animator animator;
 
-    // Update is called once per frame
-    void Update()
-    {
+        // Start is called before the first frame update
+        void Start()
+        {
+            animator = GetComponent<Animator>();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
         
-    }
-
-    private void OnMouseOver()
-    {
-        //  animator.Play("Hold");
-        animator.StartPlayback();
-
-    }
+        }
 
 
-    private void OnMouseExit()
-    {
+        private void OnMouseExit()
+        {
         
-        animator.StopPlayback();
+            animator.StopPlayback();
+        }
+
+        private void OnMouseOver()
+        {
+            //  animator.Play("Hold");
+            animator.StartPlayback();
+
+        }
     }
-
-
-
 }

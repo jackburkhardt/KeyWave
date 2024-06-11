@@ -1,215 +1,218 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using KeyWave.Runtime.Scripts.AssetLoading;
-using Language.Lua;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.App;
-using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.DialogueSystem;
+using Project.Runtime.Scripts.Events;
+using Project.Runtime.Scripts.UI;
 using Unity.VisualScripting;
 using UnityEngine;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
-[Serializable]
-
-
-public class GameManager : MonoBehaviour
+namespace Project.Runtime.Scripts.Manager
 {
-    public static GameManager instance;
-    public static GameStateManager gameStateManager;
-    public static PlayerEventStack playerEventStack;
-    private CustomLuaFunctions _customLuaFunctions;
-    public List<Location> locations;
-    public bool capFramerate = false;
-    public DailyReport dailyReport;
-    
-    [ShowIf("capFramerate")]
-    public int framerateLimit;
-    
-    public static GameState gameState => GameStateManager.instance.gameState;
+    [Serializable]
 
-    // Start is called before the first frame update
 
-    private void OnEnable()
+    public class GameManager : MonoBehaviour
     {
+        public static GameManager instance;
+        public static GameStateManager gameStateManager;
+        public static PlayerEventStack playerEventStack;
+        public List<Location> locations;
+        public bool capFramerate = false;
+
+        [ShowIf("capFramerate")]
+        public int framerateLimit;
+
+        private CustomLuaFunctions _customLuaFunctions;
+        public DailyReport dailyReport;
+
+        private string last_convo = string.Empty;
+
+        public static GameState gameState => GameStateManager.instance.gameState;
+
+
+        private void Awake()
+        {
        
-    }
+            //if instance of GameManager already exists, destroy it
 
-    public void PauseDialogueSystem()
-    {
-        DialogueManager.instance.Pause();
-        WatchHandCursor.GlobalFreeze();
-    }
-    
-    public void UnpauseDialogueSystem()
-    {
-        DialogueManager.instance.Unpause();
-        WatchHandCursor.GlobalUnfreeze();
-    }
-
-    private void OnDestroy()
-    {
-        Destroy(playerEventStack);
-        Destroy(gameStateManager);
-    }
-
-
-    private void Awake()
-    {
-       
-        //if instance of GameManager already exists, destroy it
-
-        if (instance == null)
-        {
-            instance = this;
-        }
-        
-        else if (instance != this)
-        {
-            Destroy(this);
-        }
-        
-        
-        if (gameStateManager == null)
-        {
-            gameStateManager = this.AddComponent<GameStateManager>();
-        }
-        
-        if (playerEventStack == null)
-        {
-            playerEventStack = ScriptableObject.CreateInstance<PlayerEventStack>();
-        }
-        _customLuaFunctions = GetComponent<CustomLuaFunctions>() ?? gameObject.AddComponent<CustomLuaFunctions>();
-
-    }
-  
-    private void Start()
-    {
-        GameEvent.OnPlayerEvent += OnPlayerEvent;
-        //OnSaveDataApplied();
-    }
-
-    public void OnSaveDataApplied()
-    {
-        dailyReport ??= new DailyReport(gameState.day);
-
-        FindObjectOfType<PointsBar>().ApplySaveData();
-    }
-    
-    private void OnPlayerEvent(PlayerEvent e)
-    {
-        if (gameState.Clock > Clock.DailyLimit)
-        {
-            GameEvent.OnDayEnd();
-            DialogueManager.StopAllConversations();
-            EndOfDay();
-        }
-    }
-
-    public void StartNewDay()
-    {
-        GameStateManager.instance.StartNextDay();
-        dailyReport = new DailyReport(gameState.day);
-        App.Instance.ChangeScene("Hotel", "EndOfDay");
-    }
-
-    public IEnumerator StartNewSave()
-    {
-        yield return App.Instance.LoadScene("Hotel");
-        dailyReport = new DailyReport(gameState.day);
-        
-        while (App.isLoading)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-
-        yield return new WaitForSeconds(0.25f);
-        DialogueManager.StartConversation("Intro");
-    }
-
-    
-    
-    
-    public static void OnQuestStateChange(string questName)
-    {
-        var quest = DialogueUtility.GetQuestByName(questName);
-        var state = QuestLog.GetQuestState(questName);
-        var points = DialogueUtility.GetPointsFromField(quest.fields);
-
-        if (state == QuestState.Success && points.Points > 0)
-        {
-            GameEvent.OnPointsIncrease(points, questName);
-            points.Points = 0;
-            DialogueLua.SetItemField(questName, "Points", points.ToString());
-        }
-        
-        var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
-        
-        GameEvent.OnQuestStateChange(questName, state, duration);
-    }
-
-    private string last_convo = string.Empty;
-    public void OpenMap()
-    {
-        //last_convo = gameState.current_conversation_title;
-        DialogueManager.StopConversation();
-        DialogueManager.instance.PlaySequence("SetDialoguePanel(false)");
-        App.Instance.LoadScene("Map");
-    }
-
-    public void CloseMap(bool returnToConvo)
-    {
-        App.Instance.UnloadScene("Map");
-        if (returnToConvo)
-        {
-            DialogueManager.instance.PlaySequence("SetDialoguePanel(true)");
-            DialogueManager.StartConversation(last_convo);
-        }
-    }
-
-
-    public void EndOfDay() => App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene);
-
-    public void StartOfDay() => App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
-
-    public void TravelTo(Location location)
-    {
-        TravelTo(location.Name);
-    }
-    
-    public void TravelTo(string newLocation, string currentScene = "")
-    {
-
-        DialogueManager.StopConversation();
-        if (currentScene == "") currentScene = gameState.current_scene;
-        StartCoroutine(TravelToHandler());
-
-        IEnumerator TravelToHandler()
-        {
-            yield return App.Instance.ChangeScene(newLocation, currentScene);
-            
-            while (App.isLoading)
+            if (instance == null)
             {
-                yield return null;
+                instance = this;
+            }
+        
+            else if (instance != this)
+            {
+                Destroy(this);
+            }
+        
+        
+            if (gameStateManager == null)
+            {
+                gameStateManager = this.AddComponent<GameStateManager>();
+            }
+        
+            if (playerEventStack == null)
+            {
+                playerEventStack = ScriptableObject.CreateInstance<PlayerEventStack>();
+            }
+            _customLuaFunctions = GetComponent<CustomLuaFunctions>() ?? gameObject.AddComponent<CustomLuaFunctions>();
+
+        }
+
+        private void Start()
+        {
+            GameEvent.OnPlayerEvent += OnPlayerEvent;
+            //OnSaveDataApplied();
+        }
+
+        private void Update()
+        {
+            if (capFramerate) Application.targetFrameRate = framerateLimit;
+        }
+
+        // Start is called before the first frame update
+
+        private void OnEnable()
+        {
+       
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(playerEventStack);
+            Destroy(gameStateManager);
+        }
+
+        public void PauseDialogueSystem()
+        {
+            DialogueManager.instance.Pause();
+            WatchHandCursor.GlobalFreeze();
+        }
+
+        public void UnpauseDialogueSystem()
+        {
+            DialogueManager.instance.Unpause();
+            WatchHandCursor.GlobalUnfreeze();
+        }
+
+        public void OnSaveDataApplied()
+        {
+            dailyReport ??= new DailyReport(gameState.day);
+
+            FindObjectOfType<PointsBar>().ApplySaveData();
+        }
+
+        private void OnPlayerEvent(PlayerEvent e)
+        {
+            if (gameState.Clock > Clock.DailyLimit)
+            {
+                GameEvent.OnDayEnd();
+                DialogueManager.StopAllConversations();
+                EndOfDay();
+            }
+        }
+
+        public void StartNewDay()
+        {
+            GameStateManager.instance.StartNextDay();
+            dailyReport = new DailyReport(gameState.day);
+            App.App.Instance.ChangeScene("Hotel", "EndOfDay");
+        }
+
+        public IEnumerator StartNewSave()
+        {
+            yield return App.App.Instance.LoadScene("Hotel");
+            dailyReport = new DailyReport(gameState.day);
+        
+            while (App.App.isLoading)
+            {
+                yield return new WaitForEndOfFrame();
             }
 
-            yield return new WaitForSeconds(1f);
-
-            DialogueManager.StartConversation($"{newLocation}/Base");
-
-            gameState.current_scene = newLocation;
-            
-            
+            yield return new WaitForSeconds(0.25f);
+            DialogueManager.StartConversation("Intro");
         }
-    }
-    
-    public void Wait(int duration)
-    {
-       GameEvent.OnWait(duration);
-    }
 
-    private void Update()
-    {
-        if (capFramerate) Application.targetFrameRate = framerateLimit;
+
+        public static void OnQuestStateChange(string questName)
+        {
+            var quest = DialogueUtility.GetQuestByName(questName);
+            var state = QuestLog.GetQuestState(questName);
+            var points = DialogueUtility.GetPointsFromField(quest.fields);
+
+            if (state == QuestState.Success && points.Points > 0)
+            {
+                GameEvent.OnPointsIncrease(points, questName);
+                points.Points = 0;
+                DialogueLua.SetItemField(questName, "Points", points.ToString());
+            }
+        
+            var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
+        
+            GameEvent.OnQuestStateChange(questName, state, duration);
+        }
+
+        public void OpenMap()
+        {
+            //last_convo = gameState.current_conversation_title;
+            DialogueManager.StopConversation();
+            DialogueManager.instance.PlaySequence("SetDialoguePanel(false)");
+            App.App.Instance.LoadScene("Map");
+        }
+
+        public void CloseMap(bool returnToConvo)
+        {
+            App.App.Instance.UnloadScene("Map");
+            if (returnToConvo)
+            {
+                DialogueManager.instance.PlaySequence("SetDialoguePanel(true)");
+                DialogueManager.StartConversation(last_convo);
+            }
+        }
+
+
+        public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene);
+
+        public void StartOfDay() => App.App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
+
+        public void TravelTo(Location location)
+        {
+            TravelTo(location.Name);
+        }
+
+        public void TravelTo(string newLocation, string currentScene = "")
+        {
+
+            DialogueManager.StopConversation();
+            if (currentScene == "") currentScene = gameState.current_scene;
+            StartCoroutine(TravelToHandler());
+
+            IEnumerator TravelToHandler()
+            {
+                yield return App.App.Instance.ChangeScene(newLocation, currentScene);
+            
+                while (App.App.isLoading)
+                {
+                    yield return null;
+                }
+
+                yield return new WaitForSeconds(1f);
+
+                DialogueManager.StartConversation($"{newLocation}/Base");
+
+                gameState.current_scene = newLocation;
+            
+            
+            }
+        }
+
+        public void Wait(int duration)
+        {
+            GameEvent.OnWait(duration);
+        }
     }
 }

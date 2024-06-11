@@ -1,4 +1,3 @@
-using System;
 using PixelCrushers.DialogueSystem;
 using UnityEditor;
 using UnityEngine;
@@ -42,7 +41,7 @@ namespace Project.Editor.Scripts.Tools
                 else
                 {
                     Debug.LogWarning($"The conversation {node.Converstion} has no return location set! " +
-                                   $"Terminating node {node.Entry.id} has no outgoing links and may softlock.");
+                                     $"Terminating node {node.Entry.id} has no outgoing links and may softlock.");
                 }
 
                 // replace the entry in the conversation

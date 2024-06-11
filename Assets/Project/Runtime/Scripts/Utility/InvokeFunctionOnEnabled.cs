@@ -1,20 +1,21 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class InvokeFunctionOnEnabled : MonoBehaviour
+namespace Project.Runtime.Scripts.Utility
 {
-    public UnityEvent onEnabled;
-
-    private void Awake()
+    public class InvokeFunctionOnEnabled : MonoBehaviour
     {
-        enabled = false;
-    }
+        public UnityEvent onEnabled;
 
-    public void OnEnable()
-    {
-        onEnabled.Invoke();
-        enabled = false;
+        private void Awake()
+        {
+            enabled = false;
+        }
+
+        public void OnEnable()
+        {
+            onEnabled.Invoke();
+            enabled = false;
+        }
     }
-    
-    
 }

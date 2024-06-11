@@ -1,186 +1,177 @@
 #nullable enable
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
-[RequireComponent(typeof(Button))]
-public class CustomUIResponseButton : StandardUIResponseButton, IPointerEnterHandler, IPointerExitHandler,
-    IPointerClickHandler
+namespace Project.Runtime.Scripts.UI
 {
-
-    //private StandardUIResponseButton StandardUIResponseButton => GetComponent<StandardUIResponseButton>();
-
-    protected static CustomUIResponseButton _hoveredButton;
-    protected Button UnityButton => GetComponent<Button>();
-    protected Vector2 Position => label.gameObject.transform.position;
-
-    [SerializeField] protected string _autoNumberFormat = "{0}. {1}";
-
-    [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
-
-
-
-    protected UIButtonKeyTrigger[] ButtonKeyTriggers => GetComponents<UIButtonKeyTrigger>();
-
-    protected List<CustomUIResponseButton> SiblingButtons =>
-        transform.parent.GetComponentsInChildren<CustomUIResponseButton>().ToList();
-
-    [SerializeField] protected UITextField autonumberText;
-
-
-
-
-    public void SetAutonumber()
+    [RequireComponent(typeof(Button))]
+    public class CustomUIResponseButton : StandardUIResponseButton, IPointerEnterHandler, IPointerExitHandler,
+        IPointerClickHandler
     {
-        
-        
-        int GetAutonumber()
+        //private StandardUIResponseButton StandardUIResponseButton => GetComponent<StandardUIResponseButton>();
+
+        protected static CustomUIResponseButton _hoveredButton;
+
+        [SerializeField] protected string _autoNumberFormat = "{0}. {1}";
+
+        [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
+
+        [SerializeField] protected UITextField autonumberText;
+        protected Button UnityButton => GetComponent<Button>();
+        protected Vector2 Position => label.gameObject.transform.position;
+
+
+        protected UIButtonKeyTrigger[] ButtonKeyTriggers => GetComponents<UIButtonKeyTrigger>();
+
+        protected List<CustomUIResponseButton> SiblingButtons =>
+            transform.parent.GetComponentsInChildren<CustomUIResponseButton>().ToList();
+
+        private bool DialogueEntryInvalid => response?.destinationEntry?.conditionsString?.Length != 0 &&
+                                             !Lua.IsTrue(response?.destinationEntry?.conditionsString);
+
+
+        protected virtual void OnEnable()
         {
-            
-            var buttons = new List<CustomUIResponseButton>(SiblingButtons);
-            
-            // remove all buttons that are invalid
-            buttons.RemoveAll(localButton => !localButton.transform.gameObject.activeSelf || 
-                                             localButton.response?.destinationEntry?.conditionsString?.Length != 0 &&
-                                        !Lua.IsTrue(localButton.response?.destinationEntry?.conditionsString));
-
-            if (!buttons.Contains(this)) return -1;
-
-            var siblingIndices = buttons.Select(localButton => localButton.transform.GetSiblingIndex()).OrderBy(n => n).ToList();
-
-            var siblingIndex = transform.GetSiblingIndex();
-
-
-            var autoNumber = siblingIndices.IndexOf(siblingIndex) == 9 ? 0 : siblingIndices.IndexOf(siblingIndex) + 1;
-
-            return autoNumber;
-
+            Refresh();
+    
         }
 
-        string extraKeys = "QWERTYUIOPASDFGHJKLZXCVBNM";
-
-
-        KeyCode intToKeyCodeKeypad(int i)
+        private void OnDisable()
         {
-            if (i < 0 || i > 9) return KeyCode.None;
-            var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Keypad" + i);
-            return key;
+            if (this != MenuPanelContainer.buttonTemplate) Destroy(gameObject);
+      
         }
 
-        KeyCode intToKeyCodeAlpha(int i)
+
+        public virtual void OnPointerClick(PointerEventData eventData)
         {
-            if (i < 0) return KeyCode.None;
-            if (i < 10)
+       
+        }
+
+
+        public virtual void OnPointerEnter(PointerEventData eventData)
+        {
+        
+            _hoveredButton = this;
+            Refresh();
+       
+        }
+
+        public virtual void OnPointerExit(PointerEventData eventData)
+        {
+            Refresh();
+        
+        }
+
+
+        public void SetAutonumber()
+        {
+        
+        
+            int GetAutonumber()
             {
-                var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Alpha" + i);
+            
+                var buttons = new List<CustomUIResponseButton>(SiblingButtons);
+            
+                // remove all buttons that are invalid
+                buttons.RemoveAll(localButton => !localButton.transform.gameObject.activeSelf || 
+                                                 localButton.response?.destinationEntry?.conditionsString?.Length != 0 &&
+                                                 !Lua.IsTrue(localButton.response?.destinationEntry?.conditionsString));
+
+                if (!buttons.Contains(this)) return -1;
+
+                var siblingIndices = buttons.Select(localButton => localButton.transform.GetSiblingIndex()).OrderBy(n => n).ToList();
+
+                var siblingIndex = transform.GetSiblingIndex();
+
+
+                var autoNumber = siblingIndices.IndexOf(siblingIndex) == 9 ? 0 : siblingIndices.IndexOf(siblingIndex) + 1;
+
+                return autoNumber;
+
+            }
+
+            string extraKeys = "QWERTYUIOPASDFGHJKLZXCVBNM";
+
+
+            KeyCode intToKeyCodeKeypad(int i)
+            {
+                if (i < 0 || i > 9) return KeyCode.None;
+                var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Keypad" + i);
                 return key;
+            }
+
+            KeyCode intToKeyCodeAlpha(int i)
+            {
+                if (i < 0) return KeyCode.None;
+                if (i < 10)
+                {
+                    var key = (KeyCode)Enum.Parse(typeof(KeyCode), "Alpha" + i);
+                    return key;
+                }
+
+                else
+                {
+                    var key = (KeyCode)Enum.Parse(typeof(KeyCode), extraKeys[i - 10].ToString());
+                    return key;
+                }
+            }
+
+            var autoNumber = GetAutonumber();
+
+            foreach (var trigger in ButtonKeyTriggers)
+            {
+                if (trigger.key.ToString().Contains("Keypad"))
+                {
+                    trigger.key = intToKeyCodeKeypad(autoNumber);
+                    continue;
+                }
+
+                trigger.key = intToKeyCodeAlpha(autoNumber);
+            }
+
+            if (autonumberText.gameObject == null)
+            {
+                label.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
+                label.text = label.text.Replace("{1}", response?.formattedText.text);
             }
 
             else
             {
-                var key = (KeyCode)Enum.Parse(typeof(KeyCode), extraKeys[i - 10].ToString());
-                return key;
+                if (autoNumber < 0) autonumberText.text = "";
+                else if (autoNumber < 10) autonumberText.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
+                else autonumberText.text = _autoNumberFormat.Replace("{0}", $"{extraKeys[autoNumber - 10]}");
+                autonumberText.text.Replace("{1}", string.Empty);
             }
         }
 
-        var autoNumber = GetAutonumber();
 
-        foreach (var trigger in ButtonKeyTriggers)
+        public virtual void Refresh()
         {
-            if (trigger.key.ToString().Contains("Keypad"))
-            {
-                trigger.key = intToKeyCodeKeypad(autoNumber);
-                continue;
-            }
-
-            trigger.key = intToKeyCodeAlpha(autoNumber);
-        }
-
-        if (autonumberText.gameObject == null)
-        {
-            label.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
-            label.text = label.text.Replace("{1}", response?.formattedText.text);
-        }
-
-        else
-        {
-            if (autoNumber < 0) autonumberText.text = "";
-            else if (autoNumber < 10) autonumberText.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
-            else autonumberText.text = _autoNumberFormat.Replace("{0}", $"{extraKeys[autoNumber - 10]}");
-            autonumberText.text.Replace("{1}", string.Empty);
-        }
-    }
-
-private bool DialogueEntryInvalid => response?.destinationEntry?.conditionsString?.Length != 0 &&
-                                         !Lua.IsTrue(response?.destinationEntry?.conditionsString);
-
-
-    
-    
-
-    public virtual void Refresh()
-    {
        
-        if (MenuPanelContainer.buttonTemplate == this) return;
+            if (MenuPanelContainer.buttonTemplate == this) return;
 
-        if (DialogueEntryInvalid)
-        {
-            if ( !Field.LookupBool(response?.destinationEntry?.fields, "Show If Invalid")) Destroy(gameObject);
-            
-            
-            if (Field.FieldExists(response?.destinationEntry?.fields, "Invalid Text"))
+            if (DialogueEntryInvalid)
             {
-                var invalidText = Field.LookupValue(response?.destinationEntry?.fields, "Invalid Text");
+                if ( !Field.LookupBool(response?.destinationEntry?.fields, "Show If Invalid")) Destroy(gameObject);
+            
+            
+                if (Field.FieldExists(response?.destinationEntry?.fields, "Invalid Text"))
+                {
+                    var invalidText = Field.LookupValue(response?.destinationEntry?.fields, "Invalid Text");
                 
-                label.text = invalidText;
-            }
-        } 
+                    label.text = invalidText;
+                }
+            } 
         
-        SetAutonumber();
-    }
-    
-  
-
- 
-    protected virtual void OnEnable()
-    {
-        Refresh();
-    
-    }
-    
-    private void OnDisable()
-    {
-      if (this != MenuPanelContainer.buttonTemplate) Destroy(gameObject);
-      
-    }
-    
-   
-    public virtual void OnPointerEnter(PointerEventData eventData)
-    {
-        
-        _hoveredButton = this;
-        Refresh();
-       
-    }
-
-    public virtual void OnPointerExit(PointerEventData eventData)
-    {
-        Refresh();
-        
-    }
-    
-
-
-    public virtual void OnPointerClick(PointerEventData eventData)
-    {
-       
+            SetAutonumber();
+        }
     }
 }
