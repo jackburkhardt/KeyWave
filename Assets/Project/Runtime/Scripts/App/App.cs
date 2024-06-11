@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KeyWave.Runtime.Scripts.AssetLoading;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.SaveSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -38,11 +39,15 @@ namespace Project.Runtime.Scripts.App
             DontDestroyOnLoad(this.gameObject);
             _instance = this;
             if (Camera.main != null) Camera.main.backgroundColor = Color.black;
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            BrowserInterface.getOccupiedSaveSlots();
+            #endif
         }
 
-        public void BeginGame() => StartCoroutine(BeginGameSequence());
+        public void BeginGame() => StartCoroutine(BeginGameSequence(-1));
+        public void BeginGame(int slot) => StartCoroutine(BeginGameSequence(slot));
 
-        private IEnumerator BeginGameSequence()
+        private IEnumerator BeginGameSequence(int slot)
         {
             #if !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
@@ -53,9 +58,15 @@ namespace Project.Runtime.Scripts.App
                 yield return null;
             }
             
-            if (PixelCrushers.SaveSystem.HasSavedGameInSlot(1))
+            if (PixelCrushers.SaveSystem.HasSavedGameInSlot(slot))
             {
-                PixelCrushers.SaveSystem.LoadFromSlot(1);
+                var data = PixelCrushers.SaveSystem.storer.RetrieveSavedGameData(slot);
+                #if !UNITY_EDITOR
+                yield return new WaitUntil(() => WebDataStorer.saveDataReady);
+                PixelCrushers.SaveSystem.LoadGame(WebDataStorer.saveData);
+                #else
+                PixelCrushers.SaveSystem.LoadGame(data);
+                #endif
             }
             else
             {
@@ -93,11 +104,8 @@ namespace Project.Runtime.Scripts.App
         
         private IEnumerator LoadSceneHandler(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? loadingScreenType = LoadingScreen.LoadingScreenType.Default, bool? unloadLoadingScreen = true)
         {
-            
             isLoading = true;
-            
-            
-            
+
             var LoadingScreen = FindObjectOfType<LoadingScreen>();
             
             OnLoadStart?.Invoke();
@@ -117,9 +125,7 @@ namespace Project.Runtime.Scripts.App
             }
 
             else Debug.LogError("Unable to get the canvas group for the loading screen!");
-            
-            
-        
+
             if (sceneToUnload != "") {
         
                 var unloadCurrentScene = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(sceneToUnload));
@@ -129,9 +135,7 @@ namespace Project.Runtime.Scripts.App
                     yield return null;
                 }
             }
-            
-           
-        
+
             var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
 
             while (!newScene.isDone || !AddressableLoader.IsQueueEmpty()) yield return null;
@@ -152,9 +156,6 @@ namespace Project.Runtime.Scripts.App
                 OnLoadEnd?.Invoke();
                
             }
-            
-            
-
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using PixelCrushers;
 using Project.Runtime.Scripts.App;
@@ -7,13 +8,17 @@ namespace Project.Runtime.Scripts.SaveSystem
 {
     public class WebDataStorer : SavedGameDataStorer
     {
+        public static List<int> occupiedSlots = new List<int>();
+        public static bool saveDataReady = false;
+        public static SavedGameData saveData;
+        
         public override bool HasDataInSlot(int slotNumber)
         {
 #if UNITY_EDITOR
             // check if file exists
             return System.IO.File.Exists(Application.dataPath + "/DebugSaves/" + slotNumber + ".json");
 #elif UNITY_WEBGL
-            return BrowserInterface.saveGameExists(slotNumber);
+            return occupiedSlots.Contains(slotNumber);
 #endif
         }
 
@@ -39,7 +44,9 @@ namespace Project.Runtime.Scripts.SaveSystem
             }
             return JsonUtility.FromJson<SavedGameData>(System.IO.File.ReadAllText(Application.dataPath + "/DebugSaves/" + slotNumber + ".json"));
 #elif UNITY_WEBGL
-            return JsonConvert.DeserializeObject<SavedGameData>(BrowserInterface.getSaveGame(slotNumber));
+            saveDataReady = false;
+            BrowserInterface.getSaveGame(slotNumber);
+            return null;
 #endif
         }
 

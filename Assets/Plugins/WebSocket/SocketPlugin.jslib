@@ -8,8 +8,8 @@ var SocketPlugin = {
     sendSaveGame: function(slot, data){
         window.dispatchEvent(new CustomEvent("putSaveGame", {detail: {slot: slot, data: data}}));
     },
-    saveGameExists: function(slot){
-        window.dispatchEvent(new CustomEvent("saveGameExists", {detail:{slot: slot}}));
+    getOccupiedSaveSlots: function(){
+        window.dispatchEvent(new CustomEvent("getOccupiedSaveSlots"));
     },
     getSaveGame: function(slot){
         window.dispatchEvent(new CustomEvent("getSaveGame", {detail:{slot: slot}}));
