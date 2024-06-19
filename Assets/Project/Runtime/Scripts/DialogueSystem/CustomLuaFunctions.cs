@@ -58,7 +58,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(CompletedActionQuestCount), this, SymbolExtensions.GetMethodInfo(() => CompletedActionQuestCount()));
             Lua.RegisterFunction(nameof(LocationETA), this, SymbolExtensions.GetMethodInfo(() => LocationETA(string.Empty)));
             Lua.RegisterFunction(nameof(LocationDistanceInMinutes), this, SymbolExtensions.GetMethodInfo(() => LocationDistanceInMinutes(string.Empty)));
-      
+            Lua.RegisterFunction(nameof(SetExclusiveQuestEntryState), this , SymbolExtensions.GetMethodInfo(() => SetExclusiveQuestEntryState(string.Empty, 0, string.Empty)));
         }
 
         private void DeregisterLuaFunctions()
@@ -88,6 +88,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(CompletedActionQuestCount));
             Lua.UnregisterFunction(nameof(LocationETA));
             Lua.UnregisterFunction(nameof(LocationDistanceInMinutes));
+            Lua.UnregisterFunction(nameof(SetExclusiveQuestEntryState));
         }
 
 
@@ -290,6 +291,20 @@ namespace Project.Runtime.Scripts.DialogueSystem
         {
             var playerLocation = Location.FromString(location);
             return playerLocation.TravelTime / 60;
+        }
+
+        public void SetExclusiveQuestEntryState(string questName, double entry, string questState)
+        {
+            
+            for (int i = 1; i <= QuestLog.GetQuestEntryCount(questName); i++)
+            {
+                if (i == (int)entry) QuestLog.SetQuestEntryState(questName, i, questState);
+                else
+                {
+                    if (QuestLog.GetQuestEntryState(questName, i) != QuestState.Active) continue;
+                    QuestLog.SetQuestEntryState(questName, i, QuestState.Success);
+                }
+            }
         }
     }
 }

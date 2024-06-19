@@ -1561,11 +1561,15 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
-      value: Get to know your competition.
+      value: The State of C&A
       type: 0
       typeString: CustomFieldType_Text
     - title: Group
       value: Main Task
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: 'Entry 1 '
+      value: jhh
       type: 0
       typeString: CustomFieldType_Text
   - id: 38
@@ -1623,7 +1627,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
-      value: Obtain your store's financial history.
+      value: Coin Chronicle
       type: 0
       typeString: CustomFieldType_Text
     - title: Entry 2 State
@@ -1673,7 +1677,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
-      value: Find the former manager.
+      value: The Path to Succession
       type: 0
       typeString: CustomFieldType_Text
     - title: Trackable
@@ -1771,7 +1775,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Display Name
-      value: Get a fresh new look.
+      value: Fresh Look
       type: 0
       typeString: CustomFieldType_Text
     - title: Trackable
@@ -1836,6 +1840,30 @@ MonoBehaviour:
       value: Main Task
       type: 0
       typeString: CustomFieldType_Text
+    - title: Display Name
+      value: The Old Timer
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry Count
+      value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 1 State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 1
+      value: Give Douglas a phone call.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Entry 2
+      value: Call Douglas when he's available.
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 116
     fields:
     - title: Pictures
@@ -1884,6 +1912,10 @@ MonoBehaviour:
       typeString: CustomFieldType_Boolean
     - title: Group
       value: Main Task
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Display Name
+      value: The Big Boss
       type: 0
       typeString: CustomFieldType_Text
   - id: 31
@@ -36680,7 +36712,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: '{{typed}}'
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -36714,7 +36746,7 @@ MonoBehaviour:
       - originConversationID: 77
         originDialogueID: 1
         destinationConversationID: 77
-        destinationDialogueID: 2
+        destinationDialogueID: 91
         isConnector: 0
         priority: 2
       conditionsString: BeforeTimeslot("07:00")  == true
@@ -36724,8 +36756,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1397.1659
-        y: 233.8743
+        x: 1512.9568
+        y: 244.90201
         width: 160
         height: 30
     - id: 2
@@ -36739,7 +36771,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 15
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -36747,7 +36779,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: Call again later.
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -36799,8 +36831,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1938.4535
-        y: 715.39825
+        x: 1961.776
+        y: 735.6157
         width: 160
         height: 30
     - id: 3
@@ -36954,8 +36986,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1885.5044
-        y: 237.07025
+        x: 2041.7307
+        y: 242.5841
         width: 160
         height: 30
     - id: 36
@@ -40627,7 +40659,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1617.0994
+        x: 1615.4518
         y: 734.5159
         width: 160
         height: 30
@@ -41087,9 +41119,84 @@ MonoBehaviour:
         y: 267.7649
         width: 160
         height: 30
+    - id: 91
+      fields:
+      - title: Title
+        value: SetQuestEntryState
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 15
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 77
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Passthrough
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 91
+        destinationConversationID: 77
+        destinationDialogueID: 2
+        isConnector: 0
+        priority: 2
+      conditionsString: CurrentQuestEntryState("Main/MeetDouglasFischer", 1) == "active"
+      userScript: SetExclusiveQuestEntryState("Main/MeetDouglasFischer", 2, "active")
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1715.8458
+        y: 482.39154
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 779.8361, y: 126.84407}
-    canvasZoom: 0.54408383
+    canvasScrollPosition: {x: 1322.7104, y: 55.439484}
+    canvasZoom: 0.60692596
   - id: 78
     fields:
     - title: Title
@@ -61459,7 +61566,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 286.33826, y: 165.53635}
+    canvasScrollPosition: {x: 276.9491, y: 153.01743}
     canvasZoom: 0.95854974
   - id: 99
     fields:
