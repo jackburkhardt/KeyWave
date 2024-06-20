@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 namespace Project.Runtime.Scripts.App
 {
-    public sealed class App : MonoBehaviour
+    public class App : MonoBehaviour
     {
         private static App _instance;
         private static string playerID;
@@ -39,37 +39,51 @@ namespace Project.Runtime.Scripts.App
 
         private void Awake()
         {
-            DontDestroyOnLoad(this.gameObject);
-            _instance = this;
+            if (_instance == null)
+            {
+                _instance = this;
+                Debug.Log(this.GetInstanceID());
+                DontDestroyOnLoad(this.gameObject);
+            }
+            else if (_instance != this)
+            {
+                Destroy(this);
+            }
+            
             if (Camera.main != null) Camera.main.backgroundColor = Color.black;
-#if UNITY_WEBGL && !UNITY_EDITOR
-            BrowserInterface.getOccupiedSaveSlots();
-#endif
         }
 
-        public void BeginGame() => StartCoroutine(BeginGameSequence(-1));
-        public void BeginGame(int slot) => StartCoroutine(BeginGameSequence(slot));
+        private void Start()
+        {
+            SaveDataStorer.RetrieveSavedGameData();
+        }
 
-        private IEnumerator BeginGameSequence(int slot)
+        public void StartNewGame()
+        {
+            StartCoroutine(BeginGameSequence(true));
+        }
+
+        public void ContinueGame()
+        {
+            StartCoroutine(BeginGameSequence(false));
+        }
+
+        private IEnumerator BeginGameSequence(bool newGame)
         {
 #if !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
 #endif
             yield return LoadSceneButKeepLoadingScreen("Base", sceneToUnload:"StartMenu", type: LoadingScreen.LoadingScreenType.Black);
+            Debug.Log("routine end");
             while (!DialogueManager.Instance.isInitialized)
             {
                 yield return null;
             }
             
-            if (PixelCrushers.SaveSystem.HasSavedGameInSlot(slot))
+            if (!newGame)
             {
-                var data = PixelCrushers.SaveSystem.storer.RetrieveSavedGameData(slot);
-#if !UNITY_EDITOR
-                yield return new WaitUntil(() => WebDataStorer.saveDataReady);
-                PixelCrushers.SaveSystem.LoadGame(WebDataStorer.saveData);
-#else
+                var data = SaveDataStorer.RetrieveSavedGameData();
                 PixelCrushers.SaveSystem.LoadGame(data);
-#endif
             }
             else
             {
@@ -80,9 +94,12 @@ namespace Project.Runtime.Scripts.App
 
         private void SendPlayerEvent(PlayerEvent e)
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            BrowserInterface.sendPlayerEvent(e.ToString());
-#endif
+            if (e.EventType == "quest_state_change")
+            {
+    #if UNITY_WEBGL && !UNITY_EDITOR
+                BrowserInterface.sendPlayerEvent(e.ToString());
+    #endif
+            }
         }
 
         /// <summary>
