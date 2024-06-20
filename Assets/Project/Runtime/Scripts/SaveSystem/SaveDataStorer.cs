@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using PixelCrushers;
 using Project.Runtime.Scripts.App;
 using UnityEngine;
@@ -20,14 +21,7 @@ namespace Project.Runtime.Scripts.SaveSystem
         public static void WebStoreGameData(SavedGameData savedGameData)
         {
             var saveDataWithMeta = new SaveGameMetadata(DateTime.Now, savedGameData);
-            
-#if UNITY_EDITOR
-            if (!Directory.Exists(Application.dataPath + "/DebugSaves")) 
-            {
-                Directory.CreateDirectory(Application.dataPath + "/DebugSaves");
-            }
-            File.WriteAllTextAsync(Application.dataPath + "/DebugSaves/game.json", JsonConvert.SerializeObject(saveDataWithMeta));
-#elif UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.sendSaveGame(JsonConvert.SerializeObject(saveDataWithMeta));
 #endif
         }
@@ -40,15 +34,7 @@ namespace Project.Runtime.Scripts.SaveSystem
         {
             var saveDataWithMeta = new SaveGameMetadata(DateTime.Now, savedGameData);
             
-#if UNITY_EDITOR
-            if (!Directory.Exists(Application.dataPath + "/DebugSaves"))
-            {
-                Directory.CreateDirectory(Application.dataPath + "/DebugSaves");
-            }
-            File.WriteAllTextAsync(Application.dataPath + "/DebugSaves/game.json", JsonConvert.SerializeObject(saveDataWithMeta));
-#elif UNITY_WEBGL
-            File.WriteAllTextAsync(Application.persistentDataPath + "/game.json", JsonConvert.SerializeObject(saveDataWithMeta));
-#endif
+            PlayerPrefs.SetString("latestLocalSave", JsonConvert.SerializeObject(saveDataWithMeta));
         }
 
         /// <summary>
@@ -57,17 +43,12 @@ namespace Project.Runtime.Scripts.SaveSystem
         /// <returns></returns>
         public static SavedGameData RetrieveSavedGameData()
         {
-#if UNITY_EDITOR
-            if (!Directory.Exists(Application.dataPath + "/DebugSaves"))
-            {
-                Directory.CreateDirectory(Application.dataPath + "/DebugSaves");
-            }
-            return JsonConvert.DeserializeObject<SaveGameMetadata>(File.ReadAllText(Application.dataPath + "/DebugSaves/game.json")).state;
-#elif UNITY_WEBGL
 
-            if (File.Exists($"{Application.persistentDataPath}/game.json"))
+            if (PlayerPrefs.HasKey("latestLocalSave"))
             {
-                var localSave = JsonConvert.DeserializeObject<SaveGameMetadata>(File.ReadAllText($"{Application.persistentDataPath}/game.json"));
+                var saveText = PlayerPrefs.GetString("latestLocalSave");
+                Debug.Log("Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
+                var localSave = JsonConvert.DeserializeObject<SaveGameMetadata>(saveText);
                 if (localSave.last_played > LatestSaveData.last_played)
                 {
                     LatestSaveData = localSave;
@@ -77,18 +58,17 @@ namespace Project.Runtime.Scripts.SaveSystem
             
             if (!SaveDataExists)
             {
-                Debug.LogError("No save game data found!");
+                Debug.LogWarning("No save game data found!");
             }
 
             return LatestSaveData.state;
-#endif
         }
    }
     
     public struct SaveGameMetadata
     {
-        public readonly DateTime last_played;
-        public readonly SavedGameData state;
+        public DateTime last_played;
+        public SavedGameData state;
         
         public SaveGameMetadata(DateTime lastPlayed, SavedGameData state)
         {

@@ -42,7 +42,6 @@ namespace Project.Runtime.Scripts.App
             if (_instance == null)
             {
                 _instance = this;
-                Debug.Log(this.GetInstanceID());
                 DontDestroyOnLoad(this.gameObject);
             }
             else if (_instance != this)
@@ -74,7 +73,6 @@ namespace Project.Runtime.Scripts.App
             BrowserInterface.canYouHearMe();
 #endif
             yield return LoadSceneButKeepLoadingScreen("Base", sceneToUnload:"StartMenu", type: LoadingScreen.LoadingScreenType.Black);
-            Debug.Log("routine end");
             while (!DialogueManager.Instance.isInitialized)
             {
                 yield return null;
