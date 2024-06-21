@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
+using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.UI;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -140,6 +142,8 @@ namespace Project.Runtime.Scripts.Manager
 
         public static void OnQuestStateChange(string questName)
         {
+            SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
+
             var quest = DialogueUtility.GetQuestByName(questName);
             var state = QuestLog.GetQuestState(questName);
             var points = DialogueUtility.GetPointsFromField(quest.fields);
