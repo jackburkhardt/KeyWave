@@ -13,6 +13,18 @@ namespace Project.Runtime.Scripts.UI
         public static bool Frozen => isFrozen && globalFreeze || globalFreeze;
 
 
+        public void OnDialogueSystemPause()
+        {
+            //   if (!Animator!.GetBool("Active")) return;
+            GlobalFreeze();
+        }
+
+        public void OnDialogueSystemUnpause()
+        {
+            GlobalUnfreeze();
+        }
+
+        
         public float AngleCenteredSouth => transform.rotation.eulerAngles.z - 270;
 
         // Update is called once per frame

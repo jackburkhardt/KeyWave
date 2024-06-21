@@ -68,6 +68,17 @@ namespace Project.Runtime.Scripts.UI
       
         }
 
+        public void OnDialogueSystemPause()
+        {
+         //   if (!Animator!.GetBool("Active")) return;
+            WatchHandCursor.GlobalFreeze();
+            }
+
+        public void OnDialogueSystemUnpause()
+        {
+            WatchHandCursor.GlobalUnfreeze();
+          }
+
 
         public void OnChoiceSelection()
         {

@@ -176,6 +176,16 @@ namespace PixelCrushers.DialogueSystem
             base.OnDisable();
             Stop();
         }
+        
+        public void OnDialogueSystemPause()
+        {
+            Pause();
+        }
+        
+        public void OnDialogueSystemUnpause()
+        {
+            Unpause();
+        }
 
         /// <summary>
         /// Pauses the effect.

@@ -30,7 +30,7 @@ namespace Project.Runtime.Scripts.UI
 
         private void OnEnable()
         {
-            FadeIn();
+            
         }
 
         public void FadeIn()
