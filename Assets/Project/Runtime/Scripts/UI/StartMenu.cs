@@ -26,15 +26,15 @@ namespace Project.Runtime.Scripts.UI
         
         public void TryStartNewGame()
         {
-            if (SaveDataStorer.SaveDataExists)
-            {
-                _saveExistsWarningPopup.SetActive(true);
-                _saveExistsWarningTimestamp.text = SaveDataStorer.LatestSaveData.last_played.ToString("MM/dd/yyyy HH:mm");
-            }
-            else
+            if (_saveExistsWarningTimestamp == null || !SaveDataStorer.SaveDataExists)
             {
                 StartNewGame();
+                return;
             }
+            
+            _saveExistsWarningPopup.SetActive(true);
+            _saveExistsWarningTimestamp.text = SaveDataStorer.LatestSaveData.last_played.ToString("MM/dd/yyyy HH:mm");
+           
         }
         
         public void StartNewGame()
