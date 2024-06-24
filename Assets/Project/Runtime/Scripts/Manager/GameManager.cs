@@ -8,6 +8,7 @@ using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.UI;
+using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
 using UnityEngine;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
@@ -142,11 +143,29 @@ namespace Project.Runtime.Scripts.Manager
 
         public static void OnQuestStateChange(string questName)
         {
+            Debug.Log("quest state change");
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
 
-            var quest = DialogueUtility.GetQuestByName(questName);
+            var quest = DialogueManager.masterDatabase.GetQuest(questName);
             var state = QuestLog.GetQuestState(questName);
-            var points = DialogueUtility.GetPointsFromField(quest.fields);
+            var points = DialogueUtility.GetPointsFromField(quest!.fields);
+            
+            Debug.Log("Quest State Change: " + questName + " " + state);
+
+            if (quest.Group == "Main Task")
+            {
+                Debug.Log("Main Task");
+                if (state == QuestState.Active)
+                {
+                    Debug.Log("Setting time start");
+                    DialogueLua.SetQuestField(questName, "Time Start", Clock.CurrentTime);
+                }
+                
+                else if (state == QuestState.Success)
+                {
+                    DialogueLua.SetQuestField(questName, "Time Complete", Clock.CurrentTime);
+                }
+            }
 
             if (state == QuestState.Success && points.Points > 0)
             {

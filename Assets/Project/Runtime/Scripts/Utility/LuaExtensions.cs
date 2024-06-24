@@ -162,6 +162,16 @@ namespace Project.Runtime.Scripts.Utility
             if (group != null) quests = quests.FindAll(i => i.Group == group);
             return quests;
         }
+        
+        public static Item? GetQuest(this DialogueDatabase database, string questName)
+        {
+            return database.items.Find(i => i.Name == questName);
+        }
+        
+        public static Field? AssignedField(this Item item, string fieldName)
+        {
+            return Field.Lookup(item.fields, fieldName);
+        }
 
         public static DialogueEntry? GetNextDialogueEntry(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
         {
