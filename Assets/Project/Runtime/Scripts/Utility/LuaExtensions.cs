@@ -168,9 +168,9 @@ namespace Project.Runtime.Scripts.Utility
             return database.items.Find(i => i.Name == questName);
         }
         
-        public static Field? AssignedField(this Item item, string fieldName)
+        public static Field? GetField(this Item item, string fieldName)
         {
-            return Field.Lookup(item.fields, fieldName);
+            return item.fields.Find(f => f.title == fieldName);
         }
 
         public static DialogueEntry? GetNextDialogueEntry(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)

@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class CustomUIQuestLogWindow : StandardUIQuestLogWindow
 {
-    [SerializeField] private StandardUITextTemplate _questTimeStartTemplate;
-    [SerializeField] private StandardUITextTemplate _questTimeCompleteTemplate;
+    [SerializeField] private StandardUITextTemplateList _questTimeTemplate;
+    [SerializeField] private StandardUITextTemplateList _previousQuestEntriesTemplate;
     
     // Start is called before the first frame update
     public override bool IsQuestVisible(string questTitle)
@@ -19,8 +19,7 @@ public class CustomUIQuestLogWindow : StandardUIQuestLogWindow
     {
         base.InitializeTemplates();
         
-        Tools.SetGameObjectActive(_questTimeStartTemplate.gameObject, false);
-        Tools.SetGameObjectActive(_questTimeCompleteTemplate.gameObject, false);
+        Tools.SetGameObjectActive(_questTimeTemplate.gameObject, false);
     }
     
     protected override void RepaintSelectedQuest(QuestInfo quest)
@@ -31,33 +30,35 @@ public class CustomUIQuestLogWindow : StandardUIQuestLogWindow
             // Title:
             var titleInstance = detailsPanelContentManager.Instantiate<StandardUITextTemplate>(questHeadingTextTemplate);
             titleInstance.Assign(quest.Heading.text);
+            Debug.Log(quest.Heading.text);
             detailsPanelContentManager.Add(titleInstance, questDetailsContentContainer);
-            
-            // Time
 
-            if (!QuestLog.IsQuestUnassigned(quest.Title))
-            {
-                var timeStartInstance = detailsPanelContentManager.Instantiate<StandardUITextTemplate>(_questTimeStartTemplate);
-                Debug.Log(DialogueManager.masterDatabase.GetQuest(quest.Title)!.FieldExists("Time Start"));
-                var timeStartText =
-                    $"Time Started: {DialogueManager.masterDatabase.GetQuest(quest.Title)?.AssignedField("Time Start").value}";
-                timeStartInstance.Assign(timeStartText);
-                detailsPanelContentManager.Add(timeStartInstance, questDetailsContentContainer);
-            }
             
-            if (QuestLog.IsQuestSuccessful(quest.Title))
-            {
-                var timeCompleteInstance = detailsPanelContentManager.Instantiate<StandardUITextTemplate>(_questTimeCompleteTemplate);
-                var timeCompleteText =
-                    $"Time Completed: {DialogueManager.masterDatabase.GetQuest(quest.Title)?.AssignedField("Time Complete").value}";
-                timeCompleteInstance.Assign(timeCompleteText);
-                detailsPanelContentManager.Add(timeCompleteInstance, questDetailsContentContainer);
-            }
+           
+            
+    
+            
+            
            
             // Description:
             var descriptionInstance = detailsPanelContentManager.Instantiate<StandardUITextTemplate>(questDescriptionTextTemplate);
             descriptionInstance.Assign(quest.Description.text);
             detailsPanelContentManager.Add(descriptionInstance, questDetailsContentContainer);
+            
+            
+            //Time
+            var timeInstance = detailsPanelContentManager.Instantiate<StandardUITextTemplateList>(_questTimeTemplate);
+
+            var timeTexts = new List<string>();
+            var timeStartText =
+                $"Time Started: {DialogueLua.GetQuestField(quest.Title, "Time Start").AsString}";
+            timeTexts.Add(timeStartText);
+            var timeCompleteText =  $"Time Finished:  {DialogueLua.GetQuestField(quest.Title, "Time Complete").AsString}";
+            if (QuestLog.IsQuestSuccessful(quest.Title)) timeTexts.Add(timeCompleteText);
+            
+            timeInstance.Assign(timeTexts);
+            detailsPanelContentManager.Add(timeInstance, questDetailsContentContainer);
+            
 
             // Entries:
             for (int i = 0; i < quest.Entries.Length; i++)
