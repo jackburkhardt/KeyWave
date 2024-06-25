@@ -14,14 +14,20 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private GameObject _saveExistsWarningPopup;
         [SerializeField] private TextMeshProUGUI _saveExistsWarningTimestamp;
 
-        private void Awake()
+        private void OnEnable()
         {
-            BrowserInterface.OnSaveGameDataReceived += OnSaveDataReceived;
+           SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
+        }
+
+        private void Start()
+        {
+            if (SaveDataStorer.SaveDataExists) OnSaveDataReceived(SaveDataStorer.LatestSaveData);
         }
 
         private void OnSaveDataReceived(SaveGameMetadata metadata)
         {
             _continueButton.SetActive(true);
+            _continueTimestamp.text = metadata.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
         }
         
         public void TryStartNewGame()
@@ -33,8 +39,9 @@ namespace Project.Runtime.Scripts.UI
             }
             
             _saveExistsWarningPopup.SetActive(true);
-            _saveExistsWarningTimestamp.text = SaveDataStorer.LatestSaveData.last_played.ToString("MM/dd/yyyy HH:mm");
-           
+            string saveTimestamp = SaveDataStorer.LatestSaveData.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
+            _saveExistsWarningTimestamp.text =
+                $"Existing progress found! Last played {saveTimestamp}.\nStart a new game and overwrite this data?";
         }
         
         public void StartNewGame()
@@ -49,7 +56,7 @@ namespace Project.Runtime.Scripts.UI
         
         private void OnDestroy()
         {
-            BrowserInterface.OnSaveGameDataReceived -= OnSaveDataReceived;
+            SaveDataStorer.OnSaveGameDataReady -= OnSaveDataReceived;
         }
     }
 }

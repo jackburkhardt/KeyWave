@@ -12,6 +12,10 @@ namespace Project.Runtime.Scripts.SaveSystem
     public static class SaveDataStorer
     {
         public static SaveGameMetadata LatestSaveData;
+        public delegate void SaveGameDataDelegate(SaveGameMetadata metadata);
+        public static event SaveGameDataDelegate OnSaveGameDataReady;
+        public static void FireSaveGameReadyEvent(SaveGameMetadata data) => OnSaveGameDataReady?.Invoke(data);
+        
         public static bool SaveDataExists => LatestSaveData.state != null;
 
         /// <summary>
@@ -52,6 +56,7 @@ namespace Project.Runtime.Scripts.SaveSystem
                 if (localSave.last_played > LatestSaveData.last_played)
                 {
                     LatestSaveData = localSave;
+                    OnSaveGameDataReady?.Invoke(localSave);
                     return localSave.state;
                 }
             }

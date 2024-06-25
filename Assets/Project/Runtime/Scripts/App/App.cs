@@ -80,8 +80,7 @@ namespace Project.Runtime.Scripts.App
             
             if (!newGame)
             {
-                var data = SaveDataStorer.RetrieveSavedGameData();
-                PixelCrushers.SaveSystem.LoadGame(data);
+                PixelCrushers.SaveSystem.LoadGame(SaveDataStorer.LatestSaveData.state);
             }
             else
             {
