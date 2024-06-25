@@ -20,8 +20,6 @@ namespace Project.Runtime.Scripts.UI.Map
             _text.text = location.unlocked ? location.Name : "???";
             GetComponent<Button>().interactable = location.unlocked;
             _youAreHere.gameObject.SetActive(Location.PlayerLocation == location);
-
-
         }
     }
 }
