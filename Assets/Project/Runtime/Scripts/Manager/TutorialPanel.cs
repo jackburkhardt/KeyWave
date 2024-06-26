@@ -174,6 +174,11 @@ namespace Project.Runtime.Scripts.Manager
           
         }
 
+        public static void Play(string tutorialName)
+        {
+            instance.PlayTutorial(tutorialName);
+        }
+
         // Update is called once per frame
     }
 }

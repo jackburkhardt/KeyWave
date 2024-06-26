@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Project.Runtime.Scripts.Manager;
@@ -5,6 +6,7 @@ using Project.Runtime.Scripts.ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Project.Runtime.Scripts.UI.Map
 {
@@ -40,6 +42,16 @@ namespace Project.Runtime.Scripts.UI.Map
             _objectivePrefab.gameObject.SetActive(false);
         }
 
+        private void OnLoad()
+        {
+            if (Clock.CurrentTimeRaw >= Clock.ToSeconds("18:00"))
+            {
+                TutorialPanel.Play("SleepTutorial");
+            }
+        }
+
+  
+
         private void Update()
         {
             if (!_standby) return;
@@ -64,9 +76,6 @@ namespace Project.Runtime.Scripts.UI.Map
             
                 _direction = new Vector3(newXdirection, newYdirection, 0f).normalized;
             }
-        
-        
-        
         }
 
         private void SpawnPins()
@@ -79,7 +88,6 @@ namespace Project.Runtime.Scripts.UI.Map
             }
 
             pinPrefab.gameObject.SetActive(false);
-
         }
 
         public void FreezeInfoPanel()
@@ -117,7 +125,6 @@ namespace Project.Runtime.Scripts.UI.Map
         private void ShowConfirmationButtons() {
             _confirmButton.gameObject.SetActive(true);
             _cancelButton.gameObject.SetActive(true);
-            //_returnButton.gameObject.SetActive(false);
         }
 
         public void ReturnButton()
@@ -130,7 +137,7 @@ namespace Project.Runtime.Scripts.UI.Map
         {
             _confirmButton.gameObject.SetActive(false);
             _cancelButton.gameObject.SetActive(false);
-            //_returnButton.gameObject.SetActive(true);
+            
         }
 
         public void DisableCircularButtonsAndCursor()

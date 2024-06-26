@@ -15,8 +15,6 @@ namespace Project.Runtime.Scripts.Events.Actions
         {
             if (DialogueUtility.CurrentDialogueEntry.id == 0) return; 
         
-        
-       
 
             if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Action"))
             {
