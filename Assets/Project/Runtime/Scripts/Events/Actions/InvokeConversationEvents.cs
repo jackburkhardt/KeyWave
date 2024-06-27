@@ -31,6 +31,8 @@ namespace Project.Runtime.Scripts.Events.Actions
             if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
             {
                 SaveDataStorer.LocalStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
+               
+               
             }
         
             //   Debug.Log("Current Node Duration: " + DialogueUtility.CurrentNodeDuration);

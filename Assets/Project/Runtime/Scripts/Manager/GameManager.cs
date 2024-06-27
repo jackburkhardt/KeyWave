@@ -143,18 +143,15 @@ namespace Project.Runtime.Scripts.Manager
 
         public static void OnQuestStateChange(string questName)
         {
-            Debug.Log("quest state change");
-            SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
+          SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
 
             var quest = DialogueManager.masterDatabase.GetQuest(questName);
             var state = QuestLog.GetQuestState(questName);
             var points = DialogueUtility.GetPointsFromField(quest!.fields);
             
-            Debug.Log("Quest State Change: " + questName + " " + state);
-
             if (quest.Group == "Main Task")
             {
-                Debug.Log("Main Task");
+           
                 if (state == QuestState.Active)
                 {
                     Debug.Log("Setting time start");

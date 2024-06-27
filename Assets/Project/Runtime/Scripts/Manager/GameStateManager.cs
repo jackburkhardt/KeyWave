@@ -115,8 +115,7 @@ namespace Project.Runtime.Scripts.Manager
             switch (gameState.type)
             {
                 case GameState.Type.Normal:
-                    Debug.Log("Adding time: " + playerEvent.Duration);
-                    gameState.Clock += playerEvent.Duration;
+                gameState.Clock += playerEvent.Duration;
                     break;
                 case GameState.Type.EndOfDay:
                     gameState.Clock = Clock.DailyLimit;

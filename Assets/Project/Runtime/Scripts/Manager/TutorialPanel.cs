@@ -100,7 +100,7 @@ namespace Project.Runtime.Scripts.Manager
        
             SetupTutorial();
         
-            Debug.Log("Show");
+     
        
         }
 
