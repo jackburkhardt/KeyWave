@@ -14,14 +14,9 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private GameObject _saveExistsWarningPopup;
         [SerializeField] private TextMeshProUGUI _saveExistsWarningTimestamp;
 
-        private void OnEnable()
+        private void Awake()
         {
            SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
-        }
-
-        private void Start()
-        {
-            if (SaveDataStorer.SaveDataExists) OnSaveDataReceived(SaveDataStorer.LatestSaveData);
         }
 
         private void OnSaveDataReceived(SaveGameMetadata metadata)
@@ -30,9 +25,14 @@ namespace Project.Runtime.Scripts.UI
             _continueTimestamp.text = metadata.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
         }
         
+        public void BeginSaveRetrieval()
+        {
+            SaveDataStorer.RetrieveSavedGameData();
+        }
+        
         public void TryStartNewGame()
         {
-            if (_saveExistsWarningTimestamp == null || !SaveDataStorer.SaveDataExists)
+            if (!SaveDataStorer.SaveDataExists)
             {
                 StartNewGame();
                 return;
@@ -41,7 +41,7 @@ namespace Project.Runtime.Scripts.UI
             _saveExistsWarningPopup.SetActive(true);
             string saveTimestamp = SaveDataStorer.LatestSaveData.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
             _saveExistsWarningTimestamp.text =
-                $"Existing progress found! Last played {saveTimestamp}.\nStart a new game and overwrite this data?";
+                $"Existing progress found! Last played: {saveTimestamp}.\nStart a new game and overwrite this data?";
         }
         
         public void StartNewGame()

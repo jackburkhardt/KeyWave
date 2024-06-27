@@ -224,6 +224,7 @@ namespace Project.Runtime.Scripts.Manager
 
                 DialogueManager.StartConversation($"{newLocation}/Base");
 
+                Debug.Log("current scene chaned to :" + newLocation);
                 gameState.current_scene = newLocation;
             
             

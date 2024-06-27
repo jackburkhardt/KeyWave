@@ -12,26 +12,11 @@ namespace Project.Runtime.Scripts.SaveSystem
     {
         public override string RecordData()
         {
-            /// This method should return a string that represents the data you want to save.
-            /// You can use SaveSystem.Serialize() to serialize a serializable object to a 
-            /// string. This will use the serializer component on the Save System GameObject,
-            /// which defaults to Unity's built-in JSON serialization. Remember that Unity
-            /// cannot directly serialize lists or arrays, so you must put them inside a
-            /// class.
-            /// 
-            /// If you use a class to hold the data, use SaveSystem.Serialize to return a 
-            /// serialized version:
-            
             return JsonConvert.SerializeObject(GameManager.instance.dailyReport);
         }
 
         public override void ApplyData(string s)
         {
-            /// This method should process the string representation of saved data and apply
-            /// it to the current state of the game. You can use SaveSystem.Deserialize()
-            /// to deserialize the string to an object that specifies the state to apply to
-            /// the game.
-
             if (string.IsNullOrEmpty(s))
             {
                 return;
@@ -43,12 +28,6 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override void ApplyDataImmediate()
         {
-            // If your Saver needs to pull data from the Save System immediately after
-            // loading a scene, instead of waiting for ApplyData to be called at its
-            // normal time, which may be some number of frames after the scene has started,
-            // it can implement this method. For efficiency, the Save System will not look up 
-            // the Saver's data; your method must look it up manually by calling 
-            // SaveSystem.savedGameData.GetData(key).
             
             var s = PixelCrushers.SaveSystem.currentSavedGameData.GetData("dayReport");
             if (string.IsNullOrEmpty(s))

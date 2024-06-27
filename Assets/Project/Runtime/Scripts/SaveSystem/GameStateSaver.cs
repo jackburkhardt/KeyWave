@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
+using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
 {
@@ -12,34 +13,21 @@ namespace Project.Runtime.Scripts.SaveSystem
     {
         public override string RecordData()
         {
-            /// This method should return a string that represents the data you want to save.
-            /// You can use SaveSystem.Serialize() to serialize a serializable object to a 
-            /// string. This will use the serializer component on the Save System GameObject,
-            /// which defaults to Unity's built-in JSON serialization. Remember that Unity
-            /// cannot directly serialize lists or arrays, so you must put them inside a
-            /// class.
-            /// 
-            /// If you use a class to hold the data, use SaveSystem.Serialize to return a 
-            /// serialized version:
-
-            return JsonConvert.SerializeObject(GameManager.gameState);
+            return JsonConvert.SerializeObject(GameStateManager.instance.gameState);
         }
 
         public override void ApplyData(string s)
         {
-            /// This method should process the string representation of saved data and apply
-            /// it to the current state of the game. You can use SaveSystem.Deserialize()
-            /// to deserialize the string to an object that specifies the state to apply to
-            /// the game.
-
             if (string.IsNullOrEmpty(s))
             {
                 return;
             }; // No data to apply.
-            GameState data = PixelCrushers.SaveSystem.Deserialize<GameState>(s);
+            GameState data = JsonConvert.DeserializeObject<GameState>(s);
+            Debug.Log(s);
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
             
+            Debug.Log("Loading scene (normal): " + data.current_scene);
             App.App.Instance.LoadScene(data.current_scene);
         }
 
@@ -62,6 +50,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
 
+            Debug.Log("Loading scene (immediate): " + data.current_scene);
             App.App.Instance.LoadScene(data.current_scene);
         }
 
