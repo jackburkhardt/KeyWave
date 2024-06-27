@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;

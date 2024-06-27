@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
+using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
 {
@@ -22,7 +23,9 @@ namespace Project.Runtime.Scripts.SaveSystem
             /// If you use a class to hold the data, use SaveSystem.Serialize to return a 
             /// serialized version:
 
-            return JsonConvert.SerializeObject(GameManager.gameState);
+            var jason = JsonUtility.ToJson(GameManager.gameState);
+            Debug.Log(jason);
+            return jason;
         }
 
         public override void ApplyData(string s)
@@ -36,7 +39,8 @@ namespace Project.Runtime.Scripts.SaveSystem
             {
                 return;
             }; // No data to apply.
-            GameState data = PixelCrushers.SaveSystem.Deserialize<GameState>(s);
+            GameState data = JsonUtility.FromJson<GameState>(s);
+            Debug.Log(s);
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
             

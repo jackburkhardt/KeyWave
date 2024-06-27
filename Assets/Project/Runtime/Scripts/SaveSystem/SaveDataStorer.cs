@@ -26,7 +26,7 @@ namespace Project.Runtime.Scripts.SaveSystem
         {
             var saveDataWithMeta = new SaveGameMetadata(DateTime.Now, savedGameData);
 #if UNITY_WEBGL && !UNITY_EDITOR
-            BrowserInterface.sendSaveGame(JsonConvert.SerializeObject(saveDataWithMeta));
+            //BrowserInterface.sendSaveGame(JsonConvert.SerializeObject(saveDataWithMeta));
 #endif
         }
 
@@ -38,7 +38,11 @@ namespace Project.Runtime.Scripts.SaveSystem
         {
             var saveDataWithMeta = new SaveGameMetadata(DateTime.Now, savedGameData);
             
-            PlayerPrefs.SetString("latestLocalSave", JsonConvert.SerializeObject(saveDataWithMeta));
+            Debug.Log("Attempting local save...");
+            string saveString = JsonUtility.ToJson(savedGameData);
+            Debug.Log(saveString);
+            PlayerPrefs.SetString("latestLocalSave", saveString);
+            PlayerPrefs.Save();
         }
 
         /// <summary>
@@ -52,7 +56,8 @@ namespace Project.Runtime.Scripts.SaveSystem
             {
                 var saveText = PlayerPrefs.GetString("latestLocalSave");
                 Debug.Log("Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
-                var localSave = JsonConvert.DeserializeObject<SaveGameMetadata>(saveText);
+                Debug.Log("Local save data: " + saveText);
+                var localSave = JsonUtility.FromJson<SaveGameMetadata>(saveText);
                 if (localSave.last_played > LatestSaveData.last_played)
                 {
                     LatestSaveData = localSave;
