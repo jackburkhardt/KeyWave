@@ -13,6 +13,7 @@ namespace Project.Runtime.Scripts.SaveSystem
     {
         public override string RecordData()
         {
+            //Debug.Log("Recorded: " +JsonConvert.SerializeObject(GameStateManager.instance.gameState));
             return JsonConvert.SerializeObject(GameStateManager.instance.gameState);
         }
 
@@ -23,11 +24,11 @@ namespace Project.Runtime.Scripts.SaveSystem
                 return;
             }; // No data to apply.
             GameState data = JsonConvert.DeserializeObject<GameState>(s);
-            Debug.Log(s);
+            //Debug.Log(s);
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
             
-            Debug.Log("Loading scene (normal): " + data.current_scene);
+            //Debug.Log("Loading scene (normal): " + data.current_scene);
             App.App.Instance.LoadScene(data.current_scene);
         }
 
@@ -50,7 +51,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
 
-            Debug.Log("Loading scene (immediate): " + data.current_scene);
+            //Debug.Log("Loading scene (immediate): " + data.current_scene);
             App.App.Instance.LoadScene(data.current_scene);
         }
 

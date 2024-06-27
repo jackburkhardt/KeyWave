@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
 {
-    public static class SaveDataStorer
+    public class SaveDataStorer : SavedGameDataStorer
     {
         private static SaveGameMetadata _latestSaveData;
         public static SaveGameMetadata LatestSaveData
@@ -46,8 +46,12 @@ namespace Project.Runtime.Scripts.SaveSystem
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
             
             Debug.Log("Attempting local save...");
-            string saveString = JsonConvert.SerializeObject(LatestSaveData); ;
+            string saveString = JsonConvert.SerializeObject(LatestSaveData);
+           // Debug.Log("Save string : " + saveString);
             File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
+#if UNITY_WEBGL && !UNITY_EDITOR
+            Application.ExternalEval("_JS_FileSystem_Sync();");
+#endif
         }
 
         /// <summary>
@@ -56,12 +60,11 @@ namespace Project.Runtime.Scripts.SaveSystem
         /// <returns></returns>
         public static void RetrieveSavedGameData()
         {
-
             if (File.Exists($"{Application.persistentDataPath}/save.json"))
             {
                 var saveText = File.ReadAllText($"{Application.persistentDataPath}/save.json");
                 Debug.Log("Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
-                //App.Utility.PipeToEditorAndOpen(saveText);
+                //Debug.Log("Local save: " + saveText);
                 var localSave = JsonConvert.DeserializeObject<SaveGameMetadata>(saveText);
                 if (localSave.last_played > LatestSaveData.last_played)
                 {
@@ -69,7 +72,27 @@ namespace Project.Runtime.Scripts.SaveSystem
                 }
             }
         }
-   }
+
+        public override bool HasDataInSlot(int slotNumber)
+        {
+            return slotNumber == 1;
+        }
+
+        public override void StoreSavedGameData(int slotNumber, SavedGameData savedGameData)
+        {
+            LocalStoreGameData(savedGameData);
+        }
+
+        public override SavedGameData RetrieveSavedGameData(int slotNumber)
+        {
+            return LatestSaveData.state;
+        }
+
+        public override void DeleteSavedGameData(int slotNumber)
+        {
+            throw new NotImplementedException();
+        }
+    }
     
     public struct SaveGameMetadata
     {

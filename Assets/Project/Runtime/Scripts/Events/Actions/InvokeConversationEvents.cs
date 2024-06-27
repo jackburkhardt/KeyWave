@@ -31,7 +31,7 @@ namespace Project.Runtime.Scripts.Events.Actions
         
             if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
             {
-                SaveDataStorer.LocalStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
+                PixelCrushers.SaveSystem.SaveToSlot(1);
                
                
             }
