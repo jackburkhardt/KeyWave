@@ -47,8 +47,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             
             Debug.Log("Attempting local save...");
             string saveString = JsonConvert.SerializeObject(LatestSaveData); ;
-            PlayerPrefs.SetString("latestLocalSave", saveString);
-            PlayerPrefs.Save();
+            File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
         }
 
         /// <summary>
@@ -58,9 +57,9 @@ namespace Project.Runtime.Scripts.SaveSystem
         public static void RetrieveSavedGameData()
         {
 
-            if (PlayerPrefs.HasKey("latestLocalSave"))
+            if (File.Exists($"{Application.persistentDataPath}/save.json"))
             {
-                var saveText = PlayerPrefs.GetString("latestLocalSave");
+                var saveText = File.ReadAllText($"{Application.persistentDataPath}/save.json");
                 Debug.Log("Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
                 //App.Utility.PipeToEditorAndOpen(saveText);
                 var localSave = JsonConvert.DeserializeObject<SaveGameMetadata>(saveText);

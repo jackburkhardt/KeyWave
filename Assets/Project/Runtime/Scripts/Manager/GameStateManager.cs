@@ -17,7 +17,7 @@ namespace Project.Runtime.Scripts.Manager
         public int business_score = 0;
 
 
-        public string current_scene = "";
+        public string current_scene = "Hotel";
         public int day = 1;
         public int local_savvy_score = 0;
 
