@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Newtonsoft.Json;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Events;
@@ -54,7 +55,8 @@ namespace Project.Runtime.Scripts.App
 
         private void Start()
         {
-            SaveDataStorer.RetrieveSavedGameData();
+            BrowserInterface.canYouHearMe();
+            BrowserInterface.unityReadyForData();
         }
 
         public void StartNewGame()
@@ -69,9 +71,6 @@ namespace Project.Runtime.Scripts.App
 
         private IEnumerator BeginGameSequence(bool newGame)
         {
-#if !UNITY_EDITOR
-            BrowserInterface.canYouHearMe();
-#endif
             yield return LoadSceneButKeepLoadingScreen("Base", sceneToUnload:"StartMenu", type: LoadingScreen.LoadingScreenType.Black);
             while (!DialogueManager.Instance.isInitialized)
             {
@@ -171,6 +170,13 @@ namespace Project.Runtime.Scripts.App
                 OnLoadEnd?.Invoke();
                
             }
+        }
+        
+        private static void WebSaveGameCallback(string jsonData)
+        {
+            Debug.Log("Got game state from web interface: " + jsonData);
+            SaveGameMetadata saveGameMetadata = JsonConvert.DeserializeObject<SaveGameMetadata>(jsonData);
+            SaveDataStorer.LatestSaveData = saveGameMetadata;
         }
     }
 }

@@ -11,6 +11,9 @@ var SocketPlugin = {
     sendPlayerEvent: function(data){
         window.dispatchEvent(new CustomEvent("playerEvent", {detail:{data: data}}));
     },
+    unityReadyForData: function(){
+        window.dispatchEvent(new CustomEvent("unityReadyForData"));
+    }
 };
 
 mergeInto(LibraryManager.library, SocketPlugin);
