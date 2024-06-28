@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PixelCrushers;
 using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
@@ -14,7 +15,7 @@ namespace Project.Runtime.Scripts.SaveSystem
         private static SaveGameMetadata _latestSaveData;
         public static SaveGameMetadata LatestSaveData
         {
-            set
+            private set
             {
                 _latestSaveData = value;
                 OnSaveGameDataReady?.Invoke(value);
@@ -33,7 +34,7 @@ namespace Project.Runtime.Scripts.SaveSystem
         {
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 #if UNITY_WEBGL && !UNITY_EDITOR
-            //BrowserInterface.sendSaveGame(JsonConvert.SerializeObject(LatestSaveData));
+            BrowserInterface.sendSaveGame(PixelCrushers.SaveSystem.Serialize(LatestSaveData));
 #endif
         }
 
@@ -41,15 +42,13 @@ namespace Project.Runtime.Scripts.SaveSystem
         /// Stores game data on the local machine at the Application.persistentDataPath. Used for quick-restoring of game data.
         /// </summary>
         /// <param name="savedGameData"></param>
-        public static void LocalStoreGameData(SavedGameData savedGameData)
+        private static void LocalStoreGameData(SavedGameData savedGameData)
         {
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
-            
-            Debug.Log("Attempting local save...");
-            string saveString = JsonConvert.SerializeObject(LatestSaveData);
-           // Debug.Log("Save string : " + saveString);
+
+            string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
             File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR // todo: see if this can be removed for optimization
             Application.ExternalEval("_JS_FileSystem_Sync();");
 #endif
         }
@@ -58,19 +57,36 @@ namespace Project.Runtime.Scripts.SaveSystem
         /// Fetches the latest save game. Checks local cache first, otherwise returns the latest web save.
         /// </summary>
         /// <returns></returns>
-        public static void RetrieveSavedGameData()
+        private static void CheckDiskForSaveData()
         {
             if (File.Exists($"{Application.persistentDataPath}/save.json"))
             {
                 var saveText = File.ReadAllText($"{Application.persistentDataPath}/save.json");
                 Debug.Log("Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
-                //Debug.Log("Local save: " + saveText);
-                var localSave = JsonConvert.DeserializeObject<SaveGameMetadata>(saveText);
+
+                var localSave = PixelCrushers.SaveSystem.Deserialize<SaveGameMetadata>(saveText);
                 if (localSave.last_played > LatestSaveData.last_played)
                 {
                     LatestSaveData = localSave;
                 }
             }
+        }
+
+        private static void WebSaveGameCallback(string json)
+        {
+            Debug.Log("Received data from web server: " + json);
+            if (string.IsNullOrEmpty(json)) return;
+            
+            var saveData = PixelCrushers.SaveSystem.Deserialize<SaveGameMetadata>(json);
+            if (saveData.last_played > LatestSaveData.last_played)
+            {
+                LatestSaveData = saveData;
+            }
+        }
+        
+        public void BeginSaveRetrieval()
+        {
+            CheckDiskForSaveData();
         }
 
         public override bool HasDataInSlot(int slotNumber)

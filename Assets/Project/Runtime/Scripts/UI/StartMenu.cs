@@ -25,11 +25,6 @@ namespace Project.Runtime.Scripts.UI
             _continueTimestamp.text = metadata.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
         }
         
-        public void BeginSaveRetrieval()
-        {
-            SaveDataStorer.RetrieveSavedGameData();
-        }
-        
         public void TryStartNewGame()
         {
             if (!SaveDataStorer.SaveDataExists)

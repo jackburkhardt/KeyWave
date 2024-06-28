@@ -172,14 +172,5 @@ namespace Project.Runtime.Scripts.App
             }
         }
         
-        private static void WebSaveGameCallback(string jsonData)
-        {
-            Debug.Log("Got game state from web interface: " + jsonData);
-            if (!string.IsNullOrEmpty(jsonData))
-            {
-                SaveGameMetadata saveGameMetadata = JsonConvert.DeserializeObject<SaveGameMetadata>(jsonData);
-                SaveDataStorer.LatestSaveData = saveGameMetadata;
-            }
-        }
     }
 }

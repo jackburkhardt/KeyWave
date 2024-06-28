@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PixelCrushers;
 
 namespace Project.Runtime.Scripts.SaveSystem
