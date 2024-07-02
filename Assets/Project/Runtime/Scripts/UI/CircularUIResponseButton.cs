@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
@@ -54,7 +55,7 @@ namespace Project.Runtime.Scripts.UI
 
         private Item? AssociatedQuest => DialogueManager.Instance.masterDatabase.items.Find(item => item.Name == response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title);
 
-        private Points.PointsField PointsData
+        private Points.PointsField[] PointsData
         {
             get
             {
@@ -64,7 +65,7 @@ namespace Project.Runtime.Scripts.UI
                     return QuestUtility.GetPoints(conversation);
                 
                 }
-                return new Points.PointsField();
+                return Array.Empty<Points.PointsField>();
             }
         }
 
@@ -117,14 +118,19 @@ namespace Project.Runtime.Scripts.UI
         {
             base.OnPointerEnter(eventData);
             Refresh();
-
-            if (PointsData.Type != Points.Type.Null && AssociatedQuest?.GetQuestState() == QuestState.Active && PointsData.Points > 0)
+            
+            //todo: implement gradient for multiple point types
+            if (PointsData.Length > 0)
             {
-                ButtonColor = Points.Color(PointsData.Type);
+                var pointData = PointsData[0];
+                if (AssociatedQuest?.GetQuestState() == QuestState.Active && pointData.Points > 0)
+                {
+                    ButtonColor = Points.Color(pointData.Type);
+                }
+
+                else ButtonColor = BaseColor;
             }
 
-            else ButtonColor = BaseColor;
-        
             CircularPanelContainer.SetPropertiesFromButton(this);
         }
 

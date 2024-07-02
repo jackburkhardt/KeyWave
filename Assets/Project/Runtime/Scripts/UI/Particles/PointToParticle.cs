@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Project.Runtime.Scripts.UI.Particles
 {
@@ -19,28 +21,10 @@ namespace Project.Runtime.Scripts.UI.Particles
         [Label("Particle Color")] public Color _particleColorW = Points.Color(Points.Type.Wellness);
 
         private List<Vector4> _customData = new List<Vector4>();
+        private bool done;
 
         private ParticleSystem _particleSystem;
-
-        private void OnParticleSystemStart(ParticleSystem particleSystem)
-        {
-            Points.OnPointsAnimStart?.Invoke();
-        }
-
-        private void OnParticleSystemEnd(ParticleSystem particleSystem)
-        {
-            Points.OnPointsAnimEnd?.Invoke();
-        }
-
-        private void OnParticleBorn(ParticleSystem.Particle particle)
-        {
-            
-        }
-        
-        private void OnParticleDead(ParticleSystem.Particle particle)
-        {
-            
-        }
+        private Queue<Points.PointsField> _particleQueue = new Queue<Points.PointsField>();
 
         private void Awake()
         {
@@ -57,11 +41,11 @@ namespace Project.Runtime.Scripts.UI.Particles
             GameEvent.OnPlayerEvent -= OnPlayerEvent;
         }
 
-        private void OnPlayerEvent(PlayerEvent playerEvent)
+        private void Update()
         {
-            if (playerEvent.EventType == "points")
+            if (!_particleSystem.IsAlive() && _particleQueue.Count > 0)
             {
-                Points.PointsField pointsInfo = Points.PointsField.FromString(playerEvent.Data);
+                var pointsInfo = _particleQueue.Dequeue();
                 ParticleSystem.Burst pointBurst = _particleSystem.emission.GetBurst(0);
                 pointBurst.cycleCount = pointsInfo.Points;
                 _particleSystem.emission.SetBurst(0, pointBurst);
@@ -76,9 +60,17 @@ namespace Project.Runtime.Scripts.UI.Particles
                  
                 var main = _particleSystem.main;
                 main.startColor = color;
-            
+                
                 _particleSystem.Play();
-            
+            }
+        }
+
+        private void OnPlayerEvent(PlayerEvent playerEvent)
+        {
+            if (playerEvent.EventType == "points")
+            {
+                Points.PointsField pointsInfo = Points.PointsField.FromString(playerEvent.Data);
+                _particleQueue.Enqueue(pointsInfo);
             }
         }
     }

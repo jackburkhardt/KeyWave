@@ -164,11 +164,14 @@ namespace Project.Runtime.Scripts.Manager
                 }
             }
 
-            if (state == QuestState.Success && points.Points > 0)
+            if (state == QuestState.Success && points.Length > 0)
             {
-                GameEvent.OnPointsIncrease(points, questName);
-                points.Points = 0;
-                DialogueLua.SetItemField(questName, "Points", points.ToString());
+                foreach (var pointField in points)
+                {
+                    GameEvent.OnPointsIncrease(pointField, questName);
+                    quest.fields.RemoveAll(f => f.title == "Points");
+                    
+                }
             }
         
             var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;

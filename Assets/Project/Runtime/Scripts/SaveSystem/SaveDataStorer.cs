@@ -34,13 +34,14 @@ namespace Project.Runtime.Scripts.SaveSystem
         {
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 #if UNITY_WEBGL && !UNITY_EDITOR
+            Debug.Log("Attempting web save...");
             BrowserInterface.sendSaveGame(PixelCrushers.SaveSystem.Serialize(LatestSaveData));
 #endif
         }
 
         /// <summary>
         /// Stores game data on the local machine at the Application.persistentDataPath. Used for quick-restoring of game data.
-        /// </summary>
+        /// </summary>  
         /// <param name="savedGameData"></param>
         private static void LocalStoreGameData(SavedGameData savedGameData)
         {

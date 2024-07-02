@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
@@ -52,16 +54,11 @@ namespace Project.Runtime.Scripts.DialogueSystem
             return defaultColor;
         }
 
-        public static Points.PointsField GetPointsFromField(List<Field> fields)
+        public static Points.PointsField[] GetPointsFromField(List<Field> fields)
         {
-            if (!Field.FieldExists(fields, "Points")) return new Points.PointsField
-            {
-
-                Type = Points.Type.Null,
-                Points = 0
-            };
-            var pointsField = Field.Lookup(fields, "Points");
-            return Points.PointsField.FromString(pointsField.value);
+            if (fields == null || !Field.FieldExists(fields, "Points")) return Array.Empty<Points.PointsField>();
+            var pointsField = fields.Where(f => f.title == "Points");
+            return pointsField.Select(field => Points.PointsField.FromString(field.value)).ToArray();
         }
 
         public static Item GetQuestByName(string questName)

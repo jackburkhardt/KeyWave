@@ -121,25 +121,28 @@ namespace Project.Editor.Scripts.Tools
                 foreach (var entry in conversation.dialogueEntries)
                 {
                     var pointsField = QuestUtility.GetPoints(entry);
-                    if (pointsField.Type == Points.Type.Null) continue;
+                    if (pointsField.Length == 0) continue;
 
-                    var points = pointsField.Points;
-                    switch (pointsField.Type)
+                    foreach (var field in pointsField)
                     {
-                        case Points.Type.Wellness:
-                            wellnessEntries.Add(entry, points);
-                            wellnessTotal += points;
-                            break;
-                        case Points.Type.Business:
-                            businessEntries.Add(entry, points);
-                            businessTotal += points;
-                            break;
-                        case Points.Type.Savvy:
-                            savvyEntries.Add(entry, points);
-                            savvyTotal += points;
-                            break;
+                        var points = field.Points;
+                        switch (field.Type)
+                        {
+                            case Points.Type.Wellness:
+                                wellnessEntries.Add(entry, points);
+                                wellnessTotal += points;
+                                break;
+                            case Points.Type.Business:
+                                businessEntries.Add(entry, points);
+                                businessTotal += points;
+                                break;
+                            case Points.Type.Savvy:
+                                savvyEntries.Add(entry, points);
+                                savvyTotal += points;
+                                break;
+                        }
                     }
-                    
+
                 }
             }
             
