@@ -66,6 +66,9 @@ namespace Project.Runtime.Scripts.Manager
             return score;
         }
 
+        public static Action OnPointsAnimEnd;
+        public static Action OnPointsAnimStart;
+
         public static void SetSpawnPosition(Vector2 position)
         {
             spawnPosition = position;

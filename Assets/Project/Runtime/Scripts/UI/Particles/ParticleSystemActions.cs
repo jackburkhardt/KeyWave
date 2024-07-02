@@ -35,6 +35,30 @@ namespace Project.Runtime.Scripts.UI.Particles
 
         private int _uniqueID;
 
+        private void OnParticleSystemStart()
+        {
+            SendMessage("OnParticleSystemStart", _particleSystem);
+            _particleSystemStart?.Invoke(_particleSystem);
+        }
+
+        private void OnParticleSystemEnd()
+        {
+            SendMessage("OnParticleSystemEnd", _particleSystem);
+            _particleDeadAll?.Invoke(_particleSystem);
+        }
+        
+        private void OnParticleBorn(ParticleSystem.Particle particle)
+        {
+            SendMessage("OnParticleBorn", particle);
+            _particleWasBorn?.Invoke(particle);
+        }
+        
+        private void OnParticleDead(ParticleSystem.Particle particle)
+        {
+            SendMessage("OnParticleDead", particle);
+            _particleDead?.Invoke(particle);
+        }
+
         private void Awake()
         {
             _particleSystem = GetComponent<ParticleSystem>();
@@ -81,9 +105,9 @@ namespace Project.Runtime.Scripts.UI.Particles
                 if (_isDead)
                 {
                     _isDead = false;
-                    _particleSystemStart?.Invoke(_particleSystem);
+                    OnParticleSystemStart();
                 }
-                _particleWasBorn?.Invoke(_particles[i]);
+                OnParticleBorn(_particles[i]);
                 _currentParticlesIds.Add(_customData[i].x);
    
                 if (_uniqueID > _particleSystem.main.maxParticles)
@@ -99,19 +123,16 @@ namespace Project.Runtime.Scripts.UI.Particles
             {
                 var deadParticleIndex = _currentParticlesIds.IndexOf(difference[i]);
                 var deadParticle = _oldParticles[deadParticleIndex];
-                _particleDead?.Invoke(deadParticle);
+                OnParticleDead(deadParticle);
                 
             }
-          
-           
             
             _currentParticlesIds = ids;
             _particleSystem.SetCustomParticleData(_customData, _customDataSlot);
             
-            
             if (_particleSystem.particleCount == 0 && !_isDead)
             {
-                _particleDeadAll?.Invoke(_particleSystem);
+                OnParticleSystemEnd();
                 _isDead = true;
             }
             

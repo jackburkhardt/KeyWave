@@ -43,7 +43,7 @@ public class QuestAlert : MonoBehaviour
         image.color = onQuestUpdateColor;
         Alert("Task Update", QuestLog.GetQuestTitle(args.questName), questEntry);
     }
-
+    
     public void OnShow()
     {
         OnShowEvent?.Invoke();

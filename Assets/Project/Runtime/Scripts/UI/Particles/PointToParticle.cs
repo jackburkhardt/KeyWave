@@ -7,7 +7,6 @@ using UnityEngine;
 namespace Project.Runtime.Scripts.UI.Particles
 {
     [RequireComponent(typeof(ParticleSystem))]
-
     public class PointToParticle : MonoBehaviour
     {
         [HorizontalLine(color: EColor.Blue)][BoxGroup("Business")]
@@ -22,6 +21,26 @@ namespace Project.Runtime.Scripts.UI.Particles
         private List<Vector4> _customData = new List<Vector4>();
 
         private ParticleSystem _particleSystem;
+
+        private void OnParticleSystemStart(ParticleSystem particleSystem)
+        {
+            Points.OnPointsAnimStart?.Invoke();
+        }
+
+        private void OnParticleSystemEnd(ParticleSystem particleSystem)
+        {
+            Points.OnPointsAnimEnd?.Invoke();
+        }
+
+        private void OnParticleBorn(ParticleSystem.Particle particle)
+        {
+            
+        }
+        
+        private void OnParticleDead(ParticleSystem.Particle particle)
+        {
+            
+        }
 
         private void Awake()
         {
