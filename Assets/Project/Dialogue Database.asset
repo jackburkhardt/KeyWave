@@ -353,6 +353,10 @@ MonoBehaviour:
       value: Sara
       type: 0
       typeString: CustomFieldType_Text
+    - title: HasTalkedToPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
     portrait: {fileID: 2800000, guid: 6c49a2cf2b631c0419ae6b23619f259f, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -1904,22 +1908,22 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-    - title: Entry 3 State
-      value: unassigned
-      type: 0
-      typeString: CustomFieldType_QuestState
-    - title: Entry 3
-      value: Talk to Douglas after following his advice.
+    - title: Entry 4
+      value: Talk to Douglas after following his advice to visit the store.
       type: 0
       typeString: CustomFieldType_Text
     - title: Entry 4 State
       value: unassigned
       type: 0
       typeString: CustomFieldType_QuestState
-    - title: Entry 4
-      value: Obtain "Before Day One"
+    - title: Entry 3
+      value: Find your lost copy of "Before Day One", or get a new copy.
       type: 0
       typeString: CustomFieldType_Text
+    - title: Entry 3 State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
   - id: 116
     fields:
     - title: Pictures
@@ -4818,6 +4822,20 @@ MonoBehaviour:
     fields:
     - title: Name
       value: Douglas/book_obtained
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 50
+    fields:
+    - title: Name
+      value: Store/visited
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
@@ -10424,8 +10442,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1481.746
-        y: 136.31998
+        x: 1462.9291
+        y: 125.029816
         width: 160
         height: 30
     - id: 38
@@ -11039,7 +11057,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: Dialog[thisID].SimStatus == "Untouched"
-      userScript: 
+      userScript: Location["Store"].Visited = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -12793,7 +12811,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 1801.3676, y: 346.01794}
+    canvasScrollPosition: {x: 987.2203, y: 58.959778}
     canvasZoom: 0.79715425
   - id: 22
     fields:
@@ -14230,7 +14248,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 371.2019
-        y: 359.44943
+        y: 318.51923
         width: 160
         height: 30
     - id: 77
@@ -14690,8 +14708,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 205.95609, y: 40.513924}
-    canvasZoom: 0.7804413
+    canvasScrollPosition: {x: 68.74425, y: 34.545467}
+    canvasZoom: 0.7085233
   - id: 25
     fields:
     - title: Title
@@ -37133,8 +37151,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2579.449
-        y: 554.79663
+        x: 2810.963
+        y: 551.85364
         width: 160
         height: 30
     - id: 3
@@ -40829,8 +40847,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 904.34534
-        y: 945.3628
+        x: 968.0569
+        y: 880.9628
         width: 160
         height: 30
     - id: 83
@@ -41209,15 +41227,9 @@ MonoBehaviour:
       - originConversationID: 77
         originDialogueID: 87
         destinationConversationID: 77
-        destinationDialogueID: 94
-        isConnector: 0
-        priority: 4
-      - originConversationID: 77
-        originDialogueID: 87
-        destinationConversationID: 77
         destinationDialogueID: 95
         isConnector: 0
-        priority: 2
+        priority: 3
       conditionsString: 
       userScript: 
       onExecute:
@@ -41225,8 +41237,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 754.29846
-        y: 1035.6952
+        x: 883.4807
+        y: 1053.577
         width: 160
         height: 30
     - id: 88
@@ -41667,83 +41679,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1023.08105
-        y: 1037.528
-        width: 160
-        height: 30
-    - id: 94
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 16
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      - title: Show If Invalid
-        value: False
-        type: 2
-        typeString: CustomFieldType_Boolean
-      - title: Invalid Text
-        value: ???
-        type: 0
-        typeString: CustomFieldType_Text
-      conversationID: 77
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 77
-        originDialogueID: 94
-        destinationConversationID: 77
-        destinationDialogueID: 80
-        isConnector: 0
-        priority: 2
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 550.8425
-        y: 1149.4022
+        x: 1101.8455
+        y: 1052.7281
         width: 160
         height: 30
     - id: 95
@@ -41811,15 +41748,15 @@ MonoBehaviour:
         destinationDialogueID: 97
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: Location["Store"].Visited == true
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 756.8052
-        y: 1158.8593
+        x: 677.5372
+        y: 1124.4434
         width: 160
         height: 30
     - id: 96
@@ -41955,7 +41892,19 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 97
+        destinationConversationID: 77
+        destinationDialogueID: 110
+        isConnector: 0
+        priority: 3
+      - originConversationID: 77
+        originDialogueID: 97
+        destinationConversationID: 77
+        destinationDialogueID: 80
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -41963,8 +41912,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 755.4901
-        y: 1245.4838
+        x: 679.4385
+        y: 1183.6296
         width: 160
         height: 30
     - id: 98
@@ -42792,8 +42741,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2629.712
-        y: 971.06824
+        x: 2585.5676
+        y: 819.0146
         width: 160
         height: 30
     - id: 109
@@ -42867,13 +42816,157 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2611.7097
-        y: 769.8243
+        x: 2586.784
+        y: 682.51605
+        width: 160
+        height: 30
+    - id: 110
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 16
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: I... already did that, too.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 77
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 110
+        destinationConversationID: 77
+        destinationDialogueID: 111
+        isConnector: 0
+        priority: 2
+      conditionsString: Actor["Sara_Carvalho"].HasTalkedToPlayer == true
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 680.0868
+        y: 1247.9335
+        width: 160
+        height: 30
+    - id: 111
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 16
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 'Oookay then. Have you tried talking to '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      conversationID: 77
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 680.0868
+        y: 1329.8766
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 2227.8037, y: 692.9051}
-    canvasZoom: 1.019377
+    canvasScrollPosition: {x: 491.6529, y: 548.1665}
+    canvasZoom: 0.84525543
   - id: 78
     fields:
     - title: Title
