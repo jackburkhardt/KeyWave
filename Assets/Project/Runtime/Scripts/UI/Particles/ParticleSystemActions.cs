@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -37,25 +38,23 @@ namespace Project.Runtime.Scripts.UI.Particles
 
         private void OnParticleSystemStart()
         {
-            SendMessage("OnParticleSystemStart", _particleSystem);
+            Points.OnPointsAnimStart?.Invoke();
             _particleSystemStart?.Invoke(_particleSystem);
         }
 
         private void OnParticleSystemEnd()
         {
-            SendMessage("OnParticleSystemEnd", _particleSystem);
+            Points.OnPointsAnimEnd?.Invoke();
             _particleDeadAll?.Invoke(_particleSystem);
         }
         
         private void OnParticleBorn(ParticleSystem.Particle particle)
         {
-            SendMessage("OnParticleBorn", particle);
             _particleWasBorn?.Invoke(particle);
         }
         
         private void OnParticleDead(ParticleSystem.Particle particle)
         {
-            SendMessage("OnParticleDead", particle);
             _particleDead?.Invoke(particle);
         }
 

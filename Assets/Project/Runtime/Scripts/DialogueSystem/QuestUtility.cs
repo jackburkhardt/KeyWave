@@ -1,18 +1,16 @@
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.Utility;
 
 namespace Project.Runtime.Scripts.DialogueSystem
 {
     public class QuestUtility
     {
-        public static Points.PointsField GetPoints(string questTitle)
-        {
-            var pointFieldData = GetField(questTitle, "Points").asString;
-            return Points.PointsField.FromString(pointFieldData);
-        }
+        public static Points.PointsField[] GetPoints(string questTitle) =>
+            DialogueUtility.GetPointsFromField(DialogueManager.MasterDatabase.GetQuest(questTitle)?.fields);
 
-        public static Points.PointsField GetPoints(DialogueEntry dialogueEntry)
+        public static Points.PointsField[] GetPoints(DialogueEntry dialogueEntry)
         {
             return GetPoints(DialogueUtility.GetConversationByDialogueEntry(dialogueEntry).Title);
         }
