@@ -73,7 +73,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             }
         }
 
-        private static void WebSaveGameCallback(string json)
+        public void WebSaveGameCallback(string json)
         {
             Debug.Log("Received data from web server: " + json);
             if (string.IsNullOrEmpty(json)) return;
