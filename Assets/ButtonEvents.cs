@@ -10,24 +10,76 @@ using UnityEngine.UI;
 public class ButtonEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public UnityEvent OnClick, OnClicked, OnHover, OnHoverEnd;
+    private Button _button;
+    [Tooltip("If true, the button events will run even if the button itself is not interactable.")]
+    public bool ignoreButtonInteractability;
+    
+    #region statics + type definitions
+    private static readonly List<CanvasGroup> m_CanvasGroupCache = new List<CanvasGroup>();
+    #endregion
+ 
+    #region properties
+    public bool IsInteractable { get; private set; }
+    #endregion
+ 
+    #region Unity Messages
+ 
+    private void OnCanvasGroupChanged()
+    {
+        //default to true incase no canvas group to root
+        bool interactibleCheck = true;
+ 
+        Transform cg_transform = transform;
+        while(cg_transform != null)
+        {
+            cg_transform.GetComponents(m_CanvasGroupCache);
+            bool ignoreParentGroups = false;
+ 
+            for(int i = 0, count = m_CanvasGroupCache.Count; i < count; i++)
+            {
+                var canvasGroup = m_CanvasGroupCache[i];
+ 
+                interactibleCheck &= canvasGroup.interactable;
+                ignoreParentGroups |= canvasGroup.ignoreParentGroups || !canvasGroup.interactable;
+            }
+ 
+            if(ignoreParentGroups)
+            {
+                break;
+            }
+ 
+            cg_transform = cg_transform.parent;
+        }
+ 
+        IsInteractable = interactibleCheck;
+    }
+    #endregion
+    
+    private void Awake()
+    {
+        _button = GetComponent<Button>();
+    }
+    
     public void OnPointerDown(PointerEventData eventData)
     {
-        OnClick.Invoke();
+        if (_button.interactable && IsInteractable || ignoreButtonInteractability)
+            OnClick.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        OnClicked.Invoke();
+        if (_button.interactable && IsInteractable || ignoreButtonInteractability)
+            OnClicked.Invoke();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
-    {
+    {  if (_button.interactable && IsInteractable || ignoreButtonInteractability)
         OnHover.Invoke();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("Hover end");
-        OnHoverEnd.Invoke();
+        if (_button.interactable && IsInteractable || ignoreButtonInteractability)
+            OnHoverEnd.Invoke();
     }
 }

@@ -196,8 +196,7 @@ namespace Project.Runtime.Scripts.Utility
 
         public static bool IsEmpty(this DialogueEntry dialogueEntry)
         {
-
-            return dialogueEntry is { subtitleText: "", currentMenuText: "" };
+            return dialogueEntry is { subtitleText: "", currentMenuText: "", currentSequence: ""};
         }
 
         public static Lua.Result? GetLuaField(this Item item, string fieldName)
