@@ -9,6 +9,7 @@ namespace Project.Runtime.Scripts.AssetLoading
         {
             Default,
             Black,
+            None
         }
 
         public static bool loading = false;
@@ -31,6 +32,8 @@ namespace Project.Runtime.Scripts.AssetLoading
                         return _defaultLoadingScreen.GetComponent<CanvasGroup>();
                     case LoadingScreenType.Black:
                         return _blackLoadingScreen.GetComponent<CanvasGroup>();
+                    case LoadingScreenType.None:
+                        return null;
                     default:
                         return _defaultLoadingScreen.GetComponent<CanvasGroup>();
                 }
@@ -51,7 +54,7 @@ namespace Project.Runtime.Scripts.AssetLoading
 
         public IEnumerator FadeCanvasIn(LoadingScreenType? type = LoadingScreenType.Default)
         {
-            if (loading) yield break;
+            if (loading || type == LoadingScreenType.None) yield break;
             loading = true;
             timeSinceLoadStart = 0;
         

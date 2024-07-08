@@ -2,7 +2,9 @@ using System;
 using UnityEngine;
 using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.SaveSystem;
+using Project.Runtime.Scripts.Utility;
 using TMPro;
+using UnityEngine.Events;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -13,15 +15,20 @@ namespace Project.Runtime.Scripts.UI
         
         [SerializeField] private GameObject _saveExistsWarningPopup;
         [SerializeField] private TextMeshProUGUI _saveExistsWarningTimestamp;
+        [SerializeField] private UnityEvent _onNewGame;
+        [SerializeField] private UnityEvent _onContinue;
 
         private void Awake()
         {
+            _continueButton.SetActive(false);
+            RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
            SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
         }
 
         private void OnSaveDataReceived(SaveGameMetadata metadata)
         {
             _continueButton.SetActive(true);
+            RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
             _continueTimestamp.text = metadata.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
         }
         
@@ -30,6 +37,7 @@ namespace Project.Runtime.Scripts.UI
             if (!SaveDataStorer.SaveDataExists)
             {
                 StartNewGame();
+               
                 return;
             }
             
@@ -41,11 +49,13 @@ namespace Project.Runtime.Scripts.UI
         
         public void StartNewGame()
         {
+            _onNewGame.Invoke();
             App.App.Instance.StartNewGame();
         }
 
         public void ContinueGame()
         {
+            _onContinue.Invoke();
            App.App.Instance.ContinueGame();
         }
         

@@ -25,6 +25,7 @@ namespace Project.Runtime.Scripts.Manager
         public static PlayerEventStack playerEventStack;
         public List<Location> locations;
         public bool capFramerate = false;
+        public Canvas mainCanvas;
 
         [ShowIf("capFramerate")]
         public int framerateLimit;
@@ -35,10 +36,13 @@ namespace Project.Runtime.Scripts.Manager
         private string last_convo = string.Empty;
 
         public static GameState gameState => GameStateManager.instance.gameState;
+        
+        public static Action OnGameManagerAwake;
 
 
         private void Awake()
         {
+            OnGameManagerAwake?.Invoke();
        
             //if instance of GameManager already exists, destroy it
 
@@ -128,16 +132,38 @@ namespace Project.Runtime.Scripts.Manager
 
         public IEnumerator StartNewSave()
         {
-            yield return App.App.Instance.LoadScene("Hotel");
+           // yield return App.App.Instance.LoadScene("Hotel");
             dailyReport = new DailyReport(gameState.day);
+            
+        
         
             while (App.App.isLoading)
             {
                 yield return new WaitForEndOfFrame();
             }
+            
+     
 
             yield return new WaitForSeconds(0.25f);
             DialogueManager.StartConversation("Intro");
+        }
+        
+        public static void OnConversationStart()
+        {
+            var activeConversation = DialogueManager.instance.activeConversation;
+            var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
+            if (Field.FieldExists(conversation.fields, "Base") &&
+                !DialogueLua.GetConversationField(conversation.id, "Base").asBool) return;
+            instance.mainCanvas.BroadcastMessage("SetTrigger", "Show");
+        }
+        
+        public static void OnConversationEnd()
+        {
+            var activeConversation = DialogueManager.instance.activeConversation;
+            var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
+            if (Field.FieldExists(conversation.fields, "Base") &&
+                !DialogueLua.GetConversationField(conversation.id, "Base").asBool) return;
+            instance.mainCanvas.BroadcastMessage("SetTrigger", "Hide");
         }
 
 
