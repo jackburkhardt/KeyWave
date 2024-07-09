@@ -45,8 +45,7 @@ namespace Project.Runtime.Scripts.UI
 
         private void OnDisable()
         {
-            if (this != MenuPanelContainer.buttonTemplate) Destroy(gameObject);
-      
+          //  if (this != MenuPanelContainer.buttonTemplate && this.transform.parent == MenuPanelContainer.buttonTemplate.transform.parent) Destroy(gameObject);
         }
 
 

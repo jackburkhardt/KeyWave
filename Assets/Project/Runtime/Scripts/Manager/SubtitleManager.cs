@@ -1,7 +1,9 @@
 using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -13,6 +15,7 @@ namespace Project.Runtime.Scripts.Manager
         public UnityEvent onDuplicateAdded;
 
         public SubtitleContentElement templateSubtitleContentElement;
+        public TextMeshProUGUI templateResponseDuplicate;
         public Transform duplicatedSubtitleContentContainer;
         private SubtitleContentElement mostRecentDuplicate;
         private Subtitle mostRecentSubtitle;
@@ -21,6 +24,7 @@ namespace Project.Runtime.Scripts.Manager
         {
       
             RefreshContents();
+            templateResponseDuplicate.gameObject.SetActive(false);
         }
         //public UnityEvent onDuplicateReveal;
 
@@ -36,7 +40,8 @@ namespace Project.Runtime.Scripts.Manager
         {
             for (int i = 0; i < duplicatedSubtitleContentContainer.childCount; i++)
             {
-                Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
+                if (duplicatedSubtitleContentContainer.GetChild(i).gameObject != templateResponseDuplicate.gameObject)
+                    Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
             }
       
             templateSubtitleContentElement.Clear();
@@ -62,6 +67,14 @@ namespace Project.Runtime.Scripts.Manager
       
             onDuplicateAdded.Invoke();
       
+        }
+
+        public void AddResponse(TextMeshProUGUI button)
+        {
+            var response = Instantiate(templateResponseDuplicate, templateResponseDuplicate.gameObject.transform.parent);
+            response.gameObject.SetActive(true);
+            response.text = button.text;
+
         }
 
         public void RevealDuplicate()

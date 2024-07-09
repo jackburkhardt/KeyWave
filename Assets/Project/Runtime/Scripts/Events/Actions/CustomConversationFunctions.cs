@@ -68,7 +68,7 @@ namespace Project.Runtime.Scripts.Events.Actions
             if (currentEntry.outgoingLinks.Count != 1) return;
             var nextEntry = currentEntry.outgoingLinks[0].GetDestinationEntry();
         
-            if (nextEntry.Title.Contains("Show") && nextEntry.Title.Contains("Options") && !currentEntry.GetActor()!.IsPlayer && !currentEntry.IsEmpty())
+            if (nextEntry.Title.Contains("Show") && nextEntry.Title.Contains("Options") && currentEntry.GetActor()!.IsPlayer && !currentEntry.IsEmpty())
             {
                 DialogueManager.PlaySequence("Continue()@Message(Typed)");
             }
