@@ -1,3 +1,4 @@
+using System.Linq;
 using Newtonsoft.Json;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
@@ -25,6 +26,11 @@ namespace Project.Runtime.Scripts.Events.Actions
             if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Talk"))
             {
                 TutorialPanel.instance.PlayTutorial("TalkTutorial");
+            }
+            
+            if (DialogueUtility.CurrentDialogueEntry.Title.Contains("Options"))
+            {
+                TutorialPanel.instance.PlayTutorial("StartTutorial");
             }
         
             GameStateManager.instance.gameState.Clock += (DialogueUtility.CurrentNodeDuration);

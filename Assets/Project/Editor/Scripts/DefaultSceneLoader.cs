@@ -18,6 +18,7 @@ namespace Project.Editor.Scripts
 
             if (state == PlayModeStateChange.EnteredPlayMode) {
            
+              
                 EditorSceneManager.LoadScene (0);
             }
         }
