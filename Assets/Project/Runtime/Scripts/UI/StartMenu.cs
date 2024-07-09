@@ -69,6 +69,11 @@ namespace Project.Runtime.Scripts.UI
            App.App.Instance.ContinueGame();
         }
         
+        public void BeginSaveRetrieval()
+        {
+            SaveDataStorer.BeginSaveRetrieval();
+        }
+        
         private void OnDestroy()
         {
             SaveDataStorer.OnSaveGameDataReady -= OnSaveDataReceived;

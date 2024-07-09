@@ -85,7 +85,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             }
         }
         
-        public void BeginSaveRetrieval()
+        public static void BeginSaveRetrieval()
         {
             CheckDiskForSaveData();
         }
