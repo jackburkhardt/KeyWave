@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.SaveSystem;
@@ -20,10 +21,19 @@ namespace Project.Runtime.Scripts.UI
 
         private void Awake()
         {
-            _continueButton.SetActive(false);
-            RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
+           _continueButton.SetActive(false);
+           RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
            SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
+           
+           var lamb = new GameObject("Sacrificial Lamb");
+           DontDestroyOnLoad(lamb);
+
+           var sheepList = new[] { "Save System", "App", "[Debug Updater]"};
+           
+           foreach(var suspect in lamb.scene.GetRootGameObjects())
+               if (!sheepList.Contains(suspect.name)) Destroy(suspect);
         }
+        
 
         private void OnSaveDataReceived(SaveGameMetadata metadata)
         {

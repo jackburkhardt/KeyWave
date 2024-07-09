@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
@@ -92,13 +93,19 @@ namespace Project.Runtime.Scripts.ScriptableObjects
                 return Distance;
             }
         }
-
+        
         public void MoveHere()
         {
             LastLocation = FromString(GameManager.gameState.PlayerLocation);
             if (LastLocation.area != Area.Café) LastNonCaféLocation = LastLocation;
             GameEvent.OnMove(this.Name, LastLocation, Distance);
+            
             GameManager.instance.TravelTo(this);
+        }
+
+        public void MoveHereImmediate()
+        {
+            App.App.Instance.LoadSceneImmediate(name, "StartMenu");
         }
 
         public override string ToString()

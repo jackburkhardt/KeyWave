@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.SaveSystem;
@@ -228,12 +229,12 @@ namespace Project.Runtime.Scripts.Manager
 
         public void StartOfDay() => App.App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
 
-        public void TravelTo(Location location)
+        public void TravelTo(Location location, LoadingScreen.LoadingScreenType? type =  LoadingScreen.LoadingScreenType.Default)
         {
-            TravelTo(location.Name);
+            TravelTo(location.Name, loadingScreenType: type);
         }
 
-        public void TravelTo(string newLocation, string currentScene = "")
+        public void TravelTo(string newLocation, string currentScene = "", LoadingScreen.LoadingScreenType? loadingScreenType =  LoadingScreen.LoadingScreenType.Default)
         {
 
             DialogueManager.StopConversation();
@@ -242,7 +243,7 @@ namespace Project.Runtime.Scripts.Manager
 
             IEnumerator TravelToHandler()
             {
-                yield return App.App.Instance.ChangeScene(newLocation, currentScene);
+                yield return App.App.Instance.ChangeScene(newLocation, currentScene, loadingScreenType);
             
                 while (App.App.isLoading)
                 {

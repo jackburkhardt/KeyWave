@@ -70,6 +70,8 @@ namespace Project.Runtime.Scripts.App
         {
             StartCoroutine(BeginGameSequence(false));
         }
+        
+        
 
         private IEnumerator NewGameSequence()
         {
@@ -123,11 +125,16 @@ namespace Project.Runtime.Scripts.App
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(sceneToUnload));
         }
+        
+        public void LoadSceneImmediate(string sceneToLoad, string sceneToUnload = "")
+        {
+            StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: null));
+        }
 
         /// <summary>
         ///  Unloads the current scene and loads a new scene
         /// </summary>
-        public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload));
+        public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload, LoadingScreen.LoadingScreenType? type = null) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload, loadingScreenType: type));
 
         private IEnumerator LoadSceneHandler(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? loadingScreenType = LoadingScreen.LoadingScreenType.Default, bool? unloadLoadingScreen = true, bool? waitForUnload = true)
         {
