@@ -29,7 +29,7 @@ namespace Project.Runtime.Scripts.UI
            var lamb = new GameObject("Sacrificial Lamb");
            DontDestroyOnLoad(lamb);
 
-           var sheepList = new[] { "Save System", "App", "[Debug Updater]"};
+           var sheepList = new[] { "Evan", "Save System", "App", "[Debug Updater]"};
            
            foreach(var suspect in lamb.scene.GetRootGameObjects())
                if (!sheepList.Contains(suspect.name)) Destroy(suspect);

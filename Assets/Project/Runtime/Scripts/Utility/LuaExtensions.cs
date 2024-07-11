@@ -210,22 +210,5 @@ namespace Project.Runtime.Scripts.Utility
             return listToClone.Select(item => (T)item.Clone()).ToList();
         }
         
-        public static float PreferredVolume(this AudioSource audioSource)
-        {
-            var volumeData = audioSource.GetComponent<AudioVolume>();
-            if (volumeData == null) return audioSource.volume;
-            var volume = 0f;
-            foreach (var data in volumeData.audioData)
-            {
-                if (audioSource.clip == data.clip)
-                {
-                    volume = data.volume;
-                }
-            }
-
-            return volume;
-        }
-        
-        
     }
 }
