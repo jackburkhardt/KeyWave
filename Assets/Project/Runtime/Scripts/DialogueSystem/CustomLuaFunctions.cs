@@ -59,6 +59,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(LocationETA), this, SymbolExtensions.GetMethodInfo(() => LocationETA(string.Empty)));
             Lua.RegisterFunction(nameof(LocationDistanceInMinutes), this, SymbolExtensions.GetMethodInfo(() => LocationDistanceInMinutes(string.Empty)));
             Lua.RegisterFunction(nameof(SetExclusiveQuestEntryState), this , SymbolExtensions.GetMethodInfo(() => SetExclusiveQuestEntryState(string.Empty, 0, string.Empty)));
+            
         }
 
         private void DeregisterLuaFunctions()

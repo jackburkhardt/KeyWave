@@ -38,7 +38,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             if (audioSource != null)
             {
                 audioSource.Stop();
-                audioSource.volume = audioSource.PreferredVolume();
+                audioSource.volume = originalVolume;
             }
         }
     }
