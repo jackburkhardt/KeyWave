@@ -25,6 +25,7 @@ namespace Project.Runtime.Scripts.UI
            RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
            SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
            
+           #if UNITY_EDITOR
            var lamb = new GameObject("Sacrificial Lamb");
            DontDestroyOnLoad(lamb);
 
@@ -32,6 +33,7 @@ namespace Project.Runtime.Scripts.UI
            
            foreach(var suspect in lamb.scene.GetRootGameObjects())
                if (!sheepList.Contains(suspect.name)) Destroy(suspect);
+           #endif
         }
         
 

@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using PixelCrushers;
+using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
@@ -25,6 +26,7 @@ namespace Project.Runtime.Scripts.SaveSystem
         public static bool SaveDataExists => LatestSaveData.state != null;
         public delegate void SaveGameDataDelegate(SaveGameMetadata metadata);
         public static event SaveGameDataDelegate OnSaveGameDataReady;
+        private static bool savingEnabled => DialogueLua.GetVariable("saving_enabled").asBool;
 
         /// <summary>
         /// Sends game data to the web interface for persistent storage. Used for saving game state across devices.
@@ -32,6 +34,8 @@ namespace Project.Runtime.Scripts.SaveSystem
         /// <param name="savedGameData"></param>
         public static void WebStoreGameData(SavedGameData savedGameData)
         {
+            if (!savingEnabled) return;
+            
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 #if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.sendSaveGame(PixelCrushers.SaveSystem.Serialize(LatestSaveData));
@@ -44,6 +48,8 @@ namespace Project.Runtime.Scripts.SaveSystem
         /// <param name="savedGameData"></param>
         private static void LocalStoreGameData(SavedGameData savedGameData)
         {
+            if (!savingEnabled) return;
+            
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 
             string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
