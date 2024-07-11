@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 namespace Project.Runtime.Scripts.AssetLoading
@@ -37,10 +38,17 @@ namespace Project.Runtime.Scripts.AssetLoading
             else
             {
                 _loadQueue.Add(reference);
-                reference.LoadAssetAsync<T>().Completed += handle =>
+                var operation = reference.LoadAssetAsync<T>();
+                operation.Completed += handle =>
                 {
-                    _activeObjects[reference.AssetGUID] = handle.Result;
                     _loadQueue.Remove(reference);
+                    if (operation.Status == AsyncOperationStatus.Failed)
+                    {
+                        Debug.LogError($"AddressableLoader: failed to load asset at address {reference}!");
+                        Debug.LogError(operation.OperationException);
+                        return;
+                    }
+                    _activeObjects[reference.AssetGUID] = handle.Result;
                     callback?.Invoke(handle.Result);
                 };
             }
@@ -65,14 +73,26 @@ namespace Project.Runtime.Scripts.AssetLoading
                 var operation = Addressables.LoadAssetAsync<T>(address);
                 operation.Completed += handle =>
                 {
-                    _activeObjects[address] = handle.Result;
                     _loadQueue.Remove(address);
+                    if (operation.Status == AsyncOperationStatus.Failed)
+                    {
+                        Debug.LogError($"AddressableLoader: failed to load asset at address {address}!");
+                        Debug.LogError(operation.OperationException);
+                        return;
+                    }
+                    _activeObjects[address] = handle.Result;
                     callback?.Invoke(handle.Result);
                 };
             }
         }
 
-        public static void Release(object obj) => Addressables.Release(obj);
+        public static void Release(string path)
+        { 
+            if (_activeObjects.Remove(path, out var obj))
+            {
+                Addressables.Release(obj);
+            }
+        }
 
         public static bool IsQueueEmpty() => _loadQueue.Count == 0;
 

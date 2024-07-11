@@ -47,7 +47,7 @@ namespace Project.Runtime.Scripts.App
             }
             else if (_instance != this)
             {
-                Destroy(this);
+                Destroy(this.gameObject);
             }
             
             if (Camera.main != null) Camera.main.backgroundColor = Color.black;
