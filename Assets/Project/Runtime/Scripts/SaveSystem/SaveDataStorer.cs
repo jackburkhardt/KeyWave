@@ -34,7 +34,6 @@ namespace Project.Runtime.Scripts.SaveSystem
         {
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 #if UNITY_WEBGL && !UNITY_EDITOR
-            Debug.Log("Attempting web save...");
             BrowserInterface.sendSaveGame(PixelCrushers.SaveSystem.Serialize(LatestSaveData));
 #endif
         }
@@ -63,7 +62,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (File.Exists($"{Application.persistentDataPath}/save.json"))
             {
                 var saveText = File.ReadAllText($"{Application.persistentDataPath}/save.json");
-                Debug.Log("Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
+                Debug.Log("[<- Unity] Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
 
                 var localSave = PixelCrushers.SaveSystem.Deserialize<SaveGameMetadata>(saveText);
                 if (localSave.last_played > LatestSaveData.last_played)
@@ -75,7 +74,7 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public void WebSaveGameCallback(string json)
         {
-            Debug.Log("Received data from web server: " + json);
+            Debug.Log("[<- Unity] Received data from web server: " + json);
             if (string.IsNullOrEmpty(json)) return;
             
             var saveData = PixelCrushers.SaveSystem.Deserialize<SaveGameMetadata>(json);
