@@ -195,7 +195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2063615592313cd42b9741dc87ad465c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canvasGroup: {fileID: 222771106}
+  _defaultLoadingScreen: {fileID: 0}
+  _blackLoadingScreen: {fileID: 0}
+  loadingScreenType: 0
 --- !u!114 &222771102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,14 +350,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8742435, g: 0.8830059, b: 0.8962264, a: 0.8392157}
+  m_Color: {r: 0.43158934, g: 0.41429335, b: 0.6603774, a: 0.95686275}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: bc76e30705b610d49aac177f043cf103, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -364,7 +366,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2.36
 --- !u!222 &275479992
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -871,14 +873,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.09818439, g: 0.10886246, b: 0.26415092, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 66854b7015f92114583e8c06474078eb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c2da9b234912ebf40b63d6ae002618bd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -974,14 +976,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8742435, g: 0.8830059, b: 0.8962264, a: 0.8392157}
+  m_Color: {r: 0.43158934, g: 0.41429335, b: 0.6603774, a: 0.95686275}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: bc76e30705b610d49aac177f043cf103, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -990,7 +992,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2.36
 --- !u!222 &587006888
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1719,14 +1721,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8742435, g: 0.8830059, b: 0.8962264, a: 0.8392157}
+  m_Color: {r: 0.43158934, g: 0.41429335, b: 0.6603774, a: 0.95686275}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: bc76e30705b610d49aac177f043cf103, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1735,7 +1737,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 2.36
 --- !u!222 &1457371438
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1868,7 +1870,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: End of Day {0}
+  m_text: End of Day
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4577609e07deb9429644dc05e7bfdb8, type: 2}
   m_sharedMaterial: {fileID: 3689533377796605181, guid: f4577609e07deb9429644dc05e7bfdb8, type: 2}
@@ -1952,7 +1954,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1808745134}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a477f1d1af904450dbce4d34ac3465e8, type: 3}
   m_Name: 
@@ -1960,7 +1962,11 @@ MonoBehaviour:
   text:
     m_uiText: {fileID: 0}
     m_textMeshProUGUI: {fileID: 1808745136}
-  _0: day
+  overrideText: 1
+  startString: 
+  onlyVariables: 0
+  _0_asVariable: 
+  _0_asLua: 
   _1: 
   _2: 
 --- !u!1 &1831104648
