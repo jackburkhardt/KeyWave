@@ -1,8 +1,10 @@
 using System.Collections;
+using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Audio;
-using Project.Runtime.Scripts.Utility;
 using UnityEngine;
-namespace PixelCrushers.DialogueSystem.SequencerCommands
+
+namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
 {
     /// <summary>
     /// Syntax: AudioFade(audioSource, duration)

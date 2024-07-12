@@ -7,6 +7,7 @@ using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.SaveSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace Project.Runtime.Scripts.App
@@ -51,6 +52,7 @@ namespace Project.Runtime.Scripts.App
             }
             
             if (Camera.main != null) Camera.main.backgroundColor = Color.black;
+            Cursor.lockState = CursorLockMode.None;
         }
         
         
