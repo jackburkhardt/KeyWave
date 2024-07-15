@@ -9,7 +9,7 @@ namespace Project.Runtime.Scripts.App
         
         private void Start()
         {
-            versionText.text = $"Build {Application.version}";
+            versionText.text = $"Version {Application.version}";
         }
     }
 }
