@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 namespace PixelCrushers
 {
@@ -62,7 +61,6 @@ namespace PixelCrushers
         private static bool s_allowReceiveSameFrameAdded = true;
 
         private static bool s_debug = false;
-        private static bool s_allowExceptions = false;
 
         private static int s_sendMessageDepth = 0;
 
@@ -106,15 +104,6 @@ namespace PixelCrushers
         {
             get { return s_debug && Debug.isDebugBuild; }
             set { s_debug = value; }
-        }
-
-        /// <summary>
-        /// Don't catch exceptions thrown by message recipients.
-        /// </summary>
-        public static bool allowExceptions
-        {
-            get { return s_allowExceptions && Debug.isDebugBuild; }
-            set { s_allowExceptions = value; }
         }
 
         private static List<ListenerInfo> listenerInfo { get { return s_listenerInfo; } }
@@ -366,20 +355,19 @@ namespace PixelCrushers
                      if (!allowReceiveSameFrameAdded && x.frameAdded == Time.frameCount) continue;
                     if (string.Equals(x.message, message) && (string.Equals(x.parameter, parameter) || string.IsNullOrEmpty(x.parameter)))
                     {
-                        if (allowExceptions)
+                        try
                         {
-                            SendMessageToListener(x, sender, target, message, parameter, messageArgs);
+                            if (ShouldLogReceiver(x.listener))
+                            {
+                                Debug.Log("MessageSystem.SendMessage(sender=" + sender +
+                                    ((target == null) ? string.Empty : (" target=" + target)) +
+                                    ": " + message + "," + parameter + ")");
+                            }
+                            x.listener.OnMessage(messageArgs);
                         }
-                        else
+                        catch (System.Exception e)
                         {
-                            try
-                            {
-                                SendMessageToListener(x, sender, target, message, parameter, messageArgs);
-                            }
-                            catch (System.Exception e)
-                            {
-                                Debug.LogError("Message System exception sending '" + message + "'/'" + parameter + "' to " + x.listener + ": " + e.Message);
-                            }
+                            Debug.LogError("Message System exception sending '" + message + "'/'" + parameter + "' to " + x.listener + ": " + e.Message);
                         }
                     }
                 }
@@ -389,17 +377,6 @@ namespace PixelCrushers
                 sendMessageDepth--;
                 if (sendMessageDepth == 0) RemoveMarkedListenerInfo();
             }
-        }
-
-        private static void SendMessageToListener(ListenerInfo x, object sender, object target, string message, string parameter, MessageArgs messageArgs)
-        {
-            if (ShouldLogReceiver(x.listener))
-            {
-                Debug.Log("MessageSystem.SendMessage(sender=" + sender +
-                    ((target == null) ? string.Empty : (" target=" + target)) +
-                    ": " + message + "," + parameter + ")");
-            }
-            x.listener.OnMessage(messageArgs);
         }
 
         /// <summary>

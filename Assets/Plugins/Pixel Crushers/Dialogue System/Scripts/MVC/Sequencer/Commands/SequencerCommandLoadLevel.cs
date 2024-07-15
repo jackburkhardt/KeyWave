@@ -37,7 +37,8 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             {
                 if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Sequencer: LoadLevel({1})", DialogueDebug.Prefix, GetParameters()));
                 DialogueLua.SetActorField("Player", "Spawnpoint", spawnpoint);
-                if (SaveSystem.hasInstance)
+                var saveSystem = GameObjectUtility.FindFirstObjectByType<SaveSystem>();
+                if (saveSystem != null)
                 {
                     if (additive)
                     {

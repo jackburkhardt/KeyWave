@@ -1,7 +1,6 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -22,12 +21,10 @@ namespace PixelCrushers.DialogueSystem
         public GameObject ui;
 
         [Tooltip("If instantiating a prefab, keep it ready in memory instead of destroying it when conversation ends.")]
-        [FormerlySerializedAs("dontDestroyPrefabIntance")]
-        public bool dontDestroyPrefabInstance = true;
+        public bool dontDestroyPrefabIntance = true;
 
         protected virtual void OnDestroy()
         {
-            if (dontDestroyPrefabInstance) return;
             if (!Tools.IsPrefab(ui)) Destroy(ui);
         }
 

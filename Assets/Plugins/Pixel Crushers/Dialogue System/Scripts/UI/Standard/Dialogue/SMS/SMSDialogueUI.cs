@@ -311,7 +311,6 @@ namespace PixelCrushers.DialogueSystem
         public override void ShowContinueButton(Subtitle subtitle)
         {
             shouldShowContinueButton = true;
-            if (continueButton != null) continueButton.gameObject.SetActive(true);
         }
 
         public override void OnContinueConversation()
@@ -430,7 +429,6 @@ namespace PixelCrushers.DialogueSystem
         {
             if (DontLoadInThisScene()) return;
             if (!DialogueManager.IsConversationActive) return;
-            if (records == null || records.Count == 0) return;
             if (Debug.isDebugBuild) Debug.Log("TextlineDialogueUI.OnRecordPersistentData: Saving current conversation to " + currentDialogueEntryRecords);
             // Save actor & conversant:
             var actorName = (DialogueManager.CurrentActor != null) ? DialogueManager.CurrentActor.name : string.Empty;
@@ -468,7 +466,6 @@ namespace PixelCrushers.DialogueSystem
             if (Debug.isDebugBuild) Debug.Log("TextlineDialogueUI.OnApplyPersistentData: Restoring current conversation from " + currentDialogueEntryRecords + ": " + s);
             var ints = s.Split(';');
             var numRecords = Tools.StringToInt(ints[0]);
-            if (numRecords == 0) return;
             for (int i = 0; i < numRecords; i++)
             {
                 var conversationID = Tools.StringToInt(ints[1 + i * 2]);

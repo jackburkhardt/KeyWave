@@ -1,4 +1,12 @@
-﻿// Copyright (c) Pixel Crushers. All rights reserved.
+// Recompile at 3/18/2024 10:31:13 AM
+
+
+
+
+
+
+
+// Copyright (c) Pixel Crushers. All rights reserved.
 
 using System.Collections;
 using System.Collections.Generic;
@@ -38,6 +46,7 @@ namespace PixelCrushers.DialogueSystem
         public AutoScrollSettings autoScrollSettings = new AutoScrollSettings();
 
         public UnityEvent onBegin = new UnityEvent();
+        public UnityEvent onFirstCharacter = new UnityEvent();
         public UnityEvent onCharacter = new UnityEvent();
         public UnityEvent onEnd = new UnityEvent();
 
@@ -167,6 +176,16 @@ namespace PixelCrushers.DialogueSystem
             base.OnDisable();
             Stop();
         }
+        
+        public void OnDialogueSystemPause()
+        {
+            Pause();
+        }
+        
+        public void OnDialogueSystemUnpause()
+        {
+            Unpause();
+        }
 
         /// <summary>
         /// Pauses the effect.
@@ -239,6 +258,7 @@ namespace PixelCrushers.DialogueSystem
         {
             if ((textComponent != null) && (charactersPerSecond > 0) && !string.IsNullOrEmpty(textComponent.text))
             {
+                
                 if (waitOneFrameBeforeStarting) yield return null;
                 textComponent.text = textComponent.text.Replace("<br>", "\n");
                 fromIndex = StripRPGMakerCodes(Tools.StripTextMeshProTags(textComponent.text)).Substring(0, fromIndex).Length;
@@ -255,7 +275,6 @@ namespace PixelCrushers.DialogueSystem
                 textComponent.maxVisibleCharacters = fromIndex;
                 textComponent.ForceMeshUpdate();
                 TMPro.TMP_TextInfo textInfo = textComponent.textInfo;
-                if (textInfo == null) yield break;
                 var parsedText = textComponent.GetParsedText();
                 int totalVisibleCharacters = textInfo.characterCount; // Get # of Visible Character in text object
                 charactersTyped = fromIndex;
@@ -314,6 +333,7 @@ namespace PixelCrushers.DialogueSystem
                                 }
                             }
                             onCharacter.Invoke();
+                            if (totalVisibleCharacters == 1) onFirstCharacter.Invoke();
                             charactersTyped++;
                             textComponent.maxVisibleCharacters = charactersTyped;
                             if (IsFullPauseCharacter(typedCharacter)) yield return DialogueTime.WaitForSeconds(fullPauseDuration);
@@ -428,7 +448,7 @@ namespace PixelCrushers.DialogueSystem
                 onEnd.Invoke();
                 Sequencer.Message(SequencerMessages.Typed);
             }
-            if (textComponent != null && textComponent.textInfo != null) 
+            if (textComponent != null) 
             {
                 textComponent.maxVisibleCharacters = textComponent.textInfo.characterCount;
                 textComponent.ForceMeshUpdate();

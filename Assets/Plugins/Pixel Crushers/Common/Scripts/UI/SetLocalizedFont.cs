@@ -1,4 +1,12 @@
-// Recompile at 1/21/2023 3:18:05 PM
+// Recompile at 3/18/2024 10:31:13 AM
+
+
+
+
+
+
+
+
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using UnityEngine;
@@ -14,19 +22,19 @@ namespace PixelCrushers
     public class SetLocalizedFont : MonoBehaviour
     {
 
-        [SerializeField] protected bool m_setOnEnable = true;
+        [SerializeField] private bool m_setOnEnable = true;
 
         [Tooltip("Overrides UILocalizationManager's Localized Fonts if set.")]
-        [SerializeField] protected LocalizedFonts m_localizedFonts = null;
+        [SerializeField] private LocalizedFonts m_localizedFonts = null;
 
-        protected bool m_started = false;
-        protected float m_initialFontSize = -1;
-        protected UnityEngine.UI.Text text;
+        private bool m_started = false;
+        private float m_initialFontSize = -1;
+        private UnityEngine.UI.Text text;
 #if TMP_PRESENT
-        protected TMPro.TextMeshProUGUI textMeshPro;
+        private TMPro.TextMeshProUGUI textMeshPro;
 #endif
 
-        protected virtual void Awake()
+        private void Awake()
         {
             text = GetComponent<UnityEngine.UI.Text>();
 #if TMP_PRESENT
@@ -34,29 +42,18 @@ namespace PixelCrushers
 #endif
         }
 
-        protected virtual void Start()
+        private void Start()
         {
             m_started = true;
             if (m_setOnEnable) SetCurrentLocalizedFont();
-            UILocalizationManager.languageChanged += OnLanguageChanged;
         }
 
-        protected virtual void OnDestroy()
-        {
-            UILocalizationManager.languageChanged -= OnLanguageChanged; 
-        }
-
-        protected virtual void OnEnable()
+        private void OnEnable()
         {
             if (m_started) SetCurrentLocalizedFont();
         }
 
-        protected virtual void OnLanguageChanged(string language)
-        {
-            SetCurrentLocalizedFont();
-        }
-
-        public virtual void SetCurrentLocalizedFont()
+        public void SetCurrentLocalizedFont()
         {
             // Record initial font size if necessary:
             if (m_initialFontSize == -1)

@@ -1,3 +1,11 @@
+// Recompile at 3/18/2024 10:31:13 AM
+
+
+
+
+
+
+
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using UnityEngine;
@@ -48,14 +56,14 @@ namespace PixelCrushers
         }
 
         private List<string> m_fieldNames = new List<string>();
-        public List<string> fieldNames
+        protected List<string> fieldNames
         {
             get { return m_fieldNames; }
             set { m_fieldNames = value; }
         }
 
         private List<string> m_tmpFieldNames = new List<string>();
-        public List<string> tmpFieldNames
+        protected List<string> tmpFieldNames
         {
             get { return m_tmpFieldNames; }
             set { m_tmpFieldNames = value; }
@@ -107,77 +115,6 @@ namespace PixelCrushers
             if (started) UpdateText();
         }
 
-        /// <summary>
-        /// If fieldName(s), tmpFieldName(s) are blank, set them to the UI element's text.
-        /// </summary>
-        public virtual void ValidateFieldNames()
-        {
-            if (!string.IsNullOrEmpty(fieldName)) return;
-            if (fieldNames.Count > 0) return;
-
-            if (text == null && dropdown == null)
-            {
-                text = GetComponent<UnityEngine.UI.Text>();
-                dropdown = GetComponent<UnityEngine.UI.Dropdown>();
-            }
-            var hasLocalizableComponent = text != null || dropdown != null;
-
-#if TMP_PRESENT
-            if (!m_lookedForTMP)
-            {
-                m_lookedForTMP = true;
-                textMeshPro = GetComponent<TMPro.TextMeshPro>();
-                textMeshProUGUI = GetComponent<TMPro.TextMeshProUGUI>();
-                textMeshProDropdown = GetComponent<TMPro.TMP_Dropdown>();
-            }
-            hasLocalizableComponent = hasLocalizableComponent || textMeshPro != null ||
-                textMeshProUGUI != null || textMeshProDropdown != null;
-#endif
-
-            if (!hasLocalizableComponent) return;
-
-            // Get the original values to use as field lookups:
-            if (string.IsNullOrEmpty(fieldName))
-            {
-                fieldName = (text != null) ? text.text : string.Empty;
-            }
-            if ((dropdown != null) && (fieldNames.Count != dropdown.options.Count))
-            {
-                fieldNames.Clear();
-                dropdown.options.ForEach(opt => fieldNames.Add(opt.text));
-            }
-
-
-#if TMP_PRESENT
-            if (textMeshPro != null)
-            {
-                if (string.IsNullOrEmpty(fieldName))
-                {
-                    fieldName = (textMeshPro != null) ? textMeshPro.text : string.Empty;
-                }
-            }
-            if (textMeshProUGUI != null)
-            {
-                if (string.IsNullOrEmpty(fieldName))
-                {
-                    fieldName = (textMeshProUGUI != null) ? textMeshProUGUI.text : string.Empty;
-                }
-            }
-            if (textMeshProDropdown != null)
-            {
-                if (tmpFieldNames.Count != textMeshProDropdown.options.Count)
-                {
-                    tmpFieldNames.Clear();
-                    textMeshProDropdown.options.ForEach(opt => tmpFieldNames.Add(opt.text));
-                }
-            }
-#endif
-
-        }
-
-        /// <summary>
-        /// Set UI element's text (and possibly font) according to current language.
-        /// </summary>
         public virtual void UpdateText()
         {
             var language = (UILocalizationManager.instance != null) ? UILocalizationManager.instance.currentLanguage : string.Empty;
@@ -288,8 +225,6 @@ namespace PixelCrushers
                 {
                     textMeshPro.text = GetLocalizedText(fieldName);
                     if (localizedTextMeshProFont != null) textMeshPro.font = localizedTextMeshProFont;
-                    textMeshPro.enabled = false;
-                    textMeshPro.enabled = true;
                 }
             }
             if (textMeshProUGUI != null)
@@ -306,8 +241,6 @@ namespace PixelCrushers
                 {
                     textMeshProUGUI.text = GetLocalizedText(fieldName);
                     if (localizedTextMeshProFont != null) textMeshProUGUI.font = localizedTextMeshProFont;
-                    textMeshProUGUI.enabled = false;
-                    textMeshProUGUI.enabled = true;
                 }
             }
             if (textMeshProDropdown != null)

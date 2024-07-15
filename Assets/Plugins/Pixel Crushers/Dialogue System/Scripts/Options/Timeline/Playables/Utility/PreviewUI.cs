@@ -1,4 +1,6 @@
-﻿#if USE_TIMELINE
+// Recompile at 3/18/2024 10:31:56 AM
+
+#if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
 
@@ -31,7 +33,6 @@ namespace PixelCrushers.DialogueSystem
         private int lineOffset;
         private bool computedRect;
         private Rect rect;
-        private GUIStyle guiStyle = null;
 
         /// <summary>
         /// Returns a best guess of what the dialogue text will be.
@@ -266,8 +267,10 @@ namespace PixelCrushers.DialogueSystem
 
         private static AudioClip LoadAudioClip(string audioFileName)
         {
+#if UNITY_EDITOR || USE_ADDRESSABLES
+            AudioClip audioClip;
 #if UNITY_EDITOR
-            AudioClip audioClip = Resources.Load<AudioClip>(audioFileName);
+            audioClip = Resources.Load<AudioClip>(audioFileName);
             if (audioClip != null) return audioClip;
 
 #if USE_ADDRESSABLES
@@ -276,6 +279,7 @@ namespace PixelCrushers.DialogueSystem
             var foundEntry = allEntries.FirstOrDefault(e => e.address == audioFileName);
             if (foundEntry != null) audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(foundEntry.AssetPath);
             if (audioClip != null) return audioClip;
+#endif
 #endif
 #endif
             return null;
@@ -296,25 +300,17 @@ namespace PixelCrushers.DialogueSystem
             this.lineOffset = lineOffset;
             endTime = Time.realtimeSinceStartup + (Mathf.Approximately(0, duration) ? 2 : duration);
             computedRect = false;
-            Debug.Log(message);
         }
 
         private void OnGUI()
         {
-            if (guiStyle == null)
-            {
-                guiStyle = new GUIStyle(GUI.skin.label);
-                guiStyle.fontSize = 26;
-                guiStyle.fontStyle = FontStyle.Bold;
-                guiStyle.alignment = TextAnchor.MiddleCenter;
-            }
             if (!computedRect)
             {
                 computedRect = true;
-                var size = guiStyle.CalcSize(new GUIContent(message));
-                rect = new Rect((Screen.width - size.x) / 2, Screen.height - ((2 + -lineOffset) * size.y), size.x, size.y);
+                var size = GUI.skin.label.CalcSize(new GUIContent(message));
+                rect = new Rect((Screen.width - size.x) / 2, (Screen.height - size.y) / 2 + lineOffset * size.y, size.x, size.y);
             }
-            GUI.Label(rect, message, guiStyle);
+            GUI.Label(rect, message);
         }
 
         private void Update()

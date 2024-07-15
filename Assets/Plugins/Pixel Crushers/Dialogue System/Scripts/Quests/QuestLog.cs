@@ -804,6 +804,16 @@ namespace PixelCrushers.DialogueSystem
                 return DefaultCurrentQuestEntryState(questName, (int)entryNumber);
             }
         }
+        
+        public static string FindQuestEntryByState(string questName, QuestState state)
+        {
+            int entryCount = GetQuestEntryCount(questName);
+            for (int i = 1; i <= entryCount; i++)
+            {
+                if (GetQuestEntryState(questName, i) == state) return GetQuestEntry(questName, i);
+            }
+            return string.Empty;
+        }
 
         /// <summary>
         /// Default built-in implementation of CurrentQuestEntryState.
@@ -822,6 +832,12 @@ namespace PixelCrushers.DialogueSystem
         public static void SetQuestEntryState(string questName, int entryNumber, QuestState state)
         {
             SetQuestEntryState(questName, entryNumber, StateToString(state));
+        }
+        
+        public static void SetQuestEntryField(string questName, int entryNumber, string fieldName, string value)
+        {
+            string entryFieldName = GetEntryFieldName(entryNumber) + " " + fieldName;
+            DialogueLua.SetQuestField(questName, entryFieldName, value);
         }
 
         /// <summary>

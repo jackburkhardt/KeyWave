@@ -468,19 +468,8 @@ $@"local {RunCommandRuntimeArgumentList} = {Lua.EvaluateYarnExpression}({{1}})
             CreateLink(previousEntry, jumpEntry);
 
             var dstConvo = _dialogueDb.GetConversation(stmt.Destination);
-            if (dstConvo == null)
-            {
-                Debug.LogWarning($"Dialogue System: Yarn import error: Conversation '{stmt.Destination}' doesn't exist in database.");
-            }
-            else if (dstConvo.dialogueEntries.Count == 0)
-            {
-                Debug.LogWarning($"Dialogue System: Yarn import error: Conversation '{stmt.Destination}' doesn't have a <START> entry to create a jump link to.");
-            }
-            else
-            {
-                var jumpLink = CreateLink(jumpEntry, dstConvo.dialogueEntries[0]);
-                jumpLink.isConnector = true;
-            }
+            var jumpLink = CreateLink(jumpEntry, dstConvo.dialogueEntries[0]);
+            jumpLink.isConnector = true;
 
             // It is perfectly legal to put unreachable statements in a Yarn node right after a <<jump DestinationConversation>> statement.
             // To make sure those statements are represented in the Dialogue Database, an unreachable parent node is used.
@@ -515,15 +504,6 @@ $@"local {RunCommandRuntimeArgumentList} = {Lua.EvaluateYarnExpression}({{1}})
                 return seqEntry;
             }
 
-            // Special case for the append command. Grab the previous line entry and append the sequence.
-            if (IsAppendSequence(stmt.Name))
-            {
-                var previousSequence = previousEntry.Sequence;
-                var appendedSequence = previousSequence.Trim() == string.Empty ? GenerateSequence(stmt) : previousSequence + "; " + GenerateSequence(stmt);
-                previousEntry.Sequence = appendedSequence;
-                return previousEntry;
-            }
-
             // Special case for the wait command.
             if (stmt.CommandType.IsWait())
             {
@@ -537,9 +517,9 @@ $@"local {RunCommandRuntimeArgumentList} = {Lua.EvaluateYarnExpression}({{1}})
                 }
                 else
                 {
-                    delayAmount = stmt.StringTokens[0].Value;
+                    // var delayAmount = stmt.StringTokens[0].Value;
                     Assert.IsTrue(stmt.StringTokens.Count >= 1, "Must have at least a single command statement argument for <<wait>>");
-                    seq = $"Delay({delayAmount})";
+                    seq = $"Delay({stmt.StringTokens[0].Value})";
                 }
 
                 var waitEntry = CreateDialogueEntry(
@@ -561,8 +541,6 @@ $@"local {RunCommandRuntimeArgumentList} = {Lua.EvaluateYarnExpression}({{1}})
 
             return cmdEntry;
         }
-
-        private bool IsAppendSequence(string name) => name == "appSeq" || name == "appendSequence";
 
         private DialogueEntry CreateAndAddDialogueEntries(LineStatement stmt, DialogueEntry previousEntry)
         {
@@ -899,12 +877,6 @@ $@"local {RunCommandRuntimeArgumentList} = {Lua.EvaluateYarnExpression}({{1}})
                 if (mc.Count == 1 && mc[0].Groups.Count == 2)
                 {
                     lineEntry.Sequence = mc[0].Groups[1].Captures[0].Value;
-                    var dialogueText = lineEntry.DialogueText;
-                    var seqPos = dialogueText.IndexOf("[seq");
-                    if (seqPos != -1)
-                    {
-                        lineEntry.DialogueText = dialogueText.Substring(0, seqPos);
-                    }
                     return;
                 }
             }
@@ -1092,12 +1064,7 @@ $@"local {RunCommandRuntimeArgumentList} = {Lua.EvaluateYarnExpression}({{1}})
             // So no need to completely parse this apart like a typical command.
             var splitIndex = cmd.Text.IndexOf(' ');
             var sequenceString = cmd.Text;
-
             if (splitIndex < sequenceString.Length) sequenceString = cmd.Text.Substring(splitIndex + 1).Trim();
-
-            // Parser doesn't handle ->Message, so it was temporarily replaced. Fix it back:
-            sequenceString = sequenceString.Replace("SEQ_SEND_MESSAGE(", "->Message(");
-
             Debug.Log($"YarnProjectWriter::GenerateSequence() - sequenceString: {sequenceString}, exp count: {cmd.ExpressionCount}");
 
             if (cmd.HasExpression)

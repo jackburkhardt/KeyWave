@@ -3,7 +3,6 @@
 using UnityEngine;
 using UnityEngine.Events;
 using PixelCrushers.DialogueSystem.UnityGUI;
-using UnityEngine.Serialization;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -166,10 +165,7 @@ namespace PixelCrushers.DialogueSystem
         /// The default use message. This can be overridden in the target's Usable component.
         /// </summary>
         [Tooltip("Default use message; can be overridden in the target's Usable component")]
-        [SerializeField]
-        [FormerlySerializedAs("defaultUseMessage")]
-        private string m_defaultUseMessage = "(spacebar to interact)";
-        public virtual string defaultUseMessage { get => m_defaultUseMessage; set => m_defaultUseMessage = value; }
+        public string defaultUseMessage = "(spacebar to interact)";
 
         /// <summary>
         /// If ticked, the OnUse message is broadcast to the usable object's children.

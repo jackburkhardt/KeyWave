@@ -345,26 +345,16 @@ namespace PixelCrushers.DialogueSystem
             return Regex.Replace(s, @"<b>|</b>|<i>|</i>|<p>|</p>|<\\/p>|<color=[#]?\w+>|</color>", string.Empty);
         }
 
-        public static Regex TextMeshProTagsRegex = new Regex(@"<[Bb]>|</[Bb]>|<[Ii]>|</[Ii]>|<color=[#]?\w+>|<color=""\w+"">|</color>|<#\w+>|" +
+        public static string StripTextMeshProTags(string s)
+        {
+            if (!s.Contains("<")) return s;
+            return Regex.Replace(s, @"<[Bb]>|</[Bb]>|<[Ii]>|</[Ii]>|<color=[#]?\w+>|<color=""\w+"">|</color>|<#\w+>|" +
                 @"<align=\w+>|</align>|<font=[^>]+>|</font>|<indent=\w+\%>|<indent=\w+>|</indent>|" +
                 @"<line-height=\w+%>|<line-height=\w+>|</line-height>|<line-indent=\w+\%>|<line-ident=\w+>|</line-ident>|" +
                 @"<link=""[^""]+"">|</link>|<lowercase>|</lowercase>|<uppercase>|</uppercase>|" +
-                @"<smallcaps>|</smallcaps>|<margin=.+?>|<margin-?\w+=.+?>|</margin>|<mark=#\w+>|</mark>|" +
-                @"<nobr>|</nobr>|<size=\w+\%>|<size=\w+>|</size>|<sprite=.+?>|<[Ss]>|</[Ss]>|<[Uu]>|</[Uu]>|" +
-                @"<sup>|</sup>|<sub>|</sub>|<p>|</p>|<\\/p>|<page>|<pos=[^>]+>|<style=[^>]+>|</style>" +
-                @"<voffset=[^>]+>|</voffset>|<cspace=[^>]+>|</cspace>|<mspace=[^>]+>|</mspace>" +
-                @"<noparse>|</noparse>");
-
-        public static string StripTextMeshProTags(string s)
-        {
-            if (!s.Contains('<')) return s;
-            return TextMeshProTagsRegex.Replace(s, string.Empty);
-        }
-
-        public static string StripRPGMakerCodes(string s)
-        {
-            if (!s.Contains('\\')) return s;
-            return Regex.Replace(s, @"\\\.|\\,|\\\>|\\\<|\\\^", string.Empty);
+                @"<smallcaps>|</smallcaps>|<margin=.+>|<margin-?\w+=.+>|</margin>|<mark=#\w+>|</mark>|" +
+                @"<nobr>|</nobr>|<size=\w+\%>|<size=\w+>|</size>|<sprite=.+>|<[Ss]>|</[Ss]>|<[Uu]>|</[Uu]>|" +
+                @"<sup>|</sup>|<sub>|</sub>|<p>|</p>|<\\/p>", string.Empty);
         }
 
         /// <summary>
@@ -584,22 +574,28 @@ namespace PixelCrushers.DialogueSystem
 
         public static bool IsCursorVisible()
         {
-            return CursorControl.isCursorVisible;
+            return Cursor.visible;
         }
 
         public static bool IsCursorLocked()
         {
-            return CursorControl.isCursorLocked;
+            return Cursor.lockState != CursorLockMode.None;
         }
+
+        private static CursorLockMode previousLockMode = CursorLockMode.Locked;
 
         public static void ShowCursor(bool value)
         {
-            CursorControl.ShowCursor(value);
+            Cursor.visible = value;
         }
 
         public static void LockCursor(bool value)
         {
-            CursorControl.LockCursor(value);
+            if (value == false && IsCursorLocked())
+            {
+                previousLockMode = Cursor.lockState;
+            }
+            Cursor.lockState = value ? previousLockMode : CursorLockMode.None;
         }
 
 #endif
