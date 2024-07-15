@@ -292,7 +292,7 @@ namespace PixelCrushers.DialogueSystem
                 if (sequence.Contains(SequencerKeywords.End))
                 {
                     var text = barkText;
-                    int numCharacters = string.IsNullOrEmpty(text) ? 0 : Tools.StripRichTextCodes(text).Length;
+                    int numCharacters = string.IsNullOrEmpty(text) ? 0 : Tools.StripRPGMakerCodes(Tools.StripTextMeshProTags(text)).Length;
                     var endDuration = Mathf.Max(DialogueManager.displaySettings.GetMinSubtitleSeconds(), numCharacters / Mathf.Max(1, DialogueManager.displaySettings.GetSubtitleCharsPerSecond()));
                     sequence = sequence.Replace(SequencerKeywords.End, endDuration.ToString(System.Globalization.CultureInfo.InvariantCulture));
                 }

@@ -61,6 +61,8 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public override bool hasText { get { return m_focusedPanel != null && !string.IsNullOrEmpty(m_focusedPanel.subtitleText.text); } }
 
+        public virtual bool allowDialogueActorCustomPanels { get; set; } = true;
+
         #endregion
 
         #region Initialization & Lookup
@@ -124,39 +126,71 @@ namespace PixelCrushers.DialogueSystem
                 if (immediate)
                 {
                     // Make change immediately:
+                    var subtitle = DialogueManager.currentConversationState.subtitle;
+                    var isSpeaker = actor != null && subtitle.speakerInfo.id == actor.id;
                     StandardUISubtitlePanel actorCurrentPanel =
                         m_builtinPanels.Find(x => x.isOpen && x.portraitActorName == actor.Name) ??
                         m_customPanels.Find(x => x.isOpen && x.portraitActorName == actor.Name);
-                    if (actorCurrentPanel != panel)
+                    if (actorCurrentPanel != panel && actorCurrentPanel != null)
                     {
-                        if (actorCurrentPanel != null)
+                        // Actor is currently present in another open panel, so close it 
+                        // and open the new panel with the same settings:
+                        var isContinueButtonActive = actorCurrentPanel.continueButton != null && actorCurrentPanel.continueButton.gameObject.activeInHierarchy;
+                        var currentName = actorCurrentPanel.portraitActorName;
+                        var currentSprite = (actorCurrentPanel.portraitImage != null) ? actorCurrentPanel.portraitImage.sprite : null;
+                        var currentHasFocus = actorCurrentPanel.hasFocus;
+                        if (actorCurrentPanel.subtitleText.gameObject != panel.subtitleText.gameObject)
                         {
-                            var isContinueButtonActive = actorCurrentPanel.continueButton != null && actorCurrentPanel.continueButton.gameObject.activeInHierarchy;
-                            var currentName = actorCurrentPanel.portraitActorName;
-                            var currentSprite = (actorCurrentPanel.portraitImage != null) ? actorCurrentPanel.portraitImage.sprite : null;
-                            var currentHasFocus = actorCurrentPanel.hasFocus;
-                            if (actorCurrentPanel.subtitleText.gameObject != panel.subtitleText.gameObject)
-                            {
-                                actorCurrentPanel.Close();
-                            }
-                            else
-                            {
-                                actorCurrentPanel.Unfocus();
-                                actorCurrentPanel.SetPortraitName(string.Empty);
-                                actorCurrentPanel.SetPortraitImage(null);
-                            }
-                            if (panel.panelState != UIPanel.PanelState.Open)
-                            {
-                                panel.Open();
-                                if (currentHasFocus) panel.Focus();
-                                if (isContinueButtonActive) panel.ShowContinueButton();
-                            }
-                            panel.SetPortraitName(currentName);
-                            if (actorCurrentPanel.portraitImage != null)
-                            {
-                                panel.SetPortraitImage(currentSprite);
-                            }
+                            actorCurrentPanel.Close();
                         }
+                        else
+                        {
+                            actorCurrentPanel.Unfocus();
+                            actorCurrentPanel.SetPortraitName(string.Empty);
+                            actorCurrentPanel.SetPortraitImage(null);
+                        }
+                        if (panel.panelState != UIPanel.PanelState.Open)
+                        {
+                            panel.Open();
+                            if (currentHasFocus || (actor != null && actor.id == DialogueManager.currentConversationState.subtitle.speakerInfo.id))
+                            {
+                                panel.Focus();
+                            }
+                            if (isContinueButtonActive) panel.ShowContinueButton();
+                        }
+                        panel.SetPortraitName(currentName);
+                        if (actorCurrentPanel.portraitImage != null)
+                        {
+                            panel.SetPortraitImage(currentSprite);
+                        }
+                    }
+                    else
+                    {
+                        // Actor is not present in another panel, so open the
+                        // specified panel and set its content from basic actor info:
+                        if (panel.panelState != UIPanel.PanelState.Open)
+                        {
+                            panel.Open();
+                            if ((actor != null && actor.id == DialogueManager.currentConversationState.subtitle.speakerInfo.id))
+                            {
+                                panel.Focus();
+                            }
+                            if (DialogueManager.conversationView.isWaitingForContinue) panel.ShowContinueButton();
+                        }
+                        panel.SetPortraitImage(actor.GetPortraitSprite());
+                        // If actor is not current speaker and portrait name GameObject is set
+                        // to speaker's name, do not set the portrait name to the actor's name
+                        // in case multiple subtitle panels share the portrait name GameObject.
+                        var actorDisplayName = CharacterInfo.GetLocalizedDisplayNameInDatabase(DialogueLua.GetActorField(actor.Name, "Name").asString);
+                        if (isSpeaker || panel.portraitName.text != subtitle.speakerInfo.Name)
+                        {
+                            panel.SetPortraitName(actorDisplayName);
+                        }
+                    }
+                    // Check animator if actor is current subtitle's speaker:
+                    if (actor != null && isSpeaker)
+                    {
+                        panel.CheckSubtitleAnimator(subtitle);
                     }
                 }
             }
@@ -182,7 +216,9 @@ namespace PixelCrushers.DialogueSystem
                     break;
                 default:
                 case SubtitlePanelNumber.Custom:
-                    panel = GetPanelFromNumber(subtitlePanelNumber, customPanel);
+                    panel = allowDialogueActorCustomPanels 
+                        ? GetPanelFromNumber(subtitlePanelNumber, customPanel)
+                        : (actor != null && actor.IsPlayer) ? m_defaultPCPanel : m_defaultNPCPanel;
                     break;
             }
             if (panel == null)
@@ -288,6 +324,7 @@ namespace PixelCrushers.DialogueSystem
                 case SubtitlePanelNumber.Default:
                     return null;
                 case SubtitlePanelNumber.Custom:
+                    if (!allowDialogueActorCustomPanels) return null;
                     if (!m_customPanels.Contains(customPanel)) m_customPanels.Add(customPanel);
                     return customPanel;
                 case SubtitlePanelNumber.UseBarkUI:
@@ -330,6 +367,21 @@ namespace PixelCrushers.DialogueSystem
             m_actorPanelCache[dialogueActor.transform] = GetPanelFromNumber(subtitlePanelNumber, dialogueActor.standardDialogueUISettings.customSubtitlePanel);
         }
 
+        public void ShowActorInPanel(Actor actor, SubtitlePanelNumber subtitlePanelNumber, StandardUISubtitlePanel customPanel = null)
+        {
+            if (actor == null) return;
+            var panel = GetPanelFromNumber(subtitlePanelNumber, customPanel);
+            if (m_lastPanelUsedByActor.ContainsKey(actor.id))
+            {
+                if (m_lastPanelUsedByActor[actor.id] == panel) return; // Already using panel.
+                m_lastPanelUsedByActor[actor.id].Close();
+            }
+            var displayName = DialogueLua.GetLocalizedActorField(actor.Name, "Display Name").asString;
+            if (string.IsNullOrEmpty(displayName)) displayName = actor.localizedName;
+            panel.OpenOnStartConversation(actor.GetPortraitSprite(), displayName, null);
+                
+        }
+
         #endregion
 
         #region Save & Load Actor Panel Cache
@@ -346,12 +398,17 @@ namespace PixelCrushers.DialogueSystem
         /// not custom panels.
         /// </summary>
         public virtual void RecordActorPanelCache(out List<string> actorGOs, out List<SubtitlePanelNumber> actorGOPanels,
-            out List<int> actorIDs, out List<SubtitlePanelNumber> actorIDPanels)
+            out List<int> actorIDs, out List<SubtitlePanelNumber> actorIDPanels, out List<string> actorNames)
         {
             actorGOs = new List<string>();
             actorGOPanels = new List<SubtitlePanelNumber>();
             actorIDs = new List<int>();
             actorIDPanels = new List<SubtitlePanelNumber>();
+            actorNames = new List<string>();
+            for (int i = 0; i < m_builtinPanels.Count; i++)
+            {
+                actorNames.Add(string.Empty);
+            }
             foreach (var kvp in m_actorPanelCache)
             {
                 if (kvp.Key == null) continue;
@@ -359,11 +416,24 @@ namespace PixelCrushers.DialogueSystem
                 if (panelNumber == SubtitlePanelNumber.Custom) continue;
                 actorGOs.Add(kvp.Key.name);
                 actorGOPanels.Add(panelNumber);
+                if (panelNumber >= SubtitlePanelNumber.Panel0)
+                {
+                    actorNames[(int)panelNumber - (int)SubtitlePanelNumber.Panel0] = kvp.Key.name;
+                }
             }
             foreach (var kvp in m_actorIdOverridePanel)
             {
                 actorIDs.Add(kvp.Key);
-                actorIDPanels.Add((GetSubtitlePanelNumberFromPanel(kvp.Value)));
+                var panelNumber = GetSubtitlePanelNumberFromPanel(kvp.Value);
+                actorIDPanels.Add(panelNumber);
+                if (panelNumber >= SubtitlePanelNumber.Panel0)
+                {
+                    var actor = DialogueManager.masterDatabase.GetActor(kvp.Key);
+                    if (actor != null)
+                    {
+                        actorNames[(int)panelNumber - (int)SubtitlePanelNumber.Panel0] = actor.Name;
+                    }
+                }
             }
         }
 
@@ -480,16 +550,22 @@ namespace PixelCrushers.DialogueSystem
 
                 // Focus the panel and show the subtitle:
                 m_focusedPanel = panel;
-                if (panel.addSpeakerName && !string.IsNullOrEmpty(subtitle.speakerInfo.Name))
-                {
-                    subtitle.formattedText.text = FormattedText.Parse(string.Format(panel.addSpeakerNameFormat, new object[] { subtitle.speakerInfo.Name, subtitle.formattedText.text })).text;
-                }
                 if (dialogueActor != null && dialogueActor.standardDialogueUISettings.setSubtitleColor)
                 {
                     subtitle.formattedText.text = dialogueActor.AdjustSubtitleColor(subtitle);
                 }
                 SupercedeOtherPanels(panel);
                 panel.ShowSubtitle(subtitle);
+            }
+
+            // Check if a [picc=#] tag changed the conversant's portrait:
+            if (subtitle.formattedText.picConversant != FormattedText.NoPicOverride)
+            {
+                var conversantPortrait = subtitle.GetListenerOverridePortrait();
+                var defaultPanel = subtitle.listenerInfo.IsNPC ? defaultNPCPanel : defaultPCPanel;
+                DialogueActor conversantDialogueActor;
+                var conversantPanel = GetActorTransformPanel(subtitle.listenerInfo.transform, defaultPanel, out conversantDialogueActor);
+                if (conversantPanel != null && conversantPanel.portraitImage != null) conversantPanel.portraitImage.sprite = conversantPortrait;
             }
         }
 
@@ -573,7 +649,7 @@ namespace PixelCrushers.DialogueSystem
                 if (panel == null || panel == newPanel) continue;
                 if (panel.isOpen)
                 {
-                    if (panel.visibility == UIVisibility.UntilSuperceded)
+                    if (UITools.CanBeSuperceded(panel.visibility))
                     {
                         panel.Close();
                     }
@@ -590,7 +666,23 @@ namespace PixelCrushers.DialogueSystem
             for (int i = 0; i < m_builtinPanels.Count; i++)
             {
                 var panel = m_builtinPanels[i];
-                if (panel != null && panel.isOpen && (panel.hasFocus || panel.isFocusing)) panel.Unfocus();
+                if (panel != null && panel.isOpen && (panel.hasFocus || panel.isFocusing))
+                {
+                    panel.Unfocus();
+                }
+            }
+        }
+
+        public virtual void HideOnResponseMenu()
+        {
+            for (int i = 0; i < m_builtinPanels.Count; i++)
+            {
+                var panel = m_builtinPanels[i];
+                if (panel != null && panel.isOpen &&
+                    panel.visibility == UIVisibility.UntilSupercededOrActorChangeOrMenu)
+                {
+                    panel.Close();
+                }
             }
         }
 
@@ -770,10 +862,10 @@ namespace PixelCrushers.DialogueSystem
         {
             for (int i = 0; i < m_builtinPanels.Count; i++)
             {
-                if (m_builtinPanels[i] != null) TypewriterUtility.GetTypewriterSpeed(m_builtinPanels[i].subtitleText);
+                if (m_builtinPanels[i] != null) TypewriterUtility.SetTypewriterSpeed(m_builtinPanels[i].subtitleText, charactersPerSecond);
             }
-            if (m_defaultNPCPanel != null && !m_builtinPanels.Contains(m_defaultNPCPanel)) TypewriterUtility.GetTypewriterSpeed(m_defaultNPCPanel.subtitleText);
-            if (m_defaultPCPanel != null && !m_builtinPanels.Contains(m_defaultPCPanel)) TypewriterUtility.GetTypewriterSpeed(m_defaultPCPanel.subtitleText);
+            if (m_defaultNPCPanel != null && !m_builtinPanels.Contains(m_defaultNPCPanel)) TypewriterUtility.SetTypewriterSpeed(m_defaultNPCPanel.subtitleText, charactersPerSecond);
+            if (m_defaultPCPanel != null && !m_builtinPanels.Contains(m_defaultPCPanel)) TypewriterUtility.SetTypewriterSpeed(m_defaultPCPanel.subtitleText, charactersPerSecond);
         }
 
         private AbstractTypewriterEffect GetTypewriter(StandardUISubtitlePanel panel)

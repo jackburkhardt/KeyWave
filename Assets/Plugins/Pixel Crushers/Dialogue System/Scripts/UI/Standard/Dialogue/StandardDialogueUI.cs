@@ -124,7 +124,7 @@ namespace PixelCrushers.DialogueSystem
             conversationUIElements.ClearCaches();
         }
 
-        protected IEnumerator CloseAfterPanelsAreClosed()
+        protected virtual IEnumerator CloseAfterPanelsAreClosed()
         {
             // Close subtitle/menu panels and wait for them to finish:
             conversationUIElements.ClosePanels();
@@ -202,6 +202,12 @@ namespace PixelCrushers.DialogueSystem
             {
                 base.ShowAlert(message, duration);
             }
+        }
+
+        public override void HideAllAlerts()
+        {
+            m_alertQueue.Clear();
+            base.HideAllAlerts();
         }
 
         private void UpdateAlertQueue()
@@ -317,6 +323,14 @@ namespace PixelCrushers.DialogueSystem
             conversationUIElements.standardSubtitleControls.ForceOverrideSubtitlePanel(customPanel);
         }
 
+        /// <summary>
+        /// Shows an actor immediately in a subtitle panel.
+        /// </summary>
+        public virtual void ShowActorInPanel(Actor actor, SubtitlePanelNumber subtitlePanelNumber, StandardUISubtitlePanel customPanel = null)
+        {
+            conversationUIElements.standardSubtitleControls.ShowActorInPanel(actor, subtitlePanelNumber, customPanel);
+        }
+
         #endregion
 
         #region Response Menu
@@ -347,6 +361,7 @@ namespace PixelCrushers.DialogueSystem
         protected virtual void ShowResponsesImmediate(Subtitle subtitle, Response[] responses, float timeout)
         { 
             conversationUIElements.standardSubtitleControls.UnfocusAll();
+            conversationUIElements.standardSubtitleControls.HideOnResponseMenu();
             base.ShowResponses(subtitle, responses, timeout);
         }
 

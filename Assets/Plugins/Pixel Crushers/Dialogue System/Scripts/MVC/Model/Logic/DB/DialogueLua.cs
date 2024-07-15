@@ -1200,7 +1200,9 @@ namespace PixelCrushers.DialogueSystem
             Lua.WasInvoked = true;
             LuaTable luaTable = Lua.Environment.GetValue("Variable") as LuaTable;
             if (luaTable == null) return;
-            luaTable.SetNameValue(StringToTableIndex(variable), LuaInterpreterExtensions.ObjectToLuaValue(value));
+            var tableIndex = StringToTableIndex(variable);
+            luaTable.SetNameValue(tableIndex, LuaInterpreterExtensions.ObjectToLuaValue(value));
+            if (Assignment.MonitoredVariables.Contains(tableIndex)) Assignment.InvokeVariableChanged(tableIndex, value);
         }
 
         /// <summary>
@@ -1348,7 +1350,7 @@ namespace PixelCrushers.DialogueSystem
             var safeValue = (value == null) ? "nil"
                 : (value.GetType() == typeof(string)) ? $"\"{DoubleQuotesToSingle(value.ToString())}\""
                 : value.ToString();
-            Lua.Run(string.Format("return Conversation[{0}].{1} = {2}", new System.Object[] { conversationID, StringToTableIndex(field), safeValue }), false, true);
+            Lua.Run(string.Format("Conversation[{0}].{1} = {2}", new System.Object[] { conversationID, StringToTableIndex(field), safeValue }), false, true);
         }
 
         /// <summary>

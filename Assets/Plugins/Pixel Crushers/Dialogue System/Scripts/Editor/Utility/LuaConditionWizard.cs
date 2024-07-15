@@ -69,7 +69,9 @@ namespace PixelCrushers.DialogueSystem
         private string savedLuaCode = string.Empty;
         private bool append = true;
         private CustomLuaFunctionInfoRecord[] customLuaFuncs = null;
+        private CustomLuaFunctionInfoRecord[] builtinLuaFuncs = null;
         private string[] customLuaFuncNames = null;
+        private string[] builtinLuaFuncNames = null;
 
         public LuaConditionWizard(DialogueDatabase database) : base(database)
         {
@@ -293,10 +295,81 @@ namespace PixelCrushers.DialogueSystem
                 item.simStatusType = (SimStatusType)EditorGUILayout.EnumPopup(item.simStatusType);
             }
 
+            else if (item.conditionType == ConditionWizardResourceType.Misc)
+            {
+                ValidateCustomLuaFunctionInfo();
+
+                int newCustomLuaFuncIndex = EditorGUILayout.Popup(item.customLuaFuncIndex, builtinLuaFuncNames);
+                if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
+                {
+                    item.customLuaFuncIndex = newCustomLuaFuncIndex;
+                    item.customParamValues = null;
+                }
+                if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < builtinLuaFuncNames.Length)
+                {
+                    var luaFuncRecord = builtinLuaFuncs[item.customLuaFuncIndex];
+                    if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
+                    for (int i = 0; i < luaFuncRecord.parameters.Length; i++)
+                    {
+                        switch (luaFuncRecord.parameters[i])
+                        {
+                            case CustomLuaParameterType.Bool:
+                                item.customParamValues[i] = (BooleanType)EditorGUILayout.EnumPopup((BooleanType)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Double:
+                                item.customParamValues[i] = EditorGUILayout.FloatField((float)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.String:
+                                item.customParamValues[i] = EditorGUILayout.TextField((string)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Actor:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], actorNames);
+                                break;
+                            case CustomLuaParameterType.Quest:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], questNames);
+                                item.questNamesIndex = (int)item.customParamValues[i];
+                                break;
+                            case CustomLuaParameterType.QuestEntry:
+                                if ((item.conditionsQuestEntryNames.Length == 0) && (item.questNamesIndex < complexQuestNames.Length))
+                                {
+                                    item.conditionsQuestEntryNames = GetQuestEntryNames(complexQuestNames[item.questNamesIndex]);
+                                }
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], item.conditionsQuestEntryNames);
+                                break;
+                            case CustomLuaParameterType.Variable:
+                            case CustomLuaParameterType.VariableName:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], variablePopupNames);
+                                break;
+                            case CustomLuaParameterType.Item:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], itemNames);
+                                break;
+                            case CustomLuaParameterType.QuestState:
+                                if (item.customParamValues[i] == null || item.customParamValues[i].GetType() != typeof(QuestState))
+                                {
+                                    item.customParamValues[i] = QuestState.Unassigned;
+                                }
+                                item.customParamValues[i] = (QuestState)EditorGUILayout.EnumPopup((QuestState)item.customParamValues[i]);
+                                break;
+                        }
+                    }
+                    switch (luaFuncRecord.returnValue)
+                    {
+                        case CustomLuaReturnType.Bool:
+                            DrawRightHand(item, FieldType.Boolean);
+                            break;
+                        case CustomLuaReturnType.Double:
+                            DrawRightHand(item, FieldType.Number);
+                            break;
+                        case CustomLuaReturnType.String:
+                            DrawRightHand(item, FieldType.Text);
+                            break;
+                    }
+                }
+            }
+
             else if (item.conditionType == ConditionWizardResourceType.Custom)
             {
-                // Custom Lua Functions:
-                if (customLuaFuncs == null) FindAllCustomLuaFuncs(true, out customLuaFuncs, out customLuaFuncNames);
+                ValidateCustomLuaFunctionInfo();
 
                 int newCustomLuaFuncIndex = EditorGUILayout.Popup(item.customLuaFuncIndex, customLuaFuncNames);
                 if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
@@ -439,6 +512,16 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
+        private void ValidateCustomLuaFunctionInfo()
+        {
+            if (customLuaFuncs == null)
+            {
+                FindAllCustomLuaFuncs(true,
+                    out builtinLuaFuncs, out builtinLuaFuncNames,
+                    out customLuaFuncs, out customLuaFuncNames);
+            }
+        }
+
         private string openParen = string.Empty;
         private string closeParen = string.Empty;
 
@@ -518,8 +601,8 @@ namespace PixelCrushers.DialogueSystem
                                                     openParen,
                                                     DialogueLua.StringToTableIndex(variableName),
                                                     GetWizardComparisonText(item.comparisonType),
-                                                    item.floatValue,
-                                                    item.floatValue2,
+                                                    item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                                    item.floatValue2.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                                     closeParen);
                                 }
                                 else
@@ -528,7 +611,7 @@ namespace PixelCrushers.DialogueSystem
                                                     openParen,
                                                     DialogueLua.StringToTableIndex(variableName),
                                                     GetWizardComparisonText(item.comparisonType),
-                                                    item.floatValue,
+                                                    item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                                     closeParen);
                                 }
                                 break;
@@ -613,15 +696,16 @@ namespace PixelCrushers.DialogueSystem
                                         closeParen);
 
                     }
-                    else if (item.conditionType == ConditionWizardResourceType.Custom)
+                    else if (item.conditionType == ConditionWizardResourceType.Misc)
                     {
 
                         // Custom:
-                        if (customLuaFuncs == null) FindAllCustomLuaFuncs(true, out customLuaFuncs, out customLuaFuncNames);
-                        if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < customLuaFuncs.Length)
+                        ValidateCustomLuaFunctionInfo();
+
+                        if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < builtinLuaFuncs.Length)
                         {
                             sb.Append(openParen);
-                            var luaFuncRecord = customLuaFuncs[item.customLuaFuncIndex];
+                            var luaFuncRecord = builtinLuaFuncs[item.customLuaFuncIndex];
                             sb.Append(Tools.GetAllAfterSlashes(luaFuncRecord.functionName) + "(");
                             if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
                             for (int p = 0; p < luaFuncRecord.parameters.Length; p++)
@@ -635,7 +719,7 @@ namespace PixelCrushers.DialogueSystem
                                         break;
                                     case CustomLuaParameterType.Double:
                                         if (item.customParamValues[p] == null) item.customParamValues[p] = (float)0;
-                                        sb.Append((float)item.customParamValues[p]);
+                                        sb.Append(((float)item.customParamValues[p]).ToString(System.Globalization.CultureInfo.InvariantCulture));
                                         break;
                                     case CustomLuaParameterType.String:
                                         if (item.customParamValues[p] == null) item.customParamValues[p] = string.Empty;
@@ -685,7 +769,90 @@ namespace PixelCrushers.DialogueSystem
                                         ((item.booleanValue == BooleanType.True) ? "true" : "false"));
                                     break;
                                 case CustomLuaReturnType.Double:
-                                    sb.Append(GetWizardComparisonText(item.comparisonType) + " " + item.floatValue);
+                                    sb.Append(GetWizardComparisonText(item.comparisonType) + " " + item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                    break;
+                                case CustomLuaReturnType.String:
+                                    sb.Append(((item.equalityType == EqualityType.Is) ? " == " : " ~= ") +
+                                        "\"" + item.stringValue + "\"");
+                                    break;
+                            }
+                            sb.Append(closeParen);
+                        }
+                    }
+                    else if (item.conditionType == ConditionWizardResourceType.Custom)
+                    {
+
+                        // Custom:
+                        ValidateCustomLuaFunctionInfo();
+
+                        if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < customLuaFuncs.Length)
+                        {
+                            sb.Append(openParen);
+                            var luaFuncRecord = customLuaFuncs[item.customLuaFuncIndex];
+                            sb.Append(Tools.GetAllAfterSlashes(luaFuncRecord.functionName) + "(");
+                            if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
+                            for (int p = 0; p < luaFuncRecord.parameters.Length; p++)
+                            {
+                                if (p > 0) sb.Append(", ");
+                                switch (luaFuncRecord.parameters[p])
+                                {
+                                    case CustomLuaParameterType.Bool:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = BooleanType.True;
+                                        sb.Append(((BooleanType)item.customParamValues[p] == BooleanType.True) ? "true" : "false");
+                                        break;
+                                    case CustomLuaParameterType.Double:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (float)0;
+                                        sb.Append(((float)item.customParamValues[p]).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                        break;
+                                    case CustomLuaParameterType.String:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = string.Empty;
+                                        sb.Append("\"" + (string)item.customParamValues[p] + "\"");
+                                        break;
+                                    case CustomLuaParameterType.Actor:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
+                                        var actorIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= actorIndex && actorIndex < actorNames.Length) ? ("\"" + actorNames[actorIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.Quest:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
+                                        var questIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= questIndex && questIndex < questNames.Length) ? ("\"" + questNames[questIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.QuestEntry:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
+                                        sb.Append(((int)item.customParamValues[p] + 1).ToString());
+                                        break;
+                                    case CustomLuaParameterType.Variable:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
+                                        var variableIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= variableIndex && variableIndex < variableNames.Length) ? ("Variable[\"" + DialogueLua.StringToTableIndex(variableNames[variableIndex]) + "\"]") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.VariableName:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
+                                        var variableNameIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= variableNameIndex && variableNameIndex < variableNames.Length) ? ("\"" + variableNames[variableNameIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.Item:
+                                        if (item.customParamValues[p] == null) item.customParamValues[p] = (int)0;
+                                        var itemIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= itemIndex && itemIndex < itemNames.Length) ? ("\"" + itemNames[itemIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.QuestState:
+                                        var tempQuestState = (item.customParamValues[p] == null || item.customParamValues[p].GetType() != typeof(QuestState))
+                                            ? QuestState.Unassigned : ((QuestState)(item.customParamValues[p]));
+                                        sb.Append("\"" + QuestLog.StateToString(tempQuestState) + "\"");
+                                        break;
+                                }
+                            }
+                            sb.Append(") ");
+                            switch (luaFuncRecord.returnValue)
+                            {
+                                case CustomLuaReturnType.Bool:
+                                    sb.Append(((item.equalityType == EqualityType.Is) ? " == " : " ~= ") +
+                                        ((item.booleanValue == BooleanType.True) ? "true" : "false"));
+                                    break;
+                                case CustomLuaReturnType.Double:
+                                    sb.Append(GetWizardComparisonText(item.comparisonType) + " " + item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                                     break;
                                 case CustomLuaReturnType.String:
                                     sb.Append(((item.equalityType == EqualityType.Is) ? " == " : " ~= ") +
@@ -734,8 +901,8 @@ namespace PixelCrushers.DialogueSystem
                                         DialogueLua.StringToTableIndex(elementName),
                                         DialogueLua.StringToFieldName(fieldName),
                                         GetWizardComparisonText(item.comparisonType),
-                                        item.floatValue,
-                                        item.floatValue2,
+                                        item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                        item.floatValue2.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                         closeParen);
                     }
                     else
@@ -746,7 +913,7 @@ namespace PixelCrushers.DialogueSystem
                                         DialogueLua.StringToTableIndex(elementName),
                                         DialogueLua.StringToFieldName(fieldName),
                                         GetWizardComparisonText(item.comparisonType),
-                                        item.floatValue,
+                                        item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                         closeParen);
                     }
                     break;
@@ -1036,11 +1203,89 @@ namespace PixelCrushers.DialogueSystem
                 x += rect.width + 2;
 
             }
+            else if (item.conditionType == ConditionWizardResourceType.Misc)
+            {
+                ValidateCustomLuaFunctionInfo();
+
+                var customPopupWidth = 60f;
+                var rightHandWidth = 80f;
+                rect = new Rect(x, y, customPopupWidth, EditorGUIUtility.singleLineHeight);
+                int newCustomLuaFuncIndex = EditorGUI.Popup(rect, item.customLuaFuncIndex, builtinLuaFuncNames);
+                if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
+                {
+                    item.customLuaFuncIndex = newCustomLuaFuncIndex;
+                    item.customParamValues = null;
+                }
+                if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < builtinLuaFuncs.Length)
+                {
+                    var luaFuncRecord = builtinLuaFuncs[item.customLuaFuncIndex];
+                    var numParams = luaFuncRecord.parameters.Length;
+                    var freeWidth = position.width - (typeWidth + equalityWidth + deleteButtonWidth + 10) - customPopupWidth - rightHandWidth;
+                    if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
+                    for (int i = 0; i < luaFuncRecord.parameters.Length; i++)
+                    {
+                        x += rect.width + 2;
+                        rect = new Rect(x, y, freeWidth / numParams, EditorGUIUtility.singleLineHeight);
+                        switch (luaFuncRecord.parameters[i])
+                        {
+                            case CustomLuaParameterType.Bool:
+                                item.customParamValues[i] = (BooleanType)EditorGUI.EnumPopup(rect, (BooleanType)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Double:
+                                item.customParamValues[i] = EditorGUI.FloatField(rect, (float)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.String:
+                                item.customParamValues[i] = EditorGUI.TextField(rect, (string)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Actor:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], actorNames);
+                                break;
+                            case CustomLuaParameterType.Quest:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], questNames);
+                                item.questNamesIndex = (int)item.customParamValues[i];
+                                break;
+                            case CustomLuaParameterType.QuestEntry:
+                                if ((item.conditionsQuestEntryNames.Length == 0) && (item.questNamesIndex < complexQuestNames.Length))
+                                {
+                                    item.conditionsQuestEntryNames = GetQuestEntryNames(complexQuestNames[item.questNamesIndex]);
+                                }
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], item.conditionsQuestEntryNames);
+                                break;
+                            case CustomLuaParameterType.Variable:
+                            case CustomLuaParameterType.VariableName:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], variablePopupNames);
+                                break;
+                            case CustomLuaParameterType.Item:
+                                item.customParamValues[i] = EditorGUI.Popup(rect, (int)item.customParamValues[i], itemNames);
+                                break;
+                            case CustomLuaParameterType.QuestState:
+                                if (item.customParamValues[i] == null || item.customParamValues[i].GetType() != typeof(QuestState))
+                                {
+                                    item.customParamValues[i] = QuestState.Unassigned;
+                                }
+                                item.customParamValues[i] = (QuestState)EditorGUI.EnumPopup(rect, (QuestState)item.customParamValues[i]);
+                                break;
+                        }
+                    }
+                    x += rect.width + 2;
+                    rect = new Rect(x, y, position.width - x, EditorGUIUtility.singleLineHeight);
+                    switch (luaFuncRecord.returnValue)
+                    {
+                        case CustomLuaReturnType.Bool:
+                            DrawRightHand(rect, item, FieldType.Boolean);
+                            break;
+                        case CustomLuaReturnType.Double:
+                            DrawRightHand(rect, item, FieldType.Number);
+                            break;
+                        case CustomLuaReturnType.String:
+                            DrawRightHand(rect, item, FieldType.Text);
+                            break;
+                    }
+                }
+            }
             else if (item.conditionType == ConditionWizardResourceType.Custom)
             {
-
-                // Custom Lua Functions:
-                if (customLuaFuncs == null) FindAllCustomLuaFuncs(true, out customLuaFuncs, out customLuaFuncNames);
+                ValidateCustomLuaFunctionInfo();
 
                 var customPopupWidth = 60f;
                 var rightHandWidth = 80f;

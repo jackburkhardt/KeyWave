@@ -68,6 +68,12 @@ namespace PixelCrushers.DialogueSystem
         public bool randomizeNextEntry { get; set; }
 
         /// <summary>
+        /// If randomizeNextEntry is set, it checks this property. If it's
+        /// also set, tries to avoid choosing the same entry it did last time.
+        /// </summary>
+        public bool randomizeNextEntryNoDuplicate { get; set; }
+
+        /// <summary>
         /// Gets the conversant info for this conversation.
         /// </summary>
         /// <value>
@@ -240,8 +246,10 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
             isPCResponseMenuNext = !state.hasNPCResponse && !hasForceAuto &&
-                (numPCResponses > 1 || hasForceMenu || (numPCResponses == 1 && alwaysForceMenu));
-            isPCAutoResponseNext = !state.hasNPCResponse && hasForceAuto || (numPCResponses == 1 && !hasForceMenu && (!alwaysForceMenu || state.pcResponses[0].destinationEntry.isGroup));
+                (numPCResponses > 1 || hasForceMenu || (numPCResponses == 1 && alwaysForceMenu && !string.IsNullOrEmpty(state.pcResponses[0].formattedText.text)));
+            isPCAutoResponseNext = !state.hasNPCResponse && hasForceAuto || 
+                (numPCResponses == 1 && string.IsNullOrEmpty(state.pcResponses[0].formattedText.text)) ||
+                (numPCResponses == 1 && !hasForceMenu && (!alwaysForceMenu || state.pcResponses[0].destinationEntry.isGroup));
         }
 
         private void SetConversationOverride(ConversationState state)
@@ -270,7 +278,7 @@ namespace PixelCrushers.DialogueSystem
             randomizeNextEntry = false;
             if (m_state.hasNPCResponse)
             {
-                GotoState(m_model.GetState(randomize ? m_state.GetRandomNPCEntry() : m_state.firstNPCResponse.destinationEntry));
+                GotoState(m_model.GetState(randomize ? m_state.GetRandomNPCEntry(randomizeNextEntryNoDuplicate) : m_state.firstNPCResponse.destinationEntry));
             }
             else if (m_state.hasPCResponses)
             {

@@ -11,7 +11,6 @@ namespace PixelCrushers.DialogueSystem
     [AddComponentMenu("")] // Use wrapper.
     public class QuestLogWindowHotkey : MonoBehaviour
     {
-        private bool isOpen = false;
 
         [Tooltip("Toggle the quest log window when this key is pressed.")]
         public KeyCode key = KeyCode.J;
@@ -42,11 +41,7 @@ namespace PixelCrushers.DialogueSystem
             if (DialogueManager.IsDialogueSystemInputDisabled()) return;
             if (InputDeviceManager.IsKeyDown(key) || (!string.IsNullOrEmpty(buttonName) && DialogueManager.getInputButtonDown(buttonName)))
             {
-                
-              // if (runtimeQuestLogWindow.isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
-              
-              if (isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
-              isOpen = !isOpen;
+                if (runtimeQuestLogWindow.isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
             }
         }
 

@@ -19,12 +19,7 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        public virtual string Draw(string currentValue, DialogueDatabase database)
-        {
-            return currentValue;
-        }
-        
-        
+        public abstract string Draw(string currentValue, DialogueDatabase database);
 
         public virtual string Draw(GUIContent label, string currentValue, DialogueDatabase database)
         {
@@ -36,7 +31,6 @@ namespace PixelCrushers.DialogueSystem
             Debug.LogWarning("Dialogue System: API change notice: Since version 1.6.8, CustomFieldType has added an overload to Draw() that uses a Rect. Please add an implementation of this overload to " + GetType().Name + ".");
             return EditorGUI.TextField(rect, currentValue);
         }
-        
 
         protected void RequireDialogueEditorWindow(DialogueDatabase database)
         {
