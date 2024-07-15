@@ -1,12 +1,4 @@
-// Recompile at 3/18/2024 10:31:13 AM
-
-
-
-
-
-
-
-// Copyright (c) Pixel Crushers. All rights reserved.
+﻿// Copyright (c) Pixel Crushers. All rights reserved.
 
 using System.Collections;
 using System.Collections.Generic;
@@ -159,6 +151,24 @@ namespace PixelCrushers.DialogueSystem
 
         #region Show & Hide
 
+        protected override void Update()
+        {
+            if (s_isInputDisabled)
+            {
+                if (eventSystem != null) eventSystem.SetSelectedGameObject(null);
+            }
+            else
+            {
+                base.Update();
+            }
+        }
+
+        public override void CheckFocus()
+        {
+            if (s_isInputDisabled) return;
+            base.CheckFocus();
+        }
+
         public virtual void SetPCPortrait(Sprite portraitSprite, string portraitName)
         {
             if (pcImage != null)
@@ -225,7 +235,14 @@ namespace PixelCrushers.DialogueSystem
             {
                 DisableInput();
                 if (InputDeviceManager.autoFocus) SetFocus(firstSelected);
-                Invoke(nameof(EnableInput), blockInputDuration);
+                if (Mathf.Approximately(0, Time.timeScale))
+                { 
+                    StartCoroutine(EnableInputAfterDuration(blockInputDuration));
+                }
+                else
+                {
+                    Invoke(nameof(EnableInput), blockInputDuration);
+                }
             }
             else
             {
@@ -235,6 +252,12 @@ namespace PixelCrushers.DialogueSystem
 #if TMP_PRESENT
             DialogueManager.instance.StartCoroutine(CheckTMProAutoScroll());
 #endif
+        }
+
+        private IEnumerator EnableInputAfterDuration(float duration)
+        {
+            yield return new WaitForSecondsRealtime(duration);
+            EnableInput();
         }
 
 #if TMP_PRESENT
@@ -529,16 +552,27 @@ namespace PixelCrushers.DialogueSystem
                 if (autonumber.enabled)
                 {
                     button.text = string.Format(m_processedAutonumberFormat, buttonNumber + 1, button.text);
-                    var keyTrigger = button.GetComponent<UIButtonKeyTrigger>();
+                    // Add UIButtonKeyTrigger(s) if needed:
+                    var numKeyTriggersNeeded = 0;
+                    if (autonumber.regularNumberHotkeys) numKeyTriggersNeeded++;
+                    if (autonumber.numpadHotkeys) numKeyTriggersNeeded++;
+                    var keyTriggers = button.GetComponents<UIButtonKeyTrigger>();
+                    if (keyTriggers.Length < numKeyTriggersNeeded)
+                    {
+                        for (int i = keyTriggers.Length; i < numKeyTriggersNeeded; i++)
+                        {
+                            button.gameObject.AddComponent<UIButtonKeyTrigger>();
+                        }
+                        keyTriggers = button.GetComponents<UIButtonKeyTrigger>();
+                    }
+                    int index = 0;
                     if (autonumber.regularNumberHotkeys)
                     {
-                        if (keyTrigger == null) keyTrigger = button.gameObject.AddComponent<UIButtonKeyTrigger>();
-                        keyTrigger.key = (KeyCode)((int)KeyCode.Alpha1 + buttonNumber);
+                        keyTriggers[index++].key = (KeyCode)((int)KeyCode.Alpha1 + buttonNumber);
                     }
                     if (autonumber.numpadHotkeys)
                     {
-                        if (autonumber.regularNumberHotkeys || keyTrigger == null) keyTrigger = button.gameObject.AddComponent<UIButtonKeyTrigger>();
-                        keyTrigger.key = (KeyCode)((int)KeyCode.Keypad1 + buttonNumber);
+                        keyTriggers[index].key = (KeyCode)((int)KeyCode.Keypad1 + buttonNumber);
                     }
                 }
             }
@@ -600,7 +634,6 @@ namespace PixelCrushers.DialogueSystem
 
         protected virtual GameObject InstantiateButton()
         {
-            /*
             // Try to pull from pool first:
             if (m_instantiatedButtonPool.Count > 0)
             {
@@ -610,10 +643,8 @@ namespace PixelCrushers.DialogueSystem
             }
             else
             {
-                
+                return GameObject.Instantiate(buttonTemplate.gameObject) as GameObject;
             }
-            */
-            return Instantiate(buttonTemplate.gameObject) as GameObject;
         }
 
         public void DestroyInstantiatedButtons()
@@ -621,7 +652,7 @@ namespace PixelCrushers.DialogueSystem
             // Return buttons to pool:
             for (int i = 0; i < instantiatedButtons.Count; i++)
             {
-                if (instantiatedButtons[i] != null) instantiatedButtons[i].SetActive(false);
+                instantiatedButtons[i].SetActive(false);
             }
             m_instantiatedButtonPool.AddRange(instantiatedButtons);
 
@@ -707,6 +738,10 @@ namespace PixelCrushers.DialogueSystem
             {
                 RefreshSelectablesList();
                 CheckFocus();
+                if (eventSystem != null && eventSystem.currentSelectedGameObject != null)
+                { // Also show in focused/selected state:
+                    UIUtility.Select(eventSystem.currentSelectedGameObject.GetComponent<UnityEngine.UI.Selectable>());
+                }
             }
         }
         #endregion

@@ -42,13 +42,5 @@ namespace PixelCrushers.DialogueSystem
             }
             return 0;
         }
-        
-        public override FieldType storeFieldAsType
-        {
-            get
-            {
-                return FieldType.QuestState;
-            }
-        }
     }
 }

@@ -242,11 +242,17 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 }
                 if (currentConversation != null)
                 {
+                    menu.AddItem(new GUIContent("Arrange Nodes/Vertically"), false, ArrangeNodesCallback, AutoArrangeStyle.Vertically);
+                    menu.AddItem(new GUIContent("Arrange Nodes/Vertically (alternate)"), false, ArrangeNodesCallback, AutoArrangeStyle.VerticallyOld);
+                    menu.AddItem(new GUIContent("Arrange Nodes/Horizontally"), false, ArrangeNodesCallback, AutoArrangeStyle.Horizontally);
                     menu.AddItem(new GUIContent("Split Pipes Into Nodes/Process Conversation"), false, SplitPipesIntoEntries, null);
                     menu.AddItem(new GUIContent("Split Pipes Into Nodes/Trim Whitespace Around Pipes"), trimWhitespaceAroundPipes, ToggleTrimWhitespaceAroundPipes);
                 }
                 else
                 {
+                    menu.AddDisabledItem(new GUIContent("Arrange Nodes/Vertically"));
+                    menu.AddDisabledItem(new GUIContent("Arrange Nodes/Vertically (alternate)"));
+                    menu.AddDisabledItem(new GUIContent("Arrange Nodes/Horizontally"));
                     menu.AddDisabledItem(new GUIContent("Split Pipes Into Nodes/Process Conversation"));
                     menu.AddDisabledItem(new GUIContent("Split Pipes Into Nodes/Trim Whitespace Around Pipes"));
                 }
@@ -256,6 +262,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 menu.AddItem(new GUIContent("Sort/Reorder IDs/All Conversations"), false, ConfirmReorderIDsAllConversations);
                 menu.AddItem(new GUIContent("Sort/Reorder IDs/Depth First Reordering"), reorderIDsDepthFirst, () => { reorderIDsDepthFirst = !reorderIDsDepthFirst; });
                 menu.AddItem(new GUIContent("Show/Show Conversation IDs"), prefs.showConversationIDs, ToggleShowConversationIDs);
+                menu.AddItem(new GUIContent("Show/Show Node IDs"), prefs.showNodeIDs, ToggleShowNodeIDs);
                 menu.AddItem(new GUIContent("Show/Show All Actor Names"), prefs.showAllActorNames, ToggleShowAllActorNames);
                 menu.AddItem(new GUIContent("Show/Show Non-Primary Actor Names"), prefs.showOtherActorNames, ToggleShowOtherActorNames);
                 menu.AddItem(new GUIContent("Show/Show Actor Portraits"), prefs.showActorPortraits, ToggleShowActorPortraits);
@@ -263,7 +270,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 menu.AddItem(new GUIContent("Show/Show Full Text On Hover"), prefs.showFullTextOnHover, ToggleShowFullTextOnHover);
                 menu.AddItem(new GUIContent("Show/Show Link Order On Arrows"), prefs.showLinkOrderOnConnectors, () => { prefs.showLinkOrderOnConnectors = !prefs.showLinkOrderOnConnectors; });
                 menu.AddItem(new GUIContent("Show/Show End Node Markers"), prefs.showEndNodeMarkers, ToggleShowEndNodeMarkers);
-                menu.AddItem(new GUIContent("Show/Show Node IDs"), prefs.showNodeIDs, ToggleShowNodeIDs);
                 menu.AddItem(new GUIContent("Show/Show Titles Instead of Text"), prefs.showTitlesInsteadOfText, ToggleShowTitlesBeforeText);
                 menu.AddItem(new GUIContent("Show/Show Primary Actors in Lower Right"), prefs.showParticipantNames, ToggleShowParticipantNames);
                 menu.AddItem(new GUIContent("Show/Prefer Titles For 'Links To' Menus"), prefs.preferTitlesForLinksTo, TogglePreferTitlesForLinksTo);

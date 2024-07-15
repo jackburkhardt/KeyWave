@@ -186,12 +186,6 @@ namespace PixelCrushers.DialogueSystem
         {
             UpdateTracker();
         }
-        
-        public void OnConversationLine(Subtitle subtitle)
-        {
-            UpdateTracker();
-        }
-       
 
         public virtual void UpdateTracker()
         {

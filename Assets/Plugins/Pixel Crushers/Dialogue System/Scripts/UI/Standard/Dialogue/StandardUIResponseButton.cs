@@ -1,7 +1,5 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
-using System.Collections;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,6 +13,7 @@ namespace PixelCrushers.DialogueSystem
     [AddComponentMenu("")] // Use wrapper.
     public class StandardUIResponseButton : MonoBehaviour, ISelectHandler
     {
+
         [HelpBox("If Button's OnClick() event is empty, this Standard UI Response Button component will automatically assign its OnClick method at runtime. If Button's OnClick() event has other elements, you *must* manually assign the StandardUIResponseButton.OnClick method to it.", HelpBoxMessageType.Info)]
         public UnityEngine.UI.Button button;
 
@@ -26,8 +25,6 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("Set button's text to this color by default.")]
         public Color defaultColor = Color.white;
-
-        public int delayTime = 0;
 
         /// <summary>
         /// Gets or sets the response text element.
@@ -94,7 +91,6 @@ namespace PixelCrushers.DialogueSystem
 
         public virtual void Start()
         {
-            
             if (button != null && button.onClick.GetPersistentEventCount() == 0)
             {
                 button.onClick.AddListener(OnClick);
@@ -130,13 +126,6 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public virtual void OnClick()
         {
-            StartCoroutine(DelayThenClick());
-        }
-
-        private IEnumerator DelayThenClick()
-        {
-            yield return new WaitForSeconds(delayTime);
-            
             if (target != null)
             {
                 SetCurrentResponse();

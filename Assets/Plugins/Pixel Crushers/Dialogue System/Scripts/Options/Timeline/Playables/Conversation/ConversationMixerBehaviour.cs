@@ -1,5 +1,3 @@
-// Recompile at 3/18/2024 10:31:56 AM
-
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -39,18 +37,19 @@ namespace PixelCrushers.DialogueSystem
                         {
                             DialogueManager.StopAllConversations();
                         }
-                        if (input.jumpToSpecificEntry && input.entryID > 0)
-                        {
-                            DialogueManager.StartConversation(input.conversation, actorTransform, input.conversant, input.entryID);
+                        var entryID = (input.jumpToSpecificEntry && input.entryID > 0) ? input.entryID : -1;
+                        if (input.overrideDialogueUI != null)
+                        { 
+                            DialogueManager.StartConversation(input.conversation, actorTransform, input.conversant, input.entryID, input.overrideDialogueUI);
                         }
                         else
                         {
-                            DialogueManager.StartConversation(input.conversation, actorTransform, input.conversant);
+                            DialogueManager.StartConversation(input.conversation, actorTransform, input.conversant, input.entryID);
                         }
                     }
                     else
                     {
-                        var message = "Conversation (" + DialogueActor.GetActorName(actorTransform) + "->" + DialogueActor.GetActorName(input.conversant) + "): [" + input.conversation + "] '" + input.GetEditorDialogueText() + "' (may vary)";
+                        var message = "Conversation (" + DialogueActor.GetActorName(actorTransform) + "->" + DialogueActor.GetActorName(input.conversant) + "):\n[" + input.conversation + "]\n'" + input.GetEditorDialogueText() + "' (may vary)";
                         PreviewUI.ShowMessage(message, 2, 0);
                     }
                 }
