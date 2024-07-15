@@ -3,7 +3,6 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System;
-using UnityEngine.Serialization;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -23,18 +22,12 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// (Optional) Overrides the name shown by the Selector.
         /// </summary>
-        [SerializeField]
-        [FormerlySerializedAs("overrideName")]
-        private string m_overrideName;
-        public virtual string overrideName { get => m_overrideName; set => m_overrideName = value; }
+        public string overrideName;
 
         /// <summary>
         /// (Optional) Overrides the use message shown by the Selector.
         /// </summary>
-        [SerializeField]
-        [FormerlySerializedAs("overrideUseMessage")]
-        private string m_overrideUseMessage;
-        public virtual string overrideUseMessage { get => m_overrideUseMessage; set => m_overrideUseMessage = value; }
+        public string overrideUseMessage;
 
         /// <summary>
         /// The max distance at which the object can be used.

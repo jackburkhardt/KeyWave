@@ -43,15 +43,15 @@ namespace PixelCrushers.DialogueSystem
         /// playing, check the bark UI's IsPlaying property.
         /// </summary>
         /// <value>The sequencer.</value>
-        public Sequencer sequencer { get; protected set; }
+        public Sequencer sequencer { get; private set; }
 
-        protected BarkHistory barkHistory;
+        private BarkHistory barkHistory;
 
-        protected bool tryingToBark = false;
+        private bool tryingToBark = false;
 
-        protected ConversationState cachedState = null;
+        private ConversationState cachedState = null;
 
-        protected IBarkUI barkUI = null;
+        private IBarkUI barkUI = null;
 
         /// <summary>
         /// Gets or sets the bark index for sequential barks.
@@ -101,7 +101,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         /// <param name="target">Target.</param>
         /// <param name="interactor">Interactor to test the condition against.</param>
-        public virtual void TryBark(Transform target, Transform interactor)
+        public void TryBark(Transform target, Transform interactor)
         {
             if (!tryingToBark)
             {
@@ -144,34 +144,33 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        protected Transform GetBarker()
+        private Transform GetBarker()
         {
             return Tools.Select(conversant, this.transform);
         }
 
-        protected string GetBarkerName()
+        private string GetBarkerName()
         {
             return DialogueActor.GetActorName(GetBarker());
         }
 
-        protected void BarkCachedLine(Transform speaker, Transform listener)
+        private void BarkCachedLine(Transform speaker, Transform listener)
         {
             if (barkUI == null) barkUI = speaker.GetComponentInChildren(typeof(IBarkUI)) as IBarkUI;
             if (cachedState == null) PopulateCache(speaker, listener);
             BarkNextCachedLine(speaker, listener);
         }
 
-        protected void PopulateCache(Transform speaker, Transform listener)
+        private void PopulateCache(Transform speaker, Transform listener)
         {
             if (string.IsNullOrEmpty(conversation) && DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Bark (speaker={1}, listener={2}): conversation title is blank", new System.Object[] { DialogueDebug.Prefix, speaker, listener }), speaker);
-            ConversationModel conversationModel = new ConversationModel(DialogueManager.masterDatabase, conversation, speaker, listener, DialogueManager.allowLuaExceptions, 
-                DialogueManager.isDialogueEntryValid, -1, false, DialogueManager.useLinearGroupMode);
+            ConversationModel conversationModel = new ConversationModel(DialogueManager.masterDatabase, conversation, speaker, listener, DialogueManager.allowLuaExceptions, DialogueManager.isDialogueEntryValid);
             cachedState = conversationModel.firstState;
             if ((cachedState == null) && DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Bark (speaker={1}, listener={2}): '{3}' has no START entry", new System.Object[] { DialogueDebug.Prefix, speaker, listener, conversation }), speaker);
             if (!cachedState.hasAnyResponses && DialogueDebug.logWarnings) Debug.Log(string.Format("{0}: Bark (speaker={1}, listener={2}): '{3}' has no valid bark lines", new System.Object[] { DialogueDebug.Prefix, speaker, listener, conversation }), speaker);
         }
 
-        protected void BarkNextCachedLine(Transform speaker, Transform listener)
+        private void BarkNextCachedLine(Transform speaker, Transform listener)
         {
             if ((barkUI != null) && (cachedState != null) && cachedState.hasAnyResponses)
             {

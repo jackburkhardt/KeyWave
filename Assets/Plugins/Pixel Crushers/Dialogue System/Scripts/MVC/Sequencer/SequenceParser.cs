@@ -252,7 +252,6 @@ namespace PixelCrushers.DialogueSystem
             atTime = 0;
             atMessage = string.Empty;
             sendMessage = string.Empty;
-            ParseOptionalWhitespace(reader);
             if (IsNextChar(reader, '@'))
             {
                 ParseAtSignModifier(reader, out atTime, out atMessage);

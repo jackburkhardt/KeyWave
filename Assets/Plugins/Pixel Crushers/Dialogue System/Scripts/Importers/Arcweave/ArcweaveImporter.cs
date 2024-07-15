@@ -66,7 +66,6 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
         public bool componentsFoldout = true;
 
         public bool importPortraits = true;
-        public bool importDialogueEntryAttributes = false;
         public bool importGuids = false;
         public int numPlayers = 1;
         public string globalVariables;
@@ -101,7 +100,6 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
         public List<string> globalVariables = new List<string>();
 
         public bool importPortraits = true;
-        public bool importDialogueEntryAttributes = false;
         public bool importGuids = false;
 
         public Template template = Template.FromDefault();
@@ -144,13 +142,12 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
         /// <param name="boardsFoldout">Settings from Arcweave importer window's prefs.</param>
         /// <param name="componentsFoldout">Settings from Arcweave importer window's prefs.</param>
         /// <param name="importPortraits">Assign portrait images to actors. (Editor only)</param>
-        /// <param name="importDialogueEntryAttributes">Import dialogue element attributes as custom fields in dialogue entry.</param>
         /// <param name="importGuids">In actors, locations, conversations, and quests, add a field containing Arcweave GUID.</param>
         /// <param name="merge">Merge into existing database, keeping/overwriting existing assets, instead of clearing database first.</param>
         /// <param name="numPlayers">Set to value greater than 1 to import set of variables for each player.</param>
         /// <param name="globalVariables">If numPlayers > 1, this is a comma-separated list of global variables that aren't player-specific.</param>
         /// <param name="template">Template to use to create new actors, conversations, etc.</param>
-        public virtual void Setup(string arcweaveProjectPath,
+        public void Setup(string arcweaveProjectPath,
             string contentJson,
             List<string> questBoardGuids,
             List<ArcweaveConversationInfo> conversationInfo,
@@ -161,7 +158,6 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             bool boardsFoldout,
             bool componentsFoldout,
             bool importPortraits,
-            bool importDialogueEntryAttributes,
             bool importGuids,
             int numPlayers,
             string globalVariables,
@@ -179,7 +175,6 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             this.boardsFoldout = boardsFoldout;
             this.componentsFoldout = componentsFoldout;
             this.importPortraits = importPortraits;
-            this.importDialogueEntryAttributes = importDialogueEntryAttributes;
             this.importGuids = importGuids;
             this.numPlayers = numPlayers;
             this.globalVariables = ParseGlobalVariables(globalVariables);
@@ -190,51 +185,10 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
         /// <summary>
         /// Prepares the Arcweave importer with parameters ready to perform an import.
         /// </summary>
-        /// <param name="arcweaveProjectPath">Path to Arcweave project files. This path should contain project_settings.json exported from Arcweave.</param>
-        /// <param name="contentJson">Arcweave project_settings.json text. Can be blank. If non-blank, import uses this instead of reading JSON file from arcweaveProjectPath.</param>
-        /// <param name="questBoardGuids">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="conversationInfo">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="playerComponentGuids">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="npcComponentGuids">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="itemComponentGuids">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="locationComponentGuids">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="boardsFoldout">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="componentsFoldout">Settings from Arcweave importer window's prefs.</param>
-        /// <param name="importPortraits">Assign portrait images to actors. (Editor only)</param>
-        /// <param name="importGuids">In actors, locations, conversations, and quests, add a field containing Arcweave GUID.</param>
-        /// <param name="merge">Merge into existing database, keeping/overwriting existing assets, instead of clearing database first.</param>
-        /// <param name="numPlayers">Set to value greater than 1 to import set of variables for each player.</param>
-        /// <param name="globalVariables">If numPlayers > 1, this is a comma-separated list of global variables that aren't player-specific.</param>
-        /// <param name="template">Template to use to create new actors, conversations, etc.</param>
-        public virtual void Setup(string arcweaveProjectPath,
-            string contentJson,
-            List<string> questBoardGuids,
-            List<ArcweaveConversationInfo> conversationInfo,
-            List<string> playerComponentGuids,
-            List<string> npcComponentGuids,
-            List<string> itemComponentGuids,
-            List<string> locationComponentGuids,
-            bool boardsFoldout,
-            bool componentsFoldout,
-            bool importPortraits,
-            bool importGuids,
-            int numPlayers,
-            string globalVariables,
-            bool merge,
-            Template template)
-        {
-            Setup(arcweaveProjectPath, contentJson, questBoardGuids, conversationInfo, playerComponentGuids, npcComponentGuids,
-                itemComponentGuids, locationComponentGuids, boardsFoldout, componentsFoldout, importPortraits, false,
-                importGuids, numPlayers, globalVariables, merge, template);
-        }
-
-        /// <summary>
-        /// Prepares the Arcweave importer with parameters ready to perform an import.
-        /// </summary>
         /// <param name="jsonPrefs">JSON text of prefs from Arcweave importer window, with optional contentJson to use instead of reading project_settings.json file.</param>
         /// <param name="database">Database in which to add the imported content.</param>
         /// <param name="template">Template to use to create new actors, conversations, etc.</param>
-        public virtual void Setup(string jsonPrefs, DialogueDatabase database, Template template)
+        public void Setup(string jsonPrefs, DialogueDatabase database, Template template)
         {
             var prefs = JsonUtility.FromJson<ArcweaveImportPrefs>(jsonPrefs);
             if (prefs != null)
@@ -250,7 +204,6 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                     prefs.boardsFoldout,
                     prefs.componentsFoldout,
                     prefs.importPortraits,
-                    prefs.importDialogueEntryAttributes,
                     prefs.importGuids,
                     prefs.numPlayers,
                     prefs.globalVariables,
@@ -260,12 +213,12 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        public virtual void Clear()
+        public void Clear()
         {
             arcweaveProject = null;
         }
 
-        protected virtual List<string> ParseGlobalVariables(string s)
+        protected List<string> ParseGlobalVariables(string s)
         {
             var list = new List<string>();
             if (!string.IsNullOrEmpty(s))
@@ -288,24 +241,24 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
         /// <param name="jsonPrefs">JSON text of prefs from Arcweave importer window, with optional contentJson to use instead of reading project_settings.json file.</param>
         /// <param name="database">Database in which to add the imported content.</param>
         /// <param name="template">Template to use to create new actors, conversations, etc.</param>
-        public virtual void Import(string jsonPrefs, DialogueDatabase database, Template template)
+        public void Import(string jsonPrefs, DialogueDatabase database, Template template)
         {
             Setup(jsonPrefs, database, template);
             LoadAndConvert();
         }
 
-        public virtual void LoadAndConvert()
+        public void LoadAndConvert()
         {
             LoadJson();
             Convert();
         }
 
-        public virtual bool IsJsonLoaded()
+        public bool IsJsonLoaded()
         {
             return arcweaveProject != null && arcweaveProject.boards != null && arcweaveProject.boards.Count > 0;
         }
 
-        public virtual bool LoadJson()
+        public bool LoadJson()
         {
             try
             {
@@ -364,7 +317,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void SortBoardElements()
+        protected void SortBoardElements()
         {
             foreach (var board in leafBoards.Values)
             {
@@ -372,7 +325,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void RecordBoardHierarchy()
+        protected void RecordBoardHierarchy()
         {
             // Record hierarchy so we can identify leaf nodes and path for conversation titles.
             rootBoardNode = null;
@@ -396,7 +349,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             RecordBoardChildren(rootBoardNode);
         }
 
-        protected virtual void RecordBoardChildren(ArcweaveBoardNode boardNode)
+        protected void RecordBoardChildren(ArcweaveBoardNode boardNode)
         {
             if (boardNode == null || boardNode.board == null) return;
             if (boardNode.board.children == null)
@@ -418,7 +371,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void RecordElementNames()
+        protected void RecordElementNames()
         {
             // Sort elements:
             var elementList = arcweaveProject.elements.ToList();
@@ -443,7 +396,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return name.Replace("/", "\u2215");
         }
 
-        protected virtual void RecordComponentNames()
+        protected void RecordComponentNames()
         {
             // Add default Player actor:
             var list = new List<string>();
@@ -467,7 +420,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
 
         #region Import
 
-        public virtual void Convert()
+        public void Convert()
         {
             if (IsJsonLoaded())
             {
@@ -476,7 +429,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        public virtual void CopySourceToDialogueDatabase(DialogueDatabase database)
+        public void CopySourceToDialogueDatabase(DialogueDatabase database)
         {
             this.database = database;
             database.description = arcweaveProject.name;
@@ -485,10 +438,9 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             AddActors(playerComponentGuids, "Player", true);
             AddActors(npcComponentGuids, "NPC", false);
             AddConversations();
-            AddQuests();
         }
 
-        protected virtual void CatalogAllArcweaveTypes()
+        protected void CatalogAllArcweaveTypes()
         {
             arcweaveLookup.Clear();
             CatalogDictionary(arcweaveProject.boards);
@@ -504,7 +456,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             CatalogDictionary(arcweaveProject.conditions);
         }
 
-        protected virtual void CatalogDictionary<T>(Dictionary<string, T> dict) where T : ArcweaveType
+        protected void CatalogDictionary<T>(Dictionary<string, T> dict) where T : ArcweaveType
         {
             foreach (var kvp in dict)
             {
@@ -518,7 +470,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return arcweaveLookup.TryGetValue(guid, out value) ? (value as T) : null;
         }
 
-        protected virtual void AddVariables()
+        protected void AddVariables()
         {
             AddVariables("");
             if (numPlayers > 1)
@@ -530,7 +482,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void AddVariables(string prefix)
+        protected void AddVariables(string prefix)
         {
             foreach (var kvp in arcweaveProject.variables)
             {
@@ -538,6 +490,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                 if (!string.IsNullOrEmpty(arcweaveVariable.name))
                 {
                     if (merge) database.variables.RemoveAll(x => x.Name == arcweaveVariable.name);
+                    //---Was: var variable = template.CreateVariable(template.GetNextVariableID(database), arcweaveVariable.name, string.Empty);
                     var isGlobalVariable = globalVariables.Contains(arcweaveVariable.name);
                     if ((isGlobalVariable && !string.IsNullOrEmpty(prefix))) // Is global so don't need player-specific version.
                     {
@@ -585,7 +538,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             database.variables.Sort((a, b) => a.Name.CompareTo(b.Name));
         }
 
-        protected virtual void AddLocations()
+        protected void AddLocations()
         {
             foreach (string guid in locationComponentGuids)
             {
@@ -600,9 +553,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected static string[] ImageExtensions = new string[] { ".png", ".jpg", ".tga", ".tif", ".psd", ".psb" };
-
-        protected virtual void AddActors(List<string> guids, string defaultActorName, bool isPlayer)
+        protected void AddActors(List<string> guids, string defaultActorName, bool isPlayer)
         {
             Actor actor = null;
             foreach (var guid in guids)
@@ -624,61 +575,24 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                         ArcweaveAsset asset;
                         if (arcweaveProject.assets.TryGetValue(component.assets.cover.id, out asset))
                         {
-                            Sprite sprite;
-                            Texture2D texture;
-                            TryLoadPortrait(asset.name, out sprite, out texture);
+                            var pathInProject = (!string.IsNullOrEmpty(arcweaveProjectPath) && arcweaveProjectPath.StartsWith("Assets"))
+                                ? arcweaveProjectPath : "Assets";
+                            var assetPath = pathInProject + "/assets/" + asset.name;
+                            Sprite sprite = UnityEditor.AssetDatabase.LoadAssetAtPath(assetPath, typeof(Sprite)) as Sprite;
                             if (sprite != null)
                             {
                                 actor.spritePortrait = sprite;
                             }
-                            else if (texture != null)
-                            {
-                                actor.portrait = texture;
-                            }
                             else
                             {
-                                Debug.LogWarning($"Dialogue System: Can't find portrait image '{GetAssetPath(asset.name)}' for actor {actor.Name}.");
-                            }
-                        }
-
-                        // Alternate portraits:
-                        foreach (var attributeId in component.attributes)
-                        {
-                            Attribute attribute;
-                            if (arcweaveProject.attributes.TryGetValue(attributeId, out attribute))
-                            {
-                                if (attribute != null && attribute.name != null &&
-                                    attribute.name.StartsWith("Portrait "))
+                                Texture2D texture = UnityEditor.AssetDatabase.LoadAssetAtPath(assetPath, typeof(Texture2D)) as Texture2D;
+                                if (texture != null)
                                 {
-                                    int portraitNum = SafeConvert.ToInt(attribute.name.Substring("Portrait ".Length).Trim());
-                                    var assetName = (string)attribute.value.data;
-                                    Sprite sprite = null;
-                                    Texture2D texture = null;
-                                    foreach (var extension in ImageExtensions)
-                                    { 
-                                        TryLoadPortrait(assetName + extension, out sprite, out texture);
-                                        if (sprite != null || texture != null) break;
-                                    }
-                                    if (sprite != null)
-                                    {
-                                        for (int i = actor.spritePortraits.Count; i < (portraitNum - 1); i++)
-                                        {
-                                            actor.spritePortraits.Add(null);
-                                        }
-                                        actor.spritePortraits[portraitNum - 2] = sprite;
-                                    }
-                                    else if (texture != null)
-                                    {
-                                        for (int i = actor.alternatePortraits.Count; i < portraitNum; i++)
-                                        {
-                                            actor.alternatePortraits.Add(null);
-                                        }
-                                        actor.alternatePortraits[portraitNum - 2] = texture;
-                                    }
-                                    else
-                                    {
-                                        Debug.LogWarning($"Dialogue System: Can't find portrait {portraitNum} image '{GetAssetPath(assetName)}' for actor {actor.Name}.");
-                                    }
+                                    actor.portrait = texture;
+                                }
+                                else
+                                {
+                                    Debug.LogWarning($"Dialogue System: Can't find portrait image '{assetPath}' for actor {actor.Name}.");
                                 }
                             }
                         }
@@ -694,30 +608,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void TryLoadPortrait(string assetName, out Sprite sprite, out Texture2D texture)
-        {
-#if UNITY_EDITOR
-            string assetPath = GetAssetPath(assetName);
-            texture = null;
-            sprite = UnityEditor.AssetDatabase.LoadAssetAtPath(assetPath, typeof(Sprite)) as Sprite;
-            if (sprite == null)
-            {
-                texture = UnityEditor.AssetDatabase.LoadAssetAtPath(assetPath, typeof(Texture2D)) as Texture2D;
-            }
-#else
-            sprite = null;
-            texture = null;
-#endif
-        }
-
-        protected virtual string GetAssetPath(string assetName)
-        {
-            var pathInProject = (!string.IsNullOrEmpty(arcweaveProjectPath) && arcweaveProjectPath.StartsWith("Assets"))
-                                ? arcweaveProjectPath : "Assets";
-            return pathInProject + "/assets/" + assetName;
-        }
-
-        protected virtual void AddAttributes(List<Field> fields, List<string> attributes)
+        private void AddAttributes(List<Field> fields, List<string> attributes)
         {
             foreach (string attributeGuid in attributes)
             {
@@ -735,12 +626,12 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual Actor FindActorByComponentIndex(int index)
+        protected Actor FindActorByComponentIndex(int index)
         {
             return (0 <= index && index < componentNames.Length) ? database.actors.Find(x => x.Name == componentNames[index]) : null;
         }
 
-        protected virtual void AddConversations()
+        protected void AddConversations()
         {
             dialogueEntryLookup.Clear();
 
@@ -777,7 +668,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                         var element = LookupArcweave<Element>(elementGuid);
                         if (element == null) continue;
                         var entry = GetOrCreateDialogueEntry(conversation, elementGuid);
-                        entry.Title = StripHtmlCodes(element.title);
+                        entry.Title = element.title;
                         entry.ActorID = GetActorIDFromTitle(element, currentNpcID);
                         entry.ConversantID = currentPlayerID;
                         SetActorIDsFromComponents(entry, element);
@@ -853,19 +744,6 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                         {
                             elseEntry.Title = "else";
                         }
-
-                        //if (!string.IsNullOrEmpty(currentCumulativeCondition))
-                        //{
-                        //    var fallthroughEntry = template.CreateDialogueEntry(template.GetNextDialogueEntryID(conversation), conversation.id, string.Empty);
-                        //    if (fallthroughEntry != null)
-                        //    {
-                        //        fallthroughEntry.ActorID = currentNpcID;
-                        //        fallthroughEntry.ConversantID = currentPlayerID;
-                        //        fallthroughEntry.isGroup = true;
-                        //        fallthroughEntry.conditionsString = $"not ({currentCumulativeCondition})";
-                        //        fallthroughEntry.Title = "fallthrough";
-                        //    }
-                        //}
                     }
 
                     // Connect <START> node to starting element:
@@ -955,7 +833,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
         /// <param name="label">Original label.</param>
         /// <param name="code">Extracted code.</param>
         /// <returns>Full label if no code tag, or empty string if extracted code.</returns>
-        protected virtual string ExtractCode(string label, out string code)
+        protected string ExtractCode(string label, out string code)
         {
             code = string.Empty;
             if (string.IsNullOrEmpty(label) || !label.Contains("<code>")) return label;
@@ -966,7 +844,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return string.Empty;
         }
 
-        protected virtual void SetElementOrderByOutputs()
+        protected void SetElementOrderByOutputs()
         {
             foreach (var conversationInfo in conversationInfo)
             {
@@ -985,7 +863,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void DeleteUnnecessaryConnectionEntries()
+        protected void DeleteUnnecessaryConnectionEntries()
         {
             foreach (var conversation in database.conversations)
             {
@@ -1008,7 +886,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual int CompareOutputsPosition(Link x, Link y, List<string> outputs)
+        private int CompareOutputsPosition(Link x, Link y, List<string> outputs)
         {
             if (outputs == null) return 0;
             var destinationX = database.GetDialogueEntry(x);
@@ -1023,7 +901,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return (indexX < indexY) ? -1 : 1;
         }
 
-        protected virtual string GetConversationTitle(Board conversationBoard)
+        protected string GetConversationTitle(Board conversationBoard)
         {
             string title;
             foreach (var boardNode in rootBoardNode.children)
@@ -1033,7 +911,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return conversationBoard.name;
         }
 
-        protected virtual bool TryGetConversationTitle(Board conversationBoard, ArcweaveBoardNode boardNode, out string title)
+        protected bool TryGetConversationTitle(Board conversationBoard, ArcweaveBoardNode boardNode, out string title)
         {
             if (boardNode.board == conversationBoard)
             {
@@ -1055,7 +933,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual int GetActorIDFromTitle(Element element, int currentNpcID)
+        protected int GetActorIDFromTitle(Element element, int currentNpcID)
         {
             if (element != null && element.title != null && element.title.Contains("Speaker:"))
             {
@@ -1067,7 +945,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return currentNpcID;
         }
 
-        protected virtual void SetActorIDsFromComponents(DialogueEntry entry, Element element)
+        protected void SetActorIDsFromComponents(DialogueEntry entry, Element element)
         {
             if (entry == null || element == null || element.components == null) return;
             if (element.components.Count >= 1)
@@ -1090,7 +968,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual bool AddLink(string sourceGuid, string targetGuid)
+        protected bool AddLink(string sourceGuid, string targetGuid)
         {
             DialogueEntry sourceEntry, targetEntry;
             if (!(dialogueEntryLookup.TryGetValue(sourceGuid, out sourceEntry) &&
@@ -1099,7 +977,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return true;
         }
 
-        protected virtual DialogueEntry GetOrCreateDialogueEntry(Conversation conversation, string guid)
+        protected DialogueEntry GetOrCreateDialogueEntry(Conversation conversation, string guid)
         {
             DialogueEntry entry;
             if (!dialogueEntryLookup.TryGetValue(guid, out entry))
@@ -1114,29 +992,11 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                 {
                     entry.fields.Add(new Field("Guid", guid, FieldType.Text));
                 }
-                if (importDialogueEntryAttributes)
-                {
-                    ArcweaveType arcweaveType;
-                    if (arcweaveLookup.TryGetValue(guid, out arcweaveType))
-                    {
-                        var element = arcweaveType as Element;
-                        if (element != null && element.attributes != null)
-                        {
-                            foreach (var attributeId in element.attributes)
-                            {
-                                var attribute = LookupArcweave<Attribute>(attributeId);
-                                var templateField = template.dialogueEntryFields.Find(x => x.title == attribute.name);
-                                var fieldType = (templateField != null) ? templateField.type : FieldType.Text;
-                                Field.SetValue(entry.fields, attribute.name, attribute.value.data.ToString(), fieldType);
-                            }
-                        }
-                    }
-                }
             }
             return entry;
         }
 
-        protected virtual DialogueEntry CreateConditionEntry(Conversation conversation, string conditionGuid, ref string currentCumulativeCondition)
+        protected DialogueEntry CreateConditionEntry(Conversation conversation, string conditionGuid, ref string currentCumulativeCondition)
         {
             if (string.IsNullOrEmpty(conditionGuid)) return null;
             ArcweaveType value;
@@ -1193,7 +1053,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return entry;
         }
 
-        protected virtual void ConnectJumpers()
+        protected void ConnectJumpers()
         {
             // Handle jumpers here to handle cross-conversation links too:
             foreach (var conversationInfo in conversationInfo)
@@ -1212,7 +1072,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                         if (destinationEntry == null) continue;
                         var destinationText = destinationEntry.Title;
                         if (string.IsNullOrEmpty(destinationText)) destinationText = destinationEntry.DialogueText;
-                        jumperEntry.Title = string.IsNullOrEmpty(destinationText) ? "Jumper" : "Jumper: " + StripHtmlCodes(destinationText);
+                        jumperEntry.Title = string.IsNullOrEmpty(destinationText) ? "Jumper" : "Jumper: " + Tools.StripRichTextCodes(destinationText.Replace("\n", "").Replace("\r", "").Replace("<p>", "").Replace("</p>", ""));
                         jumperEntry.outgoingLinks.Clear();
                         AddLink(jumperGuid, jumper.elementId);
                     }
@@ -1220,78 +1080,11 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void AddQuests()
-        {
-            foreach (var questBoardGuid in questBoardGuids)
-            {
-                try
-                {
-                    var questInfo = LookupArcweave<Board>(questBoardGuid);
-                    if (questInfo == null) continue;
-                    var questID = template.GetNextQuestID(database);
-                    var quest = template.CreateQuest(questID, questInfo.name);
-                    int highestEntryNumber = 0;
-                    foreach (var elementId in questInfo.elements)
-                    {
-                        var element = LookupArcweave<Element>(elementId);
-                        var title = StripHtmlCodes(element.title);
-                        if (string.Equals("Main", title, StringComparison.OrdinalIgnoreCase))
-                        {
-                            Field.SetValue(quest.fields, "Description", StripHtmlCodes(element.content));
-                            foreach (var attributeId in element.attributes)
-                            {
-                                var attribute = LookupArcweave<Attribute>(attributeId);
-                                switch (attribute.name)
-                                {
-                                    case "Trackable":
-                                    case "Track":
-                                        Field.SetValue(quest.fields, attribute.name, attribute.value.plain);
-                                        break;
-                                    case "State":
-                                        Field.SetValue(quest.fields, attribute.name, attribute.value.data.ToString().ToLower());
-                                        break;
-                                    default:
-                                        //case "Group":
-                                        //case "Description":
-                                        //case "Success Description":
-                                        //case "Failure Description":
-                                        Field.SetValue(quest.fields, attribute.name, attribute.value.data.ToString());
-                                        break;
-                                }
-                            }
-                        }
-                        else if (title.StartsWith("Entry "))
-                        {
-                            int entryNumber;
-                            if (int.TryParse(title.Substring("Entry ".Length), out entryNumber))
-                            {
-                                highestEntryNumber = Mathf.Max(highestEntryNumber, entryNumber);
-                                Field.SetValue(quest.fields, title, StripHtmlCodes(element.content));
-                                foreach (var attributeId in element.attributes)
-                                {
-                                    var attribute = LookupArcweave<Attribute>(attributeId);
-                                    var value = attribute.value.data.ToString();
-                                    if (attribute.name == "State") value = value.ToLower();
-                                    Field.SetValue(quest.fields, attribute.name, value);
-                                }
-                            }
-                        }
-                    }
-                    Field.SetValue(quest.fields, "Entry Count", highestEntryNumber);
-                    database.items.Add(quest);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"Failed to create quest for Arcweave GUID {questBoardGuid}. {e.Message}");
-                }
-            }
-        }
-
-#endregion
+        #endregion
 
         #region Touch Up Database
 
-        public virtual void TouchUpDialogueDatabase(DialogueDatabase database)
+        public void TouchUpDialogueDatabase(DialogueDatabase database)
         {
             SetStartCutscenesToNone(database);
             ConnectJumpers();
@@ -1301,7 +1094,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             SplitPipes();
         }
 
-        protected virtual void SetStartCutscenesToNone(DialogueDatabase database)
+        protected void SetStartCutscenesToNone(DialogueDatabase database)
         {
             foreach (var conversation in database.conversations)
             {
@@ -1309,7 +1102,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void SetConversationStartCutsceneToNone(Conversation conversation)
+        protected void SetConversationStartCutsceneToNone(Conversation conversation)
         {
             DialogueEntry entry = conversation.GetFirstDialogueEntry();
             if (entry == null)
@@ -1325,13 +1118,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual string StripHtmlCodes(string text)
-        {
-            if (string.IsNullOrEmpty(text)) return text;
-            return Tools.StripRichTextCodes(text.Replace("\n", "").Replace("\r", "").Replace("<p>", "").Replace("</p>", ""));
-        }
-
-        protected virtual void TouchUpRichText()
+        protected void TouchUpRichText()
         {
             foreach (var conversation in database.conversations)
             {
@@ -1349,11 +1136,11 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void SplitPipes()
+        protected void SplitPipes()
         {
             foreach (var conversation in database.conversations)
             {
-                conversation.SplitPipesIntoEntries(true, false, "Guid");
+                conversation.SplitPipesIntoEntries();
                 foreach (var entry in conversation.dialogueEntries)
                 {
                     entry.DialogueText = entry.DialogueText.Trim();
@@ -1373,7 +1160,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
 
         protected enum CodeState { None, InIf, InElseIf, InElse }
 
-        protected virtual void ExtractSequences()
+        protected void ExtractSequences()
         {
             foreach (var conversation in database.conversations)
             {
@@ -1384,7 +1171,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void ExtractSequence(DialogueEntry entry)
+        protected void ExtractSequence(DialogueEntry entry)
         {
             var text = entry.DialogueText;
             if (string.IsNullOrEmpty(text)) return;
@@ -1397,7 +1184,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual string TouchUpRichText(string s)
+        protected string TouchUpRichText(string s)
         {
             if (string.IsNullOrEmpty(s)) return string.Empty;
 
@@ -1434,7 +1221,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void ProcessContent(DialogueEntry entry, string content)
+        protected void ProcessContent(DialogueEntry entry, string content)
         {
             // Put conditional code in temporary fields. They will be processed in the
             // touch-up phase as new child nodes. 
@@ -1568,7 +1355,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             }
         }
 
-        protected virtual void AddInlineCodeNodes()
+        protected void AddInlineCodeNodes()
         {
             foreach (var conversation in database.conversations)
             {
@@ -1603,7 +1390,6 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                     entry.outgoingLinks.Clear();
 
                     // Add code nodes between entry and postIfEntry:
-                    var cumulativeConditions = string.Empty;
                     foreach (var prefix in CodeFieldPrefixes)
                     {
                         if (prefix == "_ELSEIF")
@@ -1611,22 +1397,22 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
                             var numElseIf = Field.LookupInt(entry.fields, "_NUM_ELSEIF");
                             for (int elseIndex = 0; elseIndex < numElseIf; elseIndex++)
                             {
-                                InsertCodeEntry(conversation, entry, postIfEntry, $"{prefix}.{elseIndex}", ref cumulativeConditions);
+                                InsertCodeEntry(conversation, entry, postIfEntry, $"{prefix}.{elseIndex}");
                             }
                         }
                         else
                         {
-                            InsertCodeEntry(conversation, entry, postIfEntry, prefix, ref cumulativeConditions);
+                            InsertCodeEntry(conversation, entry, postIfEntry, prefix);
                         }
                     }
 
-                    // Add fallthrough node to use if no IF/ELSEIF conditions are true:
-                    InsertCodeFallthroughEntry(conversation, entry, postIfEntry, cumulativeConditions);
+                    // Finally add a fallthrough link from entry to postIfEntry:
+                    entry.outgoingLinks.Add(new Link(conversation.id, entry.id, conversation.id, postIfEntry.id));
                 }
             }
         }
 
-        protected virtual void InsertCodeEntry(Conversation conversation, DialogueEntry entry, DialogueEntry postIfEntry, string prefix, ref string cumulativeConditions)
+        protected void InsertCodeEntry(Conversation conversation, DialogueEntry entry, DialogueEntry postIfEntry, string prefix)
         {
             var codeField = Field.Lookup(entry.fields, prefix + "_CODE");
             if (codeField == null) return;
@@ -1639,41 +1425,16 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             conversation.dialogueEntries.Add(codeEntry);
             codeEntry.ActorID = entry.ActorID;
             codeEntry.ConversantID = entry.ConversantID;
-            codeEntry.Title = codeField.value;
             codeEntry.outgoingLinks.Add(new Link(conversation.id, codeEntry.id, conversation.id, postIfEntry.id));
-            codeEntry.isGroup = textField == null || string.IsNullOrEmpty(textField.value);
+            codeEntry.isGroup = string.IsNullOrEmpty(textField.value);
             codeEntry.Sequence = codeEntry.isGroup ? string.Empty : ContinueSequence;
-            codeEntry.DialogueText = (textField != null) ? TouchUpRichText(textField.value) : string.Empty;
+            codeEntry.DialogueText = TouchUpRichText(textField.value);
             codeEntry.conditionsString = ConvertArcscriptToLua(codeField.value);
-            if (string.IsNullOrEmpty(cumulativeConditions))
-            {
-                cumulativeConditions = codeEntry.conditionsString;
-            }
-            else
-            {
-                if (cumulativeConditions[0] != '(') cumulativeConditions = $"({cumulativeConditions})";
-                cumulativeConditions += $" and ({codeEntry.conditionsString})";
-            }
             if (innerCodeField != null) codeEntry.userScript = ConvertArcscriptToLua(innerCodeField.value, true);
             entry.outgoingLinks.Add(new Link(conversation.id, entry.id, conversation.id, codeEntry.id));
         }
 
-        protected virtual void InsertCodeFallthroughEntry(Conversation conversation, DialogueEntry entry, DialogueEntry postIfEntry, string cumulativePreviousConditions)
-        {
-            var codeEntry = template.CreateDialogueEntry(template.GetNextDialogueEntryID(conversation), conversation.id, string.Empty);
-            conversation.dialogueEntries.Add(codeEntry);
-            codeEntry.ActorID = entry.ActorID;
-            codeEntry.ConversantID = entry.ConversantID;
-            codeEntry.Title = "fallthrough";
-            codeEntry.outgoingLinks.Add(new Link(conversation.id, codeEntry.id, conversation.id, postIfEntry.id));
-            codeEntry.isGroup = true;
-            codeEntry.Sequence = codeEntry.isGroup ? string.Empty : ContinueSequence;
-            codeEntry.DialogueText = string.Empty;
-            codeEntry.conditionsString = $"not ({cumulativePreviousConditions})";
-            entry.outgoingLinks.Add(new Link(conversation.id, entry.id, conversation.id, codeEntry.id));
-        }
-
-        protected virtual string ConvertArcscriptToLua(string code, bool convertIncrementors = false)
+        protected string ConvertArcscriptToLua(string code, bool convertIncrementors = false)
         {
             if (string.IsNullOrEmpty(code)) return code;
             code = Tools.RemoveHtml(code);
@@ -1689,7 +1450,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
         }
 
         // Convert visits() function calls.
-        protected virtual string ConvertVisits(string code)
+        protected string ConvertVisits(string code)
         {
             if (!code.Contains("visits(")) return code; ;
 
@@ -1707,7 +1468,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return code.Replace("visits()", "visits(\"\")");
         }
 
-        protected virtual string ConvertIncrementors(string code)
+        protected string ConvertIncrementors(string code)
         {
             // Convert "x +=" to "x = x +" and same for "-=":
             var matches = IncrementorRegex.Matches(code);
@@ -1727,7 +1488,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return code;
         }
 
-        protected virtual string ConvertArcscriptVariablesToLua(string code)
+        protected string ConvertArcscriptVariablesToLua(string code)
         {
             var matches = IdentifierRegex.Matches(code);
             foreach (var match in matches.Cast<Match>().Reverse())
@@ -1750,7 +1511,7 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
             return code;
         }
 
-        protected virtual string Replace(string s, int index, int length, string replacement)
+        protected string Replace(string s, int index, int length, string replacement)
         {
             var builder = new System.Text.StringBuilder();
             builder.Append(s.Substring(0, index));

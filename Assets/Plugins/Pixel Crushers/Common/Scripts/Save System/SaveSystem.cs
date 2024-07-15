@@ -31,10 +31,6 @@ namespace PixelCrushers
         [SerializeField]
         private bool m_saveCurrentScene = true;
 
-        [Tooltip("Highest save slot number allowed.")]
-        [SerializeField]
-        private int m_maxSaveSlot = 99999;
-
         [Tooltip("When loading a game/scene, wait this many frames before applying saved data to allow other scripts to initialize first.")]
         [SerializeField]
         private int m_framesToWaitBeforeApplyData = 0;
@@ -59,8 +55,6 @@ namespace PixelCrushers
 
         private static SceneTransitionManager m_sceneTransitionManager = null;
 
-        private static bool m_allowNegativeSlotNumbers = false;
-
         private static GameObject m_playerSpawnpoint = null;
 
         private static int m_currentSceneIndex = NoSceneIndex;
@@ -70,10 +64,6 @@ namespace PixelCrushers
         private static bool m_autoUnloadAdditiveScenes = false;
 
         private static AsyncOperation m_currentAsyncOperation = null;
-
-#if USE_ADDRESSABLES
-        private static UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<UnityEngine.ResourceManagement.ResourceProviders.SceneInstance> m_currentAsyncOperationHandle;
-#endif
 
         private static int m_framesToWaitBeforeSaveDataAppliedEvent = 0;
 
@@ -126,21 +116,6 @@ namespace PixelCrushers
             set
             {
                 if (m_instance != null) m_instance.m_saveCurrentScene = value;
-            }
-        }
-
-        /// <summary>
-        /// Highest save slot number allowed.
-        /// </summary>
-        public static int maxSaveSlot
-        {
-            get
-            {
-                return (m_instance != null) ? m_instance.m_maxSaveSlot : int.MaxValue;
-            }
-            set
-            {
-                if (m_instance != null) m_instance.m_maxSaveSlot = value;
             }
         }
 
@@ -207,10 +182,6 @@ namespace PixelCrushers
             }
         }
 
-        /// <summary>
-        /// Reference to the DataSerializer in the SaveSystem's hierarchy.
-        /// SaveSystem will use it to serialize and deserialize saved game data.
-        /// </summary>
         public static DataSerializer serializer
         {
             get
@@ -228,10 +199,6 @@ namespace PixelCrushers
             }
         }
 
-        /// <summary>
-        /// Reference to the SavedGameDataStorer in the SaveSystem's hierarchy. 
-        /// SaveSystem will use it to store and retrieve saved game data.
-        /// </summary>
         public static SavedGameDataStorer storer
         {
             get
@@ -249,9 +216,6 @@ namespace PixelCrushers
             }
         }
 
-        /// <summary>
-        /// Reference to the SceneTransitionManager in the SaveSystem's hierarchy, if present.
-        /// </summary>
         public static SceneTransitionManager sceneTransitionManager
         {
             get
@@ -262,15 +226,6 @@ namespace PixelCrushers
                 }
                 return m_sceneTransitionManager;
             }
-        }
-
-        /// <summary>
-        /// Allow the use of negative slot numbers.
-        /// </summary>
-        public bool allowNegativeSlotNumbers
-        {
-            get { return m_allowNegativeSlotNumbers; }
-            set { m_allowNegativeSlotNumbers = value; }
         }
 
         /// <summary>
@@ -435,72 +390,6 @@ namespace PixelCrushers
             return UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
         }
 
-        public static bool IsSceneInBuildSettings(string sceneName)
-        {
-            for (var n = 0; n < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; ++n)
-            {
-                var scenePath = UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(n);
-                if (string.IsNullOrEmpty(scenePath)) continue;
-                if (string.Equals(System.IO.Path.GetFileNameWithoutExtension(scenePath), sceneName, System.StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private static void SceneManagerOrAddressablesLoadScene(string sceneName)
-        {
-            if (IsSceneInBuildSettings(sceneName))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-                return;
-            }
-#if USE_ADDRESSABLES
-            // If not in build settings, try loading an Addressable scene:
-            m_currentAsyncOperationHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName);
-#else
-            Debug.LogError("Can't load scene. Scene is not in build settings: " + sceneName);
-#endif
-        }
-
-        private static void SceneManagerOrAddressablesLoadSceneAsync(string sceneName)
-        {
-            m_currentAsyncOperation = null;
-            if (IsSceneInBuildSettings(sceneName))
-            {
-                m_currentAsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
-                return;
-            }
-#if USE_ADDRESSABLES
-            // If not in build settings, try loading an Addressable scene:
-            m_currentAsyncOperationHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName);
-#else
-            Debug.LogError("Can't load scene. Scene is not in build settings: " + sceneName);
-#endif
-        }
-
-        private static IEnumerator SceneManagerOrAddressablesLoadSceneAdditiveAsync(string sceneName)
-        {
-            if (IsSceneInBuildSettings(sceneName))
-            {
-                yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
-            }
-            else
-            {
-#if USE_ADDRESSABLES
-                // If not in build settings, try loading an Addressable scene:
-                m_currentAsyncOperationHandle = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
-                while (!m_currentAsyncOperation.isDone)
-                {
-                    yield return null;
-                }
-#else
-                Debug.LogError("Can't load additive scene. Scene is not in build settings: " + sceneName);
-#endif
-            }
-        }
-
         private static IEnumerator LoadSceneInternal(string sceneName, SceneValidationMode sceneValidationMode)
         {
             m_addedScenes.Clear();
@@ -519,7 +408,7 @@ namespace PixelCrushers
                         if (debug) Debug.LogWarning("Scene '" + sceneName + "' is not a valid scene to load.");
                         yield break;
                     }
-                    SceneManagerOrAddressablesLoadScene(sceneName);
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
                 }
                 yield break;
             }
@@ -546,26 +435,13 @@ namespace PixelCrushers
                     if (debug) Debug.LogWarning("Scene '" + sceneName + "' is not a valid scene to load.");
                     yield break;
                 }
-                SceneManagerOrAddressablesLoadSceneAsync(sceneName);
+                m_currentAsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
             }
-            if (m_currentAsyncOperation != null)
+            while (m_currentAsyncOperation != null && !m_currentAsyncOperation.isDone)
             {
-                while (m_currentAsyncOperation != null && !m_currentAsyncOperation.isDone)
-                {
-                    sceneTransitionManager.OnLoading(m_currentAsyncOperation.progress);
-                    yield return null;
-                }
+                sceneTransitionManager.OnLoading(m_currentAsyncOperation.progress);
+                yield return null;
             }
-#if USE_ADDRESSABLES
-            else
-            {
-                while (!m_currentAsyncOperationHandle.IsDone)
-                {
-                    sceneTransitionManager.OnLoading(m_currentAsyncOperationHandle.PercentComplete);
-                    yield return null;
-                }
-            }
-#endif
             sceneTransitionManager.OnLoading(1);
             m_currentAsyncOperation = null;
             instance.StartCoroutine(sceneTransitionManager.EnterScene());
@@ -575,7 +451,7 @@ namespace PixelCrushers
         {
             if (validateNameScene != null) sceneName = validateNameScene(sceneName, sceneValidationMode);
             if (string.IsNullOrEmpty(sceneName)) yield break;
-            yield return SceneManagerOrAddressablesLoadSceneAdditiveAsync(sceneName);
+            yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
             var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
             if (!scene.IsValid()) yield break;
             var rootGOs = scene.GetRootGameObjects();
@@ -652,7 +528,7 @@ namespace PixelCrushers
 
 #else
 
-            public static string GetCurrentSceneName()
+        public static string GetCurrentSceneName()
         {
             return Application.loadedLevelName;
         }
@@ -678,30 +554,6 @@ namespace PixelCrushers
             Application.UnloadLevel(sceneName);
         }
 #endif
-
-        /// <summary>
-        /// If slotNumber is negative and allowNegativeSlotNumbers is false, 
-        /// choose an empty positive slot up to maxSlots. If none are empty,
-        /// return false;
-        /// </summary>
-        private static bool SanitizeSlotNumberForSave(int slotNumber, out int sanitizedSlotNumber)
-        {
-            if (slotNumber >= 0 || m_instance == null || m_instance.allowNegativeSlotNumbers)
-            {
-                sanitizedSlotNumber = slotNumber;
-                return true;
-            }
-            for (int i = 0; i <= maxSaveSlot; i++)
-            {
-                if (!HasSavedGameInSlot(i))
-                {
-                    sanitizedSlotNumber = i;
-                    return true;
-                }
-            }
-            sanitizedSlotNumber = 0;
-            return false;
-        }
 
         /// <summary>
         /// Saves a game into a slot using the storage provider on the 
@@ -764,11 +616,6 @@ namespace PixelCrushers
 
         private static IEnumerator SaveToSlotCoroutine(int slotNumber)
         {
-            if (!SanitizeSlotNumberForSave(slotNumber, out slotNumber))
-            {
-                Debug.LogError("Can't save game. Invalid save slot: " + slotNumber);
-                yield break;
-            }
             saveStarted();
             yield return null;
             PlayerPrefs.SetInt(LastSavedGameSlotPlayerPrefsKey, slotNumber);
@@ -781,11 +628,6 @@ namespace PixelCrushers
         /// </summary>
         public static void SaveToSlotImmediate(int slotNumber)
         {
-            if (!SanitizeSlotNumberForSave(slotNumber, out slotNumber))
-            {
-                Debug.LogError("Can't save game. Invalid save slot: " + slotNumber);
-                return;
-            }
             saveStarted();
             PlayerPrefs.SetInt(LastSavedGameSlotPlayerPrefsKey, slotNumber);
             storer.StoreSavedGameData(slotNumber, RecordSavedGameData());
@@ -895,28 +737,24 @@ namespace PixelCrushers
         /// <param name="savedGameData">Saved game data.</param>
         public static void ApplySavedGameData(SavedGameData savedGameData)
         {
-            if (savedGameData != null)
+            if (savedGameData == null) return;
+            m_savedGameData = savedGameData;
+            if (m_savers.Count <= 0) return;
+            m_tmpSavers.Clear();
+            m_tmpSavers.AddRange(m_savers); // Make a copy in case a saver ends up removing multiple savers.
+            for (int i = m_tmpSavers.Count - 1; i >= 0; i--) // A saver may remove itself from list during apply.
             {
-                m_savedGameData = savedGameData;
-                if (m_savers.Count > 0)
+                try
                 {
-                    m_tmpSavers.Clear();
-                    m_tmpSavers.AddRange(m_savers); // Make a copy in case a saver ends up removing multiple savers.
-                    for (int i = m_tmpSavers.Count - 1; i >= 0; i--) // A saver may remove itself from list during apply.
+                    if (0 <= i && i < m_tmpSavers.Count)
                     {
-                        try
-                        {
-                            if (0 <= i && i < m_tmpSavers.Count)
-                            {
-                                var saver = m_tmpSavers[i];
-                                if (saver != null) saver.ApplyData(savedGameData.GetData(saver.key));
-                            }
-                        }
-                        catch (System.Exception e)
-                        {
-                            Debug.LogException(e);
-                        }
+                        var saver = m_tmpSavers[i];
+                        if (saver != null) saver.ApplyData(savedGameData.GetData(saver.key));
                     }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogException(e);
                 }
             }
             if (framesToWaitBeforeSaveDataAppliedEvent == 0 || instance == null)
@@ -1045,24 +883,22 @@ namespace PixelCrushers
         // Calls ApplyDataImmediate on all savers.
         private static void ApplyDataImmediate()
         {
-            if (m_savers.Count > 0)
+            if (m_savers.Count <= 0) return;
+            m_tmpSavers.Clear();
+            m_tmpSavers.AddRange(m_savers); // Make a copy in case a saver ends up removing multiple savers.
+            for (int i = m_tmpSavers.Count - 1; i >= 0; i--) // A saver may remove itself from list during apply.
             {
-                m_tmpSavers.Clear();
-                m_tmpSavers.AddRange(m_savers); // Make a copy in case a saver ends up removing multiple savers.
-                for (int i = m_tmpSavers.Count - 1; i >= 0; i--) // A saver may remove itself from list during apply.
+                try
                 {
-                    try
+                    if (0 <= i && i < m_tmpSavers.Count)
                     {
-                        if (0 <= i && i < m_tmpSavers.Count)
-                        {
-                            var saver = m_tmpSavers[i];
-                            if (saver != null) saver.ApplyDataImmediate();
-                        }
+                        var saver = m_tmpSavers[i];
+                        if (saver != null) saver.ApplyDataImmediate();
                     }
-                    catch (System.Exception e)
-                    {
-                        Debug.LogException(e);
-                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogException(e);
                 }
             }
         }

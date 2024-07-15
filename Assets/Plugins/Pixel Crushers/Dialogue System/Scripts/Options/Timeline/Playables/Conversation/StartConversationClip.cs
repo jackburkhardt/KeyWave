@@ -1,3 +1,5 @@
+// Recompile at 3/18/2024 10:31:56 AM
+
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -15,7 +17,6 @@ namespace PixelCrushers.DialogueSystem
     {
         public StartConversationBehaviour template = new StartConversationBehaviour();
         public ExposedReference<Transform> conversant;
-        public ExposedReference<AbstractDialogueUI> overrideDialogueUI;
 
         public float m_duration = 1;
         public override double duration { get { return m_duration; } }
@@ -35,7 +36,6 @@ namespace PixelCrushers.DialogueSystem
             var playable = ScriptPlayable<StartConversationBehaviour>.Create(graph, template);
             StartConversationBehaviour clone = playable.GetBehaviour();
             clone.conversant = conversant.Resolve(graph.GetResolver());
-            clone.overrideDialogueUI = overrideDialogueUI.Resolve(graph.GetResolver());
             return playable;
         }
     }

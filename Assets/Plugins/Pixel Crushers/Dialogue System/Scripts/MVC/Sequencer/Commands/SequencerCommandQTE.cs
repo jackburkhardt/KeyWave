@@ -19,14 +19,14 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
     public class SequencerCommandQTE : SequencerCommand
     {
 
-        protected int index;
-        protected float stopTime;
-        protected string button;
-        protected string variableName;
-        protected string variableQTEValue;
-        protected FieldType variableType;
+        private int index;
+        private float stopTime;
+        private string button;
+        private string variableName;
+        private string variableQTEValue;
+        private FieldType variableType;
 
-        public virtual void Start()
+        public void Start()
         {
             index = GetParameterAsInt(0);
             DialogueManager.dialogueUI.ShowQTEIndicator(index);
@@ -42,7 +42,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             Lua.Run(string.Format("Variable[\"{0}\"] = \"\"", new System.Object[] { variableName }), DialogueDebug.logInfo);
         }
 
-        protected virtual FieldType GetVariableType()
+        private FieldType GetVariableType()
         {
             float temp;
             if ((string.Equals(variableQTEValue, "true", System.StringComparison.OrdinalIgnoreCase)) ||
@@ -60,7 +60,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             }
         }
 
-        public virtual void Update()
+        public void Update()
         {
             if (!string.IsNullOrEmpty(button) && DialogueManager.getInputButtonDown(button))
             {
@@ -82,7 +82,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             }
         }
 
-        protected virtual string ValueAsString(FieldType fieldType, string fieldValue)
+        private string ValueAsString(FieldType fieldType, string fieldValue)
         {
             switch (fieldType)
             {
@@ -95,7 +95,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
             }
         }
 
-        public virtual void OnDestroy()
+        public void OnDestroy()
         {
             DialogueManager.dialogueUI.HideQTEIndicator(index);
         }

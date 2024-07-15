@@ -14,12 +14,6 @@ namespace PixelCrushers.DialogueSystem
     public class BarkOnIdle : BarkStarter
     {
 
-        [Tooltip("Bark as soon as this component starts the first time.")]
-        public bool barkOnStart = false;
-
-        [Tooltip("Bark when the component is enabled. If disabled and reenabled, barks again.")]
-        public bool barkOnEnable = false;
-
         /// <summary>
         /// The minimum seconds between barks.
         /// </summary>
@@ -47,41 +41,34 @@ namespace PixelCrushers.DialogueSystem
             base.Start();
             started = true;
             StartBarkLoop();
-            if (barkOnStart && !barkOnEnable) TryIdleBark();
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             StartBarkLoop();
-            if (barkOnEnable) TryIdleBark();
         }
 
         /// <summary>
         /// Starts the bark loop. Normally this is started in the Start() method. If you need to
         /// restart it for some reason, call this method.
         /// </summary>
-        public virtual void StartBarkLoop()
+        public void StartBarkLoop()
         {
             if (!started) return;
             StopAllCoroutines();
             StartCoroutine(BarkLoop());
         }
 
-        protected virtual IEnumerator BarkLoop()
+        private IEnumerator BarkLoop()
         {
             while (true)
             {
                 yield return new WaitForSeconds(Random.Range(minSeconds, maxSeconds));
-                TryIdleBark();
-            }
-        }
-
-        protected virtual void TryIdleBark()
-        {
-            if (enabled && (!DialogueManager.isConversationActive || allowDuringConversations) && !DialogueTime.isPaused)
-            {
-                TryBark(target);
+                if (enabled && (!DialogueManager.isConversationActive || allowDuringConversations) && !DialogueTime.isPaused)
+                {
+                    TryBark(target);
+                }
             }
         }
 

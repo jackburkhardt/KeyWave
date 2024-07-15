@@ -101,8 +101,6 @@ namespace PixelCrushers.DialogueSystem
 
         protected List<string> expandedGroupNames = new List<string>();
         protected System.Action confirmAbandonQuestHandler = null;
-        protected string mostRecentSelectedActiveQuest = null;
-        protected string mostRecentSelectedCompletedQuest = null;
         private Coroutine m_refreshCoroutine = null;
         private bool m_isAwake = false;
 
@@ -159,6 +157,10 @@ namespace PixelCrushers.DialogueSystem
             mainPanel.Open();
             openedWindowHandler();
             onOpen.Invoke();
+            if (selectFirstQuestOnOpen && quests.Length > 0)
+            {
+                RepaintSelectedQuest(quests[0]);
+            }
         }
 
         /// <summary>
@@ -325,14 +327,6 @@ namespace PixelCrushers.DialogueSystem
                 selectionPanelContentManager.Add(questTitle, questSelectionContentContainer);
             }
 
-            // If no quest selected and Select First Quest On Open is ticked, select it:
-            if (string.IsNullOrEmpty(selectedQuest) && selectFirstQuestOnOpen && quests.Length > 0)
-            {
-                selectedQuest = quests[0].Title;
-                RepaintSelectedQuest(quests[0]);
-                QuestLog.MarkQuestViewed(selectedQuest);
-            }
-
             SetStateToggleButtons();
             mainPanel.RefreshSelectablesList();
             if (mainPanel != null) UnityEngine.UI.LayoutRebuilder.MarkLayoutForRebuild(mainPanel.GetComponent<RectTransform>());
@@ -493,22 +487,7 @@ namespace PixelCrushers.DialogueSystem
 
         protected override void ShowQuests(QuestState questStateMask)
         {
-            if (questStateMask != currentQuestStateMask)
-            {
-                detailsPanelContentManager.Clear();
-
-                // Record most recent selected quest in category for when we return to category:
-                if (currentQuestStateMask == ActiveQuestStateMask)
-                {
-                    mostRecentSelectedActiveQuest = selectedQuest;
-                    selectedQuest = mostRecentSelectedCompletedQuest;
-                }
-                else
-                {
-                    mostRecentSelectedCompletedQuest = selectedQuest;
-                    selectedQuest = mostRecentSelectedActiveQuest;
-                }
-            }
+            if (questStateMask != currentQuestStateMask) detailsPanelContentManager.Clear();
             base.ShowQuests(questStateMask);
         }
 

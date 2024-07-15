@@ -347,8 +347,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     }
                 }
 
-                customGlobalSearch?.Invoke(database, specificConversation, globalSearchText, ref result);
-
                 Debug.Log(result);
             }
             finally
@@ -476,8 +474,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         }
                     }
                 }
-
-                customGlobalSearchAndReplace?.Invoke(database, specificConversation, globalSearchText, globalReplaceText);
 
             }
             finally

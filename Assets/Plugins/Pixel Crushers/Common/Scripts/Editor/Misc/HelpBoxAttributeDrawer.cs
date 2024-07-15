@@ -1,7 +1,4 @@
-﻿#if !ODIN_INSPECTOR 
-// Pending fix from Sirenix, to prevent Odin stack overflow bug we don't draw help boxes if Odin in installed.
-
-// Copyright (c) Pixel Crushers. All rights reserved.
+﻿// Copyright (c) Pixel Crushers. All rights reserved.
 
 using UnityEngine;
 using UnityEditor;
@@ -56,4 +53,3 @@ namespace PixelCrushers
 
     }
 }
-#endif

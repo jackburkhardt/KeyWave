@@ -95,11 +95,6 @@ namespace PixelCrushers.DialogueSystem
             BarkGroupManager.instance.GroupBark(conversation, this, listener, barkHistory, delayTime);
         }
 
-        public void GroupBark(string conversation, Transform listener, int entryID, float delayTime = -1)
-        {
-            BarkGroupManager.instance.GroupBark(conversation, this, listener, entryID, delayTime);
-        }
-
         public void GroupBarkString(string barkText, Transform listener, string sequence, float delayTime = -1)
         {
             BarkGroupManager.instance.GroupBarkString(barkText, this, listener, sequence, delayTime);

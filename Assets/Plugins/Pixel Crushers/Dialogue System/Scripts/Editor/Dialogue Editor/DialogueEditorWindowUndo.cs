@@ -50,12 +50,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             if (database == null) return;
             var eventType = Event.current.type;
-            if (eventType == EventType.Repaint ||
-                eventType == EventType.MouseEnterWindow || eventType == EventType.MouseLeaveWindow ||
-                eventType == EventType.ContextClick) return;
-            //--- Changed: More event types need to register undo.
-            //if (eventType == EventType.MouseUp || eventType == EventType.MouseDrag ||
-            //    eventType == EventType.KeyUp || eventType == EventType.ContextClick)
+            if (eventType == EventType.MouseUp || eventType == EventType.MouseDrag ||
+                eventType == EventType.KeyUp || eventType == EventType.ContextClick)
             {
                 if (registerCompleteObjectUndo)
                 {
@@ -95,11 +91,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     }
                 }
             }
-            if (database != null)
-            {
-                EditorUtility.SetDirty(database);
-                PrefabUtility.RecordPrefabInstancePropertyModifications(database);
-            }
+            if (database != null) EditorUtility.SetDirty(database);
         }
 
         private void MakeAutoBackup()

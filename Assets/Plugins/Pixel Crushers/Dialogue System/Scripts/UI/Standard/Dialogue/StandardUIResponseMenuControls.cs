@@ -42,8 +42,6 @@ namespace PixelCrushers.DialogueSystem
             set { m_defaultPanel = value; }
         }
 
-        public virtual bool allowDialogueActorCustomPanels { get; set; } = true;
-
         #endregion
 
         #region Initialization & Lookup
@@ -197,15 +195,14 @@ namespace PixelCrushers.DialogueSystem
             return GetPanelFromNumber(dialogueActor.standardDialogueUISettings.menuPanelNumber, dialogueActor.standardDialogueUISettings.customMenuPanel);
         }
 
-        protected StandardUIMenuPanel GetPanelFromNumber(MenuPanelNumber menuPanelNumber, StandardUIMenuPanel customPanel)
+        protected StandardUIMenuPanel GetPanelFromNumber(MenuPanelNumber menuPanelNumber, StandardUIMenuPanel customMenuPanel)
         {
             switch (menuPanelNumber)
             {
                 case MenuPanelNumber.Default:
                     return m_defaultPanel;
                 case MenuPanelNumber.Custom:
-                    if (!allowDialogueActorCustomPanels) return null;
-                    return customPanel;
+                    return customMenuPanel;
                 default:
                     var index = PanelNumberUtility.GetMenuPanelIndex(menuPanelNumber);
                     return (0 <= index && index < m_builtinPanels.Count) ? m_builtinPanels[index] : null;

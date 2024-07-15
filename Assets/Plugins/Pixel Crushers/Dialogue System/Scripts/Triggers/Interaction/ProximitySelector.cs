@@ -3,7 +3,6 @@
 using PixelCrushers.DialogueSystem.UnityGUI;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -87,11 +86,8 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The default use message. This can be overridden in the target's Usable component.
         /// </summary>
-        [Tooltip("Default use message; can be overridden in the target's Usable component")]
-        [SerializeField]
-        [FormerlySerializedAs("defaultUseMessage")]
-        private string m_defaultUseMessage = "(spacebar to interact)";
-        public virtual string defaultUseMessage { get => m_defaultUseMessage; set => m_defaultUseMessage = value; }
+        [Tooltip("Default use message. This can be overridden in the target's Usable component.")]
+        public string defaultUseMessage = "(spacebar to interact)";
 
         /// <summary>
         /// The key that sends an OnUse message.
@@ -165,7 +161,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Keeps track of which usable objects' triggers the selector is currently inside.
         /// </summary>
-        public List<Usable> usablesInRange = new List<Usable>();
+        protected List<Usable> usablesInRange = new List<Usable>();
 
         /// <summary>
         /// The current usable that will receive an OnUse message if the player hits the use button.
