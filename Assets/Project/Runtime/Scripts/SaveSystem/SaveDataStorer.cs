@@ -43,23 +43,6 @@ namespace Project.Runtime.Scripts.SaveSystem
         }
 
         /// <summary>
-        /// Stores game data on the local machine at the Application.persistentDataPath. Used for quick-restoring of game data.
-        /// </summary>  
-        /// <param name="savedGameData"></param>
-        private static void LocalStoreGameData(SavedGameData savedGameData)
-        {
-            if (!savingEnabled) return;
-            
-            LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
-
-            string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
-            File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
-#if UNITY_WEBGL && !UNITY_EDITOR // todo: see if this can be removed for optimization
-            Application.ExternalEval("_JS_FileSystem_Sync();");
-#endif
-        }
-
-        /// <summary>
         /// Fetches the latest save game. Checks local cache first, otherwise returns the latest web save.
         /// </summary>
         /// <returns></returns>
@@ -97,22 +80,45 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override bool HasDataInSlot(int slotNumber)
         {
+#if UNITY_EDITOR
+            return File.Exists($"{Application.dataPath}/DebugSaves/{slotNumber}.json");
+#else
             return slotNumber == 1;
+#endif
         }
 
         public override void StoreSavedGameData(int slotNumber, SavedGameData savedGameData)
         {
-            LocalStoreGameData(savedGameData);
+            if (!savingEnabled) return;
+            
+            LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
+
+            string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
+#if UNITY_EDITOR
+            File.WriteAllText($"{Application.dataPath}/DebugSaves/{slotNumber}.json", saveString);
+#else
+            File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
+#endif
+#if UNITY_WEBGL && !UNITY_EDITOR // todo: see if this can be removed for optimization
+            Application.ExternalEval("_JS_FileSystem_Sync();");
+#endif
         }
 
         public override SavedGameData RetrieveSavedGameData(int slotNumber)
         {
+#if UNITY_EDITOR
+            string saveText = File.ReadAllText($"{Application.dataPath}/DebugSaves/{slotNumber}.json");
+            return PixelCrushers.SaveSystem.Deserialize<SaveGameMetadata>(saveText).state;
+#else
             return LatestSaveData.state;
+#endif
         }
 
         public override void DeleteSavedGameData(int slotNumber)
         {
-            throw new NotImplementedException();
+            #if UNITY_EDITOR
+            File.Delete($"{Application.dataPath}/DebugSaves/{slotNumber}.json");
+            #endif
         }
     }
     
