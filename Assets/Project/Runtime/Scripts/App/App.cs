@@ -179,7 +179,6 @@ namespace Project.Runtime.Scripts.App
 
             while (!newScene.isDone || !AddressableLoader.IsQueueEmpty()) yield return null;
             
-            Debug.Log("Scene loaded: " + sceneToLoad);
             
             if (waitForUnload == false)
             {
@@ -202,8 +201,6 @@ namespace Project.Runtime.Scripts.App
             }
 
             
-            
-            Debug.Log("Scene loaded: " + sceneToLoad);
         }
         
     }

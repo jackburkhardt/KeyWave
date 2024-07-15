@@ -12,6 +12,7 @@ using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.Manager
@@ -146,6 +147,10 @@ namespace Project.Runtime.Scripts.Manager
      
 
             yield return new WaitForSeconds(0.25f);
+            while (!DialogueManager.hasInstance)
+            {
+                yield return null;
+            }
             DialogueManager.StartConversation("Intro");
         }
         
@@ -161,6 +166,7 @@ namespace Project.Runtime.Scripts.Manager
         public static void OnConversationEnd()
         {
             var activeConversation = DialogueManager.instance.activeConversation;
+            if (activeConversation == null) return;
             var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
             if (Field.FieldExists(conversation.fields, "Base") &&
                 !DialogueLua.GetConversationField(conversation.id, "Base").asBool) return;
@@ -238,7 +244,11 @@ namespace Project.Runtime.Scripts.Manager
         {
 
             DialogueManager.StopConversation();
-            if (currentScene == "") currentScene = gameState.current_scene;
+            if (currentScene == "")
+            {
+                if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
+                else currentScene = gameState.current_scene;
+            }
             StartCoroutine(TravelToHandler());
 
             IEnumerator TravelToHandler()

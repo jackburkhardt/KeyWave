@@ -38,8 +38,6 @@ namespace Project.Runtime.Scripts.Events.Actions
             if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
             {
                 PixelCrushers.SaveSystem.SaveToSlot(1);
-               
-               
             }
 
             foreach (var actor in DialogueManager.masterDatabase.actors)
@@ -74,9 +72,11 @@ namespace Project.Runtime.Scripts.Events.Actions
             }
         }
 
-        public void OnSequenceEnd()
+
+
+        public void OnLoad()
         {
-        
+            Sequencer.Message("Load");
         }
 
 

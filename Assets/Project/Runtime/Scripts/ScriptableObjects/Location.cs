@@ -102,11 +102,22 @@ namespace Project.Runtime.Scripts.ScriptableObjects
             
             GameManager.instance.TravelTo(this);
         }
+        
+        public void FadeHere()
+        {
+            LastLocation = FromString(GameManager.gameState.PlayerLocation);
+            if (LastLocation.area != Area.Café) LastNonCaféLocation = LastLocation;
+            //GameEvent.OnMove(this.Name, LastLocation, Distance);
+
+            GameManager.instance.TravelTo(this, LoadingScreen.LoadingScreenType.Black);
+        }
 
         public void MoveHereImmediate()
         {
             App.App.Instance.LoadSceneImmediate(name, "StartMenu");
         }
+
+        
 
         public override string ToString()
         {

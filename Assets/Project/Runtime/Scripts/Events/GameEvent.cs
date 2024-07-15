@@ -116,6 +116,7 @@ namespace Project.Runtime.Scripts.Events
 
         public static void OnConversationEnd()
         {
+            if (DialogueManager.instance.activeConversation == null) return;
             var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
             var currentEntry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
             RegisterPlayerEvent("conversation_end",  "DialogueManager", conversationTitle, currentEntry.ToString());
