@@ -1716,6 +1716,40 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 contextMenu.AddItem(new GUIContent("Group/Delete"), false, DeleteEntryGroup, null);
             }
 
+            contextMenu.AddItem(new GUIContent("Sort/By Title"), false, SortConversationsByTitle);
+            contextMenu.AddItem(new GUIContent("Sort/By ID"), false, SortConversationsByID);
+            contextMenu.AddItem(new GUIContent("Sort/Reorder IDs/This Conversation"), false, ConfirmReorderIDsThisConversation);
+            contextMenu.AddItem(new GUIContent("Sort/Reorder IDs/All Conversations"), false, ConfirmReorderIDsAllConversations);
+            contextMenu.AddItem(new GUIContent("Sort/Reorder IDs/Depth First Reordering"), reorderIDsDepthFirst, () => { reorderIDsDepthFirst = !reorderIDsDepthFirst; });
+            contextMenu.AddItem(new GUIContent("Show/Show Conversation IDs"), prefs.showConversationIDs, ToggleShowConversationIDs);
+            contextMenu.AddItem(new GUIContent("Show/Show Node IDs"), prefs.showNodeIDs, ToggleShowNodeIDs);
+            contextMenu.AddItem(new GUIContent("Show/Show All Actor Names"), prefs.showAllActorNames, ToggleShowAllActorNames);
+            contextMenu.AddItem(new GUIContent("Show/Show Non-Primary Actor Names"), prefs.showOtherActorNames, ToggleShowOtherActorNames);
+            contextMenu.AddItem(new GUIContent("Show/Show Actor Portraits"), prefs.showActorPortraits, ToggleShowActorPortraits);
+            contextMenu.AddItem(new GUIContent("Show/Show Descriptions"), prefs.showDescriptions, ToggleShowDescriptions);
+            contextMenu.AddItem(new GUIContent("Show/Show Full Text On Hover"), prefs.showFullTextOnHover, ToggleShowFullTextOnHover);
+            contextMenu.AddItem(new GUIContent("Show/Show Link Order On Arrows"), prefs.showLinkOrderOnConnectors, () => { prefs.showLinkOrderOnConnectors = !prefs.showLinkOrderOnConnectors; });
+            contextMenu.AddItem(new GUIContent("Show/Show End Node Markers"), prefs.showEndNodeMarkers, ToggleShowEndNodeMarkers);
+            contextMenu.AddItem(new GUIContent("Show/Show Titles Instead of Text"), prefs.showTitlesInsteadOfText, ToggleShowTitlesBeforeText);
+            contextMenu.AddItem(new GUIContent("Show/Show Primary Actors in Lower Right"), prefs.showParticipantNames, ToggleShowParticipantNames);
+            contextMenu.AddItem(new GUIContent("Show/Prefer Titles For 'Links To' Menus"), prefs.preferTitlesForLinksTo, TogglePreferTitlesForLinksTo);
+            contextMenu.AddItem(new GUIContent("Show/Node Width/1x"), canvasRectWidthMultiplier == 1, SetNodeWidthMultiplier, (int)1);
+            contextMenu.AddItem(new GUIContent("Show/Node Width/2x"), canvasRectWidthMultiplier == 2, SetNodeWidthMultiplier, (int)2);
+            contextMenu.AddItem(new GUIContent("Show/Node Width/3x"), canvasRectWidthMultiplier == 3, SetNodeWidthMultiplier, (int)3);
+            contextMenu.AddItem(new GUIContent("Show/Node Width/4x"), canvasRectWidthMultiplier == 4, SetNodeWidthMultiplier, (int)4);
+            contextMenu.AddItem(new GUIContent("Grid/No Snap"), prefs.snapToGridAmount < MinorGridLineWidth, SetSnapToGrid, 0f);
+            contextMenu.AddItem(new GUIContent("Grid/12 pixels"), Mathf.Approximately(12f, prefs.snapToGridAmount), SetSnapToGrid, 12f);
+            contextMenu.AddItem(new GUIContent("Grid/24 pixels"), Mathf.Approximately(24f, prefs.snapToGridAmount), SetSnapToGrid, 24f);
+            contextMenu.AddItem(new GUIContent("Grid/36 pixels"), Mathf.Approximately(36f, prefs.snapToGridAmount), SetSnapToGrid, 36f);
+            contextMenu.AddItem(new GUIContent("Grid/48 pixels"), Mathf.Approximately(48f, prefs.snapToGridAmount), SetSnapToGrid, 48f);
+            contextMenu.AddItem(new GUIContent("Grid/Snap All Nodes To Grid"), false, SnapAllNodesToGrid);
+            contextMenu.AddItem(new GUIContent("Search/Search Bar"), isSearchBarOpen, ToggleDialogueTreeSearchBar);
+            contextMenu.AddItem(new GUIContent("Search/Global Search and Replace..."), false, OpenGlobalSearchAndReplace);
+            contextMenu.AddItem(new GUIContent("Settings/Auto Arrange After Adding Node"), prefs.autoArrangeOnCreate, ToggleAutoArrangeOnCreate);
+            contextMenu.AddItem(new GUIContent("Settings/Add New Nodes to Right"), prefs.addNewNodesToRight, ToggleAddNewNodesToRight);
+            contextMenu.AddItem(new GUIContent("Settings/Confirm Node and Link Deletion"), confirmDelete, ToggleConfirmDelete);
+            contextMenu.AddItem(new GUIContent("Outline Mode"), false, ActivateOutlineMode);
+
             AddCanvasContextMenuGotoItems(contextMenu);
 
             contextMenu.AddSeparator(string.Empty);
@@ -1755,55 +1789,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             GenericMenu contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Create Child Node"), false, AddChildCallback, entry);
-            if (multinodeSelection.nodes.Count == 2  && (multinodeSelection.nodes.Contains(entry)))
-            {
-                contextMenu.AddItem(new GUIContent("Create In-between node"), false, CreateBetweenNodeCallback, entry);
-            }
-            contextMenu.AddSeparator("");
-            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, currentEntry, false));
-            contextMenu.AddItem(new GUIContent("Edit Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, currentEntry, true));
-
-            var sequenceOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/SequenceOptions.asset");
-            var titleOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/TitleOptions.asset");
-            var menuTextOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/MenuTextOptions.asset");
-
-            if (titleOpts)
-            {
-                foreach (var item in titleOpts.strings)
-                {
-                    contextMenu.AddItem(new GUIContent("Set Title/" + item), false, SetTitleCallback,
-                        new Tuple<DialogueEntry, string>(entry, item));
-                }
-            }
-
-            if (sequenceOpts)
-            {
-                foreach (var item in sequenceOpts.strings)
-                {
-                    contextMenu.AddItem(new GUIContent("Set Sequence/" + item), false, SetSequenceCallback,
-                        new Tuple<DialogueEntry, string>(entry, item));
-                }
-            }
-            
-            if (menuTextOpts)
-            {
-                foreach (var item in menuTextOpts.strings)
-                {
-                    contextMenu.AddItem(new GUIContent("Set Menu Text/" + item), false, SetMenuTextCallback,
-                        new Tuple<DialogueEntry, string>(entry, item));
-                }
-            }
-            
-            contextMenu.AddSeparator("");
-            
-            contextMenu.AddItem(new GUIContent("Auto Condition/If Quest Active"), false, IfQuestActiveCallback, entry);
-            
-            contextMenu.AddItem(new GUIContent("Auto Script/Set Quest Success"), false, SetQuestSuccessCallback, entry);
-
-
-
-            contextMenu.AddSeparator("");
-
             contextMenu.AddItem(new GUIContent("Make Link"), false, MakeLinkCallback, entry);
             if ((multinodeSelection.nodes.Count > 1) && (multinodeSelection.nodes.Contains(entry)))
             {
@@ -1871,10 +1856,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 {
                     contextMenu.AddItem(new GUIContent("Center on Current Entry"), false, GotoCurrentRuntimeEntry);
                 }
+                contextMenu.AddItem(new GUIContent("Refresh"), false, RefreshConversation);
             }
             else
             {
                 contextMenu.AddDisabledItem(new GUIContent("Center on START"));
+                contextMenu.AddDisabledItem(new GUIContent("Refresh"));
             }
         }
 

@@ -207,8 +207,10 @@ namespace PixelCrushers.DialogueSystem
                     Tools.SendMessageToEveryone(message);
                     break;
                 case RecordPersistentDataOn.OnlyRegisteredGameObjects:
-                    foreach (var go in listeners)
+                    var gos = new List<GameObject>(listeners); // listeners may change during loop.
+                    for (int i = gos.Count - 1; i >= 0; i--)
                     {
+                        var go = gos[i];
                         if (go != null) go.SendMessage(message, SendMessageOptions.DontRequireReceiver);
                     }
                     break;
@@ -915,7 +917,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Appends SimStatus for all conversations.
         /// </summary>
-        private static void AppendSimStatus(StringBuilder sb)
+        public static void AppendSimStatus(StringBuilder sb)
         {
             try
             {
@@ -1029,7 +1031,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// When reapplying saved data, expands compress SimX info into conversations' SimStatus tables.
         /// </summary>
-        private static void ExpandCompressedSimStatusData()
+        public static void ExpandCompressedSimStatusData()
         {
             if (!(includeSimStatus && DialogueManager.Instance.includeSimStatus)) return;
             // Track conversations so we know which ones were added after the saved game:

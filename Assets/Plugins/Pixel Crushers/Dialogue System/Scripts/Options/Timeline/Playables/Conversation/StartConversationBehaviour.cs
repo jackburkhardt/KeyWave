@@ -1,5 +1,3 @@
-// Recompile at 3/18/2024 10:31:56 AM
-
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -31,10 +29,13 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("Stop any active conversations before starting this one.")]
         public bool exclusive = false;
 
+        [Tooltip("(Optional) Assign if you want to override dialogue UI for this conversation.")]
+        public AbstractDialogueUI overrideDialogueUI;
+
         public string GetEditorDialogueText()
         {
             var dialogueText = PreviewUI.GetDialogueText(conversation, jumpToSpecificEntry ? entryID : -1);
-            return "[" + conversation + "] '" + dialogueText + "'";
+            return "'" + dialogueText + "'";
         }
 
     }

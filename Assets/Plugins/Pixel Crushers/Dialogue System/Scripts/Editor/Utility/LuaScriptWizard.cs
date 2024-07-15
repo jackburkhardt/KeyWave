@@ -74,6 +74,8 @@ namespace PixelCrushers.DialogueSystem
         private List<ScriptItem> scriptItems = new List<ScriptItem>();
         private string savedLuaCode = string.Empty;
         private bool append = true;
+        private CustomLuaFunctionInfoRecord[] builtinLuaFuncs = null;
+        private string[] builtinLuaFuncNames = null;
         private CustomLuaFunctionInfoRecord[] customLuaFuncs = null;
         private string[] customLuaFuncNames = null;
 
@@ -178,6 +180,16 @@ namespace PixelCrushers.DialogueSystem
             EditorGUILayout.EndVertical();
 
             return luaCode;
+        }
+
+        private void ValidateCustomLuaFunctionInfo()
+        {
+            if (customLuaFuncs == null)
+            {
+                FindAllCustomLuaFuncs(false, 
+                    out builtinLuaFuncs, out builtinLuaFuncNames,
+                    out customLuaFuncs, out customLuaFuncNames);
+            }
         }
 
         private void DrawScriptItem(ScriptItem item, ref ScriptItem itemToDelete)
@@ -356,10 +368,68 @@ namespace PixelCrushers.DialogueSystem
                 item.stringValue = EditorGUILayout.TextField(item.stringValue);
 
             }
+            else if (item.resourceType == ScriptWizardResourceType.Misc)
+            {
+                ValidateCustomLuaFunctionInfo();
+
+                int newCustomLuaFuncIndex = EditorGUILayout.Popup(item.customLuaFuncIndex, builtinLuaFuncNames);
+                if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
+                {
+                    item.customLuaFuncIndex = newCustomLuaFuncIndex;
+                    item.customParamValues = null;
+                }
+                if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < builtinLuaFuncs.Length)
+                {
+                    var luaFuncRecord = builtinLuaFuncs[item.customLuaFuncIndex];
+                    if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
+                    for (int i = 0; i < luaFuncRecord.parameters.Length; i++)
+                    {
+                        switch (luaFuncRecord.parameters[i])
+                        {
+                            case CustomLuaParameterType.Bool:
+                                item.customParamValues[i] = (BooleanType)EditorGUILayout.EnumPopup((BooleanType)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Double:
+                                item.customParamValues[i] = EditorGUILayout.FloatField((float)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.String:
+                                item.customParamValues[i] = EditorGUILayout.TextField((string)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Actor:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], actorNames);
+                                break;
+                            case CustomLuaParameterType.Quest:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], questNames);
+                                item.questNamesIndex = (int)item.customParamValues[i];
+                                break;
+                            case CustomLuaParameterType.QuestEntry:
+                                if ((item.scriptQuestEntryNames.Length == 0) && (item.questNamesIndex < complexQuestNames.Length))
+                                {
+                                    item.scriptQuestEntryNames = GetQuestEntryNames(complexQuestNames[item.questNamesIndex]);
+                                }
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], item.scriptQuestEntryNames);
+                                break;
+                            case CustomLuaParameterType.Variable:
+                            case CustomLuaParameterType.VariableName:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], variablePopupNames);
+                                break;
+                            case CustomLuaParameterType.Item:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], itemNames);
+                                break;
+                            case CustomLuaParameterType.QuestState:
+                                if (item.customParamValues[i] == null || item.customParamValues[i].GetType() != typeof(QuestState))
+                                {
+                                    item.customParamValues[i] = QuestState.Unassigned;
+                                }
+                                item.customParamValues[i] = (QuestState)EditorGUILayout.EnumPopup((QuestState)item.customParamValues[i]);
+                                break;
+                        }
+                    }
+                }
+            }
             else if (item.resourceType == ScriptWizardResourceType.Custom)
             {
-                // Custom Lua Functions:
-                if (customLuaFuncs == null) FindAllCustomLuaFuncs(false, out customLuaFuncs, out customLuaFuncNames);
+                ValidateCustomLuaFunctionInfo();
 
                 int newCustomLuaFuncIndex = EditorGUILayout.Popup(item.customLuaFuncIndex, customLuaFuncNames);
                 if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
@@ -548,17 +618,17 @@ namespace PixelCrushers.DialogueSystem
                                         case ValueSetMode.To:
                                             sb.AppendFormat("NetSetNumber(\"{0}\", {1})",
                                                             DialogueLua.StringToTableIndex(variableName),
-                                                            item.floatValue);
+                                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                                             break;
                                         case ValueSetMode.Add:
                                             sb.AppendFormat("NetSetNumber(\"{0}\", Variable[\"{0}\"] + {1})",
                                                             DialogueLua.StringToTableIndex(variableName),
-                                                            item.floatValue);
+                                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                                             break;
                                         case ValueSetMode.Subtract:
                                             sb.AppendFormat("NetSetNumber(\"{0}\", Variable[\"{0}\"] - {1})",
                                                             DialogueLua.StringToTableIndex(variableName),
-                                                            item.floatValue);
+                                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                                             break;
                                     }
                                 }
@@ -569,17 +639,17 @@ namespace PixelCrushers.DialogueSystem
                                         case ValueSetMode.To:
                                             sb.AppendFormat("Variable[\"{0}\"] = {1}",
                                                             DialogueLua.StringToTableIndex(variableName),
-                                                            item.floatValue);
+                                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                                             break;
                                         case ValueSetMode.Add:
                                             sb.AppendFormat("Variable[\"{0}\"] = Variable[\"{0}\"] + {1}",
                                                             DialogueLua.StringToTableIndex(variableName),
-                                                            item.floatValue);
+                                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                                             break;
                                         case ValueSetMode.Subtract:
                                             sb.AppendFormat("Variable[\"{0}\"] = Variable[\"{0}\"] - {1}",
                                                             DialogueLua.StringToTableIndex(variableName),
-                                                            item.floatValue);
+                                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                                             break;
                                     }
                                 }
@@ -654,11 +724,69 @@ namespace PixelCrushers.DialogueSystem
                         // Custom:
                         sb.Append("ShowAlert(\"" + item.stringValue.Replace("\"", "\\\"") + "\")");
                     }
+
+                    else if (item.resourceType == ScriptWizardResourceType.Misc)
+                    {
+
+                        // Custom:
+                        ValidateCustomLuaFunctionInfo();
+                        if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < builtinLuaFuncs.Length)
+                        {
+                            var luaFuncRecord = builtinLuaFuncs[item.customLuaFuncIndex];
+                            sb.Append(Tools.GetAllAfterSlashes(luaFuncRecord.functionName) + "(");
+                            for (int p = 0; p < luaFuncRecord.parameters.Length; p++)
+                            {
+                                if (p > 0) sb.Append(", ");
+                                switch (luaFuncRecord.parameters[p])
+                                {
+                                    case CustomLuaParameterType.Bool:
+                                        sb.Append(((BooleanType)item.customParamValues[p] == BooleanType.True) ? "true" : "false");
+                                        break;
+                                    case CustomLuaParameterType.Double:
+                                        sb.Append(((float)item.customParamValues[p]).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                                        break;
+                                    case CustomLuaParameterType.String:
+                                        sb.Append("\"" + (string)item.customParamValues[p] + "\"");
+                                        break;
+                                    case CustomLuaParameterType.Actor:
+                                        var actorIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= actorIndex && actorIndex < actorNames.Length) ? ("\"" + actorNames[actorIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.Quest:
+                                        var questIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= questIndex && questIndex < questNames.Length) ? ("\"" + questNames[questIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.QuestEntry:
+                                        sb.Append(((int)item.customParamValues[p] + 1).ToString());
+                                        break;
+                                    case CustomLuaParameterType.Variable:
+                                        var variableIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= variableIndex && variableIndex < variableNames.Length) ? ("Variable[\"" + DialogueLua.StringToTableIndex(variableNames[variableIndex]) + "\"]") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.VariableName:
+                                        var variableNameIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= variableNameIndex && variableNameIndex < variableNames.Length) ? ("\"" + variableNames[variableNameIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.Item:
+                                        var itemIndex = (int)item.customParamValues[p];
+                                        sb.Append((0 <= itemIndex && itemIndex < itemNames.Length) ? ("\"" + itemNames[itemIndex] + "\"") : "\"\"");
+                                        break;
+                                    case CustomLuaParameterType.QuestState:
+                                        var tempQuestState = (item.customParamValues[p] == null || item.customParamValues[p].GetType() != typeof(QuestState))
+                                            ? QuestState.Unassigned : ((QuestState)(item.customParamValues[p]));
+                                        sb.Append("\"" + QuestLog.StateToString(tempQuestState) + "\"");
+                                        break;
+                                }
+                            }
+                            sb.Append(")");
+                        }
+                    }
+
                     else if (item.resourceType == ScriptWizardResourceType.Custom)
                     {
 
                         // Custom:
-                        if (customLuaFuncs == null) FindAllCustomLuaFuncs(true, out customLuaFuncs, out customLuaFuncNames);
+                        ValidateCustomLuaFunctionInfo();
                         if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < customLuaFuncs.Length)
                         {
                             var luaFuncRecord = customLuaFuncs[item.customLuaFuncIndex];
@@ -672,7 +800,7 @@ namespace PixelCrushers.DialogueSystem
                                         sb.Append(((BooleanType)item.customParamValues[p] == BooleanType.True) ? "true" : "false");
                                         break;
                                     case CustomLuaParameterType.Double:
-                                        sb.Append((float)item.customParamValues[p]);
+                                        sb.Append(((float)item.customParamValues[p]).ToString(System.Globalization.CultureInfo.InvariantCulture));
                                         break;
                                     case CustomLuaParameterType.String:
                                         sb.Append("\"" + (string)item.customParamValues[p] + "\"");
@@ -748,21 +876,21 @@ namespace PixelCrushers.DialogueSystem
                                             tableName,
                                             DialogueLua.StringToTableIndex(elementName),
                                             DialogueLua.StringToFieldName(fieldName),
-                                            item.floatValue);
+                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                             break;
                         case ValueSetMode.Add:
                             sb.AppendFormat("{0}[\"{1}\"].{2} = {0}[\"{1}\"].{2} + {3}",
                                             tableName,
                                             DialogueLua.StringToTableIndex(elementName),
                                             DialogueLua.StringToFieldName(fieldName),
-                                            item.floatValue);
+                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                             break;
                         case ValueSetMode.Subtract:
                             sb.AppendFormat("{0}[\"{1}\"].{2} = {0}[\"{1}\"].{2} - {3}",
                                             tableName,
                                             DialogueLua.StringToTableIndex(elementName),
                                             DialogueLua.StringToFieldName(fieldName),
-                                            item.floatValue);
+                                            item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                             break;
                     }
                     break;
@@ -771,7 +899,7 @@ namespace PixelCrushers.DialogueSystem
                                     tableName,
                                     DialogueLua.StringToTableIndex(elementName),
                                     DialogueLua.StringToFieldName(fieldName),
-                                    item.stringValue);
+                                    item.stringValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
                     break;
             }
         }
@@ -1081,14 +1209,77 @@ namespace PixelCrushers.DialogueSystem
                 // Alert:
                 rect = new Rect(x, y, position.width - rect.width - 2, rect.height);
                 item.stringValue = EditorGUI.TextField(rect, item.stringValue);
-
             }
+
+            else if (item.resourceType == ScriptWizardResourceType.Misc)
+            {
+                GUI.BeginGroup(position);
+
+                ValidateCustomLuaFunctionInfo();
+
+                int newCustomLuaFuncIndex = EditorGUILayout.Popup(item.customLuaFuncIndex, builtinLuaFuncNames);
+                if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
+                {
+                    item.customLuaFuncIndex = newCustomLuaFuncIndex;
+                    item.customParamValues = null;
+                }
+
+                if (0 <= item.customLuaFuncIndex && item.customLuaFuncIndex < builtinLuaFuncs.Length)
+                {
+                    var luaFuncRecord = builtinLuaFuncs[item.customLuaFuncIndex];
+                    if (item.customParamValues == null) InitCustomParamValues(luaFuncRecord, out item.customParamValues);
+                    for (int i = 0; i < luaFuncRecord.parameters.Length; i++)
+                    {
+                        switch (luaFuncRecord.parameters[i])
+                        {
+                            case CustomLuaParameterType.Bool:
+                                item.customParamValues[i] = (BooleanType)EditorGUILayout.EnumPopup((BooleanType)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Double:
+                                item.customParamValues[i] = EditorGUILayout.FloatField((float)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.String:
+                                item.customParamValues[i] = EditorGUILayout.TextField((string)item.customParamValues[i]);
+                                break;
+                            case CustomLuaParameterType.Actor:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], actorNames);
+                                break;
+                            case CustomLuaParameterType.Quest:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], questNames);
+                                item.questNamesIndex = (int)item.customParamValues[i];
+                                break;
+                            case CustomLuaParameterType.QuestEntry:
+                                if ((item.scriptQuestEntryNames.Length == 0) && (item.questNamesIndex < complexQuestNames.Length))
+                                {
+                                    item.scriptQuestEntryNames = GetQuestEntryNames(complexQuestNames[item.questNamesIndex]);
+                                }
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], item.scriptQuestEntryNames);
+                                break;
+                            case CustomLuaParameterType.Variable:
+                            case CustomLuaParameterType.VariableName:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], variablePopupNames);
+                                break;
+                            case CustomLuaParameterType.Item:
+                                item.customParamValues[i] = EditorGUILayout.Popup((int)item.customParamValues[i], itemNames);
+                                break;
+                            case CustomLuaParameterType.QuestState:
+                                if (item.customParamValues[i] == null || item.customParamValues[i].GetType() != typeof(QuestState))
+                                {
+                                    item.customParamValues[i] = QuestState.Unassigned;
+                                }
+                                item.customParamValues[i] = (QuestState)EditorGUI.EnumPopup(rect, (QuestState)item.customParamValues[i]);
+                                break;
+                        }
+                    }
+                }
+                GUI.EndGroup();
+            }
+
             else if (item.resourceType == ScriptWizardResourceType.Custom)
             {
                 GUI.BeginGroup(position);
 
-                // Custom Lua Functions:
-                if (customLuaFuncs == null) FindAllCustomLuaFuncs(false, out customLuaFuncs, out customLuaFuncNames);
+                ValidateCustomLuaFunctionInfo();
 
                 int newCustomLuaFuncIndex = EditorGUILayout.Popup(item.customLuaFuncIndex, customLuaFuncNames);
                 if (newCustomLuaFuncIndex != item.customLuaFuncIndex)
