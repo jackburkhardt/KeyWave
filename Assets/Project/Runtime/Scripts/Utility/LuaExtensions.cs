@@ -210,5 +210,10 @@ namespace Project.Runtime.Scripts.Utility
             return listToClone.Select(item => (T)item.Clone()).ToList();
         }
         
+        public static bool EvaluateConditions(this DialogueEntry dialogueEntry)
+        {
+            return Lua.IsTrue(dialogueEntry.conditionsString);
+        }
+        
     }
 }

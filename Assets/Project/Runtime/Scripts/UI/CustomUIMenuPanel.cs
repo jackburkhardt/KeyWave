@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.UI
@@ -39,6 +40,30 @@ namespace Project.Runtime.Scripts.UI
                 if (!button.gameObject.activeSelf && button != buttonTemplate) return;
                 button.Refresh();
             }
+            
+            /*
+
+            var allResponses = response
+            foreach (var response in allResponses)
+            {
+                Debug.Log("Response: " + response.destinationEntry.fields[0].value);
+                if (response.destinationEntry == null) continue;
+                if (!response.destinationEntry.EvaluateConditions() &&
+                    Field.FieldExists(response.destinationEntry.fields, "Show Invalid") &&
+                    Field.Lookup(response.destinationEntry.fields, "Show Invalid").value == "true")
+                {
+                    var invalidButton = Instantiate(buttonTemplate, buttonTemplate.transform.parent);
+                    invalidButton.gameObject.SetActive(true);
+                    invalidButton.response = response;
+                    invalidButton.button.interactable = false;
+                    invalidButton.text = "???";
+                }
+
+            }
+            
+            
+            */
+
         }
 
         public void OnQuestStateChange(string questTitle)

@@ -176,7 +176,7 @@ namespace Project.Runtime.Scripts.Manager
         {
           
             var database = DialogueManager.instance.masterDatabase;
-            var conversationName = Location.PlayerLocation.name + "/Talk";
+            var conversationName = Location.PlayerLocation.name + "/Talk/Base";
 
             if (!DialogueManager.instance.isConversationActive)
             {
@@ -193,7 +193,7 @@ namespace Project.Runtime.Scripts.Manager
         public void StartActionConversation()
         {
             var database = DialogueManager.instance.masterDatabase;
-            var conversationName = Location.PlayerLocation.name + "/Action";
+            var conversationName = Location.PlayerLocation.name + "/Action/Base";
             
             
             if (!DialogueManager.instance.isConversationActive)
