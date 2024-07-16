@@ -16,19 +16,19 @@ namespace Project.Editor.Scripts.Tools
         private static string[] _slotNames;
         private Vector2 _scrollPos;
         
-        [MenuItem("Save System/Load")]
-        private static void ShowLoadWindow()
-        {
-            _isLoading = true;
-            ShowWindow();
-        }
-        
-        [MenuItem("Save System/Save")]
-        private static void ShowSaveWindow()
-        {
-            _isLoading = false;
-            ShowWindow();
-        }
+        // [MenuItem("Save System/Load")]
+        // private static void ShowLoadWindow()
+        // {
+        //     _isLoading = true;
+        //     ShowWindow();
+        // }
+        //
+        // [MenuItem("Save System/Save")]
+        // private static void ShowSaveWindow()
+        // {
+        //     _isLoading = false;
+        //     ShowWindow();
+        // }
 
         private static void ShowWindow()
         {
