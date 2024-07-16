@@ -71,7 +71,7 @@ namespace Project.Runtime.Scripts.Manager
             switch (playerEvent.EventType)
             {
                 case "move":
-                    var location = Location.FromString(playerEvent.Target);
+                    var location = Location.FromString(playerEvent.Data["newLocation"]?.ToString());
                     gameState.PlayerLocation = location.Name; 
                     break;
                 case "conversation_start":
@@ -96,7 +96,7 @@ namespace Project.Runtime.Scripts.Manager
                     //   gameState.most_recent_response_node = string.Empty;
                     break;
                 case "points":
-                    var pointsField = Points.PointsField.FromString(playerEvent.Data);
+                    var pointsField = Points.PointsField.FromJObject(playerEvent.Data);
                     switch (pointsField.Type)
                     {
                         case Points.Type.Wellness:

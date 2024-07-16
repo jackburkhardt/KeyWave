@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -134,6 +135,15 @@ namespace Project.Runtime.Scripts.Manager
                 var split = data.Split(':');
                 var type = (Type) Enum.Parse(typeof(Type), split[0]);
                 var points = int.Parse(split[1]);
+                return new PointsField {Type = type, Points = points};
+            }
+            
+            public static PointsField FromJObject(JObject data)
+            {
+                if (data["points"] == null || data["pointsType"] == null) return new PointsField {Type = Type.Null, Points = 0};
+                
+                var type = (Type) Enum.Parse(typeof(Type), (string) data["pointsType"]);
+                var points = (int) data["points"];
                 return new PointsField {Type = type, Points = points};
             }
 

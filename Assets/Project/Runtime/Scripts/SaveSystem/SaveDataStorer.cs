@@ -80,11 +80,7 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override bool HasDataInSlot(int slotNumber)
         {
-#if UNITY_EDITOR
-            return File.Exists($"{Application.dataPath}/DebugSaves/{slotNumber}.json");
-#else
             return slotNumber == 1;
-#endif
         }
 
         public override void StoreSavedGameData(int slotNumber, SavedGameData savedGameData)
@@ -94,11 +90,9 @@ namespace Project.Runtime.Scripts.SaveSystem
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 
             string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
-#if UNITY_EDITOR
-            File.WriteAllText($"{Application.dataPath}/DebugSaves/{slotNumber}.json", saveString);
-#else
+
+            Debug.Log("Performing local autosave...");
             File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
-#endif
 #if UNITY_WEBGL && !UNITY_EDITOR // todo: see if this can be removed for optimization
             Application.ExternalEval("_JS_FileSystem_Sync();");
 #endif
@@ -106,19 +100,12 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override SavedGameData RetrieveSavedGameData(int slotNumber)
         {
-#if UNITY_EDITOR
-            string saveText = File.ReadAllText($"{Application.dataPath}/DebugSaves/{slotNumber}.json");
-            return PixelCrushers.SaveSystem.Deserialize<SaveGameMetadata>(saveText).state;
-#else
             return LatestSaveData.state;
-#endif
         }
 
         public override void DeleteSavedGameData(int slotNumber)
         {
-            #if UNITY_EDITOR
             File.Delete($"{Application.dataPath}/DebugSaves/{slotNumber}.json");
-            #endif
         }
     }
     
