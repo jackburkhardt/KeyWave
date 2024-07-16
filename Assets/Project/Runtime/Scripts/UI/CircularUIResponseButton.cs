@@ -53,6 +53,8 @@ namespace Project.Runtime.Scripts.UI
             }
         }
 
+        private Color _defaultLabelColor;
+
         private Item? AssociatedQuest => DialogueManager.Instance.masterDatabase.items.Find(item => item.Name == response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title);
 
         private Points.PointsField[] PointsData
@@ -89,6 +91,18 @@ namespace Project.Runtime.Scripts.UI
             }
         }
 
+        public override void Refresh()
+        {
+            base.Refresh();
+            label.color = _defaultLabelColor;
+        }
+        
+        public override void Awake()
+        {
+            base.Awake();
+            _defaultLabelColor = label.color;
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -110,8 +124,13 @@ namespace Project.Runtime.Scripts.UI
         
             foreach (var customUIResponseButton in SiblingButtons)
             {
-                if (customUIResponseButton != this) customUIResponseButton.label.color = Color.clear;
+                if (customUIResponseButton != this && customUIResponseButton != MenuPanelContainer.buttonTemplate) customUIResponseButton.label.color = Color.clear;
             }
+        }
+
+        public void OnContentChanged()
+        {
+            label.color = _defaultLabelColor;
         }
 
         public override void OnPointerEnter(PointerEventData eventData)

@@ -55,10 +55,12 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnSequenceStart()
         {
+            
 
             if (DialogueUtility.CurrentDialogueEntry.IsEmpty() || DialogueUtility.CurrentDialogueEntry.id == 0)
             {
                 DialogueManager.PlaySequence("Continue()");
+         
             }
         
         
@@ -89,7 +91,7 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnConversationEnd(Transform t)
         {
-            GameEvent.OnConversationEnd();
+          //  GameEvent.OnConversationEnd();
         }
     }
 }

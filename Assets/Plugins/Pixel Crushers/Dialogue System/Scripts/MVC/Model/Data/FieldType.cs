@@ -75,6 +75,8 @@ namespace PixelCrushers.DialogueSystem
         
         
         EmailState,
+        
+        Color
     }
 
 }

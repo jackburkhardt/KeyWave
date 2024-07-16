@@ -163,11 +163,14 @@ namespace Project.Runtime.Scripts.Manager
 
 
             if (DialogueLua.GetVariable($"Tutorial/{_tutorial.name}").asBool) return;
+            if (DialogueLua.GetVariable("debug.disable_tutorials").asBool) return;
             if (_tutorial == null)
             {
                 Debug.LogError($"Tutorial {tutorialName} not found");
                 return;
             }
+            
+            
         
        
             GetComponent<Animator>().SetTrigger("Show");

@@ -33,10 +33,11 @@ namespace Project.Runtime.Scripts.UI
 
         protected virtual void OnContentChanged()
         {
-            foreach (var button in ResponseButtons)
+            var responseButtons = GetComponentsInChildren<CustomUIResponseButton>();
+            foreach (var button in responseButtons)
             {
-                if (!button.gameObject.activeSelf && button != buttonTemplate) Destroy(button);
-                else button.Refresh();
+                if (!button.gameObject.activeSelf && button != buttonTemplate) return;
+                button.Refresh();
             }
         }
 
@@ -47,7 +48,7 @@ namespace Project.Runtime.Scripts.UI
 
         public void OnConversationEnd()
         {
-            responseMenuAnimator.SetTrigger("Hide");
+     
         }
     }
 }

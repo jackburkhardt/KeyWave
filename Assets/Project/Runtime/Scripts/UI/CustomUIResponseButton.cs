@@ -159,7 +159,7 @@ namespace Project.Runtime.Scripts.UI
 
             if (DialogueEntryInvalid)
             {
-                if ( !Field.LookupBool(response?.destinationEntry?.fields, "Show If Invalid")) Destroy(gameObject);
+               // if ( !Field.LookupBool(response?.destinationEntry?.fields, "Show If Invalid")) Destroy(gameObject);
             
             
                 if (Field.FieldExists(response?.destinationEntry?.fields, "Invalid Text"))

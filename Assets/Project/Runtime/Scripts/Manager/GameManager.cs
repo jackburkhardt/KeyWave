@@ -29,8 +29,7 @@ namespace Project.Runtime.Scripts.Manager
         public bool capFramerate = false;
         public Canvas mainCanvas;
 
-        [ShowIf("capFramerate")]
-        public int framerateLimit;
+        [ShowIf("capFramerate")] public int framerateLimit;
 
         private CustomLuaFunctions _customLuaFunctions;
         public DailyReport dailyReport;
@@ -38,36 +37,37 @@ namespace Project.Runtime.Scripts.Manager
         private string last_convo = string.Empty;
 
         public static GameState gameState => GameStateManager.instance.gameState;
-        
+
         public static Action OnGameManagerAwake;
 
 
         private void Awake()
         {
             OnGameManagerAwake?.Invoke();
-       
+
             //if instance of GameManager already exists, destroy it
 
             if (instance == null)
             {
                 instance = this;
             }
-        
+
             else if (instance != this)
             {
                 Destroy(this);
             }
-        
-        
+
+
             if (gameStateManager == null)
             {
                 gameStateManager = this.AddComponent<GameStateManager>();
             }
-        
+
             if (playerEventStack == null)
             {
                 playerEventStack = ScriptableObject.CreateInstance<PlayerEventStack>();
             }
+
             _customLuaFunctions = GetComponent<CustomLuaFunctions>() ?? gameObject.AddComponent<CustomLuaFunctions>();
 
         }
@@ -87,7 +87,7 @@ namespace Project.Runtime.Scripts.Manager
 
         private void OnEnable()
         {
-       
+
         }
 
         private void OnDestroy()
@@ -134,27 +134,81 @@ namespace Project.Runtime.Scripts.Manager
 
         public IEnumerator StartNewSave()
         {
-           // yield return App.App.Instance.LoadScene("Hotel");
+            // yield return App.App.Instance.LoadScene("Hotel");
             dailyReport = new DailyReport(gameState.day);
-            
-        
-        
+
+
+
             while (App.App.isLoading)
             {
                 yield return new WaitForEndOfFrame();
             }
-            
-     
+
+
 
             yield return new WaitForSeconds(0.25f);
             while (!DialogueManager.hasInstance)
             {
                 yield return null;
             }
-            DialogueManager.StartConversation("Intro");
+
+            DialogueManager.instance.StartConversation("Intro");
         }
-        
-        public static void OnConversationStart()
+
+        public void StartMapConversation()
+        {
+            var database = DialogueManager.instance.masterDatabase;
+            var conversationName = "Map";
+
+            if (!DialogueManager.instance.isConversationActive)
+            {
+                DialogueManager.instance.StartConversation(conversationName);
+                return;
+            }
+            
+            var conversation = database.GetConversation(conversationName);
+            var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
+            var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+            DialogueManager.conversationController.GotoState(state);
+        }
+
+        public void StartTalkConversation()
+        {
+          
+            var database = DialogueManager.instance.masterDatabase;
+            var conversationName = Location.PlayerLocation.name + "/Talk";
+
+            if (!DialogueManager.instance.isConversationActive)
+            {
+                DialogueManager.instance.StartConversation(conversationName);
+                return;
+            }
+            
+            var conversation = database.GetConversation(conversationName);
+            var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
+            var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+            DialogueManager.conversationController.GotoState(state);
+        }
+
+        public void StartActionConversation()
+        {
+            var database = DialogueManager.instance.masterDatabase;
+            var conversationName = Location.PlayerLocation.name + "/Action";
+            
+            
+            if (!DialogueManager.instance.isConversationActive)
+            {
+                DialogueManager.instance.StartConversation(conversationName);
+                return;
+            }
+            
+            var conversation = database.GetConversation(conversationName);
+            var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
+            var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+            DialogueManager.conversationController.GotoState(state);
+        }
+
+    public static void OnConversationStart()
         {
             var activeConversation = DialogueManager.instance.activeConversation;
             var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
@@ -165,12 +219,14 @@ namespace Project.Runtime.Scripts.Manager
         
         public static void OnConversationEnd()
         {
+            /*
             var activeConversation = DialogueManager.instance.activeConversation;
             if (activeConversation == null) return;
             var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
             if (Field.FieldExists(conversation.fields, "Base") &&
                 !DialogueLua.GetConversationField(conversation.id, "Base").asBool) return;
             instance.mainCanvas.BroadcastMessage("SetTrigger", "Hide");
+            */
         }
 
 

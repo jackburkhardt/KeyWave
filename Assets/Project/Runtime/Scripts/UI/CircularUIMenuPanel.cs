@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using PixelCrushers;
+using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -15,15 +20,30 @@ namespace Project.Runtime.Scripts.UI
             "offsetCurve", 
             "timeEstimate",
             "responseMenuAnimator",
-            "mousePointerHand"
+            "mousePointerHand",
+            "outerBackground",
+            "innerBackground",
         };
 
         [SerializeField] private WatchHandCursor mousePointerHand;
         [SerializeField] public AnimationCurve offsetCurve;
         [SerializeField] private UITextField timeEstimate;
+        [SerializeField] private Image outerBackground, innerBackground;
+
+        private Color defaultOuterColor, defaultInnerColor;
 
         private bool _firstFocus = false;
         private Animator? Animator => GetComponent<Animator>();
+        
+       // protected void
+        public override void Awake()
+        {
+            base.Awake();
+            {
+                defaultOuterColor = outerBackground.color;
+                defaultInnerColor = innerBackground.color;
+            }
+        }
 
 
         protected override void Update()
@@ -49,11 +69,14 @@ namespace Project.Runtime.Scripts.UI
             var normalizedMenuPosition = new Vector2(transform.position.x / Screen.width, transform.position.y / Screen.height);
         
             var distance = Vector2.Distance(normalizedMousePosition, normalizedMenuPosition);
+            
+           
         
             var active = Animator!.GetBool("Active");
 
             if (!active) return;
-        
+            
+            
             if (distance > 1.65f && _firstFocus)
             {
                 Animator!.SetBool("Focus", false);
@@ -64,8 +87,22 @@ namespace Project.Runtime.Scripts.UI
                 Animator!.SetBool("Focus", true);
                 _firstFocus = true;
             }
+            
+            
         
       
+        }
+
+        public void Focus()
+        {
+           // Animator!.SetBool("Focus", true);
+            WatchHandCursor.GlobalUnfreeze();
+        }
+        
+        public void Unfocus()
+        {
+            //Animator!.SetBool("Focus", false);
+            WatchHandCursor.GlobalFreeze();
         }
 
         public void OnDialogueSystemPause()
@@ -79,6 +116,11 @@ namespace Project.Runtime.Scripts.UI
             WatchHandCursor.GlobalUnfreeze();
           }
 
+        public void OnConversationLine()
+        {
+            
+        }
+
 
         public void OnChoiceSelection()
         {
@@ -90,12 +132,31 @@ namespace Project.Runtime.Scripts.UI
 
         protected override void OnContentChanged()
         {
-            _firstFocus = false;
             base.OnContentChanged();
+            _firstFocus = false;
+           
+          
             WatchHandCursor.Unfreeze();
        
             Animator!.SetBool("Frozen", false);
+            
+  
+            var currentConversation =
+                (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.GetConversation());
+            var fieldExists = Field.FieldExists(currentConversation.fields, "Circular Menu Background");
+            if (fieldExists)
+            {
+                var color = Tools.WebColor(DialogueLua.GetConversationField(currentConversation.id, "Circular Menu Background").asString);
+                if (color == Color.clear || color == Color.black) return;
+                outerBackground.color = Color.Lerp(defaultOuterColor, new Color(color.r, color.g, color.b ,outerBackground.color.a), 0.2f);
+                
+                innerBackground.color = Color.Lerp(defaultInnerColor, new Color(color.r, color.g, color.b ,innerBackground.color.a), 0.4f);
+            }
+            
+           
         }
+        
+     
 
         public void SetPropertiesFromButton(CircularUIResponseButton button)
         {
