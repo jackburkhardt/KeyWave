@@ -636,6 +636,7 @@ namespace PixelCrushers.DialogueSystem.Articy
                 SetDialogueEntryParticipants(entry, conversation.ConversantID, conversation.ActorID);
                 ConvertPinExpressionsToConditionsAndScripts(entry, articyDialogue.pins, isInputPin, !isInputPin);
                 entry.isGroup = true;
+                //Field.SetValue(entry.fields, "Sequence", "Continue()", FieldType.Text);
                 Field.SetValue(entry.fields, ArticyIdFieldTitle, pin.id, FieldType.Text);
 
                 if (isInputPin)
@@ -904,51 +905,17 @@ namespace PixelCrushers.DialogueSystem.Articy
                     foreach (var link in parentEntry.outgoingLinks)
                     {
                         var childEntry = conversation.GetDialogueEntry(link.destinationDialogueID);
-
-                        // If no conditions or reevaluate links is true, no need for buffer entry:
-                        if (string.IsNullOrEmpty(childEntry.conditionsString) || !prefs.DelayEvaluation) continue;
-
+                        if (string.IsNullOrEmpty(childEntry.conditionsString)) continue;
                         // Parent has script and child has conditions, so create a buffer entry between them to delay evaluation:
                         var childArticyId = Field.LookupValue(childEntry.fields, ArticyIdFieldTitle);
-
-                        // Look for buffer entry or create if necessary:
-                        DialogueEntry bufferEntry = null;
-                        foreach (var linkFromParent in parentEntry.outgoingLinks)
-                        {
-                            var endpoint = database.GetDialogueEntry(linkFromParent);
-                            if (endpoint.Title == "Delay Evaluation")
-                            {
-                                bufferEntry = endpoint;
-                                break;
-                            }
-                        }
-                        if (bufferEntry == null)
-                        {
-                            bufferEntry = CreateNewDialogueEntry(conversation, "Delay Evaluation", childArticyId + "-1");
-                            conversation.dialogueEntries.Add(bufferEntry);
-                            bufferEntry.isGroup = prefs.ConvertInstructionsAs == ConverterPrefs.CodeNodeMode.GroupEntry;
-                            bufferEntry.ActorID = GetNPCID(conversation);
-                            bufferEntry.Sequence = "Continue()";
-                            bufferEntry.outgoingLinks = new List<Link>() { new Link(link) };
-                        }
-                        else
-                        {
-                            bufferEntry.outgoingLinks.Add(new Link(link));
-                        }
+                        var bufferEntry = CreateNewDialogueEntry(conversation, "Delay Evaluation", childArticyId + "-1");
+                        conversation.dialogueEntries.Add(bufferEntry);
+                        bufferEntry.Sequence = "Continue()";
+                        bufferEntry.outgoingLinks = new List<Link>() { new Link(link) };
                         link.destinationDialogueID = bufferEntry.id;
                     }
                 }
             }
-        }
-
-        private int GetNPCID(Conversation conversation)
-        {
-            var conversant = database.GetActor(conversation.ConversantID);
-            if (conversant != null && !conversant.IsPlayer) return conversation.id;
-            var actor = database.GetActor(conversation.ActorID);
-            if (actor != null && !actor.IsPlayer) return actor.id;
-            var npc = database.actors.Find(x => !x.IsPlayer);
-            return (npc != null) ? npc.id : conversation.ConversantID;
         }
 
         protected const int MaxRecursionDepth = 1000;
@@ -1091,12 +1058,6 @@ namespace PixelCrushers.DialogueSystem.Articy
                 ProcessJumpConnection(kvp.Key, kvp.Value);
             }
 
-            // Process dialogue-to-dialogue connections:
-            foreach (var kvp in articyData.connections)
-            {
-                ProcessDialogueConnection(kvp.Value);
-            }
-
             // Remove unused output entries:
             RemoveUnusedOutputEntries();
         }
@@ -1107,15 +1068,9 @@ namespace PixelCrushers.DialogueSystem.Articy
 
             DialogueEntry sourceEntry, targetEntry;
 
-            // See if source and target are dialogues:
-            var sourceDialogue = LookupArticyDialogue(connection.source.idRef);
-            var targetDialogue = LookupArticyDialogue(connection.target.idRef);
-
-            // If connection is from dialogue to dialogue, wait until other connections are done:
-            if (sourceDialogue != null && targetDialogue != null) return;
-
             // If connection is from dialogue, connect from <START> node:
-            if (sourceDialogue != null)
+            var dialogue = LookupArticyDialogue(connection.source.idRef);
+            if (dialogue != null)
             {
                 var conversation = database.conversations.Find(x => string.Equals(x.LookupValue(ArticyIdFieldTitle), connection.source.idRef));
                 if (conversation == null) return;
@@ -1152,74 +1107,18 @@ namespace PixelCrushers.DialogueSystem.Articy
             MarkTargetUsed(targetEntry);
         }
 
-        protected virtual void ProcessDialogueConnection(ArticyData.Connection connection)
-        {
-            if (connection == null) return;
-
-            // See if source and target are dialogues:
-            var sourceDialogue = LookupArticyDialogue(connection.source.idRef);
-            if (sourceDialogue == null) return;
-            var targetDialogue = LookupArticyDialogue(connection.target.idRef);
-            if (targetDialogue == null) return;
-
-            // Get conversations:
-            var sourceConversation = database.conversations.Find(x => string.Equals(x.LookupValue(ArticyIdFieldTitle), connection.source.idRef));
-            if (sourceConversation == null) return;
-            var targetConversation = database.conversations.Find(x => string.Equals(x.LookupValue(ArticyIdFieldTitle), connection.target.idRef));
-            if (targetConversation == null) return;
-
-            // Connect from source dialogue entries that link to source dialogue to first entry in target dialogue:
-            var targetFirstEntry = targetConversation.GetFirstDialogueEntry();
-            if (targetFirstEntry == null) return;
-            foreach (var innerConnection in articyData.connections.Values)
-            {
-                // Find connections that link to source dialogue:
-                if (innerConnection.target.idRef != connection.source.idRef) continue;
-
-                // Make sure they're in source conversation:
-                var sourceEntry = sourceConversation.dialogueEntries.Find(x => Field.LookupValue(x.fields, ArticyIdFieldTitle) == innerConnection.source.idRef);
-                if (sourceEntry == null) continue; // Not in this conversation, so skip.
-
-                if (sourceEntry.outgoingLinks == null) sourceEntry.outgoingLinks = new List<Link>();
-                sourceEntry.outgoingLinks.Add(new Link(sourceConversation.id, sourceEntry.id, targetConversation.id, targetFirstEntry.id));
-            }
-        }
-
         protected virtual void ProcessJumpConnection(ArticyData.Jump jump, DialogueEntry jumpEntry)
         {
-            if (jump == null || jumpEntry == null) return;
-
-            // See if jump connects to a dialogue fragment:
-            if (entriesByPinID.ContainsKey(jump.target.pinRef))
-            {
-                var targetEntry = entriesByPinID[jump.target.pinRef];
-                Link link = new Link();
-                link.originConversationID = jumpEntry.conversationID;
-                link.originDialogueID = jumpEntry.id;
-                link.destinationConversationID = targetEntry.conversationID;
-                link.destinationDialogueID = targetEntry.id;
-                link.isConnector = false;
-                jumpEntry.outgoingLinks.Add(link);
-                MarkTargetUsed(targetEntry);
-            }
-            else
-            {
-                // Otherwise check if jump connects to a dialogue:
-                var targetConversation = database.conversations.Find(x => string.Equals(x.LookupValue(ArticyIdFieldTitle), jump.target.idRef));
-                if (targetConversation != null)
-                {
-                    var firstEntry = targetConversation.GetFirstDialogueEntry();
-                    Link link = new Link();
-                    link.originConversationID = jumpEntry.conversationID;
-                    link.originDialogueID = jumpEntry.id;
-                    link.destinationConversationID = firstEntry.conversationID;
-                    link.destinationDialogueID = firstEntry.id;
-                    link.isConnector = false;
-                    jumpEntry.outgoingLinks.Add(link);
-                    MarkTargetUsed(firstEntry);
-
-                }
-            }
+            if (jump == null || jumpEntry == null || !entriesByPinID.ContainsKey(jump.target.pinRef)) return;
+            var targetEntry = entriesByPinID[jump.target.pinRef];
+            Link link = new Link();
+            link.originConversationID = jumpEntry.conversationID;
+            link.originDialogueID = jumpEntry.id;
+            link.destinationConversationID = targetEntry.conversationID;
+            link.destinationDialogueID = targetEntry.id;
+            link.isConnector = false;
+            jumpEntry.outgoingLinks.Add(link);
+            MarkTargetUsed(targetEntry);
         }
 
         protected virtual void MarkTargetUsed(DialogueEntry targetEntry)
@@ -1384,7 +1283,6 @@ namespace PixelCrushers.DialogueSystem.Articy
             }
             entry.isGroup = true;
             ConvertPinExpressionsToConditionsAndScripts(entry, flowFragment.pins);
-            if (entry.isGroup) entry.ActorID = GetNPCID(conversation);
             RecordPins(flowFragment.pins, entry);
         }
 
@@ -1400,14 +1298,13 @@ namespace PixelCrushers.DialogueSystem.Articy
         protected virtual void BuildDialogueEntryFromHub(Conversation conversation, ArticyData.Hub hub)
         {
             if (hub == null || conversation == null) return;
-            DialogueEntry hubEntry = CreateNewDialogueEntry(conversation, hub.displayName.DefaultText, hub.id);
-            hubEntry.canvasRect = new Rect(hub.position.x, hub.position.y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
-            SetFeatureFields(hubEntry.fields, hub.features);
-            ConvertLocalizableText(hubEntry, "Title", hub.displayName);
-            hubEntry.isGroup = true; // May be set false if output pin has code.
-            ConvertPinExpressionsToConditionsAndScripts(hubEntry, hub.pins);
-            if (hubEntry.isGroup) hubEntry.ActorID = GetNPCID(conversation);
-            RecordPins(hub.pins, hubEntry);
+            DialogueEntry groupEntry = CreateNewDialogueEntry(conversation, hub.displayName.DefaultText, hub.id);
+            groupEntry.canvasRect = new Rect(hub.position.x, hub.position.y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
+            SetFeatureFields(groupEntry.fields, hub.features);
+            ConvertLocalizableText(groupEntry, "Title", hub.displayName);
+            groupEntry.isGroup = true;
+            ConvertPinExpressionsToConditionsAndScripts(groupEntry, hub.pins);
+            RecordPins(hub.pins, groupEntry);
         }
 
         /// <summary>
@@ -1427,8 +1324,8 @@ namespace PixelCrushers.DialogueSystem.Articy
             SetFeatureFields(jumpEntry.fields, jump.features);
             ConvertLocalizableText(jumpEntry, "Title", jump.displayName);
             jumpEntry.isGroup = true; // We'll set isGroup correctly in a final pass in CheckJumpsForGroupNodes.
+            //jumpEntry.currentSequence = "Continue()";
             ConvertPinExpressionsToConditionsAndScripts(jumpEntry, jump.pins);
-            if (jumpEntry.isGroup) jumpEntry.ActorID = GetNPCID(conversation);
             RecordPins(jump.pins, jumpEntry);
             jumpsToProcess.Add(jump, jumpEntry);
 
@@ -1439,8 +1336,8 @@ namespace PixelCrushers.DialogueSystem.Articy
                 flowEntry.canvasRect = new Rect(jump.position.x, jump.position.y + 32f, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
                 SetFeatureFields(flowEntry.fields, flowFragment.features);
                 flowEntry.isGroup = true;
+                //flowEntry.currentSequence = "Continue()";
                 ConvertPinExpressionsToConditionsAndScripts(flowEntry, flowFragment.pins);
-                if (flowEntry.isGroup) flowEntry.ActorID = GetNPCID(conversation);
                 RecordPins(flowFragment.pins, flowEntry);
             }
         }
@@ -1460,7 +1357,19 @@ namespace PixelCrushers.DialogueSystem.Articy
             {
                 if (jumpEntry == null) continue;
                 jumpEntry.isGroup = string.IsNullOrEmpty(jumpEntry.userScript);
-                if (!jumpEntry.isGroup && string.IsNullOrEmpty(jumpEntry.Sequence)) jumpEntry.Sequence = "Continue()";
+                //jumpEntry.isGroup = true;
+                //for (int i = 0; i < jumpEntry.outgoingLinks.Count; i++)
+                //{
+                //    var destEntry = database.GetDialogueEntry(jumpEntry.outgoingLinks[i]);
+                //    if (destEntry == null) continue;
+                //    var linksToJump = jumpEntries.Contains(jumpEntry);
+                //    var linksToGroup = destEntry.isGroup;
+                //    if (!(linksToJump || linksToGroup))
+                //    {
+                //        jumpEntry.isGroup = false;
+                //        break;
+                //    }
+                //}
             }
         }
 
@@ -1481,8 +1390,8 @@ namespace PixelCrushers.DialogueSystem.Articy
             conditionEntry.ConversantID = conversation.ActorID;
             conditionEntry.currentDialogueText = string.Empty;
             conditionEntry.currentMenuText = string.Empty;
+            //conditionEntry.currentSequence = "Continue()";
             conditionEntry.isGroup = true;
-            if (conditionEntry.isGroup) conditionEntry.ActorID = GetNPCID(conversation);
 
             string trueLuaConditions = ConvertExpression(condition.expression, true);
             string falseLuaConditions = string.IsNullOrEmpty(trueLuaConditions)
@@ -1504,10 +1413,11 @@ namespace PixelCrushers.DialogueSystem.Articy
                     var entry = CreateNewDialogueEntry(conversation, title, condition.id);
                     entry.canvasRect = new Rect(condition.position.x, y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
                     y += 2f;
-                    entry.ActorID = GetNPCID(conversation); // conversation.ConversantID;
+                    entry.ActorID = conversation.ConversantID;
                     entry.ConversantID = conversation.ActorID;
                     entry.currentDialogueText = string.Empty;
                     entry.currentMenuText = string.Empty;
+                    //entry.currentSequence = "Continue()";
                     entry.isGroup = true;
                     string luaConditions = isTruePath ? trueLuaConditions : falseLuaConditions;
                     entry.conditionsString = AddToConditions(entry.conditionsString, luaConditions);
@@ -1541,17 +1451,15 @@ namespace PixelCrushers.DialogueSystem.Articy
         {
             if (instruction == null || conversation == null) return;
             DialogueEntry entry = CreateNewDialogueEntry(conversation, instruction.expression, instruction.id);
-            entry.canvasRect = new Rect(instruction.position.x, instruction.position.y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
-            entry.ActorID = GetNPCID(conversation);
+            entry.ActorID = conversation.ConversantID;
             entry.ConversantID = conversation.ActorID;
             entry.currentDialogueText = string.Empty;
             entry.currentMenuText = string.Empty;
-            entry.currentSequence = "Continue()"; // If it's not a group, make sure we continue past it immediately.
-            entry.isGroup = prefs.ConvertInstructionsAs == ConverterPrefs.CodeNodeMode.GroupEntry;
+            entry.currentSequence = "Continue()"; // Since it's not a group, make sure we continue past it immediately.
+            entry.isGroup = false; // Since groups are processed one level ahead, don't make this a group: entry.isGroup = true;
             entry.conditionsString = string.Empty;
             entry.userScript = AddToUserScript(entry.userScript, ConvertExpression(instruction.expression, false));
             ConvertPinExpressionsToConditionsAndScripts(entry, instruction.pins);
-            if (entry.isGroup) entry.ActorID = GetNPCID(conversation);
             RecordPins(instruction.pins, entry);
         }
 
@@ -1640,11 +1548,6 @@ namespace PixelCrushers.DialogueSystem.Articy
                         if (convertOutput)
                         {
                             entry.userScript = AddToUserScript(entry.userScript, ConvertExpression(pin.expression, false));
-                            if (!string.IsNullOrEmpty(entry.userScript) && prefs.ConvertInstructionsAs != ConverterPrefs.CodeNodeMode.GroupEntry)
-                            {
-                                entry.isGroup = false;
-                                if (string.IsNullOrEmpty(entry.Sequence)) entry.Sequence = "Continue()";
-                            }
                         }
                         break;
                     default:

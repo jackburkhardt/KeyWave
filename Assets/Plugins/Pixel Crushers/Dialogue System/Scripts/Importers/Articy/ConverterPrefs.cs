@@ -53,8 +53,6 @@ namespace PixelCrushers.DialogueSystem.Articy
 
         public enum RecursionModes { Off, On }
 
-        public enum CodeNodeMode { RegularEntry, GroupEntry }
-
         public string ProjectFilename { get; set; }
         public string PortraitFolder { get; set; }
         public bool UseDefaultActorsIfNoneAssignedToDialogue { get; set; }
@@ -70,7 +68,6 @@ namespace PixelCrushers.DialogueSystem.Articy
         public ConversionSettings ConversionSettings { get; set; }
         public EncodingType EncodingType { get; set; }
         public RecursionModes RecursionMode { get; set; }
-        public CodeNodeMode ConvertInstructionsAs { get; set; }
         public ConvertDropdownsModes ConvertDropdownsAs { get; set; }
         public ConvertSlotsModes ConvertSlotsAs { get; set; }
         public bool UseTechnicalNames { get; set; }
@@ -82,7 +79,6 @@ namespace PixelCrushers.DialogueSystem.Articy
         public bool SplitTextOnPipes { get; set; }
         public bool TrimWhitespace { get; set; } = true;
         public bool ReorderIDs { get; set; }
-        public bool DelayEvaluation { get; set; }
         public string FlowFragmentScript { get; set; }
         public string VoiceOverProperty { get; set; }
         public string LocalizationXlsx { get; set; }
@@ -111,7 +107,6 @@ namespace PixelCrushers.DialogueSystem.Articy
             ConversionSettings = new ConversionSettings();
             EncodingType = EncodingType.Default;
             RecursionMode = RecursionModes.On;
-            ConvertInstructionsAs = CodeNodeMode.RegularEntry;
             ConvertDropdownsAs = ConvertDropdownsModes.Int;
             ConvertSlotsAs = ConvertSlotsModes.DisplayName;
             UseTechnicalNames = false;
@@ -123,7 +118,6 @@ namespace PixelCrushers.DialogueSystem.Articy
             SplitTextOnPipes = true;
             TrimWhitespace = true;
             ReorderIDs = false;
-            DelayEvaluation = false;
             FlowFragmentScript = DefaultFlowFragmentScript;
             VoiceOverProperty = DefaultVoiceOverProperty;
             LocalizationXlsx = string.Empty;

@@ -95,11 +95,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     }
                 }
             }
-            if (database != null)
-            {
-                EditorUtility.SetDirty(database);
-                PrefabUtility.RecordPrefabInstancePropertyModifications(database);
-            }
+            if (database != null) EditorUtility.SetDirty(database);
         }
 
         private void MakeAutoBackup()

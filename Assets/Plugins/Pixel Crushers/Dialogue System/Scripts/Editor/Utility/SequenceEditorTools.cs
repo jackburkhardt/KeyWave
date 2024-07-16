@@ -537,6 +537,8 @@ namespace PixelCrushers.DialogueSystem
             {
                 foreach (var shortcut in sequencerShortcuts.shortcuts)
                 {
+                    //list.Add(@"{{" + shortcut.shortcut + @"}}");
+
                     // Check if the shortcut has a submenu specified
                     if (!string.IsNullOrEmpty(shortcut.subMenu))
                     {
@@ -555,7 +557,7 @@ namespace PixelCrushers.DialogueSystem
                         {
                             submenuDict["General"] = new List<string>();
                         }
-                        submenuDict["General"].Add(@"{{" + shortcut.shortcut + @"}}");
+                        submenuDict["General"].Add(shortcut.shortcut);
                     }
                 }
             }
@@ -566,7 +568,7 @@ namespace PixelCrushers.DialogueSystem
                 submenuDict[submenu].Sort(); // Sort the shortcuts
                 foreach (var shortcut in submenuDict[submenu])
                 {
-                    string menuPath = string.IsNullOrEmpty(submenu) ? shortcut : $"{submenu}/{shortcut.Replace('/', '\u2215')}";
+                    string menuPath = string.IsNullOrEmpty(submenu) ? shortcut : $"{submenu}/{shortcut}";
                     menu.AddItem(new GUIContent("Shortcuts/" + menuPath), false, StartOtherCommand, shortcut);
                 }
             }

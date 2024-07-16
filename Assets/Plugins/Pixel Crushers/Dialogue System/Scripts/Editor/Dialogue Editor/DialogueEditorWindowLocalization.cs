@@ -1008,7 +1008,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 EditorUtility.ClearProgressBar();
             }
             EditorUtility.DisplayDialog("Imported Localization CSV", "The CSV files have been imported back into your dialogue database.", "OK");
-            Reset();
         }
 
         private List<string> GetCSVColumnsFromLine(string line)

@@ -1424,6 +1424,16 @@ namespace PixelCrushers.DialogueSystem
             }
             questWatchList.Clear();
         }
+        
+        public static string FindQuestEntryByState(string questName, QuestState state)
+        {
+            int entryCount = GetQuestEntryCount(questName);
+            for (int i = 1; i <= entryCount; i++)
+            {
+                if (GetQuestEntryState(questName, i) == state) return GetQuestEntry(questName, i);
+            }
+            return string.Empty;
+        }
 
         /// <summary>
         /// Updates all quest state listeners who are listening for questName.

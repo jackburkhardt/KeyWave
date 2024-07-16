@@ -60,7 +60,6 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
                 if (DialogueDebug.LogInfo) Debug.Log("Dialogue System: Sequencer: CinemachinePriority(" + vcamName + ", " + priority + ", cut=" + cut + ")");
 
                 // Handle cut:
-                // (Could set vcam.PreviousStateIsValid false, but need to support older CM versions.)
                 var shouldIRestoreBlendMode = false;
                 var cinemachineBrain = cut ? GameObjectUtility.FindFirstObjectByType<CinemachineBrain>() : null;
 #if UNITY_6000_0_OR_NEWER

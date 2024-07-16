@@ -52,8 +52,6 @@ namespace PixelCrushers.DialogueSystem
 
         public ActiveConversationRecord activeConversationRecord { get; set; }
 
-        public bool reevaluateLinksAfterSubtitle { get; set; }
-
         /// <summary>
         /// Gets or sets the IsDialogueEntryValid delegate.
         /// </summary>
@@ -117,21 +115,16 @@ namespace PixelCrushers.DialogueSystem
         /// <param name='view'>
         /// View to use to provide a user interface for the conversation.
         /// </param>
-        /// <param name="reevaluateLinksAfterSubtitle">Reevaluate links after subtitle in case sequence or OnConversationLine changed link conditions.</param>
-        /// <param name="alwaysForceResponseMenu">Always force response menu if only one PC node.</param>
         /// <param name='endConversationHandler'>
         /// Handler to call to inform when the conversation is done.
         /// </param>
-        public ConversationController(ConversationModel model, ConversationView view, 
-            bool reevaluateLinksAfterSubtitle, bool alwaysForceResponseMenu, 
-            EndConversationDelegate endConversationHandler)
+        public ConversationController(ConversationModel model, ConversationView view, bool alwaysForceResponseMenu, EndConversationDelegate endConversationHandler)
         {
             isActive = true;
             this.m_model = model;
             this.m_view = view;
             this.m_endConversationHandler = endConversationHandler;
             this.randomizeNextEntry = false;
-            this.reevaluateLinksAfterSubtitle = reevaluateLinksAfterSubtitle;
             DialogueManager.instance.currentConversationState = model.firstState;
             model.InformParticipants(DialogueSystemMessages.OnConversationStart);
             view.FinishedSubtitleHandler += OnFinishedSubtitle;
@@ -154,33 +147,13 @@ namespace PixelCrushers.DialogueSystem
         /// <param name='endConversationHandler'>
         /// Handler to call to inform when the conversation is done.
         /// </param>
-        public void Initialize(ConversationModel model, ConversationView view, 
-            bool reevaluateLinksAfterSubtitle, bool alwaysForceResponseMenu, 
-            EndConversationDelegate endConversationHandler)
+        public void Initialize(ConversationModel model, ConversationView view, bool alwaysForceResponseMenu, EndConversationDelegate endConversationHandler)
         {
             isActive = true;
             this.m_model = model;
             this.m_view = view;
             this.m_endConversationHandler = endConversationHandler;
             this.randomizeNextEntry = false;
-            DialogueManager.instance.currentConversationState = model.firstState;
-            model.InformParticipants(DialogueSystemMessages.OnConversationStart);
-            view.FinishedSubtitleHandler += OnFinishedSubtitle;
-            view.SelectedResponseHandler += OnSelectedResponse;
-            m_currentConversationID = model.GetConversationID(model.firstState);
-            SetConversationOverride(model.firstState);
-            GotoState(model.firstState);
-        }
-
-        public void Initialize(ConversationModel model, ConversationView view, bool alwaysForceResponseMenu,
-            EndConversationDelegate endConversationHandler)
-        {
-            isActive = true;
-            this.m_model = model;
-            this.m_view = view;
-            this.m_endConversationHandler = endConversationHandler;
-            this.randomizeNextEntry = false;
-            this.reevaluateLinksAfterSubtitle = false;
             DialogueManager.instance.currentConversationState = model.firstState;
             model.InformParticipants(DialogueSystemMessages.OnConversationStart);
             view.FinishedSubtitleHandler += OnFinishedSubtitle;
@@ -300,7 +273,6 @@ namespace PixelCrushers.DialogueSystem
         /// </param>
         public void OnFinishedSubtitle(object sender, EventArgs e)
         {
-            if (reevaluateLinksAfterSubtitle) m_model.UpdateResponses(m_state);
             DialogueManager.instance.activeConversation = activeConversationRecord;
             var randomize = randomizeNextEntry;
             randomizeNextEntry = false;

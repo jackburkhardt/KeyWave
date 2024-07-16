@@ -47,7 +47,34 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Location ID
         /// </summary>
-        Location
+        Location,
+        
+        //custom
+        
+        /// <summary>
+        /// Formatted as "ConversationID,SubtitleID"
+        /// </summary>
+        Node,
+        
+        /// <summary>
+        /// Formatted as "hours:seconds"
+        /// </summary>
+        Time,
+        
+        Points,
+        /// <summary>
+        /// Formatted as "pointsType:pointsValue"
+        /// </summary>
+        
+        Timespan,
+        /// <summary>
+        /// Formatted as "value:unit"
+        /// </summary>
+        ///
+        QuestState,
+        
+        
+        EmailState,
     }
 
 }

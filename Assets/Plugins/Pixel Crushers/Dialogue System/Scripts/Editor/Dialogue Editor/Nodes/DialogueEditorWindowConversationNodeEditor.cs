@@ -1,6 +1,10 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pitfalls;
+using Plugins.Pixel_Crushers.Dialogue_System.Scripts.Utility;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Graphs;
@@ -1689,6 +1693,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             GenericMenu contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Create Node"), false, AddChildCallback, null);
+            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, null, false));
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Vertically"), false, ArrangeNodesCallback, AutoArrangeStyle.Vertically);
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Vertically (alternate)"), false, ArrangeNodesCallback, AutoArrangeStyle.VerticallyOld);
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Horizontally"), false, ArrangeNodesCallback, AutoArrangeStyle.Horizontally);
@@ -2082,6 +2087,30 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             RemoveOutgoingLinksFromClipboard();
         }
 
+        private void CreateBetweenNodeCallback(object o)
+        {
+            if (multinodeSelection.nodes.Count != 2) return;
+
+            int convoID = currentConversation.id;
+            var node0 = multinodeSelection.nodes[0];
+            var node1 = multinodeSelection.nodes[1];
+            
+            var newNode =
+                template.CreateDialogueEntry(template.GetNextDialogueEntryID(currentConversation), convoID, "");
+            newNode.canvasRect.x = node0.canvasRect.x + 20;
+            newNode.canvasRect.y = node0.canvasRect.y + 20;
+            currentConversation.dialogueEntries.Add(newNode);
+            var inLink = new Link(convoID, node0.id, convoID, newNode.id);
+            node0.outgoingLinks.Add(inLink);
+            var outLink = new Link(convoID, newNode.id, convoID, node1.id);
+            newNode.outgoingLinks.Add(outLink);
+
+            Link dirtyLink = node0.outgoingLinks.FirstOrDefault(link => link.destinationDialogueID == node1.id);
+            node0.outgoingLinks.Remove(dirtyLink);
+            
+            SetDatabaseDirty("Created inbetween node");
+        }
+
         private void RemoveOutgoingLinksFromClipboard()
         {
             if (nodeClipboard == null) return;
@@ -2104,6 +2133,52 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void PasteMultipleEntriesCallback(object o)
         {
             PasteClipboardNodes(o as DialogueEntry);
+        }
+        
+        private void SetTitleCallback(object o)
+        {
+            var tuple = o as Tuple<DialogueEntry, string>;
+            if (tuple == null) return;
+            
+            tuple.Item1.Title = tuple.Item2;
+            SetDatabaseDirty("Set Title");
+            RefreshConversation();
+        }
+        
+        private void SetSequenceCallback(object o)
+        {
+            var tuple = o as Tuple<DialogueEntry, string>;
+            if (tuple == null) return;
+            
+            tuple.Item1.Sequence = tuple.Item2;
+            SetDatabaseDirty("Set Sequence");
+            RefreshConversation();
+        }
+        
+        private void SetMenuTextCallback(object o)
+        {
+            var tuple = o as Tuple<DialogueEntry, string>;
+            if (tuple == null) return;
+            
+            tuple.Item1.MenuText = tuple.Item2;
+            SetDatabaseDirty("Set Menu Text");
+            RefreshConversation();
+        }
+        
+        private void IfQuestActiveCallback(object o)
+        {
+            var entry = o as DialogueEntry;
+            entry.conditionsString = "CurrentQuestState(\"" + currentConversation.Title + "\") == \"active\"";
+            SetDatabaseDirty("Set User Script");
+            RefreshConversation();
+        }
+
+        private void SetQuestSuccessCallback(object o)
+        {
+            var entry = o as DialogueEntry;
+            entry.userScript = "SetQuestState(\"" + currentConversation.Title + "\", \"Success\");";
+            SetDatabaseDirty("Set User Script");
+            RefreshConversation();
         }
 
         private DialogueEntry DuplicateEntryForClipboard(DialogueEntry entry)

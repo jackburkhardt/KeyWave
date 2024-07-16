@@ -155,7 +155,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: {1} says '{2}'", new System.Object[] { DialogueDebug.Prefix, Tools.GetGameObjectName(subtitle.speakerInfo.transform), subtitle.formattedText.text }));
 
-                if (DialogueManager.instance.allowSimultaneousConversations)
+                if (DialogueManager.instance.activeConversations.Count > 1)
                 {
                     DialogueManager.instance.displaySettings = settings;
                 }
@@ -361,11 +361,8 @@ namespace PixelCrushers.DialogueSystem
             if ((subtitle != null) && (settings != null) && (settings.subtitleSettings != null))
             {
                 if (subtitle.formattedText.noSubtitle || 
-                    string.Equals(subtitle.sequence, "None()") || 
-                    string.Equals(subtitle.sequence, "None();") ||
-                    (!settings.cameraSettings.showSubtitleOnEmptyContinue && 
-                        (string.Equals(subtitle.sequence, "Continue()") || 
-                        string.Equals(subtitle.sequence, "Continue();"))))
+                    string.Equals(subtitle.sequence, "None()") || string.Equals(subtitle.sequence, "None();") ||
+                    string.Equals(subtitle.sequence, "Continue()") || string.Equals(subtitle.sequence, "Continue();"))
                 {
                     return false;
                 }
@@ -433,7 +430,7 @@ namespace PixelCrushers.DialogueSystem
                 if (notifyOnFinishSubtitle)
                 {
                     notifyOnFinishSubtitle = false;
-                    if (lastSubtitle != null) NotifyParticipantsOnConversationLineEnd(lastSubtitle);
+                    if (_subtitle != null) NotifyParticipantsOnConversationLineEnd(lastSubtitle);
                     if (FinishedSubtitleHandler != null) FinishedSubtitleHandler(this, EventArgs.Empty);
                 }
             }

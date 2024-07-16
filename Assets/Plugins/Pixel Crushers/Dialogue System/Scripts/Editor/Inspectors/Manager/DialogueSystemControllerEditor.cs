@@ -423,9 +423,6 @@ namespace PixelCrushers.DialogueSystem
                     }
                     EditorGUILayout.PropertyField(instantiateDatabaseProp, true);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("includeSimStatus"), true);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("stopEvaluationAtFirstValid"), true);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("reevaluateLinksAfterSubtitle"), true);
-                    EditorGUILayout.PropertyField(serializedObject.FindProperty("useLinearGroupMode"), true);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("allowSimultaneousConversations"), true);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("onStartTriggerWaitForSaveDataApplied"), true);
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("dialogueTimeMode"), true);

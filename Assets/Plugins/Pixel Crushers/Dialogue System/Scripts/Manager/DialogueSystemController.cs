@@ -63,24 +63,6 @@ namespace PixelCrushers.DialogueSystem
         public bool interruptActiveConversations = false;
 
         /// <summary>
-        /// Stop evaluating links at first valid NPC link unless parent uses RandomizeNextEntry().
-        /// </summary>
-        [Tooltip("Stop evaluating links at first valid NPC link unless parent uses RandomizeNextEntry().")]
-        public bool stopEvaluationAtFirstValid = true;
-
-        /// <summary>
-        /// Reevaluate links after showing subtitle in case subtitle Sequence or OnConversationLine changes link conditions. If you know this can't happen, you can UNtick this checkbox to improve performance.
-        /// </summary>
-        [Tooltip("Reevaluate links after showing subtitle in case subtitle Sequence or OnConversationLine changes link conditions. If you know this can't happen, you can UNtick this checkbox to improve performance.")]
-        public bool reevaluateLinksAfterSubtitle = false;
-
-        /// <summary>
-        /// If a group node's Conditions are true, don't evaluate sibling group nodes.
-        /// </summary>
-        [Tooltip("If a group node's Conditions are true, don't evaluate sibling group nodes.")]
-        public bool useLinearGroupMode = false;
-
-        /// <summary>
         /// Set <c>true</c> to include sim status for each dialogue entry.
         /// </summary>
         [Tooltip("Tick if your conversations reference Dialog[x].SimStatus.")]
@@ -679,8 +661,7 @@ namespace PixelCrushers.DialogueSystem
                         view.Initialize(dialogueUI, GetNewSequencer(), displaySettings, OnDialogueEntrySpoken);
                         view.SetPCPortrait(model.GetPCSprite(), model.GetPCName());
                         var controller = new ConversationController();
-                        controller.Initialize(model, view, reevaluateLinksAfterSubtitle,
-                            displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
+                        controller.Initialize(model, view, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
                         var standardDialogueUI = abstractDialogueUI as StandardDialogueUI;
                         if (standardDialogueUI != null && !dontHideImmediateDuringWarmup) standardDialogueUI.conversationUIElements.HideImmediate();
                         controller.Close();
@@ -716,7 +697,7 @@ namespace PixelCrushers.DialogueSystem
             warmupView.Initialize(dialogueUI, GetNewSequencer(), displaySettings, OnDialogueEntrySpoken);
             warmupView.SetPCPortrait(warmupModel.GetPCSprite(), warmupModel.GetPCName());
             warmupController = new ConversationController();
-            warmupController.Initialize(warmupModel, warmupView, reevaluateLinksAfterSubtitle, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
+            warmupController.Initialize(warmupModel, warmupView, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
             warmupController.GotoState(warmupModel.GetState(fakeConversation.dialogueEntries[1]));
             Canvas.ForceUpdateCanvases();
             yield return new WaitForSeconds(1.25f);
@@ -958,8 +939,7 @@ namespace PixelCrushers.DialogueSystem
             var prevCurrentConversant = currentConversant;
             currentActor = actor;
             currentConversant = conversant;
-            var model = new ConversationModel(m_databaseManager.masterDatabase, title, actor, conversant, allowLuaExceptions, 
-                isDialogueEntryValid, initialDialogueEntryID, true, true, useLinearGroupMode);
+            var model = new ConversationModel(m_databaseManager.masterDatabase, title, actor, conversant, allowLuaExceptions, isDialogueEntryValid, initialDialogueEntryID, true, true);
             currentActor = prevCurrentActor;
             currentConversant = prevCurrentConversant;
             return model.hasValidEntry;
@@ -1088,14 +1068,12 @@ namespace PixelCrushers.DialogueSystem
 
                 m_calledRandomizeNextEntry = false;
                 m_conversationController = new ConversationController();
-                var model = new ConversationModel(m_databaseManager.masterDatabase, title, actor, conversant, allowLuaExceptions, isDialogueEntryValid, 
-                    initialDialogueEntryID, stopEvaluationAtFirstValid, false, useLinearGroupMode);
+                var model = new ConversationModel(m_databaseManager.masterDatabase, title, actor, conversant, allowLuaExceptions, isDialogueEntryValid, initialDialogueEntryID);
                 var needToSetRandomizeNextEntryAgain = m_calledRandomizeNextEntry; // Special case when START node leads to group node with RandomizeNextEntry().
                 m_calledRandomizeNextEntry = false;
                 if (!model.hasValidEntry)
                 {
                     // Back out:
-                    if (DialogueDebug.logInfo) Debug.Log($"{DialogueDebug.Prefix}: Not starting conversation '{title}' after all. After evaluating possible links, there is no valid state to show.");
                     currentActor = prevActor;
                     currentConversant = prevConversant;
                     lastConversationStarted = prevLastConversation;
@@ -1117,7 +1095,7 @@ namespace PixelCrushers.DialogueSystem
                 sequencer.conversationView = view;
                 view.Initialize(dialogueUI, sequencer, displaySettings, OnDialogueEntrySpoken);
                 view.SetPCPortrait(model.GetPCSprite(), model.GetPCName());
-                m_conversationController.Initialize(model, view, reevaluateLinksAfterSubtitle, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
+                m_conversationController.Initialize(model, view, displaySettings.inputSettings.alwaysForceResponseMenu, OnEndConversation);
                 if (needToSetRandomizeNextEntryAgain) RandomizeNextEntry();
 
                 // Add an active conversation record to the list:
@@ -1660,7 +1638,7 @@ namespace PixelCrushers.DialogueSystem
             if (ui == null) return;
             var state = record.conversationController.currentState;
             var subtitle = state.subtitle;
-            subtitle.formattedText.text = FormattedText.Parse(subtitle.dialogueEntry.subtitleText).text;
+            subtitle.formattedText.text = FormattedText.Parse(subtitle.dialogueEntry.currentDialogueText).text;
             DialogueActor dialogueActor;
             var panel = ui.conversationUIElements.standardSubtitleControls.GetPanel(subtitle, out dialogueActor);
             panel.subtitleText.text = subtitle.formattedText.text;
@@ -1679,7 +1657,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 foreach (var response in state.pcResponses)
                 {
-                    response.formattedText.text = FormattedText.Parse(response.destinationEntry.responseButtonText).text;
+                    response.formattedText.text = FormattedText.Parse(response.destinationEntry.currentMenuText).text;
                 }
                 menu.ShowResponses(subtitle, state.pcResponses, ui.transform);
             }
@@ -1737,8 +1715,7 @@ namespace PixelCrushers.DialogueSystem
                 return;
             }
             var barkUI = speaker.GetComponentInChildren(typeof(IBarkUI)) as IBarkUI;
-            ConversationModel conversationModel = new ConversationModel(DialogueManager.masterDatabase, conversationTitle, speaker, listener, DialogueManager.allowLuaExceptions, DialogueManager.isDialogueEntryValid, entryID, 
-                stopEvaluationAtFirstValid, useLinearGroupMode);
+            ConversationModel conversationModel = new ConversationModel(DialogueManager.masterDatabase, conversationTitle, speaker, listener, DialogueManager.allowLuaExceptions, DialogueManager.isDialogueEntryValid, entryID);
             var state = conversationModel.firstState;
             StartCoroutine(BarkController.Bark(state.subtitle, speaker, listener, barkUI));
         }

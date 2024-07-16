@@ -349,7 +349,7 @@ namespace PixelCrushers.DialogueSystem
 
         public virtual bool IsQuestVisible(string questTitle)
         {
-            return !checkVisibleField || Lua.IsTrue("Quest[\"" + DialogueLua.StringToTableIndex(questTitle) + "\"].Visible ~= false");
+            return !checkVisibleField || Lua.IsTrue("Quest[\"" + DialogueLua.StringToTableIndex(questTitle) + "\"].Visible == true");
         }
 
         protected virtual void ShowQuests(QuestState questStateMask)

@@ -17,7 +17,6 @@ namespace PixelCrushers.DialogueSystem
         public const string LipsyncFiles = "Lipsync Files";
         public const string AnimationFiles = "Animation Files";
 
-        public const string DisplayName = "Display Name";
         public const string IsPlayer = "IsPlayer";
         public const string CurrentPortrait = "Current Portrait";
         public const string Voice = "Voice";
@@ -27,9 +26,6 @@ namespace PixelCrushers.DialogueSystem
 
         public const string IsItem = "Is Item";
         public const string Group = "Group";
-        public const string SuccessDescription = "Success Description";
-        public const string FailureDescription = "Failure Description";
-        public const string EntryCount = "Entry Count";
 
         public const string InitialValue = "Initial Value";
 
@@ -37,12 +33,8 @@ namespace PixelCrushers.DialogueSystem
         public const string Description = "Description";
         public const string Actor = "Actor";
         public const string Conversant = "Conversant";
-
-        public const string DialogueText = "Dialogue Text";
-        public const string MenuText = "Menu Text";
         public const string Priority = "Priority";
         public const string Sequence = "Sequence";
-        public const string ResponseMenuSequence = "Response Menu Sequence";
         public const string VoiceOverFile = "VoiceOverFile";
 
     }
