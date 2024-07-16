@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using PixelCrushers.DialogueSystem;
@@ -35,16 +36,16 @@ namespace Project.Runtime.Scripts.Manager
             {
                 case "points":
                 {
-                    Points.PointsField pointsInfo = Points.PointsField.FromString(playerEvent.Data);
+                    Points.PointsField pointsInfo = Points.PointsField.FromJObject(playerEvent.Data);
                     EarnedPoints[pointsInfo.Type] += pointsInfo.Points;
                     break;
                 }
                 case "quest_state_change":
                 {
-                    string displayName = QuestLog.GetQuestTitle(playerEvent.Source);
+                    string displayName = QuestLog.GetQuestTitle(playerEvent.Data["questName"].ToString());
                     if (string.IsNullOrEmpty(displayName)) return;
                 
-                    switch (playerEvent.Target)
+                    switch (playerEvent.Data["state"].ToString())
                     {
                         case "Success":
                             _completedTasks.Add(displayName);

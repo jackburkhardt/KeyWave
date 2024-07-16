@@ -69,7 +69,7 @@ namespace Project.Runtime.Scripts.UI.Particles
         {
             if (playerEvent.EventType == "points")
             {
-                Points.PointsField pointsInfo = Points.PointsField.FromString(playerEvent.Data);
+                Points.PointsField pointsInfo = Points.PointsField.FromJObject(playerEvent.Data);
                 _particleQueue.Enqueue(pointsInfo);
             }
         }

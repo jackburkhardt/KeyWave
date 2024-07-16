@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.Events
@@ -9,8 +10,6 @@ namespace Project.Runtime.Scripts.Events
     [Serializable]
     public class PlayerEvent
     {
-        private string PlayerID;
-
         /// <summary>
         /// An event that was triggered by a player action. Used mostly for server data logging.
         /// </summary>
@@ -19,22 +18,17 @@ namespace Project.Runtime.Scripts.Events
         /// <param name="target">Who is it directed to?</param>
         /// <param name="data">Other information relevant to this event (point information, dialogue nodes, location details)</param>
         /// <param name="duration">How much time did this event take?</param>
-        public PlayerEvent(string eventType, string source, string target, string data = "", int duration = 0)
+        public PlayerEvent(string eventType, JObject data, int duration = 0)
         {
             this.EventType = eventType;
-            this.Source = source;
-            this.Target = target;
             this.LocalTimeStamp = DateTime.Now;
-            this.PlayerID = App.App.PlayerID;
             this.Data = data;
             this.Duration = duration;
         }
 
         public string EventType { get; }
-        public string Source { get; }
-        public string Target { get; }
         public DateTime LocalTimeStamp { get; }
-        public string Data { get; }
+        public JObject Data { get; }
         public int Duration { get; }
 
         public override string ToString()

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
@@ -55,10 +56,10 @@ namespace Project.Runtime.Scripts.Events
 
         public static event PlayerEventDelegate OnRegisterPlayerEvent;
 
-        private static void RegisterPlayerEvent(string eventType, string source, string target, string data = null, int duration = 0)
+        private static void RegisterPlayerEvent(string eventType, JObject data, int duration = 0)
         {
            
-            var playerEvent = new PlayerEvent(eventType, source, target, data, duration);
+            var playerEvent = new PlayerEvent(eventType, data, duration);
             OnRegisterPlayerEvent?.Invoke(playerEvent);
         }
 
@@ -73,36 +74,60 @@ namespace Project.Runtime.Scripts.Events
         {
             if (interactable.TryGetComponent(out DialogueSystemTrigger dialogueSystemTrigger))
             {
-                RegisterPlayerEvent("interact", "player", interactable.name, dialogueSystemTrigger.ToString(), Clock.TimeScales.SecondsPerInteract);
+                var data = new JObject
+                {
+                    ["target"] = interactable.name,
+                    ["trigger"] = dialogueSystemTrigger.ToString()
+                };
+                RegisterPlayerEvent("interact", data, Clock.TimeScales.SecondsPerInteract);
                 dialogueSystemTrigger.OnUse();
             }
         }
 
         public static void OnMove(string locName, Location lastLocation, int duration)
         {
-            RegisterPlayerEvent("move", "player", locName, "{\"previous_location\":\""+ lastLocation.ToString() +"\"}", duration);
+            var data = new JObject
+            {
+                ["lastLocation"] = lastLocation.Name,
+                ["newLocation"] = locName
+            };
+            RegisterPlayerEvent("move", data, duration);
         }
 
         public static void OnPointsIncrease(Points.PointsField pointData, string source)
         {
-       
-            RegisterPlayerEvent("points", source, "player", pointData.ToString());
+            var data = new JObject
+            {
+                ["points"] = pointData.Points.ToString(),
+                ["pointsType"] = pointData.Type.ToString(),
+                ["source"] = source
+            };
+            RegisterPlayerEvent("points", data);
         }
 
         public static void OnQuestStateChange(string questName, QuestState state, int duration)
         {
-            var quest = DialogueUtility.GetQuestByName(questName);
-            RegisterPlayerEvent("quest_state_change", questName, state.ToString(), JsonConvert.SerializeObject(quest), duration);
+            var questData = new JObject
+            {
+                ["questName"] = questName,
+                ["state"] = state.ToString(),
+            };
+            RegisterPlayerEvent("quest_state_change", questData, duration);
         }
 
         public static void OnWait(int duration)
         {
-            RegisterPlayerEvent("wait", "player", "player", duration.ToString(), duration);
+            RegisterPlayerEvent("wait", null, duration);
         }
 
         public static void OnDayEnd()
         {
-            RegisterPlayerEvent("end_day", "", "");
+            var data = new JObject
+            {
+                ["day"] = GameManager.instance.dailyReport.Day,
+                ["dailyReport"] = JsonConvert.SerializeObject(GameManager.instance.dailyReport)
+            };
+            RegisterPlayerEvent("end_day", data);
         }
 
         public static void OnConversationStart(string eventSender = "")
@@ -111,7 +136,12 @@ namespace Project.Runtime.Scripts.Events
         
             int conversationID = DialogueManager.currentConversationState.subtitle.dialogueEntry.conversationID;
             var conversationTitle = DialogueManager.masterDatabase.GetConversation(conversationID).Title;
-            RegisterPlayerEvent("conversation_start",  eventSender, "", conversationTitle);
+            var data = new JObject
+            {
+                ["conversationTitle"] = conversationTitle,
+                ["currentEntry"] = DialogueManager.currentConversationState.subtitle.dialogueEntry.id
+            };
+            RegisterPlayerEvent("conversation_start",  data);
         }
 
         public static void OnConversationEnd()
@@ -119,7 +149,12 @@ namespace Project.Runtime.Scripts.Events
             if (DialogueManager.instance.activeConversation == null) return;
             var conversationTitle = DialogueManager.instance.activeConversation.conversationTitle;
             var currentEntry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.id;
-            RegisterPlayerEvent("conversation_end",  "DialogueManager", conversationTitle, currentEntry.ToString());
+            var data = new JObject
+            {
+                ["conversationTitle"] = conversationTitle,
+                ["currentEntry"] = currentEntry
+            };
+            RegisterPlayerEvent("conversation_end",  data);
         }
 
         public static event OnUIScreen onUIScreenOpen;
