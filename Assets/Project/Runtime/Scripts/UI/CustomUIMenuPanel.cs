@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
+using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
@@ -75,5 +77,37 @@ namespace Project.Runtime.Scripts.UI
         {
      
         }
+    }
+    
+    
+}
+
+
+public class SequencerCommandSetMenuPanelTrigger : SequencerCommand
+{
+    private void Awake()
+    {
+        var panelID = GetParameterAsInt(0);
+        var show = GetParameterAsBool(1 );
+        var standardDialogueUI = DialogueManager.dialogueUI as StandardDialogueUI;
+        if (standardDialogueUI == null) return;
+        
+        var panel = PanelNumberUtility.IntToMenuPanelNumber(panelID);
+        var menuPanels = standardDialogueUI.conversationUIElements.menuPanels;
+        var i = PanelNumberUtility.GetMenuPanelIndex(panel);
+        
+        var menuPanel = menuPanels[i];
+        if (show)
+        {
+            menuPanel.gameObject.GetComponent<Animator>().SetTrigger(menuPanel.showAnimationTrigger);
+        }
+        else
+        {
+            menuPanel.gameObject.GetComponent<Animator>().SetTrigger(menuPanel.hideAnimationTrigger);
+        }
+        
+        
+        
+        Stop();
     }
 }

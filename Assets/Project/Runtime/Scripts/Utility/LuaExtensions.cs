@@ -11,12 +11,12 @@ namespace Project.Runtime.Scripts.Utility
     public static class LuaExtensions
     {
         // Start is called before the first frame update
-        public static int Timespan (this DialogueEntry dialogueEntry, string field = "Timespan")
+        public static int Timespan(this DialogueEntry dialogueEntry, string field = "Timespan")
         {
             if (!Field.FieldExists(dialogueEntry.fields, field)) return -1;
-        
+
             var timespanField = Field.Lookup(dialogueEntry.fields, field);
-        
+
             var value = timespanField.value.Split(':')[0] == null ? 0 : int.Parse(timespanField.value.Split(':')[0]);
 
             var unit = timespanField.value.Split(':')[1];
@@ -32,14 +32,15 @@ namespace Project.Runtime.Scripts.Utility
                     value *= 3600;
                     break;
             }
+
             return value;
         }
 
-        public static int Timespan (this Item quest, string field = "Duration")
+        public static int Timespan(this Item quest, string field = "Duration")
         {
             var durationField = quest.AssignedField(field);
             if (durationField == null) return 0;
-        
+
             var unit = durationField.value.Split(':')[1];
             var questTime = int.Parse(durationField.value.Split(':')[0]);
             var duration = 0;
@@ -47,7 +48,7 @@ namespace Project.Runtime.Scripts.Utility
             if (unit == "seconds") duration = questTime;
             else if (unit == "minutes") duration = questTime * 60;
             else if (unit == "hours") duration = questTime * 3600;
-        
+
             return duration;
         }
 
@@ -59,7 +60,8 @@ namespace Project.Runtime.Scripts.Utility
 
         public static bool Visited(this DialogueEntry dialogueEntry)
         {
-            var simStatus = Lua.Run("return Conversation[" + dialogueEntry.conversationID + "].Dialog[" + dialogueEntry.id + "].SimStatus").AsString;
+            var simStatus = Lua.Run("return Conversation[" + dialogueEntry.conversationID + "].Dialog[" +
+                                    dialogueEntry.id + "].SimStatus").AsString;
             return simStatus == "Visited";
         }
 
@@ -81,6 +83,7 @@ namespace Project.Runtime.Scripts.Utility
             {
                 list.Add(item);
             }
+
             return list;
         }
 
@@ -104,19 +107,21 @@ namespace Project.Runtime.Scripts.Utility
                     }
                 }
             }
+
             return links;
         }
 
         public static bool IsResponseChild(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
         {
             database ??= DialogueManager.MasterDatabase;
-        
+
             var isResponseChild = false;
             foreach (var link in dialogueEntry.GetIncomingLinks(database))
             {
                 if (link.GetOriginEntry(database).IsResponseRoot(database)) isResponseChild = true;
-            
+
             }
+
             return isResponseChild;
         }
 
@@ -135,12 +140,12 @@ namespace Project.Runtime.Scripts.Utility
         public static bool IsResponseRoot(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
         {
             database ??= DialogueManager.MasterDatabase;
-      
+
             var actor = (dialogueEntry.GetActor(database));
 
             var isActorPlayer = actor != null && (Field.FieldExists(actor.fields, "IsPlayer") &&
                                                   Field.LookupBool(actor.fields, "IsPlayer"));
-        
+
             var doesAnyMenuTextForceResponse = dialogueEntry.outgoingLinks.Exists(link =>
             {
                 var destinationEntry = link.GetDestinationEntry(database);
@@ -163,18 +168,19 @@ namespace Project.Runtime.Scripts.Utility
             if (group != null) quests = quests.FindAll(i => i.Group == group);
             return quests;
         }
-        
+
         public static Item? GetQuest(this DialogueDatabase database, string questName)
         {
             return database.items.Find(i => i.Name == questName);
         }
-        
+
         public static Field? GetField(this Item item, string fieldName)
         {
             return item.fields.Find(f => f.title == fieldName);
         }
 
-        public static DialogueEntry? GetNextDialogueEntry(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
+        public static DialogueEntry? GetNextDialogueEntry(this DialogueEntry dialogueEntry,
+            DialogueDatabase? database = null)
         {
             database ??= DialogueManager.MasterDatabase;
             var nextDialogueEntry = dialogueEntry.outgoingLinks.Count == 1
@@ -185,7 +191,8 @@ namespace Project.Runtime.Scripts.Utility
 
         public static Item? GetSubconversationQuest(this DialogueEntry dialogueEntry)
         {
-            var quest = DialogueManager.instance.masterDatabase.GetItem(dialogueEntry?.GetNextDialogueEntry()?.GetConversation().Title);
+            var quest = DialogueManager.instance.masterDatabase.GetItem(dialogueEntry?.GetNextDialogueEntry()
+                ?.GetConversation().Title);
 
             return quest;
         }
@@ -197,7 +204,7 @@ namespace Project.Runtime.Scripts.Utility
 
         public static bool IsEmpty(this DialogueEntry dialogueEntry)
         {
-            return dialogueEntry is { subtitleText: "", currentMenuText: "", currentSequence: ""};
+            return dialogueEntry is { subtitleText: "", currentMenuText: "", currentSequence: "" };
         }
 
         public static Lua.Result? GetLuaField(this Item item, string fieldName)
@@ -205,15 +212,131 @@ namespace Project.Runtime.Scripts.Utility
             return DialogueLua.GetItemField(item.Name, fieldName);
         }
 
-        public static IList<T> Clone<T>(this IList<T> listToClone) where T: ICloneable
+        public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
         {
             return listToClone.Select(item => (T)item.Clone()).ToList();
         }
-        
+
         public static bool EvaluateConditions(this DialogueEntry dialogueEntry)
         {
             return Lua.IsTrue(dialogueEntry.conditionsString);
         }
+
+
+
+        public static IEnumerable<T> GetChildren<T>(this Transform transform, IEnumerable<T>? exclude = null)
+            where T : Component
+        {
+            var children = transform.GetComponentsInChildren<T>().ToList();
+            children.Remove(transform.GetComponent<T>());
+            if (exclude != null)
+            {
+                foreach (var item in exclude)
+                {
+                    children.Remove(item);
+                }
+            }
+
+            return children;
+        }
         
+        public static IEnumerable<T> GetChildren<T>(this Transform transform, T? exclude = null)
+            where T : Component
+        {
+            var children = transform.GetComponentsInChildren<T>().ToList();
+            children.Remove(transform.GetComponent<T>());
+            if (exclude != null)
+            {
+                children.Remove(exclude);
+            }
+
+            return children;
+        }
+        
+        public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T)? exclude = null)
+            where T : Component
+        {
+            var children = transform.GetComponentsInChildren<T>().ToList();
+            children.Remove(transform.GetComponent<T>());
+            if (exclude != null)
+            {
+                children.Remove(exclude.Value.Item1);
+                children.Remove(exclude.Value.Item2);
+            }
+
+            return children;
+        }
+        
+        public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T, T)? exclude = null)
+            where T : Component
+        {
+            var children = transform.GetComponentsInChildren<T>().ToList();
+            children.Remove(transform.GetComponent<T>());
+            if (exclude != null)
+            {
+                children.Remove(exclude.Value.Item1);
+                children.Remove(exclude.Value.Item2);
+                children.Remove(exclude.Value.Item3);
+            }
+
+            return children;
+        }
+
+   
+
+
+
+        public static IEnumerable<Transform> GetChildren(this Transform transform, IEnumerable<Transform>? exclude = null)
+        {
+            var children = transform.GetComponentsInChildren<Transform>().ToList();
+            children.Remove(transform.GetComponent<Transform>());
+            if (exclude != null)
+            {
+                foreach (var item in exclude)
+                {
+                    children.Remove(item);
+                }
+            }
+            return children;
+        }
+    
+    
+        public static IEnumerable<Transform> GetChildren(this Transform transform, Transform? exclude = null)  {
+                var children = transform.GetComponentsInChildren<Transform>().ToList();
+                children.Remove(transform.GetComponent<Transform>());
+                if (exclude != null)
+                {
+                    children.Remove(exclude);
+                }
+
+                return children; 
+    }
+    
+    
+        public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform)? exclude = null)  {
+            var children = transform.GetComponentsInChildren<Transform>().ToList();
+            children.Remove(transform.GetComponent<Transform>());
+            if (exclude != null)
+            {
+                children.Remove(exclude.Value.Item1);
+                children.Remove(exclude.Value.Item2);
+            }
+
+            return children; 
+    }
+    
+    
+        public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform, Transform)? exclude = null)  {
+            var children = transform.GetComponentsInChildren<Transform>().ToList();
+            children.Remove(transform.GetComponent<Transform>());
+            if (exclude != null)
+            {
+                children.Remove(exclude.Value.Item1);
+                children.Remove(exclude.Value.Item2);
+                children.Remove(exclude.Value.Item3);
+            }
+
+            return children; 
+    }
     }
 }

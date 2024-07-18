@@ -53,6 +53,11 @@ namespace Project.Runtime.Scripts.Events.Actions
             }
         }
 
+        public void OnConversationEnd()
+        {
+            DialogueManager.PlaySequence("SetContinueMode(false)");
+        }
+
         public void OnSequenceStart()
         {
             

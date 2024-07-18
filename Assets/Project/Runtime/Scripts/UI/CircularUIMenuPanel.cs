@@ -23,12 +23,14 @@ namespace Project.Runtime.Scripts.UI
             "mousePointerHand",
             "outerBackground",
             "innerBackground",
+            "useHideAnimationTrigger"
         };
 
         [SerializeField] private WatchHandCursor mousePointerHand;
         [SerializeField] public AnimationCurve offsetCurve;
         [SerializeField] private UITextField timeEstimate;
         [SerializeField] private Image outerBackground, innerBackground;
+        [SerializeField] private bool useHideAnimationTrigger;
 
         private Color defaultOuterColor, defaultInnerColor;
 
@@ -87,21 +89,42 @@ namespace Project.Runtime.Scripts.UI
                 Animator!.SetBool("Focus", true);
                 _firstFocus = true;
             }
-            
-            
-        
       
         }
+        
+        public override void Close()
+        {
+            PopFromPanelStack();
+            if (gameObject == null) return;
+            if (gameObject.activeInHierarchy) CancelInvoke();
+            if (panelState == PanelState.Closed || panelState == PanelState.Closing) return;
+            panelState = PanelState.Closing;
+            onClose.Invoke();
+            var myAnimator = GetComponent<Animator>();
+            if (myAnimator != null && myAnimator.isInitialized && !string.IsNullOrEmpty(showAnimationTrigger))
+            {
+                myAnimator.ResetTrigger(showAnimationTrigger);
+            }
+            if (useHideAnimationTrigger) animatorMonitor.SetTrigger(hideAnimationTrigger, OnHidden, true);
 
-        public void Focus()
+            // Deselect ours:
+            if (eventSystem != null && selectables.Contains(eventSystem.currentSelectedGameObject))
+            {
+                eventSystem.SetSelectedGameObject(null);
+            }
+        }
+
+        public override void Focus()
         {
            // Animator!.SetBool("Focus", true);
+           base.Focus();
             WatchHandCursor.GlobalUnfreeze();
         }
         
-        public void Unfocus()
+        public override void Unfocus()
         {
             //Animator!.SetBool("Focus", false);
+            base.Unfocus();
             WatchHandCursor.GlobalFreeze();
         }
 
