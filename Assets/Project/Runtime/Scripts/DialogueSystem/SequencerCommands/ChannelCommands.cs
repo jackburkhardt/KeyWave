@@ -34,7 +34,7 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
         }
     }
     
-    public class SequencerCommandStopAllAudioOnChannel : SequencerCommand
+    public class SequencerCommandStopChannel : SequencerCommand
     {
         private void Awake()
         {
@@ -44,7 +44,7 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
         }
     }
     
-    public class SequencerCommandPauseAllAudioOnChannel : SequencerCommand
+    public class SequencerCommandPauseChannel : SequencerCommand
     {
         private void Awake()
         {
@@ -54,7 +54,7 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
         }
     }
     
-    public class SequencerCommandResumeAllAudioOnChannel : SequencerCommand
+    public class SequencerCommandResumeChannel : SequencerCommand
     {
         private void Awake()
         {

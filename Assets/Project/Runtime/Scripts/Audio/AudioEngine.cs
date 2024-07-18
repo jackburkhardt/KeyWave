@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -40,7 +41,9 @@ namespace Project.Runtime.Scripts.Audio
                 {
                     source.volume = clipData.volume;
                 }
+                source.outputAudioMixerGroup = clipData.channel;
                 source.Play();
+                
                 _activeAudio.Add(clipAddress, source);
                 
                 followup?.Invoke();
@@ -154,19 +157,31 @@ namespace Project.Runtime.Scripts.Audio
         
         #region Channel Management
         
+        private const float maxVolume = 0;
+        private const float minVolume = -80;
+        
+        
         public void SetChannelVolume(string channelName, float volume)
         {
-            _userAudioMixer.SetFloat(channelName, volume);
+            var mappedVolume = volume.Map(0, 1, minVolume, maxVolume);
+            _userAudioMixer.SetFloat(channelName + "/Volume", mappedVolume);
+        }
+
+        public float GetChannelVolume(string channelName)
+        {
+            
+            _userAudioMixer.GetFloat(channelName + "/Volume", out float volume);
+            return volume.Map(minVolume, maxVolume, 0, 1);
         }
         
         public void MuteChannel(string channelName)
         {
-            _userAudioMixer.SetFloat(channelName, -80);
+            _userAudioMixer.SetFloat(channelName + "/Volume", -80);
         }
         
         public void UnmuteChannel(string channelName)
         {
-            _userAudioMixer.SetFloat(channelName, 0);
+            _userAudioMixer.SetFloat(channelName + "/Volume", 0);
         }
         
         public void StopAllAudioOnChannel(string channelName)
@@ -178,6 +193,8 @@ namespace Project.Runtime.Scripts.Audio
                     StopClip(entry.Key);
                 }
             }
+            
+            UnmuteChannel(channelName);
         }
         
         public void PauseAllAudioOnChannel(string channelName)

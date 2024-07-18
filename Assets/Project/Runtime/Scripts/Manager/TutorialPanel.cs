@@ -93,8 +93,8 @@ namespace Project.Runtime.Scripts.Manager
 
         public void OnShow()
         {
-            DialogueManager.Pause();
-            WatchHandCursor.GlobalFreeze();
+            DialogueManager.Pause(); 
+            //WatchHandCursor.GlobalFreeze();
         
             _content.gameObject.SetActive(true);
        
@@ -108,7 +108,7 @@ namespace Project.Runtime.Scripts.Manager
         public void OnHide()
         {
             DialogueManager.Unpause();
-            WatchHandCursor.GlobalUnfreeze();
+           // WatchHandCursor.GlobalUnfreeze();
             _content.gameObject.SetActive(false);
         
             foreach (var dot in Dots)

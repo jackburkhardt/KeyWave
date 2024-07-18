@@ -55,14 +55,14 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnConversationEnd()
         {
-            DialogueManager.PlaySequence("SetContinueMode(false)");
+            DialogueManager.PlaySequence("SetContinueMode(false); SetActionPanel(true)@Message(Typed); SetMenuPanelTrigger(1, false)@Message(Typed)");
         }
 
         public void OnSequenceStart()
         {
             
 
-            if (DialogueUtility.CurrentDialogueEntry.IsEmpty() || DialogueUtility.CurrentDialogueEntry.id == 0)
+            if (DialogueUtility.CurrentDialogueEntry.IsEmpty() || DialogueUtility.CurrentDialogueEntry.id == 0 && !DialogueUtility.CurrentDialogueEntry.isGroup)
             {
                 DialogueManager.PlaySequence("Continue()");
          

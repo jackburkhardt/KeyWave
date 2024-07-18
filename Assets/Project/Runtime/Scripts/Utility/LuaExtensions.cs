@@ -189,14 +189,6 @@ namespace Project.Runtime.Scripts.Utility
             return nextDialogueEntry;
         }
 
-        public static Item? GetSubconversationQuest(this DialogueEntry dialogueEntry)
-        {
-            var quest = DialogueManager.instance.masterDatabase.GetItem(dialogueEntry?.GetNextDialogueEntry()
-                ?.GetConversation().Title);
-
-            return quest;
-        }
-
         public static Field? GetField(this DialogueEntry dialogueEntry, string fieldName)
         {
             return Field.Lookup(dialogueEntry.fields, fieldName);
@@ -212,131 +204,166 @@ namespace Project.Runtime.Scripts.Utility
             return DialogueLua.GetItemField(item.Name, fieldName);
         }
 
-        public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
-        {
-            return listToClone.Select(item => (T)item.Clone()).ToList();
-        }
-
         public static bool EvaluateConditions(this DialogueEntry dialogueEntry)
         {
             return Lua.IsTrue(dialogueEntry.conditionsString);
         }
-
-
-
-        public static IEnumerable<T> GetChildren<T>(this Transform transform, IEnumerable<T>? exclude = null)
-            where T : Component
-        {
-            var children = transform.GetComponentsInChildren<T>().ToList();
-            children.Remove(transform.GetComponent<T>());
-            if (exclude != null)
-            {
-                foreach (var item in exclude)
-                {
-                    children.Remove(item);
-                }
-            }
-
-            return children;
-        }
         
-        public static IEnumerable<T> GetChildren<T>(this Transform transform, T? exclude = null)
-            where T : Component
-        {
-            var children = transform.GetComponentsInChildren<T>().ToList();
-            children.Remove(transform.GetComponent<T>());
-            if (exclude != null)
-            {
-                children.Remove(exclude);
-            }
-
-            return children;
-        }
-        
-        public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T)? exclude = null)
-            where T : Component
-        {
-            var children = transform.GetComponentsInChildren<T>().ToList();
-            children.Remove(transform.GetComponent<T>());
-            if (exclude != null)
-            {
-                children.Remove(exclude.Value.Item1);
-                children.Remove(exclude.Value.Item2);
-            }
-
-            return children;
-        }
-        
-        public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T, T)? exclude = null)
-            where T : Component
-        {
-            var children = transform.GetComponentsInChildren<T>().ToList();
-            children.Remove(transform.GetComponent<T>());
-            if (exclude != null)
-            {
-                children.Remove(exclude.Value.Item1);
-                children.Remove(exclude.Value.Item2);
-                children.Remove(exclude.Value.Item3);
-            }
-
-            return children;
-        }
-
-   
-
-
-
-        public static IEnumerable<Transform> GetChildren(this Transform transform, IEnumerable<Transform>? exclude = null)
-        {
-            var children = transform.GetComponentsInChildren<Transform>().ToList();
-            children.Remove(transform.GetComponent<Transform>());
-            if (exclude != null)
-            {
-                foreach (var item in exclude)
-                {
-                    children.Remove(item);
-                }
-            }
-            return children;
-        }
+    }
     
+    public static class KeyWaveExtensions
+    {
+        public static Item? GetSubconversationQuest(this DialogueEntry dialogueEntry)
+        {
+            var quest = DialogueManager.instance.masterDatabase.GetItem(dialogueEntry?.GetNextDialogueEntry()
+                ?.GetConversation().Title);
+
+            return quest;
+        }
+        
+        public static string GetCondensedQuestName(this Item subconversationQuest, int? characterLimit = null, string? append = null)
+        {
+            var title = string.Empty;
+            if (subconversationQuest.LookupBool("UseDisplayName")) title = QuestLog.GetQuestTitle(subconversationQuest.Name);
+            else title = subconversationQuest.Name.Split('/')[^1];
+            if (characterLimit != null && title.Length > characterLimit) title = title.Substring(0, (int)characterLimit);
+            if (append != null) title += append;
+            return title;
+        }
+    }
     
-        public static IEnumerable<Transform> GetChildren(this Transform transform, Transform? exclude = null)  {
-                var children = transform.GetComponentsInChildren<Transform>().ToList();
-                children.Remove(transform.GetComponent<Transform>());
+    public static class BaseExtensions
+    {
+       public static IEnumerable<T> GetChildren<T>(this Transform transform, IEnumerable<T>? exclude = null)
+                where T : Component
+            {
+                var children = transform.GetComponentsInChildren<T>().ToList();
+                children.Remove(transform.GetComponent<T>());
+                if (exclude != null)
+                {
+                    foreach (var item in exclude)
+                    {
+                        children.Remove(item);
+                    }
+                }
+
+                return children;
+            }
+            
+            public static IEnumerable<T> GetChildren<T>(this Transform transform, T? exclude = null)
+                where T : Component
+            {
+                var children = transform.GetComponentsInChildren<T>().ToList();
+                children.Remove(transform.GetComponent<T>());
                 if (exclude != null)
                 {
                     children.Remove(exclude);
                 }
 
+                return children;
+            }
+            
+            public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T)? exclude = null)
+                where T : Component
+            {
+                var children = transform.GetComponentsInChildren<T>().ToList();
+                children.Remove(transform.GetComponent<T>());
+                if (exclude != null)
+                {
+                    children.Remove(exclude.Value.Item1);
+                    children.Remove(exclude.Value.Item2);
+                }
+
+                return children;
+            }
+            
+            public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T, T)? exclude = null)
+                where T : Component
+            {
+                var children = transform.GetComponentsInChildren<T>().ToList();
+                children.Remove(transform.GetComponent<T>());
+                if (exclude != null)
+                {
+                    children.Remove(exclude.Value.Item1);
+                    children.Remove(exclude.Value.Item2);
+                    children.Remove(exclude.Value.Item3);
+                }
+
+                return children;
+            }
+
+       
+
+
+
+            public static IEnumerable<Transform> GetChildren(this Transform transform, IEnumerable<Transform>? exclude = null)
+            {
+                var children = transform.GetComponentsInChildren<Transform>().ToList();
+                children.Remove(transform.GetComponent<Transform>());
+                if (exclude != null)
+                {
+                    foreach (var item in exclude)
+                    {
+                        children.Remove(item);
+                    }
+                }
+                return children;
+            }
+        
+        
+            public static IEnumerable<Transform> GetChildren(this Transform transform, Transform? exclude = null)  {
+                    var children = transform.GetComponentsInChildren<Transform>().ToList();
+                    children.Remove(transform.GetComponent<Transform>());
+                    if (exclude != null)
+                    {
+                        children.Remove(exclude);
+                    }
+
+                    return children; 
+        }
+        
+        
+            public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform)? exclude = null)  {
+                var children = transform.GetComponentsInChildren<Transform>().ToList();
+                children.Remove(transform.GetComponent<Transform>());
+                if (exclude != null)
+                {
+                    children.Remove(exclude.Value.Item1);
+                    children.Remove(exclude.Value.Item2);
+                }
+
                 return children; 
-    }
-    
-    
-        public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform)? exclude = null)  {
-            var children = transform.GetComponentsInChildren<Transform>().ToList();
-            children.Remove(transform.GetComponent<Transform>());
-            if (exclude != null)
-            {
-                children.Remove(exclude.Value.Item1);
-                children.Remove(exclude.Value.Item2);
-            }
+        }
+        
+        
+            public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform, Transform)? exclude = null)  {
+                var children = transform.GetComponentsInChildren<Transform>().ToList();
+                children.Remove(transform.GetComponent<Transform>());
+                if (exclude != null)
+                {
+                    children.Remove(exclude.Value.Item1);
+                    children.Remove(exclude.Value.Item2);
+                    children.Remove(exclude.Value.Item3);
+                }
 
-            return children; 
+                return children; 
+        }
+            
+        public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+        {
+            return listToClone.Select(item => (T)item.Clone()).ToList();
+        }
+        
+        
+        public static float Map(this float value, float fromSource, float toSource, float fromTarget, float toTarget)
+        {
+            return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
+        }
     }
     
     
-        public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform, Transform)? exclude = null)  {
-            var children = transform.GetComponentsInChildren<Transform>().ToList();
-            children.Remove(transform.GetComponent<Transform>());
-            if (exclude != null)
-            {
-                children.Remove(exclude.Value.Item1);
-                children.Remove(exclude.Value.Item2);
-                children.Remove(exclude.Value.Item3);
-            }
-
-            return children; 
-    }
-    }
 }
+
+    
+
+

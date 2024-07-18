@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.UI
 {
-    public class CircularUIMenuPanel : CustomUIMenuPanel
+    public class CircularUIMenuPanel : CustomUIMenuPanel, IPointerEnterHandler, IPointerExitHandler
     {
         private const float MaxVisibleDegreeSum = 85;
 
@@ -117,26 +117,54 @@ namespace Project.Runtime.Scripts.UI
         public override void Focus()
         {
            // Animator!.SetBool("Focus", true);
-           base.Focus();
-            WatchHandCursor.GlobalUnfreeze();
+            base.Focus();
+            mousePointerHand.GlobalUnfreeze();
+        }
+        
+        protected override void ShowResponsesNow(Subtitle subtitle, Response[] responses, Transform target)
+        {
+            if (responses == null || responses.Length == 0)
+            {
+                if (DialogueDebug.logWarnings) Debug.LogWarning("Dialogue System: StandardDialogueUI ShowResponses received an empty list of responses.", this);
+                return;
+            }
+            ClearResponseButtons();
+            SetResponseButtons(responses, target);
+            ActivateUIElements();
+            Open();
+            RefreshSelectablesList();
+            if (blockInputDuration > 0)
+            {
+                DisableInput();
+                if (InputDeviceManager.autoFocus) SetFocus(firstSelected);
+                Invoke(nameof(EnableInput), blockInputDuration);
+            }
+            else
+            {
+                if (InputDeviceManager.autoFocus) SetFocus(firstSelected);
+                if (s_isInputDisabled) EnableInput();
+            }
+#if TMP_PRESENT
+            DialogueManager.instance.StartCoroutine(CheckTMProAutoScroll());
+#endif
         }
         
         public override void Unfocus()
         {
             //Animator!.SetBool("Focus", false);
             base.Unfocus();
-            WatchHandCursor.GlobalFreeze();
+            mousePointerHand.GlobalFreeze();
         }
 
         public void OnDialogueSystemPause()
         {
          //   if (!Animator!.GetBool("Active")) return;
-            WatchHandCursor.GlobalFreeze();
-            }
+           // WatchHandCursor.GlobalFreeze();
+         }
 
         public void OnDialogueSystemUnpause()
         {
-            WatchHandCursor.GlobalUnfreeze();
+           // WatchHandCursor.GlobalUnfreeze();
           }
 
         public void OnConversationLine()
@@ -192,6 +220,16 @@ namespace Project.Runtime.Scripts.UI
             {
                 timeEstimate.text = button.TimeEstimateText;
             }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            Focus();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            Unfocus();
         }
     }
 }

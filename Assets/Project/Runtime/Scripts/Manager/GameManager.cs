@@ -99,13 +99,13 @@ namespace Project.Runtime.Scripts.Manager
         public void PauseDialogueSystem()
         {
             DialogueManager.instance.Pause();
-            WatchHandCursor.GlobalFreeze();
+           // WatchHandCursor.GlobalFreeze();
         }
 
         public void UnpauseDialogueSystem()
         {
             DialogueManager.instance.Unpause();
-            WatchHandCursor.GlobalUnfreeze();
+            //WatchHandCursor.GlobalUnfreeze();
         }
 
         public void OnSaveDataApplied()
@@ -169,6 +169,7 @@ namespace Project.Runtime.Scripts.Manager
             var conversation = database.GetConversation(conversationName);
             var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
             var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+            DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
             DialogueManager.conversationController.GotoState(state);
         }
 
@@ -187,6 +188,7 @@ namespace Project.Runtime.Scripts.Manager
             var conversation = database.GetConversation(conversationName);
             var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
             var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+            DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
             DialogueManager.conversationController.GotoState(state);
         }
 
@@ -204,6 +206,9 @@ namespace Project.Runtime.Scripts.Manager
             
             var conversation = database.GetConversation(conversationName);
             var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
+            
+            DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
+            
             var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
             DialogueManager.conversationController.GotoState(state);
         }
@@ -272,7 +277,14 @@ namespace Project.Runtime.Scripts.Manager
         {
             //last_convo = gameState.current_conversation_title;
             DialogueManager.StopConversation();
-            DialogueManager.instance.PlaySequence("SetDialoguePanel(false)");
+            DialogueManager.instance.PlaySequence(
+                "SetDialoguePanel(false);" +
+                "SetMenuPanelTrigger(1, false);" +
+                "ChannelFade(Music, 0, 2);" +
+                "StopChannel(Music)@2;" +
+                "ChannelFade(Music, 1)@2;" +
+                "PlayClip(music/intro)@2.5;"
+                );
             App.App.Instance.LoadScene("Map");
         }
 
@@ -284,6 +296,14 @@ namespace Project.Runtime.Scripts.Manager
                 DialogueManager.instance.PlaySequence("SetDialoguePanel(true)");
                 DialogueManager.StartConversation(last_convo);
             }
+            
+            DialogueManager.instance.PlaySequence(
+                "ChannelFade(Music, 0, 0.75);" +
+                "StopChannel(Music)@0.75;" +
+                "ChannelFade(Music, 1)@1;"
+                
+            );
+            
         }
 
 
@@ -322,8 +342,6 @@ namespace Project.Runtime.Scripts.Manager
 
                 Debug.Log("current scene chaned to :" + newLocation);
                 gameState.current_scene = newLocation;
-            
-            
             }
         }
 

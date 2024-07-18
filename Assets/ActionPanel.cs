@@ -29,7 +29,7 @@ public class ActionPanel : MonoBehaviour
     {
         Debug.Log("OnConversationLine");
         var conversation = subtitle.dialogueEntry.GetConversation().Title;
-        if (conversation.Contains("Map") || conversation.EndsWith("Action/Base") || conversation.EndsWith("Talk/Base"))
+        if (conversation.Contains("Map") || conversation.EndsWith("Base")) 
         {
             Debug.Log(conversation + " contains Map, Action or Talk");
             if (isActionPanelActive) return;

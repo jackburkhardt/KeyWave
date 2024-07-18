@@ -16,12 +16,12 @@ namespace Project.Runtime.Scripts.UI
         public void OnDialogueSystemPause()
         {
             //   if (!Animator!.GetBool("Active")) return;
-            GlobalFreeze();
+          //  GlobalFreeze();
         }
 
         public void OnDialogueSystemUnpause()
-        {
-            GlobalUnfreeze();
+        { //
+          //GlobalUnfreeze();
         }
 
         
@@ -64,9 +64,6 @@ namespace Project.Runtime.Scripts.UI
                 var maxAngle = (minAngle + 6);
                 angle = Mathf.RoundToInt((angle - minAngle < maxAngle - angle) ? minAngle : maxAngle);
             }
-
-        
-
         
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, (angle))), Time.deltaTime * 20);
         
@@ -79,13 +76,14 @@ namespace Project.Runtime.Scripts.UI
             Unfreeze();
         }
 
-        public static void GlobalFreeze()
+        public void GlobalFreeze()
         {
             globalFreeze = true;
         }
 
-        public static void GlobalUnfreeze()
+        public void GlobalUnfreeze()
         {
+            Debug.Log("Global Unfreeze");
             globalFreeze = false;
         }
 

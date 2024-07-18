@@ -28,6 +28,7 @@ namespace Project.Runtime.Scripts.UI.Map
         private RectTransform _objectivePanel;
         private RectTransform _rectTransform, _parentRectTransform;
         private bool _standby = true;
+        public WatchHandCursor watchCursor;
 
         private List<MapLocationInfo> WatchEdgeButtons => FindObjectsOfType<MapLocationInfo>().ToList();
 
@@ -48,6 +49,7 @@ namespace Project.Runtime.Scripts.UI.Map
             {
                 TutorialPanel.Play("SleepTutorial");
             }
+            watchCursor.GlobalUnfreeze();
         }
 
   
@@ -147,7 +149,7 @@ namespace Project.Runtime.Scripts.UI.Map
                 button.GetComponent<Button>().interactable = false;
             }
         
-            WatchHandCursor.GlobalFreeze();
+            // watchCursor.GlobalFreeze();
         }
 
         public void EnableCircularButtonsAndCursor()
@@ -156,7 +158,7 @@ namespace Project.Runtime.Scripts.UI.Map
             {
                 button.GetComponent<Button>().interactable = button.location.unlocked;
             }
-            WatchHandCursor.GlobalUnfreeze();
+            watchCursor.GlobalUnfreeze();
         }
 
         public void ZoomInOnCoordinates(Vector2 coordinates)
