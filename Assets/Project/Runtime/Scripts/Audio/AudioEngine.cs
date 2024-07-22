@@ -194,7 +194,6 @@ namespace Project.Runtime.Scripts.Audio
                 }
             }
             
-            UnmuteChannel(channelName);
         }
         
         public void PauseAllAudioOnChannel(string channelName)
