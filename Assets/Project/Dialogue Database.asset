@@ -4817,9 +4817,9 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: Hotel
-      type: 0
-      typeString: CustomFieldType_Text
+      value: -1
+      type: 7
+      typeString: CustomFieldType_Location
     - title: Description
       value: 
       type: 0
@@ -5244,8 +5244,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1067.3828
-        y: 263.45657
+        x: 1001.11365
+        y: 269.86972
         width: 160
         height: 30
     - id: 1
@@ -6834,6 +6834,12 @@ MonoBehaviour:
       - originConversationID: 16
         originDialogueID: 43
         destinationConversationID: 16
+        destinationDialogueID: 53
+        isConnector: 0
+        priority: 3
+      - originConversationID: 16
+        originDialogueID: 43
+        destinationConversationID: 16
         destinationDialogueID: 52
         isConnector: 0
         priority: 2
@@ -6844,8 +6850,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1062.2537
-        y: 322.48804
+        x: 1001.3287
+        y: 347.07172
         width: 160
         height: 30
     - id: 45
@@ -7293,8 +7299,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 689.56287
-        y: 479.22177
+        x: 599.77875
+        y: 474.94638
         width: 160
         height: 30
     - id: 51
@@ -7368,8 +7374,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 689.9402
-        y: 582.46405
+        x: 600.15607
+        y: 578.18866
         width: 160
         height: 30
     - id: 52
@@ -7399,7 +7405,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: PlayClip(music/hotel); WaitForMessage(Forever)
+        value: WaitForMessage(Forever)
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -7445,13 +7451,171 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1064.2941
-        y: 409.20074
+        x: 1002.3008
+        y: 676.4151
+        width: 160
+        height: 30
+    - id: 53
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Auto Continue
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
+      conversationID: 16
+      isRoot: 0
+      isGroup: 1
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 16
+        originDialogueID: 53
+        destinationConversationID: 16
+        destinationDialogueID: 54
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["player_location"] ~= "Hotel"
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 840.7858
+        y: 481.26727
+        width: 160
+        height: 30
+    - id: 54
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Business:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Time Estimate
+        value: 0,0
+        type: 8
+        typeString: CustomFieldType_NodeType
+      - title: Show If Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Auto Continue
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
+      conversationID: 16
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 16
+        originDialogueID: 54
+        destinationConversationID: 16
+        destinationDialogueID: 52
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 'Variable["player_location"] = "Hotel"; PlayClip(music/hotel); '
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 840.78503
+        y: 569.7463
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 619.7424, y: 195.38838}
-    canvasZoom: 0.8830768
+    canvasScrollPosition: {x: 640.71735, y: 220.23439}
+    canvasZoom: 0.93557686
   - id: 18
     fields:
     - title: Title
@@ -17057,8 +17221,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 812.7854
-        y: 143.3541
+        x: 810.803
+        y: 145.33656
         width: 160
         height: 30
     - id: 36
@@ -17975,7 +18139,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 470.30975
+        x: 468.32733
         y: 838.2826
         width: 160
         height: 30
@@ -18059,7 +18223,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 468.22272
-        y: 921.41406
+        y: 923.3965
         width: 160
         height: 30
     - id: 59
@@ -18397,7 +18561,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: Continue()@Message(Load); Timeline(play, BaseAwake);
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -18426,7 +18590,7 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       conversationID: 28
       isRoot: 0
-      isGroup: 0
+      isGroup: 1
       nodeColor: 
       delaySimStatus: 0
       falseConditionAction: Block
@@ -18434,37 +18598,24 @@ MonoBehaviour:
       outgoingLinks:
       - originConversationID: 28
         originDialogueID: 63
-        destinationConversationID: 16
-        destinationDialogueID: 0
+        destinationConversationID: 28
+        destinationDialogueID: 58
         isConnector: 0
         priority: 2
       conditionsString: Variable["debug.skip_intro"] == true
       userScript: 
       onExecute:
         m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 11400000, guid: cf0cb6f429c184964a397a5239800c7e, type: 2}
-            m_TargetAssemblyTypeName: Project.Runtime.Scripts.ScriptableObjects.Location,
-              Assembly-CSharp
-            m_MethodName: FadeHere
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
+          m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1176.5105
-        y: 146.1708
+        x: 1475.8617
+        y: 604.1607
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 286.80518, y: 592.3424}
-    canvasZoom: 1.3634245
+    canvasScrollPosition: {x: 126.051994, y: 0}
+    canvasZoom: 0.5154249
   - id: 31
     fields:
     - title: Title
