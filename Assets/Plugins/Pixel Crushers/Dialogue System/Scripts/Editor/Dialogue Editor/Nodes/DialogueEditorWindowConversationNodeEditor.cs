@@ -1789,6 +1789,51 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             GenericMenu contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Create Child Node"), false, AddChildCallback, entry);
+            if (multinodeSelection.nodes.Count == 2  && (multinodeSelection.nodes.Contains(entry)))
+            {
+                contextMenu.AddItem(new GUIContent("Create In-between node"), false, CreateBetweenNodeCallback, entry);
+            }
+            contextMenu.AddSeparator("");
+            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, currentEntry, false));
+            contextMenu.AddItem(new GUIContent("Edit Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, currentEntry, true));
+            
+            var sequenceOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/SequenceOptions.asset");
+            var titleOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/TitleOptions.asset");
+            var menuTextOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/MenuTextOptions.asset");
+
+            if (titleOpts)
+            {
+                foreach (var item in titleOpts.strings)
+                {
+                    contextMenu.AddItem(new GUIContent("Set Title/" + item), false, SetTitleCallback,
+                        new Tuple<DialogueEntry, string>(entry, item));
+                }
+            }
+
+            if (sequenceOpts)
+            {
+                foreach (var item in sequenceOpts.strings)
+                {
+                    contextMenu.AddItem(new GUIContent("Set Sequence/" + item), false, SetSequenceCallback,
+                        new Tuple<DialogueEntry, string>(entry, item));
+                }
+            }
+            
+            if (menuTextOpts)
+            {
+                foreach (var item in menuTextOpts.strings)
+                {
+                    contextMenu.AddItem(new GUIContent("Set Menu Text/" + item), false, SetMenuTextCallback,
+                        new Tuple<DialogueEntry, string>(entry, item));
+                }
+            }
+            
+            contextMenu.AddSeparator("");
+            contextMenu.AddItem(new GUIContent("Auto Condition/If Quest Active"), false, IfQuestActiveCallback, entry);
+            
+            contextMenu.AddItem(new GUIContent("Auto Script/Set Quest Success"), false, SetQuestSuccessCallback, entry);
+            
+            
             contextMenu.AddItem(new GUIContent("Make Link"), false, MakeLinkCallback, entry);
             if ((multinodeSelection.nodes.Count > 1) && (multinodeSelection.nodes.Contains(entry)))
             {
