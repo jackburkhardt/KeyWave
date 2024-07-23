@@ -21,6 +21,7 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private UITextField portraitText;
         [SerializeField] private TMP_Text mainClock;
         [SerializeField] private UITextField subtitleText;
+        [SerializeField] public Button continueButton;
 
         private float _alpha;
         private RectElement? _containerRect;

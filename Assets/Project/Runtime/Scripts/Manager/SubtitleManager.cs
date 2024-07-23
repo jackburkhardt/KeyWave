@@ -17,6 +17,7 @@ namespace Project.Runtime.Scripts.Manager
         public SubtitleContentElement templateSubtitleContentElement;
         public TextMeshProUGUI templateResponseDuplicate;
         public Transform duplicatedSubtitleContentContainer;
+        public Transform continueButton;
         private SubtitleContentElement mostRecentDuplicate;
         private Subtitle mostRecentSubtitle;
 
@@ -60,13 +61,11 @@ namespace Project.Runtime.Scripts.Manager
             // RefreshLayoutGroups.Refresh(gameObject);
             if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == templateSubtitleContentElement.SubtitleText.ToString()) return;
             mostRecentDuplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
+            if (mostRecentDuplicate.continueButton != null) Destroy(mostRecentDuplicate.continueButton.gameObject);
+            mostRecentDuplicate.UpdateTime();
             mostRecentDuplicate.gameObject.SetActive(false);
             RefreshContents();
-      
-            mostRecentDuplicate.UpdateTime();
-      
             onDuplicateAdded.Invoke();
-      
         }
 
         public void AddResponse(TextMeshProUGUI button)
