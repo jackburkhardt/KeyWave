@@ -280,10 +280,8 @@ namespace Project.Runtime.Scripts.Manager
             DialogueManager.instance.PlaySequence(
                 "SetDialoguePanel(false);" +
                 "SetMenuPanelTrigger(1, false);" +
-                "ChannelFade(Music, 0, 2);" +
-                "StopChannel(Music)@2;" +
-                "ChannelFade(Music, 1)@2;" +
-                "PlayClip(music/intro)@2.5;"
+                "ChannelFade(Music, out, 2);" +
+                "PlayClip(music/intro)@2;"
                 );
             App.App.Instance.LoadScene("Map");
         }
@@ -298,10 +296,7 @@ namespace Project.Runtime.Scripts.Manager
             }
             
             DialogueManager.instance.PlaySequence(
-                "ChannelFade(Music, 0, 0.75);" +
-                "StopChannel(Music)@0.75;" +
-                "ChannelFade(Music, 1)@1;"
-                
+                "ChannelFade(Music, out, 1);"
             );
             
         }

@@ -4565,7 +4565,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Description
@@ -5244,8 +5244,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1106.0437
-        y: 259.94196
+        x: 1067.3828
+        y: 263.45657
         width: 160
         height: 30
     - id: 1
@@ -6844,8 +6844,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1096.1893
-        y: 391.13898
+        x: 1062.2537
+        y: 322.48804
         width: 160
         height: 30
     - id: 45
@@ -7399,7 +7399,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: PlayClip(music/hotel);
+        value: PlayClip(music/hotel); WaitForMessage(Forever)
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -7426,6 +7426,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Auto Continue
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
       conversationID: 16
       isRoot: 0
       isGroup: 0
@@ -7441,13 +7445,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1088.8965
-        y: 515.8102
+        x: 1064.2941
+        y: 409.20074
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 782.17236, y: 268.6756}
-    canvasZoom: 0.99458164
+    canvasScrollPosition: {x: 619.7424, y: 195.38838}
+    canvasZoom: 0.8830768
   - id: 18
     fields:
     - title: Title
@@ -17975,98 +17979,6 @@ MonoBehaviour:
         y: 838.2826
         width: 160
         height: 30
-    - id: 57
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 7
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 22
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      - title: Show If Invalid
-        value: False
-        type: 2
-        typeString: CustomFieldType_Boolean
-      - title: Invalid Text
-        value: ???
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Response Menu Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      conversationID: 28
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 28
-        originDialogueID: 57
-        destinationConversationID: 28
-        destinationDialogueID: 59
-        isConnector: 0
-        priority: 2
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 11400000, guid: cf0cb6f429c184964a397a5239800c7e, type: 2}
-            m_TargetAssemblyTypeName: Project.Runtime.Scripts.ScriptableObjects.Location,
-              Assembly-CSharp
-            m_MethodName: MoveHereImmediate
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
-      canvasRect:
-        serializedVersion: 2
-        x: 467.73523
-        y: 967.1979
-        width: 160
-        height: 30
     - id: 58
       fields:
       - title: Title
@@ -18121,8 +18033,8 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
-      - title: Override Auto Continue
-        value: True
+      - title: Auto Continue
+        value: False
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 28
@@ -18136,7 +18048,7 @@ MonoBehaviour:
       - originConversationID: 28
         originDialogueID: 58
         destinationConversationID: 28
-        destinationDialogueID: 57
+        destinationDialogueID: 59
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -18147,7 +18059,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 468.22272
-        y: 897.2103
+        y: 921.41406
         width: 160
         height: 30
     - id: 59
@@ -18226,7 +18138,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 465.27094
-        y: 1031.1038
+        y: 1012.76794
         width: 160
         height: 30
     - id: 60
@@ -77795,7 +77707,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 99.999985
+        x: 98.44115
         y: 349
         width: 160
         height: 30
@@ -78094,8 +78006,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 23.200012, y: 87.19998}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 0, y: 123.78696}
+    canvasZoom: 0.64149976
   - id: 119
     fields:
     - title: Title
@@ -80280,5 +80192,5 @@ MonoBehaviour:
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Timespan","value":"-1:seconds","type":11,"typeString":"CustomFieldType_TimespanType"},{"title":"Points","value":"Business:0","type":10,"typeString":"CustomFieldType_PointsType"},{"title":"Time
     Estimate","value":"0,0","type":8,"typeString":"CustomFieldType_NodeType"},{"title":"Show
     If Invalid","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Invalid
-    Text","value":"???","type":0,"typeString":"CustomFieldType_Text"},{"title":"Override
-    Auto Continue","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'
+    Text","value":"???","type":0,"typeString":"CustomFieldType_Text"},{"title":"Auto
+    Continue","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'

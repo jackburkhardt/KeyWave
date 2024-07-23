@@ -50,7 +50,7 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             string outcome = string.Empty;
             
-            if (split.Length == 0) outcome = direction == "out" ? "unstay" : "stay";
+            if (split.Length <= 1) outcome = direction == "out" ? "unstay" : "stay";
             
             if (split.Length > 1)
             {

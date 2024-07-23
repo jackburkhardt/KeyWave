@@ -125,6 +125,12 @@ namespace Project.Runtime.Scripts.Utility
             return isResponseChild;
         }
 
+        public static bool IsLastNode(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
+        {
+            database ??= DialogueManager.MasterDatabase;
+            return dialogueEntry.outgoingLinks.Count == 0;
+        }
+
         public static Actor? GetActor(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
         {
             database ??= DialogueManager.MasterDatabase;

@@ -158,7 +158,7 @@ namespace Project.Runtime.Scripts.Audio
         #region Channel Management
         
         private const float maxVolume = 0;
-        private const float minVolume = -80;
+        private const float minVolume = -20;
         
         
         public void SetChannelVolume(string channelName, float volume)

@@ -55,16 +55,17 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnConversationEnd()
         {
-            DialogueManager.PlaySequence("SetContinueMode(false); SetActionPanel(true)@Message(Typed); SetMenuPanelTrigger(1, false)@Message(Typed)");
+            DialogueManager.PlaySequence(
+                "SetContinueMode(false); SetActionPanel(true)@Message(Typed); SetMenuPanelTrigger(1, false)@Message(Typed);");
         }
 
         public void OnSequenceStart()
         {
             var sequence = DialogueUtility.CurrentDialogueEntry.Sequence;
             var entry = DialogueUtility.CurrentDialogueEntry;
-            var overrideAutoContinue = Field.FieldExists(entry.fields, "Override Auto Continue") && Field.LookupBool(entry.fields, "Override Auto Continue");
+            var autoContinue = Field.FieldExists(entry.fields, "Auto Continue") && Field.LookupBool(entry.fields, "Auto Continue");
 
-            if (entry.IsEmpty() || entry.id == 0 && !entry.isGroup || sequence != string.Empty && !sequence.Contains("Continue") && !overrideAutoContinue)
+            if (entry.IsEmpty() || entry.id == 0 && !entry.isGroup || sequence != string.Empty && !sequence.Contains("Continue") && autoContinue && !entry.IsLastNode())
             {
                 DialogueManager.PlaySequence("Continue()");
             }
