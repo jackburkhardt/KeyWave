@@ -13,15 +13,15 @@ namespace Project.Runtime.Scripts.StateMachineBehaviour
                 animator.SetBool("Active", true);
             }
         
-            if (stateInfo.IsName("Focus"))
-            {
-                WatchHandCursor.Unfreeze();
-            }
-        
-            if (stateInfo.IsName("Unfocus"))
-            {
-                WatchHandCursor.Freeze();
-            }
+            // if (stateInfo.IsName("Focus"))
+            // {
+            //     WatchHandCursor.Unfreeze();
+            // }
+            //
+            // if (stateInfo.IsName("Unfocus"))
+            // {
+            //     WatchHandCursor.Freeze();
+            // }
         
             if (stateInfo.IsName("Hide"))
             {

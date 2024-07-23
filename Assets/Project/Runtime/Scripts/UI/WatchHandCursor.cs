@@ -5,24 +5,11 @@ namespace Project.Runtime.Scripts.UI
     public class WatchHandCursor : MonoBehaviour
     {
         private static bool isFrozen = false;
-        private static bool globalFreeze = false;
 
         [SerializeField] private float minimumDistance = 750;
         public bool isMouseOver = false;
         public bool stickToWatchTicks = false;
-        public static bool Frozen => isFrozen && globalFreeze || globalFreeze;
-
-
-        public void OnDialogueSystemPause()
-        {
-            //   if (!Animator!.GetBool("Active")) return;
-          //  GlobalFreeze();
-        }
-
-        public void OnDialogueSystemUnpause()
-        { //
-          //GlobalUnfreeze();
-        }
+        public static bool Frozen => isFrozen;
 
         
         public float AngleCenteredSouth => transform.rotation.eulerAngles.z - 270;
@@ -30,7 +17,6 @@ namespace Project.Runtime.Scripts.UI
         // Update is called once per frame
         void Update()
         {
-            if (globalFreeze) return;
             if (isFrozen) return;
             // rotate self to point at the mouse cursor
         
@@ -64,29 +50,16 @@ namespace Project.Runtime.Scripts.UI
                 var maxAngle = (minAngle + 6);
                 angle = Mathf.RoundToInt((angle - minAngle < maxAngle - angle) ? minAngle : maxAngle);
             }
-        
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, (angle))), Time.deltaTime * 20);
-        
-       
-       
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(new Vector3(0, 0, (angle))),
+                Time.deltaTime * 20);
+
         }
 
         public void OnEnable()
         {
             Unfreeze();
         }
-
-        public void GlobalFreeze()
-        {
-            globalFreeze = true;
-        }
-
-        public void GlobalUnfreeze()
-        {
-            Debug.Log("Global Unfreeze");
-            globalFreeze = false;
-        }
-
 
         public static void Freeze()
         {

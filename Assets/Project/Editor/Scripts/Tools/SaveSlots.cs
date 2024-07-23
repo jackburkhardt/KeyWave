@@ -3,8 +3,11 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
+using PixelCrushers;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using SaveSystem = PixelCrushers.SaveSystem;
 
 namespace Project.Editor.Scripts.Tools
@@ -16,19 +19,19 @@ namespace Project.Editor.Scripts.Tools
         private static string[] _slotNames;
         private Vector2 _scrollPos;
         
-        // [MenuItem("Save System/Load")]
-        // private static void ShowLoadWindow()
-        // {
-        //     _isLoading = true;
-        //     ShowWindow();
-        // }
-        //
-        // [MenuItem("Save System/Save")]
-        // private static void ShowSaveWindow()
-        // {
-        //     _isLoading = false;
-        //     ShowWindow();
-        // }
+        [MenuItem("Save System/Load")]
+        private static void ShowLoadWindow()
+        {
+            _isLoading = true;
+            ShowWindow();
+        }
+        
+        [MenuItem("Save System/Save")]
+        private static void ShowSaveWindow()
+        {
+            _isLoading = false;
+            ShowWindow();
+        }
 
         private static void ShowWindow()
         {
@@ -38,6 +41,7 @@ namespace Project.Editor.Scripts.Tools
                 {
                     var text = File.ReadAllText($"{Application.dataPath}/DebugSaves/slot_names.json");
                     _slotNames = JsonConvert.DeserializeObject<string[]>(text);
+                    if (_slotNames == null) throw new Exception();
                 }
                 catch
                 {
@@ -65,15 +69,37 @@ namespace Project.Editor.Scripts.Tools
                 {
                     if (_isLoading)
                     {
-                        SaveSystem.LoadFromSlot(i);
+                        if (!Application.isPlaying)
+                        {
+                            EditorSceneManager.OpenScene("Assets/Scenes/Base.unity");
+                            EditorApplication.isPlaying = true;
+                        }
+                        else
+                        {
+                            for (int j = 0; j < SceneManager.sceneCount; j++)
+                            {
+                                string sceneName = SceneManager.GetSceneAt(j).name;
+                                if (sceneName is not ("DontDestroyOnLoad" or "Base"))
+                                {
+                                    SceneManager.UnloadSceneAsync(sceneName);
+                                }
+                            }
+                        }
+
+                        var saveText = File.ReadAllText($"{Application.dataPath}/DebugSaves/slot_{i}.json");
+                        var saveData = JsonConvert.DeserializeObject<SavedGameData>(saveText);
+                        SaveSystem.LoadGame(saveData);
+                        
                     }
                     else
                     {
-                        SaveSystem.SaveToSlot(i);
+                        var saveData = SaveSystem.RecordSavedGameData();
+                        var saveText = JsonConvert.SerializeObject(saveData);
+                        File.WriteAllText($"{Application.dataPath}/DebugSaves/slot_{i}.json", saveText);
                     }
                 }
                 
-                bool saveExists = SaveSystem.HasSavedGameInSlot(i);
+                bool saveExists = File.Exists($"{Application.dataPath}/DebugSaves/slot_{i}.json");
                 GUILayout.Toggle(saveExists, "Has data?");
                 
                 _slotNames[i] = GUILayout.TextField(_slotNames[i]);

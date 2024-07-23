@@ -118,7 +118,7 @@ namespace Project.Runtime.Scripts.UI
         {
            // Animator!.SetBool("Focus", true);
             base.Focus();
-            mousePointerHand.GlobalUnfreeze();
+            WatchHandCursor.Unfreeze();
         }
         
         protected override void ShowResponsesNow(Subtitle subtitle, Response[] responses, Transform target)
@@ -153,7 +153,7 @@ namespace Project.Runtime.Scripts.UI
         {
             //Animator!.SetBool("Focus", false);
             base.Unfocus();
-            mousePointerHand.GlobalFreeze();
+            WatchHandCursor.Freeze();
         }
 
         public void OnDialogueSystemPause()

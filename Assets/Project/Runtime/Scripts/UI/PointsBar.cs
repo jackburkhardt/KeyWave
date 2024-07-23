@@ -67,6 +67,10 @@ namespace Project.Runtime.Scripts.UI
 
         public void ApplySaveData()
         {
+            foreach (var barUnit in PointsBarUnits)
+            {
+                Destroy(barUnit.gameObject);
+            }
             for (var i = 0; i < Points.WellnessScore; i++)
             {
                 AddOrExpandUnit(Points.Color(Points.Type.Wellness));

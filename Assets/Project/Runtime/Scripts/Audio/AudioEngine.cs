@@ -133,11 +133,11 @@ namespace Project.Runtime.Scripts.Audio
 
         private IEnumerator WaitForClipEnd(string clipAddress, AudioSource source)
         {
-            while (!Mathf.Approximately(source.time, source.clip.length))
+            while (source && !Mathf.Approximately(source.time, source.clip.length))
             {
                 yield return null;
             }
-            StopClip(clipAddress);
+            if (source) StopClip(clipAddress);
         }
         
         private IEnumerator PlayClipRepeat(string clipAddress, AudioSource source, int repeats)
@@ -186,14 +186,15 @@ namespace Project.Runtime.Scripts.Audio
         
         public void StopAllAudioOnChannel(string channelName)
         {
+            List<string> keysToRemove = new();
             foreach (var entry in _activeAudio)
             {
                 if (entry.Value.outputAudioMixerGroup.name == channelName)
                 {
-                    StopClip(entry.Key);
+                    keysToRemove.Add(entry.Key);
                 }
             }
-            
+            keysToRemove.ForEach(StopClip);
         }
         
         public void PauseAllAudioOnChannel(string channelName)

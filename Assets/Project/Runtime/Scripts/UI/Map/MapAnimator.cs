@@ -49,7 +49,8 @@ namespace Project.Runtime.Scripts.UI.Map
             {
                 TutorialPanel.Play("SleepTutorial");
             }
-            watchCursor.GlobalUnfreeze();
+
+            WatchHandCursor.Unfreeze();
         }
 
   
@@ -158,7 +159,7 @@ namespace Project.Runtime.Scripts.UI.Map
             {
                 button.GetComponent<Button>().interactable = button.location.unlocked;
             }
-            watchCursor.GlobalUnfreeze();
+            WatchHandCursor.Unfreeze();
         }
 
         public void ZoomInOnCoordinates(Vector2 coordinates)
