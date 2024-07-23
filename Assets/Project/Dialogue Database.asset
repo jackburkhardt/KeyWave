@@ -4565,7 +4565,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Description
@@ -16890,8 +16890,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1011.9031
-        y: 78.55554
+        x: 1012.8679
+        y: 54.234344
         width: 160
         height: 30
     - id: 32
@@ -16976,8 +16976,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 780.9077
-        y: 248.48404
+        x: 790.7698
+        y: 227.93802
         width: 160
         height: 30
     - id: 35
@@ -17009,7 +17009,7 @@ MonoBehaviour:
       - title: Sequence
         value: 'Continue()@3;
 
-          Audio(music/intro, Music)@1;'
+          PlayClip(music/intro)@1;'
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -17053,8 +17053,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 870.47876
-        y: 178.45987
+        x: 812.7854
+        y: 143.3541
         width: 160
         height: 30
     - id: 36
@@ -17128,8 +17128,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 531.4538
-        y: 256.28125
+        x: 482.55768
+        y: 269.20786
         width: 160
         height: 30
     - id: 37
@@ -17279,8 +17279,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 525.8198
-        y: 314.30823
+        x: 476.9237
+        y: 327.23483
         width: 160
         height: 30
     - id: 39
@@ -17431,8 +17431,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 526.51715
-        y: 374.5045
+        x: 477.62103
+        y: 387.4311
         width: 160
         height: 30
     - id: 50
@@ -17514,8 +17514,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 777.4926
-        y: 480.30096
+        x: 471.1891
+        y: 501.6579
         width: 160
         height: 30
     - id: 51
@@ -17589,8 +17589,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 344.10922
-        y: 616.0484
+        x: 341.2991
+        y: 617.17255
         width: 160
         height: 30
     - id: 52
@@ -17664,8 +17664,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 671.1879
-        y: 618.36774
+        x: 610.4893
+        y: 609.37537
         width: 160
         height: 30
     - id: 53
@@ -17740,8 +17740,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 675.7993
-        y: 684.46893
+        x: 608.9184
+        y: 688.40314
         width: 160
         height: 30
     - id: 54
@@ -17816,8 +17816,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 341.7847
-        y: 694.73
+        x: 342.3467
+        y: 681.24146
         width: 160
         height: 30
     - id: 55
@@ -17892,8 +17892,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 470.30396
-        y: 784.18933
+        x: 475.39178
+        y: 773.1657
         width: 160
         height: 30
     - id: 56
@@ -17971,8 +17971,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 465.22192
-        y: 841.67444
+        x: 470.30975
+        y: 838.2826
         width: 160
         height: 30
     - id: 57
@@ -18002,7 +18002,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: HidePanel(2); Continue();
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -18063,8 +18063,8 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 462.64752
-        y: 962.11
+        x: 467.73523
+        y: 967.1979
         width: 160
         height: 30
     - id: 58
@@ -18094,7 +18094,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: Timeline(play, IntroEnd); SetContinueMode(false)
+        value: 'Timeline(play, IntroEnd); '
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -18121,6 +18121,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Override Auto Continue
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
       conversationID: 28
       isRoot: 0
       isGroup: 0
@@ -18142,8 +18146,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 466.39087
-        y: 904.4084
+        x: 468.22272
+        y: 897.2103
         width: 160
         height: 30
     - id: 59
@@ -18196,6 +18200,10 @@ MonoBehaviour:
         value: ???
         type: 0
         typeString: CustomFieldType_Text
+      - title: Override Auto Continue
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
       conversationID: 28
       isRoot: 0
       isGroup: 0
@@ -18217,8 +18225,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 467.54315
-        y: 1028.5597
+        x: 465.27094
+        y: 1031.1038
         width: 160
         height: 30
     - id: 60
@@ -18370,8 +18378,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 469.78937
-        y: 1106.5311
+        x: 467.34863
+        y: 1096.6599
         width: 160
         height: 30
     - id: 62
@@ -18446,8 +18454,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 463.24854
-        y: 1196.6816
+        x: 464.47137
+        y: 1162.4207
         width: 160
         height: 30
     - id: 63
@@ -18538,13 +18546,13 @@ MonoBehaviour:
             m_CallState: 2
       canvasRect:
         serializedVersion: 2
-        x: 1175.8318
-        y: 200.75697
+        x: 1176.5105
+        y: 146.1708
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 675.8348, y: 74.58167}
-    canvasZoom: 0.883425
+    canvasScrollPosition: {x: 286.80518, y: 592.3424}
+    canvasZoom: 1.3634245
   - id: 31
     fields:
     - title: Title
@@ -80272,4 +80280,5 @@ MonoBehaviour:
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Timespan","value":"-1:seconds","type":11,"typeString":"CustomFieldType_TimespanType"},{"title":"Points","value":"Business:0","type":10,"typeString":"CustomFieldType_PointsType"},{"title":"Time
     Estimate","value":"0,0","type":8,"typeString":"CustomFieldType_NodeType"},{"title":"Show
     If Invalid","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Invalid
-    Text","value":"???","type":0,"typeString":"CustomFieldType_Text"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'
+    Text","value":"???","type":0,"typeString":"CustomFieldType_Text"},{"title":"Override
+    Auto Continue","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'

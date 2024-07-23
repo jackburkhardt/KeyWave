@@ -60,14 +60,19 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnSequenceStart()
         {
-            
+            var sequence = DialogueUtility.CurrentDialogueEntry.Sequence;
+            var entry = DialogueUtility.CurrentDialogueEntry;
+            var overrideAutoContinue = Field.FieldExists(entry.fields, "Override Auto Continue") && Field.LookupBool(entry.fields, "Override Auto Continue");
 
-            if (DialogueUtility.CurrentDialogueEntry.IsEmpty() || DialogueUtility.CurrentDialogueEntry.id == 0 && !DialogueUtility.CurrentDialogueEntry.isGroup)
+            if (entry.IsEmpty() || entry.id == 0 && !entry.isGroup || sequence != string.Empty && !sequence.Contains("Continue") && !overrideAutoContinue)
             {
                 DialogueManager.PlaySequence("Continue()");
-         
             }
-        
+
+            if (sequence != string.Empty && !sequence.Contains("SetContinueMode"))
+            {
+                DialogueManager.PlaySequence("SetContinueMode(false)");
+            }
         
             var currentEntry = DialogueUtility.CurrentDialogueEntry;
             if (currentEntry.outgoingLinks.Count != 1) return;
