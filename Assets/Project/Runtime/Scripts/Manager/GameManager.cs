@@ -277,12 +277,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             //last_convo = gameState.current_conversation_title;
             DialogueManager.StopConversation();
-            DialogueManager.instance.PlaySequence(
-                "SetDialoguePanel(false);" +
-                "SetMenuPanelTrigger(1, false);" +
-                "ChannelFade(Music, out, 2);" +
-                "PlayClip(music/intro)@2;"
-                );
+            
             App.App.Instance.LoadScene("Map");
         }
 
