@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,11 @@ namespace Project.Runtime.Scripts.UI
             _rectTransform = GetComponent<RectTransform>();
             _tmpText = GetComponentInChildren<TMP_Text>();
             _verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
+        }
+
+        private void OnEnable()
+        {
+            previousText = string.Empty;
         }
 
         // Update is called once per frame

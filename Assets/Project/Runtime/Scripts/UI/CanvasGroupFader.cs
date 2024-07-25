@@ -60,6 +60,7 @@ namespace Project.Runtime.Scripts.UI
         private IEnumerator FadeIn(CanvasGroup canvasGroup, float duration, float alpha)
         {
             _canvasGroup.gameObject.SetActive(true);
+            _canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 0;
             while (canvasGroup.alpha < alpha)
             {
@@ -78,6 +79,7 @@ namespace Project.Runtime.Scripts.UI
                 yield return null;
             }
             _canvasGroup.gameObject.SetActive(false);
+            _canvasGroup.blocksRaycasts = false;
             OnFadedOut.Invoke();
             //gameObject.SetActive(false);
         }

@@ -219,7 +219,7 @@ namespace Project.Runtime.Scripts.Manager
             var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
             if (Field.FieldExists(conversation.fields, "Base") &&
                 !DialogueLua.GetConversationField(conversation.id, "Base").asBool) return;
-            instance.mainCanvas.BroadcastMessage("SetTrigger", "Show");
+            instance.mainCanvas.BroadcastMessage("SetTrigger", "Show", SendMessageOptions.DontRequireReceiver);
         }
         
         public static void OnConversationEnd()
