@@ -104,7 +104,11 @@ namespace Project.Runtime.Scripts.Manager
 
         public static int CurrentVisualizedTimeRaw = ClockUI.CurrentVisualizedTimeRaw;
 
-        public static int CurrentTimeRaw => GameManager.gameState.Clock;
+        public static int CurrentTimeRaw
+        {
+            get { return GameManager.gameState.Clock; }
+            set { GameManager.gameState.Clock = value; }
+        }
 
         public static float DayProgress {
             get

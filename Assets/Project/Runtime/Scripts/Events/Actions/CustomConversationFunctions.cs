@@ -74,6 +74,8 @@ namespace Project.Runtime.Scripts.Events.Actions
             {
                 DialogueManager.PlaySequence("SetContinueMode(false)");
             }
+            
+            /*
         
             var currentEntry = DialogueUtility.CurrentDialogueEntry;
             if (currentEntry.outgoingLinks.Count != 1) return;
@@ -83,6 +85,8 @@ namespace Project.Runtime.Scripts.Events.Actions
             {
                 DialogueManager.PlaySequence("Continue()@Message(Typed)");
             }
+            
+            */
         }
 
 

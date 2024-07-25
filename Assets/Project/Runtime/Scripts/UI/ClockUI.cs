@@ -46,7 +46,7 @@ namespace Project.Runtime.Scripts.UI
             return time.Replace(":", " ");
         }
 
-        private List<string> _hoursRecorded;
+        private List<string> _hoursRecorded = new();
 
         IEnumerator UpdateVisualizedTime(int newTime)
         {
@@ -61,6 +61,7 @@ namespace Project.Runtime.Scripts.UI
                 if (CurrentVisualizedTime.EndsWith("00") && CurrentVisualizedTime != startTime && !_hoursRecorded.Contains(CurrentVisualizedTime))
                 {
                     _hoursRecorded.Add(CurrentVisualizedTime);
+                    Debug.Log("Hour changed to " + CurrentVisualizedTime);
                     OnHourChanged?.Invoke();
                     
                 }

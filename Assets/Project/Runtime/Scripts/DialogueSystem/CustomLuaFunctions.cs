@@ -1,5 +1,6 @@
 using System;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
@@ -59,7 +60,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(LocationETA), this, SymbolExtensions.GetMethodInfo(() => LocationETA(string.Empty)));
             Lua.RegisterFunction(nameof(LocationDistanceInMinutes), this, SymbolExtensions.GetMethodInfo(() => LocationDistanceInMinutes(string.Empty)));
             Lua.RegisterFunction(nameof(SetExclusiveQuestEntryState), this , SymbolExtensions.GetMethodInfo(() => SetExclusiveQuestEntryState(string.Empty, 0, string.Empty)));
-            
+            Lua.RegisterFunction(nameof(SkipTime), this, SymbolExtensions.GetMethodInfo(() => SkipTime(0)));
         }
 
         private void DeregisterLuaFunctions()
@@ -90,6 +91,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(LocationETA));
             Lua.UnregisterFunction(nameof(LocationDistanceInMinutes));
             Lua.UnregisterFunction(nameof(SetExclusiveQuestEntryState));
+            Lua.UnregisterFunction(nameof(SkipTime));
         }
 
 
@@ -109,6 +111,11 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public string LocationIDToName(Single locationID)
         {
             return DialogueManager.DatabaseManager.masterDatabase.GetLocation((int)locationID).Name;
+        }
+
+        public void SkipTime(double seconds)
+        {
+            GameEvent.OnWait((int)seconds);
         }
 
         public string EmailState(string itemName)
