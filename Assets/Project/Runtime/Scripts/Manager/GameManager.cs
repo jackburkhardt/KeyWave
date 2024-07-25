@@ -169,7 +169,7 @@ namespace Project.Runtime.Scripts.Manager
             var conversation = database.GetConversation(conversationName);
             var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
             var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
-            DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
+           // DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
             DialogueManager.conversationController.GotoState(state);
         }
 
@@ -188,7 +188,7 @@ namespace Project.Runtime.Scripts.Manager
             var conversation = database.GetConversation(conversationName);
             var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
             var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
-            DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
+           // DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
             DialogueManager.conversationController.GotoState(state);
         }
 
@@ -207,7 +207,7 @@ namespace Project.Runtime.Scripts.Manager
             var conversation = database.GetConversation(conversationName);
             var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
             
-            DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
+            //DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
             
             var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
             DialogueManager.conversationController.GotoState(state);

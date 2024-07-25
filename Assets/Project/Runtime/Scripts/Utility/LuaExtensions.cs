@@ -213,7 +213,12 @@ namespace Project.Runtime.Scripts.Utility
         public static bool EvaluateConditions(this DialogueEntry dialogueEntry)
         {
             return Lua.IsTrue(dialogueEntry.conditionsString);
+            
+            
         }
+        
+        
+       
         
     }
     

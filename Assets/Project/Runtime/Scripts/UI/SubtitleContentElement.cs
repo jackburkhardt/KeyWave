@@ -11,7 +11,7 @@ using TextMeshProTypewriterEffect = PixelCrushers.DialogueSystem.Wrappers.TextMe
 
 namespace Project.Runtime.Scripts.UI
 {
-    public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         public Image portrait;
         [SerializeField] private SubtitleManager subtitleManager;
@@ -66,7 +66,7 @@ namespace Project.Runtime.Scripts.UI
         {
             if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
             _alpha = canvasGroup.alpha;
-            canvasGroup.alpha = 1;
+            LeanTween.alphaCanvas(canvasGroup, 1, 0.25f);
         
             //DialogueManager.Pause();
         
@@ -77,18 +77,24 @@ namespace Project.Runtime.Scripts.UI
         public void OnPointerExit(PointerEventData eventData)
         {
             if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
-            canvasGroup.alpha = _alpha;
+            LeanTween.alphaCanvas(canvasGroup, _alpha, 0.25f);
 
             var isPointerOnAnySubtitle = false;
         
             //  DialogueManager.Unpause();
         
             //  subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Unpause();
-
-
-
-
         }
+        
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if ((typewriterEffect != null) && typewriterEffect.isPlaying)
+            {
+                typewriterEffect.Stop();
+            }
+        }
+        
+        
 
         public void Clear()
         {
@@ -170,5 +176,7 @@ namespace Project.Runtime.Scripts.UI
                 _rectTransform.sizeDelta = new Vector2(_defaultWidth, _defaultHeight);
             }
         }
+
+        
     }
 }

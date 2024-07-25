@@ -10,6 +10,8 @@ public class StandardDialogueUIShowInvalidResponses : StandardDialogueUI
 
     public string showInvalidFieldName = "Show Invalid";
 
+    public bool showInvalidByDefault;
+
     public override void Start()
     {
         PersistentDataManager.includeSimStatus = includeSimStatusInSavedGames;
@@ -24,7 +26,7 @@ public class StandardDialogueUIShowInvalidResponses : StandardDialogueUI
 
     private Response[] CheckInvalidResponses(Response[] responses)
     {
-        if (!HasAnyInvalid(responses)) return responses; // If no invalid responses, we can skip the special code.
+        if (!HasAnyInvalid(responses)) return responses;
         var list = new List<Response>();
         for (int i = 0; i < responses.Length; i++)
         {
@@ -41,11 +43,26 @@ public class StandardDialogueUIShowInvalidResponses : StandardDialogueUI
 
     private bool HasAnyInvalid(Response[] responses)
     {
-        if (responses == null) return false;
+       // Debug.Log("Checking for invalid responses");
+        if (responses == null)
+        {
+          //  Debug.Log("No responses");
+            return false;
+        }
         for (int i = 0; i < responses.Length; i++)
         {
-            if (!responses[i].enabled) return true;
+        //    Debug.Log("Checking response: " + responses[i].formattedText.text);
+         //   Debug.Log("Response condition: " + responses[i].destinationEntry.conditionsString);
+            if (!responses[i].enabled)
+            {
+            //    Debug.Log("Found invalid response: " + responses[i].formattedText.text);
+                return true;
+            }
         }
+        
+        
+//        Debug.Log("No invalid responses");
+      //  Debug.Log(DialogueManager.displaySettings.inputSettings.includeInvalidEntries);
         return false;
     }
 
@@ -56,7 +73,15 @@ public class StandardDialogueUIShowInvalidResponses : StandardDialogueUI
         if (luaResult.Equals(Lua.noResult) || luaResult.asString == "nil")
         {
             // If not, return the design-time Show Invalid field value from the database:
-            return Field.LookupBool(response.destinationEntry.fields, showInvalidFieldName);
+            if (Field.FieldExists(response.destinationEntry.fields, showInvalidFieldName))
+            {
+                return Field.LookupBool(response.destinationEntry.fields, showInvalidFieldName);
+            }
+            else
+            {
+                // Not sure how to get this
+               return showInvalidByDefault;
+            }
         }
         else
         {

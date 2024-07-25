@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Utility;
@@ -27,27 +28,34 @@ public class ActionPanel : MonoBehaviour
     // Start is called before the first frame update
     public void OnConversationLine(Subtitle subtitle)
     {
-        Debug.Log("OnConversationLine");
         var conversation = subtitle.dialogueEntry.GetConversation().Title;
-        if (conversation.Contains("Map") || conversation.EndsWith("Base")) 
+        if (conversation.Contains("Map") || conversation.EndsWith("Action/Base") || conversation.EndsWith("Talk/Base")) 
         {
-            Debug.Log(conversation + " contains Map, Action or Talk");
-            if (isActionPanelActive) return;
+           if (isActionPanelActive) return;
             ShowPanel();
         }
         else
         {
-            Debug.Log(conversation + " does not contain Map, Action or Talk");
             if (!isActionPanelActive) return;
             HidePanel();
         }
+        
+        if (Field.FieldExists(subtitle.dialogueEntry.fields, "Track") && Field.LookupBool(subtitle.dialogueEntry.fields, "Track").Equals(true))
+        {
+       //     if (subtitle.dialogueEntry.)
+        }
+    }
+    
+    public void OnQuestStateChange(string questTitle, QuestState questState)
+    {
+       
     }
 
     public void ShowPanel()
     {
 
         isActionPanelActive = true;
-        //SendMessage("SetTrigger", "Show", SendMessageOptions.DontRequireReceiver);
+       
         GetComponent<Animator>().SetTrigger("Show");
     }
 

@@ -36,6 +36,7 @@ namespace Project.Runtime.Scripts.UI
 
         protected virtual void OnContentChanged()
         {
+           
             var responseButtons = GetComponentsInChildren<CustomUIResponseButton>();
             foreach (var button in responseButtons)
             {
