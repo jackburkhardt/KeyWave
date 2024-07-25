@@ -35,23 +35,21 @@ namespace Project.Editor.Scripts.Tools
 
         private static void ShowWindow()
         {
-            if (_slotNames == null)
+            try
             {
-                try
+                var text = File.ReadAllText($"{Application.dataPath}/DebugSaves/slot_names.json");
+                _slotNames = JsonConvert.DeserializeObject<string[]>(text);
+                if (_slotNames == null) throw new Exception();
+            }
+            catch
+            {
+                _slotNames = new string[NUM_SLOTS];
+                for (int i = 0; i < NUM_SLOTS; i++)
                 {
-                    var text = File.ReadAllText($"{Application.dataPath}/DebugSaves/slot_names.json");
-                    _slotNames = JsonConvert.DeserializeObject<string[]>(text);
-                    if (_slotNames == null) throw new Exception();
-                }
-                catch
-                {
-                    _slotNames = new string[NUM_SLOTS];
-                    for (int i = 0; i < NUM_SLOTS; i++)
-                    {
-                        _slotNames[i] = "";
-                    }
+                    _slotNames[i] = "";
                 }
             }
+        
             var window = GetWindow<SaveSlots>();
             window.titleContent = new GUIContent((_isLoading ? "[LOAD]" : "[SAVE]") + " Select Slot");
             window.Show();

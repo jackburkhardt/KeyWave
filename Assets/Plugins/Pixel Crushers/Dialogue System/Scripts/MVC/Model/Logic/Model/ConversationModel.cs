@@ -430,8 +430,6 @@ namespace PixelCrushers.DialogueSystem
                             ((isDialogueEntryValid == null) || isDialogueEntryValid(destinationEntry));
                         if (isValid || (m_includeInvalidEntries && (characterType == CharacterType.PC)))
                         {
-                            
-                            Debug.Log(m_includeInvalidEntries);
 
                             // Condition is true (or blank), so add this link:
                             if (destinationEntry.isGroup)

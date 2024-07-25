@@ -1,6 +1,7 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Project.Editor.Scripts
 {
@@ -11,17 +12,27 @@ namespace Project.Editor.Scripts
             EditorApplication.playModeStateChanged += LoadDefaultScene;
         }
 
-        static void LoadDefaultScene(PlayModeStateChange state){
-            if (state == PlayModeStateChange.ExitingEditMode) {
-                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo ();
-            }
-
-            if (state == PlayModeStateChange.EnteredPlayMode) {
-           
-              
-                EditorSceneManager.LoadScene (0);
+        static void LoadDefaultScene(PlayModeStateChange state)
+        {
+            switch (state)
+            {
+                case PlayModeStateChange.ExitingEditMode:
+                    var lastScene = EditorSceneManager.GetActiveScene().path;
+                    PlayerPrefs.SetString("editor_lastScene", lastScene);
+                    EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
+                    EditorSceneManager.OpenScene("Assets/Scenes/Menus/StartMenu.unity");
+                    break;
+                case PlayModeStateChange.EnteredEditMode:
+                {
+                    if (PlayerPrefs.HasKey("editor_lastScene"))
+                    {
+                        var path = PlayerPrefs.GetString("editor_lastScene");
+                        EditorSceneManager.OpenScene(path);
+                    }
+                    break;
+                }
             }
         }
+        
     }
 }
-#endif

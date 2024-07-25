@@ -187,7 +187,7 @@ namespace Project.Runtime.Scripts.UI
             _firstFocus = false;
            
           
-            WatchHandCursor.Unfreeze();
+            //WatchHandCursor.Unfreeze();
        
             Animator!.SetBool("Frozen", false);
             
