@@ -45,11 +45,6 @@ public class ActionPanel : MonoBehaviour
        //     if (subtitle.dialogueEntry.)
         }
     }
-    
-    public void OnQuestStateChange(string questTitle, QuestState questState)
-    {
-       
-    }
 
     public void ShowPanel()
     {

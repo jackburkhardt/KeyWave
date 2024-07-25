@@ -47,6 +47,7 @@ public class QuestAlert : MonoBehaviour
     public void OnShow()
     {
         OnShowEvent?.Invoke();
+       // DialogueManager.instance.PlaySequence("SetContinueMode(false)");
     }
     
     public void OnHide()

@@ -113,6 +113,7 @@ namespace Project.Runtime.Scripts.UI
         private IEnumerator SetButtonColor()
         {
             yield return new WaitForEndOfFrame();
+            Refresh();
             ButtonColor = BaseColor;
         }
 
@@ -126,6 +127,8 @@ namespace Project.Runtime.Scripts.UI
             {
                 if (customUIResponseButton != this && customUIResponseButton != MenuPanelContainer.buttonTemplate) customUIResponseButton.label.color = Color.clear;
             }
+            
+            
         }
 
         public void OnContentChanged()
