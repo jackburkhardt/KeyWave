@@ -53,6 +53,12 @@ namespace Project.Runtime.Scripts.UI
             }
         }
 
+        private void ResetColors()
+        {
+            var defaultColors = CircularPanelContainer.buttonTemplate.button.colors;
+            UnityButton.colors = defaultColors;
+        }
+
         private Color _defaultLabelColor;
 
         private Item? AssociatedQuest => DialogueManager.Instance.masterDatabase.items.Find(item => item.Name == response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title);
@@ -106,6 +112,7 @@ namespace Project.Runtime.Scripts.UI
         protected override void OnEnable()
         {
             base.OnEnable();
+            ResetColors();
             Refresh();
             StartCoroutine(SetButtonColor());
         }
