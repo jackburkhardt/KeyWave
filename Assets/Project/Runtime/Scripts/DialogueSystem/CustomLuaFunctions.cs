@@ -61,6 +61,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(LocationDistanceInMinutes), this, SymbolExtensions.GetMethodInfo(() => LocationDistanceInMinutes(string.Empty)));
             Lua.RegisterFunction(nameof(SetExclusiveQuestEntryState), this , SymbolExtensions.GetMethodInfo(() => SetExclusiveQuestEntryState(string.Empty, 0, string.Empty)));
             Lua.RegisterFunction(nameof(SkipTime), this, SymbolExtensions.GetMethodInfo(() => SkipTime(0)));
+            Lua.RegisterFunction(nameof(LikedThat), this, SymbolExtensions.GetMethodInfo(() => LikedThat(string.Empty, true)));
         }
 
         private void DeregisterLuaFunctions()
@@ -92,6 +93,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(LocationDistanceInMinutes));
             Lua.UnregisterFunction(nameof(SetExclusiveQuestEntryState));
             Lua.UnregisterFunction(nameof(SkipTime));
+            Lua.UnregisterFunction(nameof(LikedThat));
         }
 
 
@@ -313,6 +315,14 @@ namespace Project.Runtime.Scripts.DialogueSystem
                     QuestLog.SetQuestEntryState(questName, i, QuestState.Success);
                 }
             }
+        }
+        
+        public void LikedThat(string actorName, bool liked)
+        {
+            var offset = liked ? 0.25f : -0.25f;
+            var relationship = DialogueLua.GetActorField(actorName, "PlayerRelationship").asFloat;
+            var newRelationship = Mathf.Clamp(relationship + offset, -1f, 1f);
+            DialogueLua.SetActorField(actorName, "PlayerRelationship", relationship + offset);
         }
     }
 }

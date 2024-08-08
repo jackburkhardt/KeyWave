@@ -73,10 +73,11 @@ namespace PixelCrushers.DialogueSystem
         ///
         QuestState,
         
-        
         EmailState,
         
-        Color
+        Color,
+        
+        Relationship
     }
 
 }

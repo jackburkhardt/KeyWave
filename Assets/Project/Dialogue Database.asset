@@ -251,6 +251,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: PlayerRelationship
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
     portrait: {fileID: 2800000, guid: eed84d68d3db0bc4a84a29da5fdf01c4, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -407,6 +411,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: 
+      value: (None)
+      type: 15
+      typeString: CustomFieldType_Relationship
     portrait: {fileID: 2800000, guid: 6c49a2cf2b631c0419ae6b23619f259f, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -547,6 +555,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: ActorVariant
+      value: 5
+      type: 5
+      typeString: CustomFieldType_Actor
     portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -577,6 +589,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: ActorVariant
+      value: 12
+      type: 5
+      typeString: CustomFieldType_Actor
     portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -637,6 +653,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: ActorVariant
+      value: 11
+      type: 5
+      typeString: CustomFieldType_Actor
     portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -5258,8 +5278,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1001.11365
-        y: 256.81583
+        x: 996.95557
+        y: 297.35718
         width: 160
         height: 30
     - id: 43
@@ -5340,7 +5360,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 1004.6866
-        y: 342.34
+        y: 371.44666
         width: 160
         height: 30
     - id: 52
@@ -5661,8 +5681,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 749.30994, y: 249.32225}
-    canvasZoom: 0.9684797
+    canvasScrollPosition: {x: 747.57245, y: 248.26866}
+    canvasZoom: 0.96197915
   - id: 18
     fields:
     - title: Title
@@ -9605,7 +9625,7 @@ MonoBehaviour:
         destinationConversationID: 21
         destinationDialogueID: 84
         isConnector: 0
-        priority: 3
+        priority: 4
       conditionsString: 
       userScript: 
       onExecute:
@@ -11047,13 +11067,7 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 83
-        destinationConversationID: 21
-        destinationDialogueID: 85
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: BeforeTimeslot("09:00")  == true
       userScript: 
       onExecute:
@@ -11061,8 +11075,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1443.4729
-        y: 385.951
+        x: 1471.6694
+        y: 465.41324
         width: 160
         height: 30
     - id: 84
@@ -11122,13 +11136,7 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 21
-        originDialogueID: 84
-        destinationConversationID: 21
-        destinationDialogueID: 85
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: AfterTimeslot("20:00")  == true
       userScript: 
       onExecute:
@@ -11136,81 +11144,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1686.5681
-        y: 388.34494
-        width: 160
-        height: 30
-    - id: 85
-      fields:
-      - title: Title
-        value: Leave
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 7
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: -1
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: '[f]Leave.'
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Business:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Time Estimate
-        value: 0,0
-        type: 8
-        typeString: CustomFieldType_NodeType
-      - title: Show If Invalid
-        value: False
-        type: 2
-        typeString: CustomFieldType_Boolean
-      - title: Invalid Text
-        value: ???
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: EventGuid
-        value: a7fb853d-70a1-4721-bbeb-25276d495429
-        type: 0
-        typeString: CustomFieldType_Text
-      conversationID: 21
-      isRoot: 0
-      isGroup: 0
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks: []
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 1566.9144
-        y: 547.962
+        x: 1713.4825
+        y: 389.6266
         width: 160
         height: 30
     - id: 86
@@ -11875,8 +11810,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 1254.1306, y: 116.02475}
-    canvasZoom: 0.81124526
+    canvasScrollPosition: {x: 1197.9106, y: 106.91522}
+    canvasZoom: 0.780245
   - id: 22
     fields:
     - title: Title
@@ -16665,8 +16600,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 339.70203, y: 0}
-    canvasZoom: 0.6576834
+    canvasScrollPosition: {x: 333.56616, y: 0}
+    canvasZoom: 0.64318305
   - id: 31
     fields:
     - title: Title
