@@ -38,16 +38,19 @@ namespace PixelCrushers.DialogueSystem
 
         void Update()
         {
-            if (runtimeQuestLogWindow == null) return;
-            if (DialogueManager.IsDialogueSystemInputDisabled()) return;
+           
             if (InputDeviceManager.IsKeyDown(key) || (!string.IsNullOrEmpty(buttonName) && DialogueManager.getInputButtonDown(buttonName)))
             {
-                
-              // if (runtimeQuestLogWindow.isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
-              
-              if (isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
-              isOpen = !isOpen;
+              ToggleQuestLogWindow();
             }
+        }
+        
+        public void ToggleQuestLogWindow()
+        {
+            if (runtimeQuestLogWindow == null) return;
+            if (DialogueManager.IsDialogueSystemInputDisabled()) return;
+            if (isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
+            isOpen = !isOpen;
         }
 
     }

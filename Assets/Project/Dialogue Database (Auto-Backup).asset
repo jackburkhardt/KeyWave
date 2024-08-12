@@ -251,6 +251,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: PlayerRelationship
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
     portrait: {fileID: 2800000, guid: eed84d68d3db0bc4a84a29da5fdf01c4, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -407,6 +411,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: 
+      value: (None)
+      type: 15
+      typeString: CustomFieldType_Relationship
     portrait: {fileID: 2800000, guid: 6c49a2cf2b631c0419ae6b23619f259f, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -547,6 +555,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: ActorVariant
+      value: 5
+      type: 5
+      typeString: CustomFieldType_Actor
     portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -577,6 +589,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: ActorVariant
+      value: 12
+      type: 5
+      typeString: CustomFieldType_Actor
     portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -637,6 +653,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: ActorVariant
+      value: 11
+      type: 5
+      typeString: CustomFieldType_Actor
     portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -15012,7 +15032,7 @@ MonoBehaviour:
         destinationConversationID: 28
         destinationDialogueID: 63
         isConnector: 0
-        priority: 3
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -15020,8 +15040,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1061.5409
-        y: 24.28183
+        x: 1081.4187
+        y: 50.041046
         width: 160
         height: 30
     - id: 32
@@ -15180,15 +15200,15 @@ MonoBehaviour:
         destinationDialogueID: 32
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: Variable["debug.skip_intro"] == false
       userScript: Variable["saving_enabled"] = false
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 785.7463
-        y: 157.72908
+        x: 794.63776
+        y: 164.03557
         width: 160
         height: 30
     - id: 36
@@ -16575,13 +16595,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1071.5028
-        y: 533.0235
+        x: 1078.3661
+        y: 524.36005
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 339.70203, y: 0}
-    canvasZoom: 0.6576834
+    canvasScrollPosition: {x: 705.6271, y: 0}
+    canvasZoom: 1.4531823
   - id: 31
     fields:
     - title: Title

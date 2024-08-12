@@ -128,7 +128,7 @@ namespace PixelCrushers.DialogueSystem
                         m_emTagForOldResponses = displaySettings.inputSettings.emTagForOldResponses;
                         m_emTagForInvalidResponses = displaySettings.inputSettings.emTagForInvalidResponses;
                         m_includeInvalidEntries = displaySettings.inputSettings.includeInvalidEntries;
-                        Debug.Log("Conversation display settings found: m_includeInvalidEntries = " + m_includeInvalidEntries);
+                     //   Debug.Log("Conversation display settings found: m_includeInvalidEntries = " + m_includeInvalidEntries);
                     }
                 }
                 if (conversation.overrideSettings != null)
@@ -139,7 +139,7 @@ namespace PixelCrushers.DialogueSystem
                         m_emTagForOldResponses = conversation.overrideSettings.emTagForOldResponses;
                         m_emTagForInvalidResponses = conversation.overrideSettings.emTagForInvalidResponses;
                         m_includeInvalidEntries = conversation.overrideSettings.includeInvalidEntries;
-                        Debug.Log("Conversation override settings found: m_includeInvalidEntries = " + m_includeInvalidEntries);
+//                        Debug.Log("Conversation override settings found: m_includeInvalidEntries = " + m_includeInvalidEntries);
                     }
                 }
 
