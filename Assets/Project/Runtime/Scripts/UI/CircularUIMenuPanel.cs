@@ -35,6 +35,10 @@ namespace Project.Runtime.Scripts.UI
         private Color defaultOuterColor, defaultInnerColor;
 
         private bool _firstFocus = false;
+        
+        private bool _pointerInside = false;
+        
+        
         private Animator? Animator => GetComponent<Animator>();
         
        // protected void
@@ -204,6 +208,7 @@ namespace Project.Runtime.Scripts.UI
                 innerBackground.color = Color.Lerp(defaultInnerColor, new Color(color.r, color.g, color.b ,innerBackground.color.a), 0.4f);
             }
             
+            if (_pointerInside) Focus();
            
         }
         
@@ -225,11 +230,13 @@ namespace Project.Runtime.Scripts.UI
         public void OnPointerEnter(PointerEventData eventData)
         {
             Focus();
+            _pointerInside = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             Unfocus();
+            _pointerInside = false;
         }
     }
 }

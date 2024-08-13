@@ -36,6 +36,7 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private bool syncSpacingWithWatchSide = true;
         [SerializeField] private float _padding;
         [SerializeField] private bool _mouseEvents = true;
+        
 
         [ShowIf(nameof(_mouseEvents))]
         public UnityEvent onHover, onClick, onMouseExit;

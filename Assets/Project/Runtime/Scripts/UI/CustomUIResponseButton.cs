@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
@@ -24,6 +25,9 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
 
         [SerializeField] protected UITextField autonumberText;
+        
+        [SerializeField] private Image _popupBadge;
+       
         protected Button UnityButton => GetComponent<Button>();
         protected Vector2 Position => label.gameObject.transform.position;
 
@@ -65,8 +69,18 @@ namespace Project.Runtime.Scripts.UI
 
         public virtual void OnPointerExit(PointerEventData eventData)
         {
+            StartCoroutine(DelaydRefreshOnExit());
+        }
+
+        private IEnumerator DelaydRefreshOnExit()
+        {
+            yield return new WaitForEndOfFrame();
+            if (_hoveredButton != this)
+            {
+                Field.SetValue(response?.destinationEntry?.fields, "Show Badge", false);
+                if (_popupBadge != null && _popupBadge.gameObject.activeSelf) DialogueManager.instance.gameObject.BroadcastMessage("OnNewOptionSelected", response?.destinationEntry, SendMessageOptions.DontRequireReceiver);
+            }
             Refresh();
-        
         }
 
 
@@ -171,6 +185,16 @@ namespace Project.Runtime.Scripts.UI
             } 
         
             SetAutonumber();
+
+
+            if (Field.FieldExists(response?.destinationEntry?.fields, "Show Badge") && Field.LookupBool(response?.destinationEntry?.fields, "Show Badge"))
+            {
+                if (_popupBadge != null) _popupBadge.gameObject.SetActive(true);
+            }
+            else
+            {
+                if (_popupBadge != null) _popupBadge.gameObject.SetActive(false);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,12 +25,15 @@ namespace Project.Runtime.Scripts.UI
         private VerticalLayoutGroup _verticalLayoutGroup;
         private bool adjustedWidthOnLimit;
         private string previousText = string.Empty;
+        private string plainText = string.Empty;
 
         void Start()
         {
             _rectTransform = GetComponent<RectTransform>();
             _tmpText = GetComponentInChildren<TMP_Text>();
             _verticalLayoutGroup = GetComponent<VerticalLayoutGroup>();
+            plainText = Regex.Replace(_tmpText.text, "<.*?>", "");
+            
         }
 
         private void OnEnable()
@@ -54,14 +58,16 @@ namespace Project.Runtime.Scripts.UI
             textAngle += flipText ? 180 : 0;
             textAngle += expansion == Expansion.Horizontal ? 0 : 180;
             _tmpText.rectTransform.localEulerAngles = new Vector3(0, 0, textAngle);
+            
+            plainText = Regex.Replace(_tmpText.text, "<.*?>", "");
         
             if (_tmpText.text.Length == 0) return;
 
-            if (previousText != _tmpText.text)
+            if (previousText != plainText)
             {
                 _tmpText.textInfo.ClearLineInfo();
                 widthLimitReached = false;
-                previousText = _tmpText.text;
+                previousText = plainText;
                 _rectTransform.offsetMin = new Vector2(0, 0);
                 _rectTransform.offsetMax = -_rectTransform.offsetMin;
                 shrinkRate = 100f;
@@ -99,12 +105,12 @@ namespace Project.Runtime.Scripts.UI
         
             // get last non-whitespace character 
         
-            char lastCharacter = _tmpText.text[^1];
-            var characterCount = _tmpText.text.Length;
+            char lastCharacter = plainText[^1];
+            var characterCount = plainText.Length;
         
             while (char.IsWhiteSpace(lastCharacter))
             {
-                lastCharacter = _tmpText.text[characterCount - 1];
+                lastCharacter = plainText[characterCount - 1];
                 characterCount--;
 
                 if (characterCount == 0) break;
@@ -119,13 +125,13 @@ namespace Project.Runtime.Scripts.UI
             for (int i = 0; i < _tmpText.textInfo.lineInfo.Length; i++)
             {
                 _tmpText.textInfo.ClearLineInfo();
-                if (previousText != _tmpText.text) return;
+                if (previousText != plainText) return;
                 var lineInfo = _tmpText.textInfo.lineInfo[i]; 
                 if (lineInfo.lastVisibleCharacterIndex < indexOfLastVisibleCharInCurrentLine || widthLimitReached) continue;
             
                 //Debug.Log("last visible character in current line: index: " + lineInfo.lastVisibleCharacterIndex + ", character: " + _tmpText.text[lineInfo.lastVisibleCharacterIndex]);
             
-            
+                
             
                 if (lineInfo.lastVisibleCharacterIndex + 1 == characterCount )
                 {
@@ -135,14 +141,16 @@ namespace Project.Runtime.Scripts.UI
                         continue;
                     }
                 } 
-                if (lineInfo.lastVisibleCharacterIndex + 1 < characterCount) widthLimitReached = !char.IsWhiteSpace(_tmpText.text[lineInfo.lastVisibleCharacterIndex + 1]) && lineInfo.lastVisibleCharacterIndex + 1 < characterCount;
+                if (lineInfo.lastVisibleCharacterIndex + 1 < characterCount) widthLimitReached = !char.IsWhiteSpace(plainText[lineInfo.lastVisibleCharacterIndex + 1]) && lineInfo.lastVisibleCharacterIndex + 1 < characterCount;
                 //  if (widthLimitReached) Debug.Log("widthLimitReached = true at line 96: " + _tmpText.text[lineInfo.lastVisibleCharacterIndex + 1] + " != whitespace");
-                indexOfLastVisibleCharInCurrentLine = lineInfo.lastVisibleCharacterIndex >= _tmpText.text.Length ? indexOfLastVisibleCharInCurrentLine : lineInfo.lastVisibleCharacterIndex;
+                indexOfLastVisibleCharInCurrentLine = lineInfo.lastVisibleCharacterIndex >= plainText.Length ? indexOfLastVisibleCharInCurrentLine : lineInfo.lastVisibleCharacterIndex;
             }
+            
+            
         
         
 
-            widthLimitReached = widthLimitReached || _tmpText.text[indexOfLastVisibleCharInCurrentLine] != lastCharacter ||
+            widthLimitReached = widthLimitReached || plainText[indexOfLastVisibleCharInCurrentLine] != lastCharacter ||
                                 _tmpText.rectTransform.rect.position.x == 0;
 
         }

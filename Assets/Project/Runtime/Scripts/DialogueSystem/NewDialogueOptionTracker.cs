@@ -74,7 +74,10 @@ namespace Project.Runtime.Scripts.DialogueSystem
                         {
                             node[i] = (entry.entry, true);
                             onNewOptionAvailable.Invoke(entry.entry);
+                            BroadcastMessage("OnNewOptionAvailable", entry.entry, SendMessageOptions.DontRequireReceiver);
                             Debug.Log("New option unlocked " + entry.entry.currentMenuText);
+                            Field.SetValue(entry.entry.fields, "Show Badge", true);
+                            
                         }
                     }
                 }
