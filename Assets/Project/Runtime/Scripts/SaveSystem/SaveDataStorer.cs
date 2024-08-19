@@ -80,8 +80,10 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override bool HasDataInSlot(int slotNumber)
         {
-            return slotNumber == 1;
+            return true;
         }
+        
+        
 
         public override void StoreSavedGameData(int slotNumber, SavedGameData savedGameData)
         {
