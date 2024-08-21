@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using PixelCrushers;
+using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
             
-            App.App.Instance.LoadScene(data.current_scene);
+            App.App.Instance.ChangeScene(data.current_scene, App.App.Instance.currentScene, LoadingScreen.LoadingScreenType.Default);
         }
 
 
@@ -37,7 +38,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
 
-            App.App.Instance.LoadScene(data.current_scene);
+            App.App.Instance.ChangeScene(data.current_scene, App.App.Instance.currentScene, LoadingScreen.LoadingScreenType.Default);
         }
 
     }

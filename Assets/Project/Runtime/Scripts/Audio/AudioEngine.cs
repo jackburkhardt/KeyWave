@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using PixelCrushers;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 
 namespace Project.Runtime.Scripts.Audio
 {
@@ -14,7 +16,11 @@ namespace Project.Runtime.Scripts.Audio
         
         [SerializeField] private AudioClipDatabase _clipDatabase;
         [SerializeField] private AudioMixer _userAudioMixer;
-        private Dictionary<string, AudioSource> _activeAudio = new();
+        public Dictionary<string, AudioSource> _activeAudio = new();
+        
+        public UnityEvent onActiveAudioChange;
+        
+        
 
         private void Awake()
         {
@@ -47,7 +53,12 @@ namespace Project.Runtime.Scripts.Audio
                 _activeAudio.Add(clipAddress, source);
                 
                 followup?.Invoke();
+
+                onActiveAudioChange.Invoke();
+
             });
+            
+           
         }
         
         private bool ClipAlreadyPlaying(string clipAddress)
@@ -101,7 +112,9 @@ namespace Project.Runtime.Scripts.Audio
             _activeAudio[clipAddress].Stop();
             AddressableLoader.Release(clipAddress);
             Destroy(_activeAudio[clipAddress]);
+            
             _activeAudio.Remove(clipAddress);
+            onActiveAudioChange.Invoke();
         }
         
         public void StopAllAudio()
@@ -112,7 +125,9 @@ namespace Project.Runtime.Scripts.Audio
                 AddressableLoader.Release(audio.Key);
                 Destroy(audio.Value);
             }
+            
             _activeAudio.Clear();
+            onActiveAudioChange.Invoke();
         }
         
         public void PauseAllAudio()

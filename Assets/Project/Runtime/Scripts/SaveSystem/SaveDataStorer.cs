@@ -81,28 +81,58 @@ namespace Project.Runtime.Scripts.SaveSystem
         public override bool HasDataInSlot(int slotNumber)
         {
             return true;
+            //return PixelCrushers.SaveSystem.HasSavedGameInSlot(slotNumber);
         }
         
+        private string m_playerPrefsKeyBase = "Save";
+        
+        public string GetPlayerPrefsKey(int slotNumber)
+        {
+            return m_playerPrefsKeyBase + slotNumber;
+        }
         
 
         public override void StoreSavedGameData(int slotNumber, SavedGameData savedGameData)
         {
             if (!savingEnabled) return;
-            
-            LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 
-            string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
+            if (slotNumber == 1)
+            {
+                LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
 
-            Debug.Log("Performing local autosave...");
-            File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
+                string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
+
+                //  Debug.Log("Performing local autosave...");
+                File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
 #if UNITY_WEBGL && !UNITY_EDITOR // todo: see if this can be removed for optimization
             Application.ExternalEval("_JS_FileSystem_Sync();");
 #endif
+            }
+
+            else
+            {
+                var s = PixelCrushers.SaveSystem.Serialize(savedGameData);
+                
+                PlayerPrefs.SetString(GetPlayerPrefsKey(slotNumber),s);
+                PlayerPrefs.Save();
+            }
         }
+        
+        
 
         public override SavedGameData RetrieveSavedGameData(int slotNumber)
         {
-            return LatestSaveData.state;
+            
+            if (slotNumber == 1) return LatestSaveData.state;
+            
+            
+            var s = PlayerPrefs.GetString(GetPlayerPrefsKey(slotNumber));
+            return HasDataInSlot(slotNumber) ? PixelCrushers.SaveSystem.Deserialize<SavedGameData>(s) : new SavedGameData();
+          
+          //  var s = PlayerPrefs.GetString(GetPlayerPrefsKey(slotNumber));
+           // return HasDataInSlot(slotNumber) ? SaveSystem.Deserialize<SavedGameData>(s) : new SavedGameData();
+            
+          //  return LatestSaveData.state;
         }
 
         public override void DeleteSavedGameData(int slotNumber)

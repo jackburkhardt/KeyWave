@@ -20,8 +20,10 @@ namespace Project.Runtime.Scripts.App
 
         public static Action OnLoadStart;
         public static Action OnLoadEnd;
+        public static Action OnDeloadEnd;
 
         public static bool isLoading = false;
+        public string currentScene = "StartMenu";
 
         public static App Instance
         {
@@ -166,15 +168,26 @@ namespace Project.Runtime.Scripts.App
                 else Debug.LogError("Unable to get the canvas group for the loading screen!");
             }
 
-            if (sceneToUnload != "") {
-        
-                var unloadCurrentScene = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(sceneToUnload));
-            
-                while (!unloadCurrentScene.isDone)
+            if (sceneToUnload != "")
+            {
+
+                var unloadScene = SceneManager.GetSceneByName(sceneToUnload);
+                
+                if (unloadScene.IsValid())
                 {
-                    yield return null;
+                    var unloadCurrentScene = SceneManager.UnloadSceneAsync(unloadScene);
+            
+                    while (!unloadCurrentScene.isDone)
+                    {
+                        yield return null;
+                    }
                 }
+        
+                
             }
+            
+            OnDeloadEnd?.Invoke();
+            
          
 
             var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
@@ -194,12 +207,17 @@ namespace Project.Runtime.Scripts.App
                     yield return StartCoroutine(LoadingScreen.FadeCanvasOut());
                 }
 
-                var loadingScreenUnload = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("LoadingScreen"));
+                var loadingScreenScene = SceneManager.GetSceneByName("LoadingScreen");
+                if (loadingScreenScene.IsValid())
+                {
+                    var loadingScreenUnload = SceneManager.UnloadSceneAsync(loadingScreenScene);
         
-                while (!loadingScreenUnload.isDone) yield return null;
+                    while (!loadingScreenUnload.isDone) yield return null;
+                }
               
                 isLoading = false;
                 OnLoadEnd?.Invoke();
+                currentScene = sceneToLoad;
             }
 
             

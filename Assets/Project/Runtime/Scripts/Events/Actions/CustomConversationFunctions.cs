@@ -34,10 +34,12 @@ namespace Project.Runtime.Scripts.Events.Actions
             }
         
             GameStateManager.instance.gameState.Clock += (DialogueUtility.CurrentNodeDuration);
-        
-            if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
+
+
+            if (subtitle.dialogueEntry.IsLastNode())
             {
-                PixelCrushers.SaveSystem.SaveToSlot(1);
+                
+                DialogueManager.PlaySequence("SetContinueMode(false);");
             }
 
             foreach (var actor in DialogueManager.masterDatabase.actors)
@@ -55,8 +57,19 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnConversationEnd()
         {
-            DialogueManager.PlaySequence(
-                "SetContinueMode(false); SetActionPanel(true)@Message(Typed); SetMenuPanelTrigger(1, false)@Message(Typed);");
+            //DialogueManager.PlaySequence(
+            //    "SetContinueMode(false); SetActionPanel(true)@Message(Typed); SetMenuPanelTrigger(1, false)@Message(Typed);");
+
+            DialogueManager.PlaySequence("SetMenuPanelTrigger(1, false); SetActionPanel(true)");
+
+        }
+        
+        public void OnConversationLineEnd(Subtitle subtitle)
+        {
+            if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
+            {
+                PixelCrushers.SaveSystem.SaveToSlot(1);
+            }
         }
 
         public void OnSequenceStart()

@@ -987,6 +987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f4cec12f72a4c42a72983383692b514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScene: 
 --- !u!1 &486107003
 GameObject:
   m_ObjectHideFlags: 0
@@ -2638,6 +2639,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1164089272}
   - component: {fileID: 1164089273}
+  - component: {fileID: 1164089274}
   m_Layer: 0
   m_Name: Audio System
   m_TagString: Untagged
@@ -2674,6 +2676,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clipDatabase: {fileID: 11400000, guid: 2cc6ca52ab485404e8c43149a500ca6d, type: 2}
   _userAudioMixer: {fileID: 24100000, guid: f30b364c196fa2d46a1e04ca80f3ffcf, type: 2}
+  onActiveAudioChange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1164089274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164089271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5779204863facd409aa1ae5285dfc26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_key: audioEngine
+  m_appendSaverTypeToKey: 0
+  m_saveAcrossSceneChanges: 1
+  m_restoreStateOnStart: 0
 --- !u!1 &1175838552
 GameObject:
   m_ObjectHideFlags: 0

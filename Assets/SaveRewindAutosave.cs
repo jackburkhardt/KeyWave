@@ -17,11 +17,17 @@ public class SaveRewindAutosave : MonoBehaviour
             autosaveEnabled = true;
             return;
         }
-        
+
         if (subtitle.formattedText.text == string.Empty) return;
-        if (subtitle.dialogueEntry.IsResponseChild()) return;
-        
-        var saveName = subtitle.speakerInfo.Name.Length != 0 ? $"{subtitle.speakerInfo.Name}: {subtitle.formattedText.text}" : subtitle.formattedText.text;
+        if (subtitle.dialogueEntry.IsResponseChild())
+        {
+            Debug.Log("Response child detected, skipping autosave");
+            return;
+        }
+
+    var saveName = subtitle.speakerInfo.Name.Length != 0 ? $"{subtitle.speakerInfo.Name}: {subtitle.formattedText.text}" : subtitle.formattedText.text;
         saveRewind.PushSave(saveName);
     }
+    
+    
 }

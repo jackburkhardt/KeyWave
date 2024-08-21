@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
@@ -14,10 +15,10 @@ namespace Project.Runtime.Scripts.Manager
     {
         public UnityEvent onDuplicateAdded;
 
+        
         public SubtitleContentElement templateSubtitleContentElement;
         public TextMeshProUGUI templateResponseDuplicate;
         public Transform duplicatedSubtitleContentContainer;
-        public Transform continueButton;
         private SubtitleContentElement mostRecentDuplicate;
         private Subtitle mostRecentSubtitle;
 
@@ -26,6 +27,7 @@ namespace Project.Runtime.Scripts.Manager
       
             RefreshContents();
             templateResponseDuplicate.gameObject.SetActive(false);
+            templateSubtitleContentElement.gameObject.SetActive(false);
         }
         //public UnityEvent onDuplicateReveal;
 
@@ -41,11 +43,17 @@ namespace Project.Runtime.Scripts.Manager
         {
             for (int i = 0; i < duplicatedSubtitleContentContainer.childCount; i++)
             {
-                if (duplicatedSubtitleContentContainer.GetChild(i).gameObject != templateResponseDuplicate.gameObject)
+                if (duplicatedSubtitleContentContainer.GetChild(i).gameObject ==
+                    templateResponseDuplicate.gameObject) continue;
+                if (duplicatedSubtitleContentContainer.GetChild(i).gameObject == templateSubtitleContentElement.gameObject) continue;
                     Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
             }
+            
+            _queuedSubtitles.Clear();
       
             templateSubtitleContentElement.Clear();
+            
+            
       
         }
 
@@ -56,14 +64,26 @@ namespace Project.Runtime.Scripts.Manager
             RefreshLayoutGroups.Refresh(gameObject);
         }
 
-        public void AddHiddenDuplicate()
+        private List<SubtitleContentElement> _queuedSubtitles = new List<SubtitleContentElement>();
+        
+        private void RevealQueuedSubtitles()
         {
-            // RefreshLayoutGroups.Refresh(gameObject);
-            if (mostRecentDuplicate != null && mostRecentDuplicate.SubtitleText.ToString() == templateSubtitleContentElement.SubtitleText.ToString()) return;
-            mostRecentDuplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
-            if (mostRecentDuplicate.continueButton != null) Destroy(mostRecentDuplicate.continueButton.gameObject);
-            mostRecentDuplicate.UpdateTime();
-            mostRecentDuplicate.gameObject.SetActive(false);
+            if (_queuedSubtitles.Count == 0) return;
+            foreach (var subtitle in _queuedSubtitles)
+            {
+                subtitle.gameObject.SetActive(true);
+            }
+            _queuedSubtitles.Clear();
+            RefreshContents();
+        }
+
+        public void AddHiddenSubtitle(SubtitleContentElement subtitleElement)
+        {
+            if (subtitleElement.SubtitleText == string.Empty) return;
+            RevealQueuedSubtitles();
+            var duplicate = Instantiate(templateSubtitleContentElement, duplicatedSubtitleContentContainer);
+            duplicate.Initialize(subtitleElement);
+            _queuedSubtitles.Add(duplicate);
             RefreshContents();
             onDuplicateAdded.Invoke();
         }
@@ -75,15 +95,6 @@ namespace Project.Runtime.Scripts.Manager
             response.text = button.text;
 
         }
-
-        public void RevealDuplicate()
-        {
-    
-            if (mostRecentDuplicate == null || duplicatedSubtitleContentContainer.childCount == 0) return;
-            mostRecentDuplicate.gameObject.SetActive(true);
-            RefreshContents();
-        }
-
 
         private void OnConversationLine(Subtitle subtitle)
         {

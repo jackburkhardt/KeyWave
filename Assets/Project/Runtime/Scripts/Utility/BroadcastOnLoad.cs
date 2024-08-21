@@ -9,15 +9,22 @@ public class BroadcastOnLoad : MonoBehaviour
     private void OnEnable()
     {
         App.OnLoadEnd += BroadcastOnLoadEnd;
+        App.OnDeloadEnd += BroadcastOnDeloadEnd;
     }
 
     private void OnDisable()
     {
         App.OnLoadEnd -= BroadcastOnLoadEnd;
+        App.OnDeloadEnd -= BroadcastOnDeloadEnd;
     }
     
     private void BroadcastOnLoadEnd()
     {
-        BroadcastMessage("OnLoad");
+        BroadcastMessage("OnLoad", SendMessageOptions.DontRequireReceiver);
+    }
+    
+    private void BroadcastOnDeloadEnd()
+    {
+        BroadcastMessage("OnDeload", SendMessageOptions.DontRequireReceiver);
     }
 }

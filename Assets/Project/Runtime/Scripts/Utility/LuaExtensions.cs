@@ -122,7 +122,7 @@ namespace Project.Runtime.Scripts.Utility
 
             }
 
-            return isResponseChild;
+            return isResponseChild && dialogueEntry.GetActor()!.IsPlayer;
         }
 
         public static bool IsLastNode(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)

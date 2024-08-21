@@ -91,7 +91,7 @@ public class SaveRewind : MonoBehaviour
         
         saveSlots[saveSlotIndex] = saveSlot;
         SaveSystem.SaveToSlot(saveSlot.saveSlotIndex);
-        Debug.Log("Pushed save to slot " + saveSlot.saveSlotIndex);
+       // Debug.Log("Pushed save to slot " + saveSlot.saveSlotIndex);
         
     }
     

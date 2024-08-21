@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
@@ -19,31 +20,37 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private TextMeshProTypewriterEffect typewriterEffect;
         [SerializeField] private UITextField timeText;
         [SerializeField] private UITextField portraitText;
-        [SerializeField] private TMP_Text mainClock;
         [SerializeField] private UITextField subtitleText;
-        [SerializeField] public Button continueButton;
 
         private float _alpha;
         private RectElement? _containerRect;
 
         private bool _isAnimationPlaying = false;
-        private TextElement? _portraitTextElement;
-
-        private TextElement? _timeTextElement;
-        public TextElement SubtitleText;
-
-        private List<SubtitleContentElement> DuplicatedSubtitles =>
-            subtitleManager.GetComponentsInChildren<SubtitleContentElement>().ToList();
-
+        
         public bool PortraitActive => portrait != null && portrait.gameObject.activeSelf;
+        
+        private string _storedSubtitleText;
+        private string _storedTimeText;
+        private string _storedPortraitText;
+        
+        public string SubtitleText => subtitleText.text;
+
+        public void Initialize(string subtitle, string time = null, string portraitName = null)
+        {
+            _storedPortraitText = portraitName;
+            _storedSubtitleText = subtitle;
+            _storedTimeText = time;
+        }
+        
+        public void Initialize(SubtitleContentElement subtitleContentElement)
+        {
+            Initialize(subtitleContentElement.subtitleText.text, subtitleContentElement.timeText.text, subtitleContentElement.portraitText.text);
+        }
 
         private void Awake()
         {
-            if (timeText != null) _timeTextElement = new TextElement(timeText);
-            if (portraitText != null) _portraitTextElement = new TextElement(portraitText);
             if (portrait != null) _containerRect = new RectElement(portrait.transform.parent.GetComponent<RectTransform>());
-            if (subtitleText != null) SubtitleText = new TextElement(subtitleText);
-            // else subtitleText = GetComponentInChildren<UITextField>();
+            if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) subtitleText.text = string.Empty;
         }
 
         public void Update()
@@ -56,8 +63,10 @@ namespace Project.Runtime.Scripts.UI
         {
             RefreshLayoutGroups.Refresh(gameObject);
             if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
-            Destroy(typewriterEffect);
-            canvasGroup.alpha = 0.25f;
+           
+            if (!string.IsNullOrEmpty(_storedSubtitleText)) subtitleText.text = _storedSubtitleText;
+            if (!string.IsNullOrEmpty(_storedTimeText)) timeText.text = _storedTimeText;
+            if (!string.IsNullOrEmpty(_storedPortraitText)) portraitText.text = _storedPortraitText;
         
         }
 
@@ -68,10 +77,7 @@ namespace Project.Runtime.Scripts.UI
             _alpha = canvasGroup.alpha;
             LeanTween.alphaCanvas(canvasGroup, 1, 0.25f);
         
-            //DialogueManager.Pause();
-        
-         
-            // subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Pause();
+            
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -81,9 +87,7 @@ namespace Project.Runtime.Scripts.UI
 
             var isPointerOnAnySubtitle = false;
         
-            //  DialogueManager.Unpause();
-        
-            //  subtitleManager.templateSubtitleContentElement.GetComponentInChildren<TextMeshProTypewriterEffect>().Unpause();
+          
         }
         
         public void OnPointerClick(PointerEventData eventData)
@@ -98,59 +102,21 @@ namespace Project.Runtime.Scripts.UI
 
         public void Clear()
         {
-            typewriterEffect.GetComponent<TMP_Text>().text = string.Empty;
+            subtitleText.text = string.Empty;
         }
 
-        public void UpdateTime()
-        {
-            if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) timeText.text = mainClock.text.Replace(" ", ":");
-            canvasGroup.alpha = 1;
-
-        }
-
+    
 
         public void HidePortraitHelper()
         {
-            _portraitTextElement?.Clear();
-            _timeTextElement?.Clear();
+          
             _containerRect?.Clear();
         }
 
 
         public void ShowPortraitHelper()
         {
-            _portraitTextElement?.Show();
-            _timeTextElement?.Show();
             _containerRect?.Show();
-        }
-
-
-        public struct TextElement
-        {
-            public TextElement(UITextField text)
-            {
-                this._text = text;
-                this._defaultColor = text.color;
-            }
-        
-            private UITextField _text;
-            private Color _defaultColor;
-
-            public void Clear()
-            {
-                this._text.color = Color.clear;
-            }
-        
-            public void Show()
-            {
-                this._text.color = this._defaultColor;
-            }
-
-            public new string ToString()
-            {
-                return _text.text;
-            }
-        
         }
 
         private struct RectElement
