@@ -9,15 +9,18 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private float minimumDistance = 750;
         public bool isMouseOver = false;
         public bool stickToWatchTicks = false;
-        public static bool Frozen => isFrozen;
+        public static bool Frozen
+        {
+            get { return isFrozen && Time.timeScale != 0; }
+        }
 
-        
+
         public float AngleCenteredSouth => transform.rotation.eulerAngles.z - 270;
 
         // Update is called once per frame
         void Update()
         {
-            if (isFrozen) return;
+            if (Frozen) return;
             // rotate self to point at the mouse cursor
         
             Vector3 mousePos = Input.mousePosition;

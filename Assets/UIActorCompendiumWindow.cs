@@ -428,7 +428,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         {
             detailsPanelContentManager.Clear();
             SetActorImage(null);
-            RefreshLayoutGroups.Refresh(this.gameObject);
+            RefreshLayoutGroups.Refresh(mainPanel.GetComponentInChildren<LayoutGroup>().gameObject);
                           
             if (actor != null)
             {
