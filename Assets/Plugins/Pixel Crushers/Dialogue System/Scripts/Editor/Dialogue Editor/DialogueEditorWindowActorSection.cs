@@ -297,6 +297,16 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             // AI - Voice
             DrawAIVoiceSelection(actor);
+            
+            Field stateField = Field.Lookup(actor.fields, "State");
+            if (stateField == null)
+            {
+                stateField = new Field("State", "unidentified", FieldType.Text);
+                actor.fields.Add(stateField);
+                SetDatabaseDirty("Create State Field");
+            }
+            
+            stateField.value = DrawActorStateField(new GUIContent("State", "The starting state of the actor."), stateField.value);
 
             // Portrait Textures:
             actorTexturesFoldout = EditorGUILayout.Foldout(actorTexturesFoldout, new GUIContent("Portrait Textures", "Portrait images using texture assets."));

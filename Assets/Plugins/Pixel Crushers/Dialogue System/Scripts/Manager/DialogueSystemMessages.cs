@@ -41,6 +41,7 @@ namespace PixelCrushers.DialogueSystem
         public const string OnDialogueSystemUnpause = "OnDialogueSystemUnpause";
 
         public const string OnShowAlert = "OnShowAlert";
+        public const string OnActorStateChange = "OnActorStateChange";
 
     }
 }

@@ -22,6 +22,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private List<string> textAreaFields = new List<string>() { "Description", "Success Description", "Failure Description" };
         private static readonly string[] questStateStrings = { "(None)", "unassigned", "active", "success", "failure", "done", "abandoned", "grantable", "returnToNPC" };
+        private static readonly string[] actorStateStrings = { "(None)", "unidentified", "mentioned", "amicable", "botched", "unapproachable", "approachable", "confronted" };
 
         private bool showStateFieldAsQuest = true;
 
@@ -338,6 +339,19 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 : ((newIndex == 0) ? string.Empty : questStateStrings[newIndex]);
         }
 
+        private string DrawActorStateField(string value)
+        {
+            int index = 0;
+            for (int i = 0; i < actorStateStrings.Length; i++)
+            {
+                if (string.Equals(value, actorStateStrings[i])) index = i;
+            }
+            int newIndex = EditorGUILayout.Popup(index, actorStateStrings);
+            return (newIndex == index)
+                ? value
+                : ((newIndex == 0) ? string.Empty : actorStateStrings[newIndex]);
+        }
+
         private string DrawQuestStateField(GUIContent label, string value)
         {
             int index = 0;
@@ -349,6 +363,19 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             return (newIndex == index)
                 ? value
                 : ((newIndex == 0) ? string.Empty : questStateStrings[newIndex]);
+        }
+
+        private string DrawActorStateField(GUIContent label, string value)
+        {
+            int index = 0;
+            for (int i = 0; i < actorStateStrings.Length; i++)
+            {
+                if (string.Equals(value, actorStateStrings[i])) index = i;
+            }
+            int newIndex = EditorGUILayout.Popup(label.text, index, actorStateStrings);
+            return (newIndex == index)
+                ? value
+                : ((newIndex == 0) ? string.Empty : actorStateStrings[newIndex]);
         }
 
         public string DrawAssetPopup<T>(string value, List<T> assets, GUIContent assetLabel) where T : Asset

@@ -77,7 +77,9 @@ namespace PixelCrushers.DialogueSystem
         
         Color,
         
-        Relationship
+        Relationship,
+        
+        ActorState
     }
 
 }
