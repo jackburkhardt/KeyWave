@@ -1,14 +1,18 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomUIQuestLogWindow : StandardUIQuestLogWindow
 {
     [SerializeField] private StandardUITextTemplateList _questTimeTemplate;
     [SerializeField] private StandardUITextTemplate _previousQuestEntriesContainer;
+
+    public Button button;
     
     // Start is called before the first frame update
     public override bool IsQuestVisible(string questTitle)
@@ -23,7 +27,33 @@ public class CustomUIQuestLogWindow : StandardUIQuestLogWindow
         Tools.SetGameObjectActive(_questTimeTemplate.gameObject, false);
         Tools.SetGameObjectActive(_previousQuestEntriesContainer.gameObject, false);
     }
-    
+
+    public void HideIfOpen()
+    {
+        if (IsOpen)
+        {
+            isOpen = false;
+            mainPanel.Close();
+        }
+    }
+
+    public void CloseIfOpen()
+    {
+        if (IsOpen)
+        {
+           var closeWindowDelegate = new Action(() => isOpen = false);
+           onClose.Invoke();
+           CloseWindow(closeWindowDelegate);
+           mainPanel.Close();
+        }
+    }
+
+    protected override void PauseGameplay()
+    {
+        if (Time.timeScale == 0) return;
+        base.PauseGameplay();
+    }
+
     protected override void RepaintSelectedQuest(QuestInfo quest)
     {
         detailsPanelContentManager.Clear();
@@ -100,6 +130,25 @@ public class CustomUIQuestLogWindow : StandardUIQuestLogWindow
                 abandonButtonInstance.button.onClick.AddListener(ClickAbandonQuestButton);
             }
         }
+    }
+    
+    
+    private Color _defaultButtonColor = Color.clear;
+
+    public void KeepIconHighlighted(bool keep)
+    {
+        if (button == null) return;
+        var colors = button.colors;
+        if (keep)
+        {
+            _defaultButtonColor = colors.normalColor;
+            colors.normalColor = colors.highlightedColor;
+        }
+        else
+        {
+            if (_defaultButtonColor != Color.clear ) colors.normalColor = _defaultButtonColor;
+        }
+        button.colors = colors;
     }
     
     

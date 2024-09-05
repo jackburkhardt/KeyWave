@@ -1,3 +1,4 @@
+using System;
 using Project.Runtime.Scripts.ScriptableObjects;
 using Project.Runtime.Scripts.UI;
 using UnityEngine;
@@ -173,11 +174,25 @@ namespace Project.Runtime.Scripts.Manager
         {
             return location.TravelTime + CurrentTimeRaw;
         }
+        
+        public static Action OnTimeScaleChange;
 
 
         public struct TimeScales
         {
-            internal static int Modifier = 1;
+            private static int _modifier = 1;
+            internal static int Modifier
+            {
+                get
+                {
+                    return _modifier;
+                }
+                set
+                {
+                    _modifier = value;
+                    OnTimeScaleChange.Invoke();
+                }
+            }
             internal static int GlobalTimeScale => 1 * Modifier;
     
             internal static float SecondsPercharacter = 1.5f;

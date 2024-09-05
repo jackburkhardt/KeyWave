@@ -125,6 +125,7 @@ namespace PixelCrushers.DialogueSystem
             }
             else
             {
+             //   if (entry.outgoingLinks.Count == 0) sequence = GetLastLineSequence();
                 sequence = GetDefaultSequence(isPlayer);
             }
             if (sequence.Contains("entrytaglocal"))
@@ -144,6 +145,11 @@ namespace PixelCrushers.DialogueSystem
             var dialogueManager = FindObjectOfType<DialogueSystemController>();
             if (dialogueManager == null || dialogueManager.initialDatabase == null) return "entrytag";
             return dialogueManager.initialDatabase.GetEntrytag(entry.conversationID, entry.id, dialogueManager.displaySettings.cameraSettings.entrytagFormat);
+        }
+
+        private static string GetLastLineSequence()
+        {
+            return DialogueManager.displaySettings.cameraSettings.defaultLastLineSequence;
         }
 
         private static string GetDefaultSequence(bool isPlayer)

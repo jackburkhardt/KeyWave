@@ -51,8 +51,8 @@ namespace Project.Runtime.Scripts.ActorCompendium
         {
             if (runtimeActorCompendiumWindow == null) return;
             if (DialogueManager.IsDialogueSystemInputDisabled()) return;
-            if (isOpen) runtimeActorCompendiumWindow.Close(); else runtimeActorCompendiumWindow.Open();
-            isOpen = !isOpen;
+            if (runtimeActorCompendiumWindow.isOpen) runtimeActorCompendiumWindow.Close(); else runtimeActorCompendiumWindow.Open();
+           
         }
 
     }

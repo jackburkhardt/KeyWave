@@ -256,6 +256,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         /// <param name="openedWindowHandler">Closed window handler.</param>
         public virtual void CloseWindow(Action closedWindowHandler)
         {
+            
             closedWindowHandler();
         }
         

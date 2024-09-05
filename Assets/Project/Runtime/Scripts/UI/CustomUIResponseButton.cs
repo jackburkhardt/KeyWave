@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -27,6 +28,13 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] protected UITextField autonumberText;
         
         [SerializeField] private Image _popupBadge;
+
+        public string simStatus
+        {
+            get;
+            private set;
+        }
+        
        
         protected Button UnityButton => GetComponent<Button>();
         protected Vector2 Position => label.gameObject.transform.position;
@@ -61,10 +69,9 @@ namespace Project.Runtime.Scripts.UI
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-        
             _hoveredButton = this;
+            simStatus = response?.destinationEntry?.SimStatus()!;
             Refresh();
-       
         }
 
         public virtual void OnPointerExit(PointerEventData eventData)

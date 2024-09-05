@@ -2221,8 +2221,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void SetQuestSuccessCallback(object o)
         {
             var entry = o as DialogueEntry;
-            entry.userScript = "SetQuestState(\"" + currentConversation.Title + "\", \"Success\");";
+            entry.userScript = "SetQuestState(\"" + currentConversation.Title + "\", \"success\");";
+            entry.Title = "Auto Quest Success";
+            entry.Sequence = "SetContinueMode(false); WaitForMessage(Typed);";
             SetDatabaseDirty("Set User Script");
+            
             RefreshConversation();
         }
 

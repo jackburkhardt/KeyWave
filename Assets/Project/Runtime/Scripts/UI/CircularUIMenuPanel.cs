@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -151,6 +152,9 @@ namespace Project.Runtime.Scripts.UI
 #if TMP_PRESENT
             DialogueManager.instance.StartCoroutine(CheckTMProAutoScroll());
 #endif
+            
+            Clock.Freeze(false);
+            
         }
         
         public override void Unfocus()
@@ -177,11 +181,22 @@ namespace Project.Runtime.Scripts.UI
         }
 
 
-        public void OnChoiceSelection()
+        public override void OnChoiceSelection(CustomUIResponseButton customUIResponseButton)
         {
             if (!Animator!.GetBool("Active")) return;
             WatchHandCursor.Freeze();
             Animator!.SetBool("Frozen", true);
+        }
+
+        private Color _color;
+
+        public void SetColor(Color color)
+        {
+            _color = color;
+            
+            outerBackground.color = Color.Lerp(defaultOuterColor, new Color(_color.r, _color.g, _color.b ,outerBackground.color.a), 0.2f);
+                
+            innerBackground.color = Color.Lerp(defaultInnerColor, new Color(_color.r, _color.g, _color.b ,innerBackground.color.a), 0.4f);
         }
 
 
@@ -198,16 +213,8 @@ namespace Project.Runtime.Scripts.UI
   
             var currentConversation =
                 (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.GetConversation());
-            var fieldExists = Field.FieldExists(currentConversation.fields, "Circular Menu Background");
-            if (fieldExists)
-            {
-                var color = Tools.WebColor(DialogueLua.GetConversationField(currentConversation.id, "Circular Menu Background").asString);
-                if (color == Color.clear || color == Color.black) return;
-                outerBackground.color = Color.Lerp(defaultOuterColor, new Color(color.r, color.g, color.b ,outerBackground.color.a), 0.2f);
-                
-                innerBackground.color = Color.Lerp(defaultInnerColor, new Color(color.r, color.g, color.b ,innerBackground.color.a), 0.4f);
-            }
             
+
             if (_pointerInside) Focus();
            
         }

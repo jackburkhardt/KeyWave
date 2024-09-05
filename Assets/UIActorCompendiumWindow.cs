@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers;
@@ -74,6 +75,8 @@ namespace Project.Runtime.Scripts.ActorCompendium
 
         [Tooltip("Add an EventSystem if one isn't in the scene.")]
         public bool addEventSystemIfNeeded = true;
+
+        public Button button;
 
         #endregion
 
@@ -175,6 +178,51 @@ namespace Project.Runtime.Scripts.ActorCompendium
             mainPanel.Close();
             onClose.Invoke();
         }
+        
+        public void HideIfOpen()
+        {
+            if (IsOpen)
+            {
+                isOpen = false;
+                mainPanel.Close();
+            }
+        }
+        
+        public void CloseIfOpen()
+        {
+            if (IsOpen)
+            {
+                var closeWindowDelegate = new Action(() => isOpen = false);
+                mainPanel.Close();
+                onClose.Invoke();
+                CloseWindow(closeWindowDelegate);
+            }
+        }
+
+        private Color _defaultButtonColor = Color.clear;
+
+        public void KeepIconHighlighted(bool keep)
+        {
+            if (button == null) return;
+            var colors = button.colors;
+            if (keep)
+            {
+                _defaultButtonColor = colors.normalColor;
+                colors.normalColor = colors.highlightedColor;
+            }
+            else
+            {
+                if (_defaultButtonColor != Color.clear ) colors.normalColor = _defaultButtonColor;
+            }
+            button.colors = colors;
+        }
+
+        protected override void PauseGameplay()
+        {
+            if (Time.timeScale == 0) return;
+            base.PauseGameplay();
+        }
+
 
         public virtual void Toggle()
         {

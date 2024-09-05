@@ -181,6 +181,9 @@ namespace Project.Runtime.Scripts.UI
 
             if (Input.GetKeyDown(KeyCode.Mouse0) && isButtonActive && button.interactable && !WatchHandCursor.Frozen)
             {
+                Debug.Log("Clicking button");
+                Debug.Log(Time.timeScale);
+                Debug.Log(WatchHandCursor.Frozen);
                 ExecuteEvents.Execute(button.gameObject, pointer, ExecuteEvents.pointerClickHandler);
                 if (_mouseEvents) onClick.Invoke();
             }

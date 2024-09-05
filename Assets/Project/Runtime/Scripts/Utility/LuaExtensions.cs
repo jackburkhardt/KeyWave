@@ -5,6 +5,7 @@ using System.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Project.Runtime.Scripts.Utility
 {
@@ -75,6 +76,12 @@ namespace Project.Runtime.Scripts.Utility
         {
             database ??= DialogueManager.MasterDatabase;
             return database.GetDialogueEntry(link.originConversationID, link.originDialogueID);
+        }
+
+        public static string SimStatus(this DialogueEntry entry)
+        {
+            var simStatus = Lua.Run("return Conversation[" + entry.conversationID + "].Dialog[" + entry.id + "].SimStatus").AsString;
+            return simStatus;
         }
 
         public static List<T> AddUnique<T>(this List<T> list, T item)
@@ -245,7 +252,8 @@ namespace Project.Runtime.Scripts.Utility
     
     public static class BaseExtensions
     {
-       public static IEnumerable<T> GetChildren<T>(this Transform transform, IEnumerable<T>? exclude = null)
+        
+       public static IEnumerable<T> GetChildren<T>(this Transform transform, IEnumerable<T>? exclude, bool? directChildrenOnly = false)
                 where T : Component
             {
                 var children = transform.GetComponentsInChildren<T>().ToList();
@@ -258,46 +266,108 @@ namespace Project.Runtime.Scripts.Utility
                     }
                 }
 
-                return children;
-            }
-            
-            public static IEnumerable<T> GetChildren<T>(this Transform transform, T? exclude = null)
-                where T : Component
-            {
-                var children = transform.GetComponentsInChildren<T>().ToList();
-                children.Remove(transform.GetComponent<T>());
-                if (exclude != null)
+                var directChildren = new List<T>();
+
+                if (directChildrenOnly == true)
                 {
-                    children.Remove(exclude);
+                    foreach (var child in children)
+                    {
+                        if (child.transform.parent == transform)
+                        {
+                            directChildren.Add(child);
+                        }
+                    }
+
+                    return directChildren;
                 }
 
                 return children;
             }
             
-            public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T)? exclude = null)
+            public static IEnumerable<T> GetChildren<T>(this Transform transform, T? exclude = null, bool? directChildrenOnly = false)
                 where T : Component
             {
-                var children = transform.GetComponentsInChildren<T>().ToList();
+                var children = transform.GetComponentsInChildren<T>(true).ToList();
+                children.Remove(transform.GetComponent<T>());
+                if (exclude != null)
+                {
+                    children.Remove(exclude);
+                }
+                
+                
+                var directChildren = new List<T>();
+
+                if (directChildrenOnly == true)
+                {
+                    foreach (var child in children)
+                    {
+                        if (child.transform.parent == transform)
+                        {
+                            directChildren.Add(child);
+                        }
+                    }
+
+                    return directChildren;
+                }
+
+                return children;
+            }
+            
+            public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T)? exclude, bool? directChildrenOnly = false)
+                where T : Component
+            {
+                var children = transform.GetComponentsInChildren<T>(true).ToList();
                 children.Remove(transform.GetComponent<T>());
                 if (exclude != null)
                 {
                     children.Remove(exclude.Value.Item1);
                     children.Remove(exclude.Value.Item2);
                 }
+                
+               
+                var directChildren = new List<T>();
+
+                if (directChildrenOnly == true)
+                {
+                    foreach (var child in children)
+                    {
+                        if (child.transform.parent == transform)
+                        {
+                            directChildren.Add(child);
+                        }
+                    }
+
+                    return directChildren;
+                }
 
                 return children;
             }
             
-            public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T, T)? exclude = null)
+            public static IEnumerable<T> GetChildren<T>(this Transform transform, (T, T, T)? exclude, bool? directChildrenOnly = false)
                 where T : Component
             {
-                var children = transform.GetComponentsInChildren<T>().ToList();
+                var children = transform.GetComponentsInChildren<T>(true).ToList();
                 children.Remove(transform.GetComponent<T>());
                 if (exclude != null)
                 {
                     children.Remove(exclude.Value.Item1);
                     children.Remove(exclude.Value.Item2);
                     children.Remove(exclude.Value.Item3);
+                }
+                
+                var directChildren = new List<T>();
+
+                if (directChildrenOnly == true)
+                {
+                    foreach (var child in children)
+                    {
+                        if (child.transform.parent == transform)
+                        {
+                            directChildren.Add(child);
+                        }
+                    }
+
+                    return directChildren;
                 }
 
                 return children;
@@ -307,9 +377,9 @@ namespace Project.Runtime.Scripts.Utility
 
 
 
-            public static IEnumerable<Transform> GetChildren(this Transform transform, IEnumerable<Transform>? exclude = null)
+            public static IEnumerable<Transform> GetChildren(this Transform transform, IEnumerable<Transform>? exclude, bool? directChildrenOnly = false)
             {
-                var children = transform.GetComponentsInChildren<Transform>().ToList();
+                var children = transform.GetComponentsInChildren<Transform>(true).ToList();
                 children.Remove(transform.GetComponent<Transform>());
                 if (exclude != null)
                 {
@@ -318,37 +388,85 @@ namespace Project.Runtime.Scripts.Utility
                         children.Remove(item);
                     }
                 }
+                
+                var directChildren = new List<Transform>();
+
+                if (directChildrenOnly == true)
+                {
+                    foreach (var child in children)
+                    {
+                        if (child.transform.parent == transform)
+                        {
+                            directChildren.Add(child);
+                        }
+                    }
+
+                    return directChildren;
+                }
+
                 return children;
             }
         
         
-            public static IEnumerable<Transform> GetChildren(this Transform transform, Transform? exclude = null)  {
-                    var children = transform.GetComponentsInChildren<Transform>().ToList();
+            public static IEnumerable<Transform> GetChildren(this Transform transform, Transform? exclude = null, bool? directChildrenOnly = false)  {
+                    var children = transform.GetComponentsInChildren<Transform>(true).ToList();
                     children.Remove(transform.GetComponent<Transform>());
                     if (exclude != null)
                     {
                         children.Remove(exclude);
                     }
+                    
+                    var directChildren = new List<Transform>();
 
-                    return children; 
+                    if (directChildrenOnly == true)
+                    {
+                        foreach (var child in children)
+                        {
+                            if (child.transform.parent == transform)
+                            {
+                                directChildren.Add(child);
+                            }
+                        }
+
+                        return directChildren;
+                    }
+
+                    return children;
         }
         
         
-            public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform)? exclude = null)  {
-                var children = transform.GetComponentsInChildren<Transform>().ToList();
+            public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform)? exclude, bool? directChildrenOnly = false)  {
+                var children = transform.GetComponentsInChildren<Transform>(true).ToList();
                 children.Remove(transform.GetComponent<Transform>());
                 if (exclude != null)
                 {
                     children.Remove(exclude.Value.Item1);
                     children.Remove(exclude.Value.Item2);
                 }
+                
+                var directChildren = new List<Transform>();
 
-                return children; 
+                if (directChildrenOnly == true)
+                {
+                    foreach (var child in children)
+                    {
+                        if (child.transform.parent == transform)
+                        {
+                            directChildren.Add(child);
+                        }
+                    }
+
+                    return directChildren;
+                }
+
+                return children;
+                
+               
         }
         
         
-            public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform, Transform)? exclude = null)  {
-                var children = transform.GetComponentsInChildren<Transform>().ToList();
+            public static IEnumerable<Transform> GetChildren(this Transform transform, (Transform, Transform, Transform)? exclude, bool? directChildrenOnly = false)  {
+                var children = transform.GetComponentsInChildren<Transform>(true).ToList();
                 children.Remove(transform.GetComponent<Transform>());
                 if (exclude != null)
                 {
@@ -356,8 +474,39 @@ namespace Project.Runtime.Scripts.Utility
                     children.Remove(exclude.Value.Item2);
                     children.Remove(exclude.Value.Item3);
                 }
+                
+                if (directChildrenOnly == true)
+                {
+                    foreach (var child in children)
+                    {
+                        if (child.transform.parent != transform)
+                        {
+                            children.Remove(child);
+                        }
+                    }
+                }
 
                 return children; 
+        }
+
+        public static GameObject? FindGameObject(this Scene scene, string name)
+        {
+            GameObject foundObject = null;
+            
+            foreach (var obj in scene.GetRootGameObjects())
+            {
+                var children = obj.GetComponentsInChildren<Transform>(true);
+                foreach (var child in children)
+                {
+                    if (foundObject != null) break;
+                    if (child.name == name)
+                    {
+                        foundObject = child.gameObject;
+                    }
+                }
+            }
+
+            return foundObject;
         }
             
         public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable

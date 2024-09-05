@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Project.Runtime.Scripts.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -11,6 +13,11 @@ namespace Project.Runtime.Scripts.UI
     {
         [ReadOnly]
         public static int CurrentVisualizedTimeRaw;
+
+        public Color clockEnabledColor;
+        public Color clockDisabledColor;
+
+        public Image clock;
 
         [SerializeField] private TMP_Text timeText;
         private int _clock;
@@ -21,10 +28,32 @@ namespace Project.Runtime.Scripts.UI
         private bool timeIsUpdating;
         private string CurrentVisualizedTime => RemoveColon(Clock.To24HourClock(CurrentVisualizedTimeRaw));
 
+        private void OnEnable()
+        {
+            Clock.OnTimeScaleChange += OnTimeScaleChange;
+        }
+
+        private void OnDisable()
+        {
+            Clock.OnTimeScaleChange -= OnTimeScaleChange;
+        }
+
         protected void Start()
         {
             CurrentVisualizedTimeRaw = GameStateManager.instance.gameState.Clock;
             timeText.text = CurrentVisualizedTime;
+        }
+
+        private void OnTimeScaleChange()
+        {
+            if (Clock.TimeScales.Modifier == 0)
+            {
+                clock.color = clockDisabledColor;
+            }
+            else
+            {
+                clock.color = clockEnabledColor;
+            }
         }
 
         private void Update()
@@ -37,8 +66,6 @@ namespace Project.Runtime.Scripts.UI
                 BroadcastMessage("OnTimeChange", (CurrentVisualizedTimeRaw,Clock.CurrentTimeRaw));
                 StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
             }
-
-  
         }
 
         private string RemoveColon(string time)

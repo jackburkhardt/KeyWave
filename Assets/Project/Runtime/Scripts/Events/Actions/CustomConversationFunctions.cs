@@ -53,16 +53,10 @@ namespace Project.Runtime.Scripts.Events.Actions
                 }
                 
             }
+
+            
         }
-
-        public void OnConversationEnd()
-        {
-            //DialogueManager.PlaySequence(
-            //    "SetContinueMode(false); SetActionPanel(true)@Message(Typed); SetMenuPanelTrigger(1, false)@Message(Typed);");
-
-            DialogueManager.PlaySequence("SetMenuPanelTrigger(1, false); SetActionPanel(true)");
-
-        }
+        
         
         public void OnConversationLineEnd(Subtitle subtitle)
         {
@@ -106,7 +100,6 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnConversationEnd(Transform t)
         {
-          //  GameEvent.OnConversationEnd();
         }
     }
 }

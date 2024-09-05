@@ -39,6 +39,7 @@ namespace Project.Runtime.Scripts.Manager
         public static GameState gameState => GameStateManager.instance.gameState;
 
         public static Action OnGameManagerAwake;
+        public static Action OnMapOpen;
 
 
         private void Awake()
@@ -155,63 +156,13 @@ namespace Project.Runtime.Scripts.Manager
             DialogueManager.instance.StartConversation("Intro");
         }
 
-        public void StartMapConversation()
-        {
-            var database = DialogueManager.instance.masterDatabase;
-            var conversationName = "Map";
+       
 
-            if (!DialogueManager.instance.isConversationActive)
-            {
-                DialogueManager.instance.StartConversation(conversationName);
-                return;
-            }
-            
-            var conversation = database.GetConversation(conversationName);
-            var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
-            var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
-           // DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
-            DialogueManager.conversationController.GotoState(state);
-        }
+       
+        
+        
 
-        public void StartTalkConversation()
-        {
-          
-            var database = DialogueManager.instance.masterDatabase;
-            var conversationName = Location.PlayerLocation.name + "/Talk/Base";
-
-            if (!DialogueManager.instance.isConversationActive)
-            {
-                DialogueManager.instance.StartConversation(conversationName);
-                return;
-            }
-            
-            var conversation = database.GetConversation(conversationName);
-            var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
-            var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
-           // DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
-            DialogueManager.conversationController.GotoState(state);
-        }
-
-        public void StartActionConversation()
-        {
-            var database = DialogueManager.instance.masterDatabase;
-            var conversationName = Location.PlayerLocation.name + "/Action/Base";
-            
-            
-            if (!DialogueManager.instance.isConversationActive)
-            {
-                DialogueManager.instance.StartConversation(conversationName);
-                return;
-            }
-            
-            var conversation = database.GetConversation(conversationName);
-            var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
-            
-            //DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
-            
-            var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
-            DialogueManager.conversationController.GotoState(state);
-        }
+       
 
     public static void OnConversationStart()
         {
@@ -269,6 +220,8 @@ namespace Project.Runtime.Scripts.Manager
             }
         
             var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
+            
+            Debug.Log($"Quest {questName} state changed to {state}");
         
             GameEvent.OnQuestStateChange(questName, state, duration);
         }
@@ -279,6 +232,8 @@ namespace Project.Runtime.Scripts.Manager
             DialogueManager.StopConversation();
             
             App.App.Instance.LoadScene("Map");
+            
+            OnMapOpen?.Invoke();
         }
 
         public void CloseMap(bool returnToConvo)

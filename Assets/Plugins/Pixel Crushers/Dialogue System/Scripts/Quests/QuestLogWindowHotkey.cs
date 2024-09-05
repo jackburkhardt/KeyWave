@@ -49,8 +49,8 @@ namespace PixelCrushers.DialogueSystem
         {
             if (runtimeQuestLogWindow == null) return;
             if (DialogueManager.IsDialogueSystemInputDisabled()) return;
-            if (isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
-            isOpen = !isOpen;
+            if (runtimeQuestLogWindow.isOpen) runtimeQuestLogWindow.Close(); else runtimeQuestLogWindow.Open();
+           
         }
 
     }

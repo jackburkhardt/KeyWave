@@ -150,7 +150,6 @@ public class CustomUIDialogueControls : StandardUIDialogueControls
         standardSubtitleControls = new CustomUISubtitleControls(_standardUIDialogueControls.standardSubtitleControls);
         typeof(StandardUIDialogueControls).GetField("m_standardSubtitleControls", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, standardSubtitleControls);
     }
-   
 }                   
 
 

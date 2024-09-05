@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using Project;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -13,17 +14,14 @@ namespace Project.Runtime.Scripts.UI
 
         [SerializeField] private float duration;
         [SerializeField] private float alpha;
+        
+        [GetComponent]
         [SerializeField] private CanvasGroup _canvasGroup;
 
         private void Awake()
         {
             
             _canvasGroup ??= GetComponent<CanvasGroup>();
-            
-            if (_canvasGroup == null)
-            {
-                _canvasGroup = gameObject.AddComponent<CanvasGroup>();
-            }
             
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
@@ -33,7 +31,7 @@ namespace Project.Runtime.Scripts.UI
         {
             
             _canvasGroup.alpha = 0;
-            if (_canvasGroup.gameObject != this.gameObject) _canvasGroup.gameObject.SetActive(false);
+            _canvasGroup.blocksRaycasts = false;
         
         }
 
@@ -47,38 +45,38 @@ namespace Project.Runtime.Scripts.UI
             OnFadeIn.Invoke();
             StopAllCoroutines();
             
-            StartCoroutine(FadeIn(_canvasGroup, duration, alpha));
+            StartCoroutine(FadeIn(duration, alpha));
         }
 
         public void FadeOut()
         {
             OnFadeOut.Invoke();
             StopAllCoroutines();
-            StartCoroutine(FadeOut(_canvasGroup, duration, alpha));
+            StartCoroutine(FadeOut(duration, alpha));
         }
 
-        private IEnumerator FadeIn(CanvasGroup canvasGroup, float duration, float alpha)
+        private IEnumerator FadeIn(float duration, float alpha)
         {
-            _canvasGroup.gameObject.SetActive(true);
+           // _canvasGroup.gameObject.SetActive(true);
             _canvasGroup.blocksRaycasts = true;
-            canvasGroup.alpha = 0;
-            while (canvasGroup.alpha < alpha)
+            _canvasGroup.alpha = 0;
+            while (_canvasGroup.alpha < alpha)
             {
-                canvasGroup.alpha += Time.deltaTime / duration;
+                _canvasGroup.alpha += Time.deltaTime / duration;
                 yield return null;
             }
             OnFadedIn.Invoke();
         }
 
-        private IEnumerator FadeOut(CanvasGroup canvasGroup, float duration, float alpha)
+        private IEnumerator FadeOut(float duration, float alpha)
         {
-            canvasGroup.alpha = alpha;
-            while (canvasGroup.alpha > 0)
+            _canvasGroup.alpha = alpha;
+            while (_canvasGroup.alpha > 0)
             {
-                canvasGroup.alpha -= Time.deltaTime / duration;
+                _canvasGroup.alpha -= Time.deltaTime / duration;
                 yield return null;
             }
-            _canvasGroup.gameObject.SetActive(false);
+           // _canvasGroup.gameObject.SetActive(false);
             _canvasGroup.blocksRaycasts = false;
             OnFadedOut.Invoke();
             //gameObject.SetActive(false);

@@ -20,6 +20,9 @@ namespace Project.Runtime.Scripts.Audio
         
         public UnityEvent onActiveAudioChange;
         
+        public AudioMixer UserAudioMixer => _userAudioMixer;
+        
+        public AudioClipDatabase ClipDatabase => _clipDatabase;
         
 
         private void Awake()
@@ -56,9 +59,20 @@ namespace Project.Runtime.Scripts.Audio
 
                 onActiveAudioChange.Invoke();
 
+                if (clipData.includeVariants)
+                {
+                    foreach (var variant in clipData.Variants)
+                    {
+                        AudioSource newSource = gameObject.AddComponent<AudioSource>();
+                        newSource.loop = source.loop;
+                        LoadClipAndPlay(variant.variantAddress, newSource, () =>
+                        {
+                            newSource.volume = 0;
+                            newSource.outputAudioMixerGroup = variant.variantChannel;
+                        });
+                    }
+                }
             });
-            
-           
         }
         
         private bool ClipAlreadyPlaying(string clipAddress)
@@ -235,6 +249,8 @@ namespace Project.Runtime.Scripts.Audio
         }
         
         #endregion
+
+        
         
     }
 }

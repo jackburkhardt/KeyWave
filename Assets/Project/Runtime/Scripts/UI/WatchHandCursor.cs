@@ -11,7 +11,7 @@ namespace Project.Runtime.Scripts.UI
         public bool stickToWatchTicks = false;
         public static bool Frozen
         {
-            get { return isFrozen && Time.timeScale != 0; }
+            get { return isFrozen || Time.timeScale == 0; }
         }
 
 

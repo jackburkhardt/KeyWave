@@ -31,6 +31,8 @@ namespace PixelCrushers.DialogueSystem
         public string defaultPlayerSequence;
         [TextArea]
         public string defaultResponseMenuSequence;
+        
+        
 
         // Input Settings:
 

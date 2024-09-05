@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using TMPro;
@@ -32,29 +35,23 @@ namespace Project.Runtime.Scripts.Manager
         //public UnityEvent onDuplicateReveal;
 
 
-        [Button("SetScrollRect")]
-        public void SetScrollRect()
-        {
-            var scrollRect = transform.parent.GetComponent<ScrollRect>();
-            scrollRect.verticalNormalizedPosition = 0;
-        }
+        
+        
+        [Button("ClearContents")]
 
         public void ClearContents()
         {
-            for (int i = 0; i < duplicatedSubtitleContentContainer.childCount; i++)
+
+            var children = duplicatedSubtitleContentContainer.transform.GetChildren(exclude: (templateResponseDuplicate.transform, templateSubtitleContentElement.transform), directChildrenOnly: true).ToList();
+            
+            foreach (var child in children)
             {
-                if (duplicatedSubtitleContentContainer.GetChild(i).gameObject ==
-                    templateResponseDuplicate.gameObject) continue;
-                if (duplicatedSubtitleContentContainer.GetChild(i).gameObject == templateSubtitleContentElement.gameObject) continue;
-                    Destroy(duplicatedSubtitleContentContainer.GetChild(i).gameObject);
+                Destroy(child.gameObject);
             }
             
             _queuedSubtitles.Clear();
       
             templateSubtitleContentElement.Clear();
-            
-            
-      
         }
 
         public void RefreshContents()
@@ -71,6 +68,7 @@ namespace Project.Runtime.Scripts.Manager
             if (_queuedSubtitles.Count == 0) return;
             foreach (var subtitle in _queuedSubtitles)
             {
+                Debug.Log("Revealing queued subtitle");
                 subtitle.gameObject.SetActive(true);
             }
             _queuedSubtitles.Clear();
@@ -99,6 +97,16 @@ namespace Project.Runtime.Scripts.Manager
         private void OnConversationLine(Subtitle subtitle)
         {
             RefreshContents();
+        }
+
+        private void OnEnable()
+        {
+            ClearContents();
+        }
+
+        private void OnDisable()
+        {
+            ClearContents();
         }
     }
 }
