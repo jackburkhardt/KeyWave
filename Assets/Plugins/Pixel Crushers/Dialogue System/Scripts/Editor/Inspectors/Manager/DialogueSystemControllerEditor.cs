@@ -275,8 +275,6 @@ namespace PixelCrushers.DialogueSystem
                  //   EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("showSubtitleOnEmptyContinue"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("defaultSequence"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("defaultPlayerSequence"), true);
-                    EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("defaultResponseMenuSequence"), true);
-                    EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("defaultLastLineSequence"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("entrytagFormat"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("reportMissingAudioFiles"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("disableInternalSequencerCommands"), true);

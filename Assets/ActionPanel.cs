@@ -47,6 +47,7 @@ public class ActionPanel : MonoBehaviour
     }
     public void OnConversationLine(Subtitle subtitle)
     {
+        Debug.Log("Conversation line");
         if (newConversation)
         {
             newConversation = false;
@@ -76,17 +77,20 @@ public class ActionPanel : MonoBehaviour
     
     public void OnConversationEnd()
     {
+        Debug.Log("Conversation end");
         var currentConversation = mostRecentSubtitle.dialogueEntry.GetConversation().Title;
 
         var conversationType = currentConversation.Split("/").Length > 3 ? currentConversation.Split("/")[^2] : string.Empty;
 
         if (conversationType is "Action" or "Talk" or "Walk")
         {
+            Debug.Log("Showing panel " + conversationType);
             ShowPanel(GetButtonOfType(conversationType));
         }
         
         if (currentConversation.EndsWith("Base"))
         {
+            Debug.Log("Showing panel");
             ShowPanel();
         }
         
@@ -100,6 +104,7 @@ public class ActionPanel : MonoBehaviour
     
     public void OnConversationStart()
     {
+        Debug.Log("Conversation start");
         newConversation = true;
         EvaluatePanel();
     }
@@ -135,6 +140,12 @@ public class ActionPanel : MonoBehaviour
                     break;
             }
         }
+    }
+    
+    public void ShowPanel(string type)
+    {
+        if (type == string.Empty) ShowPanel();
+        else ShowPanel(GetButtonOfType(type));
     }
 
     public void ShowPanel(ActionPanelButton button = null)
@@ -216,8 +227,6 @@ public class SequencerCommandSetActionPanel : SequencerCommand
         var value = GetParameterAsBool(0);
         var type = GetParameter(1, "");
         
-        
-        
         if (value)
         {
             if (type == "dummy")
@@ -226,7 +235,7 @@ public class SequencerCommandSetActionPanel : SequencerCommand
             }
             else
             {
-                ActionPanel.instance.ShowPanel();
+                ActionPanel.instance.ShowPanel(type);
             }
         }
         else

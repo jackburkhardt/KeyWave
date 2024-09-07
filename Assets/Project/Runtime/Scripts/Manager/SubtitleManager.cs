@@ -68,7 +68,7 @@ namespace Project.Runtime.Scripts.Manager
             if (_queuedSubtitles.Count == 0) return;
             foreach (var subtitle in _queuedSubtitles)
             {
-                Debug.Log("Revealing queued subtitle");
+//                Debug.Log("Revealing queued subtitle");
                 subtitle.gameObject.SetActive(true);
             }
             _queuedSubtitles.Clear();
