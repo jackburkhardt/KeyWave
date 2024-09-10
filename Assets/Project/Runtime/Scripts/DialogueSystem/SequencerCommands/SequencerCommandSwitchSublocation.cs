@@ -44,19 +44,22 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
                 if (debug) Debug.Log("Sublocation not found");
                 yield break;
             }
-          
+            Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
             
             Sequencer.PlaySequence($"Fade(stay, {duration/4})");
 
             yield return new WaitForSeconds(duration/2);
             
            Sequencer.PlaySequence("ClearPanel()");
+           
             
             if (currentSublocation != String.Empty)
             {
                 var currentSublocationGameObject = locationScene.FindGameObject(currentSublocation == String.Empty ? location : currentSublocation);
                 if (currentSublocationGameObject != null) currentSublocationGameObject.SetActive(false);
             }
+            
+            
             
             destinationSublocationGameObject.SetActive(true);
             DialogueLua.SetLocationField(location, "Current Sublocation", sublocation);
@@ -81,11 +84,13 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             if (sublocationGameObject == null) yield break;
             
-            Sequencer.PlaySequence($"Fade(stay, {duration/2})");
-
-            yield return null;
+            Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
             
-            while (Sequencer.IsPlaying) yield return null;
+            Sequencer.PlaySequence($"Fade(stay, {duration/4})");
+
+            yield return new WaitForSeconds(duration/2);
+            
+            Sequencer.PlaySequence("ClearPanel()");
             
             sublocationGameObject.SetActive(false); 
             DialogueLua.SetLocationField(location, "Current Sublocation", string.Empty);
@@ -93,13 +98,11 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             var locationGameObject = locationScene.FindGameObject(location);
             if (locationGameObject != null) locationGameObject.SetActive(true);
             
-            Sequencer.PlaySequence("ClearPanel()");
             
-            Sequencer.PlaySequence($"Fade(unstay, {duration/2})");
+            Sequencer.PlaySequence($"Fade(unstay, {duration/4})");
             
-            while (Sequencer.IsPlaying) yield return null;
+            yield return new WaitForSeconds(duration/4);
             
-            yield return null;
         }
     }
     

@@ -15,8 +15,7 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnConversationLine(Subtitle subtitle)
         {
-            if (DialogueUtility.CurrentDialogueEntry.id == 0) return; 
-        
+           // if (subtitle.dialogueEntry.id == 0) 
 
             if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Action"))
             {
@@ -34,13 +33,6 @@ namespace Project.Runtime.Scripts.Events.Actions
             }
         
             GameStateManager.instance.gameState.Clock += (DialogueUtility.CurrentNodeDuration);
-
-
-            if (subtitle.dialogueEntry.IsLastNode())
-            {
-                
-                DialogueManager.PlaySequence("SetContinueMode(false);");
-            }
 
             foreach (var actor in DialogueManager.masterDatabase.actors)
             {
@@ -63,23 +55,6 @@ namespace Project.Runtime.Scripts.Events.Actions
             if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
             {
                 PixelCrushers.SaveSystem.SaveToSlot(1);
-            }
-        }
-
-        public void OnSequenceStart()
-        {
-            var sequence = DialogueUtility.CurrentDialogueEntry.Sequence;
-            var entry = DialogueUtility.CurrentDialogueEntry;
-            var autoContinue = Field.FieldExists(entry.fields, "Auto Continue") && Field.LookupBool(entry.fields, "Auto Continue");
-
-            if (entry.IsEmpty() || entry.id == 0 && !entry.isGroup || sequence != string.Empty && !sequence.Contains("Continue") && autoContinue && !entry.IsLastNode())
-            {
-                DialogueManager.PlaySequence("Continue()");
-            }
-
-            if (sequence != string.Empty && !sequence.Contains("SetContinueMode"))
-            {
-                DialogueManager.PlaySequence("SetContinueMode(false)");
             }
         }
 

@@ -186,6 +186,14 @@ namespace Project.Runtime.Scripts.UI
             if (!Animator!.GetBool("Active")) return;
             WatchHandCursor.Freeze();
             Animator!.SetBool("Frozen", true);
+            
+            var destinationEntry = customUIResponseButton.response.destinationEntry;
+            
+            if (destinationEntry.outgoingLinks.Count == 0)
+            {
+                var entrytag = $"{destinationEntry.GetConversation().Title}_{destinationEntry.id}";
+                DialogueManager.instance.PlaySequence($"EndOfLine({entrytag})");
+            }
         }
 
         private Color _color;

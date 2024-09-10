@@ -41,6 +41,16 @@ namespace Project.Runtime.Scripts.UI
             {
                 Clock.Freeze(true);
             }
+            
+            var destinationEntry = customUIResponseButton.response.destinationEntry;
+
+            if (destinationEntry.outgoingLinks.Count == 0)
+            {
+                var entrytag = $"{destinationEntry.GetConversation().Title}_{destinationEntry.id}";
+                DialogueManager.instance.PlaySequence($"EndOfLine({entrytag})");
+            }
+
+         //   DialogueManager.instance.PlaySequence("Message(Choice)");
         }
 
         protected virtual void OnContentChanged()

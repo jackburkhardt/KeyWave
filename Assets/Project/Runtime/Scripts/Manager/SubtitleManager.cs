@@ -18,7 +18,7 @@ namespace Project.Runtime.Scripts.Manager
     {
         public UnityEvent onDuplicateAdded;
 
-        
+        public SubtitleContentElement activeSubtitleContentElement;
         public SubtitleContentElement templateSubtitleContentElement;
         public TextMeshProUGUI templateResponseDuplicate;
         public Transform duplicatedSubtitleContentContainer;
@@ -51,7 +51,9 @@ namespace Project.Runtime.Scripts.Manager
             
             _queuedSubtitles.Clear();
       
-            templateSubtitleContentElement.Clear();
+            activeSubtitleContentElement.Clear();
+            
+            RefreshContents();
         }
 
         public void RefreshContents()

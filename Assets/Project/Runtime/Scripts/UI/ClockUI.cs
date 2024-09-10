@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using TMPro;
 using UnityEngine;
@@ -100,7 +101,9 @@ namespace Project.Runtime.Scripts.UI
             timeIsUpdating = false;
         
             BroadcastMessage("OnTimeChanged");
-        
+
+            DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)");
+
         }
     }
 }

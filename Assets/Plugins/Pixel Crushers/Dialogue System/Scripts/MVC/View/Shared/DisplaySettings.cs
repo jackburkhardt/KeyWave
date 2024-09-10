@@ -308,10 +308,6 @@ namespace PixelCrushers.DialogueSystem
             [Tooltip("Used when a dialogue entry doesn't define its own Response Menu Sequence.")]
             [TextArea]
             public string defaultResponseMenuSequence = string.Empty;
-            
-            [Tooltip("Used on the last line of a conversation if the conversation doesn't define its own last line sequence.")]
-            [TextArea]
-            public string defaultLastLineSequence = string.Empty;
 
             /// <summary>
             /// The format to use for the <c>entrytag</c> keyword.

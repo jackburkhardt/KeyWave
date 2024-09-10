@@ -62,6 +62,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(SetExclusiveQuestEntryState), this , SymbolExtensions.GetMethodInfo(() => SetExclusiveQuestEntryState(string.Empty, 0, string.Empty)));
             Lua.RegisterFunction(nameof(SkipTime), this, SymbolExtensions.GetMethodInfo(() => SkipTime(0)));
             Lua.RegisterFunction(nameof(LikedThat), this, SymbolExtensions.GetMethodInfo(() => LikedThat(string.Empty, true)));
+            Lua.RegisterFunction(nameof(SetConversationConditions), this,
+                SymbolExtensions.GetMethodInfo(() => SetConversationConditions(0, string.Empty)));
         }
 
         private void DeregisterLuaFunctions()
@@ -94,6 +96,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(SetExclusiveQuestEntryState));
             Lua.UnregisterFunction(nameof(SkipTime));
             Lua.UnregisterFunction(nameof(LikedThat));
+            Lua.UnregisterFunction(nameof(SetConversationConditions));
         }
 
 
@@ -323,6 +326,24 @@ namespace Project.Runtime.Scripts.DialogueSystem
             var relationship = DialogueLua.GetActorField(actorName, "PlayerRelationship").asFloat;
             var newRelationship = Mathf.Clamp(relationship + offset, -1f, 1f);
             DialogueLua.SetActorField(actorName, "PlayerRelationship", relationship + offset);
+        }
+        
+        public void SetConversationConditions(double conversationID, string fieldValue)
+        {
+           // Debug.Log($"Setting conversation '{DialogueManager.instance.GetConversationTitle((int)conversationID)}' field {fieldName} to {fieldValue}");
+
+            var conversation =
+                DialogueManager.masterDatabase.GetConversation(
+                    DialogueManager.instance.GetConversationTitle((int)conversationID));
+            
+            var availableFieldExists = Field.FieldExists(conversation.fields, "Conditions");
+            if (!availableFieldExists)
+            {
+                Field.SetValue(conversation.fields, "Conditions", fieldValue);
+            }
+            
+            DialogueLua.SetConversationField((int)conversationID, "Conditions", fieldValue);
+            //Debug.Log($"Field set to {DialogueLua.GetConversationField((int)conversationID, "Conditions").}");
         }
     }
 }

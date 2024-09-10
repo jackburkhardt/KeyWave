@@ -146,6 +146,11 @@ namespace Project.Runtime.Scripts.Manager
         
             return (hours * 3600 + minutes * 60);
         }
+        
+        public static void AddSeconds(int seconds)
+        {
+            CurrentTimeRaw += seconds;
+        }
 
         /// <summary>
         /// Converts a time in seconds to a string in the format "HH:MM". e.g. 27000 to "07:30"

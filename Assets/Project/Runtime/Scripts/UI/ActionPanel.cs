@@ -47,7 +47,7 @@ public class ActionPanel : MonoBehaviour
     }
     public void OnConversationLine(Subtitle subtitle)
     {
-        Debug.Log("Conversation line");
+//        Debug.Log("Conversation line");
         if (newConversation)
         {
             newConversation = false;
@@ -74,25 +74,25 @@ public class ActionPanel : MonoBehaviour
     }
     
     private ActionPanelButton GetButtonOfType(string s) => GetButtonOfType((ActionPanelButton.ActionPanelButtonType) Enum.Parse(typeof(ActionPanelButton.ActionPanelButtonType), s));
+
+  
     
     public void OnConversationEnd()
     {
-        Debug.Log("Conversation end");
+        /*
         var currentConversation = mostRecentSubtitle.dialogueEntry.GetConversation().Title;
 
         var conversationType = currentConversation.Split("/").Length > 3 ? currentConversation.Split("/")[^2] : string.Empty;
 
         if (conversationType is "Action" or "Talk" or "Walk")
         {
-            Debug.Log("Showing panel " + conversationType);
             ShowPanel(GetButtonOfType(conversationType));
         }
         
         if (currentConversation.EndsWith("Base"))
         {
-            Debug.Log("Showing panel");
             ShowPanel();
-        }
+        }*/
         
         //else HidePanel();
     }
@@ -104,26 +104,52 @@ public class ActionPanel : MonoBehaviour
     
     public void OnConversationStart()
     {
-        Debug.Log("Conversation start");
+//        Debug.Log("Conversation start");
         newConversation = true;
         EvaluatePanel();
     }
 
+    private bool ConversationExistsAndIsAvailable(string conversationName)
+    {
+        var conversationExists = DialogueManager.masterDatabase.GetConversation(conversationName) != null;
+        if (!conversationExists) return false;
+        
+        var conditionsCheckExists = Field.FieldExists(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Conditions");
+
+        if (!conditionsCheckExists)
+        {
+            Debug.LogWarning("No available field found in conversation " + conversationName);
+            return true;
+        }
+        var check = Field.LookupValue(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Conditions");
+        return Lua.Run($"return {check}").asBool;
+         //   Field.LookupBool(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Available");
+
+    }
+
     public void EvaluatePanel()
     {
+        EvaluatePanel(out var _);
+    }
+
+    public void EvaluatePanel(out ActionPanelButton fallBackButton, ActionPanelButton tryButton = null)
+    {
+        fallBackButton = null;
+        
         if (Location.PlayerLocation == null) return;
         var location = Location.PlayerLocation.name;
         var sublocation = DialogueLua.GetLocationField(location, "Current Sublocation").asString;
         
         if (!string.IsNullOrEmpty(sublocation)) location += "/" + sublocation;
 
-        var actionConversationExists = DialogueManager.masterDatabase.GetConversation($"{location}/Action/Base") != null;
-        var talkConversationExists = DialogueManager.masterDatabase.GetConversation($"{location}/Talk/Base") != null;
-    //    Debug.Log(DialogueManager.masterDatabase.GetConversation($"{Location.PlayerLocation.name}/Walk/Base"));
-        var walkConversationExists = DialogueManager.masterDatabase.GetConversation($"{Location.PlayerLocation.name}/Walk/Base") != null;
+        var actionConversationExists = ConversationExistsAndIsAvailable($"{location}/Action/Base");
+        var talkConversationExists = ConversationExistsAndIsAvailable($"{location}/Talk/Base");
+        var walkConversationExists = ConversationExistsAndIsAvailable($"{Location.PlayerLocation.name}/Walk/Base");
       //  Debug.Log(walkConversationExists);
 
         var buttons = transform.GetChildren<ActionPanelButton>();
+
+        
         
         foreach (var button in buttons)
         {
@@ -131,15 +157,20 @@ public class ActionPanel : MonoBehaviour
             {
                 case ActionPanelButton.ActionPanelButtonType.Walk:
                     button.gameObject.SetActive(walkConversationExists);
+                    fallBackButton = tryButton != null && tryButton.type == button.type && walkConversationExists ? button : fallBackButton;
                     break;
                 case ActionPanelButton.ActionPanelButtonType.Talk:
                     button.gameObject.SetActive(talkConversationExists);
+                    fallBackButton = tryButton != null && tryButton.type == button.type && talkConversationExists ? button : fallBackButton;
                     break;
                 case ActionPanelButton.ActionPanelButtonType.Action:
                     button.gameObject.SetActive(actionConversationExists);
+                    fallBackButton = tryButton != null && tryButton.type == button.type && actionConversationExists ? button : fallBackButton;
                     break;
             }
         }
+        
+        fallBackButton ??= GetComponentsInChildren<ActionPanelButton>()[0];
     }
     
     public void ShowPanel(string type)
@@ -158,13 +189,9 @@ public class ActionPanel : MonoBehaviour
         isActionPanelActive = true;
         isDummyPanelActive = false;
         
-        EvaluatePanel();
+        EvaluatePanel(out button, button);
 
-        if (button == null)
-        {
-            button = GetComponentsInChildren<ActionPanelButton>()[0];
-        }
-        
+        Debug.Log("Showing panel with button " + button.type);
         
         StartCoroutine(SimulateClickAfterDelay(button, 0.5f));
     }
@@ -182,8 +209,6 @@ public class ActionPanel : MonoBehaviour
         
         EvaluatePanel();
         var buttons = instance.transform.GetChildren<ActionPanelButton>();
-        Debug.Log(GameManager.gameState.PlayerLocation);
-        Debug.Log(DialogueManager.masterDatabase.GetConversation("Hotel/Action/Base"));
         
         foreach (var button in buttons)
         {

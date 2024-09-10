@@ -74,6 +74,9 @@ public class ActionPanelButton : MonoBehaviour
         var playerLocation = Location.PlayerLocation.name;
         var conversationName = playerLocation + "/Walk/Base";
 
+        GoToConversation(conversationName);
+        return;
+
         if (!DialogueManager.instance.isConversationActive)
         {
             Debug.Log("Starting conversation: " + conversationName);
@@ -87,16 +90,10 @@ public class ActionPanelButton : MonoBehaviour
         // DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
         DialogueManager.conversationController.GotoState(state);
     }
-    
-    public void StartActionConversation()
+
+    public void GoToConversation(string conversationName)
     {
         var database = DialogueManager.instance.masterDatabase;
-        var playerLocation = Location.PlayerLocation.name;
-        var sublocation = DialogueLua.GetLocationField(playerLocation, "Current Sublocation").asString;
-        if (!string.IsNullOrEmpty(sublocation)) playerLocation += "/" + sublocation;
-        var conversationName = playerLocation + "/Action/Base";
-            
-            
         if (!DialogueManager.instance.isConversationActive)
         {
             DialogueManager.instance.StartConversation(conversationName);
@@ -105,11 +102,29 @@ public class ActionPanelButton : MonoBehaviour
             
         var conversation = database.GetConversation(conversationName);
         var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
+        var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+        DialogueManager.conversationController.GotoState(state);
+        DialogueManager.instance.PlaySequence("Continue()");
+    }
+    
+    public void StartActionConversation()
+    {
+        var database = DialogueManager.instance.masterDatabase;
+        var playerLocation = Location.PlayerLocation.name;
+        var sublocation = DialogueLua.GetLocationField(playerLocation, "Current Sublocation").asString;
+        if (!string.IsNullOrEmpty(sublocation)) playerLocation += "/" + sublocation;
+        var conversationName = playerLocation + "/Action/Base";
+        GoToConversation(conversationName);
+        return;
+            
+        var conversation = database.GetConversation(conversationName);
+        var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
             
         //DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
             
         var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
         DialogueManager.conversationController.GotoState(state);
+       
     }
     
     public void StartTalkConversation()
@@ -121,23 +136,19 @@ public class ActionPanelButton : MonoBehaviour
         if (!string.IsNullOrEmpty(sublocation)) playerLocation += "/" + sublocation;
         var conversationName = playerLocation + "/Talk/Base";
 
-        if (!DialogueManager.instance.isConversationActive)
-        {
-            DialogueManager.instance.StartConversation(conversationName);
-            return;
-        }
-            
-        var conversation = database.GetConversation(conversationName);
-        var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
-        var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
-        // DialogueManager.instance.BroadcastMessage("OnConversationBase", dialogueEntry);
-        DialogueManager.conversationController.GotoState(state);
+        GoToConversation(conversationName);
+        return;
+        
     }
     
     public void StartMapConversation()
     {
         var database = DialogueManager.instance.masterDatabase;
         var conversationName = "Map";
+
+        GoToConversation(conversationName);
+        
+        return;
 
         if (!DialogueManager.instance.isConversationActive)
         {
