@@ -16,6 +16,16 @@ public class SequencerCommandAddSeconds : SequencerCommand
     }
 }
 
+public class SequencerCommandAddMinutes: SequencerCommand
+{
+    public void Awake()
+    {
+        var time = GetParameterAsInt(0);
+        Clock.AddSeconds(time * 60);
+        Stop();
+    }
+}
+
 public class SequencerCommandBlackOut : SequencerCommand
 {
     private void Start()

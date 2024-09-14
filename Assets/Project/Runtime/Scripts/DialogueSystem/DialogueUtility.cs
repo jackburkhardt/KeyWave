@@ -88,7 +88,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                     break;
             }
 
-            return value;
+            return value * Clock.TimeScales.GlobalTimeScale;
         }
 
         public static int GetQuestDuration(Item quest)

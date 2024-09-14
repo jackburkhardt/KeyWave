@@ -64,6 +64,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(LikedThat), this, SymbolExtensions.GetMethodInfo(() => LikedThat(string.Empty, true)));
             Lua.RegisterFunction(nameof(SetConversationConditions), this,
                 SymbolExtensions.GetMethodInfo(() => SetConversationConditions(0, string.Empty)));
+            Lua.RegisterFunction(nameof(AddMinutes), this, SymbolExtensions.GetMethodInfo(() => AddMinutes(0)));
+            Lua.RegisterFunction(nameof(Increment), this, SymbolExtensions.GetMethodInfo(() => Increment(null)));
         }
 
         private void DeregisterLuaFunctions()
@@ -97,6 +99,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(SkipTime));
             Lua.UnregisterFunction(nameof(LikedThat));
             Lua.UnregisterFunction(nameof(SetConversationConditions));
+            Lua.UnregisterFunction(nameof(AddMinutes));
+            Lua.UnregisterFunction(nameof(Increment));
         }
 
 
@@ -344,6 +348,17 @@ namespace Project.Runtime.Scripts.DialogueSystem
             
             DialogueLua.SetConversationField((int)conversationID, "Conditions", fieldValue);
             //Debug.Log($"Field set to {DialogueLua.GetConversationField((int)conversationID, "Conditions").}");
+        }
+        
+        public void AddMinutes(double minutes)
+        {
+            Clock.AddSeconds((int)minutes * 60);
+        }
+
+        public void Increment(string var)
+        {
+            var value = DialogueLua.GetVariable(var).asInt;
+            DialogueLua.SetVariable(var, value + 1);
         }
     }
 }

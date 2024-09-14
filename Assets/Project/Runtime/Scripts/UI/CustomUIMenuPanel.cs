@@ -46,8 +46,9 @@ namespace Project.Runtime.Scripts.UI
 
             if (destinationEntry.outgoingLinks.Count == 0)
             {
-                var entrytag = $"{destinationEntry.GetConversation().Title}_{destinationEntry.id}";
-                DialogueManager.instance.PlaySequence($"EndOfLine({entrytag})");
+                var conversationTitle = destinationEntry.GetConversation().Title;
+                var conversationType = conversationTitle.Split("/").Length > 3 ? conversationTitle.Split("/")[^2] : string.Empty;
+                DialogueManager.instance.PlaySequence($"SetDialoguePanel(false); SetActionPanel(true, {conversationType})");
             }
 
          //   DialogueManager.instance.PlaySequence("Message(Choice)");
