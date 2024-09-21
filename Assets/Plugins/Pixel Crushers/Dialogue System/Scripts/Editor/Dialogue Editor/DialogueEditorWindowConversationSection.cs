@@ -532,6 +532,22 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             actorField = DrawConversationParticipant(new GUIContent("Actor", "Primary actor, usually the PC."), actorField);
             conversantField = DrawConversationParticipant(new GUIContent("Conversant", "Other actor, usually an NPC."), conversantField);
 
+            var conditions = Field.Lookup(currentConversation.fields, "Conditions");
+            if (conditions != null)
+            {
+                EditorWindowTools.EditorGUILayoutBeginGroup();
+                luaConditionWizard.database = database;
+                conditions.value = luaConditionWizard.Draw(new GUIContent("Conditions", "Optional Lua statement that must be true to use this entry."), conditions.value);
+                //int falseConditionIndex = EditorGUILayout.Popup("False Condition Action", GetFalseConditionIndex(entry.falseConditionAction), falseConditionActionStrings);
+               // entry.falseConditionAction = falseConditionActionStrings[falseConditionIndex];
+                EditorWindowTools.EditorGUILayoutEndGroup();
+                //EditorGUILayout.LabelField("Conditions");
+                //conditions.value = EditorGUILayout.TextArea(conditions.value);
+            }
+            
+            // Conditions:
+            
+            
             DrawOverrideSettings(currentConversation.overrideSettings);
 
             DrawOtherConversationPrimaryFields();

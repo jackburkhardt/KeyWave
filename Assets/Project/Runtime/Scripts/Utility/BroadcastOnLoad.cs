@@ -21,7 +21,6 @@ public class BroadcastOnLoad : MonoBehaviour
     private void BroadcastOnLoadEnd()
     {
         BroadcastMessage("OnLoad", SendMessageOptions.DontRequireReceiver);
-        Debug.Log("Broadcasting OnLoad");
     }
     
     private void BroadcastOnDeloadEnd()

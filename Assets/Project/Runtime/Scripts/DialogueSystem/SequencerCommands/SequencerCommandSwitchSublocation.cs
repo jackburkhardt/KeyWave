@@ -37,6 +37,7 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             var destinationSublocationGameObject = locationScene.FindGameObject(sublocation);
             
+            Sequencer.PlaySequence("SetDialoguePanel(false)");
             
             yield return null;
             if (destinationSublocationGameObject == null)
@@ -65,8 +66,15 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             DialogueLua.SetLocationField(location, "Current Sublocation", sublocation);
             
             Sequencer.PlaySequence($"Fade(unstay, {duration/4})");
-            
-            yield return new WaitForSeconds(duration/4);
+
+            yield return new WaitForSeconds(1.5f * duration / 4);
+
+            if (sequencer.GetDialogueEntry().outgoingLinks.Count == 0)
+            {
+                DialogueManager.StopConversation();
+                yield return null;
+                DialogueManager.StartConversation(location + "/" + sublocation + "/Base");
+            }
         }
     }
     
@@ -86,6 +94,8 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
             
+            Sequencer.PlaySequence("SetDialoguePanel(false)");
+            
             Sequencer.PlaySequence($"Fade(stay, {duration/4})");
 
             yield return new WaitForSeconds(duration/2);
@@ -101,8 +111,16 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             Sequencer.PlaySequence($"Fade(unstay, {duration/4})");
             
-            yield return new WaitForSeconds(duration/4);
+            yield return new WaitForSeconds(1.5f * duration/4);
+
+            if (sequencer.GetDialogueEntry().outgoingLinks.Count == 0)
+            {
+                DialogueManager.StopConversation();
+                yield return null;
+                DialogueManager.StartConversation(location + "/Base");
+            }
             
+          
         }
     }
     

@@ -183,7 +183,7 @@ namespace Project.Runtime.Scripts.UI
 
         public override void OnChoiceSelection(CustomUIResponseButton customUIResponseButton)
         {
-            if (!Animator!.GetBool("Active")) return;
+            //if (!Animator!.GetBool("Active")) return;
             WatchHandCursor.Freeze();
             Animator!.SetBool("Frozen", true);
             
@@ -192,9 +192,13 @@ namespace Project.Runtime.Scripts.UI
             if (destinationEntry.outgoingLinks.Count == 0)
             {
                 var conversationTitle = destinationEntry.GetConversation().Title;
-                var conversationType = conversationTitle.Split("/").Length > 3 ? conversationTitle.Split("/")[^2] : string.Empty;
+                var conversationType = conversationTitle.Split("/").Length > 2 ? conversationTitle.Split("/")[^2] : string.Empty;
+                Debug.Log($"Conversation type: {conversationType}");
                 DialogueManager.instance.PlaySequence($"SetDialoguePanel(false); SetActionPanel(true, {conversationType})");
             }
+            
+            else Debug.Log("links: " + destinationEntry.outgoingLinks.Count);
+
         }
 
         private Color _color;

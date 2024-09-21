@@ -223,8 +223,15 @@ namespace Project.Runtime.Scripts.Utility
             
             
         }
-        
-        
+
+        public static DialogueEntry GetDialogueEntry(this Sequencer sequencer)
+        {
+            var splitIndex = sequencer.entrytag.LastIndexOf('_');
+            var entryID = int.Parse(sequencer.entrytag.Substring(splitIndex + 1));
+            var title = sequencer.entrytag.Substring(0, splitIndex).Replace('_', '/');
+            var entry = DialogueManager.instance.masterDatabase.GetConversation(title).GetDialogueEntry(entryID);
+            return entry;
+        }
        
         
     }

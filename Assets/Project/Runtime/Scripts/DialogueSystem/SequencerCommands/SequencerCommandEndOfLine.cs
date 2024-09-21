@@ -10,21 +10,42 @@ public class SequencerCommandEndOfLine : SequencerCommand
 {
     public void Start()
     {
-        var entrytag = GetParameter(0, sequencer.entrytag);
-        var splitIndex = entrytag.LastIndexOf('_');
-        var entryID = int.Parse(entrytag.Substring(splitIndex + 1));
-        var title = entrytag.Substring(0, splitIndex).Replace('_', '/');
-        Sequencer.PlaySequence("SetContinueMode(false);");
-        var entry = DialogueManager.instance.masterDatabase.GetConversation(title).GetDialogueEntry(entryID);
+        var input = GetParameter(0, sequencer.entrytag);
+        
+        string conversationType = null;
+        
+        
+        switch (input)
+        {
+            case "Action":
+                conversationType = "Action";
+                input = sequencer.entrytag;
+                break;
+            case "Walk":
+                conversationType = "Walk";
+                input = sequencer.entrytag;
+                break;
+            case "Talk":
+                conversationType = "Talk";
+                input = sequencer.entrytag;
+                break;
+        }
 
-        var conversationType = title.Split("/").Length > 3 ? title.Split("/")[^2] : string.Empty;
+        var entry = sequencer.GetDialogueEntry();
+        var title = entry.GetConversation().Title;
 
         var state = DialogueManager.instance.currentConversationState;
         var view = DialogueManager.instance.conversationView;
-        
         var waitForTyped = entry.subtitleText.Length > 0 ? "@Message(Typed)" : string.Empty;
         
-        if (entry.IsLastNode()) Debug.Log("is last node: " + entry.IsLastNode());
+        conversationType ??= title.Split("/").Length > 2 ? title.Split("/")[^2] : string.Empty;
+        
+        if (conversationType is not "Action" and not "Walk" and not "Talk")
+        {
+            conversationType = string.Empty;
+        }
+
+        Sequencer.PlaySequence("SetContinueMode(false);");
         
         Sequencer.PlaySequence(entry.IsLastNode()
             ? $"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};"
@@ -35,11 +56,8 @@ public class SequencerCommandEndOfLine : SequencerCommand
             AnalyzePCResponses(state, view, out var isPCResponseMenuNext, out var isPCAutoResponseNext);
             var autoContinue = isPCResponseMenuNext || entry.IsEmpty();
         
-            Debug.Log(entryID);
-        
             if (autoContinue)
             {
-                Debug.Log("PC Response Menu Next");
                 if (entry.subtitleText.Length > 0)
                 {
                     sequencer.PlaySequence("Continue()@Message(Typed);");

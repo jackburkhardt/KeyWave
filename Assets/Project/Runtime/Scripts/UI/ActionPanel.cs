@@ -122,7 +122,7 @@ public class ActionPanel : MonoBehaviour
             return true;
         }
         var check = Field.LookupValue(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Conditions");
-        return Lua.Run($"return {check}").asBool;
+        return check == string.Empty || Lua.Run($"return {check}").asBool;
          //   Field.LookupBool(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Available");
 
     }

@@ -21,7 +21,6 @@ public class SaveRewindAutosave : MonoBehaviour
         if (subtitle.formattedText.text == string.Empty) return;
         if (subtitle.dialogueEntry.IsResponseChild())
         {
-            Debug.Log("Response child detected, skipping autosave");
             return;
         }
 
