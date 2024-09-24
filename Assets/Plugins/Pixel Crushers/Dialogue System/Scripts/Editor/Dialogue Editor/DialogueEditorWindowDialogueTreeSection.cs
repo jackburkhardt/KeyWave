@@ -750,12 +750,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             entry.userScript = luaScriptWizard.Draw(new GUIContent("Script", "Optional Lua code to run when entry is spoken."), entry.userScript);
             EditorWindowTools.EditorGUILayoutEndGroup();
             
-            EditorWindowTools.EditorGUILayoutBeginGroup();
+            /*
 
-            bool randomizeNextEntry = entry.fields.Exists(f => f.title == "Randomize Next Entry") && Field.LookupBool(entry.fields, "Randomize Next Entry");
-            
-            if (entry.outgoingLinks.Count > 0 && entry.isGroup)
+            if (entry.outgoingLinks.Count > 1 && entry.isGroup)
             {
+                EditorWindowTools.EditorGUILayoutBeginGroup();
+                bool randomizeNextEntry = entry.fields.Exists(f => f.title == "Randomize Next Entry") && Field.LookupBool(entry.fields, "Randomize Next Entry");
                 var checkIfLinksAreNPC =
                     entry.outgoingLinks.Find(p => !database.IsPlayerID(database.GetDialogueEntry(p).ActorID));
 
@@ -766,9 +766,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                             "Tick to add to randomize the following entries."), randomizeNextEntry);
                     Field.SetValue(entry.fields, "Randomize Next Entry", randomizeNextEntry);
                 }
+                EditorWindowTools.EditorGUILayoutEndGroup();
             }
             
-            EditorWindowTools.EditorGUILayoutEndGroup();
+            */
+       
 
             // Other primary fields defined in template:
             DrawOtherDialogueEntryPrimaryFields(entry);
