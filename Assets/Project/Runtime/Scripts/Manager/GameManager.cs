@@ -153,7 +153,10 @@ namespace Project.Runtime.Scripts.Manager
                 yield return null;
             }
 
-            DialogueManager.instance.StartConversation("Intro");
+            if (DialogueLua.GetVariable("skip_content").asBool)
+                TravelTo(Location.PlayerLocation, LoadingScreen.LoadingScreenType.Black);
+
+            else DialogueManager.instance.StartConversation("Intro");
         }
 
        

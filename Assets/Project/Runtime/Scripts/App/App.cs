@@ -75,11 +75,20 @@ namespace Project.Runtime.Scripts.App
             StartCoroutine(BeginGameSequence(false));
         }
         
+        public void LoadBaseScene()
+        {
+            IEnumerator LoadBase()
+            {
+                yield return LoadSceneWithoutLoadingScreen("Base");
+            }
+            
+            StartCoroutine(LoadBase());
+            
+        }
         
-
         private IEnumerator NewGameSequence()
         {
-            yield return LoadSceneWithoutLoadingScreen("Base");
+           // yield return LoadSceneWithoutLoadingScreen("Base");
             
 
             yield return GameManager.instance.StartNewSave();

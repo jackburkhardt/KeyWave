@@ -24,6 +24,7 @@ public class GetComponentProperyDrawer : PropertyDrawerBase
 
     protected override void OnGUI_Internal(Rect rect, SerializedProperty property, GUIContent label)
     {
+        
         EditorGUI.BeginProperty(rect, label, property);
 
         Rect propertyRect = new Rect()
@@ -34,7 +35,7 @@ public class GetComponentProperyDrawer : PropertyDrawerBase
             height = EditorGUIUtility.singleLineHeight
         };
         
-        property.serializedObject.Update();
+      
 
         var trueLabel = label;
         
@@ -53,9 +54,12 @@ public class GetComponentProperyDrawer : PropertyDrawerBase
        
         EditorGUI.PropertyField(propertyRect, property, label);
         
-        property.serializedObject.ApplyModifiedProperties();
+       
 
         EditorGUI.EndProperty();
+        
+        property.serializedObject.ApplyModifiedProperties();
+        property.serializedObject.Update();
     }
     
     private bool TryGetNullComponent(SerializedProperty property, out object component, out GameObject gameObject)

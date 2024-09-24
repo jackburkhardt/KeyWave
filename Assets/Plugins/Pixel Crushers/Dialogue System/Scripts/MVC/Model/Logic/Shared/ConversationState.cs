@@ -83,6 +83,7 @@ namespace PixelCrushers.DialogueSystem
                     if (pcResponses[i].formattedText.forceMenu) return false;
                     if (pcResponses[i].formattedText.forceAuto && pcResponses[i].enabled) hasAuto = true;
                 }
+
                 return hasAuto || (pcResponses.Length == 1);
             }
         }
@@ -99,6 +100,7 @@ namespace PixelCrushers.DialogueSystem
                 {
                     if (pcResponses[i].enabled && pcResponses[i].formattedText.forceAuto) return true;
                 }
+
                 return false;
             }
         }
@@ -118,6 +120,7 @@ namespace PixelCrushers.DialogueSystem
                 {
                     if (pcResponses[i].enabled && pcResponses[i].formattedText.forceAuto) return pcResponses[i];
                 }
+
                 return pcResponses[0];
             }
         }
@@ -140,15 +143,44 @@ namespace PixelCrushers.DialogueSystem
         public bool isGroup { get; set; }
 
         /// @cond FOR_V1_COMPATIBILITY
-        public bool HasNPCResponse { get { return hasNPCResponse; } }
-        public Response FirstNPCResponse { get { return firstNPCResponse; } }
-        public bool HasPCResponses { get { return hasPCResponses; } }
-        public bool HasPCAutoResponse { get { return hasPCAutoResponse; } }
-        public Response PCAutoResponse { get { return pcAutoResponse; } }
-        public bool HasAnyResponses { get { return hasAnyResponses; } }
-        public bool IsGroup { get { return isGroup; } set { isGroup = value; } }
+        public bool HasNPCResponse
+        {
+            get { return hasNPCResponse; }
+        }
+
+        public Response FirstNPCResponse
+        {
+            get { return firstNPCResponse; }
+        }
+
+        public bool HasPCResponses
+        {
+            get { return hasPCResponses; }
+        }
+
+        public bool HasPCAutoResponse
+        {
+            get { return hasPCAutoResponse; }
+        }
+
+        public Response PCAutoResponse
+        {
+            get { return pcAutoResponse; }
+        }
+
+        public bool HasAnyResponses
+        {
+            get { return hasAnyResponses; }
+        }
+
+        public bool IsGroup
+        {
+            get { return isGroup; }
+            set { isGroup = value; }
+        }
+
         /// @endcond
-        
+
         private static Dictionary<DialogueEntry, DialogueEntry> s_lastRandomlyChosenEntry = null;
 
 #if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
@@ -172,13 +204,16 @@ namespace PixelCrushers.DialogueSystem
         /// <param name='pcResponses'>
         /// PC responses.
         /// </param>
-        public ConversationState(Subtitle subtitle, Response[] npcResponses, Response[] pcResponses, bool isGroup = false)
+        public ConversationState(Subtitle subtitle, Response[] npcResponses, Response[] pcResponses,
+            bool isGroup = false)
         {
             this.subtitle = subtitle;
             this.npcResponses = npcResponses;
             this.pcResponses = pcResponses;
             this.isGroup = isGroup;
         }
+
+
 
         public DialogueEntry GetRandomNPCEntry(bool noDuplicate = false)
         {
@@ -187,21 +222,56 @@ namespace PixelCrushers.DialogueSystem
             {
                 if (s_lastRandomlyChosenEntry == null)
                 {
+                    for (int i = 0; i < npcResponses.Length; i++)
+                    {
+                        DialogueLua.SetConversationField(subtitle.dialogueEntry.conversationID, $"DialogueEntry_{subtitle.dialogueEntry.id}_NPCResponse_{i}_Presented",  false);
+                    }
                     s_lastRandomlyChosenEntry = new Dictionary<DialogueEntry, DialogueEntry>();
                 }
                 DialogueEntry lastEntry, chosenEntry;
+
+                var unpresentedResponses = new List<Response>();
+
+                while (unpresentedResponses.Count == 0)
+                {
+                    if (npcResponses.Length == 0) break;
+                    
+                    for (int i = 0; i < npcResponses.Length; i++)
+                    {
+                        if (!DialogueLua.GetConversationField(subtitle.dialogueEntry.conversationID, $"DialogueEntry_{subtitle.dialogueEntry.id}_NPCResponse_{i}_Presented").asBool)
+                        {
+                            unpresentedResponses.Add(npcResponses[i]);
+                        }
+                    }
+
+                    if (unpresentedResponses.Count == 0)
+                    {
+                        for (int i = 0; i < npcResponses.Length; i++)
+                        {
+                            DialogueLua.SetConversationField(subtitle.dialogueEntry.conversationID, $"DialogueEntry_{subtitle.dialogueEntry.id}_NPCResponse_{i}_Presented",  false);
+                        }
+                    }
+                }
+
+  
+                
+                
                 if (s_lastRandomlyChosenEntry.TryGetValue(subtitle.dialogueEntry, out lastEntry))
                 {
-                    var responses = new List<Response>(npcResponses);
-                    responses.RemoveAll(x => x.destinationEntry == lastEntry);
-                    chosenEntry = responses[UnityEngine.Random.Range(0, responses.Count)].destinationEntry;
+                    unpresentedResponses.RemoveAll(x => x.destinationEntry == lastEntry);
+                    //chosenEntry = responses[UnityEngine.Random.Range(0, responses.Count)].destinationEntry;
                 }
                 else
                 {
-                    chosenEntry = npcResponses[UnityEngine.Random.Range((int)0, (int)npcResponses.Length)].destinationEntry;
+                    // chosenEntry = npcResponses[UnityEngine.Random.Range((int)0, (int)npcResponses.Length)].destinationEntry;
                 }
+                
+                var chosenEntryIndex = UnityEngine.Random.Range(0, unpresentedResponses.Count);
+                chosenEntry = unpresentedResponses[chosenEntryIndex].destinationEntry;
+                
                 s_lastRandomlyChosenEntry[subtitle.dialogueEntry] = chosenEntry;
                 return chosenEntry;
+               
             }
             else
             {
@@ -209,7 +279,8 @@ namespace PixelCrushers.DialogueSystem
             }
 
         }
-
     }
 
 }
+
+

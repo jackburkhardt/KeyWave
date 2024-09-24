@@ -66,6 +66,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 SymbolExtensions.GetMethodInfo(() => SetConversationConditions(0, string.Empty)));
             Lua.RegisterFunction(nameof(AddMinutes), this, SymbolExtensions.GetMethodInfo(() => AddMinutes(0)));
             Lua.RegisterFunction(nameof(Increment), this, SymbolExtensions.GetMethodInfo(() => Increment(null)));
+            Lua.RegisterFunction(nameof(SecondsToTime), this, SymbolExtensions.GetMethodInfo(() => SecondsToTime(0)));
         }
 
         private void DeregisterLuaFunctions()
@@ -101,6 +102,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(SetConversationConditions));
             Lua.UnregisterFunction(nameof(AddMinutes));
             Lua.UnregisterFunction(nameof(Increment));
+            Lua.UnregisterFunction(nameof(SecondsToTime));
         }
 
 
@@ -360,5 +362,12 @@ namespace Project.Runtime.Scripts.DialogueSystem
             var value = DialogueLua.GetVariable(var).asInt;
             DialogueLua.SetVariable(var, value + 1);
         }
+        
+        public string SecondsToTime(double seconds)
+        {
+            return Clock.To24HourClock((int)seconds);
+        }
+
+       
     }
 }

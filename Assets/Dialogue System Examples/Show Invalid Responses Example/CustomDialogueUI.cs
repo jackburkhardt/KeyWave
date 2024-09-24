@@ -42,6 +42,8 @@ public class CustomDialogueUI : StandardDialogueUI
         base.Start();
         
     }
+    
+    
 
     public override void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
     {
@@ -119,6 +121,19 @@ public class CustomDialogueUI : StandardDialogueUI
     {
         subtitle.formattedText.text = Regex.Replace(subtitle.formattedText.text, @"[^\x20-\x7F]", "");
         base.ShowSubtitle(subtitle);
+        
+       
+       
+    }
+
+    public void OnConversationLine(Subtitle subtitle)
+    {
+        if (Field.FieldExists(subtitle.dialogueEntry.fields, "Randomize Next Entry") && Field.LookupBool(subtitle.dialogueEntry.fields, "Randomize Next Entry"))
+        {
+            Debug.Log("Randomizing next entry");
+            DialogueManager.instance.conversationController.randomizeNextEntry = true;
+            DialogueManager.instance.conversationController.randomizeNextEntryNoDuplicate = true;
+        }
     }
 
     #endregion

@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -104,6 +106,12 @@ namespace Project.Runtime.Scripts.UI
 
             DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)");
 
+        }
+
+        public void OnConversationStart()
+        {
+            if (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.GetConversation().Title != "Intro")
+            GetComponent<Animator>().SetTrigger("Show");
         }
     }
 }

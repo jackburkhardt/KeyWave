@@ -106,14 +106,14 @@ namespace Project.Runtime.Scripts.UI.Map
 
         public void ShowInfoPanelAndFreeze(GameObject infoPanel)
         {
-            _infoPanelSwitcher.ShowObject(infoPanel);
+            _infoPanelSwitcher.SwitchTo(infoPanel);
             FreezeInfoPanel();
         }
 
         public void ShowInfoPanelIfNotFrozen(GameObject infoPanel)
         {
             if (_isFrozen) return;
-            _infoPanelSwitcher.ShowObject(infoPanel);
+            _infoPanelSwitcher.SwitchTo(infoPanel);
         }
 
 

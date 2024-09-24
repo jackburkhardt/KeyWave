@@ -21,9 +21,13 @@ namespace Project.Runtime.Scripts.UI
 
         private void Awake()
         {
-           _continueButton.SetActive(false);
-           RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
-           SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
+            if (_continueButton != null)
+            {
+                _continueButton.SetActive(false);
+                RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
+            }
+
+            SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
            
            #if UNITY_EDITOR
            var lamb = new GameObject("Sacrificial Lamb");
@@ -34,11 +38,14 @@ namespace Project.Runtime.Scripts.UI
            foreach(var suspect in lamb.scene.GetRootGameObjects())
                if (!sheepList.Contains(suspect.name)) Destroy(suspect);
            #endif
+            
+            App.App.Instance.LoadBaseScene();
         }
         
 
         private void OnSaveDataReceived(SaveGameMetadata metadata)
         {
+            if (_continueButton == null) return;
             _continueButton.SetActive(true);
             RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
             _continueTimestamp.text = metadata.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
@@ -46,12 +53,14 @@ namespace Project.Runtime.Scripts.UI
         
         public void TryStartNewGame()
         {
-            if (!SaveDataStorer.SaveDataExists)
+            if (!SaveDataStorer.SaveDataExists || _continueButton == null)
             {
                 StartNewGame();
                
                 return;
             }
+            
+         
             
             _saveExistsWarningPopup.SetActive(true);
             string saveTimestamp = SaveDataStorer.LatestSaveData.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");

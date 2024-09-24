@@ -749,6 +749,26 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             luaScriptWizard.database = database;
             entry.userScript = luaScriptWizard.Draw(new GUIContent("Script", "Optional Lua code to run when entry is spoken."), entry.userScript);
             EditorWindowTools.EditorGUILayoutEndGroup();
+            
+            EditorWindowTools.EditorGUILayoutBeginGroup();
+
+            bool randomizeNextEntry = entry.fields.Exists(f => f.title == "Randomize Next Entry") && Field.LookupBool(entry.fields, "Randomize Next Entry");
+            
+            if (entry.outgoingLinks.Count > 0 && entry.isGroup)
+            {
+                var checkIfLinksAreNPC =
+                    entry.outgoingLinks.Find(p => !database.IsPlayerID(database.GetDialogueEntry(p).ActorID));
+
+                if (checkIfLinksAreNPC != null)
+                {
+                    randomizeNextEntry = EditorGUILayout.ToggleLeft(
+                        new GUIContent("Randomize Next Entry",
+                            "Tick to add to randomize the following entries."), randomizeNextEntry);
+                    Field.SetValue(entry.fields, "Randomize Next Entry", randomizeNextEntry);
+                }
+            }
+            
+            EditorWindowTools.EditorGUILayoutEndGroup();
 
             // Other primary fields defined in template:
             DrawOtherDialogueEntryPrimaryFields(entry);
