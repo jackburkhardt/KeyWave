@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers;
+using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Utility;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
@@ -59,6 +61,7 @@ namespace Project.Runtime.Scripts.Audio
 
                 onActiveAudioChange.Invoke();
 
+                
                 if (clipData.includeVariants)
                 {
                     foreach (var variant in clipData.Variants)
@@ -72,6 +75,16 @@ namespace Project.Runtime.Scripts.Audio
                         });
                     }
                 }
+                
+                IEnumerator SendSequencerMessage(string message)
+                {
+                    while (!source.isPlaying) yield return null;
+                    yield return new WaitForSeconds(0.2f);
+                    Sequencer.Message(message);
+                }
+
+                StartCoroutine(SendSequencerMessage("PlayClip"));
+
             });
         }
         

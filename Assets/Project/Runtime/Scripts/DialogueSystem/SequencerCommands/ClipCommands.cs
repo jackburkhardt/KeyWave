@@ -19,6 +19,9 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             {
                 AudioEngine.Instance.PlayClip(address, repeats);
             }
+            
+            Sequencer.PlaySequence("SetContinueMode(false); Continue()@Message(PlayClip);");
+            
             Stop();
         }
     }
@@ -29,6 +32,9 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
         {
             var address = GetParameter(0);
             AudioEngine.Instance.PlayClipLooped(address);
+            
+            Sequencer.PlaySequence("SetContinueMode(false); Continue()@Message(PlayClip);");
+            
             Stop();
         }
     }
