@@ -240,7 +240,11 @@ namespace Project.Runtime.Scripts.Utility
     {
         public static Item? GetSubconversationQuest(this DialogueEntry dialogueEntry)
         {
-            var quest = DialogueManager.instance.masterDatabase.GetItem(dialogueEntry?.GetNextDialogueEntry()
+            Item quest = null;
+            
+            if (dialogueEntry != null && dialogueEntry?.GetNextDialogueEntry() != null && dialogueEntry?.GetNextDialogueEntry()
+                    ?.GetConversation() != null)
+            quest = DialogueManager.instance.masterDatabase.GetItem(dialogueEntry?.GetNextDialogueEntry()
                 ?.GetConversation().Title);
 
             return quest;

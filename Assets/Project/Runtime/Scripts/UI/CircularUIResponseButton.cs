@@ -61,13 +61,27 @@ namespace Project.Runtime.Scripts.UI
 
         private Color _defaultLabelColor;
 
-        private Item? AssociatedQuest => DialogueManager.Instance.masterDatabase.items.Find(item => item.Name == response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title);
+        private Item? AssociatedQuest
+        {
+            get
+            {
+                if (response != null && response.destinationEntry != null &&
+                    response.destinationEntry.GetNextDialogueEntry() != null &&
+                    response.destinationEntry.GetNextDialogueEntry().GetConversation() != null)
+
+                    return DialogueManager.Instance.masterDatabase.items.Find(item =>
+                        item.Name == response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title);
+
+                else return null;
+
+            }
+        }
 
         private Points.PointsField[] PointsData
         {
             get
             {
-                if (response?.destinationEntry != null && response?.destinationEntry.GetNextDialogueEntry() != null)
+                if (response != null && response?.destinationEntry != null && response?.destinationEntry.GetNextDialogueEntry() != null && response?.destinationEntry.GetNextDialogueEntry()?.GetConversation() != null)
                 {
                     var conversation = response?.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title;
                     return QuestUtility.GetPoints(conversation);
