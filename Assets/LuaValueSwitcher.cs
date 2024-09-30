@@ -18,6 +18,16 @@ public class LuaValueSwitcher : MonoBehaviour
         }
         DialogueLua.SetVariable(targetLuaVariable, luaValues[currentIndex]);
     }
+
+    public void Previous()
+    {
+        currentIndex--;
+        if (currentIndex < 0)
+        {
+            currentIndex = luaValues.Count - 1;
+        }
+        DialogueLua.SetVariable(targetLuaVariable, luaValues[currentIndex]);
+    }
     
     
 }

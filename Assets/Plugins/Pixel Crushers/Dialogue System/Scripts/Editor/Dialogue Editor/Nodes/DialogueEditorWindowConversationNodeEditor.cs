@@ -1788,10 +1788,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             wasShiftDown = Event.current.shift;
 
             GenericMenu contextMenu = new GenericMenu();
+            //if (entry.isGroup || entry.outgoingLinks.Count < 1)
             contextMenu.AddItem(new GUIContent("Create Child Node"), false, AddChildCallback, entry);
             if (multinodeSelection.nodes.Count == 2  && (multinodeSelection.nodes.Contains(entry)))
             {
                 contextMenu.AddItem(new GUIContent("Create In-between node"), false, CreateBetweenNodeCallback, entry);
+                contextMenu.AddItem(new GUIContent("Switch Nodes"), false, SwitchNodesCallback, entry);
             }
             contextMenu.AddSeparator("");
             contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, currentEntry, false));
@@ -2154,6 +2156,49 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             node0.outgoingLinks.Remove(dirtyLink);
             
             SetDatabaseDirty("Created inbetween node");
+        }
+        
+        private void SwitchNodesCallback(object o)
+        {
+            if (multinodeSelection.nodes.Count != 2) return;
+
+            int convoID = currentConversation.id;
+            var node0 = multinodeSelection.nodes[0];
+            var node1 = multinodeSelection.nodes[1];
+
+            var node1Links = new List<Link>(node1.outgoingLinks);
+            var node0Links = new List<Link>(node0.outgoingLinks);
+            
+            node0.outgoingLinks = new List<Link>(node1Links);
+            node1.outgoingLinks = new List<Link>(node0Links);
+            
+          //  node0.outgoingLinks.Clear();
+            
+            
+            foreach (var entry in currentConversation.dialogueEntries)
+            {  
+                foreach (var link in entry.outgoingLinks)
+                {
+                    link.originDialogueID = link.originDialogueID == node1.id
+                        ? node0.id
+                        : link.originDialogueID == node0.id
+                            ? node1.id
+                            : link.originDialogueID;
+                    
+                    link.destinationDialogueID = link.destinationDialogueID == node1.id
+                        ? node0.id
+                        : link.destinationDialogueID == node0.id ? node1.id
+                            : link.destinationDialogueID;
+                }
+            }
+            
+            var node0Position = new Vector2(node0.canvasRect.x, node0.canvasRect.y);
+            node0.canvasRect.Set(node1.canvasRect.x, node1.canvasRect.y, node0.canvasRect.width, node0.canvasRect.height);
+            
+            node1.canvasRect.Set(node0Position.x, node0Position.y, node1.canvasRect.width, node1.canvasRect.height);
+            
+            
+            SetDatabaseDirty("Switched nodes node");
         }
 
         private void RemoveOutgoingLinksFromClipboard()

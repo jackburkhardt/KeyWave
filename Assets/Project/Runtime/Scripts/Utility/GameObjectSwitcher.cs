@@ -83,8 +83,6 @@ public class GameObjectSwitcher : MonoBehaviour
         {
             _queuedIndex = ObjectsToSwitch.FindIndex(i => i.gameObject == obj);
         }
-
-        
     }
 
     private void Awake()
@@ -130,7 +128,7 @@ public class GameObjectSwitcher : MonoBehaviour
 
         else if (defaultObject != null)
         {
-            ShowObject(defaultObject);
+            SwitchTo(defaultObject);
         }
       
     }
@@ -222,7 +220,7 @@ public class GameObjectSwitcher : MonoBehaviour
             imageComponentSwitcher ? ImagesToSwitch.FindIndex(i => i.gameObject == obj)
                 : canvasGroupSwitcher ? CanvasGroupsToSwitch.FindIndex(i => i.gameObject == obj)
             : ObjectsToSwitch.FindIndex(i => i.gameObject == obj);
-        
+        Debug.Log(_queuedIndex);
         Next();
     }
 
@@ -271,7 +269,7 @@ public class GameObjectSwitcher : MonoBehaviour
         
         if (_walk != null) _walk.Add(currentIndex);
 
-        var nextIndex = _queuedIndex > 0 ? _queuedIndex
+        var nextIndex = _queuedIndex >= 0 ? _queuedIndex
             : imageComponentSwitcher ? currentIndex + 1 >= ImagesToSwitch.Count ? 0 : currentIndex + 1
             : canvasGroupSwitcher ? currentIndex + 1 >= CanvasGroupsToSwitch.Count? 0 : currentIndex + 1
             : currentIndex + 1 >= ObjectsToSwitch.Count ? 0 : currentIndex + 1;
