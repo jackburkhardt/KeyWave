@@ -1754,7 +1754,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             contextMenu.AddSeparator(string.Empty);
             contextMenu.AddItem(new GUIContent("Play From Start"), false, PlayConversationFromEntry, 0);
-
+            if (_currentConversation.Title.Split("/").Length > 2)
+                contextMenu.AddItem(new GUIContent("cd .."), false, AscendConversation, 0);
             contextMenu.ShowAsContext();
             contextMenuPosition = Event.current.mousePosition;
 
@@ -1775,6 +1776,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             contextMenu.AddSeparator(string.Empty);
             contextMenu.AddItem(new GUIContent("Play From Start"), false, PlayConversationFromEntry, 0);
+            if (_currentConversation.Title.Split("/").Length > 2) contextMenu.AddItem(new GUIContent("cd .."), false, AscendConversation, 0);
 
             contextMenu.ShowAsContext();
             contextMenuPosition = Event.current.mousePosition;
@@ -2200,6 +2202,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             SetDatabaseDirty("Switched nodes node");
         }
+        
+        private void AscendConversation(object o)
+        {
+            var split = currentConversation.Title.Split('/');
+            if (split.Length <= 2) return;
+            var parentConversation = split[^1] == "Base"
+                ? currentConversation.Title.Substring(0, currentConversation.Title.Length - split[^1].Length - 1)
+                : currentConversation.Title.Substring(0, currentConversation.Title.Length - split[^1].Length - split[^2].Length - 2);
+            parentConversation += "/Base";
+            SetCurrentConversation(database.GetConversation(parentConversation));
+            if (showNodeEditor) ActivateNodeEditorMode();
+        }
 
         private void RemoveOutgoingLinksFromClipboard()
         {
@@ -2268,7 +2282,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var entry = o as DialogueEntry;
             entry.userScript = "SetQuestState(\"" + currentConversation.Title + "\", \"success\");";
             entry.Title = "Auto Quest Success";
-            entry.Sequence = "SetContinueMode(false); WaitForMessage(Typed);";
             SetDatabaseDirty("Set User Script");
             
             RefreshConversation();

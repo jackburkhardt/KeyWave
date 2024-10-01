@@ -63,7 +63,7 @@ public class ActionPanelButton : MonoBehaviour
     public void OnClick()
     {
         ActionPanel.ShowLabelAndHideAllOthers(this);
-        ActionPanel.instance.circularUIMenuPanel.SetColor(responseMenuHue);
+      //  ActionPanel.instance.circularUIMenuPanel.SetColor(responseMenuHue);
         StartConversation.Invoke();
     }
 

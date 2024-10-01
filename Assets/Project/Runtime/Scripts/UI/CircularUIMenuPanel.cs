@@ -24,20 +24,33 @@ namespace Project.Runtime.Scripts.UI
             "mousePointerHand",
             "outerBackground",
             "innerBackground",
-            "useHideAnimationTrigger"
+            "useHideAnimationTrigger",
+            "MainComponentSwitcher"
         };
+        
 
         [SerializeField] private WatchHandCursor mousePointerHand;
         [SerializeField] public AnimationCurve offsetCurve;
         [SerializeField] private UITextField timeEstimate;
         [SerializeField] private Image outerBackground, innerBackground;
         [SerializeField] private bool useHideAnimationTrigger;
+        
+        public ComponentSwitcher MainComponentSwitcher;
 
         private Color defaultOuterColor, defaultInnerColor;
 
         private bool _firstFocus = false;
         
         private bool _pointerInside = false;
+
+        [Serializable]
+        public class ResponseMenuHue
+        {
+            public string conversationType;
+            public Color color;
+        }
+        
+        public List<ResponseMenuHue> responseMenuHues;
         
         
         private Animator? Animator => GetComponent<Animator>();
@@ -210,6 +223,30 @@ namespace Project.Runtime.Scripts.UI
             outerBackground.color = Color.Lerp(defaultOuterColor, new Color(_color.r, _color.g, _color.b ,outerBackground.color.a), 0.2f);
                 
             innerBackground.color = Color.Lerp(defaultInnerColor, new Color(_color.r, _color.g, _color.b ,innerBackground.color.a), 0.4f);
+        }
+
+        public void OnLinkedConversationStart()
+        {
+            var currentConversation =
+                (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.GetConversation());
+            
+            var conversationType = currentConversation.Title == "Map" ? "Map" : currentConversation.Title.Split("/").Length > 2 ? currentConversation.Title.Split("/")[^2] : string.Empty;
+            
+            switch (conversationType) 
+            {
+                case "Talk":
+                    MainComponentSwitcher.SwitchTo(0);
+                    break;
+                case "Action":
+                    MainComponentSwitcher.SwitchTo(1);
+                    break;
+                case "Walk":
+                    MainComponentSwitcher.SwitchTo(2);
+                    break;
+                case "Map":
+                    MainComponentSwitcher.SwitchTo(3);
+                    break;
+            }
         }
 
 

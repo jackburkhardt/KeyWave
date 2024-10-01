@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &890639112
 RectTransform:
   m_ObjectHideFlags: 0
@@ -212,7 +212,8 @@ GameObject:
   - component: {fileID: 979067601}
   - component: {fileID: 979067600}
   - component: {fileID: 979067603}
-  - component: {fileID: 979067604}
+  - component: {fileID: 979067605}
+  - component: {fileID: 979067606}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -327,7 +328,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &979067604
+--- !u!114 &979067605
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -341,17 +342,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableAllOnAwake: 0
   rootsOnly: 1
-  defaultObject: {fileID: 1555963294}
+  sync: 0
+  defaultIndex: 0
   OnSwitch:
     m_PersistentCalls:
       m_Calls: []
+  _target: {fileID: 979067598}
   _extras: 0
-  animator: {fileID: 0}
+  animator: {fileID: 979067603}
   nextTriggerName: Next
   backTriggerName: Back
   waitForAnimation: 1
-  imageComponentSwitcher: 0
-  canvasGroupSwitcher: 0
+--- !u!222 &979067606
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979067598}
+  m_CullTransparentMesh: 1
 --- !u!1 &1351940006
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1555963295
 RectTransform:
   m_ObjectHideFlags: 0

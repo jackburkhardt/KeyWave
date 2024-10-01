@@ -120,7 +120,7 @@ namespace Project.Runtime.Scripts.UI.Map
         public void HideInfoPanelIfNotFrozen(GameObject infoPanel)
         {
             if (_isFrozen) return;
-            _infoPanelSwitcher.HideObject(infoPanel);
+            _infoPanelSwitcher.HideComponent(infoPanel);
             HideConfirmationButtons();
        
         }

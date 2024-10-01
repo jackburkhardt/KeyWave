@@ -32,6 +32,7 @@ public class SequencerCommandBlackOut : SequencerCommand
     {
         var time = GetParameterAsInt(0);
         var unit = GetParameter(1, "minutes");
+        var timeString = GetParameter(2, "");
 
         int timeToAdd;
         
@@ -45,6 +46,9 @@ public class SequencerCommandBlackOut : SequencerCommand
                 break;
             case "hours":
                 timeToAdd = time * 3600;
+                break;
+            case "set":
+                timeToAdd = Mathf.Max(Clock.ToSeconds(timeString) - Clock.CurrentTimeRaw, 0);
                 break;
             default:
                 timeToAdd = time * 60;

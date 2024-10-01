@@ -16,8 +16,6 @@ public class ActionPanel : MonoBehaviour
     public bool isActionPanelActive = false;
 
     public static ActionPanel instance;
-    
-    public CircularUIMenuPanel circularUIMenuPanel;
 
     private void Awake()
     {
@@ -69,7 +67,7 @@ public class ActionPanel : MonoBehaviour
     
     private ActionPanelButton GetButtonOfType(ActionPanelButton.ActionPanelButtonType type)
     {
-        var buttons = transform.GetChildren<ActionPanelButton>();
+        var buttons = transform.GetComponentsInChildren<ActionPanelButton>();
         return buttons.FirstOrDefault(button => button.type == type);
     }
     
@@ -112,15 +110,13 @@ public class ActionPanel : MonoBehaviour
     private bool ConversationExistsAndIsAvailable(string conversationName)
     {
         var conversationExists = DialogueManager.masterDatabase.GetConversation(conversationName) != null;
+        
         if (!conversationExists) return false;
         
         var conditionsCheckExists = Field.FieldExists(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Conditions");
 
-        if (!conditionsCheckExists)
-        {
-            Debug.LogWarning("No available field found in conversation " + conversationName);
-            return true;
-        }
+        if (!conditionsCheckExists) return true;
+        
         var check = Field.LookupValue(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Conditions");
         return check == string.Empty || Lua.Run($"return {check}").asBool;
          //   Field.LookupBool(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Available");
@@ -130,6 +126,17 @@ public class ActionPanel : MonoBehaviour
     public void EvaluatePanel()
     {
         EvaluatePanel(out var _);
+    }
+    
+    public static bool ConversationTypeFromName(string conversationName, out string type)
+    {
+        type = conversationName == "Map"
+            ? "Map"
+            : conversationName.Split("/").Length > 3
+                ? conversationName.Split("/")[^2]
+                : string.Empty;
+        
+        return type is "Action" or "Talk" or "Walk" or "Map";
     }
 
     public void EvaluatePanel(out ActionPanelButton fallBackButton, ActionPanelButton tryButton = null)
@@ -145,14 +152,15 @@ public class ActionPanel : MonoBehaviour
         var actionConversationExists = ConversationExistsAndIsAvailable($"{location}/Action/Base");
         var talkConversationExists = ConversationExistsAndIsAvailable($"{location}/Talk/Base");
         var walkConversationExists = ConversationExistsAndIsAvailable($"{Location.PlayerLocation.name}/Walk/Base");
-      //  Debug.Log(walkConversationExists);
-
-        var buttons = transform.GetChildren<ActionPanelButton>();
+     
+        var buttons = transform.GetComponentsInChildren<ActionPanelButton>(true);
 
         
         
         foreach (var button in buttons)
         {
+            button.gameObject.SetActive(true);
+            
             switch (button.type)
             {
                 case ActionPanelButton.ActionPanelButtonType.Walk:
@@ -208,7 +216,7 @@ public class ActionPanel : MonoBehaviour
         isDummyPanelActive = true;
         
         EvaluatePanel();
-        var buttons = instance.transform.GetChildren<ActionPanelButton>();
+        var buttons = instance.transform.GetComponentsInChildren<ActionPanelButton>();
         
         foreach (var button in buttons)
         {
@@ -226,7 +234,7 @@ public class ActionPanel : MonoBehaviour
 
     public static void ShowLabelAndHideAllOthers(ActionPanelButton panelButton)
     {
-        var buttons = instance.transform.GetChildren<ActionPanelButton>();
+        var buttons = instance.transform.GetComponentsInChildren<ActionPanelButton>();
         
         foreach (var button in buttons)
         {

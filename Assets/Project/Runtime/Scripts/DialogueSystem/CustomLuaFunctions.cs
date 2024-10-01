@@ -67,6 +67,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(AddMinutes), this, SymbolExtensions.GetMethodInfo(() => AddMinutes(0)));
             Lua.RegisterFunction(nameof(Increment), this, SymbolExtensions.GetMethodInfo(() => Increment(null)));
             Lua.RegisterFunction(nameof(SecondsToTime), this, SymbolExtensions.GetMethodInfo(() => SecondsToTime(0)));
+            
+            Lua.RegisterFunction(nameof(WithinMinutesOfVariable), this, SymbolExtensions.GetMethodInfo(() => WithinMinutesOfVariable(string.Empty, 0)));
         }
 
         private void DeregisterLuaFunctions()
@@ -103,6 +105,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(AddMinutes));
             Lua.UnregisterFunction(nameof(Increment));
             Lua.UnregisterFunction(nameof(SecondsToTime));
+            Lua.UnregisterFunction(nameof(WithinMinutesOfVariable));
         }
 
 
@@ -366,6 +369,13 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public string SecondsToTime(double seconds)
         {
             return Clock.To24HourClock((int)seconds);
+        }
+        
+        public bool WithinMinutesOfVariable(string var, double rangeInMinutes)
+        {
+            var range = (int)rangeInMinutes * 60;
+            var timeInSeconds = Clock.ToSeconds(var);
+            return Clock.CurrentTimeRaw > timeInSeconds - range && Clock.CurrentTimeRaw < timeInSeconds + range;
         }
 
        

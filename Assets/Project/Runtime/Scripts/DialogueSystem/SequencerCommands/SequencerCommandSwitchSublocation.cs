@@ -39,6 +39,8 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             Sequencer.PlaySequence("SetDialoguePanel(false)");
             
+            
+            
             yield return null;
             if (destinationSublocationGameObject == null)
             {
@@ -46,6 +48,8 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
                 yield break;
             }
             Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
+            
+            Sequencer.PlaySequence("SetActionPanel(false)");
             
             Sequencer.PlaySequence($"Fade(stay, {duration/4})");
 
@@ -84,7 +88,7 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
         {
             string location = GetParameter(0);
             var sublocation = DialogueLua.GetLocationField(location, "Current Sublocation").asString;
-            float duration = GetParameterAsFloat(1, 2);
+            float duration = GetParameterAsFloat(1, 3);
 
             var locationScene = SceneManager.GetSceneByName(location);
             
@@ -96,11 +100,15 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             Sequencer.PlaySequence("SetDialoguePanel(false)");
             
+            Sequencer.PlaySequence("SetActionPanel(false)");
+
+            
             Sequencer.PlaySequence($"Fade(stay, {duration/4})");
 
             yield return new WaitForSeconds(duration/2);
             
             Sequencer.PlaySequence("ClearPanel()");
+            
             
             sublocationGameObject.SetActive(false); 
             DialogueLua.SetLocationField(location, "Current Sublocation", string.Empty);

@@ -90,7 +90,19 @@ namespace Project.Runtime.Scripts.Audio
         
         private bool ClipAlreadyPlaying(string clipAddress)
         {
-            return _activeAudio.ContainsKey(clipAddress);
+            var clipIsPlaying = _activeAudio.ContainsKey(clipAddress);
+            if (clipIsPlaying)
+            {
+                StartCoroutine(SendSequencerMessage("PlayClip"));
+            }
+            
+            IEnumerator SendSequencerMessage(string message)
+            {
+                yield return new WaitForSeconds(0.1f);
+                Sequencer.Message(message);
+            }
+
+            return clipIsPlaying;
         }
         
         public void SetClipVolume(string clipAddress, float volume)
@@ -111,6 +123,7 @@ namespace Project.Runtime.Scripts.Audio
         public void PlayClip(string clipAddress)
         {
             if (ClipAlreadyPlaying(clipAddress)) return;
+            
             AudioSource newSource = gameObject.AddComponent<AudioSource>();
             LoadClipAndPlay(clipAddress, newSource, () => 
                 StartCoroutine(WaitForClipEnd(clipAddress, newSource)));
@@ -119,6 +132,7 @@ namespace Project.Runtime.Scripts.Audio
         public void PlayClip(string clipAddress, int repeats)
         {
             if (ClipAlreadyPlaying(clipAddress)) return;
+            
             AudioSource newSource = gameObject.AddComponent<AudioSource>();
             LoadClipAndPlay(clipAddress, newSource, () => 
                 StartCoroutine(PlayClipRepeat(clipAddress, newSource, repeats)));  // LoadClipAndPlay already plays once
@@ -127,6 +141,7 @@ namespace Project.Runtime.Scripts.Audio
         public void PlayClipLooped(string clipAddress)
         {
             if (ClipAlreadyPlaying(clipAddress)) return;
+        
             AudioSource newSource = gameObject.AddComponent<AudioSource>();
             newSource.loop = true;
             LoadClipAndPlay(clipAddress, newSource);
