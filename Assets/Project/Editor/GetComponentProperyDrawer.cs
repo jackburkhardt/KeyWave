@@ -64,22 +64,23 @@ public class GetComponentProperyDrawer : PropertyDrawerBase
     
     private bool TryGetNullComponent(SerializedProperty property, out object component, out GameObject gameObject)
     {
-        
+        gameObject = property.serializedObject.targetObject.GameObject();
         component = fieldInfo.GetValue(property.serializedObject.targetObject);
-        gameObject = component != null ? property.serializedObject.targetObject.GameObject() : null;
         return component.IsUnityNull();
     }
     
     private bool TryInjectComponent(SerializedProperty property, GameObject gameObject, object component)
     {
-        var getComponent = gameObject.GetComponent(component.GetType());
+        Component getComponent = null;
+        if (component != null) getComponent = gameObject.GetComponent(component.GetType());
+        getComponent ??= gameObject.GetComponent(fieldInfo.FieldType);
         if (getComponent != null) fieldInfo.SetValue(property.serializedObject.targetObject, getComponent);
         return getComponent != null;
     }
     
     private bool ComponentMatchesGetComponent(object component, GameObject gameObject)
     {
-        return ReferenceEquals(component, gameObject.GetComponent(component.GetType()));
+        return component != null && !component.IsUnityNull() && ReferenceEquals(component, gameObject.GetComponent(component.GetType()));
     }
     
     

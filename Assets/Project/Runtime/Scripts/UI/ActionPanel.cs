@@ -72,28 +72,7 @@ public class ActionPanel : MonoBehaviour
     }
     
     private ActionPanelButton GetButtonOfType(string s) => GetButtonOfType((ActionPanelButton.ActionPanelButtonType) Enum.Parse(typeof(ActionPanelButton.ActionPanelButtonType), s));
-
-  
     
-    public void OnConversationEnd()
-    {
-        /*
-        var currentConversation = mostRecentSubtitle.dialogueEntry.GetConversation().Title;
-
-        var conversationType = currentConversation.Split("/").Length > 3 ? currentConversation.Split("/")[^2] : string.Empty;
-
-        if (conversationType is "Action" or "Talk" or "Walk")
-        {
-            ShowPanel(GetButtonOfType(conversationType));
-        }
-        
-        if (currentConversation.EndsWith("Base"))
-        {
-            ShowPanel();
-        }*/
-        
-        //else HidePanel();
-    }
 
     private void OnLoad()
     {
@@ -102,82 +81,23 @@ public class ActionPanel : MonoBehaviour
     
     public void OnConversationStart()
     {
-//        Debug.Log("Conversation start");
         newConversation = true;
         EvaluatePanel();
     }
 
-    private bool ConversationExistsAndIsAvailable(string conversationName)
-    {
-        var conversationExists = DialogueManager.masterDatabase.GetConversation(conversationName) != null;
-        
-        if (!conversationExists) return false;
-        
-        var conditionsCheckExists = Field.FieldExists(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Conditions");
-
-        if (!conditionsCheckExists) return true;
-        
-        var check = Field.LookupValue(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Conditions");
-        return check == string.Empty || Lua.Run($"return {check}").asBool;
-         //   Field.LookupBool(DialogueManager.masterDatabase.GetConversation(conversationName).fields, "Available");
-
-    }
+   
 
     public void EvaluatePanel()
     {
         EvaluatePanel(out var _);
     }
-    
-    public static bool ConversationTypeFromName(string conversationName, out string type)
-    {
-        type = conversationName == "Map"
-            ? "Map"
-            : conversationName.Split("/").Length > 3
-                ? conversationName.Split("/")[^2]
-                : string.Empty;
-        
-        return type is "Action" or "Talk" or "Walk" or "Map";
-    }
 
     public void EvaluatePanel(out ActionPanelButton fallBackButton, ActionPanelButton tryButton = null)
     {
         fallBackButton = null;
-        
-        if (Location.PlayerLocation == null) return;
-        var location = Location.PlayerLocation.name;
-        var sublocation = DialogueLua.GetLocationField(location, "Current Sublocation").asString;
-        
-        if (!string.IsNullOrEmpty(sublocation)) location += "/" + sublocation;
-
-        var actionConversationExists = ConversationExistsAndIsAvailable($"{location}/Action/Base");
-        var talkConversationExists = ConversationExistsAndIsAvailable($"{location}/Talk/Base");
-        var walkConversationExists = ConversationExistsAndIsAvailable($"{Location.PlayerLocation.name}/Walk/Base");
-     
         var buttons = transform.GetComponentsInChildren<ActionPanelButton>(true);
-
-        
-        
-        foreach (var button in buttons)
-        {
-            button.gameObject.SetActive(true);
-            
-            switch (button.type)
-            {
-                case ActionPanelButton.ActionPanelButtonType.Walk:
-                    button.gameObject.SetActive(walkConversationExists);
-                    fallBackButton = tryButton != null && tryButton.type == button.type && walkConversationExists ? button : fallBackButton;
-                    break;
-                case ActionPanelButton.ActionPanelButtonType.Talk:
-                    button.gameObject.SetActive(talkConversationExists);
-                    fallBackButton = tryButton != null && tryButton.type == button.type && talkConversationExists ? button : fallBackButton;
-                    break;
-                case ActionPanelButton.ActionPanelButtonType.Action:
-                    button.gameObject.SetActive(actionConversationExists);
-                    fallBackButton = tryButton != null && tryButton.type == button.type && actionConversationExists ? button : fallBackButton;
-                    break;
-            }
-        }
-        
+        foreach (var button in buttons)  button.gameObject.SetActive(button.ConversationCheck());
+        fallBackButton = tryButton != null ? buttons.FirstOrDefault(p => p.type == tryButton.type && p.ConversationCheck()) : null;
         fallBackButton ??= GetComponentsInChildren<ActionPanelButton>()[0];
     }
     

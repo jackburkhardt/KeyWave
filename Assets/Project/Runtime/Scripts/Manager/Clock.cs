@@ -1,7 +1,8 @@
 using System;
-using Project.Runtime.Scripts.ScriptableObjects;
+using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.UI;
 using UnityEngine;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.Manager
 {
@@ -107,7 +108,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public static int CurrentTimeRaw
         {
-            get { return GameManager.gameState.Clock; }
+            get { return GameManager.gameState != null ? GameManager.gameState.Clock : DialogueLua.GetVariable("clock").asInt; }
             set { GameManager.gameState.Clock = value; }
         }
 

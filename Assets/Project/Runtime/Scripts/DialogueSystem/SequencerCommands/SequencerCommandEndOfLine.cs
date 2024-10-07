@@ -29,6 +29,10 @@ public class SequencerCommandEndOfLine : SequencerCommand
                 conversationType = "Talk";
                 input = sequencer.entrytag;
                 break;
+            case "Map":
+                conversationType = "Map";
+                input = sequencer.entrytag;
+                break;
         }
 
         var entry = sequencer.GetDialogueEntry();
@@ -38,14 +42,17 @@ public class SequencerCommandEndOfLine : SequencerCommand
         var view = DialogueManager.instance.conversationView;
         var waitForTyped = entry.subtitleText.Length > 0 ? "@Message(Typed)" : string.Empty;
         
-        conversationType ??= title.Split("/").Length > 2 ? title.Split("/")[^2] : string.Empty;
+        conversationType ??= title.Split("/").Length > 2 ? title.Split("/")[^2] : title == "Map" ? "Map" :
+            string.Empty;
         
-        if (conversationType is not "Action" and not "Walk" and not "Talk")
+        if (conversationType is not "Action" and not "Walk" and not "Talk" and not "Map")
         {
             conversationType = string.Empty;
         }
 
         Sequencer.PlaySequence("SetContinueMode(false);");
+        
+        if (entry.IsLastNode()) Debug.Log(conversationType);
         
         Sequencer.PlaySequence(entry.IsLastNode()
             ? $"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};"

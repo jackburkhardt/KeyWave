@@ -16,12 +16,23 @@ namespace Project.Runtime.Scripts.Audio
         private AudioMixerSnapshot DefaultSnapshot => _audioEngine.UserAudioMixer.FindSnapshot("Default");
        // private float _cutoffValue = 0;
 
- 
+       private static AudioEngineExtras _instance;
         
         private void Awake()
         {
             _audioEngine = GetComponent<AudioEngine>();
+            
+            if (_instance == null)
+            {
+                _instance = this;
+            }
+            else if (_instance != this)
+            {
+                Destroy(this);
+            }
         }
+        
+        
         
         
         private void OnPause()
@@ -87,5 +98,14 @@ namespace Project.Runtime.Scripts.Audio
           
             DefaultSnapshot.TransitionTo(0.25f);
         }
+        
+        
+        
+        public static void SetParameter(string parameter, float value)
+        {
+            _instance._audioEngine.UserAudioMixer.SetFloat(parameter, value);
+        }
+        
+        
     }
 }

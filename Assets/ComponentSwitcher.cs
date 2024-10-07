@@ -27,6 +27,7 @@ public abstract class ComponentSwitcher : MonoBehaviour
     private GameObject _target;
 
 
+    
     public GameObject Target
     {
         get => _target == null ? gameObject : _target;
@@ -57,7 +58,12 @@ public abstract class ComponentSwitcher : MonoBehaviour
     
 
     public bool IsFirstComponentSwitcher => FirstComponentSwitcher == this;
-    
+
+    private void Awake()
+    {
+        SwitchTo(defaultIndex);
+    }
+
     public ComponentSwitcher FirstComponentSwitcher
     {
         get

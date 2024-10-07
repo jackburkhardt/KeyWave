@@ -32,7 +32,7 @@ public class SequencerCommandBlackOut : SequencerCommand
     {
         var time = GetParameterAsInt(0);
         var unit = GetParameter(1, "minutes");
-        var timeString = GetParameter(2, "");
+        var timeString = GetParameter(0, "");
 
         int timeToAdd;
         
@@ -59,7 +59,8 @@ public class SequencerCommandBlackOut : SequencerCommand
                                $"SetContinueMode(false);" + 
                                $"AddSeconds({timeToAdd})@1;" +
                                $"Delay(1)@Message(ClockUpdated)->Message(FadeOut);" +
-                               $"Fade(unstay, 1)@Message(FadeOut)->Message(Continue);");
+                               $"Fade(unstay, 1)@Message(FadeOut)->Message(EndOfLine);"
+                               + "EndOfLine()@Message(EndOfLine);");
         
         Stop();
     }
