@@ -65,6 +65,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
         
             if (autoContinue)
             {
+                Debug.Log("autoContinue :" + autoContinue);
                 if (entry.subtitleText.Length > 0)
                 {
                     sequencer.PlaySequence("Continue()@Message(Typed);");

@@ -66,7 +66,9 @@ public class TimeSelectionInputPanel : MonoBehaviour
             Application.isPlaying
                 ? string.IsNullOrEmpty(_earliestSelectableTime)
                     ? Clock.CurrentTime
-                    : _earliestSelectableTime
+                    : Clock.CurrentTimeRaw > Clock.ToSeconds(_earliestSelectableTime)
+                        ? Clock.CurrentTime
+                        : _earliestSelectableTime
                 : "06:00";
         set => _earliestSelectableTime = value;
     }

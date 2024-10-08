@@ -1,5 +1,7 @@
 using System;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using UnityEngine;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
@@ -205,5 +207,66 @@ namespace Project.Runtime.Scripts.Manager
             internal static int SecondsBetweenLines = 60;
             internal static int SecondsPerInteract = 45;
         }
+    }
+}
+
+
+public class SequencerCommandAddSeconds : SequencerCommand
+{
+    public void Awake()
+    {
+        var time = GetParameterAsInt(0);
+        Clock.AddSeconds(time);
+        Stop();
+    }
+}
+
+public class SequencerCommandAddMinutes: SequencerCommand
+{
+    public void Awake()
+    {
+        var time = GetParameterAsInt(0);
+        Clock.AddSeconds(time * 60);
+        Stop();
+    }
+}
+
+public class SequencerCommandBlackOut : SequencerCommand
+{
+    private void Start()
+    {
+        var time = GetParameterAsInt(0);
+        var unit = GetParameter(1, "minutes");
+        var timeString = GetParameter(0, "");
+
+        int timeToAdd;
+        
+        switch (unit)
+        {
+            case "seconds":
+                timeToAdd = time;
+                break;
+            case "minutes":
+                timeToAdd = time * 60;
+                break;
+            case "hours":
+                timeToAdd = time * 3600;
+                break;
+            case "set":
+                timeToAdd = Mathf.Max(Clock.ToSeconds(timeString) - Clock.CurrentTimeRaw, 0);
+                break;
+            default:
+                timeToAdd = time * 60;
+                break;
+        }
+
+        sequencer.PlaySequence($"Fade(stay, 1);" +
+                               $"SetContinueMode(false);" + 
+                               $"AddSeconds({timeToAdd})@1;" +
+                               $"Delay(1)@Message(ClockUpdated)->Message(FadeOut);" +
+                               $"Fade(unstay, 1)@Message(FadeOut)->Message(PlayEndOfLine);"
+                               +"EndOfLine()@Message(PlayEndOfLine);");
+        
+       // Stop();
     }
 }
