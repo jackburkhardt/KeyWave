@@ -201,7 +201,7 @@ namespace Project.Runtime.Scripts.Manager
             }
             internal static int GlobalTimeScale => 1 * Modifier;
     
-            internal static float SecondsPercharacter = 1.5f;
+            internal static float SecondsPercharacter = 3f; //default 1.5
             internal static int SecondsBetweenLines = 60;
             internal static int SecondsPerInteract = 45;
         }

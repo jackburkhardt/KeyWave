@@ -48,18 +48,28 @@ public class TimeSelectionInputPanel : MonoBehaviour
                 value -= (minutes % increment) * 60;
             }
             
-            _inputTimeInt = Mathf.Clamp(value, Clock.ToSeconds(CurrentTime), Clock.ToSeconds("23:59"));
+            _inputTimeInt = Mathf.Clamp(value, Clock.ToSeconds(EarliestSelectableTime), Clock.ToSeconds("23:59"));
             inputField.text = Clock.To24HourClock(_inputTimeInt);
             
             
-            if (InputTimeInt == Clock.ToSeconds(CurrentTime)) inputField.text = string.Empty;
+            if (InputTimeInt == Clock.ToSeconds(EarliestSelectableTime)) inputField.text = string.Empty;
             
             SetButtonVisibilities();
             }
 
     }
+
+    private string _earliestSelectableTime = string.Empty;
     
-    private string CurrentTime => Application.isPlaying ? Clock.CurrentTime : "06:32";
+    public string EarliestSelectableTime {
+        get =>
+            Application.isPlaying
+                ? string.IsNullOrEmpty(_earliestSelectableTime)
+                    ? Clock.CurrentTime
+                    : _earliestSelectableTime
+                : "06:00";
+        set => _earliestSelectableTime = value;
+    }
 
     private void Awake()
     {
@@ -71,8 +81,8 @@ public class TimeSelectionInputPanel : MonoBehaviour
     {
         if (inputField != null)
         {
-            Placeholder.text = CurrentTime;
-            if (InputTimeInt == Clock.ToSeconds(CurrentTime)) MinuteUp();
+            Placeholder.text = EarliestSelectableTime;
+            if (InputTimeInt == Clock.ToSeconds(EarliestSelectableTime)) MinuteUp();
         }
         
         if (hourUp == null || hourDown == null || minuteUp == null || minuteDown == null) return;
@@ -94,14 +104,14 @@ public class TimeSelectionInputPanel : MonoBehaviour
     
     private void SetButtonVisibilities()
     {
-        SetButtonVisibility(hourUp, InputTimeInt + 3600 <= Clock.ToSeconds("23:59"));
+        SetButtonVisibility(hourUp, InputTimeInt + 3600 < Clock.ToSeconds("23:59"));
         
         if (hourUp.onClick.GetPersistentEventCount() == 0)
         {
             hourUp.onClick.AddListener(HourUp);
         }
         
-        SetButtonVisibility(hourDown, InputTimeInt - 3600 >= Clock.ToSeconds(CurrentTime));
+        SetButtonVisibility(hourDown, InputTimeInt - 3600 >= Clock.ToSeconds(EarliestSelectableTime));
         
         if (hourDown.onClick.GetPersistentEventCount() == 0)
         {
@@ -115,20 +125,20 @@ public class TimeSelectionInputPanel : MonoBehaviour
             minuteUp.onClick.AddListener(MinuteUp);
         }
         
-        SetButtonVisibility(minuteDown, InputTimeInt != Clock.ToSeconds(CurrentTime));
+        SetButtonVisibility(minuteDown, InputTimeInt != Clock.ToSeconds(EarliestSelectableTime) && _earliestSelectableTime == string.Empty || _earliestSelectableTime != string.Empty && InputTimeInt - 60 * increment > Clock.ToSeconds(EarliestSelectableTime));
         
         if (minuteDown.onClick.GetPersistentEventCount() == 0)
         {
             minuteDown.onClick.AddListener(MinuteDown);
         }
         
-        SetButtonVisibility(submit, InputTimeInt != Clock.ToSeconds(CurrentTime));
+        SetButtonVisibility(submit, InputTimeInt != Clock.ToSeconds(EarliestSelectableTime));
     }
 
     [Button]
     private void Reset()
     { DialogueLua.SetVariable(luaVariableName, "");
-       InputTimeInt = Clock.ToSeconds(CurrentTime);
+       InputTimeInt = Clock.ToSeconds(EarliestSelectableTime);
        OnValidate();
     }
 
@@ -171,14 +181,14 @@ public class TimeSelectionInputPanel : MonoBehaviour
     public void OnSubmit()
     {
         DialogueLua.SetVariable(luaVariableName, Clock.To24HourClock(InputTimeInt));
-        DialogueManager.instance.PlaySequence("Continue()");
+        DialogueManager.instance.PlaySequence("EndOfLine()");
         Hide();
     }
     
     public void OnCancel()
     {
         DialogueLua.SetVariable(luaVariableName, "");
-        DialogueManager.instance.PlaySequence("Continue()");
+        DialogueManager.instance.PlaySequence("EndOfLine()");
         Hide();
     }
     
@@ -190,15 +200,12 @@ public class SequencerCommandTimeSelectionPanel : SequencerCommand
     private void Awake()
     {
         sequencer.PlaySequence("SetContinueMode(false);");
-        var text = GetParameter(0, "Enter a Time");
-        var increment = GetParameterAsInt(1, 20);
-        var variable = GetParameter(2, "TimeSelectionInputValue");
-
         TimeSelectionInputPanel panel = FindObjectOfType<TimeSelectionInputPanel>();
-        panel.title.text = text;
-        panel.increment = increment;
-        panel.luaVariableName = variable;
+        
+        panel.title.text =  GetParameter(0, "Enter a Time");;
+        panel.increment = GetParameterAsInt(1, 20);
+        panel.luaVariableName =  GetParameter(2, "TimeSelectionInputValue");
+        panel.EarliestSelectableTime = GetParameter(3, "");
         panel.Show();
-
     }
 }
