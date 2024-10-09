@@ -18,9 +18,10 @@ namespace Project.Runtime.Scripts.Manager
         public enum Type
         {
             Wellness,
-            Savvy,
-            Business,
-            Null
+            Credibility,
+            Rapport,
+            Null,
+            Commitment
         }
 
         public const int MaxScore = 1000;
@@ -32,10 +33,11 @@ namespace Project.Runtime.Scripts.Manager
         public static Action<Type> OnAnimationStart;
 
         public static Action OnAnimationComplete;
-        public static int BusinessScore => GameStateManager.instance.gameState.business_score;
-        public static int SavvyScore => GameStateManager.instance.gameState.local_savvy_score;
+        public static int RapportScore => GameStateManager.instance.gameState.rapport_score;
+        public static int CredibilityScore => GameStateManager.instance.gameState.credibility_score;
         public static int WellnessScore => GameStateManager.instance.gameState.wellness_score;
-        public static int TotalScore =>  BusinessScore + SavvyScore + WellnessScore;
+        public static int CommitmentScore => GameStateManager.instance.gameState.commitment_score;
+        public static int TotalScore =>  RapportScore + CredibilityScore + WellnessScore + CommitmentScore;
         public static bool IsAnimating => isAnimating;
 
         /// <summary>
@@ -53,14 +55,17 @@ namespace Project.Runtime.Scripts.Manager
             var score = 0;
             switch (type)
             {
-                case Type.Business:
-                    score = GameStateManager.instance.gameState.business_score;
+                case Type.Rapport:
+                    score = GameStateManager.instance.gameState.rapport_score;
                     break;
-                case Type.Savvy:
-                    score = GameStateManager.instance.gameState.local_savvy_score;
+                case Type.Credibility:
+                    score = GameStateManager.instance.gameState.credibility_score;
                     break;
                 case Type.Wellness:
                     score = GameStateManager.instance.gameState.wellness_score;
+                    break;
+                case Type.Commitment:
+                    score = GameStateManager.instance.gameState.commitment_score;
                     break;
             }
 
@@ -86,9 +91,9 @@ namespace Project.Runtime.Scripts.Manager
             {
                 case Type.Wellness:
                     return UnityEngine.Color.green;
-                case Type.Savvy:
+                case Type.Credibility:
                     return UnityEngine.Color.red;
-                case Type.Business:
+                case Type.Rapport:
                     return new Color(0, 153, 255, 255);
                 default:
                     return UnityEngine.Color.white;

@@ -14,8 +14,9 @@ namespace PixelCrushers.DialogueSystem
     public enum PointsType
     {
         Wellness,
-        Savvy,
-        Business
+        Rapport,
+        Commitment,
+        Credibility
     }
     
     
@@ -41,12 +42,12 @@ namespace PixelCrushers.DialogueSystem
         public override string Draw(string currentValue, DialogueDatabase database)
         {
             
-            if (currentValue == string.Empty || currentValue.Split(':').Length < 2) return "Business:0";
+            if (currentValue == string.Empty || currentValue.Split(':').Length < 2) return "Wellness:0";
            
             Rect r = EditorGUILayout.BeginHorizontal();
 
             var pointType =
-                Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Business" : currentValue.Split(':')[0]);
+                Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Wellness" : currentValue.Split(':')[0]);
             var pointValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
             
             var type = EditorGUILayout.EnumPopup(pointType, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false));
@@ -67,14 +68,14 @@ namespace PixelCrushers.DialogueSystem
         // uses an absolute Rect position instead of auto-layout.
         public override string Draw(Rect rect, string currentValue, DialogueDatabase database)
         {
-            if (currentValue == string.Empty || currentValue.Split(':').Length < 2) return "Business:0";
+            if (currentValue == string.Empty || currentValue.Split(':').Length < 2) return "Wellness:0";
             
             //Rect r = EditorGUILayout.BeginVertical("TextField");
             //EditorGUILayout.TextField("Conversation,Entry", currentValue);
             
           //  if (currentValue == string.Empty) return "0,0";
             
-            var pointsType = Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Business" : currentValue.Split(':')[0]);
+            var pointsType = Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Wellness" : currentValue.Split(':')[0]);
             var pointsValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
 
             var label1 = "";
