@@ -231,6 +231,18 @@ public class SequencerCommandAddMinutes: SequencerCommand
     }
 }
 
+public class SequencerCommandSetTime : SequencerCommand
+{
+    public void Awake()
+    {
+        var time = GetParameter(0);
+        var endOfLine = GetParameterAsBool(1, true);
+        Clock.CurrentTimeRaw = Clock.ToSeconds(time);
+        if (endOfLine) sequencer.PlaySequence("EndOfLine()@Message(ClockUpdated)");
+        Stop();
+    }
+}
+
 public class SequencerCommandBlackOut : SequencerCommand
 {
     private void Start()
@@ -238,6 +250,7 @@ public class SequencerCommandBlackOut : SequencerCommand
         var time = GetParameterAsInt(0);
         var unit = GetParameter(1, "minutes");
         var timeString = GetParameter(0, "");
+        var playEndOfLine = GetParameterAsBool(2, true);
 
         int timeToAdd;
         
@@ -260,13 +273,15 @@ public class SequencerCommandBlackOut : SequencerCommand
                 break;
         }
 
-        sequencer.PlaySequence($"Fade(stay, 1);" +
-                               $"SetContinueMode(false);" + 
-                               $"AddSeconds({timeToAdd})@1;" +
-                               $"Delay(1)@Message(ClockUpdated)->Message(FadeOut);" +
-                               $"Fade(unstay, 1)@Message(FadeOut)->Message(PlayEndOfLine);"
-                               +"EndOfLine()@Message(PlayEndOfLine);");
+        var sequence = $"Fade(stay, 1);" +
+                       $"SetContinueMode(false);" +
+                       $"AddSeconds({timeToAdd})@1;" +
+                       $"Delay(1)@Message(ClockUpdated)->Message(FadeOut);" +
+                       $"Fade(unstay, 1)@Message(FadeOut)";
         
-       // Stop();
+        if (playEndOfLine) sequence += "->Message(PlayEndOfLine);EndOfLine()@Message(PlayEndOfLine);";
+        
+        sequencer.PlaySequence(sequence);
+        Stop();
     }
 }

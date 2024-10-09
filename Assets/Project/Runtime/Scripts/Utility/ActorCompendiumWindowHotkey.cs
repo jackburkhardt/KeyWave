@@ -40,7 +40,6 @@ namespace Project.Runtime.Scripts.ActorCompendium
 
         void Update()
         {
-           
             if (InputDeviceManager.IsKeyDown(key) || (!string.IsNullOrEmpty(buttonName) && DialogueManager.getInputButtonDown(buttonName)))
             {
                 ToggleActorCompendiumWindow();

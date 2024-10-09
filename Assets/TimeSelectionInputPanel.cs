@@ -34,6 +34,31 @@ public class TimeSelectionInputPanel : MonoBehaviour
     
     [SerializeField] [ReadOnly] private int _inputTimeInt;
 
+    public bool isOpen => container.gameObject.activeSelf;
+
+    public bool openedFromDialogueSystem = false;
+    
+    private string _playSequenceOnSubmit = "";
+    
+    public string PlaySequenceOnSubmit
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_playSequenceOnSubmit))
+            {
+                return "EndOfLine()";
+            }
+
+            else
+            {
+                var sequence = _playSequenceOnSubmit;
+                _playSequenceOnSubmit = "";
+                return sequence;
+            }
+        }
+        set => _playSequenceOnSubmit = value;
+    }
+
     public int InputTimeInt
     {
         get => _inputTimeInt;
@@ -169,13 +194,13 @@ public class TimeSelectionInputPanel : MonoBehaviour
       
     }
     
-    public void Show()
+    public void Open()
     {
         container.gameObject.SetActive(true);
         Reset();
     }
     
-    public void Hide()
+    public void Close()
     {
         container.gameObject.SetActive(false);
     }
@@ -183,15 +208,24 @@ public class TimeSelectionInputPanel : MonoBehaviour
     public void OnSubmit()
     {
         DialogueLua.SetVariable(luaVariableName, Clock.To24HourClock(InputTimeInt));
-        DialogueManager.instance.PlaySequence("EndOfLine()");
-        Hide();
+        if (openedFromDialogueSystem || _playSequenceOnSubmit != string.Empty)
+        {
+            DialogueManager.instance.PlaySequence(PlaySequenceOnSubmit);
+            openedFromDialogueSystem = false;
+        }
+        
+        Close();
     }
     
     public void OnCancel()
     {
         DialogueLua.SetVariable(luaVariableName, "");
-        DialogueManager.instance.PlaySequence("EndOfLine()");
-        Hide();
+        if (openedFromDialogueSystem)
+        {
+            if (_playSequenceOnSubmit == string.Empty) DialogueManager.instance.PlaySequence("EndOfLine()");
+            openedFromDialogueSystem = false;
+        }
+        Close();
     }
     
 }
@@ -208,6 +242,7 @@ public class SequencerCommandTimeSelectionPanel : SequencerCommand
         panel.increment = GetParameterAsInt(1, 20);
         panel.luaVariableName =  GetParameter(2, "TimeSelectionInputValue");
         panel.EarliestSelectableTime = GetParameter(3, "");
-        panel.Show();
+        panel.openedFromDialogueSystem = true;
+        panel.Open();
     }
 }

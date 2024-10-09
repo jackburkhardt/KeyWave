@@ -224,8 +224,9 @@ namespace Project.Runtime.Scripts.Utility
             
         }
 
-        public static DialogueEntry GetDialogueEntry(this Sequencer sequencer)
+        public static DialogueEntry? GetDialogueEntry(this Sequencer sequencer)
         {
+            if (string.IsNullOrEmpty(sequencer.entrytag)) return null;
             var splitIndex = sequencer.entrytag.LastIndexOf('_');
             var entryID = int.Parse(sequencer.entrytag.Substring(splitIndex + 1));
             var title = sequencer.entrytag.Substring(0, splitIndex).Replace('_', '/');

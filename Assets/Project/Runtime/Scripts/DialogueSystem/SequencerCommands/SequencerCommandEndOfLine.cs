@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class SequencerCommandEndOfLine : SequencerCommand
 {
+    public static DialogueEntry mostRecentDialogueEntry;
     public void Start()
     {
         var input = GetParameter(0, sequencer.entrytag);
@@ -36,11 +37,14 @@ public class SequencerCommandEndOfLine : SequencerCommand
         }
 
         var entry = sequencer.GetDialogueEntry();
-        var title = entry.GetConversation().Title;
+
+        var title = entry != null
+            ? entry.GetConversation().Title
+            : DialogueManager.instance.activeConversation.conversationTitle;
 
         var state = DialogueManager.instance.currentConversationState;
         var view = DialogueManager.instance.conversationView;
-        var waitForTyped = entry.subtitleText.Length > 0 ? "@Message(Typed)" : string.Empty;
+        var waitForTyped = entry != null && entry.subtitleText.Length > 0 ? "@Message(Typed)" : string.Empty;
         
         conversationType ??= title.Split("/").Length > 2 ? title.Split("/")[^2] : title == "Map" ? "Map" :
             string.Empty;
@@ -50,30 +54,37 @@ public class SequencerCommandEndOfLine : SequencerCommand
             conversationType = string.Empty;
         }
 
+        
         Sequencer.PlaySequence("SetContinueMode(false);");
         
-        if (entry.IsLastNode()) Debug.Log(conversationType);
-        
-        Sequencer.PlaySequence(entry.IsLastNode()
-            ? $"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};"
-            : "SetContinueMode(NotBeforeResponseMenu)@Message(Typed);");
-        
-        if (!entry.IsLastNode())
+        if (entry != null)
         {
-            AnalyzePCResponses(state, view, out var isPCResponseMenuNext, out var isPCAutoResponseNext);
-            var autoContinue = isPCResponseMenuNext || entry.IsEmpty();
+            Sequencer.PlaySequence(entry.IsLastNode()
+                ? $"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};"
+                : "SetContinueMode(NotBeforeResponseMenu)@Message(Typed);");
         
-            if (autoContinue)
+            if (!entry.IsLastNode())
             {
-                Debug.Log("autoContinue :" + autoContinue);
-                if (entry.subtitleText.Length > 0)
+                AnalyzePCResponses(state, view, out var isPCResponseMenuNext, out var isPCAutoResponseNext);
+                var autoContinue = isPCResponseMenuNext || entry.IsEmpty();
+        
+                if (autoContinue)
                 {
-                    sequencer.PlaySequence("Continue()@Message(Typed);");
+                    if (entry.subtitleText.Length > 0)
+                    {
+                        sequencer.PlaySequence("Continue()@Message(Typed);");
+                    }
+                    else sequencer.PlaySequence("Continue()");
                 }
-                else sequencer.PlaySequence("Continue()");
             }
         }
 
+        else
+        {
+            Sequencer.PlaySequence($"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};");
+        }
+        
+        mostRecentDialogueEntry = entry ?? mostRecentDialogueEntry;
        
     }
     
