@@ -14,12 +14,13 @@ namespace Project.Runtime.Scripts.Manager
             EndOfDay
         }
 
-        public int business_score = 0;
+        public int rapport_score = 0;
+        public int commitment_score = 0;
 
 
         public string current_scene = "Hotel";
         public int day = 1;
-        public int local_savvy_score = 0;
+        public int credibility_score = 0;
 
         //default values
 
@@ -102,11 +103,14 @@ namespace Project.Runtime.Scripts.Manager
                         case Points.Type.Wellness:
                             gameState.wellness_score += pointsField.Points;
                             break;
-                        case Points.Type.Savvy:
-                            gameState.local_savvy_score += pointsField.Points;
+                        case Points.Type.Rapport:
+                            gameState.rapport_score += pointsField.Points;
                             break;
-                        case Points.Type.Business:
-                            gameState.business_score += pointsField.Points;
+                        case Points.Type.Commitment:
+                            gameState.commitment_score += pointsField.Points;
+                            break;
+                        case Points.Type.Credibility:
+                            gameState.credibility_score += pointsField.Points;
                             break;
                     }
                     break;

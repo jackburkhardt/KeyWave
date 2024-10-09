@@ -73,17 +73,17 @@ namespace Project.Runtime.Scripts.UI
             }
             for (var i = 0; i < Points.WellnessScore; i++)
             {
-                AddOrExpandUnit(Points.Color(Points.Type.Wellness));
+                AddOrExpandUnit(Points.Color(Points.Type.Credibility));
             }
         
-            for (var i = 0; i < Points.SavvyScore; i++)
+            for (var i = 0; i < Points.CredibilityScore; i++)
             {
-                AddOrExpandUnit(Points.Color(Points.Type.Savvy));
+                AddOrExpandUnit(Points.Color(Points.Type.Rapport));
             }
         
-            for (var i = 0; i < Points.BusinessScore; i++)
+            for (var i = 0; i < Points.RapportScore; i++)
             {
-                AddOrExpandUnit(Points.Color(Points.Type.Business));
+                AddOrExpandUnit(Points.Color(Points.Type.Commitment));
             }
         }
     }
