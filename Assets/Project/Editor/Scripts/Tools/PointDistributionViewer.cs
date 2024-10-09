@@ -11,20 +11,17 @@ namespace Project.Editor.Scripts.Tools
 {
     public class PointDistributionViewer : EditorWindow
     {
-        private Dictionary<DialogueEntry, int> credibilityEntries = new();
-        private int credibilityTotal;
-        private Dictionary<DialogueEntry, int> rapportEntries = new();
-        private int rapportTotal;
-        private Dictionary<DialogueEntry, int> commitmentEntries = new();
-        private int commitmentTotal;
+        private Dictionary<DialogueEntry, int> businessEntries = new();
+        private int businessTotal;
+        private Dictionary<DialogueEntry, int> savvyEntries = new();
+        private int savvyTotal;
         private Vector2 scrollPos;
 
         private DialogueDatabase selectedDB;
-        private bool showCred;
+        private bool showBusiness;
         private bool showData;
-        private bool showRapport;
+        private bool showSavvy;
         private bool showWellness;
-        private bool showCommit;
         private int totalPoints;
 
         private Dictionary<DialogueEntry, int> wellnessEntries = new();
@@ -56,9 +53,8 @@ namespace Project.Editor.Scripts.Tools
             if (!showData) return;
                 
             EditorGUILayout.LabelField($"Total wellness points: {wellnessTotal} ({(wellnessTotal/(float)totalPoints):P})");
-            EditorGUILayout.LabelField($"Total cred points: {credibilityTotal} ({(credibilityTotal/(float)totalPoints):P})");
-            EditorGUILayout.LabelField($"Total rapoport points: {rapportTotal} ({(rapportTotal/(float)totalPoints):P})");
-            EditorGUILayout.LabelField($"Total commitment points: {commitmentTotal} ({(commitmentTotal/(float)totalPoints):P})");
+            EditorGUILayout.LabelField($"Total business points: {businessTotal} ({(businessTotal/(float)totalPoints):P})");
+            EditorGUILayout.LabelField($"Total savvy points: {savvyTotal} ({(savvyTotal/(float)totalPoints):P})");
                 
             EditorGUILayout.Space(20);
                 
@@ -77,10 +73,10 @@ namespace Project.Editor.Scripts.Tools
                     EditorGUILayout.EndHorizontal();                    }
             }
                 
-            showCred = EditorGUILayout.Foldout(showCred, $"Show Credibility Entries ({credibilityEntries.Count})");
-            if (showCred)
+            showBusiness = EditorGUILayout.Foldout(showBusiness, $"Show Business Entries ({businessEntries.Count})");
+            if (showBusiness)
             {
-                foreach (var entry in credibilityEntries)
+                foreach (var entry in businessEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
@@ -91,24 +87,10 @@ namespace Project.Editor.Scripts.Tools
                     EditorGUILayout.EndHorizontal();                    }
             }
                 
-            showRapport = EditorGUILayout.Foldout(showRapport, $"Show Rapport Entries ({rapportEntries.Count})");
-            if (showRapport)
+            showSavvy = EditorGUILayout.Foldout(showSavvy, $"Show Savvy Entries ({savvyEntries.Count})");
+            if (showSavvy)
             {
-                foreach (var entry in rapportEntries)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
-                    if (GUILayout.Button("Open", GUILayout.Width(50)))
-                    {
-                        DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
-                    }
-                    EditorGUILayout.EndHorizontal();                    }
-            }
-            
-            showCommit = EditorGUILayout.Foldout(showCommit, $"Show Commitment Entries ({commitmentEntries.Count})");
-            if (showCommit)
-            {
-                foreach (var entry in commitmentEntries)
+                foreach (var entry in savvyEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
@@ -150,17 +132,13 @@ namespace Project.Editor.Scripts.Tools
                                 wellnessEntries.Add(entry, points);
                                 wellnessTotal += points;
                                 break;
-                            case Points.Type.Rapport:
-                                credibilityEntries.Add(entry, points);
-                                credibilityTotal += points;
+                            case Points.Type.Business:
+                                businessEntries.Add(entry, points);
+                                businessTotal += points;
                                 break;
-                            case Points.Type.Credibility:
-                                rapportEntries.Add(entry, points);
-                                rapportTotal += points;
-                                break;
-                            case Points.Type.Commitment:
-                                commitmentEntries.Add(entry, points);
-                                commitmentTotal += points;
+                            case Points.Type.Savvy:
+                                savvyEntries.Add(entry, points);
+                                savvyTotal += points;
                                 break;
                         }
                     }
@@ -168,25 +146,22 @@ namespace Project.Editor.Scripts.Tools
                 }
             }
             
-            totalPoints = wellnessTotal + credibilityTotal + rapportTotal + commitmentTotal;
+            totalPoints = wellnessTotal + businessTotal + savvyTotal;
             
             // sort dictionaries on the value (highest to lowest)
             wellnessEntries = wellnessEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            credibilityEntries = credibilityEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            rapportEntries = rapportEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            commitmentEntries = commitmentEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            businessEntries = businessEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            savvyEntries = savvyEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
         private void ResetPoints()
         {
             wellnessEntries.Clear();
-            credibilityEntries.Clear();
-            rapportEntries.Clear();
-            commitmentEntries.Clear();
+            businessEntries.Clear();
+            savvyEntries.Clear();
             wellnessTotal = 0;
-            credibilityTotal = 0;
-            rapportTotal = 0;
-            commitmentTotal = 0;
+            businessTotal = 0;
+            savvyTotal = 0;
             showData = false;
         }
     }

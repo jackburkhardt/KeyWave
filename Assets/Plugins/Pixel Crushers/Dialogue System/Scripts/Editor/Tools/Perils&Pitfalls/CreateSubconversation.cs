@@ -33,7 +33,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
         static Conversation _originConversation;
         static DialogueEntry _originEntry;
         string[] questTimeOptions = { "minutes", "hours", "seconds" };
-        string[] pointTypeOptions = { "Credibility", "Rapport", "Commitment","Wellness", "Null" };
+        string[] pointTypeOptions = { "Wellness", "Savvy", "Business", "Null" };
         static bool _editMode;
         private static string DefaultInternalName => $"{_originConversation.Title.Replace("/Base", "")}/";
 
