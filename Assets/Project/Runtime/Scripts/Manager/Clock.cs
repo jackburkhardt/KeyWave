@@ -182,6 +182,18 @@ namespace Project.Runtime.Scripts.Manager
         {
             return location.TravelTime + CurrentTimeRaw;
         }
+
+
+        public static int GetHoursAsInt(string time)
+        {
+            Debug.Log(time);
+            return int.Parse(time.Split(":")[0]);
+        }
+        
+        public static int GetHoursAsInt(int time)
+        {
+            return GetHoursAsInt(To24HourClock(time));
+        }
         
         public static Action OnTimeScaleChange;
 

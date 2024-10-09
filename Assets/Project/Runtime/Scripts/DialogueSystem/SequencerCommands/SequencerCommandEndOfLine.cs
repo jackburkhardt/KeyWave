@@ -41,6 +41,10 @@ public class SequencerCommandEndOfLine : SequencerCommand
         var title = entry != null
             ? entry.GetConversation().Title
             : DialogueManager.instance.activeConversation.conversationTitle;
+        
+        var debug = entry != null && Field.FieldExists(entry.fields, "Debug") && Field.LookupBool(entry.fields, "Debug");
+        
+        if (debug) Debug.Log($"End of line: {input}");
 
         var state = DialogueManager.instance.currentConversationState;
         var view = DialogueManager.instance.conversationView;
@@ -59,22 +63,32 @@ public class SequencerCommandEndOfLine : SequencerCommand
         
         if (entry != null)
         {
+            if (debug && entry.IsLastNode()) Debug.Log("Last node (End of conversation)");
             Sequencer.PlaySequence(entry.IsLastNode()
                 ? $"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};"
                 : "SetContinueMode(NotBeforeResponseMenu)@Message(Typed);");
         
             if (!entry.IsLastNode())
             {
+                if (debug) Debug.Log("Not last node, will autocontinue or wait for response menu");
+                
                 AnalyzePCResponses(state, view, out var isPCResponseMenuNext, out var isPCAutoResponseNext);
                 var autoContinue = isPCResponseMenuNext || entry.IsEmpty();
+                
+                if (debug) Debug.Log($"Auto-continue: {autoContinue} (isPCResponseMenuNext={isPCResponseMenuNext}, isPCAutoResponseNext={isPCAutoResponseNext}), entry.IsEmpty()={entry.IsEmpty()}");
         
                 if (autoContinue)
                 {
                     if (entry.subtitleText.Length > 0)
                     {
+                        if (debug) Debug.Log("Auto-continuing to next subtitle after typed.");
                         sequencer.PlaySequence("Continue()@Message(Typed);");
                     }
-                    else sequencer.PlaySequence("Continue()");
+                    else
+                    {
+                        if (debug) Debug.Log("Auto-continuing to next entry immediately.");
+                        sequencer.PlaySequence("Continue()");
+                    }
                 }
             }
         }
