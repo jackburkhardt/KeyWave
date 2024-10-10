@@ -43,6 +43,12 @@ MonoBehaviour:
   - functionName: Time/BeforeTimeslot
     parameters: 06000000
     returnValue: 1
+  - functionName: ShowIntroductionText
+    parameters: 
+    returnValue: 1
+  - functionName: Scheduled Event/MinutesUntilNextScheduledEvent
+    parameters: 08000000
+    returnValue: 2
   scriptFunctions:
   - functionName: FreezeClock
     parameters: 00000000
@@ -79,4 +85,10 @@ MonoBehaviour:
     returnValue: 0
   - functionName: Clock/AddToCurrentTime
     parameters: 01000000
+    returnValue: 3
+  - functionName: Scheduled Event/MinutesUntilNextScheduledEvent
+    parameters: 08000000
+    returnValue: 2
+  - functionName: Scheduled Event/TimeOfNextScheduledEvent
+    parameters: 08000000
     returnValue: 3

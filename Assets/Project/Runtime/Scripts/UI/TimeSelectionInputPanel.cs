@@ -16,7 +16,22 @@ public class TimeSelectionInputPanel : MonoBehaviour
     [GetComponent]
     public TMP_InputField inputField ;
 
-    public TextMeshProUGUI title;
+    [SerializeField] private TextMeshProUGUI title;
+    
+    private string _titleText = "Select a Time";
+    public string TitleText
+    {
+        get
+        {
+            var title = _titleText;
+            _titleText = "Select a Time";
+            return title;
+        }
+        set
+        {
+            _titleText = value;
+        }
+    }
 
     public int increment = 20;
     
@@ -36,9 +51,11 @@ public class TimeSelectionInputPanel : MonoBehaviour
 
     public bool isOpen => container.gameObject.activeSelf;
 
-    public bool openedFromDialogueSystem = false;
+    [ReadOnly] public bool openedFromDialogueSystem = false;
     
     private string _playSequenceOnSubmit = "";
+    
+    public Animator animator;
     
     public string PlaySequenceOnSubmit
     {
@@ -46,7 +63,7 @@ public class TimeSelectionInputPanel : MonoBehaviour
         {
             if (string.IsNullOrEmpty(_playSequenceOnSubmit))
             {
-                return "EndOfLine()";
+                return $"EndOfLine()";
             }
 
             else
@@ -97,6 +114,18 @@ public class TimeSelectionInputPanel : MonoBehaviour
                 : "06:00";
         set => _earliestSelectableTime = value;
     }
+    
+    private string _latestSelectableTime = string.Empty;
+    
+    public string LatestSelectableTime
+    {
+        get =>
+            string.IsNullOrEmpty(_latestSelectableTime)
+                ? "23:59"
+                : _latestSelectableTime;
+               
+        set => _latestSelectableTime = value;
+    }
 
     private void Awake()
     {
@@ -131,7 +160,7 @@ public class TimeSelectionInputPanel : MonoBehaviour
     
     private void SetButtonVisibilities()
     {
-        SetButtonVisibility(hourUp, InputTimeInt + 3600 < Clock.ToSeconds("23:59"));
+        SetButtonVisibility(hourUp, InputTimeInt + 3600 < Clock.ToSeconds(LatestSelectableTime));
         
         if (hourUp.onClick.GetPersistentEventCount() == 0)
         {
@@ -145,7 +174,7 @@ public class TimeSelectionInputPanel : MonoBehaviour
             hourDown.onClick.AddListener(HourDown);
         }
         
-        SetButtonVisibility(minuteUp, InputTimeInt != Clock.ToSeconds("23:59"));
+        SetButtonVisibility(minuteUp, InputTimeInt != Clock.ToSeconds(LatestSelectableTime));
         
         if (minuteUp.onClick.GetPersistentEventCount() == 0)
         {
@@ -166,6 +195,7 @@ public class TimeSelectionInputPanel : MonoBehaviour
     private void Reset()
     { DialogueLua.SetVariable(luaVariableName, "");
        InputTimeInt = Clock.ToSeconds(EarliestSelectableTime);
+     
        OnValidate();
     }
 
@@ -197,36 +227,70 @@ public class TimeSelectionInputPanel : MonoBehaviour
     public void Open()
     {
         container.gameObject.SetActive(true);
+        title.text = TitleText;
+        if (luaVariableName != string.Empty) DialogueLua.SetVariable(luaVariableName, "");
         Reset();
+        animator.SetTrigger("Show");
     }
     
     public void Close()
     {
-        container.gameObject.SetActive(false);
+        animator.SetTrigger("Hide");
+        //DialogueManager.instance.PlaySequence("SequencerMessage(OnTimeSelectionPanelClose)");
+        StartCoroutine(DisableContainerAfterCloseAnimation());
+        openedFromDialogueSystem = false;
+        LatestSelectableTime = string.Empty;
     }
-    
+
+    private IEnumerator DisableContainerAfterCloseAnimation()
+    {
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("Show"))
+        {
+            yield return null;
+        }
+        
+        container.gameObject.SetActive(false);
+        
+    }
+
     public void OnSubmit()
     {
         DialogueLua.SetVariable(luaVariableName, Clock.To24HourClock(InputTimeInt));
-        if (openedFromDialogueSystem || _playSequenceOnSubmit != string.Empty)
+        
+        IEnumerator PlaySequenceAfterOneFrame(string sequence)
         {
-            DialogueManager.instance.PlaySequence(PlaySequenceOnSubmit);
-            openedFromDialogueSystem = false;
+            yield return new WaitForEndOfFrame();
+            DialogueManager.instance.PlaySequence(sequence);
         }
         
+        if (openedFromDialogueSystem || _playSequenceOnSubmit != string.Empty)
+        {
+            var sequence = PlaySequenceOnSubmit;
+            StartCoroutine(PlaySequenceAfterOneFrame(sequence));
+        }
         Close();
     }
     
+    
+    
     public void OnCancel()
     {
-        DialogueLua.SetVariable(luaVariableName, "");
+        DialogueLua.SetVariable(luaVariableName, string.Empty);
+        
+        IEnumerator PlaySequenceAfterOneFrame(string sequence)
+        {
+            yield return new WaitForEndOfFrame();
+            DialogueManager.instance.PlaySequence(sequence);
+        }
+        
         if (openedFromDialogueSystem)
         {
-            if (_playSequenceOnSubmit == string.Empty) DialogueManager.instance.PlaySequence("EndOfLine()");
-            openedFromDialogueSystem = false;
+            if (_playSequenceOnSubmit != string.Empty) StartCoroutine(PlaySequenceAfterOneFrame(PlaySequenceOnSubmit));
         }
         Close();
     }
+    
+    
     
 }
 
@@ -238,11 +302,14 @@ public class SequencerCommandTimeSelectionPanel : SequencerCommand
         sequencer.PlaySequence("SetContinueMode(false);");
         TimeSelectionInputPanel panel = FindObjectOfType<TimeSelectionInputPanel>();
         
-        panel.title.text =  GetParameter(0, "Enter a Time");;
+        panel.TitleText =  GetParameter(0, "Enter a Time");;
         panel.increment = GetParameterAsInt(1, 20);
         panel.luaVariableName =  GetParameter(2, "TimeSelectionInputValue");
         panel.EarliestSelectableTime = GetParameter(3, "");
+        panel.LatestSelectableTime = GetParameter(4, "");
         panel.openedFromDialogueSystem = true;
+        panel.PlaySequenceOnSubmit = $"EndOfLine({sequencer.entrytag})";
+        
         panel.Open();
     }
 }

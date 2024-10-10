@@ -54,12 +54,12 @@ public class GetComponentProperyDrawer : PropertyDrawerBase
        
         EditorGUI.PropertyField(propertyRect, property, label);
         
-       
+        property.serializedObject.ApplyModifiedProperties();
+       // property.serializedObject.Update();
 
         EditorGUI.EndProperty();
         
-        property.serializedObject.ApplyModifiedProperties();
-        property.serializedObject.Update();
+       
     }
     
     private bool TryGetNullComponent(SerializedProperty property, out object component, out GameObject gameObject)

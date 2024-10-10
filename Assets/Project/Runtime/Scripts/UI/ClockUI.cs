@@ -28,6 +28,7 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private UnityEvent OnHourChanged;
 
         [SerializeField] private Color _hourChangedColor;
+        [SerializeField] private Animator _animator;
        
         
         private bool timeIsUpdating;
@@ -41,6 +42,11 @@ namespace Project.Runtime.Scripts.UI
         private void OnDisable()
         {
             Clock.OnTimeScaleChange -= OnTimeScaleChange;
+        }
+
+        private void Awake()
+        {
+            _animator ??= GetComponent<Animator>();
         }
 
         protected void Start()
@@ -85,19 +91,37 @@ namespace Project.Runtime.Scripts.UI
             var startTime = CurrentVisualizedTime;
             timeIsUpdating = true;
             var timeDifference = newTime - CurrentVisualizedTimeRaw;
+            var hourChanged = false;
+            
             while (CurrentVisualizedTimeRaw < newTime)
             { 
                 if (CurrentVisualizedTimeRaw == 0) break; // handles overflow
                 timeText.text = RemoveColon(Clock.To24HourClock(CurrentVisualizedTimeRaw)); 
                 CurrentVisualizedTimeRaw += (int)(2 * Mathf.Pow((Mathf.Pow(timeDifference, 0.5f) / 10f), 2f));
-                if (CurrentVisualizedTimeRaw - 3600 > _mostRecentHour && CurrentVisualizedTime != startTime && Clock.GetHoursAsInt(CurrentVisualizedTime) > Clock.GetHoursAsInt(_mostRecentHour))
+
+                var currentTimeEndsInDoubleZero = CurrentVisualizedTimeRaw - 3600 > _mostRecentHour
+                                                  && CurrentVisualizedTime != startTime
+                                                  && Clock.GetHoursAsInt(CurrentVisualizedTime) >
+                                                  Clock.GetHoursAsInt(_mostRecentHour)
+                                                  && Clock.GetHoursAsInt(CurrentVisualizedTime) -
+                                                  Clock.GetHoursAsInt(newTime) == 0;
+                
+                if (currentTimeEndsInDoubleZero && !_animator.GetCurrentAnimatorStateInfo(1).IsName("Scale"))
                 {
                     _mostRecentHour = Clock.GetHoursAsInt(CurrentVisualizedTime) * 3600;
                     CurrentVisualizedTimeRaw = _mostRecentHour;
                     var defaultColor = timeText.color;
                     timeText.color = _hourChangedColor;
                     OnHourChanged?.Invoke();
+                    
                     yield return new WaitForSeconds(2);
+                    if (!hourChanged)
+                    {
+                        hourChanged = true;
+                        BroadcastMessage("OnTimeChanged");
+                        DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)");
+                    }
+                    
                     //Debug.Log("Hour changed to " + CurrentVisualizedTime);
                     timeText.color = defaultColor;
                 }
@@ -107,17 +131,33 @@ namespace Project.Runtime.Scripts.UI
             CurrentVisualizedTimeRaw = newTime % Clock.HoursToSeconds(24);
             timeText.text = RemoveColon(CurrentVisualizedTime);
             timeIsUpdating = false;
-        
-            BroadcastMessage("OnTimeChanged");
+            
+            
 
-            DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)");
+            if (_animator.GetCurrentAnimatorStateInfo(1).IsName("Scale"))
+            {
+                var defaultColor = timeText.color;
+                timeText.color = _hourChangedColor;
+                OnHourChanged?.Invoke();
+                BroadcastMessage("OnTimeChanged");
+                DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)");    
+                yield return new WaitForSeconds(1);
+                timeText.color = defaultColor;
+                _animator.SetTrigger("Unscale");
+            }
+            
+            else if (!hourChanged)
+            {
+                BroadcastMessage("OnTimeChanged");
+                DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)");
+            }
 
         }
 
         public void OnConversationStart()
         {
             if (DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.GetConversation().Title != "Intro")
-            GetComponent<Animator>().SetTrigger("Show");
+            _animator.SetTrigger("Show");
         }
     }
 }

@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class SequencerCommandEndOfLine : SequencerCommand
 {
-    public static DialogueEntry mostRecentDialogueEntry;
     public void Start()
     {
         var input = GetParameter(0, sequencer.entrytag);
@@ -37,10 +36,20 @@ public class SequencerCommandEndOfLine : SequencerCommand
         }
 
         var entry = sequencer.GetDialogueEntry();
+        
+        if (entry == null)
+        {
+            Debug.Log("EndOfLine: Entry is null");
+        }
+        
+        entry ??= DialogueManager.instance.currentConversationState.subtitle.dialogueEntry;
 
         var title = entry != null
             ? entry.GetConversation().Title
             : DialogueManager.instance.activeConversation.conversationTitle;
+        
+        if (entry != null) Debug.Log($"EndOfLine: {entry.GetConversation().Title}_{entry.id}");;
+       
         
         var debug = entry != null && Field.FieldExists(entry.fields, "Debug") && Field.LookupBool(entry.fields, "Debug");
         
@@ -60,10 +69,15 @@ public class SequencerCommandEndOfLine : SequencerCommand
 
         
         Sequencer.PlaySequence("SetContinueMode(false);");
-        
-        if (entry != null)
+
+        if (sequencer.GetDialogueEntry() == null && conversationType != string.Empty && title.EndsWith("Base"))
         {
-            if (debug && entry.IsLastNode()) Debug.Log("Last node (End of conversation)");
+            Sequencer.PlaySequence($"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};");
+        }
+        
+        else if (entry != null)
+        { 
+            
             Sequencer.PlaySequence(entry.IsLastNode()
                 ? $"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};"
                 : "SetContinueMode(NotBeforeResponseMenu)@Message(Typed);");
@@ -92,14 +106,6 @@ public class SequencerCommandEndOfLine : SequencerCommand
                 }
             }
         }
-
-        else
-        {
-            Sequencer.PlaySequence($"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};");
-        }
-        
-        mostRecentDialogueEntry = entry ?? mostRecentDialogueEntry;
-       
     }
     
     private void AnalyzePCResponses(ConversationState state,ConversationView view, out bool isPCResponseMenuNext, out bool isPCAutoResponseNext)

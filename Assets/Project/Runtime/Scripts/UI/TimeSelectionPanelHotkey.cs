@@ -22,6 +22,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         public string buttonName = string.Empty;
         
         [Tooltip("Play this sequence when clicking on Submit when opened by this button.")]
+        [TextArea]
         public string playSequence = string.Empty;
 
         [Tooltip("(Optional) Use this quest log window. If unassigned, will automatically find quest log window in scene. If you assign a window, assign a scene instance, not an uninstantiated prefab.")]

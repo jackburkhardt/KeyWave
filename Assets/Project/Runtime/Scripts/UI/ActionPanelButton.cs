@@ -94,7 +94,7 @@ public class ActionPanelButton : MonoBehaviour
         switch (type)
         {
             case ActionPanelButtonType.Walk:
-                return ConversationExistsAndIsAvailable($"{location}/Walk/Base");
+                return ConversationExistsAndIsAvailable($"{Location.PlayerLocation.name}/Walk/Base");
                 break;
             case ActionPanelButtonType.Talk:
                 return ConversationExistsAndIsAvailable($"{location}/Talk/Base");

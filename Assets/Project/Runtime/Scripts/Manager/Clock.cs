@@ -248,9 +248,9 @@ public class SequencerCommandSetTime : SequencerCommand
     public void Awake()
     {
         var time = GetParameter(0);
-        var endOfLine = GetParameterAsBool(1, true);
+       // var endOfLine = GetParameterAsBool(1, true);
         Clock.CurrentTimeRaw = Clock.ToSeconds(time);
-        if (endOfLine) sequencer.PlaySequence("EndOfLine()@Message(ClockUpdated)");
+       // if (endOfLine) sequencer.PlaySequence("EndOfLine()@Message(ClockUpdated)");
         Stop();
     }
 }

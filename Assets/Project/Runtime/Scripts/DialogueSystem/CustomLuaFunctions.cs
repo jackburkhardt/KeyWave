@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
@@ -70,6 +71,14 @@ namespace Project.Runtime.Scripts.DialogueSystem
             
             Lua.RegisterFunction(nameof(WithinMinutesOfVariable), this, SymbolExtensions.GetMethodInfo(() => WithinMinutesOfVariable(string.Empty, 0)));
             Lua.RegisterFunction(nameof(AddToCurrentTime), this, SymbolExtensions.GetMethodInfo(() => AddToCurrentTime(0)));
+            Lua.RegisterFunction(nameof(ShowIntroductionText), this,
+                SymbolExtensions.GetMethodInfo(() => ShowIntroductionText()));
+            Lua.RegisterFunction(nameof(MinutesUntilNextScheduledEvent), this,
+                SymbolExtensions.GetMethodInfo(() => MinutesUntilNextScheduledEvent(string.Empty)));
+            Lua.RegisterFunction(nameof(TimeOfNextScheduledEvent), this,
+                SymbolExtensions.GetMethodInfo(() => TimeOfNextScheduledEvent(string.Empty)));
+            Lua.RegisterFunction(nameof(Length), this,
+                SymbolExtensions.GetMethodInfo(() => Length(string.Empty)));
         }
 
         private void DeregisterLuaFunctions()
@@ -108,6 +117,10 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(SecondsToTime));
             Lua.UnregisterFunction(nameof(WithinMinutesOfVariable));
             Lua.UnregisterFunction(nameof(AddToCurrentTime));
+            Lua.UnregisterFunction(nameof(ShowIntroductionText));
+            Lua.UnregisterFunction(nameof(MinutesUntilNextScheduledEvent));
+            Lua.UnregisterFunction(nameof(TimeOfNextScheduledEvent));
+            Lua.UnregisterFunction(nameof(Length));
         }
         
         
@@ -378,6 +391,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
         
         public bool WithinMinutesOfVariable(string var, double rangeInMinutes)
         {
+            if (string.IsNullOrEmpty(var)) return false;
             var range = (int)rangeInMinutes * 60;
             var timeInSeconds = Clock.ToSeconds(var);
             return Clock.CurrentTimeRaw > timeInSeconds - range && Clock.CurrentTimeRaw < timeInSeconds + range;
@@ -387,6 +401,53 @@ namespace Project.Runtime.Scripts.DialogueSystem
         {
             var time = Clock.CurrentTimeRaw + (int)minutes * 60;
             return Clock.To24HourClock(time);
+        }
+
+        public bool ShowIntroductionText()
+        {
+            return Lua.IsTrue(
+                "Dialog[thisID].SimStatus ~= \"WasDisplayed\" and (Variable[\"skip_location_intros\"] == false) or (Variable[\"skip_content\"] == false)");
+        }
+        
+        public string TimeOfNextScheduledEvent(string eventName)
+        {
+            var item = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.Name == eventName);
+            var scheduledEventType = DialogueLua.GetItemField(item.Name, "Scheduled Event Type").asString;
+            if (scheduledEventType == "Repeating")
+            {
+                var startTimeInSeconds = Clock.ToSeconds(DialogueLua.GetItemField(item.Name, "Start Time").asString);
+                var frequency = DialogueLua.GetItemField(item.Name, "Frequency").asInt;
+                var endTimeInSeconds = Clock.ToSeconds(DialogueLua.GetItemField(item.Name, "End Time").asString);
+              
+                while (Clock.CurrentTimeRaw > startTimeInSeconds)
+                {
+                    startTimeInSeconds += frequency * 60;
+                    if (startTimeInSeconds > endTimeInSeconds)
+                    {
+                        Debug.LogError("Scheduled event start time is greater than end time");
+                        return "ERROR";
+                    }
+                }
+
+                return Clock.To24HourClock(startTimeInSeconds);
+            }
+            else
+            {
+                Debug.LogError($"Scheduled event type {scheduledEventType} not supported");
+                return "ERROR";
+            }
+        }
+        
+        public int MinutesUntilNextScheduledEvent(string eventName)
+        {
+            if (TimeOfNextScheduledEvent(eventName) == "ERROR") return -1;
+            return (Clock.ToSeconds(TimeOfNextScheduledEvent(eventName)) - Clock.CurrentTimeRaw)/60;
+        }
+        
+        public int Length(string var)
+        {
+            if (DialogueLua.GetVariable(var).asString == "nil") return 0;
+            return  Regex.Replace(DialogueLua.GetVariable(var).asString, @"[^\x20-\x7F]", "").Length;
         }
     }
 }
