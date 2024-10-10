@@ -446,8 +446,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
         
         public int Length(string var)
         {
-            if (DialogueLua.GetVariable(var).asString == "nil") return 0;
-            return  Regex.Replace(DialogueLua.GetVariable(var).asString, @"[^\x20-\x7F]", "").Length;
+            return var.Length;
         }
     }
 }

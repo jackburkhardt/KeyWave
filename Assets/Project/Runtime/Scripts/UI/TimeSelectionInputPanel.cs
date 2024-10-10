@@ -240,6 +240,7 @@ public class TimeSelectionInputPanel : MonoBehaviour
         StartCoroutine(DisableContainerAfterCloseAnimation());
         openedFromDialogueSystem = false;
         LatestSelectableTime = string.Empty;
+        EarliestSelectableTime = string.Empty;
     }
 
     private IEnumerator DisableContainerAfterCloseAnimation()
@@ -260,7 +261,12 @@ public class TimeSelectionInputPanel : MonoBehaviour
         IEnumerator PlaySequenceAfterOneFrame(string sequence)
         {
             yield return new WaitForEndOfFrame();
+            while (DialogueLua.GetVariable(luaVariableName).asString != Clock.To24HourClock(InputTimeInt))
+            {
+                yield return null;
+            }
             DialogueManager.instance.PlaySequence(sequence);
+          
         }
         
         if (openedFromDialogueSystem || _playSequenceOnSubmit != string.Empty)
@@ -280,7 +286,12 @@ public class TimeSelectionInputPanel : MonoBehaviour
         IEnumerator PlaySequenceAfterOneFrame(string sequence)
         {
             yield return new WaitForEndOfFrame();
+            while (DialogueLua.GetVariable(luaVariableName).asString != string.Empty)
+            {
+                yield return null;
+            }
             DialogueManager.instance.PlaySequence(sequence);
+          
         }
         
         if (openedFromDialogueSystem)
