@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
@@ -27,10 +26,7 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
 
         [SerializeField] protected UITextField autonumberText;
-
-        protected bool showPopupBadge = true;
         
-        [ShowIf("showPopupBadge")]
         [SerializeField] private Image _popupBadge;
 
         public string simStatus
