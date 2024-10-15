@@ -51,8 +51,7 @@ namespace Project.Runtime.Scripts.UI
                 Debug.Log($"Conversation type: {conversationType}");
                 DialogueManager.instance.PlaySequence($"SetDialoguePanel(false); SetActionPanel(true, {conversationType})");
             }
-
-         //   DialogueManager.instance.PlaySequence("Message(Choice)");
+            
         }
 
         protected virtual void OnContentChanged()
