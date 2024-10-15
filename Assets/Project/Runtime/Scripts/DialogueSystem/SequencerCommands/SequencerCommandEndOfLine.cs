@@ -5,6 +5,7 @@ using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class SequencerCommandEndOfLine : SequencerCommand
 {
@@ -58,28 +59,32 @@ public class SequencerCommandEndOfLine : SequencerCommand
         var state = DialogueManager.instance.currentConversationState;
         var view = DialogueManager.instance.conversationView;
         var waitForTyped = entry != null && entry.subtitleText.Length > 0 ? "@Message(Typed)" : string.Empty;
-        
-        conversationType ??= title.Split("/").Length > 2 ? title.Split("/")[^2] : title == "Map" ? "Map" :
+
+
+
+        conversationType ??=
+            title.Split("/").Length > 2 ? title.Split("/")[^2] : title.EndsWith("Actions") ? "Actions" : title == "Map" ? "Map" :
             string.Empty;
         
-        if (conversationType is not "Action" and not "Walk" and not "Talk" and not "Map")
+        if (conversationType is not "Actions" and not "Actions" and not "Walk" and not "Talk" and not "Map")
         {
             conversationType = string.Empty;
         }
+        
+        if (string.IsNullOrEmpty(conversationType)) Sequencer.PlaySequence("SetCircularUIPanel(false);");
 
         
         Sequencer.PlaySequence("SetContinueMode(false);");
 
         if (sequencer.GetDialogueEntry() == null && conversationType != string.Empty && title.EndsWith("Base"))
         {
-            Sequencer.PlaySequence($"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};");
+            Sequencer.PlaySequence($"WaitForMessage(Typed); SetCircularUIPanel(true){waitForTyped};");
         }
         
         else if (entry != null)
         { 
-            
             Sequencer.PlaySequence(entry.IsLastNode()
-                ? $"WaitForMessage(Typed); SetActionPanel(true, {conversationType}){waitForTyped};"
+                ? $"WaitForMessage(Typed); GoToConversation({Location.PlayerLocationWithSublocation}/Talk/Base, false){waitForTyped}; SetCircularUIPanel(true, {conversationType}){waitForTyped};"
                 : "SetContinueMode(NotBeforeResponseMenu)@Message(Typed);");
         
             if (!entry.IsLastNode())
@@ -131,5 +136,42 @@ public class SequencerCommandEndOfLine : SequencerCommand
         isPCAutoResponseNext = !state.hasNPCResponse && hasForceAuto || 
                                (numPCResponses == 1 && string.IsNullOrEmpty(state.pcResponses[0].formattedText.text)) ||
                                (numPCResponses == 1 && !hasForceMenu && (!alwaysForceMenu || state.pcResponses[0].destinationEntry.isGroup));
+    }
+}
+
+public class SequencerCommandGoToConversation : SequencerCommand
+{
+    public void Awake()
+    {
+        var conversationName = GetParameter(0);
+        var stop = GetParameterAsBool(1, false);
+        if (string.IsNullOrEmpty(conversationName)) return;
+        var database = DialogueManager.instance.masterDatabase;
+        
+        if (DialogueManager.instance.masterDatabase.GetConversation(conversationName) == null)
+        {
+            Debug.Log($"Conversation {conversationName} not found in database.");
+            return;
+        }
+        
+        if (!DialogueManager.instance.isConversationActive)
+        {
+            DialogueManager.instance.StartConversation(conversationName);
+            return;
+        }
+        
+        if (stop)
+        {
+            DialogueManager.StopConversation();
+            DialogueManager.StartConversation(conversationName);
+            return;
+        }
+        
+            
+        var conversation = database.GetConversation(conversationName);
+        var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
+        var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+        DialogueManager.conversationController.GotoState(state);
+        DialogueManager.instance.PlaySequence("Continue()");
     }
 }

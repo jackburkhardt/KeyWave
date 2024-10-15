@@ -159,6 +159,18 @@ namespace Project.Runtime.Scripts.ScriptableObjects
 
         public static Location PlayerLocation => FromString(GameManager.gameState.PlayerLocation);
 
+        public static string PlayerLocationWithSublocation
+        {
+            get
+            {
+                var location = PlayerLocation.name;
+                var sublocation = DialogueLua.GetLocationField(location, "Current Sublocation").asString;
+        
+                if (!string.IsNullOrEmpty(sublocation)) location += "/" + sublocation;
+                return location;
+            }
+        }
+
         public static Location LastLocation;
 
         #endregion
