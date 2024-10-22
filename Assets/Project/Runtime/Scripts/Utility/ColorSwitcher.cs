@@ -8,7 +8,7 @@ public class ColorSwitcher : ComponentSwitcher<Color>
 
     public Graphic targetGraphic;
     public List<Color> colors;
-    protected override int ActiveIndex => Mathf.Max(colors.FindIndex(p => targetGraphic.color == p), 0);
+    public override int ActiveIndex => Mathf.Max(colors.FindIndex(p => targetGraphic.color == p), 0);
     protected override List<Color> ComponentsToSwitch => colors;
     public override void ShowComponent(Color color)
     {

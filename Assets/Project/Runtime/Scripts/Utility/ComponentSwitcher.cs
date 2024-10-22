@@ -25,6 +25,8 @@ public abstract class ComponentSwitcher : MonoBehaviour
     //[GetComponent]
     [SerializeField]
     private GameObject _target;
+    
+    public Action OnSwitched;
 
 
     
@@ -38,7 +40,7 @@ public abstract class ComponentSwitcher : MonoBehaviour
     public abstract int ComponentCount { get; }
     
     
-    protected abstract int ActiveIndex { get; }
+    public abstract int ActiveIndex { get; }
     
     private bool IsNotFirstComponent => !IsFirstComponentSwitcher;
 
@@ -83,6 +85,7 @@ public abstract class ComponentSwitcher : MonoBehaviour
         }
         
         SwitchToNextObject();
+        OnSwitched?.Invoke();
     }
     
     public void Back()
@@ -94,6 +97,7 @@ public abstract class ComponentSwitcher : MonoBehaviour
         }
         
         SwitchToPreviousObject();
+        OnSwitched?.Invoke();
     }
 
      protected abstract void SwitchToNextObject();
@@ -163,9 +167,11 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
 
         _queuedIndex = -1;
         
-        OnSwitch.Invoke();
+      
         HideAll();
         ShowComponent(ComponentsToSwitch[nextIndex]);
+        
+        OnSwitch.Invoke();
 
         if (sync) return;
         
@@ -199,9 +205,12 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
             if (previousIndex < 0) previousIndex = ComponentsToSwitch.Count - 1;
         }
        
-        OnSwitch.Invoke();
+        
+        
         HideAll();
         ShowComponent(ComponentsToSwitch[previousIndex]);
+        
+        OnSwitch.Invoke();
         
         if (sync) return;
         

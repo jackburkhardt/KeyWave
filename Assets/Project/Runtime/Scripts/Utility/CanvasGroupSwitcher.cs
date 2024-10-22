@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CanvasGroupSwitcher : ComponentSwitcher<CanvasGroup>
 {
-    protected override int ActiveIndex => ComponentsToSwitch.FindIndex(x => (int)x.alpha == 1);
+    public override int ActiveIndex => ComponentsToSwitch.FindIndex(x => (int)x.alpha == 1);
     protected override List<CanvasGroup> ComponentsToSwitch => Target.GetComponentsInChildren<CanvasGroup>(true).Where(x => x.transform.parent == Target.transform).ToList(); 
     public override void ShowComponent(CanvasGroup obj)
     {

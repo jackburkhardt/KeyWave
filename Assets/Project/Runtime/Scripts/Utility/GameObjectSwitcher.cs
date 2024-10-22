@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class GameObjectSwitcher : ComponentSwitcher<GameObject>
 {
 
-    protected override int ActiveIndex => Mathf.Max(ComponentsToSwitch.FindIndex(c => c.activeSelf), 0);
+    public override int ActiveIndex => Mathf.Max(ComponentsToSwitch.FindIndex(c => c.activeSelf), 0);
 
     protected override List<GameObject> ComponentsToSwitch => Target.GetComponentsInChildren<Transform>(true).ToList()
         .FindAll(t => t.gameObject != Target.gameObject && (t.parent == Target.transform || !rootsOnly))
