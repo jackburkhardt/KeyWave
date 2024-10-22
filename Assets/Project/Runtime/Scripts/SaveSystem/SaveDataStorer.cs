@@ -102,11 +102,8 @@ namespace Project.Runtime.Scripts.SaveSystem
 
                 string saveString = PixelCrushers.SaveSystem.Serialize(LatestSaveData);
 
-                //  Debug.Log("Performing local autosave...");
+                Debug.Log("[Unity] Performing local autosave...");
                 File.WriteAllText($"{Application.persistentDataPath}/save.json", saveString);
-#if UNITY_WEBGL && !UNITY_EDITOR // todo: see if this can be removed for optimization
-            Application.ExternalEval("_JS_FileSystem_Sync();");
-#endif
             }
 
             else
