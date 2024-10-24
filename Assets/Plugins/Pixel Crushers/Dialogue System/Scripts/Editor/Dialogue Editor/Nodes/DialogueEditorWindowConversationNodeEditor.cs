@@ -8,6 +8,7 @@ using Plugins.Pixel_Crushers.Dialogue_System.Scripts.Utility;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Graphs;
+using UnityEngine.UIElements;
 
 namespace PixelCrushers.DialogueSystem.DialogueEditor
 {
@@ -710,6 +711,28 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 // Orphaned nodes are red:
                 nodeStyle = GetNodeStyle(Styles.Color.Red, isSelected);
+            }
+            else if (entry.fields.Find(p => p.title == "NodeColor" && p.value != String.Empty) != null)
+            {
+                var value = entry.fields.Find(p => p.title == "NodeColor" && p.value != String.Empty).value;
+                isCustomColor = true;
+                customColor = EditorTools.NodeColorStringToColor(value);
+                if (m_customNodeStyle == null || m_customNodeStyle.normal.background == null)
+                {
+#if UNITY_2019_3_OR_NEWER
+                    m_customNodeStyle = new GUIStyle(GUI.skin.button);
+#else
+                        m_customNodeStyle = new GUIStyle(GUI.skin.box);
+#endif
+                    m_customNodeStyle.contentOffset = new Vector2(0, -4);
+                    var nodeTexture = EditorGUIUtility.Load("Dialogue System/EditorNode.png") as Texture2D;
+                    m_customNodeStyle.normal.background = nodeTexture ?? Texture2D.whiteTexture;
+                    m_customNodeStyle.normal.textColor = EditorGUIUtility.isProSkin ? new Color(0.9f, 0.9f, 0.9f) : Color.black;
+                    m_customNodeStyle.wordWrap = false;
+                    m_customNodeStyle.alignment = TextAnchor.MiddleCenter;
+                }
+                nodeStyle = m_customNodeStyle;
+
             }
             else
             {

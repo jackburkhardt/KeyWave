@@ -6,6 +6,7 @@ using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -13,7 +14,8 @@ namespace Project.Runtime.Scripts.UI
     {
         public static List<string> CustomFields = new List<string>
         {
-       
+            "openOnEnable",
+            "closeOnDisable",
         };
 
 
@@ -22,16 +24,28 @@ namespace Project.Runtime.Scripts.UI
 
         public List<CustomUIResponseButton> ResponseButtons => GetComponentsInChildren<CustomUIResponseButton>().ToList();
 
+        public bool openOnEnable = false;
+        public bool closeOnDisable = false;
 
         protected override void OnEnable()
-        { 
-            base.OnEnable();
+        {   Debug.Log("Open on enable");
+            if (openOnEnable)
+            {
+                Open();
+            }
+            
+            else base.OnEnable();
             onContentChanged.AddListener(OnContentChanged);
         }
 
         protected override void OnDisable()
         { 
-            base.OnDisable();
+            Debug.Log("Close on disable");
+            if (closeOnDisable)
+            {
+                Close();
+            }
+            else base.OnDisable();
             onContentChanged.RemoveListener(OnContentChanged);
         }
 
@@ -68,6 +82,13 @@ namespace Project.Runtime.Scripts.UI
             Clock.Freeze(false);
 
         }
+        
+        public override void Open()
+        {Debug.Log(("panel state: " + panelState));
+            Debug.Log("Open");
+            base.Open();
+            
+        }
 
         public void OnQuestStateChange(string questTitle)
         {
@@ -78,6 +99,14 @@ namespace Project.Runtime.Scripts.UI
         {
      
         }
+
+        public void ShowActions()
+        {
+            Debug.Log("Show actions");
+            DialogueManager.StopConversation();
+            DialogueManager.StartConversation(Location.PlayerLocationWithSublocation + "/Actions");
+        }
+        
     }
     
     

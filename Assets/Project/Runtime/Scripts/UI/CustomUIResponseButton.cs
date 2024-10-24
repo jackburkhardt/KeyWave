@@ -7,6 +7,7 @@ using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
+using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -22,11 +23,16 @@ namespace Project.Runtime.Scripts.UI
 
         protected static CustomUIResponseButton _hoveredButton;
 
+        [SerializeField] private Graphic image;
+        
+        private Color defaultImageColor;
+
         [SerializeField] protected string _autoNumberFormat = "{0}. {1}";
 
         [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
 
         [SerializeField] protected UITextField autonumberText;
+        
 
         protected bool showPopupBadge = true;
         
@@ -57,6 +63,11 @@ namespace Project.Runtime.Scripts.UI
         {
             Refresh();
     
+        }
+        
+        private void Awake()
+        {
+            defaultImageColor = image != null ? image.color : defaultColor;
         }
 
         private void OnDisable()
@@ -185,15 +196,36 @@ namespace Project.Runtime.Scripts.UI
             if (DialogueEntryInvalid)
             {
                // if ( !Field.LookupBool(response?.destinationEntry?.fields, "Show If Invalid")) Destroy(gameObject);
-            
-            
                 if (Field.FieldExists(response?.destinationEntry?.fields, "Invalid Text"))
                 {
                     var invalidText = Field.LookupValue(response?.destinationEntry?.fields, "Invalid Text");
                 
                     label.text = invalidText;
                 }
-            } 
+            }
+
+            else if (image != null)
+            {
+                var color = defaultImageColor;
+
+                if (Field.FieldExists(response.destinationEntry.fields, "UseNodeColorInMenu")
+                    && Field.LookupBool(response.destinationEntry.fields, "UseNodeColorInMenu"))
+                {
+                    if (Field.FieldExists(response.destinationEntry.fields, "NodeColor"))
+                    {
+                        color = Tools.WebColor(
+                            Field.LookupValue(response.destinationEntry.fields, "NodeColor"));
+                    }
+                
+                    else if (Field.FieldExists(response.destinationEntry.GetActor().fields, "NodeColor"))
+                    {
+                        color = Tools.WebColor(
+                            Field.LookupValue(response.destinationEntry.GetActor().fields, "NodeColor"));
+                    }
+                }
+                
+                image.color = color;
+            }
         
             SetAutonumber();
 

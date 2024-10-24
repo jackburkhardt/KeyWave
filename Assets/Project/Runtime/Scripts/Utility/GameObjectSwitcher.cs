@@ -26,4 +26,14 @@ public class GameObjectSwitcher : ComponentSwitcher<GameObject>
     {
        obj.SetActive(false);
     }
+
+    public void OnEnable()
+    {
+        SwitchTo(ActiveIndex);
+    }
+
+    public void OnDisable()
+    {
+        HideAll();
+    }
 }
