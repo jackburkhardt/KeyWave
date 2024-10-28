@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using DG.Tweening;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -110,6 +112,7 @@ namespace Project.Runtime.Scripts.UI
       
         }
         
+        /*
         public override void Close()
         {
             PopFromPanelStack();
@@ -131,10 +134,11 @@ namespace Project.Runtime.Scripts.UI
                 eventSystem.SetSelectedGameObject(null);
             }
         }
-
+*/
         public override void Focus()
         {
-           // Animator!.SetBool("Focus", true);
+            DialogueManager.instance.StopConversation();
+            DialogueManager.instance.StartConversation(Location.PlayerLocationWithSublocation + "/Actions");
             base.Focus();
             WatchHandCursor.Unfreeze();
         }
@@ -173,24 +177,12 @@ namespace Project.Runtime.Scripts.UI
         public override void Unfocus()
         {
             //Animator!.SetBool("Focus", false);
+            if (DialogueManager.instance.conversationModel.conversationTitle.EndsWith("Actions"))
+            {
+                DialogueManager.PlaySequence("GoToConversation(" + Location.PlayerLocationWithSublocation + "/Talk/Base)");
+            }
             base.Unfocus();
             WatchHandCursor.Freeze();
-        }
-
-        public void OnDialogueSystemPause()
-        {
-         //   if (!Animator!.GetBool("Active")) return;
-           // WatchHandCursor.GlobalFreeze();
-         }
-
-        public void OnDialogueSystemUnpause()
-        {
-           // WatchHandCursor.GlobalUnfreeze();
-          }
-
-        public void OnConversationLine()
-        {
-            
         }
 
 
@@ -268,8 +260,22 @@ namespace Project.Runtime.Scripts.UI
             if (_pointerInside) Focus();
            
         }
-        
-     
+
+        public void Show()
+        {
+            animatorMonitor.SetTrigger(showAnimationTrigger, OnVisible, waitForShowAnimation);
+        }
+
+        public void Hide()
+        {
+            animatorMonitor.SetTrigger(showAnimationTrigger, OnHidden, waitForShowAnimation);
+        }
+
+        public void ShowActions()
+        {
+           
+           // animatorMonitor.SetTrigger(showAnimationTrigger, OnVisible, waitForShowAnimation);
+        }
 
         public void SetPropertiesFromButton(CircularUIResponseButton button)
         {
@@ -286,14 +292,39 @@ namespace Project.Runtime.Scripts.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Focus();
-            _pointerInside = true;
+          //  Focus();
+          //  _pointerInside = true;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Unfocus();
-            _pointerInside = false;
+            //Unfocus();
+            //_pointerInside = false;
+        }
+    }
+
+    public class SequencerCommandSetCircularUIPanel : SequencerCommand
+    {
+        private void Awake()
+        {
+            
+            var value = GetParameterAsBool(0);
+            var type = GetParameter(1, "");
+
+            var panel = FindObjectOfType<CircularUIMenuPanel>();
+            
+            if (value)
+            {
+                panel.Open();
+            }
+            else
+            {
+                panel.Close();
+            }
+
+            return;
+        
+           
         }
     }
 }

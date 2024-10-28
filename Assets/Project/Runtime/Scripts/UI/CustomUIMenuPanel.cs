@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -13,18 +15,19 @@ namespace Project.Runtime.Scripts.UI
     {
         public static List<string> CustomFields = new List<string>
         {
-       
+          
         };
 
 
         [SerializeField] Animator responseMenuAnimator;
 
-
         public List<CustomUIResponseButton> ResponseButtons => GetComponentsInChildren<CustomUIResponseButton>().ToList();
 
+        public bool openOnEnable = false;
+        public bool closeOnDisable = false;
 
         protected override void OnEnable()
-        { 
+        {   
             base.OnEnable();
             onContentChanged.AddListener(OnContentChanged);
         }
@@ -34,7 +37,8 @@ namespace Project.Runtime.Scripts.UI
             base.OnDisable();
             onContentChanged.RemoveListener(OnContentChanged);
         }
-
+        
+     
         public virtual void OnChoiceSelection(CustomUIResponseButton customUIResponseButton)
         {
             if (customUIResponseButton.simStatus == "WasDisplayed")
@@ -65,8 +69,9 @@ namespace Project.Runtime.Scripts.UI
                 button.Refresh();
             }
             
+            RefreshLayoutGroups.Refresh(gameObject);
             
-            Clock.Freeze(false);
+          //  Clock.Freeze(false);
 
         }
 
@@ -79,6 +84,21 @@ namespace Project.Runtime.Scripts.UI
         {
      
         }
+
+        public void StartConversationWithPlayerLocationPrefix(string conversationName)
+        {
+            DialogueManager.StopConversation();
+            DialogueManager.StartConversation(Location.PlayerLocationWithSublocation + "/" + conversationName);
+        }
+        
+        public void StartConversation(string conversationName)
+        {
+            DialogueManager.StopConversation();
+            DialogueManager.StartConversation(conversationName);
+        }
+        
+        
+        
     }
     
     

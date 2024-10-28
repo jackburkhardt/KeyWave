@@ -45,7 +45,6 @@ public class ActionPanel : MonoBehaviour
     }
     public void OnConversationLine(Subtitle subtitle)
     {
-//        Debug.Log("Conversation line");
         if (newConversation)
         {
             newConversation = false;
@@ -179,6 +178,8 @@ public class SequencerCommandSetActionPanel : SequencerCommand
     {
         var value = GetParameterAsBool(0);
         var type = GetParameter(1, "");
+
+        return;
         
         if (value)
         {

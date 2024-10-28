@@ -82,6 +82,11 @@ namespace Project.Runtime.Scripts.Manager
         private void Update()
         {
             if (capFramerate) Application.targetFrameRate = framerateLimit;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                DialogueManager.instance.PlaySequence("Continue()");
+            }
         }
 
         // Start is called before the first frame update
@@ -297,5 +302,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             GameEvent.OnWait(duration);
         }
+        
+        
     }
 }
