@@ -26,7 +26,7 @@ public class CharacterResponseButton : CustomUIResponseButton
     public void OnValidate()
     {
         button ??= GetComponent<Button>();
-        showPopupBadge = false;
+        //showPopupBadge = false;
         _characterMenuPanel ??= MenuPanelContainer as CharacterMenuPanel ?? FindObjectOfType<CharacterMenuPanel>();
 
         if (_characterMenuPanel == null) return;

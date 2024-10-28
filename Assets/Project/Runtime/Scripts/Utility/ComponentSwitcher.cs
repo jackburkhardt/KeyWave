@@ -46,7 +46,7 @@ public abstract class ComponentSwitcher : MonoBehaviour
 
     [HideIf("sync")] [SerializeField] private bool _extras = false;
 
-    private bool ShowExtras => _extras && (IsFirstComponentSwitcher || !sync);
+    protected bool ShowExtras => _extras && (IsFirstComponentSwitcher || !sync);
 
     [ShowIf("ShowExtras")] [GetComponent] public Animator animator;
     
@@ -261,7 +261,5 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
         {
             defaultIndex = 0;
         }
-     
-        
     }
 }

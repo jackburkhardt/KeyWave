@@ -6,9 +6,11 @@ using System.Linq;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Utility;
 using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
@@ -23,7 +25,17 @@ namespace Project.Runtime.Scripts.UI
 
         protected static CustomUIResponseButton _hoveredButton;
 
-        [SerializeField] private Graphic image;
+        [SerializeField] private Graphic nodeColorChameleon;
+        
+        private bool chameleonNotNull => nodeColorChameleon != null;
+
+        [ShowIf("chameleonNotNull")] [SerializeField] private string chameleonField = "UseNodeColorInMenu";
+
+        [SerializeField] private Image icon;
+        
+        private bool iconNotNull => icon != null;
+        [ShowIf("chameleonNotNull")] [SerializeField] private string iconField = "Icon";
+        
         
         private Color defaultImageColor;
 
@@ -31,13 +43,15 @@ namespace Project.Runtime.Scripts.UI
 
         [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
 
+        [SerializeField] protected UITextField actorNameText;
+        
+        [SerializeField] protected UITextField conversantNameText;
+        
         [SerializeField] protected UITextField autonumberText;
+
         
 
-        protected bool showPopupBadge = true;
-        
-        [ShowIf("showPopupBadge")]
-        [SerializeField] private Image _popupBadge;
+         [SerializeField] private Image _notificationBadge;
 
         public string simStatus
         {
@@ -52,8 +66,8 @@ namespace Project.Runtime.Scripts.UI
 
         protected UIButtonKeyTrigger[] ButtonKeyTriggers => GetComponents<UIButtonKeyTrigger>();
 
-        protected List<CustomUIResponseButton> SiblingButtons =>
-            transform.parent.GetComponentsInChildren<CustomUIResponseButton>().ToList();
+        protected List<CustomUIResponseButton>? SiblingButtons =>
+            transform != null && transform.parent != null ? transform.parent.GetComponentsInChildren<CustomUIResponseButton>().ToList() : null;
 
         private bool DialogueEntryInvalid => response?.destinationEntry?.conditionsString?.Length != 0 &&
                                              !Lua.IsTrue(response?.destinationEntry?.conditionsString);
@@ -67,7 +81,7 @@ namespace Project.Runtime.Scripts.UI
         
         private void Awake()
         {
-            defaultImageColor = image != null ? image.color : defaultColor;
+            defaultImageColor = nodeColorChameleon != null ? nodeColorChameleon.color : defaultColor;
         }
 
         private void OnDisable()
@@ -100,7 +114,7 @@ namespace Project.Runtime.Scripts.UI
             if (_hoveredButton != this)
             {
                 Field.SetValue(response?.destinationEntry?.fields, "Show Badge", false);
-                if (_popupBadge != null && _popupBadge.gameObject.activeSelf) DialogueManager.instance.gameObject.BroadcastMessage("OnNewOptionSelected", response?.destinationEntry, SendMessageOptions.DontRequireReceiver);
+                if (_notificationBadge != null && _notificationBadge.gameObject.activeSelf) DialogueManager.instance.gameObject.BroadcastMessage("OnNewOptionSelected", response?.destinationEntry, SendMessageOptions.DontRequireReceiver);
             }
             Refresh();
         }
@@ -113,6 +127,7 @@ namespace Project.Runtime.Scripts.UI
             int GetAutonumber()
             {
             
+                if (SiblingButtons == null) return -1;
                 var buttons = new List<CustomUIResponseButton>(SiblingButtons);
             
                 // remove all buttons that are invalid
@@ -174,8 +189,8 @@ namespace Project.Runtime.Scripts.UI
 
             if (autonumberText.gameObject == null)
             {
-                label.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
-                label.text = label.text.Replace("{1}", response?.formattedText.text);
+                if (_autoNumberFormat.Contains("{0}")) label.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
+                if (_autoNumberFormat.Contains("{1}")) label.text = label.text.Replace("{1}", response?.formattedText.text);
             }
 
             else
@@ -200,31 +215,73 @@ namespace Project.Runtime.Scripts.UI
                 {
                     var invalidText = Field.LookupValue(response?.destinationEntry?.fields, "Invalid Text");
                 
-                    label.text = invalidText;
+                   //abel.text = invalidText;
                 }
             }
 
-            else if (image != null)
+            else if (response != null && response.destinationEntry != null)
             {
-                var color = defaultImageColor;
-
-                if (Field.FieldExists(response.destinationEntry.fields, "UseNodeColorInMenu")
-                    && Field.LookupBool(response.destinationEntry.fields, "UseNodeColorInMenu"))
+                if (nodeColorChameleon != null)
                 {
-                    if (Field.FieldExists(response.destinationEntry.fields, "NodeColor"))
+                    var color = defaultImageColor;
+
+                    if (Field.FieldExists(response.destinationEntry.fields, chameleonField)
+                        && Field.LookupBool(response.destinationEntry.fields, chameleonField))
                     {
-                        color = Tools.WebColor(
-                            Field.LookupValue(response.destinationEntry.fields, "NodeColor"));
+                        if (Field.FieldExists(response.destinationEntry.fields, "NodeColor"))
+                        {
+                            color = Tools.WebColor(
+                                Field.LookupValue(response.destinationEntry.fields, "NodeColor"));
+                        }
+                
+                        else if (Field.FieldExists(response.destinationEntry.GetActor().fields, "NodeColor"))
+                        {
+                            color = Tools.WebColor(
+                                Field.LookupValue(response.destinationEntry.GetActor().fields, "NodeColor"));
+                        }
                     }
                 
-                    else if (Field.FieldExists(response.destinationEntry.GetActor().fields, "NodeColor"))
+                    nodeColorChameleon.color = color;
+                }
+                
+                if (icon != null)
+                {
+                    if (Field.FieldExists(response.destinationEntry.fields, iconField))
                     {
-                        color = Tools.WebColor(
-                            Field.LookupValue(response.destinationEntry.GetActor().fields, "NodeColor"));
+                        var iconPath = Field.LookupValue(response.destinationEntry.fields, iconField);
+                        if (string.IsNullOrEmpty(iconPath)) icon.gameObject.SetActive(false);
+                        else
+                        {
+                            icon.gameObject.SetActive(true);
+                            AddressableLoader.RequestLoad<Sprite>(iconPath, sprite =>
+                            {
+                                icon.sprite = sprite;
+                            });
+                        }
                     }
                 }
                 
-                image.color = color;
+                if (actorNameText != null)
+                {
+                    if (response.destinationEntry.GetActor() != null)
+                    {
+                        actorNameText.text = response.destinationEntry.GetActor().Name;
+                    }
+                    else actorNameText.text = string.Empty;
+                }
+                
+                if (conversantNameText != null)
+                {
+                    if (response.destinationEntry.GetConversant() != null)
+                    {
+                        conversantNameText.text = response.destinationEntry.GetConversant().Name;
+                    }
+                    else conversantNameText.text = string.Empty;
+                }
+                
+                label.text = response.formattedText.text;
+                
+              //  Debug.Log($"Response: { label.text}");
             }
         
             SetAutonumber();
@@ -232,11 +289,11 @@ namespace Project.Runtime.Scripts.UI
 
             if (Field.FieldExists(response?.destinationEntry?.fields, "Show Badge") && Field.LookupBool(response?.destinationEntry?.fields, "Show Badge"))
             {
-                if (_popupBadge != null) _popupBadge.gameObject.SetActive(true);
+                if (_notificationBadge != null) _notificationBadge.gameObject.SetActive(true);
             }
             else
             {
-                if (_popupBadge != null) _popupBadge.gameObject.SetActive(false);
+                if (_notificationBadge != null) _notificationBadge.gameObject.SetActive(false);
             }
         }
     }

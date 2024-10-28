@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers;
+using PixelCrushers.DialogueSystem;
 using Project;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,6 +33,7 @@ public class CustomUIPanel : UIPanel
          
             if (Animator != null && Animator.isInitialized && !string.IsNullOrEmpty(unfocusAnimationTrigger))
             {
+                Animator.ResetTrigger(focusAnimationTrigger);
                 Animator.SetTrigger(unfocusAnimationTrigger);
                 OnUnfocus?.Invoke();
             }
@@ -40,12 +43,18 @@ public class CustomUIPanel : UIPanel
            
             if (Animator != null && Animator.isInitialized && !string.IsNullOrEmpty(unfocusAnimationTrigger))
             {
+                Animator.ResetTrigger(unfocusAnimationTrigger);
                 Animator.SetTrigger(focusAnimationTrigger);
                 OnFocus?.Invoke();
             }
         }
         
         base.CheckFocus();
+    }
+    
+    public void OnConversationEnd()
+    {
+       
     }
 
     public void RemoveFocus()
@@ -54,14 +63,38 @@ public class CustomUIPanel : UIPanel
         CheckFocus();
     }
     
+    private string currentConversation;
+    
+    public void OnConversationLine(Subtitle subtitle)
+    {
+        currentConversation = subtitle.dialogueEntry.GetConversation().Title;
+    }
+    
+    public void OpenSmartWatch()
+    {
+        if (DialogueManager.instance.IsConversationActive)
+        {
+            Debug.Log(currentConversation);
+            DialogueManager.instance.StopConversation();
+            
+            if (currentConversation != "SmartWatch/Home")
+            {
+                DialogueManager.instance.StartConversation("SmartWatch/Home");
+            }
+            
+            else RemoveFocus();
+        }
+          
+        else if (!DialogueManager.instance.IsConversationActive)
+        {
+            DialogueManager.instance.StartConversation("SmartWatch/Home");
+        }
+       
+    }
+    
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

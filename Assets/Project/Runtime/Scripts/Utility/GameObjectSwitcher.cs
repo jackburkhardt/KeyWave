@@ -20,11 +20,23 @@ public class GameObjectSwitcher : ComponentSwitcher<GameObject>
     public override void ShowComponent(GameObject obj)
     {
         obj.SetActive(true);
+        if (Application.isPlaying && broadcastMessage)
+        {
+            BroadcastMessage(ShowComponentMessage, SendMessageOptions.DontRequireReceiver);
+            
+        }
+        //else  obj.SetActive(true);
+       
     }
 
     public override void HideComponent(GameObject obj)
     {
-       obj.SetActive(false);
+        obj.SetActive(false);
+        if (Application.isPlaying && broadcastMessage)
+        {
+            BroadcastMessage(HideComponentMessage, SendMessageOptions.DontRequireReceiver);
+            
+        }
     }
 
     public void OnEnable()
@@ -36,4 +48,13 @@ public class GameObjectSwitcher : ComponentSwitcher<GameObject>
     {
         HideAll();
     }
+
+    [Label("Try Broadcast Message First")]
+    [ShowIf("ShowExtras")] public bool broadcastMessageOnRuntimeInstead;
+    
+    private bool broadcastMessage => broadcastMessageOnRuntimeInstead == true && ShowExtras;
+
+    [ShowIf("broadcastMessage")] public string ShowComponentMessage = "Open";
+    
+    [ShowIf("broadcastMessage")] public string HideComponentMessage = "Close";
 }

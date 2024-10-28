@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Audio;
@@ -14,13 +15,11 @@ namespace Project.Runtime.Scripts.UI
     {
         public static List<string> CustomFields = new List<string>
         {
-            "openOnEnable",
-            "closeOnDisable",
+          
         };
 
 
         [SerializeField] Animator responseMenuAnimator;
-
 
         public List<CustomUIResponseButton> ResponseButtons => GetComponentsInChildren<CustomUIResponseButton>().ToList();
 
@@ -28,27 +27,18 @@ namespace Project.Runtime.Scripts.UI
         public bool closeOnDisable = false;
 
         protected override void OnEnable()
-        {   Debug.Log("Open on enable");
-            if (openOnEnable)
-            {
-                Open();
-            }
-            
-            else base.OnEnable();
+        {   
+            base.OnEnable();
             onContentChanged.AddListener(OnContentChanged);
         }
 
         protected override void OnDisable()
         { 
-            Debug.Log("Close on disable");
-            if (closeOnDisable)
-            {
-                Close();
-            }
-            else base.OnDisable();
+            base.OnDisable();
             onContentChanged.RemoveListener(OnContentChanged);
         }
-
+        
+     
         public virtual void OnChoiceSelection(CustomUIResponseButton customUIResponseButton)
         {
             if (customUIResponseButton.simStatus == "WasDisplayed")
@@ -78,16 +68,10 @@ namespace Project.Runtime.Scripts.UI
                 button.Refresh();
             }
             
+            RefreshLayoutGroups.Refresh(gameObject);
             
-            Clock.Freeze(false);
+          //  Clock.Freeze(false);
 
-        }
-        
-        public override void Open()
-        {Debug.Log(("panel state: " + panelState));
-            Debug.Log("Open");
-            base.Open();
-            
         }
 
         public void OnQuestStateChange(string questTitle)
@@ -100,12 +84,19 @@ namespace Project.Runtime.Scripts.UI
      
         }
 
-        public void ShowActions()
+        public void StartConversationWithPlayerLocationPrefix(string conversationName)
         {
-            Debug.Log("Show actions");
             DialogueManager.StopConversation();
-            DialogueManager.StartConversation(Location.PlayerLocationWithSublocation + "/Actions");
+            DialogueManager.StartConversation(Location.PlayerLocationWithSublocation + "/" + conversationName);
         }
+        
+        public void StartConversation(string conversationName)
+        {
+            DialogueManager.StopConversation();
+            DialogueManager.StartConversation(conversationName);
+        }
+        
+        
         
     }
     
