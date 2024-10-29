@@ -19,7 +19,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             Wellness,
             Credibility,
-            Rapport,
+            Engagement,
             Null,
             Commitment
         }
@@ -33,11 +33,11 @@ namespace Project.Runtime.Scripts.Manager
         public static Action<Type> OnAnimationStart;
 
         public static Action OnAnimationComplete;
-        public static int RapportScore => GameStateManager.instance.gameState.rapport_score;
+        public static int EngagementScore => GameStateManager.instance.gameState.Engagement_score;
         public static int CredibilityScore => GameStateManager.instance.gameState.credibility_score;
         public static int WellnessScore => GameStateManager.instance.gameState.wellness_score;
         public static int CommitmentScore => GameStateManager.instance.gameState.commitment_score;
-        public static int TotalScore =>  RapportScore + CredibilityScore + WellnessScore + CommitmentScore;
+        public static int TotalScore =>  EngagementScore + CredibilityScore + WellnessScore + CommitmentScore;
         public static bool IsAnimating => isAnimating;
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace Project.Runtime.Scripts.Manager
             var score = 0;
             switch (type)
             {
-                case Type.Rapport:
-                    score = GameStateManager.instance.gameState.rapport_score;
+                case Type.Engagement:
+                    score = GameStateManager.instance.gameState.Engagement_score;
                     break;
                 case Type.Credibility:
                     score = GameStateManager.instance.gameState.credibility_score;
@@ -93,7 +93,7 @@ namespace Project.Runtime.Scripts.Manager
                     return UnityEngine.Color.green;
                 case Type.Credibility:
                     return UnityEngine.Color.red;
-                case Type.Rapport:
+                case Type.Engagement:
                     return new Color(0, 153, 255, 255);
                 default:
                     return UnityEngine.Color.white;

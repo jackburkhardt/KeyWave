@@ -16,7 +16,7 @@ namespace Project.Runtime.Scripts.Manager
         public Dictionary<Points.Type, int> EarnedPoints = new()
         {
             {Points.Type.Credibility, 0},
-            {Points.Type.Rapport, 0},
+            {Points.Type.Engagement, 0},
             {Points.Type.Wellness, 0},
             {Points.Type.Commitment, 0}
         };
