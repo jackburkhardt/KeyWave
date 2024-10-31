@@ -78,10 +78,10 @@ namespace Project.Runtime.Scripts.UI
         
             for (var i = 0; i < Points.CredibilityScore; i++)
             {
-                AddOrExpandUnit(Points.Color(Points.Type.Rapport));
+                AddOrExpandUnit(Points.Color(Points.Type.Engagement));
             }
         
-            for (var i = 0; i < Points.RapportScore; i++)
+            for (var i = 0; i < Points.EngagementScore; i++)
             {
                 AddOrExpandUnit(Points.Color(Points.Type.Commitment));
             }

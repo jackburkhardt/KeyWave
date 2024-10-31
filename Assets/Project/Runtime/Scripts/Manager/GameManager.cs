@@ -183,14 +183,7 @@ namespace Project.Runtime.Scripts.Manager
         
         public static void OnConversationEnd()
         {
-            /*
-            var activeConversation = DialogueManager.instance.activeConversation;
-            if (activeConversation == null) return;
-            var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
-            if (Field.FieldExists(conversation.fields, "Base") &&
-                !DialogueLua.GetConversationField(conversation.id, "Base").asBool) return;
-            instance.mainCanvas.BroadcastMessage("SetTrigger", "Hide");
-            */
+            PixelCrushers.SaveSystem.SaveToSlot(1);
         }
 
 

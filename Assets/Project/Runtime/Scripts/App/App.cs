@@ -116,11 +116,12 @@ namespace Project.Runtime.Scripts.App
 
         private void SendPlayerEvent(PlayerEvent e)
         {
-            if (e.EventType == "quest_state_change")
+            if (e.EventType is "quest_state_change" or "points")
             {
     #if UNITY_WEBGL && !UNITY_EDITOR
                 BrowserInterface.sendPlayerEvent(e.ToString());
     #endif
+                Debug.Log("[Unity ->] Transmitting player event: " + e.ToString());
             }
         }
 

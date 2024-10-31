@@ -1,11 +1,11 @@
-# About Project KeyWave
+# About Perils & Pitfalls
 
 <p align="center">
   <img width="265" height="300" src="https://github.com/jackburkhardt/KeyWave/blob/main/keywave.png">
   <p>--- <a href="https://github.com/jackburkhardt/KeyWave/wiki">WIKI</a> ---</p>
 </p>
 
-### What is KeyWave?
+### What is Perils?
 
 Project KeyWave is the working title of a brand new educational video game that aims to help teach college and University students key learning objectives from introductory to intermediate general management classes.
 
@@ -21,4 +21,4 @@ This game is not intended to be used as a sole teaching tool. It instead acts as
 
 ### Technical Specifications
 
-KeyWave is a 2D game using the Unity engine, version 2021.3.9f1 LTS. It will be developed for PC and Mac systems, released as a single executable file and with a future goal of releasing it as a web-based Unity game.
+KeyWave is a 2D game using the Unity engine, version 2021.3.45f1 LTS. It will be developed for PC and Mac systems, released as a single executable file and with a future goal of releasing it as a web-based Unity game.

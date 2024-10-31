@@ -14,7 +14,7 @@ namespace Project.Runtime.Scripts.Manager
             EndOfDay
         }
 
-        public int rapport_score = 0;
+        public int Engagement_score = 0;
         public int commitment_score = 0;
 
 
@@ -103,8 +103,8 @@ namespace Project.Runtime.Scripts.Manager
                         case Points.Type.Wellness:
                             gameState.wellness_score += pointsField.Points;
                             break;
-                        case Points.Type.Rapport:
-                            gameState.rapport_score += pointsField.Points;
+                        case Points.Type.Engagement:
+                            gameState.Engagement_score += pointsField.Points;
                             break;
                         case Points.Type.Commitment:
                             gameState.commitment_score += pointsField.Points;

@@ -13,8 +13,8 @@ namespace Project.Editor.Scripts.Tools
     {
         private Dictionary<DialogueEntry, int> credibilityEntries = new();
         private int credibilityTotal;
-        private Dictionary<DialogueEntry, int> rapportEntries = new();
-        private int rapportTotal;
+        private Dictionary<DialogueEntry, int> EngagementEntries = new();
+        private int EngagementTotal;
         private Dictionary<DialogueEntry, int> commitmentEntries = new();
         private int commitmentTotal;
         private Vector2 scrollPos;
@@ -22,7 +22,7 @@ namespace Project.Editor.Scripts.Tools
         private DialogueDatabase selectedDB;
         private bool showCred;
         private bool showData;
-        private bool showRapport;
+        private bool showEngagement;
         private bool showWellness;
         private bool showCommit;
         private int totalPoints;
@@ -57,7 +57,7 @@ namespace Project.Editor.Scripts.Tools
                 
             EditorGUILayout.LabelField($"Total wellness points: {wellnessTotal} ({(wellnessTotal/(float)totalPoints):P})");
             EditorGUILayout.LabelField($"Total cred points: {credibilityTotal} ({(credibilityTotal/(float)totalPoints):P})");
-            EditorGUILayout.LabelField($"Total rapoport points: {rapportTotal} ({(rapportTotal/(float)totalPoints):P})");
+            EditorGUILayout.LabelField($"Total rapoport points: {EngagementTotal} ({(EngagementTotal/(float)totalPoints):P})");
             EditorGUILayout.LabelField($"Total commitment points: {commitmentTotal} ({(commitmentTotal/(float)totalPoints):P})");
                 
             EditorGUILayout.Space(20);
@@ -91,10 +91,10 @@ namespace Project.Editor.Scripts.Tools
                     EditorGUILayout.EndHorizontal();                    }
             }
                 
-            showRapport = EditorGUILayout.Foldout(showRapport, $"Show Rapport Entries ({rapportEntries.Count})");
-            if (showRapport)
+            showEngagement = EditorGUILayout.Foldout(showEngagement, $"Show Engagement Entries ({EngagementEntries.Count})");
+            if (showEngagement)
             {
-                foreach (var entry in rapportEntries)
+                foreach (var entry in EngagementEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
@@ -150,13 +150,13 @@ namespace Project.Editor.Scripts.Tools
                                 wellnessEntries.Add(entry, points);
                                 wellnessTotal += points;
                                 break;
-                            case Points.Type.Rapport:
+                            case Points.Type.Engagement:
                                 credibilityEntries.Add(entry, points);
                                 credibilityTotal += points;
                                 break;
                             case Points.Type.Credibility:
-                                rapportEntries.Add(entry, points);
-                                rapportTotal += points;
+                                EngagementEntries.Add(entry, points);
+                                EngagementTotal += points;
                                 break;
                             case Points.Type.Commitment:
                                 commitmentEntries.Add(entry, points);
@@ -168,12 +168,12 @@ namespace Project.Editor.Scripts.Tools
                 }
             }
             
-            totalPoints = wellnessTotal + credibilityTotal + rapportTotal + commitmentTotal;
+            totalPoints = wellnessTotal + credibilityTotal + EngagementTotal + commitmentTotal;
             
             // sort dictionaries on the value (highest to lowest)
             wellnessEntries = wellnessEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             credibilityEntries = credibilityEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            rapportEntries = rapportEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            EngagementEntries = EngagementEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             commitmentEntries = commitmentEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -181,11 +181,11 @@ namespace Project.Editor.Scripts.Tools
         {
             wellnessEntries.Clear();
             credibilityEntries.Clear();
-            rapportEntries.Clear();
+            EngagementEntries.Clear();
             commitmentEntries.Clear();
             wellnessTotal = 0;
             credibilityTotal = 0;
-            rapportTotal = 0;
+            EngagementTotal = 0;
             commitmentTotal = 0;
             showData = false;
         }
