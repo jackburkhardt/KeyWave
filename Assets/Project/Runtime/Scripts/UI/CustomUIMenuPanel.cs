@@ -17,6 +17,7 @@ namespace Project.Runtime.Scripts.UI
         {
           
         };
+        
 
 
         [SerializeField] Animator responseMenuAnimator;
@@ -30,6 +31,7 @@ namespace Project.Runtime.Scripts.UI
         {   
             base.OnEnable();
             onContentChanged.AddListener(OnContentChanged);
+//            BroadcastMessage("OnCustomUIMenuPanel", DialogueManager.instance.gameObject);
         }
 
         protected override void OnDisable()
@@ -96,9 +98,6 @@ namespace Project.Runtime.Scripts.UI
             DialogueManager.StopConversation();
             DialogueManager.StartConversation(conversationName);
         }
-        
-        
-        
     }
     
     

@@ -1,11 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project;
+using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class CustomUIPanel : UIPanel
 {
@@ -20,13 +25,13 @@ public class CustomUIPanel : UIPanel
 
     private Animator Animator => animator ? animator : GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
     
+   
+   
     
     // Start is called before the first frame update
     
     public override void CheckFocus()
     {
-        
-       
         
         if (topPanel != this)
         {
@@ -91,10 +96,8 @@ public class CustomUIPanel : UIPanel
         }
        
     }
+
+
     
-    void Start()
-    {
-        
-    }
 
 }

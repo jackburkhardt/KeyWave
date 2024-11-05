@@ -58,6 +58,7 @@ public abstract class ComponentSwitcher : MonoBehaviour
 
     [ShowIf("AnimatorNotNull")] public bool waitForAnimation = true;
     
+    [ShowIf("ShowExtras")] public List<UnityEvent> OnSwitchedEvents;
 
     public bool IsFirstComponentSwitcher => FirstComponentSwitcher == this;
 
@@ -172,6 +173,7 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
         ShowComponent(ComponentsToSwitch[nextIndex]);
         
         OnSwitch.Invoke();
+        OnSwitchedEvents[nextIndex].Invoke();
 
         if (sync) return;
         
@@ -211,6 +213,7 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
         ShowComponent(ComponentsToSwitch[previousIndex]);
         
         OnSwitch.Invoke();
+        OnSwitchedEvents[previousIndex].Invoke();
         
         if (sync) return;
         
@@ -261,5 +264,25 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
         {
             defaultIndex = 0;
         }
+        
+        if (OnSwitchedEvents.Count != ComponentsToSwitch.Count)
+        {
+            var oldEvents = OnSwitchedEvents;
+            OnSwitchedEvents = new List<UnityEvent>();
+            for (int i = 0; i < ComponentsToSwitch.Count; i++)
+            {
+                if (i < oldEvents.Count)
+                {
+                    OnSwitchedEvents.Add(oldEvents[i]);
+                    OnSwitchedEvents[i].SetPersistentListenerState(0, UnityEventCallState.EditorAndRuntime);
+                    //OnSwitchedEvents.
+                }
+                else
+                {
+                    OnSwitchedEvents.Add(new UnityEvent());
+                }
+            }
+        }
+        
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +12,19 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     [SerializeField] protected bool syncCorners = true;
     [HideIf("_syncingWithOtherRoundedImage")]
     [SerializeField] protected bool proportionalToRect = true;
-    
-    
+
+    public float pppradius;
     
     [ShowIf(EConditionOperator.And, "proportionalToRect", "syncCorners", "notSyncing")]
     [Range (0, 0.5f)]
-    [SerializeField] private float _proportionalRadius = 0.5f;
-    
+    public float proportionalRadius = 0.5f;
+
+    public void SetProportionalRadius(float value)
+    {
+        proportionalRadius = value;
+        OnValidate();
+    }
+   
     [ShowIf("syncCorners")]
     [SerializeField] protected bool syncWithOtherRoundedImage = false;
     
@@ -36,13 +43,17 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     
     private static Action<RoundedImageWithCornerSync> _onValidate;
     
-    private new void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+        OnValidate();
         _onValidate += SyncedValidate;
     }
     
-    private new void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+        OnValidate();
         _onValidate -= SyncedValidate;
     }
     
@@ -57,7 +68,7 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
         if (syncCorners)
         {
             var radius = proportionalToRect
-                ? _proportionalRadius * GetComponent<RectTransform>().rect.width
+                ? proportionalRadius * GetComponent<RectTransform>().rect.width
                 : _bottomLeft.Radius;
             
             
@@ -65,7 +76,7 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
             {
 
                 radius = _otherRoundedImage.syncCorners && _otherRoundedImage.proportionalToRect
-                    ? _otherRoundedImage._proportionalRadius * GetComponent<RectTransform>().rect.width
+                    ? _otherRoundedImage.proportionalRadius * GetComponent<RectTransform>().rect.width
                     : _otherRoundedImage._bottomLeft.Radius;
                 
                  if (aspectRatioFitter != null && _otherRoundedImage.GetComponent<AspectRatioFitter>() != null) 
@@ -82,7 +93,7 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
         
         if (!syncWithOtherRoundedImage) _onValidate?.Invoke(this);
         
-        
+       // AssetDatabase.SaveAssets();
     }
     
     protected override void OnRectTransformDimensionsChange() {
