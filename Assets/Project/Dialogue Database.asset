@@ -6416,6 +6416,156 @@ MonoBehaviour:
       value: Listened to the entire radio show.
       type: 0
       typeString: 
+  - id: 154
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: Store/FirstVisit
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points
+      value: Commitment:0
+      type: 10
+      typeString: CustomFieldType_PointsType
+    - title: Duration
+      value: 0:seconds
+      type: 11
+      typeString: CustomFieldType_TimespanType
+    - title: Is Procedural
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: Visit the C&A store
+      type: 0
+      typeString: 
+  - id: 155
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: Store/SecretShopper/Reveal
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points
+      value: Commitment:0
+      type: 10
+      typeString: CustomFieldType_PointsType
+    - title: Duration
+      value: 0:seconds
+      type: 11
+      typeString: CustomFieldType_TimespanType
+    - title: Is Procedural
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: Reveal yourself as the secret shopper.
+      type: 0
+      typeString: 
+  - id: 156
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: Store/SecretShopper/StayHidden
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points
+      value: Commitment:0
+      type: 10
+      typeString: CustomFieldType_PointsType
+    - title: Duration
+      value: 0:seconds
+      type: 11
+      typeString: CustomFieldType_TimespanType
+    - title: Is Procedural
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: Didn't reveal yourself as a secret shopper.
+      type: 0
+      typeString: 
   locations:
   - id: 1
     fields:
@@ -7426,6 +7576,20 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 76
+    fields:
+    - title: Name
+      value: shelf_browse_count
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   conversations:
   - id: 16
     fields:
@@ -7817,8 +7981,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 731.5897, y: 62.54567}
-    canvasZoom: 1.6496291
+    canvasScrollPosition: {x: 688.80817, y: 29.34053}
+    canvasZoom: 1.4078792
   - id: 18
     fields:
     - title: Title
@@ -12455,7 +12619,7 @@ MonoBehaviour:
         type: 11
         typeString: CustomFieldType_TimespanType
       - title: Points
-        value: Commitment:0
+        value: Credibility:1
         type: 10
         typeString: CustomFieldType_PointsType
       - title: Show Invalid
@@ -12481,7 +12645,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Store/FirstVisit", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -71152,8 +71316,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 82.09895, y: 281.82275}
-    canvasZoom: 1.0099978
+    canvasScrollPosition: {x: 86.98054, y: 285.79846}
+    canvasZoom: 1.0229973
   - id: 121
     fields:
     - title: Title
@@ -95562,7 +95726,7 @@ MonoBehaviour:
         type: 11
         typeString: CustomFieldType_TimespanType
       - title: Points
-        value: Commitment:0
+        value: Engagement:-1
         type: 10
         typeString: CustomFieldType_PointsType
       - title: Show Invalid
@@ -95573,6 +95737,10 @@ MonoBehaviour:
         value: ???
         type: 0
         typeString: CustomFieldType_Text
+      - title: pOINTS
+        value: Credibility:2
+        type: 10
+        typeString: CustomFieldType_PointsType
       conversationID: 156
       isRoot: 0
       isGroup: 0
@@ -95582,7 +95750,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Store/SecretShopper/Reveal", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -95593,8 +95761,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 54.399986, y: 74.400024}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 0.4406753, y: 0.5236909}
+    canvasZoom: 0.6065008
   - id: 157
     fields:
     - title: Title
@@ -97970,8 +98138,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 28.374825}
-    canvasZoom: 1.0899998
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.29625353
   - id: 158
     fields:
     - title: Title
@@ -100595,8 +100763,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 45.302498}
-    canvasZoom: 0.7000003
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.45750073
   - id: 160
     fields:
     - title: Title
@@ -101451,8 +101619,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 207.7613, y: 99.17139}
-    canvasZoom: 0.9624998
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.7677539
   - id: 161
     fields:
     - title: Title
@@ -101724,8 +101892,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 698.4001
-        y: 235.20001
+        x: 708.6274
+        y: 227.24548
         width: 160
         height: 30
     - id: 3
@@ -104243,8 +104411,8 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: By the way, I'm Daniel Olivera, the incoming manager. I'd love to
-          hear your impressions of working here.
+        value: (Reveal Yourself) By the way, I'm Daniel Olivera, the incoming manager.
+          I'd love to hear your impressions of working here.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -104260,7 +104428,7 @@ MonoBehaviour:
         type: 11
         typeString: CustomFieldType_TimespanType
       - title: Points
-        value: Commitment:0
+        value: Engagement:-1
         type: 10
         typeString: CustomFieldType_PointsType
       - title: Show Invalid
@@ -104271,6 +104439,10 @@ MonoBehaviour:
         value: ???
         type: 0
         typeString: CustomFieldType_Text
+      - title: Points
+        value: Credibility:2
+        type: 10
+        typeString: CustomFieldType_PointsType
       conversationID: 167
       isRoot: 0
       isGroup: 0
@@ -104286,7 +104458,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Store/SecretShopper/Reveal", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -104331,7 +104503,7 @@ MonoBehaviour:
         type: 11
         typeString: CustomFieldType_TimespanType
       - title: Points
-        value: Commitment:0
+        value: Commitment:1
         type: 10
         typeString: CustomFieldType_PointsType
       - title: Show Invalid
@@ -104342,6 +104514,10 @@ MonoBehaviour:
         value: ???
         type: 0
         typeString: CustomFieldType_Text
+      - title: Points
+        value: Credibility:1
+        type: 10
+        typeString: CustomFieldType_PointsType
       conversationID: 167
       isRoot: 0
       isGroup: 0
@@ -104351,7 +104527,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Store/SecretShopper/StayHidden", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -104743,7 +104919,7 @@ MonoBehaviour:
       isGroup: 1
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: Block
+      falseConditionAction: Passthrough
       conditionPriority: 2
       outgoingLinks:
       - originConversationID: 168
@@ -105636,8 +105812,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 95.45453}
-    canvasZoom: 0.88
+    canvasScrollPosition: {x: 108.352875, y: 0}
+    canvasZoom: 0.30174777
   - id: 170
     fields:
     - title: Title
