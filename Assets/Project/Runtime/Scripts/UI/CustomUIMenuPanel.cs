@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
@@ -32,6 +34,7 @@ namespace Project.Runtime.Scripts.UI
             base.OnEnable();
             onContentChanged.AddListener(OnContentChanged);
 //            BroadcastMessage("OnCustomUIMenuPanel", DialogueManager.instance.gameObject);
+            RefreshLayoutGroups.Refresh(gameObject);
         }
 
         protected override void OnDisable()
@@ -86,6 +89,22 @@ namespace Project.Runtime.Scripts.UI
         {
      
         }
+        
+        private IEnumerator DelayedRefresh()
+        {
+            yield return new WaitForSeconds(0.1f);
+            RefreshLayoutGroups.Refresh(gameObject);
+        }
+
+        public override void Open()
+        {
+            base.Open();
+            DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
+            RefreshLayoutGroups.Refresh(gameObject);
+            StartCoroutine(DelayedRefresh());
+        }
+        
+        
 
         public void StartConversationWithPlayerLocationPrefix(string conversationName)
         {
@@ -98,6 +117,8 @@ namespace Project.Runtime.Scripts.UI
             DialogueManager.StopConversation();
             DialogueManager.StartConversation(conversationName);
         }
+
+       
     }
     
     

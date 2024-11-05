@@ -82,6 +82,7 @@ namespace Project.Runtime.Scripts.UI
         private void Awake()
         {
             defaultImageColor = nodeColorChameleon != null ? nodeColorChameleon.color : defaultColor;
+            if (MenuPanelContainer == null) MenuPanelContainer = GetComponentInParent<CustomUIMenuPanel>();
         }
 
         private void OnDisable()

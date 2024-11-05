@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 public class CustomUISubtitlePanel : StandardUISubtitlePanel
@@ -24,6 +25,20 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     public void CloseNow()
     {
         base.Close();
+    }
+    
+    public override void Open()
+    {
+        base.Open();
+        DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
+        RefreshLayoutGroups.Refresh(gameObject);
+        StartCoroutine(DelayedRefresh());
+    }
+    
+    private IEnumerator DelayedRefresh()
+    {
+        yield return new WaitForSeconds(0.1f);
+        RefreshLayoutGroups.Refresh(gameObject);
     }
 
     public override void HideSubtitle(Subtitle subtitle)

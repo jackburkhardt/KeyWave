@@ -54,6 +54,8 @@ public class SequencerCommandEndOfLine : SequencerCommand
         
         var debug = entry != null && Field.FieldExists(entry.fields, "Debug") && Field.LookupBool(entry.fields, "Debug");
         
+        debug = true;
+        
         if (debug) Debug.Log($"End of line: {input}");
 
         var state = DialogueManager.instance.currentConversationState;
@@ -85,7 +87,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
         { 
             Sequencer.PlaySequence(entry.IsLastNode()
                 ? $"WaitForMessage(Typed); GoToConversation({Location.PlayerLocationWithSublocation}/Talk/Base, false){waitForTyped}; SetCircularUIPanel(true, {conversationType}){waitForTyped};"
-                : "SetContinueMode(NotBeforeResponseMenu)@Message(Typed);");
+                : "SetContinueMode(true)@Message(Typed);");
         
             if (!entry.IsLastNode())
             {

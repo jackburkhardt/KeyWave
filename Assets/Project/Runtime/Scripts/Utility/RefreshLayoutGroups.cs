@@ -21,8 +21,10 @@ namespace Project.Runtime.Scripts.Utility
             }
 
             var parent = root.GetComponent<LayoutGroup>();
+            parent ??= root.GetComponentInParent<LayoutGroup>();
+            parent ??= root.GetComponentInChildren<LayoutGroup>();
         
-            LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
+            if (parent != null) LayoutRebuilder.ForceRebuildLayoutImmediate(parent.GetComponent<RectTransform>());
         }
     }
 }

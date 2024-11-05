@@ -12,8 +12,6 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     [SerializeField] protected bool syncCorners = true;
     [HideIf("_syncingWithOtherRoundedImage")]
     [SerializeField] protected bool proportionalToRect = true;
-
-    public float pppradius;
     
     [ShowIf(EConditionOperator.And, "proportionalToRect", "syncCorners", "notSyncing")]
     [Range (0, 0.5f)]

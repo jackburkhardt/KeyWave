@@ -61,6 +61,49 @@ public class CustomUIPanel : UIPanel
     {
        
     }
+    
+
+    public void OnUIPanelOpen(UIPanel panel)
+    {
+        if (GetComponentsInChildren<UIPanel>().Contains(panel))
+        {
+            TakeFocus();
+        }
+        
+        foreach (var childPanel in childPanels)
+        {
+            if (childPanel.panel == panel)
+            {
+                //childPanel.onOpen?.Invoke();
+                if (!string.IsNullOrEmpty(childPanel.onOpenAnimationTrigger))
+                {
+                    Animator.SetTrigger(childPanel.onOpenAnimationTrigger);
+                }
+                return;
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(defaultChildPanelOpenAnimationTrigger))
+        {
+            Animator.SetTrigger(defaultChildPanelOpenAnimationTrigger);
+        }
+        
+    }
+    
+    public string defaultChildPanelOpenAnimationTrigger;
+
+    [Serializable]
+    public struct ChildPanel
+    {
+        public UIPanel panel;
+        public string onOpenAnimationTrigger;
+        public string onCloseAnimationTrigger;
+        //public UnityEvent onOpen;
+    }
+
+    public List<ChildPanel> childPanels;
+    
+    
 
     public void RemoveFocus()
     {

@@ -310,6 +310,8 @@ namespace Project.Runtime.Scripts.UI
             
             var value = GetParameterAsBool(0);
             var type = GetParameter(1, "");
+            
+            /*
 
             var panel = FindObjectOfType<CircularUIMenuPanel>();
             
@@ -323,6 +325,7 @@ namespace Project.Runtime.Scripts.UI
             }
 
             return;
+            */
         
            
         }
