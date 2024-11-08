@@ -5,6 +5,7 @@ using System.Linq;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
@@ -14,6 +15,7 @@ using UnityEngine.UI;
 
 public class CustomUIPanel : UIPanel
 {
+    public string panelName;
     public string focusAnimationTrigger;
     public string unfocusAnimationTrigger;
     
@@ -24,8 +26,19 @@ public class CustomUIPanel : UIPanel
     public UnityEvent OnUnfocus;
 
     private Animator Animator => animator ? animator : GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
+
+    protected override void Update()
+    {
+        base.Update();
+        
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            OpenSmartWatch();
+        }
+       
+    }
     
-   
+    
    
     
     // Start is called before the first frame update
@@ -38,7 +51,6 @@ public class CustomUIPanel : UIPanel
          
             if (Animator != null && Animator.isInitialized && !string.IsNullOrEmpty(unfocusAnimationTrigger))
             {
-                Animator.ResetTrigger(focusAnimationTrigger);
                 Animator.SetTrigger(unfocusAnimationTrigger);
                 OnUnfocus?.Invoke();
             }
@@ -46,9 +58,8 @@ public class CustomUIPanel : UIPanel
         else
         {
            
-            if (Animator != null && Animator.isInitialized && !string.IsNullOrEmpty(unfocusAnimationTrigger))
+            if (Animator != null && Animator.isInitialized && !string.IsNullOrEmpty(focusAnimationTrigger))
             {
-                Animator.ResetTrigger(unfocusAnimationTrigger);
                 Animator.SetTrigger(focusAnimationTrigger);
                 OnFocus?.Invoke();
             }
@@ -59,7 +70,11 @@ public class CustomUIPanel : UIPanel
     
     public void OnConversationEnd()
     {
-       
+       CheckFocus();
+    }
+
+    public void OnUIPanelClose(UIPanel panel)
+    {
     }
     
 
@@ -83,7 +98,7 @@ public class CustomUIPanel : UIPanel
             }
         }
         
-        if (!string.IsNullOrEmpty(defaultChildPanelOpenAnimationTrigger))
+        if (!string.IsNullOrEmpty(defaultChildPanelOpenAnimationTrigger) && GetComponentsInChildren<UIPanel>().Contains(panel))
         {
             Animator.SetTrigger(defaultChildPanelOpenAnimationTrigger);
         }
@@ -118,6 +133,7 @@ public class CustomUIPanel : UIPanel
         currentConversation = subtitle.dialogueEntry.GetConversation().Title;
     }
     
+    
     public void OpenSmartWatch()
     {
         if (DialogueManager.instance.IsConversationActive)
@@ -139,8 +155,28 @@ public class CustomUIPanel : UIPanel
         }
        
     }
+}
 
-
-    
-
+public class SequencerCommandSetCustomPanel : SequencerCommand
+{
+    private void Awake()
+    {
+        var panelName = GetParameter(0);
+        var show = GetParameterAsBool(1, true);
+        var panels = FindObjectsOfType<CustomUIPanel>();
+        foreach (var panel in panels)
+        {
+            if (panel.panelName == panelName)
+            {
+                if (show)
+                {
+                    panel.Open();
+                }
+                else
+                {
+                    panel.Close();
+                }
+            }
+        }
+    }
 }

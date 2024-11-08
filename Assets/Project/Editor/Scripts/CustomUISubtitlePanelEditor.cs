@@ -18,6 +18,7 @@ namespace PixelCrushers.DialogueSystem
             EditorGUILayout.PropertyField(serializedObject.FindProperty("panel"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("portraitImage"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("portraitName"), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("conversantName"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("subtitleText"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("continueButton"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("blockInputDuration"), true);
@@ -64,7 +65,7 @@ namespace PixelCrushers.DialogueSystem
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onUnfocus"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onBackButtonDown"), true);
             
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("useAlternateCloseMethod"), true);
+            
            
 
 

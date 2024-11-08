@@ -1,3 +1,5 @@
+using System.Net.NetworkInformation;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,14 +7,43 @@ namespace UnityEngine.UI
 {
     public class WheelLayoutGroup : LayoutGroup
     {
+        [SerializeField] private bool m_useProportionalRadius;
+        
+        [HideIf("m_useProportionalRadius")]
         [SerializeField] private float m_Radius = 200f;  // Radius of the circle layout
+        [ShowIf("m_useProportionalRadius")] [Label("Proportional to:")]
+        [SerializeField] private ProportionalRadiusType m_proportionalRadiusType;
+        [ShowIf("m_useProportionalRadius")]
+        [Range(0,1)] [SerializeField] private float m_proportionalRadius = 0.5f;
         [SerializeField] private float m_StartAngle = 0f; // Angle offset to start placing elements
         [SerializeField] private bool m_Clockwise = true; // Clockwise placement of elements
 
+        public enum ProportionalRadiusType
+        {
+            Width,
+            Height
+        }
+        
+        public float proportionalRadius
+        {
+            get
+            {
+                switch (m_proportionalRadiusType)
+                {
+                    case ProportionalRadiusType.Width:
+                        return rectTransform.rect.width * m_proportionalRadius;
+                    case ProportionalRadiusType.Height:
+                        return rectTransform.rect.height * m_proportionalRadius;
+                    default:
+                        return m_proportionalRadius;
+                }
+            }
+        }
+        
         /// <summary>
         /// Radius of the circle layout
         /// </summary>
-        public float radius { get { return m_Radius; } set { SetProperty(ref m_Radius, value); } }
+        public float radius { get { return m_useProportionalRadius ? proportionalRadius : m_Radius; } set { SetProperty(ref m_Radius, value); } }
 
         /// <summary>
         /// Angle offset to start placing elements
@@ -66,8 +97,8 @@ namespace UnityEngine.UI
                 float radian = angle * Mathf.Deg2Rad;  // Convert to radians for sine and cosine
 
                 // Calculate the position using polar coordinates
-                float posX = Mathf.Cos(radian) * m_Radius;
-                float posY = Mathf.Sin(radian) * m_Radius;
+                float posX = Mathf.Cos(radian) * radius;
+                float posY = Mathf.Sin(radian) * radius;
 
                 // Set the position of the element
                 SetChildAlongAxis(rect, 0, posX + rectTransform.rect.width / 2f - rect.rect.width / 2f); // Centering

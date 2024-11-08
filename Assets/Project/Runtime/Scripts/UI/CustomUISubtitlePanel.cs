@@ -1,25 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 public class CustomUISubtitlePanel : StandardUISubtitlePanel
 {
-    public bool hideOnConversationEnd;
+   
 
-    public bool useAlternateCloseMethod;
+    public bool useAlternateCloseTrigger;
+    [ShowIf("useAlternateCloseTrigger")]
+    public string alternateCloseTrigger;
     public string unintroducedSpeakerName;
+    public UITextField conversantName;
   
     public override void Close()
     {
-        if (!useAlternateCloseMethod)
+        if (!useAlternateCloseTrigger)
         {
-            base.Close(); return;
+            base.Close(); 
+            DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
+            return;
         }
         
-        if (!hideOnConversationEnd) return;
+      
         base.Close();
+        DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
     }
 
     public void CloseNow()
@@ -43,7 +51,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
 
     public override void HideSubtitle(Subtitle subtitle)
     {
-        if (!useAlternateCloseMethod)
+        if (!useAlternateCloseTrigger)
         {
             base. HideSubtitle(subtitle); return;
         }
@@ -54,7 +62,9 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public override void ShowSubtitle(Subtitle subtitle)
     {
-        if (!useAlternateCloseMethod)
+        conversantName.text = subtitle.listenerInfo.Name;
+        
+        if (!useAlternateCloseTrigger)
         {
             base.ShowSubtitle(subtitle); return;
         }

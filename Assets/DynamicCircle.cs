@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 
@@ -65,8 +66,10 @@ public class DynamicCircle : MonoBehaviour
         public float aspectRatio;
         [Range (0, 0.5f)]
         public float cornerRadius;
-
         public Vector2 rectOffset;
+        [ReadOnly] public string animatorTrigger;
+        public UnityEvent<float> onShapeChangeLerp;
+        //public UnityEvent<float> onShapeRevertLerp;
     }
 
 
@@ -151,7 +154,7 @@ public class DynamicCircle : MonoBehaviour
             shapePresetIndex = shapePresets.IndexOf(currentShape);
         }
         
-        if (shapePresetIndex >= 0) currentShape = shapePresets[shapePresetIndex];
+        if (shapePresetIndex >= 0) currentShape = shapePresets[shapePresetIndex % shapePresets.Count];
         
         if (_previousNextShape != nextShape)
         {
@@ -159,7 +162,8 @@ public class DynamicCircle : MonoBehaviour
             nextShapePresetIndex = shapePresets.IndexOf(nextShape);
         }
         
-        if (nextShapePresetIndex >= 0) nextShape = shapePresets[nextShapePresetIndex];
+        if (nextShapePresetIndex >= 0) nextShape = shapePresets[nextShapePresetIndex % shapePresets.Count];
+        
         
         
         if (lerp)
@@ -168,6 +172,7 @@ public class DynamicCircle : MonoBehaviour
             AspectRatio = Mathf.Lerp(currentShape.aspectRatio, nextShape.aspectRatio, lerpAmount);
             CornerRadius = Mathf.Lerp(currentShape.cornerRadius, nextShape.cornerRadius, lerpAmount);
             RectOffset = Vector2.Lerp(currentShape.rectOffset, nextShape.rectOffset, lerpAmount);
+            
         }
 
         else
@@ -181,7 +186,7 @@ public class DynamicCircle : MonoBehaviour
         
         _aspectRatioFitter.aspectMode = AspectRatioFitter.AspectMode.HeightControlsWidth;
 
-
+       
     }
 
     public void SetCurrentShapeToNext()
@@ -193,3 +198,4 @@ public class DynamicCircle : MonoBehaviour
     }
     
 }
+

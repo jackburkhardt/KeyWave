@@ -104,6 +104,12 @@ namespace Project.Runtime.Scripts.UI
             StartCoroutine(DelayedRefresh());
         }
         
+        public override void Close()
+        {
+            base.Close();
+            DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
+        }
+        
         
 
         public void StartConversationWithPlayerLocationPrefix(string conversationName)

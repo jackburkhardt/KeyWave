@@ -1,4 +1,5 @@
 using System.Collections;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 using Project;
@@ -13,6 +14,7 @@ namespace Project.Runtime.Scripts.UI
         public UnityEvent OnFadedOut;
 
         [SerializeField] private float duration;
+        [Label("Target Alpha")]
         [SerializeField] private float alpha;
         
         [GetComponent]
@@ -30,7 +32,7 @@ namespace Project.Runtime.Scripts.UI
         private void Start()
         {
             
-            _canvasGroup.alpha = 0;
+            //_canvasGroup.alpha = 0;
             _canvasGroup.blocksRaycasts = false;
         
         }

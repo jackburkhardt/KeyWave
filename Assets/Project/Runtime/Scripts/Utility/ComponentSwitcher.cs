@@ -274,9 +274,8 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
                 if (i < oldEvents.Count)
                 {
                     OnSwitchedEvents.Add(oldEvents[i]);
-                    OnSwitchedEvents[i].SetPersistentListenerState(0, UnityEventCallState.EditorAndRuntime);
-                    //OnSwitchedEvents.
-                }
+                    for (var e = 0; e < OnSwitchedEvents[i].GetPersistentEventCount(); e++)
+                    OnSwitchedEvents[i].SetPersistentListenerState(e, UnityEventCallState.EditorAndRuntime); }
                 else
                 {
                     OnSwitchedEvents.Add(new UnityEvent());

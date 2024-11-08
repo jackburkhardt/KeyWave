@@ -73,20 +73,20 @@ public class SequencerCommandEndOfLine : SequencerCommand
             conversationType = string.Empty;
         }
         
-        if (string.IsNullOrEmpty(conversationType)) Sequencer.PlaySequence("SetCircularUIPanel(false);");
+        if (string.IsNullOrEmpty(conversationType)) Sequencer.PlaySequence("SetCustomPanel(SmartWatch, false);");
 
         
         Sequencer.PlaySequence("SetContinueMode(false);");
 
         if (sequencer.GetDialogueEntry() == null && conversationType != string.Empty && title.EndsWith("Base"))
         {
-            Sequencer.PlaySequence($"WaitForMessage(Typed); SetCircularUIPanel(true){waitForTyped};");
+            Sequencer.PlaySequence($"WaitForMessage(Typed); SetCustomPanel(SmartWatch, true){waitForTyped};");
         }
         
         else if (entry != null)
         { 
             Sequencer.PlaySequence(entry.IsLastNode()
-                ? $"WaitForMessage(Typed); GoToConversation({Location.PlayerLocationWithSublocation}/Talk/Base, false){waitForTyped}; SetCircularUIPanel(true, {conversationType}){waitForTyped};"
+                ? $"WaitForMessage(Typed); SetCustomPanel(SmartWatch, true){waitForTyped};"
                 : "SetContinueMode(true)@Message(Typed);");
         
             if (!entry.IsLastNode())
@@ -103,7 +103,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
                     if (entry.subtitleText.Length > 0)
                     {
                         if (debug) Debug.Log("Auto-continuing to next subtitle after typed.");
-                        sequencer.PlaySequence("Continue()@Message(Typed);");
+                       // sequencer.PlaySequence("Continue()@Message(Typed);");
                     }
                     else
                     {
