@@ -20,7 +20,6 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     public void SetProportionalRadius(float value)
     {
         proportionalRadius = value;
-        Validate();
     }
    
     [ShowIf("syncCorners")]
@@ -37,31 +36,11 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     //for the ShowIf attribute
     private bool notSyncing => !_syncingWithOtherRoundedImage;
     
-    private AspectRatioFitter aspectRatioFitter => _syncAspectRatioFitter ? GetComponent<AspectRatioFitter>() : null;
+    [SerializeField] private AspectRatioFitter _aspectRatioFitter;
+    private AspectRatioFitter aspectRatioFitter => _aspectRatioFitter != null ? _aspectRatioFitter : GetComponent<AspectRatioFitter>();
     
-    private static Action<RoundedImageWithCornerSync> _Validate;
-    
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        Validate();
-        _Validate += SyncedValidate;
-    }
-    
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        Validate();
-        _Validate -= SyncedValidate;
-    }
-    
-    private void SyncedValidate(RoundedImageWithCornerSync other)
-    {
-        if (notSyncing && other != _otherRoundedImage) return;
-        Validate();
-    }
 
-    protected void Validate()
+    protected void Update()
     {
         if (syncCorners)
         {
@@ -77,41 +56,15 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
                     ? _otherRoundedImage.proportionalRadius * GetComponent<RectTransform>().rect.width
                     : _otherRoundedImage._bottomLeft.Radius;
                 
-                if (aspectRatioFitter != null && _otherRoundedImage.GetComponent<AspectRatioFitter>() != null) 
+                if (aspectRatioFitter != null && _otherRoundedImage.aspectRatioFitter != null) 
                 {
-                    aspectRatioFitter.aspectMode = _otherRoundedImage.GetComponent<AspectRatioFitter>().aspectMode;
-                    aspectRatioFitter.aspectRatio = _otherRoundedImage.GetComponent<AspectRatioFitter>().aspectRatio;
+                    //Debug.Log("Syncing aspect ratio fitter");
+                    aspectRatioFitter.aspectMode = _otherRoundedImage.aspectRatioFitter.aspectMode;
+                    aspectRatioFitter.aspectRatio = _otherRoundedImage.aspectRatioFitter.aspectRatio;
                 }
             }
             
             _bottomLeft = _topLeft = _topRight = _bottomRight = new Gilzoide.RoundedCorners.RoundedCorner { Radius = radius, TriangleCount = _bottomLeft.TriangleCount };
         }
-
-        //base.OnValidate();
-        
-        if (!syncWithOtherRoundedImage) _Validate?.Invoke(this);
-        
-        // AssetDatabase.SaveAssets();
-    }
-    
-    #if UNITY_EDITOR
-
-    protected override void OnValidate()
-    {
-        Validate();
-    }
-
-
-    protected override void OnRectTransformDimensionsChange() {
-        base.OnRectTransformDimensionsChange();
-       // Validate();
-    }
-    
-    #endif
-
-    // Update is called once per frame
-    void Update()
-    {
-        Validate();
     }
 }
