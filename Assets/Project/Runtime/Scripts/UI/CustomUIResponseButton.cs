@@ -220,7 +220,7 @@ namespace Project.Runtime.Scripts.UI
                 }
             }
 
-            else if (response != null && response.destinationEntry != null)
+            if (response != null && response.destinationEntry != null)
             {
                 if (nodeColorChameleon != null)
                 {
@@ -243,6 +243,8 @@ namespace Project.Runtime.Scripts.UI
                     }
                 
                     nodeColorChameleon.color = color;
+                    
+                    if (!button.interactable) nodeColorChameleon.color = Color.Lerp(nodeColorChameleon.color, Color.black, 0.5f);
                 }
                 
                 if (icon != null)

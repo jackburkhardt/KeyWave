@@ -103,6 +103,7 @@ namespace Project.Runtime.Scripts.Audio
         
         public static void SetParameter(string parameter, float value)
         {
+            if (_instance == null) return;
             _instance._audioEngine.UserAudioMixer.SetFloat(parameter, value);
         }
         

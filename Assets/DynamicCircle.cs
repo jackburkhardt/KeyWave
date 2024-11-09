@@ -124,6 +124,8 @@ public class DynamicCircle : MonoBehaviour
 
     public void OnValidate()
     {
+        if (!this.enabled) return;
+        
         _rectTransform ??= GetComponent<RectTransform>();
         _aspectRatioFitter ??= GetComponent<AspectRatioFitter>();
         _roundedImageWithCornerSync ??= GetComponent<RoundedImageWithCornerSync>();

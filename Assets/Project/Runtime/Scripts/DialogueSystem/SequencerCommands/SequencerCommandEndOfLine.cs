@@ -68,6 +68,8 @@ public class SequencerCommandEndOfLine : SequencerCommand
             title.Split("/").Length > 2 ? title.Split("/")[^2] : title.EndsWith("Actions") ? "Actions" : title == "Map" ? "Map" :
             string.Empty;
         
+        conversationType = string.Empty;
+        
         if (conversationType is not "Actions" and not "Actions" and not "Walk" and not "Talk" and not "Map")
         {
             conversationType = string.Empty;

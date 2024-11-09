@@ -79,6 +79,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 SymbolExtensions.GetMethodInfo(() => TimeOfNextScheduledEvent(string.Empty)));
             Lua.RegisterFunction(nameof(Length), this,
                 SymbolExtensions.GetMethodInfo(() => Length(string.Empty)));
+            Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
         }
 
         private void DeregisterLuaFunctions()
@@ -121,6 +122,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(MinutesUntilNextScheduledEvent));
             Lua.UnregisterFunction(nameof(TimeOfNextScheduledEvent));
             Lua.UnregisterFunction(nameof(Length));
+            Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
         }
         
         
@@ -447,6 +449,11 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public int Length(string var)
         {
             return var.Length;
+        }
+        
+        public void SaveGame()
+        {
+            PixelCrushers.SaveSystem.SaveToSlot(1);
         }
     }
 }

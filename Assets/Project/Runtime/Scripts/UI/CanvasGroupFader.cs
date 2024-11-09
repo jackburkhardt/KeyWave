@@ -19,6 +19,9 @@ namespace Project.Runtime.Scripts.UI
         
         [GetComponent]
         [SerializeField] private CanvasGroup _canvasGroup;
+        
+        public bool fadeOnEnable;
+        public bool setInteractableOnFadeIn;
 
         private void Awake()
         {
@@ -34,12 +37,16 @@ namespace Project.Runtime.Scripts.UI
             
             //_canvasGroup.alpha = 0;
             _canvasGroup.blocksRaycasts = false;
+            
         
         }
 
         private void OnEnable()
         {
-            
+            if (fadeOnEnable)
+            {
+                FadeIn();
+            }
         }
 
         public void FadeIn()
@@ -68,6 +75,11 @@ namespace Project.Runtime.Scripts.UI
                 yield return null;
             }
             OnFadedIn.Invoke();
+            if (setInteractableOnFadeIn)
+            {
+                _canvasGroup.blocksRaycasts = true;
+                _canvasGroup.interactable = true;
+            }
         }
 
         private IEnumerator FadeOut(float duration, float alpha)
@@ -80,6 +92,7 @@ namespace Project.Runtime.Scripts.UI
             }
            // _canvasGroup.gameObject.SetActive(false);
             _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.interactable = false;
             OnFadedOut.Invoke();
             //gameObject.SetActive(false);
         }

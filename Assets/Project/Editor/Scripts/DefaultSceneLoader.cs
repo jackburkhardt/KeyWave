@@ -14,6 +14,7 @@ namespace Project.Editor.Scripts
 
         static void LoadDefaultScene(PlayModeStateChange state)
         {
+            return;
             switch (state)
             {
                 case PlayModeStateChange.ExitingEditMode:
@@ -32,6 +33,8 @@ namespace Project.Editor.Scripts
                     break;
                 }
             }
+            
+            EditorApplication.playModeStateChanged -= LoadDefaultScene;
         }
         
     }

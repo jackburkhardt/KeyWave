@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+[ExecuteInEditMode]
 public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
 {
     [HideIf("_syncingWithOtherRoundedImage")]
@@ -96,12 +97,12 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     
     protected override void OnRectTransformDimensionsChange() {
         base.OnRectTransformDimensionsChange();
-        OnValidate();
+       // OnValidate();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        OnValidate();
     }
 }

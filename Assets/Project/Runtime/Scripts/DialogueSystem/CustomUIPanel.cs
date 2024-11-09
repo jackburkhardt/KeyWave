@@ -35,6 +35,11 @@ public class CustomUIPanel : UIPanel
         {
             OpenSmartWatch();
         }
+        
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Open();
+        }
        
     }
     
@@ -124,6 +129,7 @@ public class CustomUIPanel : UIPanel
     {
         PopFromPanelStack();
         CheckFocus();
+        DialogueManager.instance.StopConversation();
     }
     
     private string currentConversation;
@@ -155,6 +161,7 @@ public class CustomUIPanel : UIPanel
         }
        
     }
+
 }
 
 public class SequencerCommandSetCustomPanel : SequencerCommand
@@ -168,15 +175,22 @@ public class SequencerCommandSetCustomPanel : SequencerCommand
         {
             if (panel.panelName == panelName)
             {
-                if (show)
-                {
-                    panel.Open();
-                }
-                else
-                {
-                    panel.Close();
-                }
+                StartCoroutine(Delay(show, panel));
             }
         }
+    }
+    
+    private IEnumerator Delay(bool show, CustomUIPanel panel) 
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (show)
+        {
+            panel.Open();
+        }
+        else
+        {
+            panel.Close();
+        }
+        
     }
 }
