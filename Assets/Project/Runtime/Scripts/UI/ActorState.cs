@@ -1,5 +1,7 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using System;
+
 namespace Project.Runtime.Scripts.ActorCompendium
 {
 
@@ -7,7 +9,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
     /// Quest state is a bit-flag enum that indicates the state of a quest. 
     /// This enum is used by the QuestLog class.
     /// </summary>
-    [System.Flags]
+    [Flags]
     public enum ActorState
     {
 

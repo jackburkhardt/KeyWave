@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 
-
 namespace Project.Runtime.Scripts.App
 {
     public class BrowserInterface 

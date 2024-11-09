@@ -1,5 +1,4 @@
-﻿using System;
-using PixelCrushers.DialogueSystem.SequencerCommands;
+﻿using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Audio;
 
 namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands

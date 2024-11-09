@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using PixelCrushers;
 using UnityEngine;
-using PixelCrushers.DialogueSystem;
-
 
 namespace Project.Runtime.Scripts.ActorCompendium
 {

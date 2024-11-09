@@ -1,13 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using NaughtyAttributes;
-using UnityEngine;
 using NaughtyAttributes.Editor;
-using Project.Editor;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEngine.UIElements;
+using UnityEngine;
 
 namespace Project.Editor
 {

@@ -1,9 +1,10 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
-using UnityEngine;
 using System.Collections.Generic;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using UnityEngine;
+using Object = System.Object;
 
 namespace Project.Runtime.Scripts.ActorCompendium
 {
@@ -165,7 +166,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
             if (!string.IsNullOrEmpty(actorName))
             {
                 Lua.Run(string.Format("Actor[\"{0}\"] = {{ Name = \"{1}\", IDescription = \"{2}\", Success_Description = \"{3}\", Failure_Description = \"{4}\", State = \"{5}\" }}",
-                                      new System.Object[] { DialogueLua.StringToTableIndex(actorName),
+                                      new Object[] { DialogueLua.StringToTableIndex(actorName),
                                       DialogueLua.DoubleQuotesToSingle(actorName),
                                       DialogueLua.DoubleQuotesToSingle(description),
                                       DialogueLua.DoubleQuotesToSingle(successDescription),
@@ -195,7 +196,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
             if (!string.IsNullOrEmpty(actorName))
             {
                 Lua.Run(string.Format("Actor[\"{0}\"] = {{ Name = \"{1}\", Description = \"{2}\", State = \"{3}\" }}",
-                                      new System.Object[] { DialogueLua.StringToTableIndex(actorName),
+                                      new Object[] { DialogueLua.StringToTableIndex(actorName),
                                       DialogueLua.DoubleQuotesToSingle(actorName),
                                       DialogueLua.DoubleQuotesToSingle(description),
                                       StateToString(state) }),
@@ -234,7 +235,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         {
             if (!string.IsNullOrEmpty(actorName))
             {
-                Lua.Run(string.Format("Actor[\"{0}\"] = nil", new System.Object[] { DialogueLua.StringToTableIndex(actorName) }), DialogueDebug.logInfo);
+                Lua.Run(string.Format("Actor[\"{0}\"] = nil", new Object[] { DialogueLua.StringToTableIndex(actorName) }), DialogueDebug.logInfo);
             }
         }
 
@@ -786,7 +787,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
             LuaTableWrapper actorTable = Lua.Run("return Actor").asTable;
             if (!actorTable.isValid)
             {
-                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Actor Log couldn't access Lua Item[] table. Has the Dialogue Manager loaded a database yet?", new System.Object[] { DialogueDebug.Prefix }));
+                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Actor Log couldn't access Lua Item[] table. Has the Dialogue Manager loaded a database yet?", new Object[] { DialogueDebug.Prefix }));
                 return groups.ToArray();
             }
             foreach (var actorTableValue in actorTable.values)
@@ -874,7 +875,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
             LuaTableWrapper actorTable = Lua.Run("return Actor").asTable;
             if (!actorTable.isValid)
             {
-                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Actor Compendium couldn't access Lua Actor[] table. Has the Dialogue Manager loaded a database yet?", new System.Object[] { DialogueDebug.Prefix }));
+                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Actor Compendium couldn't access Lua Actor[] table. Has the Dialogue Manager loaded a database yet?", new Object[] { DialogueDebug.Prefix }));
                 return actorNames.ToArray();
             }
             var filterGroup = (group != null);
@@ -902,7 +903,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
                 
                 if (string.IsNullOrEmpty(actorName))
                 {
-                    if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: A Actor name (actor name in Actor[] table) is null or empty", new System.Object[] { DialogueDebug.Prefix }));
+                    if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: A Actor name (actor name in Actor[] table) is null or empty", new Object[] { DialogueDebug.Prefix }));
                 }
                 else if (!filterGroup || string.Equals(group, thisGroup))
                 {
@@ -928,7 +929,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
             LuaTableWrapper actorTable = Lua.Run("return Actor").asTable;
             if (!actorTable.isValid)
             {
-                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Actor Log couldn't access Lua Item[] table. Has the Dialogue Manager loaded a database yet?", new System.Object[] { DialogueDebug.Prefix }));
+                if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: Actor Log couldn't access Lua Item[] table. Has the Dialogue Manager loaded a database yet?", new Object[] { DialogueDebug.Prefix }));
                 return list.ToArray();
             }
             foreach (var actorTableValue in actorTable.values)
@@ -949,7 +950,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
                 catch { }
                     if (string.IsNullOrEmpty(actorName))
                     {
-                        if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: A Actor name (actor name in Actor[] table) is null or empty", new System.Object[] { DialogueDebug.Prefix }));
+                        if (DialogueDebug.logWarnings) Debug.LogWarning(string.Format("{0}: A Actor name (actor name in Actor[] table) is null or empty", new Object[] { DialogueDebug.Prefix }));
                     }
                     else if (IsActorInStateMask(actorName, flags))
                     {
@@ -984,7 +985,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
                 this.actorName = actorName;
               
                 this.frequency = frequency;
-                this.luaExpression = string.Format("return Actor[\"{0}\"].State", new System.Object[] { DialogueLua.StringToTableIndex(actorName) });
+                this.luaExpression = string.Format("return Actor[\"{0}\"].State", new Object[] { DialogueLua.StringToTableIndex(actorName) });
                 this.ActorChangedHandler = ActorChangedHandler;
                 DialogueManager.AddLuaObserver(luaExpression, frequency, OnLuaChanged);
             }

@@ -1,8 +1,8 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
-using UnityEngine;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using UnityEngine;
 
 namespace Project.Runtime.Scripts.ActorCompendium
 {

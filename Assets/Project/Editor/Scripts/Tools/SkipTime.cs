@@ -1,6 +1,5 @@
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
-using Project.Runtime.Scripts.ScriptableObjects;
 using UnityEditor;
 
 namespace Project.Editor.Scripts.Tools

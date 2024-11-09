@@ -1,13 +1,12 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Editor.Utility.Attributes;
-using Project.Runtime.Scripts.AssetLoading;
+using UnityEngine;
 using TextTable = PixelCrushers.Wrappers.TextTable;
 
 namespace Project.Runtime.Scripts.ActorCompendium

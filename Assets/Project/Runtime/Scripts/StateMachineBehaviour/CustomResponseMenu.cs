@@ -1,4 +1,3 @@
-using Project.Runtime.Scripts.UI;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.StateMachineBehaviour

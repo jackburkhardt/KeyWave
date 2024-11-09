@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
@@ -8,7 +5,6 @@ using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;

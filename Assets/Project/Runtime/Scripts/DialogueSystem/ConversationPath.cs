@@ -1,14 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ConversationPath : MonoBehaviour
 {

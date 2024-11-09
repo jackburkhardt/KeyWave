@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using PixelCrushers;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,7 +26,7 @@ public class ButtonTextSwitcher : MonoBehaviour
         textField.text = defaultText.Contains("{0}") ? defaultText.Replace("{0}", entries[_currentIndex].text) : entries[_currentIndex].text;
     }
     
-    [NaughtyAttributes.Button]
+    [Button]
     public void Next()
     {
         

@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;

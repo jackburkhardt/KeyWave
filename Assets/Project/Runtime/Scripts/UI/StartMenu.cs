@@ -1,10 +1,8 @@
-using System;
 using System.Linq;
-using UnityEngine;
-using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.Utility;
 using TMPro;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Project.Runtime.Scripts.UI

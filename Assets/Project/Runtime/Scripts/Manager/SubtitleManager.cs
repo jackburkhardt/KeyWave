@@ -1,16 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
-using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.Manager
 {

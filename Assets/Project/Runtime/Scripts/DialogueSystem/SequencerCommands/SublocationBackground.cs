@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.Events;
 using UnityEngine;
 using UnityEngine.UI;
 

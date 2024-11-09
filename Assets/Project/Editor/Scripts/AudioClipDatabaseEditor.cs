@@ -1,12 +1,6 @@
-using System;
-using DG.DemiEditor;
-using Project.Runtime.Scripts.UI;
 using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UIElements;
 
 namespace Project.Editor.Scripts
 {

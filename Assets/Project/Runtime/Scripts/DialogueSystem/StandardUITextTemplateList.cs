@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StandardUITextTemplateList : StandardUIContentTemplate
 {
@@ -12,7 +12,7 @@ public class StandardUITextTemplateList : StandardUIContentTemplate
     {
         if (textFields.Count == 0)
         {
-            foreach (var uiText in GetComponentsInChildren<UnityEngine.UI.Text>())
+            foreach (var uiText in GetComponentsInChildren<Text>())
             {
                 textFields.Add(new UITextField(uiText));
             }

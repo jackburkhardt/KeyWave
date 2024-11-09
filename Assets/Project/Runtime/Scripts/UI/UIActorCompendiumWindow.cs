@@ -1,7 +1,5 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
-using UnityEngine;
-using UnityEngine.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +7,9 @@ using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Utility;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.ActorCompendium
@@ -29,9 +30,9 @@ namespace Project.Runtime.Scripts.ActorCompendium
         public UITextField showingMentionedActorsHeading;
         public UITextField showingCompletedActorHeading;
         [Tooltip("Button to switch display to mentioned actors.")]
-        public UnityEngine.UI.Button mentionedActorsButton;
+        public Button mentionedActorsButton;
         [Tooltip("Button to switch display to completed actors.")]
-        public UnityEngine.UI.Button completedActorsButton;
+        public Button completedActorsButton;
 
         [Header("Selection Panel")]
 
@@ -96,19 +97,19 @@ namespace Project.Runtime.Scripts.ActorCompendium
             set { m_detailsPanelContentManager = value; }
         }
 
-        private UnityEngine.EventSystems.EventSystem m_eventSystem = null;
-        public UnityEngine.EventSystems.EventSystem eventSystem
+        private EventSystem m_eventSystem = null;
+        public EventSystem eventSystem
         {
             get
             {
                 if (m_eventSystem != null) return m_eventSystem;
-                return UnityEngine.EventSystems.EventSystem.current;
+                return EventSystem.current;
             }
             set { m_eventSystem = value; }
         }
 
         protected List<string> expandedGroupNames = new List<string>();
-        protected System.Action confirmAbandonActorHandler = null;
+        protected Action confirmAbandonActorHandler = null;
         protected string mostRecentSelectedMentionedActor = null;
         protected string mostRecentSelectedCompletedActor = null;
         private Coroutine m_refreshCoroutine = null;
@@ -161,7 +162,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         /// Open the window by showing the main panel.
         /// </summary>
         /// <param name="openedWindowHandler">Opened window handler.</param>
-        public override void OpenWindow(System.Action openedWindowHandler)
+        public override void OpenWindow(Action openedWindowHandler)
         {
             mainPanel.Open();
             openedWindowHandler();
@@ -172,7 +173,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         /// Close the window by hiding the main panel. Re-enable the bark UI.
         /// </summary>
         /// <param name="closedWindowHandler">Closed window handler.</param>
-        public override void CloseWindow(System.Action closedWindowHandler)
+        public override void CloseWindow(Action closedWindowHandler)
         {
             closedWindowHandler();
             mainPanel.Close();
@@ -280,7 +281,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         public override void OnActorListUpdated()
         {
             if (!m_isAwake) return;
-            UnityEngine.UI.Selectable elementToSelect = null;
+            Selectable elementToSelect = null;
             showingMentionedActorsHeading.SetActive(isShowingMentionedActors);
             showingCompletedActorHeading.SetActive(!isShowingMentionedActors);
             selectionPanelContentManager.Clear();
@@ -387,50 +388,50 @@ namespace Project.Runtime.Scripts.ActorCompendium
 
             SetStateToggleButtons();
             mainPanel.RefreshSelectablesList();
-            if (mainPanel != null) UnityEngine.UI.LayoutRebuilder.MarkLayoutForRebuild(mainPanel.GetComponent<RectTransform>());
+            if (mainPanel != null) LayoutRebuilder.MarkLayoutForRebuild(mainPanel.GetComponent<RectTransform>());
             if (elementToSelect != null)
             {
                 StartCoroutine(SelectElement(elementToSelect));
             }
             else if (eventSystem.currentSelectedGameObject == null && mainPanel != null && mainPanel.firstSelected != null && InputDeviceManager.autoFocus)
             {
-                UITools.Select(mainPanel.firstSelected.GetComponent<UnityEngine.UI.Selectable>(), true, eventSystem);
+                UITools.Select(mainPanel.firstSelected.GetComponent<Selectable>(), true, eventSystem);
             }
         }
 
-        protected virtual UIActorNameButtonTemplate GetActorNameTemplate(ActorCompendiumWindow.ActorInfo actor)
+        protected virtual UIActorNameButtonTemplate GetActorNameTemplate(ActorInfo actor)
         {
             return isShowingMentionedActors
                 ? mentionedActorHeadingTemplate
                 : completedActorHeadingTemplate;
         }
 
-        protected virtual UIActorNameButtonTemplate GetSelectedActorNameTemplate(ActorCompendiumWindow.ActorInfo actor)
+        protected virtual UIActorNameButtonTemplate GetSelectedActorNameTemplate(ActorInfo actor)
         {
             return isShowingMentionedActors
                 ? (selectedMentionedActorHeadingTemplate ?? mentionedActorHeadingTemplate)
                 : (selectedCompletedActorHeadingTemplate ?? completedActorHeadingTemplate);
         }
 
-        protected IEnumerator SelectElement(UnityEngine.UI.Selectable elementToSelect)
+        protected IEnumerator SelectElement(Selectable elementToSelect)
         {
             yield return null;
             UITools.Select(elementToSelect, true, eventSystem);
         }
 
-        protected virtual void AddShowDetailsOnSelect(UnityEngine.UI.Button button, string target)
+        protected virtual void AddShowDetailsOnSelect(Button button, string target)
         {
-            var eventTrigger = button.GetComponent<UnityEngine.EventSystems.EventTrigger>() ?? button.gameObject.AddComponent<UnityEngine.EventSystems.EventTrigger>();
+            var eventTrigger = button.GetComponent<EventTrigger>() ?? button.gameObject.AddComponent<EventTrigger>();
 
             // On joystick navigation:
-            var entry = new UnityEngine.EventSystems.EventTrigger.Entry();
-            entry.eventID = UnityEngine.EventSystems.EventTriggerType.Select;
+            var entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.Select;
             entry.callback.AddListener((eventData) => { ShowDetailsOnSelect(target); });
             eventTrigger.triggers.Add(entry);
 
             // On cursor hover:
-            entry = new UnityEngine.EventSystems.EventTrigger.Entry();
-            entry.eventID = UnityEngine.EventSystems.EventTriggerType.PointerEnter;
+            entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerEnter;
             entry.callback.AddListener((eventData) => { ShowDetailsOnSelect(target); });
             eventTrigger.triggers.Add(entry);
         }
@@ -472,7 +473,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         }
         
 
-        protected virtual void RepaintSelectedActor(ActorCompendiumWindow.ActorInfo actor)
+        protected virtual void RepaintSelectedActor(ActorInfo actor)
         {
             detailsPanelContentManager.Clear();
             SetActorImage(null);
@@ -524,7 +525,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         /// </summary>
         /// <param name="name">Actor name.</param>
         /// <param name="confirmAbandonActorHandler">Confirm abandon actor handler.</param>
-        public override void ConfirmAbandonActor(string name, System.Action confirmAbandonActorHandler)
+        public override void ConfirmAbandonActor(string name, Action confirmAbandonActorHandler)
         {
             if (abandonActorPanel == null || selectedActor == null) return;
             this.confirmAbandonActorHandler = confirmAbandonActorHandler;

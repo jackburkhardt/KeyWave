@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Project.Runtime.Scripts.UI.Particles
 {

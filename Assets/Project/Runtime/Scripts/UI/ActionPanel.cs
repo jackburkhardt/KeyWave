@@ -1,15 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
-using Project.Runtime.Scripts.Manager;
-using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class ActionPanel : MonoBehaviour
 {

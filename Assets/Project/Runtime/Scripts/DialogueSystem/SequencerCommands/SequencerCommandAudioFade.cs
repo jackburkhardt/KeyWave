@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;

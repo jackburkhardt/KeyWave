@@ -1,9 +1,9 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using PixelCrushers;
-using UnityEngine;
 using PixelCrushers.DialogueSystem;
-
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.ActorCompendium
 {
@@ -18,7 +18,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
         [Header("Actor Name Button")]
 
         [Tooltip("Button UI element.")]
-        public UnityEngine.UI.Button button;
+        public Button button;
 
         [Tooltip("Label text to set on button.")]
         public UITextField label;
@@ -32,7 +32,7 @@ namespace Project.Runtime.Scripts.ActorCompendium
 
         public virtual void Assign(string actorName, string displayName, ToggleChangedDelegate trackToggleDelegate)
         {
-            if (UITextField.IsNull(label)) label.uiText = button.GetComponentInChildren<UnityEngine.UI.Text>();
+            if (UITextField.IsNull(label)) label.uiText = button.GetComponentInChildren<Text>();
             name = actorName;
             label.text = displayName;
           

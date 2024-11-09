@@ -1,5 +1,4 @@
 using System;
-using System.Text.RegularExpressions;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;

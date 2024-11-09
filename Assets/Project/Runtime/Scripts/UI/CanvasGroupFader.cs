@@ -2,7 +2,6 @@ using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
-using Project;
 
 namespace Project.Runtime.Scripts.UI
 {

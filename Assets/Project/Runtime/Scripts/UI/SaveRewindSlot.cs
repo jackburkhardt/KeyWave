@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using PixelCrushers;
 using UnityEngine;
@@ -26,7 +24,7 @@ public class SaveRewindSlot : MonoBehaviour
     public void LoadSlot()
     {
         Debug.Log("Loading save slot " + saveSlotIndex);
-        PixelCrushers.SaveSystem.LoadFromSlot(saveSlotIndex);
+        SaveSystem.LoadFromSlot(saveSlotIndex);
         SaveRewindAutosave.autosaveEnabled = false;
     }
 }

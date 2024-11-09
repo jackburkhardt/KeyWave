@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
 
 public class GameObjectStateSetter : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class GameObjectStateSetter : MonoBehaviour
     }
     
     
-    [System.Serializable]
+    [Serializable]
     public struct GameObjectState
     {
         public GameObject gameObject;

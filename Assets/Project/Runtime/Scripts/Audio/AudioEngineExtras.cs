@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using DG.Tweening.Core;
-using Project.Runtime.Scripts.Audio;
 using UnityEngine;
 using UnityEngine.Audio;
 

@@ -1,14 +1,12 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using NaughtyAttributes;
+using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project;
 using Project.Runtime.Scripts.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using NaughtyAttributes;
-using PixelCrushers.DialogueSystem;
-using PixelCrushers.DialogueSystem.SequencerCommands;
 
 public class TimeSelectionInputPanel : MonoBehaviour
 {
