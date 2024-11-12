@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 
 public class CustomDialogueUI : StandardDialogueUI
@@ -12,7 +13,26 @@ public class CustomDialogueUI : StandardDialogueUI
 
     public string showInvalidFieldName = "Show Invalid";
 
-    public bool showInvalidByDefault;
+    [HideIf("_showInvalidAlways")]
+    [SerializeField]
+    private bool _showInvalidByDefault;
+    
+    public bool ShowInvalidByDefault
+    {
+        get => _showInvalidByDefault && !_showInvalidAlways;
+        set => _showInvalidByDefault = value;
+    }
+    
+    [HideIf("_showInvalidByDefault")]
+    [SerializeField]
+    private bool _showInvalidAlways = false;
+
+
+    public bool ShowInvalidAlways
+    {
+        get => _showInvalidAlways && !_showInvalidByDefault;
+        set => _showInvalidAlways = value;
+    }
     
    // private new CustomUIDialogueControls conversationUIElements;
 
@@ -60,7 +80,7 @@ public class CustomDialogueUI : StandardDialogueUI
             var response = responses[i];
             //--- Was: if (response.enabled || Field.LookupBool(response.destinationEntry.fields, showInvalidFieldName))
             //--- To allow runtime changes, we need to use a more sophisticated AllowShowInvalid() method:
-            if (response.enabled || AllowShowInvalid(response))
+            if (response.enabled || AllowShowInvalid(response) || ShowInvalidAlways)
             {
                 list.Add(response);
             }
@@ -95,6 +115,8 @@ public class CustomDialogueUI : StandardDialogueUI
 
     private bool AllowShowInvalid(Response response)
     {
+        //check if response's parent group is valid
+        
         // See if this response has a "Show Invalid" field in Lua:
         var luaResult = Lua.Run("return Dialog[" + response.destinationEntry.id + "].Show_Invalid");
         if (luaResult.Equals(Lua.noResult) || luaResult.asString == "nil")
@@ -107,7 +129,7 @@ public class CustomDialogueUI : StandardDialogueUI
             else
             {
                 // Not sure how to get this
-               return showInvalidByDefault;
+               return ShowInvalidByDefault;
             }
         }
         else

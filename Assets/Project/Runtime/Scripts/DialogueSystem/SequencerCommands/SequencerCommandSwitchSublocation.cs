@@ -43,9 +43,9 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
                 if (debug) Debug.Log("Sublocation not found");
                 yield break;
             }
-            Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
+        //    Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
             
-            Sequencer.PlaySequence("SetActionPanel(false)");
+            Sequencer.PlaySequence("SetCustomPanel(SmartWatch, false);");
             
             Sequencer.PlaySequence($"Fade(stay, {duration/4})");
 
@@ -92,11 +92,11 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             if (sublocationGameObject == null) yield break;
             
-            Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
+           // Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
             
             Sequencer.PlaySequence("SetDialoguePanel(false)");
             
-            Sequencer.PlaySequence("SetActionPanel(false)");
+            Sequencer.PlaySequence("SetCustomPanel(SmartWatch, false);");
 
             
             Sequencer.PlaySequence($"Fade(stay, {duration/4})");

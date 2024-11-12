@@ -414,7 +414,7 @@ namespace PixelCrushers.DialogueSystem
 
         private void EvaluateLinksAtPriority(ConditionPriority priority, DialogueEntry entry, List<Response> npcResponses,
                                              List<Response> pcResponses, List<DialogueEntry> visited,
-                                             bool stopAtFirstValid = false, bool skipExecution = false)
+                                             bool stopAtFirstValid = false, bool skipExecution = false, bool groupValid = true)
         {
             if (entry != null)
             {
@@ -442,11 +442,13 @@ namespace PixelCrushers.DialogueSystem
                                     Lua.Run(destinationEntry.userScript, DialogueDebug.logInfo, m_allowLuaExceptions);
                                     destinationEntry.onExecute.Invoke();
                                 }
+
+                                var groupIsValid = groupValid && isValid;
                                 isValid = false; // Assume invalid until at least one group's child is true.
                                 for (int i = (int)ConditionPriority.High; i >= 0; i--)
                                 {
                                     int originalResponseCount = npcResponses.Count + pcResponses.Count;
-                                    EvaluateLinksAtPriority((ConditionPriority)i, destinationEntry, npcResponses, pcResponses, visited, stopAtFirstValid, skipExecution);
+                                    EvaluateLinksAtPriority((ConditionPriority)i, destinationEntry, npcResponses, pcResponses, visited, stopAtFirstValid, skipExecution, groupIsValid);
                                     if ((npcResponses.Count + pcResponses.Count) > originalResponseCount)
                                     {
                                         isValid = true;
@@ -457,6 +459,7 @@ namespace PixelCrushers.DialogueSystem
                             else
                             {
 
+                                isValid = isValid && groupValid;
                                 // For regular entries, just add them:
                                 if (DialogueDebug.logInfo) Debug.Log(string.Format("{0}: Add Link ({1}): ID={2}:{3} '{4}' ({5})", new System.Object[] { DialogueDebug.Prefix, GetActorName(m_database.GetActor(destinationEntry.ActorID)), link.destinationConversationID, link.destinationDialogueID, GetLinkText(characterType, destinationEntry), isValid }));
                                 if (characterType == CharacterType.NPC)

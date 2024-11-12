@@ -45,12 +45,12 @@ public class SequencerCommandEndOfLine : SequencerCommand
             ? entry.GetConversation().Title
             : DialogueManager.instance.activeConversation.conversationTitle;
         
-        if (entry != null) Debug.Log($"EndOfLine: {entry.GetConversation().Title}_{entry.id}");;
+       
        
         
         var debug = entry != null && Field.FieldExists(entry.fields, "Debug") && Field.LookupBool(entry.fields, "Debug");
         
-        debug = true;
+    //    debug = true;
         
         if (debug) Debug.Log($"End of line: {input}");
 

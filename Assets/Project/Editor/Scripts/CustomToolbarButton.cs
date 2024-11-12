@@ -18,6 +18,8 @@ public class CustomPlayButton : EditorToolbarButton
     private Color defaultColor;
     private Color playModeColor = new Color(0.25f, 0.5f, 1.0f, 1.0f); // Blue shade similar to Unity's Play button
     
+    private static string _lastScene;
+    
     public CustomPlayButton()
     {
         text = "Custom Button";
@@ -30,6 +32,7 @@ public class CustomPlayButton : EditorToolbarButton
         clicked += OnButtonClicked;
         
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        EditorApplication.playModeStateChanged += LoadDefaultScene;
     }
 
     private void OnButtonClicked()
@@ -44,8 +47,6 @@ public class CustomPlayButton : EditorToolbarButton
             EditorApplication.isPlaying = true;
         }
         
-        UpdateButtonAppearance();
-        
     }
     
     private void OnPlayModeStateChanged(PlayModeStateChange state)
@@ -58,19 +59,29 @@ public class CustomPlayButton : EditorToolbarButton
         switch (state)
         {
             case PlayModeStateChange.ExitingEditMode:
-                var lastScene = EditorSceneManager.GetActiveScene().path;
+                var lastScene = _lastScene = EditorSceneManager.GetActiveScene().path;
                 PlayerPrefs.SetString("editor_lastScene", lastScene);
+                
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                 EditorSceneManager.OpenScene("Assets/Scenes/Menus/StartMenu.unity");
                 break;
             case PlayModeStateChange.EnteredEditMode:
             {
-                if (PlayerPrefs.HasKey("editor_lastScene"))
+                
+                if (!string.IsNullOrEmpty(_lastScene))
+                {
+                    EditorSceneManager.OpenScene(_lastScene);
+                    _lastScene = null;
+                }
+                else if (PlayerPrefs.HasKey("editor_lastScene"))
                 {
                     var path = PlayerPrefs.GetString("editor_lastScene");
                     EditorSceneManager.OpenScene(path);
-                    
                 }
+               
+                
+               else EditorSceneManager.OpenScene("Assets/Scenes/Base.unity");
+                
                 EditorApplication.playModeStateChanged -= LoadDefaultScene;
                 break;
             }
@@ -85,7 +96,7 @@ public class CustomPlayButton : EditorToolbarButton
         if (EditorApplication.isPlaying)
         {
             text = "Pause";
-            icon = EditorGUIUtility.IconContent("d_PauseButton").image as Texture2D;
+            icon = EditorGUIUtility.IconContent("d_PreMatQuad").image as Texture2D;
             GUI.backgroundColor = playModeColor; // Set to blue shade
         }
         else

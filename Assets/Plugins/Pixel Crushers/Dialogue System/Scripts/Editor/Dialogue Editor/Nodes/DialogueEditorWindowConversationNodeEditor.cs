@@ -712,7 +712,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 // Orphaned nodes are red:
                 nodeStyle = GetNodeStyle(Styles.Color.Red, isSelected);
             }
-            else if (entry.fields.Find(p => p.title == "NodeColor" && p.value != String.Empty) != null)
+            else if (entry.fields.Find(p => p.title == "NodeColor" && p.value != String.Empty  && EditorTools.NodeColorStringToColor(p.value) != Color.black) != null)
             {
                 var value = entry.fields.Find(p => p.title == "NodeColor" && p.value != String.Empty).value;
                 isCustomColor = true;

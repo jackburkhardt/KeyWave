@@ -272,6 +272,8 @@ namespace Project.Runtime.Scripts.Manager
             }
             StartCoroutine(TravelToHandler());
 
+            DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
+
             IEnumerator TravelToHandler()
             {
                 yield return App.App.Instance.ChangeScene(newLocation, currentScene, loadingScreenType);
