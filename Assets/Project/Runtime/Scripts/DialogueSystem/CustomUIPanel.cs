@@ -21,8 +21,16 @@ public class CustomUIPanel : UIPanel
     
     public UnityEvent OnFocus;
     public UnityEvent OnUnfocus;
+    
+    public UnityEvent OnAwake;
 
     private Animator Animator => animator ? animator : GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
+
+    protected void Awake()
+    {
+        OnAwake?.Invoke();
+    }
+
 
     protected override void Update()
     {
@@ -120,7 +128,11 @@ public class CustomUIPanel : UIPanel
 
     public List<ChildPanel> childPanels;
     
-    
+    public void AddFocus()
+    {
+        PushToPanelStack();
+        CheckFocus();
+    }
 
     public void RemoveFocus()
     {
@@ -190,4 +202,29 @@ public class SequencerCommandSetCustomPanel : SequencerCommand
         }
         
     }
+}
+
+public class SequencerCommandFocusCustomPanel : SequencerCommand
+{
+    private void Awake()
+    {
+        var panelName = GetParameter(0);
+        var show = GetParameterAsBool(1, true);
+        var panels = FindObjectsOfType<CustomUIPanel>();
+        foreach (var panel in panels)
+        {
+            if (panel.panelName == panelName)
+            {
+                if (show)
+                {
+                    panel.AddFocus();
+                }
+                else
+                {
+                    panel.RemoveFocus();
+                }
+            }
+        }
+    }
+    
 }

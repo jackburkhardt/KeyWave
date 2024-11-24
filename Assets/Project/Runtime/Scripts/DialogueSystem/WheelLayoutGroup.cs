@@ -1,3 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
 using NaughtyAttributes;
 
 namespace UnityEngine.UI
@@ -81,7 +85,7 @@ namespace UnityEngine.UI
             ArrangeElements();
         }
 
-        private void ArrangeElements()
+        public void ArrangeElements()
         {
             float angleStep = 360f / rectChildren.Count;  // Equal angle distribution
 
@@ -89,17 +93,34 @@ namespace UnityEngine.UI
             {
                 RectTransform rect = rectChildren[i];
 
+                var outputRadius = rect.GetComponent<WheelLayoutGroupElement>() != null
+                    ? rect.GetComponent<WheelLayoutGroupElement>().Radius * radius
+                    : radius;
+
                 // Calculate the angle for the current element
                 float angle = m_StartAngle - 90f + (i * angleStep * (m_Clockwise ? 1 : -1));
                 float radian = angle * Mathf.Deg2Rad;  // Convert to radians for sine and cosine
 
                 // Calculate the position using polar coordinates
-                float posX = Mathf.Cos(radian) * radius;
-                float posY = Mathf.Sin(radian) * radius;
+                float posX = Mathf.Cos(radian) * outputRadius;
+                float posY = Mathf.Sin(radian) * outputRadius;
 
                 // Set the position of the element
                 SetChildAlongAxis(rect, 0, posX + rectTransform.rect.width / 2f - rect.rect.width / 2f); // Centering
                 SetChildAlongAxis(rect, 1, posY + rectTransform.rect.height / 2f - rect.rect.height / 2f); // Centering
+            }
+        }
+
+
+        public void AnimateElementsIndividuallyWithDelay(float delay)
+        {
+            GetComponent<Animator>().SetBool("Dirty", true);
+            for (int i = 0; i < rectChildren.Count; i++)
+            {
+                var animator = rectChildren[i].GetComponent<Animator>();
+                DOTween.Sequence()
+                    .AppendInterval(i * delay + delay)
+                    .AppendCallback(() => animator.SetTrigger("Show"));
             }
         }
     }

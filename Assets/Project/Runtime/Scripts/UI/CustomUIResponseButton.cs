@@ -20,10 +20,14 @@ namespace Project.Runtime.Scripts.UI
         IPointerClickHandler
     {
         //private StandardUIResponseButton StandardUIResponseButton => GetComponent<StandardUIResponseButton>();
+        
+      
 
         protected static CustomUIResponseButton _hoveredButton;
 
-        [SerializeField] private Graphic nodeColorChameleon;
+        [SerializeField] protected Graphic nodeColorChameleon;
+        
+        public Graphic NodeColorChameleon => nodeColorChameleon;
         
         private bool chameleonNotNull => nodeColorChameleon != null;
 
@@ -31,11 +35,14 @@ namespace Project.Runtime.Scripts.UI
 
         [SerializeField] private Image icon;
         
+        public Image Icon => icon;
+        
         private bool iconNotNull => icon != null;
         [ShowIf("chameleonNotNull")] [SerializeField] private string iconField = "Icon";
         
         
-        private Color defaultImageColor;
+        protected Color defaultImageColor;
+        public Color DefaultImageColor => defaultImageColor;
 
         [SerializeField] protected string _autoNumberFormat = "{0}. {1}";
 
@@ -43,7 +50,11 @@ namespace Project.Runtime.Scripts.UI
 
         [SerializeField] protected UITextField actorNameText;
         
+        public string ActorName => actorNameText.text;
+        
         [SerializeField] protected UITextField conversantNameText;
+        
+        public string ConversantName => conversantNameText.text;
         
         [SerializeField] protected UITextField autonumberText;
 
@@ -75,6 +86,7 @@ namespace Project.Runtime.Scripts.UI
         {
             Refresh();
             if (MenuPanelContainer == null) MenuPanelContainer = GetComponentInParent<CustomUIMenuPanel>(true);
+            
         }
         
         private void Awake()
@@ -116,6 +128,39 @@ namespace Project.Runtime.Scripts.UI
                 if (_notificationBadge != null && _notificationBadge.gameObject.activeSelf) DialogueManager.instance.gameObject.BroadcastMessage("OnNewOptionSelected", response?.destinationEntry, SendMessageOptions.DontRequireReceiver);
             }
             Refresh();
+        }
+        
+        
+        public void TransferPropertiesToOther(CustomUIResponseButton button)
+        {
+            if (label.text.Contains("Metrics")) return;
+            button.response = response;
+            button.MenuPanelContainer = MenuPanelContainer;
+            button.label.text = label.text;
+            button.icon.sprite = icon.sprite;
+            button.nodeColorChameleon.color = nodeColorChameleon.color;
+          //  button.autonumberText.text = autonumberText.text;
+            button.actorNameText.text = actorNameText.text;
+            button.conversantNameText.text = conversantNameText.text;
+            button.defaultImageColor = defaultImageColor;
+        }
+
+        public void GoToResponse()
+        {
+            var entry = response.destinationEntry.GetNextDialogueEntry();
+            if (DialogueManager.instance == null || DialogueManager.instance.conversationModel == null)
+            {
+                var nextConversation = entry.GetConversation();
+                DialogueManager.StartConversation(nextConversation.Title);
+            }
+
+            else
+            {
+                var state = DialogueManager.instance.conversationModel.GetState(entry);
+                DialogueManager.conversationController.GotoState(state);
+            }
+            
+            
         }
 
 
@@ -205,7 +250,7 @@ namespace Project.Runtime.Scripts.UI
         public virtual void Refresh()
         {
        
-            if (MenuPanelContainer.buttonTemplate == this) return;
+            if (MenuPanelContainer != null && MenuPanelContainer.buttonTemplate == this) return;
 
             if (DialogueEntryInvalid)
             {
