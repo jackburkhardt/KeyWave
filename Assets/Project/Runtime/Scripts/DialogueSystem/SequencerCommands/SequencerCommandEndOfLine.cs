@@ -72,7 +72,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
             conversationType = string.Empty;
         }
         
-        if (string.IsNullOrEmpty(conversationType)) Sequencer.PlaySequence("SetCustomPanel(SmartWatch, false);");
+       // if (string.IsNullOrEmpty(conversationType) && title.) Sequencer.PlaySequence("SetCustomPanel(SmartWatch, false);");
 
         
         Sequencer.PlaySequence("SetContinueMode(false);");
