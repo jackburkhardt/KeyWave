@@ -17,15 +17,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
   
     public override void Close()
     {
-        if (!useAlternateCloseTrigger)
-        {
-            base.Close(); 
-            DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
-            return;
-        }
-        
-      
-        base.Close();
+        base.Close(); 
         DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
     }
 

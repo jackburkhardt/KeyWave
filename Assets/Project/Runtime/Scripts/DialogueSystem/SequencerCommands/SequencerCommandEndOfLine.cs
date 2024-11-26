@@ -2,6 +2,7 @@ using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class SequencerCommandEndOfLine : SequencerCommand
 {
@@ -75,19 +76,46 @@ public class SequencerCommandEndOfLine : SequencerCommand
 
         
         Sequencer.PlaySequence("SetContinueMode(false);");
+        
+        debug = true;
 
         if (sequencer.GetDialogueEntry() == null && conversationType != string.Empty && title.EndsWith("Base"))
         {
-            Sequencer.PlaySequence($"WaitForMessage(Typed); SetCustomPanel(SmartWatch, true){waitForTyped};");
+            if (debug) Debug.Log("Entry null.  End of line: Going to base conversation.");
+            
+            
+            Sequencer.PlaySequence("SetContinueMode(true)@Message(Typed);");
+            var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
+            if (title != baseConversation && !title.Contains("SmartWatch"))
+            {
+                Sequencer.PlaySequence("GoToConversation(" + baseConversation + ", true);");
+            }
         }
         
         else if (entry != null)
         { 
-            Sequencer.PlaySequence(entry.IsLastNode()
+            /* Sequencer.PlaySequence(entry.IsLastNode()
                 ? $"WaitForMessage(Typed); SetCustomPanel(SmartWatch, true){waitForTyped};"
                 : "SetContinueMode(true)@Message(Typed);");
+                */
+            
+            Debug.Log($"Entry is last node: {entry.IsLastNode()}");
+
+            Sequencer.PlaySequence("SetContinueMode(true)@Message(Typed);");
+            
+            if (entry.IsLastNode())
+            {
+                var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
+                if (title != baseConversation && !title.Contains("SmartWatch"))
+                {
+                    Debug.Log("Last node, going to base conversation.");
+                    Sequencer.PlaySequence("GoToConversation(" + baseConversation + ", true);");
+                }
+                else Debug.Log("Last node, not going to base conversation.");
+                
+            }
         
-            if (!entry.IsLastNode())
+            else
             {
                 if (debug) Debug.Log("Not last node, will autocontinue or wait for response menu");
                 
@@ -101,7 +129,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
                     if (entry.subtitleText.Length > 0)
                     {
                         if (debug) Debug.Log("Auto-continuing to next subtitle after typed.");
-                       // sequencer.PlaySequence("Continue()@Message(Typed);");
+                       sequencer.PlaySequence("Continue()@Message(Typed);");
                     }
                     else
                     {
@@ -131,12 +159,14 @@ public class SequencerCommandEndOfLine : SequencerCommand
                 break; // [auto] takes precedence over [f].
             }
         }
-        isPCResponseMenuNext = !state.hasNPCResponse && !hasForceAuto &&
+        isPCResponseMenuNext = state != null && !state.hasNPCResponse && !hasForceAuto &&
                                (numPCResponses > 1 || hasForceMenu || (numPCResponses == 1 && alwaysForceMenu && !string.IsNullOrEmpty(state.pcResponses[0].formattedText.text)));
-        isPCAutoResponseNext = !state.hasNPCResponse && hasForceAuto || 
+        isPCAutoResponseNext = state != null && !state.hasNPCResponse && hasForceAuto || 
                                (numPCResponses == 1 && string.IsNullOrEmpty(state.pcResponses[0].formattedText.text)) ||
                                (numPCResponses == 1 && !hasForceMenu && (!alwaysForceMenu || state.pcResponses[0].destinationEntry.isGroup));
     }
+
+    
 }
 
 public class SequencerCommandGoToConversation : SequencerCommand

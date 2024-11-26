@@ -41,25 +41,33 @@ namespace Project.Runtime.Scripts.UI
         }
         
      
+       
         public virtual void OnChoiceSelection(CustomUIResponseButton customUIResponseButton)
         {
-            if (customUIResponseButton.simStatus == "WasDisplayed")
-            {
-                Clock.Freeze(true);
-            }
-            
-            var destinationEntry = customUIResponseButton.response.destinationEntry;
+        
+       if (customUIResponseButton.simStatus == "WasDisplayed")
+       {
+           Clock.Freeze(true);
+       }
 
-            if (destinationEntry.outgoingLinks.Count == 0)
-            {
-                var conversationTitle = destinationEntry.GetConversation().Title;
-                var conversationType = conversationTitle.Split("/").Length > 2 ? conversationTitle.Split("/")[^2] : string.Empty;
-                Debug.Log($"Conversation type: {conversationType}");
-                DialogueManager.instance.PlaySequence($"SetDialoguePanel(false); SetActionPanel(true, {conversationType})");
-            }
+       var destinationEntry = customUIResponseButton.response.destinationEntry;
 
-         //   DialogueManager.instance.PlaySequence("Message(Choice)");
+       if (destinationEntry.outgoingLinks.Count == 0)
+       {
+           var title = destinationEntry.GetConversation().Title;
+           var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
+           if (title != baseConversation)
+           {
+               Debug.Log("Last node, going to base conversation.");
+               DialogueManager.PlaySequence("GoToConversation(" + baseConversation + ", true);");
+           }
+           else Debug.Log("Last node, not going to base conversation.");
+       }
+
+   
+    
         }
+   
 
         protected virtual void OnContentChanged()
         {
@@ -73,7 +81,7 @@ namespace Project.Runtime.Scripts.UI
             
             RefreshLayoutGroups.Refresh(gameObject);
             
-          //  Clock.Freeze(false);
+            //  Clock.Freeze(false);
 
         }
 

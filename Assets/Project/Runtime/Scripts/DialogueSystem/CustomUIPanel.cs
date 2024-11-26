@@ -80,7 +80,7 @@ public class CustomUIPanel : UIPanel
     
     public void OnConversationEnd()
     {
-       CheckFocus();
+        //CheckFocus();
     }
 
     public void OnUIPanelClose(UIPanel panel)
