@@ -16,7 +16,7 @@ namespace Project.Runtime.Scripts.Audio
         
         [SerializeField] private AudioClipDatabase _clipDatabase;
         [SerializeField] private AudioMixer _userAudioMixer;
-        public Dictionary<string, AudioSource> _activeAudio = new();
+        public Dictionary<string, AudioSource> activeAudio = new();
         
         public UnityEvent onActiveAudioChange;
         
@@ -30,7 +30,6 @@ namespace Project.Runtime.Scripts.Audio
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(this.gameObject);
             }
             else
             {
@@ -53,7 +52,7 @@ namespace Project.Runtime.Scripts.Audio
                 source.outputAudioMixerGroup = clipData.channel;
                 source.Play();
                 
-                _activeAudio.Add(clipAddress, source);
+                activeAudio.Add(clipAddress, source);
                 
                 followup?.Invoke();
 
@@ -88,7 +87,7 @@ namespace Project.Runtime.Scripts.Audio
         
         private bool ClipAlreadyPlaying(string clipAddress)
         {
-            var clipIsPlaying = _activeAudio.ContainsKey(clipAddress);
+            var clipIsPlaying = activeAudio.ContainsKey(clipAddress);
             if (clipIsPlaying)
             {
                 StartCoroutine(SendSequencerMessage("PlayClip"));
@@ -108,14 +107,14 @@ namespace Project.Runtime.Scripts.Audio
             if (!ClipAlreadyPlaying(clipAddress)) return;
             
             var defaultVolume = _clipDatabase.audioData.Find(data => data.clipAddress == clipAddress).volume;
-            _activeAudio[clipAddress].volume = volume * defaultVolume;
+            activeAudio[clipAddress].volume = volume * defaultVolume;
         }
         
         public float GetClipVolume(string clipAddress)
         {
             if (!ClipAlreadyPlaying(clipAddress)) return 0;
             
-            return _activeAudio[clipAddress].volume;
+            return activeAudio[clipAddress].volume;
         }
 
         public void PlayClip(string clipAddress)
@@ -149,30 +148,30 @@ namespace Project.Runtime.Scripts.Audio
         {
             if (!ClipAlreadyPlaying(clipAddress)) return;
             
-            _activeAudio[clipAddress].Stop();
+            activeAudio[clipAddress].Stop();
             AddressableLoader.Release(clipAddress);
-            Destroy(_activeAudio[clipAddress]);
+            Destroy(activeAudio[clipAddress]);
             
-            _activeAudio.Remove(clipAddress);
+            activeAudio.Remove(clipAddress);
             onActiveAudioChange.Invoke();
         }
         
         public void StopAllAudio()
         {
-            foreach (var audio in _activeAudio)
+            foreach (var audio in activeAudio)
             {
                 audio.Value.Stop();
                 AddressableLoader.Release(audio.Key);
                 Destroy(audio.Value);
             }
             
-            _activeAudio.Clear();
+            activeAudio.Clear();
             onActiveAudioChange.Invoke();
         }
         
         public void PauseAllAudio()
         {
-            foreach (var audio in _activeAudio)
+            foreach (var audio in activeAudio)
             {
                 audio.Value.Pause();
             }
@@ -180,7 +179,7 @@ namespace Project.Runtime.Scripts.Audio
         
         public void ResumeAllAudio()
         {
-            foreach (var audio in _activeAudio)
+            foreach (var audio in activeAudio)
             {
                 audio.Value.UnPause();
             }
@@ -242,7 +241,7 @@ namespace Project.Runtime.Scripts.Audio
         public void StopAllAudioOnChannel(string channelName)
         {
             List<string> keysToRemove = new();
-            foreach (var entry in _activeAudio)
+            foreach (var entry in activeAudio)
             {
                 if (entry.Value.outputAudioMixerGroup.name == channelName)
                 {
@@ -254,7 +253,7 @@ namespace Project.Runtime.Scripts.Audio
         
         public void PauseAllAudioOnChannel(string channelName)
         {
-            foreach (var entry in _activeAudio)
+            foreach (var entry in activeAudio)
             {
                 if (entry.Value.outputAudioMixerGroup.name == channelName)
                 {
@@ -265,7 +264,7 @@ namespace Project.Runtime.Scripts.Audio
         
         public void ResumeAllAudioOnChannel(string channelName)
         {
-            foreach (var entry in _activeAudio)
+            foreach (var entry in activeAudio)
             {
                 if (entry.Value.outputAudioMixerGroup.name == channelName)
                 {

@@ -36,7 +36,7 @@ namespace Project.Runtime.Scripts.Audio
         {
           var audioClipDatabase = _audioEngine.ClipDatabase.audioData;
 
-          foreach (var activeAudio in _audioEngine._activeAudio)
+          foreach (var activeAudio in _audioEngine.activeAudio)
           {
               var audioData = audioClipDatabase.Find(x => x.clipAddress == activeAudio.Key);
               if (audioData.includeVariants)
@@ -45,8 +45,8 @@ namespace Project.Runtime.Scripts.Audio
                   {
                       if (variant.type == AudioClipDatabase.AudioData.VariantType.Pause)
                       {
-                          var originalSource = _audioEngine._activeAudio[audioData.clipAddress];
-                          var variantSource = _audioEngine._activeAudio[variant.variantAddress];
+                          var originalSource = _audioEngine.activeAudio[audioData.clipAddress];
+                          var variantSource = _audioEngine.activeAudio[variant.variantAddress];
 
                           StartCoroutine(CrossFadeAudioSources(originalSource, variantSource, 0.5f));
                          
@@ -76,7 +76,7 @@ namespace Project.Runtime.Scripts.Audio
         {
             var audioClipDatabase = _audioEngine.ClipDatabase.audioData;
 
-            foreach (var activeAudio in _audioEngine._activeAudio)
+            foreach (var activeAudio in _audioEngine.activeAudio)
             {
                 var audioData = audioClipDatabase.Find(x => x.clipAddress == activeAudio.Key);
                 if (audioData.includeVariants)
@@ -85,8 +85,8 @@ namespace Project.Runtime.Scripts.Audio
                     {
                         if (variant.type == AudioClipDatabase.AudioData.VariantType.Pause)
                         {
-                            var originalSource = _audioEngine._activeAudio[audioData.clipAddress];
-                            var variantSource = _audioEngine._activeAudio[variant.variantAddress];
+                            var originalSource = _audioEngine.activeAudio[audioData.clipAddress];
+                            var variantSource = _audioEngine.activeAudio[variant.variantAddress];
                             StartCoroutine(CrossFadeAudioSources(originalSource, variantSource, 0.5f));
                         }
                     }

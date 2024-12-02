@@ -26,18 +26,6 @@ namespace Project.Runtime.Scripts.UI
             }
 
             SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
-           
-           #if UNITY_EDITOR
-           var lamb = new GameObject("Sacrificial Lamb");
-           DontDestroyOnLoad(lamb);
-
-           var sheepList = new[] { "Evan", "Save System", "App", "[Debug Updater]"};
-           
-           foreach(var suspect in lamb.scene.GetRootGameObjects())
-               if (!sheepList.Contains(suspect.name)) Destroy(suspect);
-           #endif
-            
-            App.App.Instance.LoadBaseScene();
         }
         
 
@@ -57,8 +45,6 @@ namespace Project.Runtime.Scripts.UI
                
                 return;
             }
-            
-         
             
             _saveExistsWarningPopup.SetActive(true);
             string saveTimestamp = SaveDataStorer.LatestSaveData.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");

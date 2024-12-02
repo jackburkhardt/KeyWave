@@ -141,7 +141,7 @@ namespace Project.Editor.Scripts.Tools
                     var pointsField = QuestUtility.GetPoints(entry);
                     if (pointsField.Length == 0) continue;
 
-                    foreach (var field in pointsField)
+                    foreach (Points.PointsField field in pointsField)
                     {
                         var points = field.Points;
                         switch (field.Type)

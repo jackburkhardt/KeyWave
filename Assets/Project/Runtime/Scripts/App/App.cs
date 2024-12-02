@@ -5,6 +5,7 @@ using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace Project.Runtime.Scripts.App
@@ -74,29 +75,15 @@ namespace Project.Runtime.Scripts.App
             StartCoroutine(BeginGameSequence(false));
         }
         
-        public void LoadBaseScene()
-        {
-            IEnumerator LoadBase()
-            {
-                yield return LoadSceneWithoutLoadingScreen("Base");
-            }
-            
-            StartCoroutine(LoadBase());
-            
-        }
         
         private IEnumerator NewGameSequence()
         {
-           // yield return LoadSceneWithoutLoadingScreen("Base");
-            
-
             yield return GameManager.instance.StartNewSave();
             GameEvent.OnRegisterPlayerEvent += SendPlayerEvent;
         }
 
         private IEnumerator BeginGameSequence(bool newGame)
         {
-            yield return LoadSceneButKeepLoadingScreen("Base", sceneToUnload:"StartMenu", type: LoadingScreen.LoadingScreenType.Black);
             while (!DialogueManager.Instance.isInitialized)
             {
                 yield return null;
@@ -149,7 +136,7 @@ namespace Project.Runtime.Scripts.App
         /// </summary>
         public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload, LoadingScreen.LoadingScreenType? type = null) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload, loadingScreenType: type));
 
-        private IEnumerator LoadSceneHandler(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? loadingScreenType = LoadingScreen.LoadingScreenType.Default, bool? unloadLoadingScreen = true, bool? waitForUnload = true)
+        private IEnumerator LoadSceneHandler(string sceneToLoad, string sceneToUnload = "", LoadingScreen.LoadingScreenType? loadingScreenType = LoadingScreen.LoadingScreenType.Default, bool? unloadLoadingScreen = true, bool? waitForUnload = true)
         {
             
             isLoading = true;
@@ -177,6 +164,10 @@ namespace Project.Runtime.Scripts.App
                 else Debug.LogError("Unable to get the canvas group for the loading screen!");
             }
 
+            var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+
+            while (!newScene.isDone || !AddressableLoader.IsQueueEmpty()) yield return null;
+            
             if (sceneToUnload != "")
             {
 
@@ -196,12 +187,6 @@ namespace Project.Runtime.Scripts.App
             }
             
             OnDeloadEnd?.Invoke();
-            
-         
-
-            var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
-
-            while (!newScene.isDone || !AddressableLoader.IsQueueEmpty()) yield return null;
             
             
             if (waitForUnload == false)

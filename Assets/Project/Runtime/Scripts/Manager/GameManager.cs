@@ -88,13 +88,6 @@ namespace Project.Runtime.Scripts.Manager
             }
         }
 
-        // Start is called before the first frame update
-
-        private void OnEnable()
-        {
-
-        }
-
         private void OnDestroy()
         {
             Destroy(playerEventStack);
@@ -104,20 +97,16 @@ namespace Project.Runtime.Scripts.Manager
         public void PauseDialogueSystem()
         {
             DialogueManager.instance.Pause();
-           // WatchHandCursor.GlobalFreeze();
         }
 
         public void UnpauseDialogueSystem()
         {
             DialogueManager.instance.Unpause();
-            //WatchHandCursor.GlobalUnfreeze();
         }
 
         public void OnSaveDataApplied()
         {
             dailyReport ??= new DailyReport(gameState.day);
-
-            FindObjectOfType<PointsBar>().ApplySaveData();
         }
 
         private void OnPlayerEvent(PlayerEvent e)
@@ -139,18 +128,13 @@ namespace Project.Runtime.Scripts.Manager
 
         public IEnumerator StartNewSave()
         {
-            // yield return App.App.Instance.LoadScene("Hotel");
             dailyReport = new DailyReport(gameState.day);
-
-
-
+            
             while (App.App.isLoading)
             {
                 yield return new WaitForEndOfFrame();
             }
-
-
-
+            
             yield return new WaitForSeconds(0.25f);
             while (!DialogueManager.hasInstance)
             {

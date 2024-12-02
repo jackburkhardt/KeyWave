@@ -1,95 +1,62 @@
 using System;
 using System.Collections.Generic;
-using Project.Runtime.Scripts.Audio;
+using PixelCrushers;
 using UnityEngine;
 
-namespace PixelCrushers
+namespace Project.Runtime.Scripts.Audio
 {
-
-    /// <summary>
-    /// Saves an animator's state.
-    /// </summary>
     [AddComponentMenu("")] // Use wrapper.
     [RequireComponent(typeof(AudioEngine))]
     public class AudioEngineSaver : Saver
     {
-       
         [Serializable]
-        public class Data
+        public class ActiveAudioData
         {
-            public List<string> audioSources = new List<string>();
-            public List<bool> loopFlags = new List<bool>();
-        }
-
-        private Data m_data = new Data();
-        private AudioEngine m_audioEngine;
-        private AudioEngine audioEngine
-        {
-            get
-            {
-                if (m_audioEngine == null) m_audioEngine = GetComponent<AudioEngine>();
-                return m_audioEngine;
-            }
-        }
-
-        private void CheckAudioEngine()
-        {
-            if (audioEngine == null) return;
-            if (m_data == null) m_data = new Data();
+            public string clipName;
+            public bool loop;
         }
         
-        public void SaveAudioEngine()
-        {
-            RecordData();
-        }
-
+        private AudioEngine audioEngine => GetComponent<AudioEngine>();
+        
         public override string RecordData()
         {
             if (audioEngine == null) return string.Empty;
-            CheckAudioEngine();
             
-            //record active audiosource clips
+            var activeAudio = new List<ActiveAudioData>();
             
-            m_data.audioSources.Clear();
-            m_data.loopFlags.Clear();
             
-            foreach (var audioSource in audioEngine._activeAudio)
+            foreach (var audioSource in audioEngine.activeAudio)
             {
-               
-                m_data.audioSources.Add(audioSource.Key);
-                m_data.loopFlags.Add(audioSource.Value.loop);
+                activeAudio.Add(new ActiveAudioData
+                {
+                    clipName = audioSource.Key,
+                    loop = audioSource.Value.loop
+                });
             }
             
-//            Debug.Log("Recording audio data");
-            
-            foreach (var clip in m_data.audioSources)
-            {
-               // Debug.Log(clip);
-            }
-            
-            return SaveSystem.Serialize(m_data);
+            return PixelCrushers.SaveSystem.Serialize(activeAudio);
         }
 
         public override void ApplyData(string s)
         {
             if (string.IsNullOrEmpty(s) || audioEngine == null) return;
+
+            var loadedData = PixelCrushers.SaveSystem.Deserialize<List<ActiveAudioData>>(s);
+            if (loadedData == null) return;
             
-            m_data = SaveSystem.Deserialize<Data>(s, m_data);
-            Debug.Log(m_data.ToString());
-            if (m_data == null)
+            audioEngine.StopAllAudio();
+            foreach (var source in loadedData)
             {
-                m_data = new Data();
-            }
-            else
-            {
-                audioEngine.StopAllAudio();
-                Debug.Log("Applying audio data: " + m_data.audioSources.Count);
-                for (int i = 0; i < m_data.audioSources.Count; i++)
+                if (source.loop)
                 {
-                    audioEngine.PlayClip(m_data.audioSources[i]);
-                    audioEngine._activeAudio[m_data.audioSources[i]].loop = m_data.loopFlags[i];
+                    audioEngine.PlayClipLooped(source.clipName);
+                }
+                else
+                {
+                    audioEngine.PlayClip(source.clipName);
                 }
             }
+            
         }
     }
 }
