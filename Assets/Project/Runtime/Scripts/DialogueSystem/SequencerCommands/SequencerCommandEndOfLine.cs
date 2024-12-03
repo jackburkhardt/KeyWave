@@ -111,7 +111,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
                     Debug.Log("Last node, going to base conversation.");
                     Sequencer.PlaySequence("GoToConversation(" + baseConversation + ", true);");
                 }
-                else Debug.Log("Last node, not going to base conversation.");
+                else Sequencer.PlaySequence("GoToConversation(SmartWatch/Home)" + waitForTyped);
                 
             }
         

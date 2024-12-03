@@ -45,6 +45,12 @@ public class CustomUIPanel : UIPanel
         {
             Open();
         }
+        
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            DialogueManager.instance.StartConversation("SmartWatch/Home");
+        }
+        
        
     }
     

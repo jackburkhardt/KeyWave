@@ -15,6 +15,7 @@ namespace Project.Runtime.Scripts.UI
             "rightPadding",
             "topPadding",
             "bottomPadding",
+            "spacing",
             "reverseArrangement",
             "childAlignment",
             "controlChildWidth",
@@ -34,6 +35,8 @@ namespace Project.Runtime.Scripts.UI
         public int topPadding;
 
         public int bottomPadding;
+
+        public new float spacing;
 
 
         public new bool reverseArrangement;
@@ -74,6 +77,7 @@ namespace Project.Runtime.Scripts.UI
             childScaleHeight = useChildHeight;
             base.childForceExpandWidth = childForceExpandWidth;
             base.childForceExpandHeight = childForceExpandHeight;
+            base.spacing = spacing;
         }
     }
 }

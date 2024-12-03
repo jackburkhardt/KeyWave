@@ -39,6 +39,23 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     [SerializeField] private AspectRatioFitter _aspectRatioFitter;
     private AspectRatioFitter aspectRatioFitter => _aspectRatioFitter != null ? _aspectRatioFitter : GetComponent<AspectRatioFitter>();
     
+    protected override void Awake()
+    {
+       base.Awake();
+       StartCoroutine(DelayedReset());
+    }
+    
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        StartCoroutine(DelayedReset());
+    }
+    
+    IEnumerator DelayedReset()
+    {
+        yield return new WaitForEndOfFrame();
+        Reset();
+    }
 
     protected void Update()
     {
@@ -66,5 +83,6 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
             
             _bottomLeft = _topLeft = _topRight = _bottomRight = new Gilzoide.RoundedCorners.RoundedCorner { Radius = radius, TriangleCount = _bottomLeft.TriangleCount };
         }
+        
     }
 }

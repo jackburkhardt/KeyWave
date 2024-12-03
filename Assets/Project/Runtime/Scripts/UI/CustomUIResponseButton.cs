@@ -7,15 +7,16 @@ using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
 namespace Project.Runtime.Scripts.UI
 {
-    [RequireComponent(typeof(Button))]
     public class CustomUIResponseButton : StandardUIResponseButton, IPointerEnterHandler, IPointerExitHandler,
         IPointerClickHandler
     {
@@ -25,6 +26,7 @@ namespace Project.Runtime.Scripts.UI
 
         protected static CustomUIResponseButton _hoveredButton;
 
+        [Foldout("Custom Fields")]
         [SerializeField] protected Graphic nodeColorChameleon;
         
         public Graphic NodeColorChameleon => nodeColorChameleon;
@@ -33,7 +35,9 @@ namespace Project.Runtime.Scripts.UI
 
         [ShowIf("chameleonNotNull")] [SerializeField] private string chameleonField = "UseNodeColorInMenu";
 
+        [Foldout("Custom Fields")]
         [SerializeField] private Image icon;
+        
         
         public Image Icon => icon;
         
@@ -44,23 +48,46 @@ namespace Project.Runtime.Scripts.UI
         protected Color defaultImageColor;
         public Color DefaultImageColor => defaultImageColor;
 
+        [Foldout("Custom Fields")]
         [SerializeField] protected string _autoNumberFormat = "{0}. {1}";
 
+        [Foldout("Custom Fields")]
         [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
 
+        [Foldout("Custom Fields")]
         [SerializeField] protected UITextField actorNameText;
         
         public string ActorName => actorNameText.text;
         
+        [Foldout("Custom Fields")]
         [SerializeField] protected UITextField conversantNameText;
         
         public string ConversantName => conversantNameText.text;
         
+        [Foldout("Custom Fields")]
         [SerializeField] protected UITextField autonumberText;
-
         
-
-         [SerializeField] private Image _notificationBadge;
+        [Foldout("Custom Fields")]
+        [SerializeField] private Image _notificationBadge;
+        
+        [Foldout("Custom Fields")]
+        [SerializeField] private bool useLocation;
+        
+        [ShowIf("useLocation")]
+        [Foldout("Custom Fields")]
+        [SerializeField] private string locationField = "Location";
+        
+        [ShowIf("useLocation")]
+        [Foldout("Custom Fields")]
+        [SerializeField] private bool useCoordinates = true;
+        
+        [ShowIf("useLocation")]
+        [Foldout("Custom Fields")]
+        [SerializeField] private UITextField locationLabel;
+        
+        [ShowIf("useLocation")]
+        [Foldout("Custom Fields")]
+        [SerializeField] private UITextField ETALabel;
 
         public string simStatus
         {
@@ -71,6 +98,9 @@ namespace Project.Runtime.Scripts.UI
        
         protected Button UnityButton => GetComponent<Button>();
         protected Vector2 Position => label.gameObject.transform.position;
+
+        
+       
 
 
         protected UIButtonKeyTrigger[] ButtonKeyTriggers => GetComponents<UIButtonKeyTrigger>();
@@ -131,19 +161,6 @@ namespace Project.Runtime.Scripts.UI
         }
         
         
-        public void TransferPropertiesToOther(CustomUIResponseButton button)
-        {
-            if (label.text.Contains("Metrics")) return;
-            button.response = response;
-            button.MenuPanelContainer = MenuPanelContainer;
-            button.label.text = label.text;
-            button.icon.sprite = icon.sprite;
-            button.nodeColorChameleon.color = nodeColorChameleon.color;
-          //  button.autonumberText.text = autonumberText.text;
-            button.actorNameText.text = actorNameText.text;
-            button.conversantNameText.text = conversantNameText.text;
-            button.defaultImageColor = defaultImageColor;
-        }
 
         public void GoToResponse()
         {
@@ -161,6 +178,11 @@ namespace Project.Runtime.Scripts.UI
             }
             
             
+        }
+        
+        public void SetAsLastSibling()
+        {
+            transform.SetAsLastSibling();
         }
 
 
@@ -246,6 +268,14 @@ namespace Project.Runtime.Scripts.UI
             }
         }
 
+        protected void OnValidate()
+        {
+            Refresh();
+            
+            
+            
+            
+        }
 
         public virtual void Refresh()
         {
@@ -327,6 +357,30 @@ namespace Project.Runtime.Scripts.UI
                 
                 label.text = response.formattedText.text;
                 
+                
+                if (useLocation && !string.IsNullOrEmpty(locationField) && Field.FieldExists(response.destinationEntry.fields, locationField))
+                {
+                    var locationIndex = Field.LookupInt(response.destinationEntry.fields, locationField);
+                        
+                    var location = Location.FromString(DialogueManager.instance.masterDatabase.locations[locationIndex].Name); 
+                    
+                    //Debug.Log(Field.LookupValue(response.destinationEntry.fields, locationField));
+                    
+                    if (location != null)
+                    {
+                        if (locationLabel != null) locationLabel.text = location.Name;
+                        if (ETALabel != null) ETALabel.text = $"ETA {Clock.EstimatedTimeOfArrival(location)}";
+                        if (useCoordinates)
+                        {
+                            transform.localPosition = location.coordinates;
+                        }
+                    }
+                    
+                    else Debug.LogWarning($"Location not found: {locationIndex}");
+                }
+                
+                
+                
               //  Debug.Log($"Response: { label.text}");
             }
         
@@ -341,6 +395,18 @@ namespace Project.Runtime.Scripts.UI
             {
                 if (_notificationBadge != null) _notificationBadge.gameObject.SetActive(false);
             }
+            
+            
+            if (MenuPanelContainer == null) MenuPanelContainer = GetComponentInParent<CustomUIMenuPanel>(true);
+            
+            
+            //buttonStyles
+            
+            
+            
+           
+            
+            
         }
     }
 }

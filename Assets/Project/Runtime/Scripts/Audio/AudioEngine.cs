@@ -76,7 +76,6 @@ namespace Project.Runtime.Scripts.Audio
                 IEnumerator SendSequencerMessage(string message)
                 {
                     while (!source.isPlaying) yield return null;
-                    yield return new WaitForSeconds(0.2f);
                     Sequencer.Message(message);
                 }
 
@@ -95,7 +94,7 @@ namespace Project.Runtime.Scripts.Audio
             
             IEnumerator SendSequencerMessage(string message)
             {
-                yield return new WaitForSeconds(0.1f);
+                yield return null;
                 Sequencer.Message(message);
             }
 
