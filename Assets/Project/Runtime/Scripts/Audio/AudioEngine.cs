@@ -43,6 +43,18 @@ namespace Project.Runtime.Scripts.Audio
         {
             AddressableLoader.RequestLoad<AudioClip>(clipAddress, clip =>
             {
+                if (ClipAlreadyPlaying(clipAddress)) return;
+                
+                try
+                {
+                    activeAudio.Add(clipAddress, source);
+                }
+                catch (ArgumentException e)
+                {
+                    Debug.LogError($"AudioEngine: Attempting to play the same clip \"{clipAddress}\" at the same time. This is not supported.");
+                    return;
+                }
+                
                 source.clip = clip;
                 var clipData = _clipDatabase.audioData.Find(data => data.clipAddress == clipAddress);
                 if (clipData.volume != 0) // no clip settings found
@@ -51,9 +63,7 @@ namespace Project.Runtime.Scripts.Audio
                 }
                 source.outputAudioMixerGroup = clipData.channel;
                 source.Play();
-                
-                activeAudio.Add(clipAddress, source);
-                
+
                 followup?.Invoke();
 
                 onActiveAudioChange.Invoke();
