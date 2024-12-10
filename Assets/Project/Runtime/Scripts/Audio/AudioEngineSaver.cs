@@ -47,6 +47,7 @@ namespace Project.Runtime.Scripts.Audio
             audioEngine.StopAllAudio();
             foreach (var source in loadedData)
             {
+                Debug.Log($"AudioEngineSaver: Playing {source.clipName}");
                 if (source.loop)
                 {
                     audioEngine.PlayClipLooped(source.clipName);

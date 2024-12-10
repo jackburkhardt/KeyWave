@@ -151,15 +151,7 @@ namespace Project.Runtime.Scripts.Manager
             else DialogueManager.instance.StartConversation("Intro");
         }
 
-       
-
-       
-        
-        
-
-       
-
-    public static void OnConversationStart()
+        public static void OnConversationStart()
         {
             var activeConversation = DialogueManager.instance.activeConversation;
             var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
@@ -168,11 +160,10 @@ namespace Project.Runtime.Scripts.Manager
             instance.mainCanvas.BroadcastMessage("SetTrigger", "Show", SendMessageOptions.DontRequireReceiver);
         }
         
-        public static void OnConversationEnd()
+        public static void DoLocalSave()
         {
             PixelCrushers.SaveSystem.SaveToSlot(1);
         }
-
 
         public static void OnQuestStateChange(string questName)
         {
