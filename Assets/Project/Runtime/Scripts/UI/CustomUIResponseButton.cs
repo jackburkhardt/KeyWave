@@ -298,6 +298,14 @@ namespace Project.Runtime.Scripts.UI
                 if (nodeColorChameleon != null)
                 {
                     var color = defaultImageColor;
+                    
+                    if (!response.enabled && Field.FieldExists(response.destinationEntry.fields, "DisabledColor"))
+                    {
+                        color = Tools.WebColor(
+                            Field.LookupValue(response.destinationEntry.fields, "DisabledColor"));
+                    }
+                    
+                    else
 
                     if (Field.FieldExists(response.destinationEntry.fields, chameleonField)
                         && Field.LookupBool(response.destinationEntry.fields, chameleonField))

@@ -11,6 +11,7 @@ using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
@@ -39,6 +40,9 @@ namespace Project.Runtime.Scripts.Manager
 
         public static Action OnGameManagerAwake;
         public static Action OnMapOpen;
+
+        public UnityEvent OnGameSceneStart;
+        public UnityEvent OnGameSceneEnd;
 
 
         private void Awake()
@@ -249,6 +253,9 @@ namespace Project.Runtime.Scripts.Manager
         {
 
             DialogueManager.StopConversation();
+            
+            OnGameSceneEnd?.Invoke();
+            
             if (currentScene == "")
             {
                 if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
@@ -270,6 +277,8 @@ namespace Project.Runtime.Scripts.Manager
                 yield return new WaitForSeconds(1f);
 
                 DialogueManager.StartConversation($"{newLocation}/Base");
+                
+                OnGameSceneStart?.Invoke();
 
                 Debug.Log("current scene chaned to :" + newLocation);
                 gameState.current_scene = newLocation;

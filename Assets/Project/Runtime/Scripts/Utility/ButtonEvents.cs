@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,10 +9,28 @@ using UnityEngine.UI;
 
 public class ButtonEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public UnityEvent OnClick, OnClicked, OnHover, OnHoverEnd;
+    public UnityEvent OnClick, OnClicked, OnHover, OnHoverEnd, OnButtonDisabled;
     private Button _button;
     [Tooltip("If true, the button events will run even if the button itself is not interactable.")]
     public bool ignoreButtonInteractability;
+    
+    private bool _oldInteractable;
+    private bool _currentInteractable;
+
+
+    private void Update()
+    {
+        _currentInteractable = _button.interactable;
+        if (_oldInteractable != _currentInteractable)
+        {
+            OnCanvasGroupChanged();
+            _oldInteractable = _currentInteractable;
+            if (!_currentInteractable)
+            {
+                OnButtonDisabled.Invoke();
+            }
+        }
+    }
     
     #region statics + type definitions
     private static readonly List<CanvasGroup> m_CanvasGroupCache = new List<CanvasGroup>();
@@ -80,5 +99,10 @@ public class ButtonEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         if (_button.interactable && IsInteractable || ignoreButtonInteractability)
             OnHoverEnd.Invoke();
+    }
+
+    public void OnButtonDisable()
+    {
+        OnButtonDisabled.Invoke();
     }
 }
