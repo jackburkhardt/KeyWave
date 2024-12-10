@@ -2,6 +2,7 @@ using System.Collections;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.UnityGUI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
@@ -125,6 +126,23 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         else
         {
             TypewriterUtility.StartTyping(subtitleText, subtitleText.text, previousChars);
+        }
+    }
+
+    public void StopTypewriterOrContinue()
+    {
+        var typewriter = subtitleText.gameObject.GetComponent<TextMeshProTypewriterEffect>();
+        
+        if (typewriter != null)
+        {
+            if (typewriter.IsPlaying)
+            {
+                typewriter.Stop();
+            }
+            else
+            {
+                OnContinue();
+            }
         }
     }
 

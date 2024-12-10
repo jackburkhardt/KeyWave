@@ -45,7 +45,7 @@ public class BroadcastAnimatorTrigger : MonoBehaviour
 
     public void Broadcast(List<Animator> animators, string trigger)
     {
-        if (_dirty && requireReset) return;
+        if (_dirty && requireReset || string.IsNullOrEmpty(trigger)) return;
         
         foreach (var animator in animators)
         {

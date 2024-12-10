@@ -8,7 +8,7 @@ using TextMeshProTypewriterEffect = PixelCrushers.DialogueSystem.Wrappers.TextMe
 
 namespace Project.Runtime.Scripts.UI
 {
-    public class SubtitleContentElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public class SubtitleContentElement : MonoBehaviour
     {
         public Image portrait;
         [SerializeField] private SubtitleManager subtitleManager;
@@ -59,42 +59,14 @@ namespace Project.Runtime.Scripts.UI
         {
             RefreshLayoutGroups.Refresh(gameObject);
             if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
-           
+
             if (!string.IsNullOrEmpty(_storedSubtitleText)) subtitleText.text = _storedSubtitleText;
             if (!string.IsNullOrEmpty(_storedTimeText)) timeText.text = _storedTimeText;
             if (!string.IsNullOrEmpty(_storedPortraitText)) portraitText.text = _storedPortraitText;
-        
+
         }
 
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
-            _alpha = canvasGroup.alpha;
-            LeanTween.alphaCanvas(canvasGroup, 1, 0.25f);
-        
-            
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (subtitleManager.duplicatedSubtitleContentContainer != transform.parent) return;
-            LeanTween.alphaCanvas(canvasGroup, _alpha, 0.25f);
-
-            var isPointerOnAnySubtitle = false;
-        
-          
-        }
-        
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if ((typewriterEffect != null) && typewriterEffect.isPlaying)
-            {
-                typewriterEffect.Stop();
-            }
-        }
-        
-        
 
         public void Clear()
         {
