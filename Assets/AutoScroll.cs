@@ -21,11 +21,18 @@ public class AutoScroll : MonoBehaviour
         ScrollToBottomImmediate(); // Scroll to the bottom on initialization
         _oldSize = contentRect.sizeDelta;
     }
+    
+    private void OnValidate()
+    {
+        scrollRect ??= GetComponent<ScrollRect>();
+        contentRect ??= scrollRect != null ? scrollRect.content : contentRect;
+
+    }
 
     private void Update()
     {
-        Debug.Log(contentRect.sizeDelta.y);
-        Debug.Log(_oldSize.y);
+        if (scrollRect == null || contentRect == null) return;
+        
         if (_oldSize != contentRect.sizeDelta)
         {
             Debug.Log("Content size changed, scrolling to bottom.");
