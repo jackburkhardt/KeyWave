@@ -18,7 +18,8 @@ namespace Project.Runtime.Scripts.UI
     {
         public static List<string> CustomFields = new List<string>
         {
-          "buttonStyles"
+          "buttonStyles",
+          "persistentMenuPanel"
         };
         
 
@@ -26,6 +27,8 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] Animator responseMenuAnimator;
 
         public List<CustomUIResponseButton> ResponseButtons => GetComponentsInChildren<CustomUIResponseButton>().ToList();
+        
+        public bool persistentMenuPanel = false;
         
 
         #region overrides
@@ -40,6 +43,17 @@ namespace Project.Runtime.Scripts.UI
                 }
 
                 instantiatedButtons.Clear();
+                
+                var unmarkedInstantiatedButtons = transform.GetComponentsInChildren<StandardUIResponseButton>(true).ToList();
+                foreach (var button in unmarkedInstantiatedButtons)
+                {
+                    if (button.gameObject.name.Contains("Response:") && button.gameObject != buttonTemplate.gameObject)
+                    {
+                        Destroy(button.gameObject);
+                    }
+                }
+                
+                
                 NotifyContentChanged();
             }
             
@@ -204,9 +218,39 @@ namespace Project.Runtime.Scripts.UI
                 Tools.SetGameObjectActive(button.responseButton.gameObject, false);
             }
         }
+        
+        public override void Open()
+        {
+            base.Open();
+            DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
+            RefreshLayoutGroups.Refresh(gameObject);
+            StartCoroutine(DelayedRefresh());
+        }
+        
+        public override void Close()
+        {
+            if (!persistentMenuPanel)
+            {
+                CloseNow();
+            }
+            
+        }
+        
+        public override void MakeButtonsNonclickable()
+        {
+            if (persistentMenuPanel) return;
+            base.MakeButtonsNonclickable();
+        }
             
 
         #endregion
+
+        private void CloseNow()
+        {
+            base.Close();
+            DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
+            DestroyInstantiatedButtons();
+        }
        
         [Serializable]
         public class ResponseButtonStyle
@@ -287,19 +331,9 @@ namespace Project.Runtime.Scripts.UI
             RefreshLayoutGroups.Refresh(gameObject);
         }
 
-        public override void Open()
-        {
-            base.Open();
-            DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
-            RefreshLayoutGroups.Refresh(gameObject);
-            StartCoroutine(DelayedRefresh());
-        }
         
-        public override void Close()
-        {
-            base.Close();
-            DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
-        }
+        
+       
         
         
 
@@ -313,6 +347,11 @@ namespace Project.Runtime.Scripts.UI
         {
             DialogueManager.StopConversation();
             DialogueManager.StartConversation(conversationName);
+        }
+        
+        public void ForceClose()
+        {
+           CloseNow();
         }
 
        

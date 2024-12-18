@@ -88,6 +88,25 @@ namespace Project.Runtime.Scripts.UI
         [ShowIf("useLocation")]
         [Foldout("Custom Fields")]
         [SerializeField] private UITextField ETALabel;
+        
+        
+        
+        
+        [Foldout("Animation")]
+        [SerializeField] private Animator _animator;
+        
+        [Foldout("Animation")]
+        [SerializeField] private string _showAnimationTrigger = "Show";
+        [Foldout("Animation")]
+        [SerializeField] private string _hideAnimationTrigger = "Hide";
+        
+        
+        
+        [Foldout("Animation")]
+        [Tooltip("Wait for the hide animation to finish before firing the StandardUIResponseButton's OnClick event.")]
+        [SerializeField] private bool _waitForHideAnimation;
+        
+        
 
         public string simStatus
         {
@@ -95,6 +114,7 @@ namespace Project.Runtime.Scripts.UI
             private set;
         }
         
+      
        
         protected Button UnityButton => GetComponent<Button>();
         protected Vector2 Position => label.gameObject.transform.position;
@@ -116,6 +136,11 @@ namespace Project.Runtime.Scripts.UI
         {
             Refresh();
             if (MenuPanelContainer == null) MenuPanelContainer = GetComponentInParent<CustomUIMenuPanel>(true);
+            
+            if (_animator != null && !string.IsNullOrEmpty(_showAnimationTrigger))
+            {
+                _animator.SetTrigger(_showAnimationTrigger);
+            }
             
         }
         
@@ -416,5 +441,31 @@ namespace Project.Runtime.Scripts.UI
             
             
         }
+
+
+        public override void OnClick()
+        {
+            if (_animator != null && !string.IsNullOrEmpty(_hideAnimationTrigger))
+            {
+                if (_waitForHideAnimation) StartCoroutine(SetAnimationTriggerAndWait(_hideAnimationTrigger, base.OnClick));
+                else base.OnClick();
+            }
+            else base.OnClick();
+        }
+        
+        private IEnumerator SetAnimationTriggerAndWait(string trigger, Action callback, int stateIndex = 0)
+        {
+            _animator.SetTrigger(_hideAnimationTrigger);
+            yield return new WaitForEndOfFrame();
+            var clip = _animator.GetCurrentAnimatorClipInfo(stateIndex);
+            var state = _animator.GetCurrentAnimatorStateInfo(stateIndex);
+            var transition = _animator.GetAnimatorTransitionInfo(0);
+            
+            var longestClip = clip.Max(c => c.clip.length) * state.speed;
+            var animationLength = Mathf.Max(longestClip, transition.duration);
+            yield return new WaitForSeconds(animationLength);
+            callback.Invoke();
+        }
+        
     }
 }

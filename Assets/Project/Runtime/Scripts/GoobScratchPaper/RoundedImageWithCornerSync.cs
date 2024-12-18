@@ -85,4 +85,16 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
         }
         
     }
+
+    protected override void OnRectTransformDimensionsChange()
+    {
+        SetVerticesDirty();
+        base.OnRectTransformDimensionsChange();
+    }
+    
+    public void RecalculateCorners()
+    {
+        SetVerticesDirty();
+        
+    }
 }

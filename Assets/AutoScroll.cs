@@ -14,11 +14,19 @@ public class AutoScroll : MonoBehaviour
     private float scrollSpeed = 10f;
 
     private Vector2 _oldSize;
+    
+    private enum ScrollDirection
+    {
+        Top,
+        Bottom
+    }
+    
+    [SerializeField] private ScrollDirection scrollDirection = ScrollDirection.Bottom; 
 
     private void OnEnable()
     {
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect); // Ensure initial layout
-        ScrollToBottomImmediate(); // Scroll to the bottom on initialization
+        ScrollToEndImmediate(); // Scroll to the bottom on initialization
         _oldSize = contentRect.sizeDelta;
     }
     
@@ -28,6 +36,8 @@ public class AutoScroll : MonoBehaviour
         contentRect ??= scrollRect != null ? scrollRect.content : contentRect;
 
     }
+
+    private float _previousScrollSensitivity = 0;
 
     private void Update()
     {
@@ -45,7 +55,10 @@ public class AutoScroll : MonoBehaviour
         
         if (shouldScroll)
         {
-            float targetVerticalPosition = 0f; // Bottom is 0 in ScrollRect
+            if (_previousScrollSensitivity == 0) _previousScrollSensitivity = scrollRect.scrollSensitivity;
+            scrollRect.scrollSensitivity = 0;
+            
+             float targetVerticalPosition = scrollDirection == ScrollDirection.Bottom ? 0f : 1f;
             scrollRect.verticalNormalizedPosition = Mathf.Lerp(
                 scrollRect.verticalNormalizedPosition,
                 targetVerticalPosition,
@@ -57,13 +70,21 @@ public class AutoScroll : MonoBehaviour
             {
                 scrollRect.verticalNormalizedPosition = targetVerticalPosition;
                 shouldScroll = false;
+                scrollRect.scrollSensitivity = _previousScrollSensitivity;
+                _previousScrollSensitivity = 0;
             }
         }
         
     }
     
-    private void ScrollToBottomImmediate()
+    private void ScrollToEndImmediate()
     {
-        scrollRect.verticalNormalizedPosition = 0f;
+        if (scrollDirection == ScrollDirection.Bottom) scrollRect.verticalNormalizedPosition = 0f;
+        else scrollRect.verticalNormalizedPosition = 1f;
+    }
+    
+    public void ScrollNow()
+    {
+        shouldScroll = true;
     }
 }

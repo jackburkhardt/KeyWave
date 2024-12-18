@@ -23,10 +23,9 @@ namespace Project.Runtime.Scripts.Manager
 
         private void Awake()
         {
-      
             RefreshContents();
-            templateResponseDuplicate.gameObject.SetActive(false);
-            templateSubtitleContentElement.gameObject.SetActive(false);
+            if (templateResponseDuplicate != null) templateResponseDuplicate.gameObject.SetActive(false);
+            if (templateSubtitleContentElement != null) templateSubtitleContentElement.gameObject.SetActive(false);
         }
         //public UnityEvent onDuplicateReveal;
 
@@ -38,6 +37,8 @@ namespace Project.Runtime.Scripts.Manager
         public void ClearContents()
         {
 
+            if (duplicatedSubtitleContentContainer == null) return;
+            
             var children = duplicatedSubtitleContentContainer.transform.GetChildren(exclude: (templateResponseDuplicate.transform, templateSubtitleContentElement.transform), directChildrenOnly: true).ToList();
             
             foreach (var child in children)
@@ -54,6 +55,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public void RefreshContents()
         {
+            if (templateSubtitleContentElement == null) return;
             if (!templateSubtitleContentElement.PortraitActive) templateSubtitleContentElement.HidePortraitHelper();
             else templateSubtitleContentElement.ShowPortraitHelper();
             RefreshLayoutGroups.Refresh(gameObject);
