@@ -160,6 +160,7 @@ namespace Project.Runtime.Scripts.Manager
             instance.mainCanvas.BroadcastMessage("SetTrigger", "Show", SendMessageOptions.DontRequireReceiver);
         }
         
+        
         public static void DoLocalSave()
         {
             PixelCrushers.SaveSystem.SaveToSlot(1);
@@ -258,6 +259,7 @@ namespace Project.Runtime.Scripts.Manager
 
             IEnumerator TravelToHandler()
             {
+                
                 yield return App.App.Instance.ChangeScene(newLocation, currentScene, loadingScreenType);
             
                 while (App.App.isLoading)
@@ -271,7 +273,7 @@ namespace Project.Runtime.Scripts.Manager
                 
                 OnGameSceneStart?.Invoke();
 
-                Debug.Log("current scene chaned to :" + newLocation);
+                if (newLocation != "StartMenu") Log("Arrived at " + newLocation, LogType.Travel);
                 gameState.current_scene = newLocation;
             }
         }
@@ -279,6 +281,27 @@ namespace Project.Runtime.Scripts.Manager
         public void Wait(int duration)
         {
             GameEvent.OnWait(duration);
+        }
+        
+        public enum LogType
+        {
+            Default,
+            Travel,
+        }
+        
+        public static void Log(string message, LogType type = LogType.Default)
+        {
+            var log = DialogueLua.GetVariable("game.log").asString;
+            var color = type switch
+            {
+                LogType.Default => string.Empty,
+                LogType.Travel => "<color=#98fff3>",
+                _ => string.Empty
+            };
+            
+            
+            log += $"[br({color}{Clock.CurrentTime})] {color}{message}";
+            DialogueLua.SetVariable("game.log", log);
         }
         
         

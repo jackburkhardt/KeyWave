@@ -25,26 +25,16 @@ public class TextImageFormatter : MonoBehaviour
     [SerializeField] private Image _imageTemplate;
     [SerializeField] private RectTransform _imageTemplateHolder;
     
-    [ReadOnly] private string imagePlaceholder = "[img($addressablePath)]";
-    
- 
+    [ReadOnly] [SerializeField] private string imagePlaceholder = "[img($addressablePath)]";
     
     
-    private enum TextTemplateType
-    {
-        Default,
-        LayoutGroup
-    }
-    
-    
-    
+    [SerializeField] private UITextField _newLineTemplate;
+    [ReadOnly] [SerializeField] private string _newLinePlaceholder = "[br($text)]";
     
 
     private void OnValidate()
     {
-
-
-       
+        
     }
 
     private void Awake()
@@ -54,6 +44,7 @@ public class TextImageFormatter : MonoBehaviour
         _textTemplateHolder.gameObject.SetActive(false);
         _imageTemplate.gameObject.SetActive(false);
         _imageTemplateHolder.gameObject.SetActive(false);
+        _newLineTemplate.gameObject.SetActive(false);
     }
     
     private string _previousText;
@@ -109,27 +100,44 @@ public class TextImageFormatter : MonoBehaviour
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(part)) continue;
+              
                 
-                currentImageContainer = null;
+                var newLinePattern = @"(\[br\(.*?\)\])";
+                var newLineResult = Regex.Split(part, newLinePattern);
                 
-                if (currentTextContainer == null)
+                foreach (var newLinePart in newLineResult)
                 {
-                    currentTextContainer = Instantiate(_textTemplateHolder.gameObject, transform);
-                    currentTextContainer.SetActive(true);
-                }
+                    if (string.IsNullOrWhiteSpace(newLinePart)) continue;
+                    currentImageContainer = null;
+                    
+                    var newText = newLinePart;
+                    var template = _textTemplate;
+
+                    if (Regex.IsMatch(newLinePart, newLinePattern))
+                    {
+                        newText = newLinePart.Replace("[br(", "").Replace(")]", "");
+                        currentTextContainer = null;
+                        template = _newLineTemplate;
+                    }
+                    
+                    if (currentTextContainer == null)
+                    {
+                        currentTextContainer = Instantiate(_textTemplateHolder.gameObject, transform);
+                        currentTextContainer.SetActive(true);
+                    }
+
+                    var textObject = Instantiate(template.gameObject, currentTextContainer.transform);
+                        textObject.SetActive(true);
                 
-                var textObject = Instantiate(_textTemplate.gameObject, currentTextContainer.transform);
-                textObject.SetActive(true);
-                var textType = _textTemplate.textMeshProUGUI != null ? typeof(TextMeshProUGUI) : typeof(Text);
-                
-                if (_textTemplate.textMeshProUGUI != null)
-                {
-                    textObject.GetComponent<TextMeshProUGUI>().text = part;
-                }
-                if (_textTemplate.uiText != null)
-                {
-                    textObject.GetComponent<Text>().text = part;
+                    if (template.textMeshProUGUI != null)
+                    {
+                        textObject.GetComponent<TextMeshProUGUI>().text = newText;
+                    }
+                    
+                    if (template.uiText != null)
+                    {
+                        textObject.GetComponent<Text>().text = newText;
+                    }
                 }
             }
         }
@@ -146,7 +154,9 @@ public class TextImageFormatter : MonoBehaviour
             if (t == _imageTemplateHolder) continue;
             if (t == _imageTemplate.transform) continue;
             if (t == _textTemplate.gameObject.transform) continue;
+            if (t == _newLineTemplate.gameObject.transform) continue;
             if (t == null) continue;
+            
             
             Destroy(t.gameObject);
         }

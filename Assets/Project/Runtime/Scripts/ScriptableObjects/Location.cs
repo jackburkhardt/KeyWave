@@ -98,6 +98,9 @@ namespace Project.Runtime.Scripts.ScriptableObjects
         {
             LastLocation = FromString(GameManager.gameState.PlayerLocation);
             if (LastLocation.area != Area.Café) LastNonCaféLocation = LastLocation;
+            
+            GameManager.Log("Left " + LastLocation.Name, GameManager.LogType.Travel);
+            
             GameEvent.OnMove(this.Name, LastLocation, Distance);
             
             GameManager.instance.TravelTo(this);
