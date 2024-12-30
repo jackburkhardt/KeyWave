@@ -60,24 +60,31 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
             }
         }
         
-        base.ShowSubtitle(subtitle); 
+        base.ShowSubtitle(subtitle);
         
-        //accumulate subtitle as hidden object if accumulateByInstantiation is true
-        if (accumulateText && accumulateByInstantiation && !string.IsNullOrWhiteSpace(subtitleText.text))
+        if (accumulateText && accumulateByInstantiation) StartCoroutine(Accumulate(subtitle));
+        
+        IEnumerator Accumulate(Subtitle sub)
         {
-            var duplicate = Instantiate(templateContent, accumulatedContentHolder);
-            var typewriter = duplicate.GetComponentInChildren<AbstractTypewriterEffect>();
-        
-            if (typewriter != null)
-            {
-                typewriter.Stop();
-                typewriter.enabled = false;
-            }
+            while (subtitleText.text != subtitle.formattedText.text) yield return new WaitForEndOfFrame();
             
-            duplicate.gameObject.SetActive(false);
-        }
+            if (!string.IsNullOrWhiteSpace(sub.formattedText.text))
+            {
+                var duplicate = Instantiate(templateContent, accumulatedContentHolder);
+                var typewriter = duplicate.GetComponentInChildren<AbstractTypewriterEffect>();
         
-        RefreshLayoutGroups.Refresh(gameObject);
+                if (typewriter != null)
+                {
+                    typewriter.Stop();
+                    typewriter.enabled = false;
+                }
+            
+                duplicate.gameObject.SetActive(false);
+            }
+        
+            RefreshLayoutGroups.Refresh(gameObject);
+        }
+      
     }
 
 

@@ -1719,7 +1719,7 @@ MonoBehaviour:
       value: Douglas Fisher
       type: 0
       typeString: 
-    portrait: {fileID: 0}
+    portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
@@ -1765,7 +1765,7 @@ MonoBehaviour:
       value: Daniel Oliviera
       type: 0
       typeString: 
-    portrait: {fileID: 0}
+    portrait: {fileID: 2800000, guid: 762578987ad3700499d69a68f74189c8, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
@@ -2288,7 +2288,7 @@ MonoBehaviour:
     - title: Name
       value: Harbor/Action/Beach
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Pictures
       value: '[]'
       type: 3
@@ -2296,19 +2296,19 @@ MonoBehaviour:
     - title: Description
       value: Had a relaxing time at the beach. Hopefully you're not sunburned tomorrow.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Success Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Failure Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: State
       value: active
       type: 12
-      typeString: 
+      typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
@@ -2316,7 +2316,7 @@ MonoBehaviour:
     - title: Display Name
       value: Relax at the beach.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Duration
       value: 45:minutes
       type: 11
@@ -30511,7 +30511,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Daniel! Attaboy! I was hoping you'd call me. What's up?
+        value: Daniel! Attaboy! I was hoping you'd call me.
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -30545,7 +30545,7 @@ MonoBehaviour:
       - originConversationID: 77
         originDialogueID: 89
         destinationConversationID: 77
-        destinationDialogueID: 71
+        destinationDialogueID: 156
         isConnector: 0
         priority: 2
       conditionsString: Dialog[thisID].SimStatus ~= "WasDisplayed"
@@ -30555,8 +30555,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 757.88086
-        y: 93.16768
+        x: 754.4022
+        y: 61.85965
         width: 160
         height: 30
     - id: 90
@@ -30791,7 +30791,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Hey Daniel! What's up?
+        value: Hey Daniel! Nice to hear from you again.
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -30829,7 +30829,7 @@ MonoBehaviour:
       - originConversationID: 77
         originDialogueID: 96
         destinationConversationID: 77
-        destinationDialogueID: 80
+        destinationDialogueID: 155
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -30839,8 +30839,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1509.4152
-        y: 283.99826
+        x: 1401.1987
+        y: 276.27435
         width: 160
         height: 30
     - id: 97
@@ -34824,6 +34824,156 @@ MonoBehaviour:
         y: 1119.5984
         width: 160
         height: 30
+    - id: 155
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 45
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 46
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: What questions do you have from me?
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 77
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 155
+        destinationConversationID: 77
+        destinationDialogueID: 80
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1396.112
+        y: 370.06232
+        width: 160
+        height: 30
+    - id: 156
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 45
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 46
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: What's on your mind?
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Invalid Text
+        value: ???
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 77
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 156
+        destinationConversationID: 77
+        destinationDialogueID: 71
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 744.8336
+        y: 121.864365
+        width: 160
+        height: 30
     entryGroups:
     - name: Douglas Hints
       rect:
@@ -34849,8 +34999,8 @@ MonoBehaviour:
         width: 1034.2877
         height: 601.3593
       color: {r: 1, g: 1, b: 1, a: 0.5}
-    canvasScrollPosition: {x: 1428.4409, y: 96.78826}
-    canvasZoom: 0.6079336
+    canvasScrollPosition: {x: 846.151, y: 16.900002}
+    canvasZoom: 0.68043214
   - id: 78
     fields:
     - title: Title
@@ -34952,8 +35102,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 3512.8342
-        y: 94.74846
+        x: 3485.2727
+        y: 127.103165
         width: 160
         height: 30
     - id: 1
@@ -35023,7 +35173,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 3505.0771
+        x: 3484.7056
         y: 208.24792
         width: 160
         height: 30
@@ -35308,7 +35458,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 3475.6548
+        x: 3478.0515
         y: 408.10413
         width: 160
         height: 30
@@ -35683,7 +35833,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 3507.9814, y: 196.95236}
+    canvasScrollPosition: {x: 3323.4402, y: 44.765488}
     canvasZoom: 0.8345002
   - id: 82
     fields:
@@ -85003,8 +85153,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 295.44534
-        y: 160.36356
+        x: 294.1164
+        y: 136.44331
         width: 160
         height: 30
     - id: 20
@@ -85022,11 +85172,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 5
+        value: 38
         type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: Read Douglas Fischer's email.
+        value: Welcome to Vitoria!
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -85078,8 +85228,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 87.13382
-        y: 247.19379
+        x: 62.990646
+        y: 260.391
         width: 160
         height: 30
     - id: 21
@@ -85097,11 +85247,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 12
+        value: 38
         type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: Read Francisco Prado's email.
+        value: To All Vitoria Staff
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -85153,8 +85303,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 457.53763
-        y: 257.8955
+        x: 484.1157
+        y: 251.251
         width: 160
         height: 30
     - id: 22
@@ -85314,11 +85464,11 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       - title: Actor
         value: 38
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 5
-        type: 5
+        value: 38
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: "Hi Daniel, hope you have been able to enjoy some time off before
@@ -85332,7 +85482,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: 
+        value: Continue()@0.1
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -85376,8 +85526,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 82.64705
-        y: 398.15125
+        x: 45.437775
+        y: 372.9021
         width: 160
         height: 30
     - id: 25
@@ -85392,11 +85542,11 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       - title: Actor
         value: 38
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 12
-        type: 5
+        value: 38
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: "To all our Vitoria staff,\n<br>\nTomorrow, we will be welcoming our
@@ -85410,7 +85560,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: 
+        value: Continue()@0.1
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -85454,13 +85604,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 457.53763
-        y: 379.32404
+        x: 494.74692
+        y: 389.95526
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.7035006
+    canvasScrollPosition: {x: 5.978696, y: 25.757664}
+    canvasZoom: 0.49300283
   - id: 192
     fields:
     - title: Title
@@ -91602,7 +91752,7 @@ MonoBehaviour:
         width: 229.80002
         height: 105.000015
       color: {r: 1, g: 1, b: 1, a: 0.5}
-    canvasScrollPosition: {x: 271.08215, y: 58.355377}
+    canvasScrollPosition: {x: 10.074493, y: 40.318268}
     canvasZoom: 0.9425011
   - id: 194
     fields:
@@ -92755,8 +92905,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 271.47922
-        y: 55.88205
+        x: 331.16397
+        y: 1
         width: 160
         height: 30
     - id: 26
@@ -92846,8 +92996,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 272.21008
-        y: 128.48918
+        x: 360.0479
+        y: 127.36305
         width: 160
         height: 30
     - id: 27
@@ -92925,8 +93075,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 134.4386
-        y: 211.81287
+        x: 134.60806
+        y: 237.42651
         width: 160
         height: 30
     - id: 28
@@ -93004,8 +93154,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 408.84616
-        y: 246.18756
+        x: 385.7203
+        y: 235.3974
         width: 160
         height: 30
     - id: 29
@@ -93090,8 +93240,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 161.63121
-        y: 446.329
+        x: 130.09969
+        y: 423.80652
         width: 160
         height: 30
     - id: 30
@@ -93204,8 +93354,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 365.13425
-        y: 448.76532
+        x: 390.44623
+        y: 433.26276
         width: 160
         height: 30
     - id: 31
@@ -93283,8 +93433,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 589.4276
-        y: 206.31526
+        x: 621.96747
+        y: 232.21614
         width: 160
         height: 30
     - id: 32
@@ -93314,7 +93464,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: 
+        value: Continue()@0.1
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -93348,7 +93498,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 196
+        originDialogueID: 32
+        destinationConversationID: 196
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -93356,13 +93512,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 591.017
-        y: 373.05127
+        x: 629.3053
+        y: 429.35748
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 536.80066, y: 249.77975}
-    canvasZoom: 2
+    canvasScrollPosition: {x: 195.30501, y: 0}
+    canvasZoom: 0.6000024
   - id: 197
     fields:
     - title: Title

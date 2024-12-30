@@ -61,6 +61,8 @@ public class TextImageFormatter : MonoBehaviour
         
         _previousText = _sourceText.text;
         
+        Debug.Log("Text changed to " + _sourceText.text);
+        
         SetFormattedText(_sourceText.text);
     }
 
@@ -75,7 +77,6 @@ public class TextImageFormatter : MonoBehaviour
         
         foreach (var part in result)
         {
-            Debug.Log(part);
             
             if (Regex.IsMatch(part, pattern))
             {
