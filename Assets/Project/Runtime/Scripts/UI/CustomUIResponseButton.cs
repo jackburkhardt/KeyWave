@@ -298,7 +298,7 @@ namespace Project.Runtime.Scripts.UI
             Refresh();
             
             
-            
+            MenuPanelContainer ??= GetComponentInParent<CustomUIMenuPanel>(true);
             
         }
 
@@ -445,12 +445,31 @@ namespace Project.Runtime.Scripts.UI
 
         public override void OnClick()
         {
+
+
+
+
             if (_animator != null && !string.IsNullOrEmpty(_hideAnimationTrigger))
             {
-                if (_waitForHideAnimation) StartCoroutine(SetAnimationTriggerAndWait(_hideAnimationTrigger, base.OnClick));
-                else base.OnClick();
+                if (_waitForHideAnimation)
+                    StartCoroutine(SetAnimationTriggerAndWait(_hideAnimationTrigger, DoClick));
+                else DoClick();
             }
-            else base.OnClick();
+            else DoClick();
+
+            void DoClick()
+            {
+                 
+                if (MenuPanelContainer != null && MenuPanelContainer.accumulateResponse && MenuPanelContainer.accumulatedResponseContainer != null)
+                {
+                    MenuPanelContainer.OnChoiceClick(this);
+                }
+                
+                base.OnClick();
+            }
+            
+            
+
         }
         
         private IEnumerator SetAnimationTriggerAndWait(string trigger, Action callback, int stateIndex = 0)

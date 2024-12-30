@@ -1,6 +1,7 @@
 using System.Linq;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.UI;
 
 namespace Project.Runtime.Scripts.DialogueSystem
 {
@@ -9,7 +10,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
     {
         public void Awake()
         {
-            var subtitleManager = FindObjectsOfType<SubtitleManager>().Where(x => x.gameObject.activeSelf);
+            var subtitleManager = FindObjectsOfType<CustomUISubtitlePanel>().Where(x => x.gameObject.activeSelf);
             foreach (var manager in subtitleManager)
             {
                 manager.ClearContents();

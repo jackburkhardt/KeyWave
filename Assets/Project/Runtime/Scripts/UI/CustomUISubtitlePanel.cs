@@ -9,12 +9,15 @@ using UnityEngine;
 public class CustomUISubtitlePanel : StandardUISubtitlePanel
 {
    
-
-    public bool useAlternateCloseTrigger;
-    [ShowIf("useAlternateCloseTrigger")]
-    public string alternateCloseTrigger;
+    
     public string unintroducedSpeakerName;
     public UITextField conversantName;
+    
+    public RectTransform templateContent;
+    public RectTransform accumulatedContentHolder;
+    
+    public bool accumulateByInstantiation;
+    
   
     public override void Close()
     {
@@ -41,44 +44,45 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         RefreshLayoutGroups.Refresh(gameObject);
     }
 
-    public override void HideSubtitle(Subtitle subtitle)
-    {
-        if (!useAlternateCloseTrigger)
-        {
-            base. HideSubtitle(subtitle); return;
-        }
-        
-        if (panelState != PanelState.Closed) Unfocus();
-        CloseNow();
-    }
+    
     
     public override void ShowSubtitle(Subtitle subtitle)
     {
-        conversantName.text = subtitle.listenerInfo.Name;
-        
-        if (!useAlternateCloseTrigger)
+        //show all accumulated subtitles
+        if (accumulateText && accumulateByInstantiation)
         {
-            base.ShowSubtitle(subtitle); return;
+            foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
+            {
+                if (go.parent == accumulatedContentHolder)
+                {
+                    go.gameObject.SetActive(true);
+                }
+            }
         }
         
-        var supercedeOnActorChange = waitForClose && isOpen && visibility == UIVisibility.UntilSupercededOrActorChange &&
-                                     subtitle != null && lastActorID != subtitle.speakerInfo.id;
-        if ((waitForClose && dialogueUI.AreAnyPanelsClosing(this)) || supercedeOnActorChange)
+        base.ShowSubtitle(subtitle); 
+        
+        //accumulate subtitle as hidden object if accumulateByInstantiation is true
+        if (accumulateText && accumulateByInstantiation && !string.IsNullOrWhiteSpace(subtitleText.text))
         {
-            if (supercedeOnActorChange) CloseNow();
-            StopShowAfterClosingCoroutine();
-            m_showAfterClosingCoroutine = DialogueManager.instance.StartCoroutine(ShowSubtitleAfterClosing(subtitle));
+            var duplicate = Instantiate(templateContent, accumulatedContentHolder);
+            var typewriter = duplicate.GetComponentInChildren<AbstractTypewriterEffect>();
+        
+            if (typewriter != null)
+            {
+                typewriter.Stop();
+                typewriter.enabled = false;
+            }
+            
+            duplicate.gameObject.SetActive(false);
         }
-        else
-        {
-            ShowSubtitleNow(subtitle);
-        }
+        
+        RefreshLayoutGroups.Refresh(gameObject);
     }
 
 
     protected override void SetSubtitleTextContent(Subtitle subtitle)
     {
-
         if (addSpeakerName && !string.IsNullOrEmpty(subtitle.speakerInfo.Name))
         {
             subtitle.formattedText.text =
@@ -91,11 +95,11 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
                     : FormattedText.Parse(string.Format(addSpeakerNameFormat,
                         new object[] { subtitle.speakerInfo.Name, subtitle.formattedText.text })).text;
         }
-
-
+        
+        if (conversantName != null) conversantName.text = subtitle.listenerInfo.Name;
 
         TypewriterUtility.StopTyping(subtitleText);
-        var previousText = accumulateText ? accumulatedText : string.Empty;
+        var previousText = accumulateText  && !accumulateByInstantiation ? accumulatedText : string.Empty;
         if (accumulateText && !string.IsNullOrEmpty(subtitle.formattedText.text))
         {
             if (numAccumulatedLines < maxLines)
@@ -128,23 +132,23 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
             TypewriterUtility.StartTyping(subtitleText, subtitleText.text, previousChars);
         }
     }
-
-    public void StopTypewriterOrContinue()
+    
+    
+    public void ClearContents()
     {
-        var typewriter = subtitleText.gameObject.GetComponent<TextMeshProTypewriterEffect>();
-        
-        if (typewriter != null)
+        accumulatedText = string.Empty;
+        numAccumulatedLines = 0;
+        foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
         {
-            if (typewriter.IsPlaying)
+            if (go.parent == accumulatedContentHolder)
             {
-                typewriter.Stop();
-            }
-            else
-            {
-                OnContinue();
+                Destroy(go.gameObject);
             }
         }
+        subtitleText.text = string.Empty;
     }
+    
+   
 
 
     public void OnSuperceded()

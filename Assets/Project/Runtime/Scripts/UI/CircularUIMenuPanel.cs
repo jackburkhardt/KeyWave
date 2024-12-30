@@ -185,7 +185,7 @@ namespace Project.Runtime.Scripts.UI
         }
 
 
-        public override void OnChoiceSelection(CustomUIResponseButton customUIResponseButton)
+        public override void OnChoiceClick(StandardUIResponseButton customUIResponseButton)
         {
             //if (!Animator!.GetBool("Active")) return;
             WatchHandCursor.Freeze();

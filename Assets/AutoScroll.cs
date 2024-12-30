@@ -45,7 +45,6 @@ public class AutoScroll : MonoBehaviour
         
         if (_oldSize != contentRect.sizeDelta)
         {
-            Debug.Log("Content size changed, scrolling to bottom.");
             shouldScroll = true;
             _oldSize = contentRect.sizeDelta;
             Canvas.ForceUpdateCanvases();

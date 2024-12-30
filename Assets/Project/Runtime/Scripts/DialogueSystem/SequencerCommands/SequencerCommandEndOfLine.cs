@@ -77,7 +77,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
         
         Sequencer.PlaySequence("SetContinueMode(false);");
         
-        debug = true;
+        debug = false;
 
         if (sequencer.GetDialogueEntry() == null && conversationType != string.Empty && title.EndsWith("Base"))
         {

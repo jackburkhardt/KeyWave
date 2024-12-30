@@ -26,11 +26,25 @@ namespace PixelCrushers.DialogueSystem
             EditorGUILayout.PropertyField(serializedObject.FindProperty("useAnimatedPortraits"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("usePortraitNativeSize"), true);
             var accumulateTextProperty = serializedObject.FindProperty("accumulateText");
+            var accumulateByInstantiationProperty = serializedObject.FindProperty("accumulateByInstantiation");
             EditorGUILayout.PropertyField(accumulateTextProperty, true);
             if (accumulateTextProperty.boolValue)
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("maxLines"), true); 
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("accumulateByInstantiation"), true); 
+                
+                if (accumulateByInstantiationProperty.boolValue)
+                {
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("templateContent"), true);
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("accumulatedContentHolder"), true);
+                }
             }
+            
+            
+            
+            
+            
+            
             EditorGUILayout.PropertyField(serializedObject.FindProperty("addSpeakerName"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("addSpeakerNameFormat"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("unintroducedSpeakerName"), true);
@@ -58,6 +72,7 @@ namespace PixelCrushers.DialogueSystem
             EditorGUILayout.PropertyField(serializedObject.FindProperty("waitForClose"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("m_deactivateOnHidden"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clearTextOnClose"), true);
+            
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onOpen"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onClose"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("onClosed"), true);

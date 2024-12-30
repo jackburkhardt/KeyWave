@@ -26521,8 +26521,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1181.0083
-        y: 406.49756
+        x: 1182.5084
+        y: 405.74753
         width: 160
         height: 30
     - id: 5
@@ -26605,8 +26605,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 928.2965, y: 72.36882}
-    canvasZoom: 1.33325
+    canvasScrollPosition: {x: 992.9867, y: 6.810713}
+    canvasZoom: 0.83525056
   - id: 77
     fields:
     - title: Title
@@ -26626,12 +26626,12 @@ MonoBehaviour:
       type: 5
       typeString: CustomFieldType_Actor
     overrideSettings:
-      useOverrides: 0
-      overrideSubtitleSettings: 0
+      useOverrides: 1
+      overrideSubtitleSettings: 1
       showNPCSubtitlesDuringLine: 1
       showNPCSubtitlesWithResponses: 1
-      showPCSubtitlesDuringLine: 0
-      skipPCSubtitleAfterResponseMenu: 0
+      showPCSubtitlesDuringLine: 1
+      skipPCSubtitleAfterResponseMenu: 1
       subtitleCharsPerSecond: 30
       minSubtitleSeconds: 2
       continueButton: 0
@@ -26708,8 +26708,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2068.2737
-        y: 26.489647
+        x: 1727.9073
+        y: 56.905357
         width: 160
         height: 30
     - id: 1
@@ -30392,7 +30392,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 84
+        destinationConversationID: 193
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: SetQuestState("Hotel/Talk/Douglas", "success")
       onExecute:
@@ -30400,8 +30406,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1477.4288
-        y: 615.7384
+        x: 1610.54
+        y: 582.4385
         width: 160
         height: 30
     - id: 87
@@ -34843,18 +34849,18 @@ MonoBehaviour:
         width: 1034.2877
         height: 601.3593
       color: {r: 1, g: 1, b: 1, a: 0.5}
-    canvasScrollPosition: {x: 573.0341, y: 0}
-    canvasZoom: 0.47143164
+    canvasScrollPosition: {x: 1428.4409, y: 96.78826}
+    canvasZoom: 0.6079336
   - id: 78
     fields:
     - title: Title
       value: SmartWatch/Phone/Francisco
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Actor
       value: 18
       type: 5
@@ -34946,8 +34952,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 3546.3464
-        y: 86.70558
+        x: 3512.8342
+        y: 94.74846
         width: 160
         height: 30
     - id: 1
@@ -35081,7 +35087,7 @@ MonoBehaviour:
         destinationDialogueID: 112
         isConnector: 0
         priority: 2
-      conditionsString: Dialog[thisID].SimStatus ~= "WasDisplayed"
+      conditionsString: 
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -35550,7 +35556,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: EndOfLine();
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -35580,7 +35586,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 78
+        originDialogueID: 125
+        destinationConversationID: 193
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -35588,8 +35600,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 3698.628
-        y: 514.86084
+        x: 3686.449
+        y: 616.3492
         width: 160
         height: 30
     - id: 126
@@ -35671,8 +35683,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 3005.0962, y: 97.671326}
-    canvasZoom: 0.7400002
+    canvasScrollPosition: {x: 3507.9814, y: 196.95236}
+    canvasZoom: 0.8345002
   - id: 82
     fields:
     - title: Title
@@ -51774,16 +51786,16 @@ MonoBehaviour:
           organized by brand to make them easier to find. The items that are on sale
           are clearly identified with a bright yellow tag that catches the eye.
 
-          
+
 
           You
           snap a few pictures of these details to study later, but you''re trying
           to be inconspicuous.
 
-          
 
-          Out of the corner of your
-          eye, you can see someone approaching you.'
+
+          Out of the corner of your eye, you can
+          see someone approaching you.'
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -51861,10 +51873,10 @@ MonoBehaviour:
         value: 'His name tag reads Dilan (Assistant Manager) and he offers a polite
           smile.
 
-          
 
-          "Hello. I noticed you were taking pictures
-          in the store. Can I help you find anything in particular?"'
+
+          "Hello. I noticed you were taking pictures in the store.
+          Can I help you find anything in particular?"'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -52162,14 +52174,14 @@ MonoBehaviour:
       - title: Dialogue Text
         value: 'He frowns for a moment, then regains his composure.
 
-          
+
 
           "I''m
           sorry but we have a strict no pictures policy. You''re welcome to shop
           or browse, but please refrain from taking photos or videos of other shoppers
           or the store. "
 
-          
+
 
           You are walking a fine line here.'
         type: 0
@@ -52376,16 +52388,16 @@ MonoBehaviour:
       - title: Dialogue Text
         value: 'Dilan looks taken aback.
 
-          
 
-          "While our location
-          within the mall isn''t that great, our team works hard to be welcoming
-          and provide professional service. I think that''s the key."
 
-          
+          "While our location within
+          the mall isn''t that great, our team works hard to be welcoming and provide
+          professional service. I think that''s the key."
 
-          He
-          continues, "That''s an interesting question, how come you are asking?"'
+
+
+          He continues,
+          "That''s an interesting question, how come you are asking?"'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -52458,14 +52470,14 @@ MonoBehaviour:
       - title: Dialogue Text
         value: 'He frowns for a moment, then regains his composure.
 
-          
+
 
           "I''m
           sorry but we have a strict no pictures policy. You''re welcome to shop
           or browse, but please refrain from taking photos or videos of other shoppers
           or the store. "
 
-          
+
 
           You are walking a fine line here.'
         type: 0
@@ -52690,13 +52702,13 @@ MonoBehaviour:
           shelf. Now you''re listening in on the behavior of the employees and taking
           notes in your head.
 
-          
 
-          The employees have a series
-          of bells that they ring to signal when a department needs additional staff.
-          This seems to help them get customers'' problems solved much faster.
 
-          
+          The employees have a series of bells that
+          they ring to signal when a department needs additional staff. This seems
+          to help them get customers'' problems solved much faster.
+
+
 
           These
           employees also go the extra mile to help close a sale. Even if they don''t
@@ -59794,7 +59806,7 @@ MonoBehaviour:
       - title: Menu Text
         value: 'This approach has a better chance of working.
 
-          
+
 
           Humor
           is an excellent way to maintain engagement, just make sure that your jokes
@@ -65115,7 +65127,7 @@ MonoBehaviour:
       - title: Dialogue Text
         value: 'She looks you up and down and then gives a slight shrug.
 
-          
+
 
           "Oh,
           right, they told us you were coming. Welcome to Vitoria, Daniel. I hope
@@ -65192,11 +65204,11 @@ MonoBehaviour:
       - title: Dialogue Text
         value: 'She beams a smile at you.
 
-          
 
-          "Pleased to meet
-          you, Daniel! I heard you were going to join us and we''re excited to have
-          a new face here. Most of us, anyways..."'
+
+          "Pleased to meet you, Daniel!
+          I heard you were going to join us and we''re excited to have a new face
+          here. Most of us, anyways..."'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -67447,7 +67459,7 @@ MonoBehaviour:
       - title: Menu Text
         value: 'A woman''s voice calls out from the other side of the door.
 
-          
+
 
           "Yes!?
           Who is it?!"'
@@ -67987,7 +67999,7 @@ MonoBehaviour:
         value: 'You open the door to see an older woman hovering over a stack of
           papers. She is startled by your entry and looks over disapprovingly.
 
-          
+
 
           "Excuse
           me, but this area of the store is restricted to staff and management."'
@@ -91215,7 +91227,7 @@ MonoBehaviour:
         width: 349.9491
         height: 308.8964
       color: {r: 0.6392157, g: 0.7019608, b: 0.93333334, a: 0.5019608}
-    canvasScrollPosition: {x: 1522.9492, y: 1187.1761}
+    canvasScrollPosition: {x: 1850.8396, y: 1247.2676}
     canvasZoom: 0.7654996
   - id: 193
     fields:
@@ -91590,8 +91602,8 @@ MonoBehaviour:
         width: 229.80002
         height: 105.000015
       color: {r: 1, g: 1, b: 1, a: 0.5}
-    canvasScrollPosition: {x: 0, y: 3.9684906}
-    canvasZoom: 1.1405008
+    canvasScrollPosition: {x: 271.08215, y: 58.355377}
+    canvasZoom: 0.9425011
   - id: 194
     fields:
     - title: Title

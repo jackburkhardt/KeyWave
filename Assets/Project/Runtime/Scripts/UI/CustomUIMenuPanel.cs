@@ -19,7 +19,9 @@ namespace Project.Runtime.Scripts.UI
         public static List<string> CustomFields = new List<string>
         {
           "buttonStyles",
-          "persistentMenuPanel"
+          "persistentMenuPanel",
+          "accumulateResponse",
+          "accumulatedResponseContainer"
         };
         
 
@@ -29,6 +31,13 @@ namespace Project.Runtime.Scripts.UI
         public List<CustomUIResponseButton> ResponseButtons => GetComponentsInChildren<CustomUIResponseButton>().ToList();
         
         public bool persistentMenuPanel = false;
+
+        public bool accumulateResponse;
+        
+        [ShowIf("accumulateResponse")]
+        public RectTransform accumulatedResponseContainer;
+        
+        
         
 
         #region overrides
@@ -105,6 +114,17 @@ namespace Project.Runtime.Scripts.UI
                     }
                 }
                 
+                else if (response.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title == "SmartWatch/Phone/Base")
+                {
+                    var style = buttonStyles.Find(x => x.condition == ResponseButtonStyle.styleCondition.EntryLeadsToSmartWatchPhone);
+                    if (style != null && style.responseButton != null)
+                    {
+                        var button = Instantiate(style.responseButton.gameObject);
+                        button.SetActive(true);
+                        return button;
+                    }
+                }
+                
                 var defaultButton = Instantiate(buttonTemplate.gameObject);
                 defaultButton.SetActive(true);
                 return defaultButton;
@@ -154,7 +174,7 @@ namespace Project.Runtime.Scripts.UI
                         {
                             instantiatedButtons.Add(buttonGameObject);
                             
-                            Debug.Log("Instantiated button count : " + instantiatedButtons.Count);
+                 
                             
                             buttonGameObject.transform.SetParent(buttonTemplateHolder.transform, false);
                             buttonGameObject.transform.SetAsLastSibling();
@@ -258,7 +278,8 @@ namespace Project.Runtime.Scripts.UI
             public enum styleCondition
             {
                 EntryHasNoOutgoingLinks,
-                EntryLeadsToSmartWatchActions
+                EntryLeadsToSmartWatchActions,
+                EntryLeadsToSmartWatchPhone
             }
             
             public styleCondition condition;
@@ -272,30 +293,44 @@ namespace Project.Runtime.Scripts.UI
         
      
        
-        public virtual void OnChoiceSelection(CustomUIResponseButton customUIResponseButton)
+        public virtual void OnChoiceClick(StandardUIResponseButton responseButton)
         {
-        
-       if (customUIResponseButton.simStatus == "WasDisplayed")
-       {
-           Clock.Freeze(true);
-       }
 
-       var destinationEntry = customUIResponseButton.response.destinationEntry;
-
-       if (destinationEntry.outgoingLinks.Count == 0)
-       {
-           var title = destinationEntry.GetConversation().Title;
-           var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
-           if (title != baseConversation)
+            
+           var destinationEntry = responseButton.response.destinationEntry;
+           
+           if (destinationEntry.SimStatus() == "WasDisplayed")
            {
-               Debug.Log("Last node, going to base conversation.");
-               DialogueManager.PlaySequence("GoToConversation(" + baseConversation + ", true);");
+               Clock.Freeze(true);
            }
-           else Debug.Log("Last node, not going to base conversation.");
-       }
 
-   
-    
+           if (destinationEntry.outgoingLinks.Count == 0)
+           {
+               
+               var title = destinationEntry.GetConversation().Title;
+               var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
+               if (title != baseConversation)
+               {
+                   Debug.Log("No outgoing links. Going to base conversation :" + baseConversation);
+                   DialogueManager.PlaySequence("GoToConversation(" + baseConversation + ", true);");
+               }
+           }
+
+           else
+           {
+               if (accumulateResponse && accumulatedResponseContainer != null)
+               {
+                   var text = responseButton.text;
+                   var button = Instantiate(responseButton, accumulatedResponseContainer);
+                   button.gameObject.SetActive(true);
+                   button.button.interactable = false;
+                   button.enabled = false;
+                   button.text = text;
+            
+                   RefreshLayoutGroups.Refresh(accumulatedResponseContainer.gameObject);
+               }
+
+           }
         }
    
 
@@ -353,6 +388,9 @@ namespace Project.Runtime.Scripts.UI
         {
            CloseNow();
         }
+        
+        
+        
 
        
     }
