@@ -12,7 +12,7 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private RectTransform pointsBarUnitTemplate;
 
         private List<RectTransform> PointsBarUnits => layoutGroup.GetComponentsInChildren<RectTransform>().Where(p => p.transform != layoutGroup.transform && p.gameObject.activeSelf).ToList();
-        private float UnitMinWidth =>  layoutGroup.GetComponent<RectTransform>().rect.width / Points.MaxScore;
+        private float UnitMinWidth =>  layoutGroup.GetComponent<RectTransform>().rect.width / Points.TotalMaxScore;
         private float LayoutGroupWidth => layoutGroup.GetComponent<RectTransform>().rect.width;
 
         private float TotalUnitWidth

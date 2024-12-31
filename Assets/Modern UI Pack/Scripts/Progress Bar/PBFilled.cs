@@ -28,6 +28,7 @@ namespace Michsky.MUIP
 
         void Update()
         {
+            return;
             if (progressBar.currentPercent >= transitionAfter)
                 barAnimatior.Play("Radial PB Filled");
 

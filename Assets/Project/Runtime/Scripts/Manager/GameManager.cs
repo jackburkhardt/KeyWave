@@ -256,6 +256,7 @@ namespace Project.Runtime.Scripts.Manager
             StartCoroutine(TravelToHandler());
 
             DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
+            DialogueManager.PlaySequence("ChannelFade(Environment, out, 1);");
 
             IEnumerator TravelToHandler()
             {

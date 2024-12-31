@@ -395,7 +395,7 @@ namespace Project.Runtime.Scripts.UI
                 {
                     var locationIndex = Field.LookupInt(response.destinationEntry.fields, locationField);
                         
-                    var location = Location.FromString(DialogueManager.instance.masterDatabase.locations[locationIndex].Name); 
+                    var location = Location.FromString(DialogueManager.instance.masterDatabase.locations.Find(p => p.id == locationIndex).Name); 
                     
                     //Debug.Log(Field.LookupValue(response.destinationEntry.fields, locationField));
                     
@@ -405,11 +405,11 @@ namespace Project.Runtime.Scripts.UI
                         if (ETALabel != null) ETALabel.text = $"ETA {Clock.EstimatedTimeOfArrival(location)}";
                         if (useCoordinates)
                         {
-                            transform.localPosition = location.coordinates;
+                            transform.localPosition = location.Coordinates;
                         }
                     }
                     
-                    else Debug.LogWarning($"Location not found: {locationIndex}");
+                    else Debug.LogWarning($"Location not found: {locationIndex}, name: {DialogueManager.instance.masterDatabase.locations[locationIndex].Name}");
                 }
                 
                 

@@ -24,19 +24,19 @@ namespace Project.Runtime.Scripts.Manager
             Commitment
         }
 
-        public const int MaxScore = 1000;
-
         private static bool isAnimating;
 
         private static Vector2 spawnPosition;
+        
+        public static Action<Type> OnPointsChange;
 
         public static Action<Type> OnAnimationStart;
 
         public static Action OnAnimationComplete;
-        public static int EngagementScore => GameStateManager.instance.gameState.Engagement_score;
-        public static int CredibilityScore => GameStateManager.instance.gameState.credibility_score;
-        public static int WellnessScore => GameStateManager.instance.gameState.wellness_score;
-        public static int CommitmentScore => GameStateManager.instance.gameState.commitment_score;
+        public static int EngagementScore => GameStateManager.instance.gameState.EngagementScore;
+        public static int CredibilityScore => GameStateManager.instance.gameState.CredibilityScore;
+        public static int WellnessScore => GameStateManager.instance.gameState.WellnessScore;
+        public static int CommitmentScore => GameStateManager.instance.gameState.CommitmentScore;
         public static int TotalScore =>  EngagementScore + CredibilityScore + WellnessScore + CommitmentScore;
         public static bool IsAnimating => isAnimating;
 
@@ -56,21 +56,47 @@ namespace Project.Runtime.Scripts.Manager
             switch (type)
             {
                 case Type.Engagement:
-                    score = GameStateManager.instance.gameState.Engagement_score;
+                    score = GameStateManager.instance.gameState.EngagementScore;
                     break;
                 case Type.Credibility:
-                    score = GameStateManager.instance.gameState.credibility_score;
+                    score = GameStateManager.instance.gameState.CredibilityScore;
                     break;
                 case Type.Wellness:
-                    score = GameStateManager.instance.gameState.wellness_score;
+                    score = GameStateManager.instance.gameState.WellnessScore;
                     break;
                 case Type.Commitment:
-                    score = GameStateManager.instance.gameState.commitment_score;
+                    score = GameStateManager.instance.gameState.CommitmentScore;
                     break;
             }
 
             return score;
         }
+
+        public static int MaxScore(Type type)
+        {
+            var score = 0;
+            switch (type)
+            {
+                case Type.Engagement:
+                    score = GameStateManager.instance.gameState.MaxEngagementScore;
+                    break;
+                case Type.Credibility:
+                    score = GameStateManager.instance.gameState.MaxCredibilityScore;
+                    break;
+                case Type.Wellness:
+                    score = GameStateManager.instance.gameState.MaxWellnessScore;
+                    break;
+                case Type.Commitment:
+                    score = GameStateManager.instance.gameState.MaxCommitmentScore;
+                    break;
+            }
+
+            return score;
+        }
+        
+        public static int TotalMaxScore
+        => GameStateManager.instance.gameState.MaxEngagementScore + GameStateManager.instance.gameState.MaxCredibilityScore + GameStateManager.instance.gameState.MaxWellnessScore + GameStateManager.instance.gameState.MaxCommitmentScore;
+         
 
         public static Action OnPointsAnimEnd;
         public static Action OnPointsAnimStart;
@@ -118,6 +144,8 @@ namespace Project.Runtime.Scripts.Manager
             Sequencer.Message("Animated");
             OnAnimationComplete?.Invoke();
         }
+        
+        
 
 
         public struct PointsField

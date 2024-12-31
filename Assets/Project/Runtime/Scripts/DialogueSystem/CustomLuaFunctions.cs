@@ -79,6 +79,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(Length), this,
                 SymbolExtensions.GetMethodInfo(() => Length(string.Empty)));
             Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
+            
+            Lua.RegisterFunction(nameof(PlayerLocation), this, SymbolExtensions.GetMethodInfo(() => PlayerLocation()));
         }
 
         private void DeregisterLuaFunctions()
@@ -122,6 +124,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(TimeOfNextScheduledEvent));
             Lua.UnregisterFunction(nameof(Length));
             Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
+            Lua.UnregisterFunction(nameof(PlayerLocation));
         }
         
         
@@ -454,7 +457,13 @@ namespace Project.Runtime.Scripts.DialogueSystem
         {
             PixelCrushers.SaveSystem.SaveToSlot(1);
         }
-        
-        
+
+
+        public string PlayerLocation()
+        {
+            return GameManager.gameState.PlayerLocation;
+        } 
+
+
     }
 }

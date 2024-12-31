@@ -34,7 +34,18 @@ namespace Project.Runtime.Scripts.ScriptableObjects
         public string description;
         public List<Item> objectives;
         public bool unlocked;
-        public Vector2 coordinates;
+        [SerializeField] private Vector2 coordinates;
+
+        public Vector2 Coordinates
+        {
+            get
+            {
+                var coords = area != Area.Café ? coordinates : Vector2.MoveTowards(LastNonCaféLocation.coordinates, Vector2.zero, 200);
+                return coords;
+            }
+            
+        }
+        
         public string Name => area.ToString();
 
         //private List<Field> _luaFields;
@@ -50,7 +61,7 @@ namespace Project.Runtime.Scripts.ScriptableObjects
 
         private static Location LastNonCaféLocation
         {
-            get { return FromString(GameManager.gameState.LastNonCaféLocation); }
+            get {return FromString(GameManager.gameState.LastNonCaféLocation); }
             set { GameManager.gameState.LastNonCaféLocation = value.Name; }
         }
 

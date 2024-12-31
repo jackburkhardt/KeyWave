@@ -84,7 +84,7 @@ namespace Project.Runtime.Scripts.UI.Map
         {
             foreach (var location in GameManager.instance.locations)
             {
-                var coordinates = new Vector3(location.coordinates.x, location.coordinates.y, 0);
+                var coordinates = new Vector3(location.Coordinates.x, location.Coordinates.y, 0);
                 var pin = Instantiate(pinPrefab.gameObject, transform, false);
                 pin.transform.localPosition = coordinates;
             }
@@ -171,7 +171,7 @@ namespace Project.Runtime.Scripts.UI.Map
 
         public void ZoomInOnLocation(Location location)
         {
-            ZoomInOnCoordinates(location.coordinates);
+            ZoomInOnCoordinates(location.Coordinates);
         }
 
         public void ZoomInOnLocation(string locationName)
