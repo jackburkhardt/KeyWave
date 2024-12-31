@@ -1,18 +1,30 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
+using Unity.VisualScripting;
+using UnityEngine;
 
 namespace Project.Runtime.Scripts.DialogueSystem
 {
     public class QuestUtility
     {
-        public static Points.PointsField[] GetPoints(string questTitle) =>
-            DialogueUtility.GetPointsFromField(DialogueManager.MasterDatabase.GetQuest(questTitle)?.fields);
-
-        public static Points.PointsField[] GetPoints(DialogueEntry dialogueEntry)
+        public static Points.PointsField[] GetPoints(string questTitle, DialogueDatabase database = null)
         {
-            return GetPoints(DialogueUtility.GetConversationByDialogueEntry(dialogueEntry).Title);
+            database ??= DialogueManager.MasterDatabase;
+            return DialogueUtility.GetPointsFromField(database.GetQuest(questTitle)?.fields);
+        }
+            
+
+        public static Points.PointsField[] GetPoints(DialogueEntry dialogueEntry, [CanBeNull] DialogueDatabase database = null)
+        {
+            var conversation = dialogueEntry.GetConversation(database);
+            if (conversation.IsUnityNull())
+            {
+                return null;
+            }
+            return GetPoints(dialogueEntry.GetConversation(database).Title, database);
         }
 
 

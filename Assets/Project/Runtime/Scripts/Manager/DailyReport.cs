@@ -38,6 +38,13 @@ namespace Project.Runtime.Scripts.Manager
                 {
                     Points.PointsField pointsInfo = Points.PointsField.FromJObject(playerEvent.Data);
                     EarnedPoints[pointsInfo.Type] += pointsInfo.Points;
+                    
+                    //poopoo code
+                    DialogueLua.SetVariable("points.credibility", EarnedPoints[Points.Type.Credibility]);
+                    DialogueLua.SetVariable("points.engagement", EarnedPoints[Points.Type.Engagement]);
+                    DialogueLua.SetVariable("points.wellness", EarnedPoints[Points.Type.Wellness]);
+                    DialogueLua.SetVariable("points.commitment", EarnedPoints[Points.Type.Commitment]);
+                    
                     break;
                 }
                 case "quest_state_change":

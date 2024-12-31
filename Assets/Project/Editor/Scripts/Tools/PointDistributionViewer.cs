@@ -26,6 +26,7 @@ namespace Project.Editor.Scripts.Tools
         private bool showWellness;
         private bool showCommit;
         private int totalPoints;
+        private bool includeZeroPointEntries;
 
         private Dictionary<DialogueEntry, int> wellnessEntries = new();
 
@@ -51,6 +52,12 @@ namespace Project.Editor.Scripts.Tools
             }
             
             EditorGUILayout.EndHorizontal();
+            
+            var defaultWidth = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 200;   
+            includeZeroPointEntries = EditorGUILayout.Toggle("Include entries with zero points", includeZeroPointEntries);
+            EditorGUIUtility.labelWidth = defaultWidth;
+            
             EditorGUILayout.Space(20);
 
             if (!showData) return;
@@ -138,12 +145,14 @@ namespace Project.Editor.Scripts.Tools
             {
                 foreach (var entry in conversation.dialogueEntries)
                 {
-                    var pointsField = QuestUtility.GetPoints(entry);
-                    if (pointsField.Length == 0) continue;
+                    var pointsField = QuestUtility.GetPoints(entry, database);
+                    if (pointsField == null || pointsField.Length == 0) continue;
 
                     foreach (Points.PointsField field in pointsField)
                     {
                         var points = field.Points;
+                        if (points == 0 && !includeZeroPointEntries) continue;
+                        
                         switch (field.Type)
                         {
                             case Points.Type.Wellness:

@@ -53,10 +53,10 @@ namespace Project.Runtime.Scripts.Utility
             return duration;
         }
 
-        public static Conversation GetConversation(this DialogueEntry dialogueEntry)
+        public static Conversation GetConversation(this DialogueEntry dialogueEntry, DialogueDatabase? database = null)
         {
-            var conversation = DialogueUtility.GetConversationByDialogueEntry(dialogueEntry);
-            return conversation;
+            database ??= DialogueManager.masterDatabase;
+            return database.conversations.Find(conversation => conversation.id == dialogueEntry.conversationID);
         }
 
         public static bool Visited(this DialogueEntry dialogueEntry)
