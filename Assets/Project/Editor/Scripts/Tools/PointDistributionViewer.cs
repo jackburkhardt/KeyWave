@@ -32,12 +32,18 @@ namespace Project.Editor.Scripts.Tools
 
         private int wellnessTotal;
 
+        private string wellnessMaxVar = "points.wellnessMAX";
+        private string engagementMaxVar = "points.engagementMAX";
+        private string credibilityMaxVar = "points.credibilityMAX";
+        private string commitmentMaxVar = "points.commitmentMAX";
+
         private void OnGUI()
         {
-            
+
             EditorGUILayout.BeginHorizontal();
-            selectedDB = EditorGUILayout.ObjectField("Dialogue Database", selectedDB, typeof(DialogueDatabase), false, GUILayout.Width(400)) as DialogueDatabase;
-            
+            selectedDB = EditorGUILayout.ObjectField("Dialogue Database", selectedDB, typeof(DialogueDatabase), false,
+                GUILayout.Width(400)) as DialogueDatabase;
+
             if (GUILayout.Button("Search", GUILayout.Width(50)))
             {
                 if (selectedDB == null)
@@ -50,25 +56,30 @@ namespace Project.Editor.Scripts.Tools
                     showData = true;
                 }
             }
-            
+
             EditorGUILayout.EndHorizontal();
-            
+
             var defaultWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = 200;   
-            includeZeroPointEntries = EditorGUILayout.Toggle("Include entries with zero points", includeZeroPointEntries);
+            EditorGUIUtility.labelWidth = 200;
+            includeZeroPointEntries =
+                EditorGUILayout.Toggle("Include entries with zero points", includeZeroPointEntries);
             EditorGUIUtility.labelWidth = defaultWidth;
-            
+
             EditorGUILayout.Space(20);
 
             if (!showData) return;
-                
-            EditorGUILayout.LabelField($"Total wellness points: {wellnessTotal} ({(wellnessTotal/(float)totalPoints):P})");
-            EditorGUILayout.LabelField($"Total cred points: {credibilityTotal} ({(credibilityTotal/(float)totalPoints):P})");
-            EditorGUILayout.LabelField($"Total rapoport points: {EngagementTotal} ({(EngagementTotal/(float)totalPoints):P})");
-            EditorGUILayout.LabelField($"Total commitment points: {commitmentTotal} ({(commitmentTotal/(float)totalPoints):P})");
-                
+
+            EditorGUILayout.LabelField(
+                $"Total wellness points: {wellnessTotal} ({(wellnessTotal / (float)totalPoints):P})");
+            EditorGUILayout.LabelField(
+                $"Total cred points: {credibilityTotal} ({(credibilityTotal / (float)totalPoints):P})");
+            EditorGUILayout.LabelField(
+                $"Total rapoport points: {EngagementTotal} ({(EngagementTotal / (float)totalPoints):P})");
+            EditorGUILayout.LabelField(
+                $"Total commitment points: {commitmentTotal} ({(commitmentTotal / (float)totalPoints):P})");
+
             EditorGUILayout.Space(20);
-                
+
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
             showWellness = EditorGUILayout.Foldout(showWellness, $"Show Wellness Entries ({wellnessEntries.Count})");
             if (showWellness)
@@ -76,56 +87,118 @@ namespace Project.Editor.Scripts.Tools
                 foreach (var entry in wellnessEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
+                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                        GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
                         DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
                     }
-                    EditorGUILayout.EndHorizontal();                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
             }
-                
+
             showCred = EditorGUILayout.Foldout(showCred, $"Show Credibility Entries ({credibilityEntries.Count})");
             if (showCred)
             {
                 foreach (var entry in credibilityEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
+                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                        GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
                         DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
                     }
-                    EditorGUILayout.EndHorizontal();                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
             }
-                
-            showEngagement = EditorGUILayout.Foldout(showEngagement, $"Show Engagement Entries ({EngagementEntries.Count})");
+
+            showEngagement =
+                EditorGUILayout.Foldout(showEngagement, $"Show Engagement Entries ({EngagementEntries.Count})");
             if (showEngagement)
             {
                 foreach (var entry in EngagementEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
+                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                        GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
                         DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
                     }
-                    EditorGUILayout.EndHorizontal();                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
             }
-            
+
             showCommit = EditorGUILayout.Foldout(showCommit, $"Show Commitment Entries ({commitmentEntries.Count})");
             if (showCommit)
             {
                 foreach (var entry in commitmentEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)", GUILayout.Width(400));
+                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                        GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
                         DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
                     }
-                    EditorGUILayout.EndHorizontal();                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
             }
-                
+
+            
+
+            
+            
+            EditorGUILayout.BeginVertical();
+            
+            EditorGUILayout.Space(30);
+            
+
+            EditorGUILayout.LabelField("Max Points Variables", EditorStyles.boldLabel);
+            
+            wellnessMaxVar = EditorGUILayout.TextField("Wellness", wellnessMaxVar);
+            
+            if (selectedDB.variables.Find(p => p.Name == wellnessMaxVar) == null)
+            {
+                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
+            }
+            
+            engagementMaxVar = EditorGUILayout.TextField("Engagement", engagementMaxVar);
+            
+            if (selectedDB.variables.Find(p => p.Name == engagementMaxVar) == null)
+            {
+                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
+            }
+           
+            credibilityMaxVar = EditorGUILayout.TextField("Credibility", credibilityMaxVar);
+            
+            if (selectedDB.variables.Find(p => p.Name == credibilityMaxVar) == null)
+            {
+                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
+            }
+            
+            commitmentMaxVar = EditorGUILayout.TextField("Commitment", commitmentMaxVar);
+            
+            if (selectedDB.variables.Find(p => p.Name == commitmentMaxVar) == null)
+            {
+                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
+            }
+            
+            if (GUILayout.Button("Set Variables", GUILayout.MaxWidth(100)))
+            {
+                SetMaxPoints(selectedDB);
+            }
+            
+            EditorGUILayout.Space(20);
+            
+            EditorGUILayout.EndVertical();
+            
+            
             EditorGUILayout.EndScrollView();
 
         }
@@ -152,7 +225,7 @@ namespace Project.Editor.Scripts.Tools
                     {
                         var points = field.Points;
                         if (points == 0 && !includeZeroPointEntries) continue;
-                        
+
                         switch (field.Type)
                         {
                             case Points.Type.Wellness:
@@ -176,14 +249,17 @@ namespace Project.Editor.Scripts.Tools
 
                 }
             }
-            
+
             totalPoints = wellnessTotal + credibilityTotal + EngagementTotal + commitmentTotal;
-            
+
             // sort dictionaries on the value (highest to lowest)
             wellnessEntries = wellnessEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            credibilityEntries = credibilityEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            EngagementEntries = EngagementEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            commitmentEntries = commitmentEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            credibilityEntries = credibilityEntries.OrderByDescending(x => x.Value)
+                .ToDictionary(x => x.Key, x => x.Value);
+            EngagementEntries =
+                EngagementEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            commitmentEntries =
+                commitmentEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
         private void ResetPoints()
@@ -197,6 +273,29 @@ namespace Project.Editor.Scripts.Tools
             EngagementTotal = 0;
             commitmentTotal = 0;
             showData = false;
+        }
+
+        private void SetMaxPoints(DialogueDatabase database)
+        {
+            database.variables.FindAll(v => v.Name.StartsWith("points.")).ForEach(v =>
+            {
+                if (v.Name == wellnessMaxVar)
+                {
+                    v.InitialFloatValue = wellnessTotal;
+                }
+                else if (v.Name == engagementMaxVar)
+                {
+                    v.InitialFloatValue = credibilityTotal;
+                }
+                else if (v.Name == credibilityMaxVar)
+                {
+                    v.InitialFloatValue = EngagementTotal;
+                }
+                else if (v.Name == commitmentMaxVar)
+                {
+                    v.InitialFloatValue = commitmentTotal;
+                }
+            });
         }
     }
 }
