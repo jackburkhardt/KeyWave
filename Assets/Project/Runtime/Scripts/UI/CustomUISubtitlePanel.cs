@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using NaughtyAttributes;
 using PixelCrushers;
@@ -17,7 +18,8 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     public RectTransform accumulatedContentHolder;
     
     public bool accumulateByInstantiation;
-    
+
+    private bool haha;
   
     public override void Close()
     {
@@ -48,9 +50,12 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public override void ShowSubtitle(Subtitle subtitle)
     {
+       
+        
         //show all accumulated subtitles
         if (accumulateText && accumulateByInstantiation)
         {
+            
             foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
             {
                 if (go.parent == accumulatedContentHolder)
@@ -62,10 +67,15 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         
         base.ShowSubtitle(subtitle);
         
+        
+        
         if (accumulateText && accumulateByInstantiation) StartCoroutine(Accumulate(subtitle));
         
         IEnumerator Accumulate(Subtitle sub)
         {
+            
+          
+            
             while (subtitleText.text != subtitle.formattedText.text) yield return new WaitForEndOfFrame();
             
             if (!string.IsNullOrWhiteSpace(sub.formattedText.text))
@@ -154,8 +164,8 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         }
         subtitleText.text = string.Empty;
     }
+
     
-   
 
 
     public void OnSuperceded()

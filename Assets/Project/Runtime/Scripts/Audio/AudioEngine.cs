@@ -38,9 +38,12 @@ namespace Project.Runtime.Scripts.Audio
         }
 
         #region Clip Management
-        
-        private void LoadClipAndPlay(string clipAddress, AudioSource source, Action followup = null)
+
+        private void LoadClipAndPlay(string clipAddress, AudioSource source, Action followup = null,
+            bool isVariant = false)
         {
+            var clipData = _clipDatabase.audioData.Find(data => data.clipAddress == clipAddress);
+            
             AddressableLoader.RequestLoad<AudioClip>(clipAddress, clip =>
             {
                 if (ClipAlreadyPlaying(clipAddress)) return;
@@ -56,7 +59,7 @@ namespace Project.Runtime.Scripts.Audio
                 }
                 
                 source.clip = clip;
-                var clipData = _clipDatabase.audioData.Find(data => data.clipAddress == clipAddress);
+                
                 if (clipData.volume != 0) // no clip settings found
                 {
                     source.volume = clipData.volume;
@@ -67,21 +70,7 @@ namespace Project.Runtime.Scripts.Audio
                 followup?.Invoke();
 
                 onActiveAudioChange.Invoke();
-
                 
-                if (clipData.includeVariants)
-                {
-                    foreach (var variant in clipData.Variants)
-                    {
-                        AudioSource newSource = gameObject.AddComponent<AudioSource>();
-                        newSource.loop = source.loop;
-                        LoadClipAndPlay(variant.variantAddress, newSource, () =>
-                        {
-                            newSource.volume = 0;
-                            newSource.outputAudioMixerGroup = variant.variantChannel;
-                        });
-                    }
-                }
                 
                 IEnumerator SendSequencerMessage(string message)
                 {
@@ -92,6 +81,21 @@ namespace Project.Runtime.Scripts.Audio
                 StartCoroutine(SendSequencerMessage("PlayClip"));
 
             });
+            
+            
+            if (!isVariant && clipData.includeVariants)
+            {
+                foreach (var variant in clipData.Variants)
+                {
+                    AudioSource newSource = gameObject.AddComponent<AudioSource>();
+                    newSource.loop = source.loop;
+                    LoadClipAndPlay(variant.variantAddress, newSource, () =>
+                    {
+                        newSource.volume = 0;
+                        newSource.outputAudioMixerGroup = variant.variantChannel;
+                    }, true);
+                }
+            }
         }
         
         private bool ClipAlreadyPlaying(string clipAddress)

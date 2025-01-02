@@ -51,7 +51,8 @@ public class PointsFishBowl : MonoBehaviour
         if (pointType != type) return;
         
         animator.SetTrigger(animationTrigger);
-        DOTween.To(() => Fill, x => Fill = x, Points.Score(pointType) / (float) Points.MaxScore(pointType), timeToFill);
+        if (Points.MaxScore(pointType) != 0) 
+            DOTween.To(() => Fill, x => Fill = x, Points.Score(pointType) / (float) Points.MaxScore(pointType), timeToFill);
         
         
     }
