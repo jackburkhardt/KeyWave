@@ -4,6 +4,7 @@ using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.DialogueEditor;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,11 +12,11 @@ namespace Project.Editor.Scripts.Tools
 {
     public class PointDistributionViewer : EditorWindow
     {
-        private Dictionary<DialogueEntry, int> credibilityEntries = new();
+        private Dictionary<Item, int> credibilityEntries = new();
         private int credibilityTotal;
-        private Dictionary<DialogueEntry, int> EngagementEntries = new();
+        private Dictionary<Item, int> EngagementEntries = new();
         private int EngagementTotal;
-        private Dictionary<DialogueEntry, int> commitmentEntries = new();
+        private Dictionary<Item, int> commitmentEntries = new();
         private int commitmentTotal;
         private Vector2 scrollPos;
 
@@ -28,7 +29,7 @@ namespace Project.Editor.Scripts.Tools
         private int totalPoints;
         private bool includeZeroPointEntries;
 
-        private Dictionary<DialogueEntry, int> wellnessEntries = new();
+        private Dictionary<Item, int> wellnessEntries = new();
 
         private int wellnessTotal;
 
@@ -72,9 +73,9 @@ namespace Project.Editor.Scripts.Tools
             EditorGUILayout.LabelField(
                 $"Total wellness points: {wellnessTotal} ({(wellnessTotal / (float)totalPoints):P})");
             EditorGUILayout.LabelField(
-                $"Total cred points: {credibilityTotal} ({(credibilityTotal / (float)totalPoints):P})");
+                $"Total credibility points: {credibilityTotal} ({(credibilityTotal / (float)totalPoints):P})");
             EditorGUILayout.LabelField(
-                $"Total rapoport points: {EngagementTotal} ({(EngagementTotal / (float)totalPoints):P})");
+                $"Total engagement points: {EngagementTotal} ({(EngagementTotal / (float)totalPoints):P})");
             EditorGUILayout.LabelField(
                 $"Total commitment points: {commitmentTotal} ({(commitmentTotal / (float)totalPoints):P})");
 
@@ -87,11 +88,11 @@ namespace Project.Editor.Scripts.Tools
                 foreach (var entry in wellnessEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
                         GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
-                        DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
+                       // DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
                     }
 
                     EditorGUILayout.EndHorizontal();
@@ -104,11 +105,11 @@ namespace Project.Editor.Scripts.Tools
                 foreach (var entry in credibilityEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
                         GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
-                        DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
+                        //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
                     }
 
                     EditorGUILayout.EndHorizontal();
@@ -122,11 +123,11 @@ namespace Project.Editor.Scripts.Tools
                 foreach (var entry in EngagementEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
                         GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
-                        DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
+                        //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
                     }
 
                     EditorGUILayout.EndHorizontal();
@@ -139,11 +140,11 @@ namespace Project.Editor.Scripts.Tools
                 foreach (var entry in commitmentEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.subtitleText} ({entry.Value} points)",
+                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
                         GUILayout.Width(400));
                     if (GUILayout.Button("Open", GUILayout.Width(50)))
                     {
-                        DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
+                        //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.id, entry.Key.id);
                     }
 
                     EditorGUILayout.EndHorizontal();
@@ -214,40 +215,39 @@ namespace Project.Editor.Scripts.Tools
         private void FindPoints(DialogueDatabase database)
         {
             ResetPoints();
-            foreach (var conversation in database.conversations)
+            foreach (var quest in database.items)
             {
-                foreach (var entry in conversation.dialogueEntries)
+                if (quest.IsItem) continue;
+                
+                var pointsField = QuestUtility.GetPoints(quest, database);
+                if (pointsField == null || pointsField.Length == 0) continue;
+
+                foreach (Points.PointsField field in pointsField)
                 {
-                    var pointsField = QuestUtility.GetPoints(entry, database);
-                    if (pointsField == null || pointsField.Length == 0) continue;
-
-                    foreach (Points.PointsField field in pointsField)
+                    var points = field.Points;
+                    if (points == 0 && !includeZeroPointEntries) continue;
+                    
+                    switch (field.Type)
                     {
-                        var points = field.Points;
-                        if (points == 0 && !includeZeroPointEntries) continue;
-
-                        switch (field.Type)
-                        {
-                            case Points.Type.Wellness:
-                                wellnessEntries.Add(entry, points);
-                                wellnessTotal += points;
-                                break;
-                            case Points.Type.Engagement:
-                                credibilityEntries.Add(entry, points);
-                                credibilityTotal += points;
-                                break;
-                            case Points.Type.Credibility:
-                                EngagementEntries.Add(entry, points);
-                                EngagementTotal += points;
-                                break;
-                            case Points.Type.Commitment:
-                                commitmentEntries.Add(entry, points);
-                                commitmentTotal += points;
-                                break;
-                        }
+                        case Points.Type.Wellness:
+                            wellnessEntries.Add(quest, points);
+                            wellnessTotal += points;
+                            break;
+                        case Points.Type.Credibility:
+                            credibilityEntries.Add(quest, points);
+                            credibilityTotal += points;
+                            break;
+                        case Points.Type.Engagement:
+                            EngagementEntries.Add(quest, points);
+                            EngagementTotal += points;
+                            break;
+                        case Points.Type.Commitment:
+                            commitmentEntries.Add(quest, points);
+                            commitmentTotal += points;
+                            break;
                     }
-
                 }
+                
             }
 
             totalPoints = wellnessTotal + credibilityTotal + EngagementTotal + commitmentTotal;
