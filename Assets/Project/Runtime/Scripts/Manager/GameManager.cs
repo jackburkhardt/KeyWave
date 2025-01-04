@@ -43,6 +43,22 @@ namespace Project.Runtime.Scripts.Manager
 
         public UnityEvent OnGameSceneStart;
         public UnityEvent OnGameSceneEnd;
+        
+        private static string _mostRecentApp = "SmartWatch/Home";
+
+        public SmartWatch smartWatch;
+
+        public static string MostRecentApp
+        {
+            get
+            {
+                var convo = _mostRecentApp;
+                _mostRecentApp = "SmartWatch/Home";
+                return convo;
+            }
+            
+            set => _mostRecentApp = $"SmartWatch/{value}";
+        }
 
 
         private void Awake()
@@ -253,6 +269,11 @@ namespace Project.Runtime.Scripts.Manager
                 if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
                 else currentScene = gameState.current_scene;
             }
+
+
+            MostRecentApp = "SmartWatch/Home";
+            
+            
             StartCoroutine(TravelToHandler());
 
             DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
@@ -304,7 +325,9 @@ namespace Project.Runtime.Scripts.Manager
             log += $"[br({color}{Clock.CurrentTime})] {color}{message}";
             DialogueLua.SetVariable("game.log", log);
         }
-        
+
+       
+
         
     }
 }

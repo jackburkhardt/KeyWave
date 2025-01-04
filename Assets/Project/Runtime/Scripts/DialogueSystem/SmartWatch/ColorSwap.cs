@@ -8,8 +8,11 @@ using NaughtyAttributes;
 
 public class ColorSwap : MonoBehaviour
 {
-    
-    
+    private void Awake()
+    {
+        // throw new NotImplementedException();
+    }
+
     public List<ColorSwapData> colors;
     private Color _defaultColor => colors[0].color;
     

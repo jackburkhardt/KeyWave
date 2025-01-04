@@ -10,6 +10,7 @@ public class TMPMirror : MonoBehaviour
    
     private TMPro.TextMeshProUGUI _textMeshPro;
     public bool useFormat;
+    public bool mirrorColor;
     
     [ShowIf("useFormat")]
     [ReadOnly] public string surrogate = "{0}";
@@ -29,5 +30,10 @@ public class TMPMirror : MonoBehaviour
         }
         
         _textMeshPro.text = textMeshProToMirror.text;
+        
+        if (mirrorColor)
+        {
+            _textMeshPro.color = textMeshProToMirror.color;
+        }
     }
 }
