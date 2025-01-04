@@ -15,7 +15,11 @@ namespace Project.Runtime.Scripts.DialogueSystem
             database ??= DialogueManager.MasterDatabase;
             return DialogueUtility.GetPointsFromField(database.GetQuest(questTitle)?.fields);
         }
-            
+        
+        public static Points.PointsField[] GetPoints(Item quest, [CanBeNull] DialogueDatabase database = null)
+        {
+            return GetPoints(quest.Name, database);
+        }
 
         public static Points.PointsField[] GetPoints(DialogueEntry dialogueEntry, [CanBeNull] DialogueDatabase database = null)
         {
