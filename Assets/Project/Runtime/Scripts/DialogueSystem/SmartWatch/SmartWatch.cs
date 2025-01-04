@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SmartWatch", menuName = "SmartWatch")]
@@ -56,13 +57,13 @@ public class SmartWatch : ScriptableObject
                     _instance = watch;
                 });
             }
-            return _instance;
+            return _instance ? _instance : GameManager.instance.smartWatchAsset;
         }
     }
     
     public static App GetApp(string name)
     {
-        return _instance.apps.Find(app => app.name == name);
+        return instance.apps.Find(app => app.name == name);
     }
     
     public static Action<App> OnAppOpen;
@@ -71,6 +72,11 @@ public class SmartWatch : ScriptableObject
     private void OnEnable()
     {
         OnAppOpen += SetCurrentApp;
+        
+        AddressableLoader.RequestLoad<SmartWatch>("SmartWatch.asset", watch =>
+        {
+            _instance = watch;
+        });
     }
     
     private void OnDisable()

@@ -28,6 +28,8 @@ namespace Project.Runtime.Scripts.Manager
         public List<Location> locations;
         public bool capFramerate = false;
         public Canvas mainCanvas;
+        
+        public SmartWatch smartWatchAsset;
 
         [ShowIf("capFramerate")] public int framerateLimit;
 
@@ -45,8 +47,6 @@ namespace Project.Runtime.Scripts.Manager
         public UnityEvent OnGameSceneEnd;
         
         private static string _mostRecentApp = "SmartWatch/Home";
-
-        public SmartWatch smartWatch;
 
         public static string MostRecentApp
         {
