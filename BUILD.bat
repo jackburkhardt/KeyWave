@@ -1,1 +1,1 @@
-py -i BUILD.py
+py BUILD.py

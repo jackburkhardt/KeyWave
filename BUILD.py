@@ -3,33 +3,38 @@ import tkinter as tk
 from tkinter import filedialog
 import sys
 import subprocess
+from subprocess import CalledProcessError
 
 root = tk.Tk()
 root.withdraw()
 
 def do_program():
     project_path = os.getcwd()
-    print(f"""{Color.CYAN}@@@@@@@   @@@@@@@  @@@@@@@   @@@  @@@       @@@@@@                              
- @@  @@@  @@@      @@@  @@@  @@@   @@      @@@           @@@    @@@ @@@  @@@@@@ 
- @@  @@@  @@@@@    @@@@@@@@  @@@   @@       @@@@@@@      @@@@   @@@@@@@  @@  @@ 
- @@@@@@   @@@    @ @@@@@@@   @@@   @@           @@@     @@@@@@  @@@@@@@  @@  @@ 
-@@@       @@@@@@@  @@@  @@@  @@@  @@@@@@@@ @@@@@@@     @@@  @@  @@  @@@  @@@@@@ 
-                                                                                
-@@@@@@@@   @@@@  @@@@@@@@@@  @@@@@@@@   @@@@@     @@@@      @@@@        @@@@@@@ 
-@@@@@@@@@@  @@@  @@@@@@@@@@  @@@@@@@@   @@@@@     @@@        @@@       @@@@@@@@ 
-@@@@  @@@@  @@@     @@@@     @@@       @@@@@@@    @@@        @@@       @@@@@@   
-@@@@@@@@@   @@@     @@@@     @@@@@@    @@@ @@@    @@@        @@@          @@@@@@
-@@@@@@@@    @@@     @@@@     @@@      @@@@@@@@@   @@@     @  @@@     @ @    @@@@
-@@@@        @@@     @@@@     @@@     @@@@   @@@@  @@@@@@@@@  @@@@@@@@  @@@@@@@@ 
+    print(f"""{Color.CYAN}@@@@@@@@    @@@@@@@@@   @@@@@@@@@    @@@@   @@@@         @@@@@@@@                                       
+ @@@@@@@@@@  @@@@@@@@@   @@@@@@@@@@@   @@@   @@@@        @@@@@@@@@                                       
+ @@@   @@@@  @@@@        @@@@   @@@@   @@@   @@@@        @@@@              @@@@     @@@@  @@@  @@@@@@@@@ 
+ @@@   @@@@  @@@@@@@     @@@@@@@@@@@   @@@   @@@@        @@@@@@@@@        @@@@@@    @@@@@ @@@  @@@   @@@ 
+ @@@@@@@@@   @@@@        @@@@@@@@@     @@@   @@@@             @@@@@       @@@@@@    @@@@@@@@@  @@@   @@@ 
+ @@@         @@@@@@@@@@  @@@@ @@@@@    @@@   @@@@@@@@@@ @@@@@@@@@@@      @@@@@@@@   @@@ @@@@@  @@@   @@@ 
+ @@@@        @@@@@@@@@@  @@@@   @@@@  @@@@   @@@@@@@@@@  @@@@@@@@       @@@    @@@  @@@  @@@@  @@@@@@@@  
+                                                                                                         
+                                                                                                         
+ @@@@@@@@@@    @@@@@  @@@@@@@@@@@@@@  @@@@@@@@@@@    @@@@@       @@@@@          @@@@          @@@@@@@@@@ 
+ @@@@@@@@@@@@  @@@@@  @@@@@@@@@@@@@@  @@@@@@@@@@@   @@@@@@@       @@@@          @@@@         @@@@@@@@@@@ 
+ @@@@   @@@@@  @@@@@       @@@@       @@@@          @@@@@@@@      @@@@          @@@@         @@@@@       
+ @@@@   @@@@@  @@@@@       @@@@       @@@@@@@@     @@@@ @@@@      @@@@          @@@@         @@@@@@@@@@  
+ @@@@@@@@@@@   @@@@@       @@@@       @@@@@@@@     @@@@ @@@@@     @@@@          @@@@             @@@@@@@@
+ @@@@@@@@@@    @@@@@       @@@@       @@@@        @@@@@@@@@@@     @@@@          @@@@       @         @@@@
+ @@@@          @@@@@       @@@@       @@@@       @@@@@@@@@@@@@    @@@@@@@@@@@   @@@@@@@@@@@  @@@@@@@@@@@@
+@@@@@          @@@@@      @@@@@       @@@@@     @@@@@     @@@@@  @@@@@@@@@@@@  @@@@@@@@@@@@  @@@@@@@@@@  
+
 
         """)
 
     print(f"{Color.GREEN}Welcome to the aforementioned build utility. Guaranteed to work just enough but not too well.")
     print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}I'll walk you through the steps so I can get back to more...er..important things.")
     unity_version = ""
-    try:
-        print(f"{project_path}\ProjectSettings\ProjectVersion.txt")
-    
+    try:    
         f = open(f"{project_path}\ProjectSettings\ProjectVersion.txt", "r")
     
         unity_version = f.readline()[17:].strip()
@@ -56,36 +61,51 @@ def do_program():
     print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}(distracted)...Oh, right -- what flavor of build would you like to make?")
 
     build_opt = input(f"""
-    1. Dev (Uncompressed)
-    2. Dev (Compressed)
-    3. Release (For ACTUAL releases)
+1. Dev (Uncompressed)
+2. Dev (Compressed)
+3. Release (For ACTUAL releases)
 
-    {Color.YELLOW}Type your choice [press ENTER for 1]:{Color.RESET}
-    """)
+{Color.YELLOW}Type your choice [press ENTER for 1]:{Color.RESET}   """).strip()
+
+    if build_opt == "": build_opt = "1"
+    if build_opt not in ["1", "2", "3"]:
+        print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}I didn't expect much of you, but frankly I have no idea how you messed that up. I'm done here.")
+        print(f"{Color.YELLOW}[PERSISTENT MEMORY] {Color.WHITE}It's okay. Just remember: hit 1, 2, or 3, and then hit ENTER.")
+        return 1 
 
     print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}Final question: dog mode? [y/N]")
     dog_opt = input()
     dog_opt = True if "y" in dog_opt else False
 
+    print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}Waiting for you to select an output directory...")
+    output_path = filedialog.askdirectory()
 
-    if (build_opt == "1" or build_opt == ""):
-        subprocess.run([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod BatchBuild.DoBuild", "-quit", "-logfile"], capture_output=True)
-    elif (build_opt == "2"):
-        subprocess.run([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod BatchBuild.DoBuildCompressed", "-quit", "-logfile"], capture_output=True)
-    elif (build_opt == "3"):
-        subprocess.run([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod BatchBuild.DoBuildRelease", "-logfile"], capture_output=True)
-    else:
-        print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}I didn't expect much of you, but frankly I have no idea how you messed that up. I'm done here.")
-        print(f"{Color.YELLOW}[PERSISTENT MEMORY] {Color.WHITE}It's okay. Just remember: hit 1, 2, or 3, and then hit ENTER.")
-        return 1 
-    
+    print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}Passing off to Unity for building.")
+    try:
+        if (build_opt == "1" or build_opt == ""):
+            subprocess.check_output([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod", "BatchBuild.DoBuild", "-outputPath", output_path, "-quit", "-logfile"])
+        elif (build_opt == "2"):
+            subprocess.check_output([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod", "BatchBuild.DoBuildCompressed", "-outputPath", output_path, "-quit", "-logfile"])
+        elif (build_opt == "3"):
+            subprocess.check_output([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod", "BatchBuild.DoBuildRelease", "-outputPath", output_path, "-quit", "-logfile"])
+    except CalledProcessError as e:
+        print(f"{Color.RED}[BUILDER] {Color.WHITE}The computer has failed you. I don't cast blame -- here's what the program said:")
+        print(f"({e.returncode}) {e.output}")
+        return 1
+
+    print(f"{Color.GREEN}[BUILDER] {Color.WHITE}SUCCESS! Enjoy that. We worked hard for it.")
+    print(f"{Color.GREEN}[BUILDER] {Color.WHITE}Until next time, {os.getlogin()}...")
 
 
 def do_program_wrap():
-    do_program()
+    try:
+        do_program()
+    except Exception as e:
+        print(f"{Color.RED}[BUILDER] {Color.WHITE}Hey, I did warn you it wouldn't work *too* well.")
+        print(e)
+
     input("Press ENTER to close this window...")
 
-    
 
 
 class Color():
