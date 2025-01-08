@@ -100,7 +100,13 @@ public class SmartWatchEvents : MonoBehaviour
     {
         foreach (var a in apps)
         {
-            if (a.app == app)
+            if (a.app == app) {
+            
+                if (ShowUnityEvent) a.onAppOpen.Invoke();
+                if (ShowAnimatorTrigger) animator.SetTrigger(a.animatorTrigger);
+            }
+            
+            else if (a.app.name == app.name)
             {
                 if (ShowUnityEvent) a.onAppOpen.Invoke();
                 if (ShowAnimatorTrigger) animator.SetTrigger(a.animatorTrigger);
