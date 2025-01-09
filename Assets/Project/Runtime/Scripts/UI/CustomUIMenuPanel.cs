@@ -91,38 +91,11 @@ namespace Project.Runtime.Scripts.UI
 
             protected virtual GameObject InstantiateButton(Response response)
             {
-                if (response.destinationEntry.outgoingLinks.Count == 0)
+                if (GetButtonStyle(response, out var stylePrefab))
                 {
-                    
-                    var style = buttonStyles.Find(x => x.condition == ResponseButtonStyle.styleCondition.EntryHasNoOutgoingLinks);
-                    if (style != null && style.responseButton != null)
-                    {
-                        var button = Instantiate(style.responseButton.gameObject);
-                        button.SetActive(true);
-                        return button;
-                    }
-                }
-                
-                if (response.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title == "SmartWatch/Actions")
-                {
-                    var style = buttonStyles.Find(x => x.condition == ResponseButtonStyle.styleCondition.EntryLeadsToSmartWatchActions);
-                    if (style != null && style.responseButton != null)
-                    {
-                        var button = Instantiate(style.responseButton.gameObject);
-                        button.SetActive(true);
-                        return button;
-                    }
-                }
-                
-                else if (response.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title == "SmartWatch/Phone/Base")
-                {
-                    var style = buttonStyles.Find(x => x.condition == ResponseButtonStyle.styleCondition.EntryLeadsToSmartWatchPhone);
-                    if (style != null && style.responseButton != null)
-                    {
-                        var button = Instantiate(style.responseButton.gameObject);
-                        button.SetActive(true);
-                        return button;
-                    }
+                    var button = Instantiate(stylePrefab.gameObject);
+                    button.SetActive(true);
+                    return button;
                 }
                 
                 var defaultButton = Instantiate(buttonTemplate.gameObject);
@@ -279,12 +252,20 @@ namespace Project.Runtime.Scripts.UI
             {
                 EntryHasNoOutgoingLinks,
                 EntryLeadsToSmartWatchActions,
-                EntryLeadsToSmartWatchPhone
+                EntryLeadsToSmartWatchPhone,
+                EntryHasTextField
             }
             
             public styleCondition condition;
             public StandardUIResponseButton responseButton;
             
+            [ShowIf("condition", styleCondition.EntryHasTextField)]
+            [AllowNesting]
+            public string fieldName;
+            [ShowIf("condition", styleCondition.EntryHasTextField)]
+            [AllowNesting]
+            public string fieldValue;
+
         }
         
         public List<ResponseButtonStyle> buttonStyles = new List<ResponseButtonStyle>();
@@ -350,14 +331,52 @@ namespace Project.Runtime.Scripts.UI
 
         }
 
-        public void OnQuestStateChange(string questTitle)
+        public bool GetButtonStyle(Response response, out StandardUIResponseButton stylePrefab)
         {
-       
-        }
+            stylePrefab = null;
+            
+            foreach (var style in buttonStyles)
+            {
+                if (style.responseButton == null) continue;
+                
+                switch ( style.condition)
+                {
+                    case ResponseButtonStyle.styleCondition.EntryHasNoOutgoingLinks:
+                        if (response.destinationEntry.outgoingLinks.Count == 0)
+                        {
+                            stylePrefab = style.responseButton;
+                            return true;
+                        }
+                        break;
+                    case ResponseButtonStyle.styleCondition.EntryLeadsToSmartWatchActions:
+                        if (response.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title == "SmartWatch/Actions")
+                        {
+                            stylePrefab = style.responseButton;
+                            return true;
+                        }
+                        break;
+                    case ResponseButtonStyle.styleCondition.EntryLeadsToSmartWatchPhone:
+                        if (response.destinationEntry.GetNextDialogueEntry()?.GetConversation().Title == "SmartWatch/Phone/Base")
+                        {
+                            stylePrefab = style.responseButton;
+                            return true;
+                        }
+                        break;
+                    case ResponseButtonStyle.styleCondition.EntryHasTextField:
+                        if (response.destinationEntry.fields.Any(field => field.title == style.fieldName && field.value == style.fieldValue))
+                        {
+                            stylePrefab = style.responseButton;
+                            return true;
+                        }
+                        break;
+                }
 
-        public void OnConversationEnd()
-        {
-     
+               
+            }
+            
+            
+            return false;
+            
         }
         
         private IEnumerator DelayedRefresh()
