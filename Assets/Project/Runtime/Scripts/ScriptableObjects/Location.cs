@@ -58,6 +58,8 @@ namespace Project.Runtime.Scripts.ScriptableObjects
                 foreach (var field in value) Field.SetValue(fields, field.title, field.value);
             }
         }
+        
+        public string Description => DialogueManager.instance.masterDatabase.locations.Find(n => n.Name == Name).Description;
 
         private static Location LastNonCaféLocation
         {

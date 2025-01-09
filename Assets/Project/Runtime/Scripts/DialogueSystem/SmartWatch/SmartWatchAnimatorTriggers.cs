@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using Project.Runtime.Scripts.AssetLoading;
 using UnityEngine;
 
@@ -10,9 +11,35 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
     
     [SerializeField] private Animator animator;
 
+    public enum TriggerType
+    {
+        Default = 1 << 0,
+        Custom = 1 << 1
+    }
+    
+    [EnumFlags] public TriggerType triggerType = TriggerType.Default;
     
     
+    private bool ShowDefaultTriggers => triggerType.HasFlag(TriggerType.Default);
+    private bool ShowCustomTriggers => triggerType.HasFlag(TriggerType.Custom);
+    
+    [ShowIf("ShowDefaultTriggers")]
     [ReadOnly] [SerializeReference] private List<string> animatorTriggers;
+
+    [Serializable]
+    public class CustomTrigger
+    {
+        [ReadOnly] public string name;
+        public string trigger;
+        
+        public CustomTrigger(string name)
+        {
+            this.name = name;
+        }
+    }
+    
+    [ShowIf("ShowCustomTriggers")]
+    [SerializeReference] private List<CustomTrigger> customTriggers;
 
     private void OnEnable()
     {
@@ -38,6 +65,22 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
                 animatorTriggers.Add(app.animatorTrigger);
             }
         }
+        
+        if (customTriggers == null) customTriggers = new List<CustomTrigger>();
+       
+        if (customTriggers.Count < animatorTriggers.Count)
+        {
+            for (var i = customTriggers.Count; i < animatorTriggers.Count; i++)
+            {
+                customTriggers.Add(new CustomTrigger(animatorTriggers[i]));
+            }
+        }
+        
+        if (customTriggers.Count > animatorTriggers.Count)
+        {
+            customTriggers.RemoveRange(animatorTriggers.Count, customTriggers.Count - animatorTriggers.Count);
+        }
+        
 
     }
     
@@ -51,7 +94,12 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
         if (animator == null) return;
         if (animatorTriggers.Contains(app.animatorTrigger))
         {
-            animator.SetTrigger(app.animatorTrigger);
+            if (triggerType.HasFlag(TriggerType.Default)) animator.SetTrigger(app.animatorTrigger);
+            if (triggerType.HasFlag(TriggerType.Custom))
+            {
+                var customTrigger = customTriggers[animatorTriggers.IndexOf(app.animatorTrigger)].trigger;
+                if (!string.IsNullOrEmpty(customTrigger)) animator.SetTrigger(customTrigger);
+            }
         }
     }
 }

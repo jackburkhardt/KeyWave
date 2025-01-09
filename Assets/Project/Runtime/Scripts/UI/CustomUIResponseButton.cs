@@ -89,6 +89,10 @@ namespace Project.Runtime.Scripts.UI
         [Foldout("Custom Fields")]
         [SerializeField] private UITextField ETALabel;
         
+        [ShowIf("useLocation")]
+        [Foldout("Custom Fields")]
+        [SerializeField] private UITextField locationDescription;
+        
         
         
         
@@ -402,11 +406,13 @@ namespace Project.Runtime.Scripts.UI
                     if (location != null)
                     {
                         if (locationLabel != null) locationLabel.text = location.Name;
-                        if (ETALabel != null) ETALabel.text = $"ETA {Clock.EstimatedTimeOfArrival(location)}";
+                        if (ETALabel != null) ETALabel.text = $"{Clock.EstimatedTimeOfArrival(location)}";
                         if (useCoordinates)
                         {
                             transform.localPosition = location.Coordinates;
                         }
+                        
+                        if (locationDescription != null) locationDescription.text = location.Description;
                     }
                     
                     else Debug.LogWarning($"Location not found: {locationIndex}, name: {DialogueManager.instance.masterDatabase.locations[locationIndex].Name}");

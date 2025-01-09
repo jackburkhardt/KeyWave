@@ -414,7 +414,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public bool ShowIntroductionText()
         {
             return Lua.IsTrue(
-                "Dialog[thisID].SimStatus ~= \"WasDisplayed\" and (Variable[\"skip_location_intros\"] == false) or (Variable[\"skip_content\"] == false)");
+                "Dialog[thisID].SimStatus ~= \"WasDisplayed\" and (Variable[\"skip_location_intros\"] == false) or Dialog[thisID].SimStatus ~= \"WasDisplayed\" and (Variable[\"skip_content\"] == false)");
         }
         
         public string TimeOfNextScheduledEvent(string eventName)

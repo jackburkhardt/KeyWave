@@ -50,14 +50,8 @@ public class SmartWatch : ScriptableObject
     {
         get
         {
-            if (_instance == null)
-            {
-                AddressableLoader.RequestLoad<SmartWatch>("SmartWatch.asset", watch =>
-                {
-                    _instance = watch;
-                });
-            }
-            return _instance ? _instance : GameManager.instance.smartWatchAsset;
+           
+            return GameManager.instance.smartWatchAsset;
         }
     }
     
