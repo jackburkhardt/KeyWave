@@ -10,7 +10,7 @@ root.withdraw()
 
 def do_program():
     project_path = os.getcwd()
-    print(f"""{Color.CYAN}@@@@@@@@    @@@@@@@@@   @@@@@@@@@    @@@@   @@@@         @@@@@@@@                                       
+    print(f""" {Color.CYAN}@@@@@@@@    @@@@@@@@@   @@@@@@@@@    @@@@   @@@@         @@@@@@@@                                       
  @@@@@@@@@@  @@@@@@@@@   @@@@@@@@@@@   @@@   @@@@        @@@@@@@@@                                       
  @@@   @@@@  @@@@        @@@@   @@@@   @@@   @@@@        @@@@              @@@@     @@@@  @@@  @@@@@@@@@ 
  @@@   @@@@  @@@@@@@     @@@@@@@@@@@   @@@   @@@@        @@@@@@@@@        @@@@@@    @@@@@ @@@  @@@   @@@ 
@@ -35,7 +35,7 @@ def do_program():
     print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}I'll walk you through the steps so I can get back to more...er..important things.")
     unity_version = ""
     try:    
-        f = open(f"{project_path}\ProjectSettings\ProjectVersion.txt", "r")
+        f = open(f"{project_path}\\ProjectSettings\\ProjectVersion.txt", "r")
     
         unity_version = f.readline()[17:].strip()
         f.close()
@@ -58,11 +58,11 @@ def do_program():
 
     # if dog, random.dog
     print(f"{Color.YELLOW}[PERSISTENT MEMORY] {Color.WHITE}{Color.UNDERLINE}Wait! Make sure you've set your output folder to be on the right Git branch.{Color.RESET}")
-    print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}(distracted)...Oh, right -- what flavor of build would you like to make?")
+    print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}Right -- what flavor of build would you like to make?")
 
     build_opt = input(f"""
-1. Dev (Uncompressed)
-2. Dev (Compressed)
+1. Dev (Uncompressed - for GitHub site)
+2. Dev (Compressed - for SimCase site)
 3. Release (For ACTUAL releases)
 
 {Color.YELLOW}Type your choice [press ENTER for 1]:{Color.RESET}   """).strip()
@@ -80,7 +80,7 @@ def do_program():
     print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}Waiting for you to select an output directory...")
     output_path = filedialog.askdirectory()
 
-    print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}Passing off to Unity for building.")
+    print(f"{Color.YELLOW}[BUILDER] {Color.WHITE}Passing off to Unity for building. I'll let you know when it succeeds or fails.")
     try:
         if (build_opt == "1" or build_opt == ""):
             subprocess.check_output([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod", "BatchBuild.DoBuild", "-outputPath", output_path, "-quit", "-logfile"])
