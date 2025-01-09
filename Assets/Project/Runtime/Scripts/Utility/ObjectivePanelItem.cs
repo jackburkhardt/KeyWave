@@ -19,9 +19,9 @@ namespace Project.Runtime.Scripts.Utility
         [Foldout("Success")] [Label("Text Color")] public Color textColorSuccess;
         [Foldout("Success")] [Label("Tick Sprite")] public Sprite tickSpriteSuccess;
 
-        public void SetVisibleElements(string state, string questName)
+        public void SetVisibleElements(string state, string questDesc)
         {
-            questTitle.text = questName;
+            questTitle.text = questDesc.Split('.')[0];
             switch (state)
             {
                 case "active":
