@@ -1,11 +1,13 @@
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class SequencerCommandEndOfLine : SequencerCommand
 {
+   
     public void Start()
     {
         var input = GetParameter(0, sequencer.entrytag);
@@ -111,8 +113,11 @@ public class SequencerCommandEndOfLine : SequencerCommand
                     Debug.Log("Last node, going to base conversation.");
                     Sequencer.PlaySequence("GoToConversation(" + baseConversation + ", true);");
                 }
-                else Sequencer.PlaySequence("GoToConversation(SmartWatch/Home)" + waitForTyped);
-                
+                else
+                {
+                   // Debug.Log("Last node, going to smartwatch conversation: " + GameManager.MostRecentApp[GameManager.CurrentSmartWatchMode]);
+                    SmartWatch.GoToCurrentApp(waitForTyped);
+                }
             }
         
             else

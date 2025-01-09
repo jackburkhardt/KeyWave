@@ -41,6 +41,19 @@ public abstract class ComponentSwitcher : MonoBehaviour
     
     public abstract int ActiveIndex { get; }
     
+    private int _activeIndexOverride = -1;
+    
+    protected int activeIndexOverride
+    {
+        get
+        {
+            var index = _activeIndexOverride;
+            _activeIndexOverride = -1;
+            return index >= 0 ? index : ActiveIndex;
+        } 
+        set => _activeIndexOverride = value;
+    }
+    
     private bool IsNotFirstComponent => !IsFirstComponentSwitcher;
 
     [HideIf("sync")] [SerializeField] private bool _extras = false;
@@ -105,6 +118,8 @@ public abstract class ComponentSwitcher : MonoBehaviour
        protected abstract void SwitchToPreviousObject();
 
        public abstract void SwitchTo(int index);
+
+       public abstract void RevertTo(int index);
 
 
 }
@@ -172,6 +187,7 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
         ShowComponent(ComponentsToSwitch[nextIndex]);
         
         OnSwitch.Invoke();
+        if (OnSwitchedEvents.Count > nextIndex)
         OnSwitchedEvents[nextIndex].Invoke();
 
         if (sync) return;
@@ -192,7 +208,7 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
     protected override void SwitchToPreviousObject() {
         
         _queuedIndex = -1;
-        var currentIndex = ActiveIndex;
+        var currentIndex = activeIndexOverride;
         var previousIndex = currentIndex - 1;
         
         if (_walk != null && _walk.Count != 0)
@@ -212,7 +228,7 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
         ShowComponent(ComponentsToSwitch[previousIndex]);
         
         OnSwitch.Invoke();
-        OnSwitchedEvents[previousIndex].Invoke();
+        if (OnSwitchedEvents.Count > previousIndex) OnSwitchedEvents[previousIndex].Invoke();
         
         if (sync) return;
         
@@ -228,6 +244,7 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
 
     public override void SwitchTo(int index)
     {
+        if (index == ActiveIndex) return;
         _queuedIndex =
             index;
         Next();
@@ -237,8 +254,33 @@ public abstract class ComponentSwitcher<T> : ComponentSwitcher
     {
         _queuedIndex =
             ComponentsToSwitch.FindIndex(i => i.Equals(obj));
+        if (_queuedIndex == ActiveIndex) return;
         Next();
     }
+    
+    public override void RevertTo(int index)
+    {
+        if (index == ActiveIndex) return;
+        _walk = new List<int>();
+        activeIndexOverride = index + 1;
+        Back();
+    }
+    
+    public void RevertTo(T obj)
+    {
+        var index = ComponentsToSwitch.FindIndex(i => i.Equals(obj));
+        if (index == ActiveIndex) return;
+        _walk = new List<int>();
+        activeIndexOverride = index + 1;
+        Back();
+    }
+    
+    public void RevertToDefault()
+    {
+        RevertTo(defaultIndex);
+    }
+    
+    
 
     public abstract void ShowComponent(T obj);
 

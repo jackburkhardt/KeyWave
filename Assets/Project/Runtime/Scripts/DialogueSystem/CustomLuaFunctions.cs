@@ -81,6 +81,9 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
             
             Lua.RegisterFunction(nameof(PlayerLocation), this, SymbolExtensions.GetMethodInfo(() => PlayerLocation()));
+
+            Lua.RegisterFunction(nameof(SetRootApp), this,
+                SymbolExtensions.GetMethodInfo(() => SetRootApp(string.Empty)));
         }
 
         private void DeregisterLuaFunctions()
@@ -125,6 +128,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(Length));
             Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
             Lua.UnregisterFunction(nameof(PlayerLocation));
+            Lua.UnregisterFunction(nameof(SetRootApp));
         }
         
         
@@ -462,8 +466,11 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public string PlayerLocation()
         {
             return GameManager.gameState.PlayerLocation;
-        } 
-
-
+        }
+        
+        public void SetRootApp(string app)
+        {
+            GameManager.MostRecentApp = app;
+        }
     }
 }
