@@ -9,20 +9,8 @@ namespace Project.Runtime.Scripts.Manager
 {
     public class GameState
     {
-        public enum Type
-        {
-            Normal,
-            EndOfDay
-        }
-
-
-
         public string current_scene = "Hotel";
         public int day = 1;
-        //default values
-
-        public Type type = Type.Normal;
-
 
         public int Clock
         {
@@ -135,25 +123,18 @@ namespace Project.Runtime.Scripts.Manager
                     gameState.PlayerLocation = location.Name; 
                     break;
                 case "conversation_start":
-                    //gameState.current_conversation_title = (string)playerEvent.Data;
                     break;
                 case "conversation_end":
-                    //gameState.current_conversation_title = string.Empty;
                     break;
                 case "conversation_line":
                     // note: removed, this should not trigger
-                    // gameState.current_conversation_actor = playerEvent.Source;
-                    // gameState.current_conversation_conversant = playerEvent.Target;
-                    //  gameState.current_conversation_line = (int)playerEvent.Data;
                     break;
                 case "awaiting_response":
-                    // gameState.most_recent_response_node = (string)playerEvent.Data;
                     break;
                 case "end_day":
-                    gameState.type = GameState.Type.EndOfDay;
+                    gameState.Clock = Clock.DailyLimit;
                     break;
                 case "conversation_decision":
-                    //   gameState.most_recent_response_node = string.Empty;
                     break;
                 case "points":
                     var pointsField = Points.PointsField.FromJObject(playerEvent.Data);
@@ -174,19 +155,10 @@ namespace Project.Runtime.Scripts.Manager
                     }
                     
                     Points.OnPointsChange?.Invoke(pointsField.Type);
-                    Debug.Log("invoking points");
                     break;
             }
 
-            switch (gameState.type)
-            {
-                case GameState.Type.Normal:
-                gameState.Clock += playerEvent.Duration;
-                    break;
-                case GameState.Type.EndOfDay:
-                    gameState.Clock = Clock.DailyLimit;
-                    break;
-            }
+            gameState.Clock += playerEvent.Duration;
         
             OnGameStateChanged?.Invoke(gameState);
         }
@@ -196,8 +168,7 @@ namespace Project.Runtime.Scripts.Manager
             gameState.day += 1;
             gameState.Clock = 21600;
             gameState.PlayerLocation = "Hotel";
-            // gameState.current_conversation_title = string.Empty;
-            gameState.type = GameState.Type.Normal;
+
         }
     }
 }

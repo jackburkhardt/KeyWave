@@ -48,8 +48,6 @@ namespace Project.Runtime.Scripts.ScriptableObjects
         
         public string Name => area.ToString();
 
-        //private List<Field> _luaFields;
-
         public List<Field> luaFields
         {
             get => DialogueManager.instance.masterDatabase.locations.Find(n => n.Name == Name).fields;
@@ -90,7 +88,7 @@ namespace Project.Runtime.Scripts.ScriptableObjects
                 // if cafe, distance is relative to current location
                 if (this.area == Area.Café || (this == LastNonCaféLocation && PlayerLocation.area == Area.Café))
                 {
-                    return DistanceToNearestCafe / Clock.TimeScales.GlobalTimeScale;
+                    return DistanceToNearestCafe;
                 }
                 var playerCoordinates = PlayerLocation.coordinates;
            
