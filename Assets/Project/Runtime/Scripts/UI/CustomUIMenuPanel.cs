@@ -374,7 +374,6 @@ namespace Project.Runtime.Scripts.UI
                
             }
             
-            
             return false;
             
         }
@@ -384,13 +383,7 @@ namespace Project.Runtime.Scripts.UI
             yield return new WaitForSeconds(0.1f);
             RefreshLayoutGroups.Refresh(gameObject);
         }
-
         
-        
-       
-        
-        
-
         public void StartConversationWithPlayerLocationPrefix(string conversationName)
         {
             DialogueManager.StopConversation();
@@ -407,14 +400,8 @@ namespace Project.Runtime.Scripts.UI
         {
            CloseNow();
         }
-        
-        
-        
-
-       
+   
     }
-    
-    
 }
 
 

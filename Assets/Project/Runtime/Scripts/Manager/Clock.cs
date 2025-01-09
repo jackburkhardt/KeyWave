@@ -123,7 +123,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public static string CurrentTime => To24HourClock(CurrentTimeRaw);
 
-        public static int DailyLimit => ToSeconds("24:00");
+        public static int DailyLimit => ToSeconds("20:00");
 
         public static void Freeze(bool freeze)
         {
