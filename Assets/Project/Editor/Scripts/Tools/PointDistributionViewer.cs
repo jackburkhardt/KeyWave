@@ -225,7 +225,7 @@ namespace Project.Editor.Scripts.Tools
                 foreach (Points.PointsField field in pointsField)
                 {
                     var points = field.Points;
-                    if (points == 0 && !includeZeroPointEntries) continue;
+                    if (points <= 0 && !includeZeroPointEntries) continue;
                     
                     switch (field.Type)
                     {

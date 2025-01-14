@@ -90,7 +90,7 @@ def do_program():
             subprocess.check_output([unity_path, "-batchmode", f"-projectPath \"{project_path}\"", "-buildTarget webgl", "-executeMethod", "BatchBuild.DoBuildRelease", "-outputPath", output_path, "-quit", "-logfile"])
     except CalledProcessError as e:
         print(f"{Color.RED}[BUILDER] {Color.WHITE}The computer has failed you. I don't cast blame -- here's what the program said:")
-        print(f"({e.returncode}) {e.output}")
+        print(f"{Color.MAGENTA}(Return Code: {e.returncode}) {Color.RESET} {e.output.decode()}")
         return 1
 
     print(f"{Color.GREEN}[BUILDER] {Color.WHITE}SUCCESS! Enjoy that. We worked hard for it.")
