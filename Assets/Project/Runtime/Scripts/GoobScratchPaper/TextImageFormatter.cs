@@ -61,8 +61,6 @@ public class TextImageFormatter : MonoBehaviour
         
         _previousText = _sourceText.text;
         
-        Debug.Log("Text changed to " + _sourceText.text);
-        
         SetFormattedText(_sourceText.text);
     }
 

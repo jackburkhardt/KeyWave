@@ -52,48 +52,13 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     {
        
         
-        //show all accumulated subtitles
-        if (accumulateText && accumulateByInstantiation)
-        {
-            
-            foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
-            {
-                if (go.parent == accumulatedContentHolder)
-                {
-                    go.gameObject.SetActive(true);
-                }
-            }
-        }
+        if (accumulateText && accumulateByInstantiation) RevealAccumulatedContent();
         
         base.ShowSubtitle(subtitle);
         
+        if (accumulateText && accumulateByInstantiation) AccumulateContentSecretly(subtitle);
         
-        
-        if (accumulateText && accumulateByInstantiation) StartCoroutine(Accumulate(subtitle));
-        
-        IEnumerator Accumulate(Subtitle sub)
-        {
-            
-          
-            
-            while (subtitleText.text != subtitle.formattedText.text) yield return new WaitForEndOfFrame();
-            
-            if (!string.IsNullOrWhiteSpace(sub.formattedText.text))
-            {
-                var duplicate = Instantiate(templateContent, accumulatedContentHolder);
-                var typewriter = duplicate.GetComponentInChildren<AbstractTypewriterEffect>();
-        
-                if (typewriter != null)
-                {
-                    typewriter.Stop();
-                    typewriter.enabled = false;
-                }
-            
-                duplicate.gameObject.SetActive(false);
-            }
-        
-            RefreshLayoutGroups.Refresh(gameObject);
-        }
+       
       
     }
 
@@ -165,8 +130,50 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         subtitleText.text = string.Empty;
     }
 
-    
+    private void RevealAccumulatedContent()
+    {
+        foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
+        {
+            if (go.parent == accumulatedContentHolder)
+            {
+                go.gameObject.SetActive(true);
+            }
+        }
+    }
 
+    private void AccumulateContentSecretly(Subtitle subtitle)
+    {
+        
+        StartCoroutine(Accumulate(subtitle));
+        
+        IEnumerator Accumulate(Subtitle sub)
+        {
+            Debug.Log("Accumulating");
+          
+            var typewriter = subtitleText.gameObject.GetComponentInChildren<AbstractTypewriterEffect>();
+            
+            while (!typewriter.isPlaying)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            
+            if (!string.IsNullOrWhiteSpace(sub.formattedText.text))
+            {
+                var duplicate = Instantiate(templateContent, accumulatedContentHolder);
+                var duplicateTypewriter = duplicate.GetComponentInChildren<AbstractTypewriterEffect>();
+        
+                if (duplicateTypewriter != null)
+                {
+                    duplicateTypewriter.Stop();
+                    duplicateTypewriter.enabled = false;
+                }
+            
+                duplicate.gameObject.SetActive(false);
+            }
+        
+            RefreshLayoutGroups.Refresh(gameObject);
+        }
+    }
 
     public void OnSuperceded()
     {

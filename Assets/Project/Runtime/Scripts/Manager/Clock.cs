@@ -104,7 +104,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public const int StartTime = 21600;
 
-        public const int MaxDayTime = 86400;
+        public const int MaxDayTime = 72000;
 
         public static int CurrentVisualizedTimeRaw = ClockUI.CurrentVisualizedTimeRaw;
 

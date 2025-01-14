@@ -1,3 +1,5 @@
+using System;
+using NaughtyAttributes;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,8 +16,21 @@ public class TrafficLevelElement : MonoBehaviour
 
     private int _startTimeInt;
     private int _endTimeInt;
+
+    [Tooltip("An anchor is an element that represents the value of 1x traffic multiplier.")]
+    public bool isAnchor;
     
-    // Start is called before the first frame update
+    [HideIf("isAnchor")]
+    public TrafficLevelElement anchor;
+
+    private void OnValidate()
+    {
+        if (!isAnchor && anchor != null)
+        {
+            
+        }
+    }
+
     void Start()
     {
         _startTimeInt = Clock.ToSeconds(startTime);
