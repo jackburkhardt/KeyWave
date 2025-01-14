@@ -32,7 +32,7 @@ namespace ntw.CurvedTextMeshPro
     /// <summary>
     /// Base class for drawing a Text Pro text following a particular curve
     /// </summary>
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public abstract class TextProOnACurve : MonoBehaviour
     {
         /// <summary>

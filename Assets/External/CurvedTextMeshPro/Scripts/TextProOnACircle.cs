@@ -29,7 +29,7 @@ namespace ntw.CurvedTextMeshPro
     /// <summary>
     /// Class for drawing a Text Pro text following a circle arc
     /// </summary>
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public class TextProOnACircle : TextProOnACurve
     {
         /// <summary>

@@ -92,9 +92,10 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
         base.OnRectTransformDimensionsChange();
     }
     
+    [Button]
     public void RecalculateCorners()
     {
-        SetVerticesDirty();
+        
         
     }
 }
