@@ -13,15 +13,13 @@ using Project.Runtime.Scripts.Manager;
 public class PointsVisualizer : MonoBehaviour
 {
    
-    
-    public string credibilityAnimationTrigger = "Credibility";
-    public string engagementAnimationTrigger = "Engagement";
-    public string commitmentAnimationTrigger = "Commitment";
-    public string wellnessAnimationTrigger = "Wellness";
-    
     [SerializeField] private float dialogueSystemPauseDuration = 2f;
     
     [SerializeField] private Animator animator;
+    
+    public string animationTrigger = "Points";
+    
+    private bool _isAnimating;
 
 
     private void OnEnable()
@@ -37,32 +35,23 @@ public class PointsVisualizer : MonoBehaviour
 
     private void VisualizePointType(Points.Type type)
     {
-        Debug.Log("Visualizing points");
         DialogueManager.instance.Pause();
         
-        switch (type)
-        {
-            case Points.Type.Credibility:
-                animator.SetTrigger(credibilityAnimationTrigger);
-                break;
-            case Points.Type.Engagement:
-                animator.SetTrigger(engagementAnimationTrigger);
-                break;
-            case Points.Type.Commitment:
-                animator.SetTrigger(commitmentAnimationTrigger);
-                break;
-            case Points.Type.Wellness:
-                animator.SetTrigger(wellnessAnimationTrigger);
-                 break;
-        }
+        _isAnimating = true;
         
-        StartCoroutine(ResumeDialogue());
+        StartCoroutine(Animate(type));
         
-        IEnumerator ResumeDialogue()
+        IEnumerator Animate(Points.Type type)
         {
+            yield return new WaitForEndOfFrame();
+        
+            animator.SetTrigger(animationTrigger);
+        
             yield return new WaitForSeconds(dialogueSystemPauseDuration);
             DialogueManager.instance.Unpause();
         }
+        
+        
     }
     
     

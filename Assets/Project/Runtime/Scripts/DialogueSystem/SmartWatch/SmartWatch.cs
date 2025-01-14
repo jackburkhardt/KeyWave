@@ -83,6 +83,11 @@ public class SmartWatch : ScriptableObject
         _currentApp = app;
     }
     
+    public static void ResetCurrentApp()
+    {
+        _currentApp = null;
+    }
+    
     public static void GoToCurrentApp(string sequenceSuffix = "")
     {
         OpenApp(_currentApp ?? instance.apps[0], sequenceSuffix);

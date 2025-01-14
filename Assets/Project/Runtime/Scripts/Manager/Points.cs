@@ -20,8 +20,8 @@ namespace Project.Runtime.Scripts.Manager
             Wellness,
             Credibility,
             Engagement,
-            Null,
-            Commitment
+            Commitment,
+            Null
         }
 
         private static bool isAnimating;

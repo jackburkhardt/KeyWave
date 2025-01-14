@@ -271,7 +271,7 @@ namespace Project.Runtime.Scripts.Manager
             }
 
 
-            MostRecentApp = "SmartWatch/Home";
+            SmartWatch.ResetCurrentApp();
             
             
             StartCoroutine(TravelToHandler());
