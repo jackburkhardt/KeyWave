@@ -83,7 +83,19 @@ namespace Project.Runtime.Scripts.UI
                 DestroyInstantiatedButtons();
             }
 
-
+            protected override void ShowResponsesNow(Subtitle subtitle, Response[] responses, Transform target)
+            {
+            
+                if (responses == null || responses.Length == 0)
+                {
+                    if (TryGetComponent<SmartWatchApp>(out var app))
+                    {
+                        app.OnEnable();
+                    }
+                }
+            
+                base.ShowResponsesNow(subtitle, responses, target);
+            }
 
             private Response[] _currentResponses;
             private int _currentResponseIndex;
