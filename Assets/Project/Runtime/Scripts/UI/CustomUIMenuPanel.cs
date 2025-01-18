@@ -200,6 +200,21 @@ namespace Project.Runtime.Scripts.UI
 
             NotifyContentChanged();
         }
+
+
+        protected override void ShowResponsesNow(Subtitle subtitle, Response[] responses, Transform target)
+        {
+            
+            if (responses == null || responses.Length == 0)
+            {
+                if (TryGetComponent<SmartWatchApp>(out var app))
+                {
+                    app.OnEnable();
+                }
+            }
+            
+            base.ShowResponsesNow(subtitle, responses, target);
+        }
             
             
             
@@ -282,7 +297,7 @@ namespace Project.Runtime.Scripts.UI
            
            if (destinationEntry.SimStatus() == "WasDisplayed")
            {
-               Clock.Freeze(true);
+            //   Clock.Freeze(true);
            }
 
            if (destinationEntry.outgoingLinks.Count == 0)

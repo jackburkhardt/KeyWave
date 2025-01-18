@@ -23,6 +23,8 @@ public class CustomUIPanel : UIPanel
     public UnityEvent OnUnfocus;
     
     public UnityEvent OnAwake;
+    
+    public string forceCloseAnimationTrigger;
 
     private Animator Animator => animator ? animator : GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
 
@@ -176,6 +178,12 @@ public class CustomUIPanel : UIPanel
         }
        
     }
+    
+    public void ForceClose()
+    {
+        Close();
+        animator.SetTrigger(forceCloseAnimationTrigger);
+    }
 
 }
 
@@ -229,6 +237,24 @@ public class SequencerCommandFocusCustomPanel : SequencerCommand
                 {
                     panel.RemoveFocus();
                 }
+            }
+        }
+    }
+    
+}
+
+
+public class SequencerCommandHideCustomPanel : SequencerCommand
+{
+    private void Awake()
+    {
+        var panels = FindObjectsOfType<CustomUIPanel>();
+        var panelName = GetParameter(0);
+        foreach (var panel in panels)
+        {
+            if (panel.panelName == panelName)
+            {
+                panel.ForceClose();
             }
         }
     }

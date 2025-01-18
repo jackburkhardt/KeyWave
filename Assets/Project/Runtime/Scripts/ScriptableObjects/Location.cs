@@ -35,6 +35,10 @@ namespace Project.Runtime.Scripts.ScriptableObjects
         public List<Item> objectives;
         public bool unlocked;
         [SerializeField] private Vector2 coordinates;
+        
+        
+        public static Action<Location> OnLocationLeave;
+        public static Action<Location> OnLocationEnter;
 
         public Vector2 Coordinates
         {
@@ -110,11 +114,18 @@ namespace Project.Runtime.Scripts.ScriptableObjects
             LastLocation = FromString(GameManager.gameState.PlayerLocation);
             if (LastLocation.area != Area.Café) LastNonCaféLocation = LastLocation;
             
-            GameManager.Log("Left " + LastLocation.Name, GameManager.LogType.Travel);
-            
             GameEvent.OnMove(this.Name, LastLocation, Distance);
             
-            GameManager.instance.TravelTo(this);
+            GameManager.instance.TravelTo(this.name,
+                onStart: () =>
+                {
+                    OnLocationLeave?.Invoke(PlayerLocation);
+                },
+                onComplete: () =>
+                {
+                    OnLocationEnter?.Invoke(this);
+                }
+                );
         }
         
         public void FadeHere()

@@ -30,16 +30,7 @@ namespace Project.Runtime.Scripts.UI
         
         private bool timeIsUpdating;
         private string CurrentVisualizedTime => Clock.To24HourClock(CurrentVisualizedTimeRaw);
-
-        private void OnEnable()
-        {
-            Clock.OnTimeScaleChange += OnTimeScaleChange;
-        }
-
-        private void OnDisable()
-        {
-            Clock.OnTimeScaleChange -= OnTimeScaleChange;
-        }
+        
 
         private void Awake()
         {
@@ -51,18 +42,7 @@ namespace Project.Runtime.Scripts.UI
             CurrentVisualizedTimeRaw = GameStateManager.instance.gameState.Clock;
             timeText.text = RemoveColon(CurrentVisualizedTime);
         }
-
-        private void OnTimeScaleChange()
-        {
-            if (Clock.TimeScales.Modifier == 0)
-            {
-                clock.color = clockDisabledColor;
-            }
-            else
-            {
-                clock.color = clockEnabledColor;
-            }
-        }
+        
 
         private void Update()
         {

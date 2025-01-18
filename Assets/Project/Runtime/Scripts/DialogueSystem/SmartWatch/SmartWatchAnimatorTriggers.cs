@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -54,7 +56,7 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
     private void OnValidate()
     {
         animator ??= GetComponent<Animator>();
-        if (SmartWatch.instance == null) return;
+        if (SmartWatch.instance == null || SmartWatch.instance.apps == null) return;
         
         if (animatorTriggers == null) animatorTriggers = new List<string>();
         if (animatorTriggers.Count != SmartWatch.instance.apps.Count)
@@ -102,4 +104,15 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
             }
         }
     }
+
+    private void OnConversationEnd()
+    {
+        var currentConversation =
+            DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.GetConversation();
+        
+        Debug.Log(currentConversation);
+    }
+
+   
+    
 }

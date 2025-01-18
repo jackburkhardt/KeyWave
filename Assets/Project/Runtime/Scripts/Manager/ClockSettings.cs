@@ -1,4 +1,5 @@
 using System;
+using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Manager;
@@ -101,33 +102,32 @@ namespace Project.Runtime.Scripts.Manager
             _58 = 58,
             _59 = 59
         }
-
-        public const int StartTime = 21600;
-
-        public const int MaxDayTime = 72000;
+        
 
         public static int CurrentVisualizedTimeRaw = ClockUI.CurrentVisualizedTimeRaw;
 
         public static int CurrentTimeRaw
         {
-            get { return GameManager.gameState != null ? GameManager.gameState.Clock : DialogueLua.GetVariable("clock").asInt; }
+            get { return GameManager.gameState != null ? GameManager.gameState.Clock : Settings.Clock.CurrentTime; }
             set { GameManager.gameState.Clock = value; }
         }
 
         public static float DayProgress {
             get
             {
-                return (CurrentTimeRaw - StartTime)/(float)MaxDayTime;
+                float range = Settings.Clock.DayEndTime - Settings.Clock.DayStartTime;
+                return (CurrentTimeRaw - Settings.Clock.DayStartTime)/range;
             }
         }
 
         public static string CurrentTime => To24HourClock(CurrentTimeRaw);
 
         public static int DailyLimit => ToSeconds("20:00");
-
-        public static void Freeze(bool freeze)
+        
+        
+        public static int TimeFromProgress(float progress)
         {
-            TimeScales.Modifier = freeze ? 0 : 1;
+            return Mathf.RoundToInt(progress * (Settings.Clock.DayEndTime - Settings.Clock.DayStartTime) + Settings.Clock.DayStartTime);
         }
 
         public static int HoursToSeconds(int hours) => hours * 3600;
@@ -161,17 +161,20 @@ namespace Project.Runtime.Scripts.Manager
         /// <param name="clock"></param>
         /// <returns></returns>
 
-        public static string To24HourClock(int clock)
+        public static string To24HourClock(int clock, bool includeSeconds = false)
         {
-            if (clock > MaxDayTime) clock -= MaxDayTime;
+            while (clock > HoursToSeconds(24)) clock -= HoursToSeconds(24);
             var hours = clock / 3600;
             var minutes = (clock % 3600) / 60;
+            var seconds = clock % 60;
         
             var minutesString = minutes < 10 ? $"0{minutes}" : minutes.ToString();
             var hoursString = hours < 10 ? $"0{hours}" : hours.ToString();
+            var secondsString = seconds < 10 ? $"0{seconds}" : seconds.ToString();
         
-            return $"{hoursString}:{minutesString}";
+            return includeSeconds ? $"{hoursString}:{minutesString}:{secondsString}" : $"{hoursString}:{minutesString}";
         }
+        
 
         public static string EstimatedTimeOfArrival(Location location)
         {
@@ -194,31 +197,47 @@ namespace Project.Runtime.Scripts.Manager
         {
             return GetHoursAsInt(To24HourClock(time));
         }
-        
-        public static Action OnTimeScaleChange;
+    }
+}
 
+[CreateAssetMenu(fileName = "Clock Settings", menuName = "Settings/Clock Settings")]
 
-        public struct TimeScales
-        {
-            private static int _modifier = 1;
-            internal static int Modifier
-            {
-                get
-                {
-                    return _modifier;
-                }
-                set
-                {
-                    _modifier = value;
-                    OnTimeScaleChange.Invoke();
-                }
-            }
-            internal static int GlobalTimeScale => 1 * Modifier;
+public class ClockSettings : ScriptableObject
+{
+    public float globalModifier = 1;
     
-            internal static float SecondsPercharacter = 3f; //default 1.5
-            internal static int SecondsBetweenLines = 60;
-            internal static int SecondsPerInteract = 45;
+    public float SecondsPerCharacter = 3f;
+    public int SecondsBetweenLines = 60;
+    public int SecondsPerInteract = 45;
+    
+    public int DayStartTime = 21600;
+    [ReadOnly] [Label("Time:")] public string DayStartTimeString = "06:00:00";
+    public int DayEndTime = 72000;
+    [ReadOnly]  [Label("Time:")] public string DayEndTimeString = "20:00:00";
+    [Tooltip("This property modifies the variable \"clock\" in the Dialogue Database")]
+    public int CurrentTime = 21600;
+    [ReadOnly] [Label("Time:")] public string CurrentTimeString = "06:00:00";
+
+    private void OnValidate()
+    {
+        
+        CurrentTime = Mathf.Clamp(CurrentTime, DayStartTime, DayEndTime);
+
+        if (!Application.isPlaying)
+        {
+            if (Settings.Instance != null) Settings.Instance.dialogueDatabase.GetVariable("clock").InitialValue = CurrentTime.ToString();
         }
+        
+        else CurrentTime = DialogueLua.GetVariable("clock").asInt;
+        
+        
+        
+        
+        DayStartTimeString = Clock.To24HourClock(DayStartTime, true);
+        DayEndTimeString = Clock.To24HourClock(DayEndTime, true);
+        CurrentTimeString = Clock.To24HourClock(CurrentTime, true);
+
+        
     }
 }
 

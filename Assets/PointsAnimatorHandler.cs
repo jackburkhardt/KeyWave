@@ -49,7 +49,7 @@ public class PointsAnimatorHandler : MonoBehaviour
         animator.SetTrigger(hideTrigger);
     }
     
-    private void HandlePointsChange(Points.Type pointType)
+    private void HandlePointsChange(Points.Type pointType, int amount)
     {
         
         

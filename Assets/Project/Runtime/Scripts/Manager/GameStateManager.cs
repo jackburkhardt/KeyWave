@@ -154,7 +154,7 @@ namespace Project.Runtime.Scripts.Manager
                             break;
                     }
                     
-                    Points.OnPointsChange?.Invoke(pointsField.Type);
+                    Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
                     break;
             }
 
@@ -166,7 +166,7 @@ namespace Project.Runtime.Scripts.Manager
         public void StartNextDay()
         {
             gameState.day += 1;
-            gameState.Clock = 21600;
+            gameState.Clock = Settings.Clock.DayStartTime;
             gameState.PlayerLocation = "Hotel";
 
         }

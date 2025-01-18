@@ -28,7 +28,7 @@ namespace Project.Runtime.Scripts.Manager
 
         private static Vector2 spawnPosition;
         
-        public static Action<Type> OnPointsChange;
+        public static Action<Type, int> OnPointsChange;
 
         public static Action<Type> OnAnimationStart;
 

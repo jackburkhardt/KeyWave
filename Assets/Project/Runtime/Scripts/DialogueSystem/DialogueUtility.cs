@@ -88,7 +88,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                     break;
             }
 
-            return value * Clock.TimeScales.GlobalTimeScale;
+            return (int)(value * Settings.Clock.globalModifier);
         }
 
         public static int GetQuestDuration(Item quest)
@@ -262,8 +262,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 return 0;
             }
             //Debug.Log($"Auto Node Duration from Line: {line.Length / Clock.TimeScales.SpokenCharactersPerSecond + Clock.TimeScales.SecondsBetweenLines}");
-            return ((int)(line.Length * Clock.TimeScales.SecondsPercharacter) +
-                    Clock.TimeScales.SecondsBetweenLines) * Clock.TimeScales.GlobalTimeScale;
+            return (int)((line.Length * Settings.Clock.SecondsPerCharacter +
+                    Settings.Clock.SecondsBetweenLines) * Settings.Clock.globalModifier);
         }
 
         public static int GetNodeDuration(DialogueEntry dialogueEntry)

@@ -108,6 +108,8 @@ public class SequencerCommandEndOfLine : SequencerCommand
             if (entry.IsLastNode())
             {
                 var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
+                
+                
                 if (title != baseConversation && !title.Contains("SmartWatch"))
                 {
                     Debug.Log("Last node, going to base conversation.");

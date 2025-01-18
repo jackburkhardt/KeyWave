@@ -46,6 +46,8 @@ namespace Project.Runtime.Scripts.Manager
         public UnityEvent OnGameSceneStart;
         public UnityEvent OnGameSceneEnd;
         
+        
+        
         private static string _mostRecentApp = "SmartWatch/Home";
 
         public static string MostRecentApp
@@ -59,6 +61,9 @@ namespace Project.Runtime.Scripts.Manager
             
             set => _mostRecentApp = $"SmartWatch/{value}";
         }
+        
+        
+       public Settings gameSettings;
 
 
         private void Awake()
@@ -135,7 +140,7 @@ namespace Project.Runtime.Scripts.Manager
             {
                 GameEvent.OnDayEnd();
                 DialogueManager.StopAllConversations();
-                EndOfDay();
+                DialogueManager.StartConversation("EndOfDay");
             }
         }
 
@@ -143,7 +148,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             GameStateManager.instance.StartNextDay();
             dailyReport = new DailyReport(gameState.day);
-            App.App.Instance.ChangeScene("Hotel", "EndOfDay");
+            App.App.Instance.ChangeScene("Hotel", "EndOfDay", LoadingScreen.LoadingScreenType.Black);
         }
 
         public IEnumerator StartNewSave()
@@ -202,6 +207,7 @@ namespace Project.Runtime.Scripts.Manager
                 else if (state == QuestState.Success)
                 {
                     DialogueLua.SetQuestField(questName, "Time Complete", Clock.CurrentTime);
+                    QuestUtility.OnQuestComplete?.Invoke(quest);
                 }
             }
 
@@ -248,7 +254,7 @@ namespace Project.Runtime.Scripts.Manager
         }
 
 
-        public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene);
+        public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, LoadingScreen.LoadingScreenType.Black);
 
         public void StartOfDay() => App.App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
 
@@ -257,12 +263,14 @@ namespace Project.Runtime.Scripts.Manager
             TravelTo(location.Name, loadingScreenType: type);
         }
 
-        public void TravelTo(string newLocation, string currentScene = "", LoadingScreen.LoadingScreenType? loadingScreenType =  LoadingScreen.LoadingScreenType.Default)
+        public void TravelTo(string newLocation, string currentScene = "", LoadingScreen.LoadingScreenType? loadingScreenType =  LoadingScreen.LoadingScreenType.Default, Action onStart = null, Action onComplete = null)
         {
 
             DialogueManager.StopConversation();
             
             OnGameSceneEnd?.Invoke();
+            
+            onStart?.Invoke();
             
             if (currentScene == "")
             {
@@ -294,9 +302,11 @@ namespace Project.Runtime.Scripts.Manager
                 DialogueManager.StartConversation($"{newLocation}/Base");
                 
                 OnGameSceneStart?.Invoke();
-
-                if (newLocation != "StartMenu") Log("Arrived at " + newLocation, LogType.Travel);
+                
+                
                 gameState.current_scene = newLocation;
+                
+                onComplete?.Invoke();
             }
         }
 
@@ -305,26 +315,8 @@ namespace Project.Runtime.Scripts.Manager
             GameEvent.OnWait(duration);
         }
         
-        public enum LogType
-        {
-            Default,
-            Travel,
-        }
         
-        public static void Log(string message, LogType type = LogType.Default)
-        {
-            var log = DialogueLua.GetVariable("game.log").asString;
-            var color = type switch
-            {
-                LogType.Default => string.Empty,
-                LogType.Travel => "<color=#98fff3>",
-                _ => string.Empty
-            };
-            
-            
-            log += $"[br({color}{Clock.CurrentTime})] {color}{message}";
-            DialogueLua.SetVariable("game.log", log);
-        }
+        
 
        
 

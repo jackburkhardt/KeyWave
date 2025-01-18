@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using PixelCrushers.DialogueSystem;
@@ -10,6 +11,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
 {
     public class QuestUtility
     {
+        public static Action<Item> OnQuestComplete;
+        
         public static Points.PointsField[] GetPoints(string questTitle, DialogueDatabase database = null)
         {
             database ??= DialogueManager.MasterDatabase;

@@ -169,8 +169,6 @@ namespace Project.Runtime.Scripts.UI
             DialogueManager.instance.StartCoroutine(CheckTMProAutoScroll());
 #endif
             
-            Clock.Freeze(false);
-            
         }
         
         public override void Unfocus()

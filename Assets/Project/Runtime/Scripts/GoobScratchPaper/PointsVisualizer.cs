@@ -33,7 +33,7 @@ public class PointsVisualizer : MonoBehaviour
     }
 
 
-    private void VisualizePointType(Points.Type type)
+    private void VisualizePointType(Points.Type type, int amount)
     {
         DialogueManager.instance.Pause();
         

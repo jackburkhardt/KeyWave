@@ -261,7 +261,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public void FreezeClock(bool freeze)
         {
-            Clock.Freeze(freeze);
+          //  Clock.Freeze(freeze);
         }
 
         public bool SurpassedTime(string time)

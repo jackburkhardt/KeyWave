@@ -54,7 +54,7 @@ public class PointsFishBowl : MonoBehaviour
         Points.OnPointsChange -= SetPoints;
     }
 
-    private void SetPoints(Points.Type pointType)
+    private void SetPoints(Points.Type pointType, int amount)
     {
         if (pointType != type)
         {

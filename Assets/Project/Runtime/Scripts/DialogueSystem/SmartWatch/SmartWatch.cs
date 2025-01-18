@@ -10,7 +10,6 @@ using UnityEngine;
 public class SmartWatch : ScriptableObject
 {
 
-    [ReadOnly] public bool isInstance;
     private static App _currentApp;
 
     [Serializable]
@@ -25,39 +24,20 @@ public class SmartWatch : ScriptableObject
     
     [HideInInspector] public List<string> appNames => apps.ConvertAll(app => app.name);
 
-    private void OnValidate()
-    {
-        if (_instance == null)
-            AddressableLoader.RequestLoad<SmartWatch>("SmartWatch.asset", watch =>
-            {
-                _instance = watch;
-                if (watch != null) OnValidate();
-            });
-
-
-        foreach (var app in apps)
-        {
-            app.animatorTrigger = app.name;
-        }
-
-        isInstance = _instance == this;
-
-    }
-
-    private static SmartWatch _instance;
-
-    public static SmartWatch instance
-    {
+   
+    public static SmartWatch instance {
         get
         {
-           
-            return GameManager.instance.smartWatchAsset;
+            if (Settings.SmartWatch == null) return null;
+            return Settings.SmartWatch;
         }
     }
+
     
     public static App GetApp(string name)
     {
-        return instance.apps.Find(app => app.name == name);
+        if (Settings.SmartWatch == null || Settings.SmartWatch.apps == null) return null;
+        return Settings.SmartWatch.apps.Find(app => app.name == name);
     }
     
     public static Action<App> OnAppOpen;
@@ -67,10 +47,6 @@ public class SmartWatch : ScriptableObject
     {
         OnAppOpen += SetCurrentApp;
         
-        AddressableLoader.RequestLoad<SmartWatch>("SmartWatch.asset", watch =>
-        {
-            _instance = watch;
-        });
     }
     
     private void OnDisable()
@@ -90,7 +66,8 @@ public class SmartWatch : ScriptableObject
     
     public static void GoToCurrentApp(string sequenceSuffix = "")
     {
-        OpenApp(_currentApp ?? instance.apps[0], sequenceSuffix);
+        
+        OpenApp(_currentApp ?? Settings.SmartWatch.apps[0], sequenceSuffix);
     } 
     
     
@@ -98,9 +75,17 @@ public class SmartWatch : ScriptableObject
     {
         DialogueManager.instance.PlaySequence($"GoToConversation({app.dialogueSystemConversationTitle})" + sequenceSuffix);
     }
-    
-    
-    
+
+    private void OnValidate()
+    {
+        foreach (var app in apps)
+        {
+            if (string.IsNullOrEmpty(app.animatorTrigger))
+            {
+                app.animatorTrigger = app.name;
+            }
+        }
+    }
 }
                 
         

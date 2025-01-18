@@ -11,8 +11,8 @@ public class TrafficLevels : MonoBehaviour
     [Tooltip("The content holder that contains the individual traffic level elements.")]
     public RectTransform content;
 
-    [Tooltip("The element within the content holder that represents the value of 1x traffic multiplier.")]
-    public RectTransform anchor;
+
+    public float maxValue = 500f;
 
     public enum Action
     {
@@ -70,11 +70,11 @@ public class TrafficLevels : MonoBehaviour
         {
             case Action.AdjustHeight:
                 element.sizeDelta = new Vector2(element.rect.width,
-                    Traffic.GetTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount, false) * anchor.rect.height);
+                    Traffic.GetTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount, false) * maxValue);
                 break;
             case Action.AdjustWidth:
                 element.sizeDelta = new Vector2(
-                    Traffic.GetTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount, false) * anchor.rect.width,
+                    Traffic.GetTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount, false) * maxValue,
                     element.rect.height);
                 break;
             default:
@@ -85,7 +85,7 @@ public class TrafficLevels : MonoBehaviour
     [Button]
     private void SetTrafficLevels()
     {
-        if (content == null || anchor == null || anchor.transform.parent != content) return;
+        if (content == null) return;
         
         var elementCount = content.childCount;
 
@@ -97,8 +97,6 @@ public class TrafficLevels : MonoBehaviour
         {
             
             SetTrafficElementAlpha(t);
-            
-            if (t.transform == anchor.transform) continue;
             
             DoActionOnElement(t);
             

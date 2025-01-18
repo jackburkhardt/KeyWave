@@ -79,7 +79,7 @@ public class SmartWatchEvents : MonoBehaviour
     private void OnValidate()
     {
         animator ??= GetComponent<Animator>();
-        
+        if (SmartWatch.instance == null || SmartWatch.instance.apps == null) return;
         if (apps == null) apps = new List<SmartWatchApp>();
         if (apps.Count != SmartWatch.instance.apps.Count) apps = new List<SmartWatchApp>( SmartWatch.instance.apps.Count);
         
