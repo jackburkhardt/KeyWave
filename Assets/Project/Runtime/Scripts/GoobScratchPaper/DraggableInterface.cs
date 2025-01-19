@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 
 [ExecuteInEditMode]
@@ -27,6 +29,14 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
 
     public UnityEvent onDrag;
     public UnityEvent onScroll;
+    
+    private RectTransform[] _rectChildren;
+    private int _childCount;
+    
+    private AspectRatioFitter _aspectRatioFitter;
+    
+    [Tooltip("Scales the radius used to check if a child is inside or outside the viewport.")]
+    public float BoundsCheckRadiusMultiplier = 1.6f;
     
     private float Scale
     {
@@ -80,6 +90,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     {
         _rectTransform ??= GetComponent<RectTransform>();
         _container ??= transform.parent.GetComponentInParent<RectTransform>();
+        _aspectRatioFitter ??= GetComponent<AspectRatioFitter>();
     }
 
     private void Update()
@@ -87,6 +98,14 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
         if (_rectTransform == null) return;
         _rectTransform.localScale = new Vector3(Scale, Scale, 1);
         _rectTransform.anchoredPosition = NearestValidPosition;
+        
+        if (_childCount != transform.childCount)
+        {
+            _rectChildren = GetComponentsInChildren<RectTransform>().Where(p => p.transform.parent == this.transform).ToArray();
+            _childCount = transform.childCount;
+        }
+        
+        CheckChildBounds();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -97,13 +116,47 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
         pos += eventData.delta;
         _rectTransform.anchoredPosition = pos;
         onDrag?.Invoke();
+
+        
     }
+
+    // used to check if children are visible in the viewport
+    public void CheckChildBounds()
+    {
+        if (childrenWithinBounds == null) childrenWithinBounds = new List<RectTransform>();
+        
+        foreach (var rect in _rectChildren)
+        {
+            var distance = Vector2.Distance(rect.transform.position, _container.transform.position);
+            
+            if (distance < _container.rect.width * BoundsCheckRadiusMultiplier / 2)
+            {
+                if (!childrenWithinBounds.Contains(rect))
+                {
+                    childrenWithinBounds.Add( rect);
+                    rect.SendMessage("OnDraggableInterfaceViewportEnter", SendMessageOptions.DontRequireReceiver);
+                }
+            }
+            
+            else if (distance >= _container.rect.width * BoundsCheckRadiusMultiplier / 2)
+            {
+                if (childrenWithinBounds.Contains(rect))
+                {
+                    childrenWithinBounds.Remove(rect);
+                    rect.SendMessage("OnDraggableInterfaceViewportExit", SendMessageOptions.DontRequireReceiver);
+                }
+            }
+        }
+    }
+
+    private List<RectTransform> childrenWithinBounds;
 
     public void OnScroll(PointerEventData eventData)
     {
         if (ignoreDrag) return;
         Scale += eventData.scrollDelta.y * 0.03f;
         onScroll?.Invoke();
+
     }
     
     public void ZoomInOnPosition(Vector3 position)
