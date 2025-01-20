@@ -14,10 +14,19 @@ public static class Traffic
 
     public static float CurrentTrafficMultiplier => GetTrafficMultiplier(Clock.DayProgress);
     
-    public static float GetTrafficMultiplier(float progress, bool includeGlobalMultiplier = true)
+    public static float GetRawTrafficMultiplier(float progress)
+    {
+        return Settings.Traffic.trafficCurve.Evaluate(progress);
+
+    }
+    
+    private static float GetTrafficMultiplier(float progress)
     {
         if (!Settings.Traffic  || Settings.Traffic.trafficCurve == null) return 1f;
-        return Settings.Traffic.trafficCurve.Evaluate(progress) * (includeGlobalMultiplier ? Settings.Traffic.globalMultiplier : 1f);
+        
+        var range = Settings.Traffic.peakTrafficLevel - Settings.Traffic.baseTrafficLevel;
+    
+        return Settings.Traffic.trafficCurve.Evaluate(progress) * range + Settings.Traffic.baseTrafficLevel;
     }
     
 }
@@ -25,10 +34,16 @@ public static class Traffic
 [CreateAssetMenu(fileName = "TrafficSettings", menuName = "TrafficSettings")]
 public class TrafficSettings : ScriptableObject
 {
-    public float globalMultiplier = 1f;
+    
+    public float baseTrafficLevel = 1f;
+    public float peakTrafficLevel = 1f;
+    
+   
     
     [CurveRange(0, 1, 0, 1, EColor.Blue)]
     public AnimationCurve trafficCurve;
+    
+   
 
     private void OnValidate()
     {

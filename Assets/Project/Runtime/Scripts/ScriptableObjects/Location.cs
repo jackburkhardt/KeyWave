@@ -69,23 +69,6 @@ namespace Project.Runtime.Scripts.ScriptableObjects
             set { GameManager.gameState.LastNonCaféLocation = value.Name; }
         }
 
-        private float Traffic
-        {
-            get
-            {
-                var trafficLevels = new float[]
-                    { 1, 2.4f, 2.77f, 1.77f, 1.99f, 1f, 2.2f, 2.5f, 1.97f, 1.32f, 0.67f, 0.322f };
-
-                var lerpPercentage = (Clock.DayProgress * 12) % 1;
-
-                var lowerBound = (int)Math.Floor(Clock.DayProgress * 12);
-                var upperBound = (int)Math.Ceiling(Clock.DayProgress * 12);
-                if (upperBound > 11) upperBound = 0;
-            
-                return Mathf.Lerp(trafficLevels[lowerBound], trafficLevels[upperBound], lerpPercentage) * _trafficMultiplier;
-            }
-        }
-
         private int Distance
         {
             get
@@ -98,7 +81,7 @@ namespace Project.Runtime.Scripts.ScriptableObjects
                 }
                 var playerCoordinates = PlayerLocation.coordinates;
            
-                return (int)(Vector2.Distance(playerCoordinates, coordinates) * Traffic);
+                return (int)(Vector2.Distance(playerCoordinates, coordinates) * Traffic.CurrentTrafficMultiplier);
             }
         }
 

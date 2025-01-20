@@ -67,6 +67,7 @@ namespace Project.Runtime.Scripts.UI
         public void BeginSaveRetrieval()
         {
             SaveDataStorer.BeginSaveRetrieval();
+            Settings.TryGetSettings( out var settings);
         }
         
         private void OnDestroy()

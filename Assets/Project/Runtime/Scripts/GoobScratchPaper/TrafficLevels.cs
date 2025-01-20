@@ -52,8 +52,7 @@ public class TrafficLevels : MonoBehaviour
             return;
         }
         
-        
-        
+      
         if (GetElementFromPercentage(Clock.DayProgress) == element)
         {
             element.GetComponent<CanvasGroup>().alpha = currentTrafficLevelAlpha;
@@ -70,11 +69,11 @@ public class TrafficLevels : MonoBehaviour
         {
             case Action.AdjustHeight:
                 element.sizeDelta = new Vector2(element.rect.width,
-                    Traffic.GetTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount, false) * maxValue);
+                    Traffic.GetRawTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount) * maxValue);
                 break;
             case Action.AdjustWidth:
                 element.sizeDelta = new Vector2(
-                    Traffic.GetTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount, false) * maxValue,
+                    Traffic.GetRawTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount)  * maxValue,
                     element.rect.height);
                 break;
             default:
