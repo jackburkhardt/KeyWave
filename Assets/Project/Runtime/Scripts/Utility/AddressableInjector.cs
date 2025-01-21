@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Gilzoide.RoundedCorners;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 
@@ -20,6 +22,7 @@ public class AddressableInjector : MonoBehaviour
         RoundedImage
     }
     
+    [Dropdown("addressableNames")]
     public string addressableName;
     
     private string _currentAddressableName;
@@ -37,10 +40,32 @@ public class AddressableInjector : MonoBehaviour
     [ShowIf("spriteComponent", SpriteComponent.RoundedImage)]
     public RoundedImage roundedImage;
 
+    public List<string> addressableNames
+    {
+        get
+        {
+            var names = new List<string>();
+            foreach (var resourceLocator in Addressables.ResourceLocators)
+            {
+              //  if (resourceLocator.LocatorId == "AddressableAssetSettings") continue;
+              //  if (resourceLocator.LocatorId == "DynamicResourceLocator") continue;
+                foreach (var key in resourceLocator.Keys)
+                {
+                    if (!key.ToString().Contains("/")) continue;
+                    names.Add(key.ToString());
+                }
+            }
 
+            return names;
+        }
+    }
     
     private void OnValidate()
     {
+        image ??= GetComponent<Image>();
+        roundedImage ??= GetComponent<RoundedImage>();
+        
+        
         Inject();
     }
     

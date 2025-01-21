@@ -92,6 +92,8 @@ namespace Project.Runtime.Scripts.UI
         [ShowIf("useLocation")]
         [Foldout("Custom Fields")]
         [SerializeField] private UITextField locationDescription;
+
+        public PixelCrushers.DialogueSystem.Location assignedLocation;
         
         
         
@@ -397,8 +399,13 @@ namespace Project.Runtime.Scripts.UI
                 
                 if (useLocation && !string.IsNullOrEmpty(locationField) && Field.FieldExists(response.destinationEntry.fields, locationField))
                 {
+                   
+                    
                     var locationIndex = Field.LookupInt(response.destinationEntry.fields, locationField);
-                        
+                    
+                    assignedLocation =
+                        DialogueManager.instance.masterDatabase.locations.Find(p => p.id == locationIndex);
+                    
                     var location = Location.FromString(DialogueManager.instance.masterDatabase.locations.Find(p => p.id == locationIndex).Name); 
                     
                     //Debug.Log(Field.LookupValue(response.destinationEntry.fields, locationField));

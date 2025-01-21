@@ -385,6 +385,10 @@ MonoBehaviour:
       value: unidentified
       type: 16
       typeString: CustomFieldType_ActorState
+    - title: Location
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
     portrait: {fileID: 2800000, guid: 2eaacb1045f5cd944ad416d56c661570, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -431,6 +435,10 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Location
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
     portrait: {fileID: 2800000, guid: b891972ef12eae44dbd03db63bbb2d4d, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -481,6 +489,10 @@ MonoBehaviour:
       value: (None)
       type: 16
       typeString: CustomFieldType_ActorState
+    - title: Location
+      value: 5
+      type: 7
+      typeString: CustomFieldType_Location
     portrait: {fileID: 2800000, guid: 6c49a2cf2b631c0419ae6b23619f259f, type: 3}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -949,44 +961,10 @@ MonoBehaviour:
       value: Mariana
       type: 0
       typeString: CustomFieldType_Text
-    portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
-    alternatePortraits: []
-    spritePortraits: []
-  - id: 28
-    fields:
-    - title: Name
-      value: ???
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: unidentified
-      type: 16
-      typeString: CustomFieldType_ActorState
-    - title: IsPlayer
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: IsAvailableToTalk
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: IsAvailableToCall
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Notable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
+    - title: Location
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
     portrait: {fileID: 0}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -1029,6 +1007,10 @@ MonoBehaviour:
       value: Laura
       type: 0
       typeString: CustomFieldType_Text
+    - title: Location
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
     portrait: {fileID: 0}
     spritePortrait: {fileID: 0}
     alternatePortraits: []
@@ -3523,10 +3505,26 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: DisplayName
+    - title: Display Name
       value: Hotel Lobby
       type: 0
       typeString: CustomFieldType_Text
+    - title: Wellness Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Commitment Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Engagement Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Credibility Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 2
     fields:
     - title: Name
@@ -3546,8 +3544,28 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: DisplayName
+    - title: Display Name
       value: "Local Caf\xE9"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Wellness Affinity
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Commitment Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Engagement Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Credibility Affinity
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Special Description
+      value: This location is always 5 minutes away from you.
       type: 0
       typeString: CustomFieldType_Text
   - id: 3
@@ -3568,14 +3586,30 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: DisplayName
-      value: C&A Store
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Current Sublocation
       value: 
       type: 0
       typeString: CustomFieldType_Text
+    - title: Display Name
+      value: C&A Store
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Wellness Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Commitment Affinity
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Engagement Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Credibility Affinity
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 4
     fields:
     - title: Name
@@ -3595,14 +3629,30 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: DisplayName
-      value: Megamall
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Current Sublocation
       value: 
       type: 0
       typeString: CustomFieldType_Text
+    - title: Display Name
+      value: Megamall
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Wellness Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Commitment Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Engagement Affinity
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Credibility Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 5
     fields:
     - title: Name
@@ -3621,10 +3671,26 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: DisplayName
+    - title: Display Name
       value: Grand Park
       type: 0
       typeString: CustomFieldType_Text
+    - title: Wellness Affinity
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Commitment Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Engagement Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Credibility Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 6
     fields:
     - title: Name
@@ -3643,14 +3709,30 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: DisplayName
-      value: Shoreline Harbor
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Current Sublocation
       value: 
       type: 0
       typeString: CustomFieldType_Text
+    - title: Display Name
+      value: Shoreline Harbor
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Wellness Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Commitment Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Engagement Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Credibility Affinity
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 9
     fields:
     - title: Name
@@ -84496,7 +84578,11 @@ MonoBehaviour:
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unassigned","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Is
     Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Points","value":"Commitment:0","type":10,"typeString":"CustomFieldType_PointsType"},{"title":"Duration","value":"0:seconds","type":11,"typeString":"CustomFieldType_TimespanType"},{"title":"Is
     Procedural","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Visits","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Visited","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Display
-    Name","value":"","type":0,"typeString":"CustomFieldType_Text"}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Initial
+    Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Wellness
+    Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Commitment
+    Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Engagement
+    Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Credibility
+    Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Initial
     Value","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"}],"conversationFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conditions","value":"","type":0,"typeString":"CustomFieldType_Text"}],"dialogueEntryFields":[{"title":"Title","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Actor","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Menu
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Dialogue
     Text","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Sequence","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Timespan","value":"-1:seconds","type":11,"typeString":"CustomFieldType_TimespanType"},{"title":"Show
