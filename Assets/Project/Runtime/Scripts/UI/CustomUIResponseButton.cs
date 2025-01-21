@@ -438,8 +438,13 @@ namespace Project.Runtime.Scripts.UI
                 {
 
                     var quest = response.destinationEntry.GetSubconversationQuest();
-                    
-                    if (quest == null) return;
+
+                    if (quest == null)
+                    {
+                        if (repeatableQuestIcon != null) repeatableQuestIcon.gameObject.SetActive(false);
+                        if (repeatableQuestTooltip != null) repeatableQuestTooltip.gameObject.SetActive(false);
+                        return;
+                    }
 
                     var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
                     var showAsRepeatable = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0;

@@ -1088,7 +1088,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Introduced
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     portrait: {fileID: 0}
@@ -2298,7 +2298,7 @@ MonoBehaviour:
   - id: 145
     fields:
     - title: Name
-      value: Harbor/Action/Colleage
+      value: Harbor/Action/Colleague
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -2485,7 +2485,7 @@ MonoBehaviour:
       type: 11
       typeString: CustomFieldType_TimespanType
     - title: Points
-      value: Wellness:5
+      value: Wellness:-5
       type: 10
       typeString: CustomFieldType_PointsType
     - title: Group
@@ -2635,7 +2635,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
     - title: State
       value: active
-      type: 12
+      type: 0
       typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
@@ -2653,6 +2653,18 @@ MonoBehaviour:
       value: 15:minutes
       type: 11
       typeString: CustomFieldType_TimespanType
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Repeatable
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points Repeat
+      value: 0.25
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 127
     fields:
     - title: Name
@@ -3490,6 +3502,44 @@ MonoBehaviour:
       value: Engagement:10
       type: 10
       typeString: CustomFieldType_PointsType
+  - id: 162
+    fields:
+    - title: Name
+      value: Tour Bus
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Is Item
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Scheduled Event Type
+      value: Repeating
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Start Time
+      value: 08:00
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: End Time
+      value: 17:00
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Frequency
+      value: 30
+      type: 1
+      typeString: CustomFieldType_Number
   locations:
   - id: 1
     fields:
@@ -3722,7 +3772,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Wellness Affinity
-      value: 0
+      value: 1
       type: 1
       typeString: CustomFieldType_Number
     - title: Commitment Affinity
@@ -3730,7 +3780,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Engagement Affinity
-      value: 0
+      value: 1
       type: 1
       typeString: CustomFieldType_Number
     - title: Credibility Affinity
@@ -4187,7 +4237,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 
+      value: '[temp]<color=#7B7C7A>Your actions will be displayed here.'
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -4640,7 +4690,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: What will you do here before heading out?
+        value: What will you do here?
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -8387,7 +8437,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 660.67676, y: 0}
+    canvasScrollPosition: {x: 570.96246, y: 28.00003}
     canvasZoom: 1.4000007
   - id: 28
     fields:
@@ -43509,7 +43559,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 44
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -43686,7 +43736,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 44
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -46636,7 +46686,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 44
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -48202,7 +48252,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 44
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -66171,14 +66221,9 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 'In front of you is a door marked "PRIVATE OFFICE". There''s a mailbox
+        value: In front of you is a door marked "PRIVATE OFFICE". There's a mailbox
           attached to the door, and nearby a stack of blank forms. The forms include
           time off requests, inventory reports, and cash register refill requests.
-
-
-
-          What
-          to do....'
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -66208,6 +66253,77 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 170
+        originDialogueID: 1
+        destinationConversationID: 170
+        destinationDialogueID: 2
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 318.79993
+        y: 153.40001
+        width: 160
+        height: 30
+    - id: 2
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 44
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: What will you do?
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 170
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
       userScript: 
@@ -66216,8 +66332,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 329.99997
-        y: 163.8
+        x: 324.39996
+        y: 232.20001
         width: 160
         height: 30
     entryGroups: []
@@ -72729,7 +72845,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Harbor/Action/Colleage", "success")
+      userScript: SetQuestState("Harbor/Action/Colleague", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -72957,8 +73073,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.7922503
+    canvasScrollPosition: {x: 2.943573, y: 126.91287}
+    canvasZoom: 0.94225013
   - id: 182
     fields:
     - title: Title
@@ -73678,8 +73794,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 480.93756
-        y: 249.3244
+        x: 460.827
+        y: 226.80057
         width: 160
         height: 30
     - id: 1
@@ -73693,11 +73809,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -73747,7 +73863,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 270.93756
-        y: 396.5388
+        y: 404.583
         width: 160
         height: 30
     - id: 2
@@ -73761,12 +73877,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Wait here!
@@ -73828,12 +73944,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Skip the tour for now.
@@ -73889,11 +74005,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 32
+        value: 21
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 7
         type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -73963,11 +74079,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 32
+        value: 21
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 7
         type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -74031,12 +74147,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
@@ -74098,12 +74214,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: You hop on the bus.
@@ -74165,12 +74281,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 'From your seat in the open-air section of the bus, you take in the
@@ -74234,12 +74350,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
@@ -74291,11 +74407,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 32
+        value: 21
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 7
         type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -74366,12 +74482,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Yes please!
@@ -74433,11 +74549,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 32
+        value: 21
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 7
         type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -74507,12 +74623,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: Hop on!
@@ -74575,11 +74691,11 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       - title: Actor
         value: 21
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 21
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
@@ -74711,8 +74827,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 271.78864
-        y: 343.14084
+        x: 266.9621
+        y: 356.0116
         width: 160
         height: 30
     - id: 16
@@ -74726,12 +74842,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 7
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
@@ -74777,8 +74893,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 112.89261, y: 168.00421}
-    canvasZoom: 0.93450016
+    canvasScrollPosition: {x: 159.27585, y: 219.54779}
+    canvasZoom: 0.9945015
   - id: 185
     fields:
     - title: Title
@@ -74907,7 +75023,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 44
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -77013,7 +77129,7 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: CurrentQuestState("Hotel/Action/Breakfast") == "active"
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -77117,8 +77233,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2199.155
-        y: 250.47275
+        x: 2172.802
+        y: 234.33823
         width: 160
         height: 30
     - id: 9
@@ -80253,8 +80369,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1840.4614
-        y: 1620.0686
+        x: 1824.236
+        y: 1623.6743
         width: 160
         height: 30
     - id: 147
@@ -80893,8 +81009,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1783.1415
-        y: 1788.415
+        x: 1752.7692
+        y: 1805.7709
         width: 160
         height: 30
     - id: 156
@@ -80962,8 +81078,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1802.9628
-        y: 1875.2336
+        x: 1772.5905
+        y: 1892.5895
         width: 160
         height: 30
     - id: 157
@@ -81035,8 +81151,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2007.3234
-        y: 1880.2229
+        x: 1976.9513
+        y: 1897.5787
         width: 160
         height: 30
     - id: 158
@@ -81104,8 +81220,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2545.0977
-        y: 1877.7239
+        x: 2514.725
+        y: 1895.0797
         width: 160
         height: 30
     - id: 159
@@ -81173,8 +81289,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2179.587
-        y: 1887.3387
+        x: 2149.2144
+        y: 1904.695
         width: 160
         height: 30
     - id: 160
@@ -81243,8 +81359,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2361.6924
-        y: 1887.4739
+        x: 2331.3198
+        y: 1904.83
         width: 160
         height: 30
     - id: 161
@@ -81321,6 +81437,12 @@ MonoBehaviour:
         destinationDialogueID: 173
         isConnector: 0
         priority: 2
+      - originConversationID: 192
+        originDialogueID: 161
+        destinationConversationID: 192
+        destinationDialogueID: 178
+        isConnector: 0
+        priority: 2
       conditionsString: PlayerLocation() == "Harbor"
       userScript: 
       onExecute:
@@ -81383,7 +81505,7 @@ MonoBehaviour:
         type: 14
         typeString: CustomFieldType_ColorType
       - title: Firewall
-        value: False
+        value: True
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 192
@@ -81419,8 +81541,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1960.4408
-        y: 2078.2168
+        x: 1909.3541
+        y: 2100.922
         width: 160
         height: 30
     - id: 164
@@ -81562,15 +81684,15 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: CurrentQuestState("Harbor/Action/Colleage") == "active"
+      conditionsString: CurrentQuestState("Harbor/Action/Colleague") == "active"
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1905.6246
-        y: 2269.6008
+        x: 1842.4758
+        y: 2267.4722
         width: 160
         height: 30
     - id: 166
@@ -81644,8 +81766,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2123.4648
-        y: 2220.0947
+        x: 2093.6643
+        y: 2179.6511
         width: 160
         height: 30
     - id: 172
@@ -81774,7 +81896,7 @@ MonoBehaviour:
         type: 14
         typeString: CustomFieldType_ColorType
       - title: Firewall
-        value: False
+        value: True
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 192
@@ -81798,8 +81920,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 2585.0098
-        y: 2074.69
+        x: 2530.8706
+        y: 2064.7197
         width: 160
         height: 30
     - id: 174
@@ -82070,6 +82192,229 @@ MonoBehaviour:
         y: 277.64343
         width: 160
         height: 30
+    - id: 178
+      fields:
+      - title: Title
+        value: Walk
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 41
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 41
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Commitment:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#9e609dff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 192
+      isRoot: 0
+      isGroup: 1
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 192
+        originDialogueID: 178
+        destinationConversationID: 192
+        destinationDialogueID: 179
+        isConnector: 0
+        priority: 2
+      - originConversationID: 192
+        originDialogueID: 178
+        destinationConversationID: 192
+        destinationDialogueID: 180
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1954.2771
+        y: 2406.5115
+        width: 160
+        height: 30
+    - id: 179
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 41
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 41
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Go to the beach.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 'EnterSublocation(Harbor, Beach); '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: 5:minutes
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Commitment:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#9e609dff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 192
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: Location["Harbor"].Current_Sublocation ~= "Beach"
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1907.3878
+        y: 2510.0078
+        width: 160
+        height: 30
+    - id: 180
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 41
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 41
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Return to the harbor.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: ExitSublocation(Harbor)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: 5:minutes
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Points
+        value: Commitment:0
+        type: 10
+        typeString: CustomFieldType_PointsType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: EventGuid
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: UseNodeColorInMenu
+        value: True
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#9e609dff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 192
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: Location["Harbor"].Current_Sublocation ~= ""
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 2113.8333
+        y: 2504.5732
+        width: 160
+        height: 30
     entryGroups:
     - name: Park
       rect:
@@ -82084,8 +82429,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: 2152.489
         y: 170.78397
-        width: 465.51413
-        height: 333.90176
+        width: 478.42172
+        height: 398.97763
       color: {r: 0.6873834, g: 0.7056604, b: 0.50461376, a: 1}
     - name: Hotel
       rect:
@@ -82162,8 +82507,8 @@ MonoBehaviour:
     - name: Mall/All
       rect:
         serializedVersion: 2
-        x: 1736.6356
-        y: 1736.2565
+        x: 1706.2631
+        y: 1753.6124
         width: 982.6183
         height: 226.71344
       color: {r: 0.93207544, g: 0.77881646, b: 0.5399003, a: 0.5}
@@ -82183,8 +82528,8 @@ MonoBehaviour:
         width: 349.9491
         height: 308.8964
       color: {r: 0.6392157, g: 0.7019608, b: 0.93333334, a: 0.5019608}
-    canvasScrollPosition: {x: 1430.3477, y: 79.09411}
-    canvasZoom: 1.1274961
+    canvasScrollPosition: {x: 1728.9539, y: 1955.9054}
+    canvasZoom: 1.0374959
   - id: 193
     fields:
     - title: Title
@@ -84580,8 +84925,8 @@ MonoBehaviour:
     Name","value":"","type":0,"typeString":"CustomFieldType_Text"}],"questFields":[{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Location","value":"","type":7,"typeString":"CustomFieldType_Location"},{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Success
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Failure
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unassigned","type":0,"typeString":"CustomFieldType_QuestState"},{"title":"Is
-    Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Points","value":"Commitment:0","type":10,"typeString":"CustomFieldType_PointsType"},{"title":"Duration","value":"0:seconds","type":11,"typeString":"CustomFieldType_TimespanType"},{"title":"Is
-    Procedural","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Visits","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Visited","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Display
+    Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Points","value":"Commitment:0","type":10,"typeString":"CustomFieldType_PointsType"},{"title":"Duration","value":"0:seconds","type":11,"typeString":"CustomFieldType_TimespanType"},{"title":"Repeatable","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Points
+    Repeat","value":"1","type":1,"typeString":"CustomFieldType_Number"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Visits","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Visited","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Display
     Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Wellness
     Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Commitment
     Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Engagement

@@ -67,7 +67,11 @@ public class TextImageFormatter : MonoBehaviour
     private void SetFormattedText(string text)
     {
         DeleteInstantiatedChildren();
+        
+        text = Regex.Replace(text, @"(\[temp\(.*?\)\])", "");
+        
         var pattern = @"(\[img\(.*?\)\])";
+        
         var result = Regex.Split(text, pattern);
         
         GameObject currentImageContainer = null;

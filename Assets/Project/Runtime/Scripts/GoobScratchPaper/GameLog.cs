@@ -35,7 +35,14 @@ public class GameLog : MonoBehaviour
 
     public static void Log(string message, LogType type = LogType.Default)
     {
+        
         var log = DialogueLua.GetVariable("game.log").asString;
+        
+        if (log.Contains("[temp]"))
+        {
+            log = string.Empty;
+        }
+        
         var color = type switch
         {
             LogType.Default => string.Empty,
