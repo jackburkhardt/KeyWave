@@ -42,12 +42,14 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
     protected override void Awake()
     {
        base.Awake();
+       SetVerticesDirty();
        StartCoroutine(DelayedReset());
     }
     
     protected override void OnEnable()
     {
         base.OnEnable();
+        SetVerticesDirty();
         StartCoroutine(DelayedReset());
     }
     IEnumerator DelayedReset()

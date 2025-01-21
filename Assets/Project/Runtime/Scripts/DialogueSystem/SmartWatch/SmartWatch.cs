@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SmartWatch", menuName = "SmartWatch")]
@@ -37,6 +39,17 @@ public class SmartWatch : ScriptableObject
     public static App GetApp(string name)
     {
         if (Settings.SmartWatch == null || Settings.SmartWatch.apps == null) return null;
+        
+        if (name == "Default")
+        {
+            return Settings.SmartWatch.apps[0];
+        }
+        
+        if (name == "Current")
+        {
+            return _currentApp ?? Settings.SmartWatch.apps[0];;
+        }
+        
         return Settings.SmartWatch.apps.Find(app => app.name == name);
     }
     
@@ -64,16 +77,16 @@ public class SmartWatch : ScriptableObject
         _currentApp = null;
     }
     
-    public static void GoToCurrentApp(string sequenceSuffix = "")
+    public static void GoToCurrentApp()
     {
         
-        OpenApp(_currentApp ?? Settings.SmartWatch.apps[0], sequenceSuffix);
+        OpenApp(_currentApp ?? Settings.SmartWatch.apps[0]);
     } 
     
-    
-    public static void OpenApp(App app, string sequenceSuffix = "")
+    //SetQuestState("Hotel/Action/Breakfast", "success")
+    public static void OpenApp(App app)
     {
-        DialogueManager.instance.PlaySequence($"GoToConversation({app.dialogueSystemConversationTitle})" + sequenceSuffix);
+        DialogueManager.instance.GoToConversation(app.dialogueSystemConversationTitle, true);
     }
 
     private void OnValidate()
@@ -85,6 +98,24 @@ public class SmartWatch : ScriptableObject
                 app.animatorTrigger = app.name;
             }
         }
+    }
+    
+}
+
+public class SequencerCommandOpenApp : SequencerCommand
+{
+    public void Awake()
+    {
+        var appName = GetParameter(0);
+        if (string.IsNullOrEmpty(appName)) return;
+        
+        var app = SmartWatch.GetApp(appName);
+        if (app == null)
+        {
+            Debug.Log($"App {appName} not found in SmartWatch.");
+            return;
+        }
+        SmartWatch.OpenApp(app);
     }
 }
                 

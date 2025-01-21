@@ -13,6 +13,9 @@ using Project.Runtime.Scripts.Manager;
 public class PointsVisualizer : MonoBehaviour
 {
    
+    public bool pauseDialogueSystem = true;
+    
+    [ShowIf("pauseDialogueSystem")]
     [SerializeField] private float dialogueSystemPauseDuration = 2f;
     
     [SerializeField] private Animator animator;
@@ -35,7 +38,7 @@ public class PointsVisualizer : MonoBehaviour
 
     private void VisualizePointType(Points.Type type, int amount)
     {
-        DialogueManager.instance.Pause();
+        if (pauseDialogueSystem) DialogueManager.instance.Pause();
         
         _isAnimating = true;
         
@@ -48,7 +51,7 @@ public class PointsVisualizer : MonoBehaviour
             animator.SetTrigger(animationTrigger);
         
             yield return new WaitForSeconds(dialogueSystemPauseDuration);
-            DialogueManager.instance.Unpause();
+            if (pauseDialogueSystem) DialogueManager.instance.Unpause();
         }
         
         

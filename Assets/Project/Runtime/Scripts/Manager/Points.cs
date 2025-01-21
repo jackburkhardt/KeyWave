@@ -179,7 +179,16 @@ namespace Project.Runtime.Scripts.Manager
                 var points = (int) data["points"];
                 return new PointsField {Type = type, Points = points};
             }
-
+            
+            public static PointsField FromLuaField(Field field)
+            {
+                return FromString(field.value);
+            }
+            
+            public static string LuaFieldValue(Field field, int points)
+            {
+                return $"{field.value.Split(':')[0]}:{points}";
+            }
         
         }
     }

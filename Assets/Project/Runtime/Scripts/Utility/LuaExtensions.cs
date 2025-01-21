@@ -531,6 +531,38 @@ namespace Project.Runtime.Scripts.Utility
         {
             return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
         }
+
+        public static void GoToConversation(this DialogueSystemController dialogueSystemController, string conversationName, bool stop = false)
+        {
+            DialogueManager.conversationView.sequencer.Stop(); 
+            if (string.IsNullOrEmpty(conversationName)) return;
+            var database = DialogueManager.MasterDatabase;
+            if (database.GetConversation(conversationName) == null)
+            {
+                Debug.Log($"Conversation {conversationName} not found in database.");
+                return;
+            }
+
+            if (!DialogueManager.IsConversationActive)
+            {
+                DialogueManager.StartConversation(conversationName);
+                return;
+            }
+
+            if (stop)
+            {
+                DialogueManager.StopConversation();
+                DialogueManager.StartConversation(conversationName);
+                return;
+            }
+
+            var conversation = database.GetConversation(conversationName);
+            var dialogueEntry = database.GetDialogueEntry(conversation.id, 0);
+            var state = DialogueManager.instance.conversationModel.GetState(dialogueEntry);
+            DialogueManager.conversationController.GotoState(state);
+            
+            
+        }
     }
     
     

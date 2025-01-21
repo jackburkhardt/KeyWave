@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
@@ -216,9 +217,35 @@ namespace Project.Runtime.Scripts.Manager
                 foreach (var pointField in points)
                 {
                     GameEvent.OnPointsIncrease(pointField, questName);
-                    quest.fields.RemoveAll(f => f.title == "Points");
                     
                 }
+                
+                if (quest.IsFieldAssigned("Points Repeat"))
+                {
+                    foreach (var field in quest.fields.Where(p => p.title == "Points"))
+                    {
+                        var multiplier = float.Parse(quest.AssignedField("Points Repeat").value);
+                        var pointsValue = Points.PointsField.FromLuaField(field).Points;
+                        field.value = Points.PointsField.LuaFieldValue(field, (int)Mathf.Ceil(pointsValue * multiplier));
+                    }
+                }
+                    
+                if (quest.IsFieldAssigned("Repeatable"))
+                {
+                    var repeatable = DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
+                    if (repeatable)
+                    {
+                        QuestLog.SetQuestState(questName, QuestState.Active);
+                        var completionCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
+                        DialogueLua.SetQuestField(questName, "Repeat Count", completionCount + 1);
+                        
+                        Debug.Log("Repeat count: " + DialogueLua.GetQuestField(questName, "Repeat Count").asInt);
+                            
+                    }
+                }
+                    
+                else quest.fields.RemoveAll(f => f.title == "Points");
+                
             }
         
             var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;

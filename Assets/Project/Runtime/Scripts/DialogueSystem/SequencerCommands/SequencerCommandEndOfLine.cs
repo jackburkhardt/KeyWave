@@ -118,7 +118,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
                 else
                 {
                    // Debug.Log("Last node, going to smartwatch conversation: " + GameManager.MostRecentApp[GameManager.CurrentSmartWatchMode]);
-                    SmartWatch.GoToCurrentApp(waitForTyped);
+                    Sequencer.PlaySequence($"OpenApp(Current){waitForTyped}");
                 }
             }
         

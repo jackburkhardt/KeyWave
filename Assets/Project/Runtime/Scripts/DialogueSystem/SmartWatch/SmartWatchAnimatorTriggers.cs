@@ -105,14 +105,6 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
         }
     }
 
-    private void OnConversationEnd()
-    {
-        var currentConversation =
-            DialogueManager.instance.currentConversationState.subtitle.dialogueEntry.GetConversation();
-        
-        Debug.Log(currentConversation);
-    }
-
    
     
 }

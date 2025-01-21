@@ -148,7 +148,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         
         IEnumerator Accumulate(Subtitle sub)
         {
-            Debug.Log("Accumulating");
+       
           
             var typewriter = subtitleText.gameObject.GetComponentInChildren<AbstractTypewriterEffect>();
             

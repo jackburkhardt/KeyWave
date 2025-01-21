@@ -20,16 +20,7 @@ public class DayProgressBar : MonoBehaviour
     [Tooltip("Only used in editor mode. Gets overriden by Clock.DayProgress in play mode.")]
     public float editorModeProgressValue = 0.5f;
 
-    private void OnEnable()
-    {
-       // Clock.on
-    }
-
-    private void OnDisable()
-    {
-        throw new NotImplementedException();
-    }
-
+   
     private void OnValidate()
     {
         Adjust();

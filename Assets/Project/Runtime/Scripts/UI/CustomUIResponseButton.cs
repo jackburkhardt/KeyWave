@@ -95,7 +95,16 @@ namespace Project.Runtime.Scripts.UI
 
         public PixelCrushers.DialogueSystem.Location assignedLocation;
         
+        [Foldout("Custom Fields")]
+        [SerializeField] private bool useQuestInfo;
         
+        [ShowIf("useQuestInfo")]
+        [Foldout("Custom Fields")]
+        [SerializeField] private RectTransform repeatableQuestIcon;
+        [ShowIf("useQuestInfo")]
+        [Foldout("Custom Fields")]
+        [SerializeField] private RectTransform repeatableQuestTooltip;
+       
         
         
         [Foldout("Animation")]
@@ -423,6 +432,23 @@ namespace Project.Runtime.Scripts.UI
                     }
                     
                     else Debug.LogWarning($"Location not found: {locationIndex}, name: {DialogueManager.instance.masterDatabase.locations[locationIndex].Name}");
+                }
+                
+                if (useQuestInfo)
+                {
+
+                    var quest = response.destinationEntry.GetSubconversationQuest();
+                    
+                    if (quest == null) return;
+
+                    var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
+                    var showAsRepeatable = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0;
+                    
+                    if (repeatableQuestIcon != null) repeatableQuestIcon.gameObject.SetActive(showAsRepeatable);
+                    if (repeatableQuestTooltip != null) repeatableQuestTooltip.gameObject.SetActive(showAsRepeatable);
+                    
+                    
+
                 }
                 
                 

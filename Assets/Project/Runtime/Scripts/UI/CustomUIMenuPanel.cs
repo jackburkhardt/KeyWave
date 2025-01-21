@@ -228,6 +228,13 @@ namespace Project.Runtime.Scripts.UI
         public override void Open()
         {
             base.Open();
+            
+            if (!deactivateOnHidden && TryGetComponent<SmartWatchApp>(out var app))
+            {
+                app.OnEnable();
+            }
+            ;
+            
             DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
             RefreshLayoutGroups.Refresh(gameObject);
             StartCoroutine(DelayedRefresh());
