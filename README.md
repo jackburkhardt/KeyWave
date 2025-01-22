@@ -16,6 +16,6 @@ Tested on Chrome, Firefox, Edge, and Safari. Not supported on mobile devices.
 
 ### Credits
 
-Austin "Goob" Lopez McDonald -- animations, art, design, UI/UX, tools, programming \
-Jack Burkhardt -- writing, design, web integration, tools, programming \
+Austin "Goob" Lopez McDonald -- animations, UI/UX, design, art, programming, tools \
+Jack Burkhardt -- writing, tools, design, programming, web integration \
 Special thanks to Tony Li of PixelCrushers
