@@ -16,8 +16,7 @@ public static class Traffic
     
     public static float GetRawTrafficMultiplier(float progress)
     {
-        return Settings.Traffic.trafficCurve.Evaluate(progress);
-
+        return EvaluateTrafficCurve(progress);
     }
     
     private static float GetTrafficMultiplier(float progress)
@@ -26,8 +25,23 @@ public static class Traffic
         
         var range = Settings.Traffic.peakTrafficLevel - Settings.Traffic.baseTrafficLevel;
     
-        return Settings.Traffic.trafficCurve.Evaluate(progress) * range + Settings.Traffic.baseTrafficLevel;
+        return EvaluateTrafficCurve(progress) * range + Settings.Traffic.baseTrafficLevel;
     }
+    
+    public static float GetNormalizedTrafficMultiplier(float progress)
+    {
+        var trafficMultiplier = GetTrafficMultiplier(progress);
+        return (trafficMultiplier - Settings.Traffic.baseTrafficLevel) / Settings.Traffic.peakTrafficLevel;
+    }
+    
+    private static float EvaluateTrafficCurve(float progress)
+    {
+        progress = Settings.Traffic.discreteTrafficLevels ? Mathf.Round(progress * Settings.Traffic.discreteLevels + 1) / (Settings.Traffic.discreteLevels + 1) : progress;
+        
+        return Settings.Traffic.trafficCurve.Evaluate(progress);
+    }
+    
+ 
     
 }
 
@@ -38,12 +52,15 @@ public class TrafficSettings : ScriptableObject
     public float baseTrafficLevel = 1f;
     public float peakTrafficLevel = 1f;
     
+    [Tooltip("Calculate traffic levels discretely to avoid interpolation.")]
+    public bool discreteTrafficLevels;
+    [ShowIf("discreteTrafficLevels")] public int discreteLevels = 12;
    
     
     [CurveRange(0, 1, 0, 1, EColor.Blue)]
     public AnimationCurve trafficCurve;
     
-   
+    public static Action OnTrafficSettingsChanged;
 
     private void OnValidate()
     {
@@ -67,6 +84,8 @@ public class TrafficSettings : ScriptableObject
             key.value = Mathf.InverseLerp(minValue, maxValue, key.value);
             trafficCurve.MoveKey(i, key);
         }
+        
+        OnTrafficSettingsChanged?.Invoke();
         
         
     }

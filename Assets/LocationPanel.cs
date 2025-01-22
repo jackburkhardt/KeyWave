@@ -21,6 +21,11 @@ public class LocationPanel : UIPanel
     private Animator _animator;
     public RectTransform noCharactersPresent;
 
+    private void Awake()
+    {
+        _animator ??= GetComponent<Animator>();
+    }
+
     private void OnValidate()
     {
         _animator ??= GetComponent<Animator>();

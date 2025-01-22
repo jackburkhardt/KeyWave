@@ -10,10 +10,11 @@ public class TrafficLevels : MonoBehaviour
 {
     [Tooltip("The content holder that contains the individual traffic level elements.")]
     public RectTransform content;
-
-
+    
+    [ReadOnly] public float minValue = 30f;
     public float maxValue = 500f;
-
+    
+    
     public enum Action
     {
         AdjustHeight,
@@ -34,12 +35,18 @@ public class TrafficLevels : MonoBehaviour
     private void OnEnable()
     {
         SetTrafficLevels();
+        
+        TrafficSettings.OnTrafficSettingsChanged += SetTrafficLevels;
+    }
+    
+    private void OnDisable()
+    {
+        TrafficSettings.OnTrafficSettingsChanged -= SetTrafficLevels;
     }
     
     private RectTransform GetElementFromPercentage(float percentage)
     {
-        var elementCount = content.childCount;
-        var index = Mathf.FloorToInt(percentage * elementCount);
+        var index = Mathf.FloorToInt(Mathf.Round(percentage * (content.childCount + 1)));
         return content.GetChild(index).GetComponent<RectTransform>();
     }
     
@@ -65,15 +72,16 @@ public class TrafficLevels : MonoBehaviour
     
     private void DoActionOnElement(RectTransform element)
     {
+        var value = Traffic.GetRawTrafficMultiplier((element.GetSiblingIndex()) / ((float)content.childCount)) * (maxValue - minValue) + minValue;
         switch (action)
         {
             case Action.AdjustHeight:
                 element.sizeDelta = new Vector2(element.rect.width,
-                    Traffic.GetRawTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount) * maxValue);
+                    value);
                 break;
             case Action.AdjustWidth:
                 element.sizeDelta = new Vector2(
-                    Traffic.GetRawTrafficMultiplier(element.GetSiblingIndex() / (float)content.childCount)  * maxValue,
+                    value,
                     element.rect.height);
                 break;
             default:
@@ -85,6 +93,8 @@ public class TrafficLevels : MonoBehaviour
     private void SetTrafficLevels()
     {
         if (content == null) return;
+        
+        minValue = maxValue * Settings.Traffic.baseTrafficLevel / Settings.Traffic.peakTrafficLevel;
         
         var elementCount = content.childCount;
 
