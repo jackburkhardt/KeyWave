@@ -79,12 +79,12 @@ using UnityEngine;
             BuildPlayerOptions options = GetDefaultBuildOptions();
             
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
-            PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.FullWithoutStacktrace;
-            PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.External;
+            PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.None;
+            PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.Embedded;
             EditorUserBuildSettings.il2CppCodeGeneration = Il2CppCodeGeneration.OptimizeSize;
             PlayerSettings.SetIl2CppCompilerConfiguration(BuildTargetGroup.WebGL, Il2CppCompilerConfiguration.Release);
             PlayerSettings.stripEngineCode = true;
-            PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL , ManagedStrippingLevel.Medium);
+            PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL , ManagedStrippingLevel.Low);
             var buildDate = DateTime.Today.ToString("yyyy.M.dd");
             buildDate += "-PUBLIC";
             Debug.Log($"Beginning build number {buildDate}");
