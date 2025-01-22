@@ -46,9 +46,13 @@ public class CircularLayoutGroupElement : MonoBehaviour
 
     private CircularLayoutGroup.LayoutMethod LayoutMethod => _circularLayoutGroup.layoutMethod;
     
-    private void Update()
+    private void OnEnable()
     {
         _circularLayoutGroup ??= GetComponentInParent<CircularLayoutGroup>();
+    }
+    
+    private void Update()
+    {
         
         if (_circularLayoutGroup == null) return;
         

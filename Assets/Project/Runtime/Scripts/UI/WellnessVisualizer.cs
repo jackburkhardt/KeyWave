@@ -78,8 +78,8 @@ public class WellnessVisualizer : MonoBehaviour
                 break;
         }
         */
-        
-      
+
+        return;
         
         AudioEngineExtras.SetParameter("Master/HighpassCutoff",WeightToRange(volumeWeight, 10, 40) );
         AudioEngineExtras.SetParameter("Master/HighpassResonance",WeightToRange(volumeWeight, 0, 2) );
