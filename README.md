@@ -1,24 +1,21 @@
-# About Perils & Pitfalls
-
 <p align="center">
-  <img width="265" height="300" src="https://github.com/jackburkhardt/KeyWave/blob/main/keywave.png">
-  <p>--- <a href="https://github.com/jackburkhardt/KeyWave/wiki">WIKI</a> ---</p>
+  <img width="600" height="170" src="https://raw.githubusercontent.com/jackburkhardt/KeyWave/refs/heads/main/Assets/Project/Runtime/Assets/Sprites/PERILS_AND_PITFALLS_LOGO.png">
 </p>
 
-### What is Perils?
+## It's time to lead
 
-Project KeyWave is the working title of a brand new educational video game that aims to help teach college and University students key learning objectives from introductory to intermediate general management classes.
+Perils and Pitfalls is an educational role-playing video game for managerial students. You play as Daniel Olivera, a recent business school grad tasked with turning a struggling clothing store around. You have one day left before starting -- how will you prepare?
 
-KeyWave is a complete reimagining of one of four video games previously developed for Northwestern University classes in 2020. It will improve and expand upon the design and mechanics of the game YellowTail, Inc, while also incorporating elements of the other three games. 
+The game is based on the case study *The Perils and Pitfalls of Leading Change* and the book *Before Day One* by William J. White. It has a complimentary lesson plan for use in the classroom.
 
-### What is YellowTail?
+### Technical details
 
-YellowTail, Inc was our first attempt at creating an educational game designed for University students. The game was built using Twine, and it adapts a Harvard case study of the same name. Players step into the role of YellowTail’s new CEO as she navigates unique circumstances and decides how to make use of her time.
+Perils is built on Unity 2021.3.45f1 LTS and supports the WebGL platform. It is designed expressly for deployment by SimCase, Inc.
 
-### How Will This Game Teach?
+Tested on Chrome, Firefox, Edge, and Safari. Not supported on mobile devices.
 
-This game is not intended to be used as a sole teaching tool. It instead acts as a supplement to the core learning objectives found in general management. Through student observation and discussion, players will learn how what they learn in the classroom can be used to apply to an experience that engages them.
+### Credits
 
-### Technical Specifications
-
-KeyWave is a 2D game using the Unity engine, version 2021.3.45f1 LTS. It will be developed for PC and Mac systems, released as a single executable file and with a future goal of releasing it as a web-based Unity game.
+Austin "Goob" Lopez McDonald -- animations, art, design, UI/UX, tools, programming \
+Jack Burkhardt -- writing, design, web integration, tools, programming \
+Special thanks to Tony Li of PixelCrushers

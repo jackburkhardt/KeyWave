@@ -49,27 +49,27 @@ namespace Project.Runtime.Scripts.Manager
                 }
                 case "quest_state_change":
                 {
-                    string displayName = QuestLog.GetQuestDescription(playerEvent.Data["questName"].ToString());
-                    if (string.IsNullOrEmpty(displayName)) return;
+                    string questName = playerEvent.Data["questName"].ToString();
+                    if (string.IsNullOrEmpty(questName)) return;
                 
                     switch (playerEvent.Data["state"].ToString())
                     {
                         case "Success":
-                            if (!_completedTasks.Contains(displayName))
+                            if (!_completedTasks.Contains(questName))
                             {
-                                _completedTasks.Add(displayName);
+                                _completedTasks.Add(questName);
                             }
                             break;
                         case "Active":
-                            if (!_activeTasks.Contains(displayName))
+                            if (!_activeTasks.Contains(questName))
                             {
-                                _activeTasks.Add(displayName);
+                                _activeTasks.Add(questName);
                             }
                             break;
                         case "Failure":
-                            if (!_failedTasks.Contains(displayName))
+                            if (!_failedTasks.Contains(questName))
                             {
-                                _failedTasks.Add(displayName);
+                                _failedTasks.Add(questName);
                             }
                             break;
                     }

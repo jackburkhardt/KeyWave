@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace Project.Runtime.Scripts.Audio
 {
-    [AddComponentMenu("")] // Use wrapper.
     [RequireComponent(typeof(AudioEngine))]
     public class AudioEngineSaver : Saver
     {

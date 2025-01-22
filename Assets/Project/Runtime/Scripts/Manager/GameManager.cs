@@ -5,6 +5,7 @@ using System.Linq;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.SaveSystem;
@@ -188,13 +189,17 @@ namespace Project.Runtime.Scripts.Manager
             PixelCrushers.SaveSystem.SaveToSlot(1);
         }
 
-        public static void OnQuestStateChange(string questName)
+        public void OnQuestStateChange(string questName)
         {
-          SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
-
             var quest = DialogueManager.masterDatabase.GetQuest(questName);
             var state = QuestLog.GetQuestState(questName);
             var points = DialogueUtility.GetPointsFromField(quest!.fields);
+
+            // if this quest already succeeded, we don't want to retrigger events
+            if (dailyReport.CompletedTasks.Contains(questName))
+            {
+                return;
+            }
             
             if (quest.Group == "Main Task")
             {
@@ -214,6 +219,7 @@ namespace Project.Runtime.Scripts.Manager
 
             if (state == QuestState.Success && points.Length > 0)
             {
+                
                 foreach (var pointField in points)
                 {
                     GameEvent.OnPointsIncrease(pointField, questName);
@@ -253,6 +259,7 @@ namespace Project.Runtime.Scripts.Manager
             Debug.Log($"Quest {questName} state changed to {state}");
         
             GameEvent.OnQuestStateChange(questName, state, duration);
+            SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
         }
 
         public void OpenMap()
@@ -318,7 +325,8 @@ namespace Project.Runtime.Scripts.Manager
             {
                 
                 yield return App.App.Instance.ChangeScene(newLocation, currentScene, loadingScreenType);
-            
+                
+                AudioEngine.Instance.StopAllAudioOnChannel("Music");
                 while (App.App.isLoading)
                 {
                     yield return null;

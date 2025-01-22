@@ -1,4 +1,5 @@
 using PixelCrushers;
+using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Manager;
 
@@ -21,8 +22,12 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
             
+            Points.OnPointsChange?.Invoke(Points.Type.Wellness, data.WellnessScore);
+            Points.OnPointsChange?.Invoke(Points.Type.Credibility, data.CredibilityScore);
+            Points.OnPointsChange?.Invoke(Points.Type.Engagement, data.EngagementScore);
+            Points.OnPointsChange?.Invoke(Points.Type.Commitment, data.CommitmentScore);
+            
             GameManager.instance.TravelTo(data.current_scene);
-           // App.App.Instance.ChangeScene(data.current_scene, App.App.Instance.currentScene, LoadingScreen.LoadingScreenType.Default);
         }
 
 

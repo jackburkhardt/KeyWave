@@ -21,8 +21,7 @@ public class PointsFishBowl : MonoBehaviour
 
     [SerializeField] Animator animator;
     [SerializeField] private string animationTrigger = "Fill";
-    
-    
+
 
     private float Fill
     {
@@ -37,11 +36,7 @@ public class PointsFishBowl : MonoBehaviour
     
     private void OnValidate()
     {
-        
         if (filledImage != null) filledImage.fillAmount = fillAmount;
-        
-     
-        
     }
 
     private void OnEnable()
@@ -61,13 +56,10 @@ public class PointsFishBowl : MonoBehaviour
             GetComponent<Selectable>().interactable = false;
             return;
         }
-      
         
         animator.SetTrigger(animationTrigger);
         if (Points.MaxScore(pointType) != 0) 
             DOTween.To(() => Fill, x => Fill = x, Points.Score(pointType) / (float) Points.MaxScore(pointType), timeToFill);
-        
-        
     }
 
 
