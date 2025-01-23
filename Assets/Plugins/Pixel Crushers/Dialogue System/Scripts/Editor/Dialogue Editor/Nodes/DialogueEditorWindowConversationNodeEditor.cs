@@ -1858,6 +1858,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             contextMenu.AddSeparator("");
             contextMenu.AddItem(new GUIContent("Auto Condition/If Quest Active"), false, IfQuestActiveCallback, entry);
             
+            if (entry.outgoingLinks.Any(l => l.destinationConversationID != conversantID)) contextMenu.AddItem(new GUIContent("Auto Condition/If Linked Quest Active"), false, IfLinkedQuestActiveCallback, entry);
+            
             contextMenu.AddItem(new GUIContent("Auto Script/Set Quest Success"), false, SetQuestSuccessCallback, entry);
             
             
@@ -2298,6 +2300,16 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             entry.conditionsString = "CurrentQuestState(\"" + currentConversation.Title + "\") == \"active\"";
             SetDatabaseDirty("Set User Script");
             RefreshConversation();
+        }
+
+        private void IfLinkedQuestActiveCallback(object o)
+        {
+            var entry = o as DialogueEntry;
+            if (entry == null) return;
+            var linkedQuest = GetConversationByTitleIndex(entry.outgoingLinks
+                .First(l => l.destinationConversationID != conversantID).destinationConversationID);
+            
+           entry.conditionsString = "CurrentQuestState(\"" + linkedQuest.Title + "\") == \"active\"";
         }
 
         private void SetQuestSuccessCallback(object o)

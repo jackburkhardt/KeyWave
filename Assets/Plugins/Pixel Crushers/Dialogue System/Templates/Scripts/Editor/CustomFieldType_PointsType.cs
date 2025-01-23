@@ -42,15 +42,20 @@ namespace PixelCrushers.DialogueSystem
         public override string Draw(string currentValue, DialogueDatabase database)
         {
             
+            
             if (currentValue == string.Empty || currentValue.Split(':').Length < 2) return "Wellness:0";
            
             Rect r = EditorGUILayout.BeginHorizontal();
 
             var pointType =
-                Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Wellness" : currentValue.Split(':')[0]);
-            var pointValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
+                Enum.TryParse<PointsType>(currentValue.Split(':')[0], out var validType) ? validType : PointsType.Wellness;
+            
+            var pointValue = currentValue.Split(':')[1] == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
             
             var type = EditorGUILayout.EnumPopup(pointType, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false));
+            
+            if (type == null) type = PointsType.Wellness;
+            
             var value = EditorGUILayout.IntField(pointValue, GUILayout.MinWidth(0),GUILayout.ExpandWidth(false));
             
             EditorGUILayout.EndHorizontal();
@@ -75,7 +80,10 @@ namespace PixelCrushers.DialogueSystem
             
           //  if (currentValue == string.Empty) return "0,0";
             
-            var pointsType = Enum.Parse<PointsType>(currentValue.Split(':')[0] == null ? "Wellness" : currentValue.Split(':')[0]);
+          var pointsType =
+              Enum.TryParse<PointsType>(currentValue.Split(':')[0], out var validType) ? validType : PointsType.Wellness;
+          
+            
             var pointsValue = Int32.Parse(currentValue.Split(':')[1]) == null ? 0 : Int32.Parse(currentValue.Split(':')[1]);
 
             var label1 = "";
@@ -94,8 +102,6 @@ namespace PixelCrushers.DialogueSystem
             
             EditorGUI.indentLevel = 0;
            
-
-         //  var fieldWidth = EditorGUIUtility.fieldWidth = Mathf.Max(20f, rect.width * 0.2f);
 
           
           
