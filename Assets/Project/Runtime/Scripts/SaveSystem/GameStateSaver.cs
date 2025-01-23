@@ -23,9 +23,9 @@ namespace Project.Runtime.Scripts.SaveSystem
             GameStateManager.instance.gameState = data;
             
             Points.OnPointsChange?.Invoke(Points.Type.Wellness, data.WellnessScore);
-            Points.OnPointsChange?.Invoke(Points.Type.Credibility, data.CredibilityScore);
-            Points.OnPointsChange?.Invoke(Points.Type.Engagement, data.EngagementScore);
-            Points.OnPointsChange?.Invoke(Points.Type.Commitment, data.CommitmentScore);
+            Points.OnPointsChange?.Invoke(Points.Type.Skills, data.SkillsScore);
+            Points.OnPointsChange?.Invoke(Points.Type.Teamwork, data.TeamworkScore);
+            Points.OnPointsChange?.Invoke(Points.Type.Context, data.ContextScore);
             
             GameManager.instance.TravelTo(data.current_scene);
         }

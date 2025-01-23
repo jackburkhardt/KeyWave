@@ -14,9 +14,9 @@ namespace PixelCrushers.DialogueSystem
     public enum PointsType
     {
         Wellness,
-        Engagement,
-        Commitment,
-        Credibility
+        Teamwork,
+        Context,
+        Skills
     }
     
     

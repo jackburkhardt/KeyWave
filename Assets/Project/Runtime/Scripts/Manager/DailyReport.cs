@@ -14,10 +14,10 @@ namespace Project.Runtime.Scripts.Manager
 
         public Dictionary<Points.Type, int> EarnedPoints = new()
         {
-            {Points.Type.Credibility, 0},
-            {Points.Type.Engagement, 0},
+            {Points.Type.Skills, 0},
+            {Points.Type.Teamwork, 0},
             {Points.Type.Wellness, 0},
-            {Points.Type.Commitment, 0}
+            {Points.Type.Context, 0}
         };
 
         public DailyReport(int day)
@@ -40,10 +40,10 @@ namespace Project.Runtime.Scripts.Manager
                     EarnedPoints[pointsInfo.Type] += pointsInfo.Points;
                     
                     //poopoo code
-                    DialogueLua.SetVariable("points.credibility", EarnedPoints[Points.Type.Credibility]);
-                    DialogueLua.SetVariable("points.engagement", EarnedPoints[Points.Type.Engagement]);
+                    DialogueLua.SetVariable("points.Skills", EarnedPoints[Points.Type.Skills]);
+                    DialogueLua.SetVariable("points.Teamwork", EarnedPoints[Points.Type.Teamwork]);
                     DialogueLua.SetVariable("points.wellness", EarnedPoints[Points.Type.Wellness]);
-                    DialogueLua.SetVariable("points.commitment", EarnedPoints[Points.Type.Commitment]);
+                    DialogueLua.SetVariable("points.Context", EarnedPoints[Points.Type.Context]);
                     
                     break;
                 }

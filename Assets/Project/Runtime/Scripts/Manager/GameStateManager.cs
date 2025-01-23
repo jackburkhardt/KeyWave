@@ -42,16 +42,16 @@ namespace Project.Runtime.Scripts.Manager
             } 
         }
         
-        public int EngagementScore 
+        public int TeamworkScore 
         {
-            get => DialogueLua.GetVariable("points.engagement").asInt;
-            set => DialogueLua.SetVariable("points.engagement", Math.Min(value, MaxEngagementScore));
+            get => DialogueLua.GetVariable("points.Teamwork").asInt;
+            set => DialogueLua.SetVariable("points.Teamwork", Math.Min(value, MaxTeamworkScore));
         }
         
-        public int CredibilityScore 
+        public int SkillsScore 
         {
-            get => DialogueLua.GetVariable("points.credibility").asInt;
-            set => DialogueLua.SetVariable("points.credibility", Math.Min(value, MaxCredibilityScore));
+            get => DialogueLua.GetVariable("points.Skills").asInt;
+            set => DialogueLua.SetVariable("points.Skills", Math.Min(value, MaxSkillsScore));
         }
         
         public int WellnessScore 
@@ -60,23 +60,23 @@ namespace Project.Runtime.Scripts.Manager
             set => DialogueLua.SetVariable("points.wellness", Math.Min(value, MaxWellnessScore));
         }
         
-        public int CommitmentScore 
+        public int ContextScore 
         {
-            get => DialogueLua.GetVariable("points.commitment").asInt;
-            set => DialogueLua.SetVariable("points.commitment", Math.Min(value, CommitmentScore));
+            get => DialogueLua.GetVariable("points.Context").asInt;
+            set => DialogueLua.SetVariable("points.Context", Math.Min(value, ContextScore));
         }
         
         
-        public int MaxEngagementScore 
+        public int MaxTeamworkScore 
         {
-            get => DialogueLua.GetVariable("points.engagement.max").asInt;
-            set => DialogueLua.SetVariable("points.engagement.max", value);
+            get => DialogueLua.GetVariable("points.Teamwork.max").asInt;
+            set => DialogueLua.SetVariable("points.Teamwork.max", value);
         }
         
-        public int MaxCredibilityScore 
+        public int MaxSkillsScore 
         {
-            get => DialogueLua.GetVariable("points.credibility.max").asInt;
-            set => DialogueLua.SetVariable("points.credibility.max", value);
+            get => DialogueLua.GetVariable("points.Skills.max").asInt;
+            set => DialogueLua.SetVariable("points.Skills.max", value);
         }
         
         public int MaxWellnessScore 
@@ -85,10 +85,10 @@ namespace Project.Runtime.Scripts.Manager
             set => DialogueLua.SetVariable("points.wellness.max", value);
         }
         
-        public int MaxCommitmentScore 
+        public int MaxContextScore 
         {
-            get => DialogueLua.GetVariable("points.commitment.max").asInt;
-            set => DialogueLua.SetVariable("points.commitment.max", value);
+            get => DialogueLua.GetVariable("points.Context.max").asInt;
+            set => DialogueLua.SetVariable("points.Context.max", value);
         }
         
         
@@ -143,14 +143,14 @@ namespace Project.Runtime.Scripts.Manager
                         case Points.Type.Wellness:
                             gameState.WellnessScore += pointsField.Points;
                             break;
-                        case Points.Type.Engagement:
-                            gameState.EngagementScore += pointsField.Points;
+                        case Points.Type.Teamwork:
+                            gameState.TeamworkScore += pointsField.Points;
                             break;
-                        case Points.Type.Commitment:
-                            gameState.CommitmentScore += pointsField.Points;
+                        case Points.Type.Context:
+                            gameState.ContextScore += pointsField.Points;
                             break;
-                        case Points.Type.Credibility:
-                            gameState.CredibilityScore += pointsField.Points;
+                        case Points.Type.Skills:
+                            gameState.SkillsScore += pointsField.Points;
                             break;
                     }
                     

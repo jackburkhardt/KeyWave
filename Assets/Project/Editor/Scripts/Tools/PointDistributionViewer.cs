@@ -12,18 +12,18 @@ namespace Project.Editor.Scripts.Tools
 {
     public class PointDistributionViewer : EditorWindow
     {
-        private Dictionary<Item, int> credibilityEntries = new();
-        private int credibilityTotal;
-        private Dictionary<Item, int> EngagementEntries = new();
-        private int EngagementTotal;
-        private Dictionary<Item, int> commitmentEntries = new();
-        private int commitmentTotal;
+        private Dictionary<Item, int> SkillsEntries = new();
+        private int SkillsTotal;
+        private Dictionary<Item, int> TeamworkEntries = new();
+        private int TeamworkTotal;
+        private Dictionary<Item, int> ContextEntries = new();
+        private int ContextTotal;
         private Vector2 scrollPos;
 
         private DialogueDatabase selectedDB;
         private bool showCred;
         private bool showData;
-        private bool showEngagement;
+        private bool showTeamwork;
         private bool showWellness;
         private bool showCommit;
         private int totalPoints;
@@ -34,9 +34,9 @@ namespace Project.Editor.Scripts.Tools
         private int wellnessTotal;
 
         private string wellnessMaxVar = "points.wellnessMAX";
-        private string engagementMaxVar = "points.engagementMAX";
-        private string credibilityMaxVar = "points.credibilityMAX";
-        private string commitmentMaxVar = "points.commitmentMAX";
+        private string TeamworkMaxVar = "points.TeamworkMAX";
+        private string SkillsMaxVar = "points.SkillsMAX";
+        private string ContextMaxVar = "points.ContextMAX";
 
         private void OnGUI()
         {
@@ -73,11 +73,11 @@ namespace Project.Editor.Scripts.Tools
             EditorGUILayout.LabelField(
                 $"Total wellness points: {wellnessTotal} ({(wellnessTotal / (float)totalPoints):P})");
             EditorGUILayout.LabelField(
-                $"Total credibility points: {credibilityTotal} ({(credibilityTotal / (float)totalPoints):P})");
+                $"Total Skills points: {SkillsTotal} ({(SkillsTotal / (float)totalPoints):P})");
             EditorGUILayout.LabelField(
-                $"Total engagement points: {EngagementTotal} ({(EngagementTotal / (float)totalPoints):P})");
+                $"Total Teamwork points: {TeamworkTotal} ({(TeamworkTotal / (float)totalPoints):P})");
             EditorGUILayout.LabelField(
-                $"Total commitment points: {commitmentTotal} ({(commitmentTotal / (float)totalPoints):P})");
+                $"Total Context points: {ContextTotal} ({(ContextTotal / (float)totalPoints):P})");
 
             EditorGUILayout.Space(20);
 
@@ -99,10 +99,10 @@ namespace Project.Editor.Scripts.Tools
                 }
             }
 
-            showCred = EditorGUILayout.Foldout(showCred, $"Show Credibility Entries ({credibilityEntries.Count})");
+            showCred = EditorGUILayout.Foldout(showCred, $"Show Skills Entries ({SkillsEntries.Count})");
             if (showCred)
             {
-                foreach (var entry in credibilityEntries)
+                foreach (var entry in SkillsEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
@@ -116,11 +116,11 @@ namespace Project.Editor.Scripts.Tools
                 }
             }
 
-            showEngagement =
-                EditorGUILayout.Foldout(showEngagement, $"Show Engagement Entries ({EngagementEntries.Count})");
-            if (showEngagement)
+            showTeamwork =
+                EditorGUILayout.Foldout(showTeamwork, $"Show Teamwork Entries ({TeamworkEntries.Count})");
+            if (showTeamwork)
             {
-                foreach (var entry in EngagementEntries)
+                foreach (var entry in TeamworkEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
@@ -134,10 +134,10 @@ namespace Project.Editor.Scripts.Tools
                 }
             }
 
-            showCommit = EditorGUILayout.Foldout(showCommit, $"Show Commitment Entries ({commitmentEntries.Count})");
+            showCommit = EditorGUILayout.Foldout(showCommit, $"Show Context Entries ({ContextEntries.Count})");
             if (showCommit)
             {
-                foreach (var entry in commitmentEntries)
+                foreach (var entry in ContextEntries)
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
@@ -169,23 +169,23 @@ namespace Project.Editor.Scripts.Tools
                 EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
             }
             
-            engagementMaxVar = EditorGUILayout.TextField("Engagement", engagementMaxVar);
+            TeamworkMaxVar = EditorGUILayout.TextField("Teamwork", TeamworkMaxVar);
             
-            if (selectedDB.variables.Find(p => p.Name == engagementMaxVar) == null)
+            if (selectedDB.variables.Find(p => p.Name == TeamworkMaxVar) == null)
             {
                 EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
             }
            
-            credibilityMaxVar = EditorGUILayout.TextField("Credibility", credibilityMaxVar);
+            SkillsMaxVar = EditorGUILayout.TextField("Skills", SkillsMaxVar);
             
-            if (selectedDB.variables.Find(p => p.Name == credibilityMaxVar) == null)
+            if (selectedDB.variables.Find(p => p.Name == SkillsMaxVar) == null)
             {
                 EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
             }
             
-            commitmentMaxVar = EditorGUILayout.TextField("Commitment", commitmentMaxVar);
+            ContextMaxVar = EditorGUILayout.TextField("Context", ContextMaxVar);
             
-            if (selectedDB.variables.Find(p => p.Name == commitmentMaxVar) == null)
+            if (selectedDB.variables.Find(p => p.Name == ContextMaxVar) == null)
             {
                 EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
             }
@@ -233,45 +233,45 @@ namespace Project.Editor.Scripts.Tools
                             wellnessEntries.Add(quest, points);
                             wellnessTotal += points;
                             break;
-                        case Points.Type.Credibility:
-                            credibilityEntries.Add(quest, points);
-                            credibilityTotal += points;
+                        case Points.Type.Skills:
+                            SkillsEntries.Add(quest, points);
+                            SkillsTotal += points;
                             break;
-                        case Points.Type.Engagement:
-                            EngagementEntries.Add(quest, points);
-                            EngagementTotal += points;
+                        case Points.Type.Teamwork:
+                            TeamworkEntries.Add(quest, points);
+                            TeamworkTotal += points;
                             break;
-                        case Points.Type.Commitment:
-                            commitmentEntries.Add(quest, points);
-                            commitmentTotal += points;
+                        case Points.Type.Context:
+                            ContextEntries.Add(quest, points);
+                            ContextTotal += points;
                             break;
                     }
                 }
                 
             }
 
-            totalPoints = wellnessTotal + credibilityTotal + EngagementTotal + commitmentTotal;
+            totalPoints = wellnessTotal + SkillsTotal + TeamworkTotal + ContextTotal;
 
             // sort dictionaries on the value (highest to lowest)
             wellnessEntries = wellnessEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            credibilityEntries = credibilityEntries.OrderByDescending(x => x.Value)
+            SkillsEntries = SkillsEntries.OrderByDescending(x => x.Value)
                 .ToDictionary(x => x.Key, x => x.Value);
-            EngagementEntries =
-                EngagementEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            commitmentEntries =
-                commitmentEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            TeamworkEntries =
+                TeamworkEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            ContextEntries =
+                ContextEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
         }
 
         private void ResetPoints()
         {
             wellnessEntries.Clear();
-            credibilityEntries.Clear();
-            EngagementEntries.Clear();
-            commitmentEntries.Clear();
+            SkillsEntries.Clear();
+            TeamworkEntries.Clear();
+            ContextEntries.Clear();
             wellnessTotal = 0;
-            credibilityTotal = 0;
-            EngagementTotal = 0;
-            commitmentTotal = 0;
+            SkillsTotal = 0;
+            TeamworkTotal = 0;
+            ContextTotal = 0;
             showData = false;
         }
 
@@ -283,17 +283,17 @@ namespace Project.Editor.Scripts.Tools
                 {
                     v.InitialFloatValue = wellnessTotal;
                 }
-                else if (v.Name == engagementMaxVar)
+                else if (v.Name == TeamworkMaxVar)
                 {
-                    v.InitialFloatValue = credibilityTotal;
+                    v.InitialFloatValue = SkillsTotal;
                 }
-                else if (v.Name == credibilityMaxVar)
+                else if (v.Name == SkillsMaxVar)
                 {
-                    v.InitialFloatValue = EngagementTotal;
+                    v.InitialFloatValue = TeamworkTotal;
                 }
-                else if (v.Name == commitmentMaxVar)
+                else if (v.Name == ContextMaxVar)
                 {
-                    v.InitialFloatValue = commitmentTotal;
+                    v.InitialFloatValue = ContextTotal;
                 }
             });
         }

@@ -10,10 +10,10 @@ namespace Project.Runtime.Scripts.UI.Particles
     public class PointToParticle : MonoBehaviour
     {
         [HorizontalLine(color: EColor.Blue)][BoxGroup("Business")]
-        [Label("Particle Color")] public Color _particleColorB = Points.Color(Points.Type.Credibility);
+        [Label("Particle Color")] public Color _particleColorB = Points.Color(Points.Type.Skills);
 
         [HorizontalLine(color: EColor.Red)][BoxGroup("Local Savvy")]
-        [Label("Particle Color")] public Color _particleColorS = Points.Color(Points.Type.Engagement);
+        [Label("Particle Color")] public Color _particleColorS = Points.Color(Points.Type.Teamwork);
 
         [HorizontalLine(color: EColor.Green)] [BoxGroup("Wellness")]
         [Label("Particle Color")] public Color _particleColorW = Points.Color(Points.Type.Wellness);
@@ -50,8 +50,8 @@ namespace Project.Runtime.Scripts.UI.Particles
             
                 var color = pointsInfo.Type switch
                 {
-                    Points.Type.Credibility => _particleColorB,
-                    Points.Type.Engagement => _particleColorS,
+                    Points.Type.Skills => _particleColorB,
+                    Points.Type.Teamwork => _particleColorS,
                     Points.Type.Wellness => _particleColorW,
                     _ => Color.white
                 };

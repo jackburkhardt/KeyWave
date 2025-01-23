@@ -13,8 +13,8 @@ public class MetricsGrid : MonoBehaviour
     
     public RectTransform credibiltyContainer;
     public RectTransform wellnessContainer;
-    public RectTransform engagementContainer;
-    public RectTransform commitmentContainer;
+    public RectTransform TeamworkContainer;
+    public RectTransform ContextContainer;
 
     public List<RectTransform> GetValidMetrics(DisplayCondition displayCondition = DisplayCondition.All, Location location = null)
     {
@@ -24,23 +24,23 @@ public class MetricsGrid : MonoBehaviour
             case DisplayCondition.All:
                 validMetrics.Add(credibiltyContainer);
                 validMetrics.Add(wellnessContainer);
-                validMetrics.Add(engagementContainer);
-                validMetrics.Add(commitmentContainer);
+                validMetrics.Add(TeamworkContainer);
+                validMetrics.Add(ContextContainer);
                 break;
             case DisplayCondition.HighLocationAffinity:
                 if (int.Parse(location.AssignedField("Wellness Affinity").value) > 0)
                 {
                     validMetrics.Add(wellnessContainer);
                 }
-                if (int.Parse(location.AssignedField("Engagement Affinity").value) > 0)
+                if (int.Parse(location.AssignedField("Teamwork Affinity").value) > 0)
                 {
-                    validMetrics.Add(engagementContainer);
+                    validMetrics.Add(TeamworkContainer);
                 }
-                if (int.Parse(location.AssignedField("Commitment Affinity").value) > 0)
+                if (int.Parse(location.AssignedField("Context Affinity").value) > 0)
                 {
-                    validMetrics.Add(commitmentContainer);
+                    validMetrics.Add(ContextContainer);
                 }
-                if (int.Parse(location.AssignedField("Credibility Affinity").value) > 0)
+                if (int.Parse(location.AssignedField("Skills Affinity").value) > 0)
                 {
                     validMetrics.Add(credibiltyContainer);
                 }
@@ -55,8 +55,8 @@ public class MetricsGrid : MonoBehaviour
     {
         credibiltyContainer.gameObject.SetActive(false);
         wellnessContainer.gameObject.SetActive(false);
-        engagementContainer.gameObject.SetActive(false);
-        commitmentContainer.gameObject.SetActive(false);
+        TeamworkContainer.gameObject.SetActive(false);
+        ContextContainer.gameObject.SetActive(false);
         
         
         var validMetrics = GetValidMetrics(displayCondition, location);

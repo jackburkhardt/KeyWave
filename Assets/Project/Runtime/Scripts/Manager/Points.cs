@@ -18,9 +18,9 @@ namespace Project.Runtime.Scripts.Manager
         public enum Type
         {
             Wellness,
-            Credibility,
-            Engagement,
-            Commitment,
+            Skills,
+            Teamwork,
+            Context,
             Null
         }
 
@@ -33,11 +33,11 @@ namespace Project.Runtime.Scripts.Manager
         public static Action<Type> OnAnimationStart;
 
         public static Action OnAnimationComplete;
-        public static int EngagementScore => GameStateManager.instance.gameState.EngagementScore;
-        public static int CredibilityScore => GameStateManager.instance.gameState.CredibilityScore;
+        public static int TeamworkScore => GameStateManager.instance.gameState.TeamworkScore;
+        public static int SkillsScore => GameStateManager.instance.gameState.SkillsScore;
         public static int WellnessScore => GameStateManager.instance.gameState.WellnessScore;
-        public static int CommitmentScore => GameStateManager.instance.gameState.CommitmentScore;
-        public static int TotalScore =>  EngagementScore + CredibilityScore + WellnessScore + CommitmentScore;
+        public static int ContextScore => GameStateManager.instance.gameState.ContextScore;
+        public static int TotalScore =>  TeamworkScore + SkillsScore + WellnessScore + ContextScore;
         public static bool IsAnimating => isAnimating;
 
         /// <summary>
@@ -55,17 +55,17 @@ namespace Project.Runtime.Scripts.Manager
             var score = 0;
             switch (type)
             {
-                case Type.Engagement:
-                    score = GameStateManager.instance.gameState.EngagementScore;
+                case Type.Teamwork:
+                    score = GameStateManager.instance.gameState.TeamworkScore;
                     break;
-                case Type.Credibility:
-                    score = GameStateManager.instance.gameState.CredibilityScore;
+                case Type.Skills:
+                    score = GameStateManager.instance.gameState.SkillsScore;
                     break;
                 case Type.Wellness:
                     score = GameStateManager.instance.gameState.WellnessScore;
                     break;
-                case Type.Commitment:
-                    score = GameStateManager.instance.gameState.CommitmentScore;
+                case Type.Context:
+                    score = GameStateManager.instance.gameState.ContextScore;
                     break;
             }
 
@@ -77,17 +77,17 @@ namespace Project.Runtime.Scripts.Manager
             var score = 0;
             switch (type)
             {
-                case Type.Engagement:
-                    score = GameStateManager.instance.gameState.MaxEngagementScore;
+                case Type.Teamwork:
+                    score = GameStateManager.instance.gameState.MaxTeamworkScore;
                     break;
-                case Type.Credibility:
-                    score = GameStateManager.instance.gameState.MaxCredibilityScore;
+                case Type.Skills:
+                    score = GameStateManager.instance.gameState.MaxSkillsScore;
                     break;
                 case Type.Wellness:
                     score = GameStateManager.instance.gameState.MaxWellnessScore;
                     break;
-                case Type.Commitment:
-                    score = GameStateManager.instance.gameState.MaxCommitmentScore;
+                case Type.Context:
+                    score = GameStateManager.instance.gameState.MaxContextScore;
                     break;
             }
 
@@ -95,7 +95,7 @@ namespace Project.Runtime.Scripts.Manager
         }
         
         public static int TotalMaxScore
-        => GameStateManager.instance.gameState.MaxEngagementScore + GameStateManager.instance.gameState.MaxCredibilityScore + GameStateManager.instance.gameState.MaxWellnessScore + GameStateManager.instance.gameState.MaxCommitmentScore;
+        => GameStateManager.instance.gameState.MaxTeamworkScore + GameStateManager.instance.gameState.MaxSkillsScore + GameStateManager.instance.gameState.MaxWellnessScore + GameStateManager.instance.gameState.MaxContextScore;
          
 
         public static Action OnPointsAnimEnd;
@@ -117,9 +117,9 @@ namespace Project.Runtime.Scripts.Manager
             {
                 case Type.Wellness:
                     return UnityEngine.Color.green;
-                case Type.Credibility:
+                case Type.Skills:
                     return UnityEngine.Color.red;
-                case Type.Engagement:
+                case Type.Teamwork:
                     return new Color(0, 153, 255, 255);
                 default:
                     return UnityEngine.Color.white;
