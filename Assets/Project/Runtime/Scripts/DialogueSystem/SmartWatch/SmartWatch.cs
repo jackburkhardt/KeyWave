@@ -8,7 +8,7 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SmartWatch", menuName = "SmartWatch")]
+[CreateAssetMenu(fileName = "SmartWatch", menuName = "SmartWatch/SmartWatch Settings")]
 public class SmartWatch : ScriptableObject
 {
 

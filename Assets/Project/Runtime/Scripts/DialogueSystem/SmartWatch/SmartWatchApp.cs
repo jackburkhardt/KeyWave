@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
-public class SmartWatchApp : MonoBehaviour
+namespace Project.Runtime.Scripts.Utility
 {
-    [Dropdown("apps")]
-    public string app;
-
-    private List<string> apps => SmartWatch.instance.appNames;
-
-    public void OnEnable()
+    public class SmartWatchApp : MonoBehaviour
     {
-        SmartWatch.OnAppOpen?.Invoke(SmartWatch.GetApp(app));
+        [Dropdown("apps")] public string app;
+
+        private List<string> apps => SmartWatch.instance.appNames;
+
+        public void OnEnable()
+        {
+            SmartWatch.OnAppOpen?.Invoke(SmartWatch.GetApp(app));
+        }
     }
 }

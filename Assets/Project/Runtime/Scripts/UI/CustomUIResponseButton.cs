@@ -447,7 +447,7 @@ namespace Project.Runtime.Scripts.UI
                     }
 
                     var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
-                    var showAsRepeatable = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0;
+                    var showAsRepeatable = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0 && DialogueLua.GetQuestField(quest.Name, "Points Repeat").asFloat < 1;
                     
                     if (repeatableQuestIcon != null) repeatableQuestIcon.gameObject.SetActive(showAsRepeatable);
                     if (repeatableQuestTooltip != null) repeatableQuestTooltip.gameObject.SetActive(showAsRepeatable);

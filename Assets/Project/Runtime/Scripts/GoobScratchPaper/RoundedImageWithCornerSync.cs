@@ -8,9 +8,7 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
 {
-    [HideIf("_syncingWithOtherRoundedImage")]
     [SerializeField] protected bool syncCorners = true;
-    [HideIf("_syncingWithOtherRoundedImage")]
     [SerializeField] protected bool proportionalToRect = true;
     
     [ShowIf(EConditionOperator.And, "proportionalToRect", "syncCorners", "notSyncing")]
@@ -64,18 +62,16 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
             _bottomLeft = _topLeft = _topRight = _bottomRight = new Gilzoide.RoundedCorners.RoundedCorner { Radius = radius, TriangleCount = _bottomLeft.TriangleCount };
         }
         
+        if (Application.isEditor && !Application.isPlaying && (int)Time.time % 5 == 0)
+        {
+            OnRectTransformDimensionsChange();
+        }
+        
     }
 
     protected override void OnRectTransformDimensionsChange()
     {
         SetVerticesDirty();
         base.OnRectTransformDimensionsChange();
-    }
-    
-    [Button]
-    public void RecalculateCorners()
-    {
-        
-        
     }
 }
