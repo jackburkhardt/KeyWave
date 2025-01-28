@@ -20,7 +20,12 @@ public class DayProgressBar : MonoBehaviour
     [Tooltip("Only used in editor mode. Gets overriden by Clock.DayProgress in play mode.")]
     public float editorModeProgressValue = 0.5f;
 
-   
+
+    private void Awake()
+    {
+        GetComponent<CanvasGroup>().alpha = 0;
+    }
+
     private void OnValidate()
     {
         Adjust();
@@ -64,5 +69,15 @@ public class DayProgressBar : MonoBehaviour
                 progressBar.localScale = new Vector3(!Application.isPlaying && Application.isEditor ? editorModeProgressValue : Clock.DayProgress, progressBar.localScale.y, progressBar.localScale.z);
                 break;
         }
+    }
+    
+    public void Show()
+    {
+        GetComponent<CanvasGroup>().DOFade(1, 1f);
+    }
+    
+    public void Hide()
+    {
+        GetComponent<CanvasGroup>().DOFade(0, 1f);
     }
 }

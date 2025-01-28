@@ -47,8 +47,8 @@ public class Settings : ScriptableObject
     [Expandable]
     public AudioSettings audioSettings;
 
-
-    public static ClockSettings Clock
+    
+    public ClockSettings Clock
     {
         get
         {
@@ -61,7 +61,7 @@ public class Settings : ScriptableObject
         }
     }
     
-    public static TrafficSettings Traffic
+    public TrafficSettings Traffic
     {
         get
         {
@@ -74,7 +74,7 @@ public class Settings : ScriptableObject
         }
     }
     
-    public static SmartWatch SmartWatch
+    public SmartWatch SmartWatch
     {
         get
         {
@@ -87,7 +87,7 @@ public class Settings : ScriptableObject
         }
     }
     
-    public static AudioSettings Audio
+    public AudioSettings Audio
     {
         get
         {

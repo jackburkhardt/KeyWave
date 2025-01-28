@@ -92,8 +92,6 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
             
             if (sublocationGameObject == null) yield break;
             
-           // Sequencer.PlaySequence("SetMenuPanelTrigger(1, false)");
-            
             Sequencer.PlaySequence("SetDialoguePanel(false)");
             
             Sequencer.PlaySequence("SetCustomPanel(SmartWatch, false);");
@@ -123,8 +121,6 @@ namespace Project.Runtime.Scripts.DialogueSystem.SequencerCommands
                 yield return null;
                 DialogueManager.StartConversation(location + "/Base");
             }
-            
-          
         }
     }
     

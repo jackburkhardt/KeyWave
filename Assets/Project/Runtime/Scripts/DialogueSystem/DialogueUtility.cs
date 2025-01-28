@@ -4,6 +4,7 @@ using System.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
+using Unity.VisualScripting;
 using UnityEngine;
 using Field = PixelCrushers.DialogueSystem.Field;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
@@ -198,21 +199,36 @@ namespace Project.Runtime.Scripts.DialogueSystem
         {
             var minTimeEstimate = int.MaxValue;
             var maxTimeEstimate = 0;
+            
+            var timespan = GetNodeDuration(node);
+            
+            if (timespan != 0) minTimeEstimate = maxTimeEstimate = timespan;
+            
         
         
-            foreach (var field in node.fields)
+            //must be a single outgoing link to a different conversation
+            if (node.outgoingLinks.Count != 1 || node.outgoingLinks[0].destinationConversationID == node.conversationID) return (minTimeEstimate, maxTimeEstimate);
+
+            var firstNode = node.outgoingLinks[0].GetDestinationEntry();
+            
+            var finalNodes = new List<DialogueEntry>();
+            
+            foreach (var nodes in firstNode.GetConversation().dialogueEntries)
             {
-                if (field.title == "Time Estimate" && field.type == FieldType.Node)
-                {
-                    if (field.value == "0,0") continue;
-                    var entry = GetDialogueEntryFromNodeField(field);
-                    var timeEstimate = DurationRangeBetweenNodes(node, entry);
+                if (nodes.outgoingLinks.Count == 0) finalNodes.Add(nodes);
+            }
+            
+            
+            foreach (var finalNode in finalNodes)
+            {
+                var timeEstimate = DurationRangeBetweenNodes(firstNode, finalNode);
                 
-                    if (timeEstimate.Item1 < minTimeEstimate) minTimeEstimate = timeEstimate.Item1;
-                    if (timeEstimate.Item2 > maxTimeEstimate) maxTimeEstimate = timeEstimate.Item2;
-                }
+                if (timeEstimate.Item1 < minTimeEstimate) minTimeEstimate = timeEstimate.Item1;
+                if (timeEstimate.Item2 > maxTimeEstimate) maxTimeEstimate = timeEstimate.Item2;
             }
 
+            if (minTimeEstimate == int.MaxValue) minTimeEstimate = maxTimeEstimate;
+            
             return (minTimeEstimate, maxTimeEstimate);
         }
 
@@ -262,29 +278,135 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 return 0;
             }
             //Debug.Log($"Auto Node Duration from Line: {line.Length / Clock.TimeScales.SpokenCharactersPerSecond + Clock.TimeScales.SecondsBetweenLines}");
-            return (int)((line.Length * Settings.Clock.SecondsPerCharacter +
-                    Settings.Clock.SecondsBetweenLines) * Settings.Clock.globalModifier);
+            return line.Length * Clock.SecondsPerCharacter +
+                          Clock.SecondsBetweenLines;
         }
 
         public static int GetNodeDuration(DialogueEntry dialogueEntry)
         {
+            var time = 0;
             var timespan = GetTimespan(dialogueEntry);
             var t = dialogueEntry.Timespan();
+            
+            
             if (timespan != -1)
             {
-                /*Debug.Log($"Node Duration from Timespan: {timespan}"); */
-                return timespan;
+                time += timespan;
             }
 
-            if (Field.FieldExists(dialogueEntry.fields, "Duration"))
+            if (dialogueEntry.Sequence.Contains("BlackOut"))
             {
-                //Debug.Log($"Node Duration from Duration Field: {Field.LookupInt(dialogueEntry.fields, "Duration")}");
-                return Field.LookupInt(dialogueEntry.fields, "Duration");
+                List<string> extractedContents = new List<string>();
+                string pattern = @"BlackOut\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim());
+                    
+                }
+
+                var blackoutTime = 0;
+                
+                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) blackoutTime = secondsFromInt;
+                
+                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) blackoutTime = secondsFromLua;
+                
+                if (extractedContents.Count > 1)
+                {
+                    switch (extractedContents[1])
+                    {
+                        case "seconds":
+                            time += blackoutTime;
+                            break;
+                        case "minutes":
+                            time += blackoutTime * 60;
+                            break;
+                        case "hours":
+                            time += blackoutTime * 3600;
+                            break;
+                    }
+                    
+                }
+                
+                else blackoutTime *= 60;
+                
+                time += blackoutTime;
+
             }
+           
+            
+            if (dialogueEntry.Sequence.Contains("AddSeconds"))
+            {
+                List<string> extractedContents = new List<string>();
+                string pattern = @"AddSeconds\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim());
+                }
+                
+                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) time += secondsFromInt;
+                
+                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) time += secondsFromLua;
+            }
+            
+            if (dialogueEntry.Sequence.Contains("AddMinutes"))
+            {
+                List<string> extractedContents = new List<string>();
+                string pattern = @"AddMinutes\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim());
+                }
+                
+                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) time += secondsFromInt;
+                
+                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) time += secondsFromLua;
+            }
+            
+            
+            if (dialogueEntry.Sequence.Contains("SetTime"))
+            {
+                List<string> extractedContents = new List<string>();
+                string pattern = @"SetTime\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim());
+                }
+                
+                var currentTime = Clock.CurrentTimeRaw;
+                
+                
+                
+                var setTime = Clock.ToSeconds(extractedContents[0]);
+                var timeDifference = setTime - (currentTime + time);
+                
+                time += timeDifference;
+
+            }
+            
+            if (dialogueEntry.userScript.Contains("SetQuestState") && (dialogueEntry.userScript.Contains("success") || dialogueEntry.userScript.Contains("failure")))
+            {
+                List<string> extractedContents = new List<string>();
+                string pattern = @"SetQuestState\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.userScript, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim().Replace("\"", ""));
+                }
+                
+                var questName = extractedContents[0].Split(",")[0];
+                var quest = GetQuestByName(questName);
+
+                if (quest == null) Debug.LogError("Couldn't find quest " + questName);
+                else time += GetQuestDuration(quest);
+            }
+            
+           // if (dialogueEntry.Visited()) return 0;
         
-            if (dialogueEntry.Visited()) return 0;
-        
-            return GetLineAutoDuration(dialogueEntry.currentDialogueText);
+            return time > 0 ? time : GetLineAutoDuration(dialogueEntry.currentDialogueText);
         }
 
         public static int GetNodeDuration(int conversationID, int nodeID)

@@ -132,7 +132,7 @@ namespace Project.Runtime.Scripts.Manager
                 case "awaiting_response":
                     break;
                 case "end_day":
-                    gameState.Clock = Clock.DailyLimit;
+                    gameState.Clock = Clock.DayEndTime;
                     break;
                 case "conversation_decision":
                     break;
@@ -166,7 +166,7 @@ namespace Project.Runtime.Scripts.Manager
         public void StartNextDay()
         {
             gameState.day += 1;
-            gameState.Clock = Settings.Clock.DayStartTime;
+            gameState.Clock = Clock.DayStartTime;
             gameState.PlayerLocation = "Hotel";
 
         }

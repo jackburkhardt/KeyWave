@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.Utility
@@ -15,6 +16,15 @@ namespace Project.Runtime.Scripts.Utility
         public void OnEnable()
         {
             SmartWatch.OnAppOpen?.Invoke(SmartWatch.GetApp(app));
+
+            foreach (var standardUIResponseButton in GetComponentsInChildren<StandardUIResponseButton>(true))
+            {
+                foreach (var subcomponent in standardUIResponseButton.GetComponentsInChildren<SmartWatchAppSubcomponent>(true))
+                {
+                    subcomponent.Evaluate(standardUIResponseButton);
+                    
+                }
+            }
         }
     }
 }

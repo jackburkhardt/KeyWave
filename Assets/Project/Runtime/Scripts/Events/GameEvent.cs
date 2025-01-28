@@ -78,7 +78,7 @@ namespace Project.Runtime.Scripts.Events
                     ["target"] = interactable.name,
                     ["trigger"] = dialogueSystemTrigger.ToString()
                 };
-                RegisterPlayerEvent("interact", data, Settings.Clock.SecondsPerInteract);
+                RegisterPlayerEvent("interact", data, Clock.SecondsPerInteract);
                 dialogueSystemTrigger.OnUse();
             }
         }

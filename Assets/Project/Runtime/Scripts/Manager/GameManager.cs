@@ -138,7 +138,7 @@ namespace Project.Runtime.Scripts.Manager
 
         private void OnPlayerEvent(PlayerEvent e)
         {
-            if (gameState.Clock > Clock.DailyLimit)
+            if (gameState.Clock > Clock.DayEndTime)
             {
                 GameEvent.OnDayEnd();
                 DialogueManager.StopAllConversations();

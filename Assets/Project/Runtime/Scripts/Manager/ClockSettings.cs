@@ -5,129 +5,32 @@ using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using UnityEngine;
+using UnityEngine.UI;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.Manager
 {
     public class Clock
     {
-        public enum Hour
-        {
-            _0 = 0,
-            _1 = 1,
-            _2 = 2,
-            _3 = 3,
-            _4 = 4,
-            _5 = 5,
-            _6 = 6,
-            _7 = 7,
-            _8 = 8,
-            _9 = 9,
-            _10 = 10,
-            _11 = 11,
-            _12 = 12,
-            _13 = 13,
-            _14 = 14,
-            _15 = 15,
-            _16 = 16,
-            _17 = 17,
-            _18 = 18,
-            _19 = 19,
-            _20 = 20,
-            _21 = 21,
-            _22 = 22,
-            _23 = 23
-        }
-
-        public enum Minute
-        {
-            _00 = 0,
-            _01 = 1,
-            _02 = 2,
-            _03 = 3,
-            _04 = 4,
-            _05 = 5,
-            _06 = 6,
-            _07 = 7,
-            _08 = 8,
-            _09 = 9,
-            _10 = 10,
-            _11 = 11,
-            _12 = 12,
-            _13 = 13,
-            _14 = 14,
-            _15 = 15,
-            _16 = 16,
-            _17 = 17,
-            _18 = 18,
-            _19 = 19,
-            _20 = 20,
-            _21 = 21,
-            _22 = 22,
-            _23 = 23,
-            _24 = 24,
-            _25 = 25,
-            _26 = 26,
-            _27 = 27,
-            _28 = 28,
-            _29 = 29,
-            _30 = 30,
-            _31 = 31,
-            _32 = 32,
-            _33 = 33,
-            _34 = 34,
-            _35 = 35,
-            _36 = 36,
-            _37 = 37,
-            _38 = 38,
-            _39 = 39,
-            _40 = 40,
-            _41 = 41,
-            _42 = 42,
-            _43 = 43,
-            _44 = 44,
-            _45 = 45,
-            _46 = 46,
-            _47 = 47,
-            _48 = 48,
-            _49 = 49,
-            _50 = 50,
-            _51 = 51,
-            _52 = 52,
-            _53 = 53,
-            _54 = 54,
-            _55 = 55,
-            _56 = 56,
-            _57 = 57,
-            _58 = 58,
-            _59 = 59
-        }
-        
-
-        public static int CurrentVisualizedTimeRaw = ClockUI.CurrentVisualizedTimeRaw;
-
         public static int CurrentTimeRaw
         {
-            get { return GameManager.gameState != null ? GameManager.gameState.Clock : Settings.Clock.CurrentTime; }
+            get { return GameManager.gameState.Clock; }
             set { GameManager.gameState.Clock = value; }
         }
 
         public static float DayProgress {
             get
             {
-                float range = Settings.Clock.DayEndTime - Settings.Clock.DayStartTime;
-                return (CurrentTimeRaw - Settings.Clock.DayStartTime)/range;
+                float range = Settings.Instance.Clock.DayEndTime - Settings.Instance.Clock.DayStartTime;
+                return (CurrentTimeRaw - Settings.Instance.Clock.DayStartTime)/range;
             }
         }
 
         public static string CurrentTime => To24HourClock(CurrentTimeRaw);
-
-        public static int DailyLimit => ToSeconds("20:00");
-        
         
         public static int TimeFromProgress(float progress)
         {
-            return Mathf.RoundToInt(progress * (Settings.Clock.DayEndTime - Settings.Clock.DayStartTime) + Settings.Clock.DayStartTime);
+            return Mathf.RoundToInt(progress * (Settings.Instance.Clock.DayEndTime - Settings.Instance.Clock.DayStartTime) + Settings.Instance.Clock.DayStartTime);
         }
 
         public static int HoursToSeconds(int hours) => hours * 3600;
@@ -181,12 +84,6 @@ namespace Project.Runtime.Scripts.Manager
             return To24HourClock(location.TravelTime + CurrentTimeRaw);
         }
 
-        public static int EstimatedTimeOfArrivalRaw(Location location)
-        {
-            return location.TravelTime + CurrentTimeRaw;
-        }
-
-
         public static int GetHoursAsInt(string time)
         {
             Debug.Log(time);
@@ -197,6 +94,15 @@ namespace Project.Runtime.Scripts.Manager
         {
             return GetHoursAsInt(To24HourClock(time));
         }
+        
+        public static int DayStartTime => Settings.Instance.Clock.DayStartTime;
+        public static int DayEndTime => Settings.Instance.Clock.DayEndTime;
+        
+        public static int SecondsPerCharacter => Mathf.RoundToInt(Settings.Instance.Clock.SecondsPerCharacter * Settings.Instance.Clock.globalModifier);
+        public static int SecondsBetweenLines => Mathf.RoundToInt(Settings.Instance.Clock.SecondsBetweenLines * Settings.Instance.Clock.globalModifier);
+        public static int SecondsPerInteract => Mathf.RoundToInt(Settings.Instance.Clock.SecondsPerInteract * Settings.Instance.Clock.globalModifier);
+        
+        
     }
 }
 
@@ -214,31 +120,36 @@ public class ClockSettings : ScriptableObject
     [ReadOnly] [Label("Time:")] public string DayStartTimeString = "06:00:00";
     public int DayEndTime = 72000;
     [ReadOnly]  [Label("Time:")] public string DayEndTimeString = "20:00:00";
+
+    public bool showModifiableCurrentTime => !Application.isPlaying;
+    [ShowIf("showModifiableCurrentTime")]
     [Tooltip("This property modifies the variable \"clock\" in the Dialogue Database")]
-    public int CurrentTime = 21600;
+    [SerializeField] private int currentTime = 21600;
+    [HideIf("showModifiableCurrentTime")]
+    [InfoBox( "The current time cannot be directly modified in play mode.")]
+    [ReadOnly] [SerializeField] [Label("Current Time")] private int readOnlyCurrentTime;
     [ReadOnly] [Label("Time:")] public string CurrentTimeString = "06:00:00";
 
     private void OnValidate()
     {
         
-        CurrentTime = Mathf.Clamp(CurrentTime, DayStartTime, DayEndTime);
+        currentTime = Mathf.Clamp(currentTime, DayStartTime, DayEndTime);
 
         if (!Application.isPlaying)
         {
-            if (Settings.Instance != null) Settings.Instance.dialogueDatabase.GetVariable("clock").InitialValue = CurrentTime.ToString();
+            if (Settings.Instance != null) Settings.Instance.dialogueDatabase.GetVariable("clock").InitialValue = currentTime.ToString();
         }
         
-        else CurrentTime = DialogueLua.GetVariable("clock").asInt;
+        else currentTime = DialogueLua.GetVariable("clock").asInt;
         
-        
+        readOnlyCurrentTime = currentTime;
         
         
         DayStartTimeString = Clock.To24HourClock(DayStartTime, true);
         DayEndTimeString = Clock.To24HourClock(DayEndTime, true);
-        CurrentTimeString = Clock.To24HourClock(CurrentTime, true);
-
-        
+        CurrentTimeString = Clock.To24HourClock(currentTime, true);
     }
+    
 }
 
 
@@ -284,6 +195,8 @@ public class SequencerCommandBlackOut : SequencerCommand
         var playEndOfLine = GetParameterAsBool(2, true);
 
         int timeToAdd;
+
+        sequencer.PlaySequence("SetAllContinueButtons(false)");
         
         switch (unit)
         {
@@ -310,9 +223,28 @@ public class SequencerCommandBlackOut : SequencerCommand
                        $"Delay(1)@Message(ClockUpdated)->Message(FadeOut);" +
                        $"Fade(unstay, 1)@Message(FadeOut)";
         
-        if (playEndOfLine) sequence += "->Message(PlayEndOfLine);EndOfLine()@Message(PlayEndOfLine);";
+        if (playEndOfLine) sequence += "->Message(PlayEndOfLine);EndOfLine()@Message(PlayEndOfLine); SetAllContinueButtons(true)@Message(PlayEndOfLine);";
+        
+        else sequence += "->Message(SetContinueButtonsTrue);SetAllContinueButtons(true)@Message(SetContinueButtonsTrue);";
         
         sequencer.PlaySequence(sequence);
         Stop();
+    }
+    
+}
+
+public class SequencerCommandSetAllContinueButtons : SequencerCommand
+{
+    private void Start()
+    {
+        bool param = GetParameterAsBool(0, true);
+        
+        var continueButtons = FindObjectsByType<StandardUIContinueButtonFastForward>( FindObjectsInactive.Include, FindObjectsSortMode.None);
+        
+        foreach (var standardUIContinueButtonFastForward in continueButtons)
+        {
+            standardUIContinueButtonFastForward.enabled = param;
+            standardUIContinueButtonFastForward.GetComponent<Button>().interactable = param;
+        }
     }
 }

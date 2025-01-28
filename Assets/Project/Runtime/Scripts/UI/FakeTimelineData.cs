@@ -106,13 +106,13 @@ public class FakeTimelineData : MonoBehaviour, IEndOfDayTimelineDataHandler
             fakeDataPoints[i].fakeDataType = fakeDataType;
             var point = fakeDataPoints[i];
 
-            if (i == 0) point.time = Math.Max(point.time, Settings.Clock.DayStartTime);
+            if (i == 0) point.time = Math.Max(point.time, Clock.DayStartTime);
             
-            else if (i == fakeDataPoints.Count - 1) point.time = Math.Clamp(point.time, fakeDataPoints[i - 1].time, Settings.Clock.DayEndTime);
+            else if (i == fakeDataPoints.Count - 1) point.time = Math.Clamp(point.time, fakeDataPoints[i - 1].time, Clock.DayEndTime);
             
             else point.time = Math.Clamp(point.time, fakeDataPoints[i - 1].time, fakeDataPoints[i + 1].time);
             
-            point.time = Mathf.Clamp(point.time, Settings.Clock.DayStartTime, Settings.Clock.DayEndTime);
+            point.time = Mathf.Clamp(point.time, Clock.DayStartTime, Clock.DayEndTime);
             point.timeString = Clock.To24HourClock(point.time);
             
         }

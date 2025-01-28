@@ -94,7 +94,7 @@ public class TrafficLevels : MonoBehaviour
     {
         if (content == null) return;
         
-        minValue = maxValue * Settings.Traffic.baseTrafficLevel / Settings.Traffic.peakTrafficLevel;
+        minValue = maxValue * Traffic.BaseTrafficLevel / Traffic.PeakTrafficLevel;
         
         var elementCount = content.childCount;
 

@@ -434,28 +434,6 @@ namespace Project.Runtime.Scripts.UI
                     else Debug.LogWarning($"Location not found: {locationIndex}, name: {DialogueManager.instance.masterDatabase.locations[locationIndex].Name}");
                 }
                 
-                if (useQuestInfo)
-                {
-
-                    var quest = response.destinationEntry.GetSubconversationQuest();
-
-                    if (quest == null)
-                    {
-                        if (repeatableQuestIcon != null) repeatableQuestIcon.gameObject.SetActive(false);
-                        if (repeatableQuestTooltip != null) repeatableQuestTooltip.gameObject.SetActive(false);
-                        return;
-                    }
-
-                    var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
-                    var showAsRepeatable = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0 && DialogueLua.GetQuestField(quest.Name, "Points Repeat").asFloat < 1;
-                    
-                    if (repeatableQuestIcon != null) repeatableQuestIcon.gameObject.SetActive(showAsRepeatable);
-                    if (repeatableQuestTooltip != null) repeatableQuestTooltip.gameObject.SetActive(showAsRepeatable);
-                    
-                    
-
-                }
-                
                 
                 
               //  Debug.Log($"Response: { label.text}");
