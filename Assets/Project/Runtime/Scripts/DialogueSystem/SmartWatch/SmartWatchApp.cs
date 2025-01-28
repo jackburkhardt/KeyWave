@@ -2,17 +2,29 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
 
-public class SmartWatchApp : MonoBehaviour
+namespace Project.Runtime.Scripts.Utility
 {
-    [Dropdown("apps")]
-    public string app;
-
-    private List<string> apps => SmartWatch.instance.appNames;
-
-    public void OnEnable()
+    public class SmartWatchApp : MonoBehaviour
     {
-        SmartWatch.OnAppOpen?.Invoke(SmartWatch.GetApp(app));
+        [Dropdown("apps")] public string app;
+
+        private List<string> apps => SmartWatch.instance.appNames;
+
+        public void OnEnable()
+        {
+            SmartWatch.OnAppOpen?.Invoke(SmartWatch.GetApp(app));
+
+            foreach (var standardUIResponseButton in GetComponentsInChildren<StandardUIResponseButton>(true))
+            {
+                foreach (var subcomponent in standardUIResponseButton.GetComponentsInChildren<SmartWatchAppSubcomponent>(true))
+                {
+                    subcomponent.Evaluate(standardUIResponseButton);
+                    
+                }
+            }
+        }
     }
 }

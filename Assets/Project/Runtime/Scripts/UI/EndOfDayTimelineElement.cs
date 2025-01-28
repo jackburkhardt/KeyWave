@@ -24,6 +24,7 @@ public class EndOfDayTimelineElement : MonoBehaviour
     
     public void OnTimelineInput(float value)
     {
+        return;
         switch (elementType)
         {
             case ElementType.Text:

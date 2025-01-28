@@ -138,7 +138,7 @@ namespace Project.Runtime.Scripts.Manager
 
         private void OnPlayerEvent(PlayerEvent e)
         {
-            if (gameState.Clock > Clock.DailyLimit)
+            if (gameState.Clock > Clock.DayEndTime)
             {
                 GameEvent.OnDayEnd();
                 DialogueManager.StopAllConversations();
@@ -194,28 +194,10 @@ namespace Project.Runtime.Scripts.Manager
             var quest = DialogueManager.masterDatabase.GetQuest(questName);
             var state = QuestLog.GetQuestState(questName);
             var points = DialogueUtility.GetPointsFromField(quest!.fields);
+            var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
 
             // if this quest already succeeded, we don't want to retrigger events
-            if (dailyReport.CompletedTasks.Contains(questName))
-            {
-                return;
-            }
-            
-            if (quest.Group == "Main Task")
-            {
-           
-                if (state == QuestState.Active)
-                {
-                    Debug.Log("Setting time start");
-                    DialogueLua.SetQuestField(questName, "Time Start", Clock.CurrentTime);
-                }
-                
-                else if (state == QuestState.Success)
-                {
-                    DialogueLua.SetQuestField(questName, "Time Complete", Clock.CurrentTime);
-                    QuestUtility.OnQuestComplete?.Invoke(quest);
-                }
-            }
+            if (dailyReport.CompletedTasks.Contains(questName) && !repeatable) return;
 
             if (state == QuestState.Success && points.Length > 0)
             {
@@ -236,18 +218,13 @@ namespace Project.Runtime.Scripts.Manager
                     }
                 }
                     
-                if (quest.IsFieldAssigned("Repeatable"))
+                if (repeatable)
                 {
-                    var repeatable = DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
-                    if (repeatable)
-                    {
-                        QuestLog.SetQuestState(questName, QuestState.Active);
-                        var completionCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
-                        DialogueLua.SetQuestField(questName, "Repeat Count", completionCount + 1);
+                    QuestLog.SetQuestState(questName, QuestState.Active);
+                    var completionCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
+                    DialogueLua.SetQuestField(questName, "Repeat Count", completionCount + 1);
                         
-                        Debug.Log("Repeat count: " + DialogueLua.GetQuestField(questName, "Repeat Count").asInt);
-                            
-                    }
+                    Debug.Log("Repeat count: " + DialogueLua.GetQuestField(questName, "Repeat Count").asInt);
                 }
                     
                 else quest.fields.RemoveAll(f => f.title == "Points");
@@ -256,8 +233,6 @@ namespace Project.Runtime.Scripts.Manager
         
             var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
             
-            Debug.Log($"Quest {questName} state changed to {state}");
-        
             GameEvent.OnQuestStateChange(questName, state, duration);
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
         }

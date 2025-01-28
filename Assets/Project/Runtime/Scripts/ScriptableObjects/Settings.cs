@@ -12,6 +12,12 @@ public class Settings : ScriptableObject
 {
     private const string Path = "Settings.asset";
     private static Settings _instance;
+
+
+    public const string FIELD_INT_ACTION_REPEAT_HISTORY_COUNT = "Repeat Count";
+    public const string FIELD_FLOAT_POINTS_MULTIPLIER_ON_ACTION_REPEAT = "Points Repeat";
+    public const string FIELD_BOOL_ACTION_IS_REPEATABLE = "Repeatable";
+    
     
     public static Settings Instance
     {
@@ -41,8 +47,8 @@ public class Settings : ScriptableObject
     [Expandable]
     public AudioSettings audioSettings;
 
-
-    public static ClockSettings Clock
+    
+    public ClockSettings Clock
     {
         get
         {
@@ -55,7 +61,7 @@ public class Settings : ScriptableObject
         }
     }
     
-    public static TrafficSettings Traffic
+    public TrafficSettings Traffic
     {
         get
         {
@@ -68,7 +74,7 @@ public class Settings : ScriptableObject
         }
     }
     
-    public static SmartWatch SmartWatch
+    public SmartWatch SmartWatch
     {
         get
         {
@@ -81,7 +87,7 @@ public class Settings : ScriptableObject
         }
     }
     
-    public static AudioSettings Audio
+    public AudioSettings Audio
     {
         get
         {

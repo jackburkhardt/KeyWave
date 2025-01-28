@@ -8,7 +8,7 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SmartWatch", menuName = "SmartWatch")]
+[CreateAssetMenu(fileName = "SmartWatch", menuName = "SmartWatch/SmartWatch Settings")]
 public class SmartWatch : ScriptableObject
 {
 
@@ -30,27 +30,27 @@ public class SmartWatch : ScriptableObject
     public static SmartWatch instance {
         get
         {
-            if (Settings.SmartWatch == null) return null;
-            return Settings.SmartWatch;
+            if (Settings.Instance.SmartWatch == null) return null;
+            return Settings.Instance.SmartWatch;
         }
     }
 
     
     public static App GetApp(string name)
     {
-        if (Settings.SmartWatch == null || Settings.SmartWatch.apps == null) return null;
+        if (Settings.Instance.SmartWatch == null || Settings.Instance.SmartWatch.apps == null) return null;
         
         if (name == "Default")
         {
-            return Settings.SmartWatch.apps[0];
+            return Settings.Instance.SmartWatch.apps[0];
         }
         
         if (name == "Current")
         {
-            return _currentApp ?? Settings.SmartWatch.apps[0];;
+            return _currentApp ?? Settings.Instance.SmartWatch.apps[0];;
         }
         
-        return Settings.SmartWatch.apps.Find(app => app.name == name);
+        return Settings.Instance.SmartWatch.apps.Find(app => app.name == name);
     }
     
     public static Action<App> OnAppOpen;
@@ -80,7 +80,7 @@ public class SmartWatch : ScriptableObject
     public static void GoToCurrentApp()
     {
         
-        OpenApp(_currentApp ?? Settings.SmartWatch.apps[0]);
+        OpenApp(_currentApp ?? Settings.Instance.SmartWatch.apps[0]);
     } 
     
     //SetQuestState("Hotel/Action/Breakfast", "success")

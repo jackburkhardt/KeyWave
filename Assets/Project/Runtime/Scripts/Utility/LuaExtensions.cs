@@ -260,6 +260,15 @@ namespace Project.Runtime.Scripts.Utility
             if (append != null) title += append;
             return title;
         }
+        
+        public static bool TryGetQuest(this Response? response, out Item? quest)
+        {
+            quest = null;
+            if (response == null || response.destinationEntry == null) return false;
+            quest = response.destinationEntry.GetSubconversationQuest();
+            return quest != null;
+        }
+        
     }
     
     public static class BaseExtensions

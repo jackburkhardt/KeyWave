@@ -31,7 +31,7 @@ public class VerticalTimelineBar : MonoBehaviour
     {
         contentSizeCapacity = content.rect.height;
         capacityInClockSeconds = contentSizeCapacity * timelineConversion;
-        percentageOfTotalClockCapacity = capacityInClockSeconds / (Settings.Clock.DayEndTime - Settings.Clock.DayStartTime);
+        percentageOfTotalClockCapacity = capacityInClockSeconds / (Clock.DayEndTime - Clock.DayStartTime);
 
         SetBars();
     }

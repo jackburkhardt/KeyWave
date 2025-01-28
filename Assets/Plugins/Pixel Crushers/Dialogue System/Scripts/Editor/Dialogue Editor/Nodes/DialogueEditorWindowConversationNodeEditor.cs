@@ -1858,7 +1858,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             contextMenu.AddSeparator("");
             contextMenu.AddItem(new GUIContent("Auto Condition/If Quest Active"), false, IfQuestActiveCallback, entry);
             
-            if (entry.outgoingLinks.Any(l => l.destinationConversationID != conversantID)) contextMenu.AddItem(new GUIContent("Auto Condition/If Linked Quest Active"), false, IfLinkedQuestActiveCallback, entry);
+            if (entry.outgoingLinks.Any(l => l.destinationConversationID != currentConversationID)) contextMenu.AddItem(new GUIContent("Auto Condition/If Linked Quest Active"), false, IfLinkedQuestActiveCallback, entry);
             
             contextMenu.AddItem(new GUIContent("Auto Script/Set Quest Success"), false, SetQuestSuccessCallback, entry);
             
@@ -2306,8 +2306,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             var entry = o as DialogueEntry;
             if (entry == null) return;
-            var linkedQuest = GetConversationByTitleIndex(entry.outgoingLinks
-                .First(l => l.destinationConversationID != conversantID).destinationConversationID);
+            var linkedQuest = database.GetConversation( entry.outgoingLinks
+                .First(l => l.destinationConversationID != currentConversationID).destinationConversationID);
             
            entry.conditionsString = "CurrentQuestState(\"" + linkedQuest.Title + "\") == \"active\"";
         }

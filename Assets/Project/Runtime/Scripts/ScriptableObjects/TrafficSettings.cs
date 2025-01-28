@@ -21,25 +21,28 @@ public static class Traffic
     
     private static float GetTrafficMultiplier(float progress)
     {
-        if (!Settings.Traffic  || Settings.Traffic.trafficCurve == null) return 1f;
+        if (!Settings.Instance.Traffic  || Settings.Instance.Traffic.trafficCurve == null) return 1f;
         
-        var range = Settings.Traffic.peakTrafficLevel - Settings.Traffic.baseTrafficLevel;
+        var range = Settings.Instance.Traffic.peakTrafficLevel - Settings.Instance.Traffic.baseTrafficLevel;
     
-        return EvaluateTrafficCurve(progress) * range + Settings.Traffic.baseTrafficLevel;
+        return EvaluateTrafficCurve(progress) * range + Settings.Instance.Traffic.baseTrafficLevel;
     }
     
     public static float GetNormalizedTrafficMultiplier(float progress)
     {
         var trafficMultiplier = GetTrafficMultiplier(progress);
-        return (trafficMultiplier - Settings.Traffic.baseTrafficLevel) / Settings.Traffic.peakTrafficLevel;
+        return (trafficMultiplier - Settings.Instance.Traffic.baseTrafficLevel) / Settings.Instance.Traffic.peakTrafficLevel;
     }
     
     private static float EvaluateTrafficCurve(float progress)
     {
-        progress = Settings.Traffic.discreteTrafficLevels ? Mathf.Round(progress * Settings.Traffic.discreteLevels + 1) / (Settings.Traffic.discreteLevels + 1) : progress;
+        progress = Settings.Instance.Traffic.discreteTrafficLevels ? Mathf.Round(progress * Settings.Instance.Traffic.discreteLevels + 1) / (Settings.Instance.Traffic.discreteLevels + 1) : progress;
         
-        return Settings.Traffic.trafficCurve.Evaluate(progress);
+        return Settings.Instance.Traffic.trafficCurve.Evaluate(progress);
     }
+    
+    public static float BaseTrafficLevel => Settings.Instance.Traffic.baseTrafficLevel;
+    public static float PeakTrafficLevel => Settings.Instance.Traffic.peakTrafficLevel;
     
  
     
