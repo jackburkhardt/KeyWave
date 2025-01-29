@@ -30,7 +30,6 @@ public class SmartWatch : ScriptableObject
     public static SmartWatch instance {
         get
         {
-            if (Settings.Instance.SmartWatch == null) return null;
             return Settings.Instance.SmartWatch;
         }
     }

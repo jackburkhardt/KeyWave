@@ -66,7 +66,7 @@ using UnityEngine;
             PlayerSettings.SetIl2CppCompilerConfiguration(BuildTargetGroup.WebGL, Il2CppCompilerConfiguration.Release);
             PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL , ManagedStrippingLevel.Low);
             var buildDate = DateTime.Today.ToString("yyyy.M.dd");
-            buildDate += "-DEV";
+            buildDate += "-DEMO";
             Debug.Log($"Beginning build number {buildDate}");
             PlayerSettings.bundleVersion = buildDate;
             PlayerSettings.SplashScreen.showUnityLogo = false;

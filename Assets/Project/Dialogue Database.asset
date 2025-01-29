@@ -4511,6 +4511,20 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 90
+    fields:
+    - title: Name
+      value: douglas_advice_count
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   conversations:
   - id: 16
     fields:
@@ -29674,6 +29688,12 @@ MonoBehaviour:
         destinationDialogueID: 146
         isConnector: 0
         priority: 2
+      - originConversationID: 77
+        originDialogueID: 82
+        destinationConversationID: 77
+        destinationDialogueID: 157
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -33361,7 +33381,7 @@ MonoBehaviour:
         destinationDialogueID: 152
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: Variable["douglas_advice_count"] < 6
       userScript: RandomizeNextEntryNoDuplicate();
       onExecute:
         m_PersistentCalls:
@@ -33845,13 +33865,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Variable["douglas_advice_count"] = Variable["douglas_advice_count"]
+        + 1
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1311.0471
+        x: 1312.674
         y: 1035.7424
         width: 160
         height: 30
@@ -34064,6 +34085,149 @@ MonoBehaviour:
         y: 121.864365
         width: 160
         height: 30
+    - id: 157
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 45
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 46
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Hmmm...I'm sorry Daniel, I don't have much more to offer you. Your
+          time might be better spent getting out and around Vitoria.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 77
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 157
+        destinationConversationID: 77
+        destinationDialogueID: 158
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1349.0751
+        y: 603.96686
+        width: 160
+        height: 30
+    - id: 158
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 46
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 45
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: (You hang up the phone.)
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 77
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 77
+        originDialogueID: 158
+        destinationConversationID: 193
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1352.578
+        y: 657.4696
+        width: 160
+        height: 30
     entryGroups:
     - name: Douglas Hints
       rect:
@@ -34089,8 +34253,8 @@ MonoBehaviour:
         width: 1034.2877
         height: 601.3593
       color: {r: 1, g: 1, b: 1, a: 0.5}
-    canvasScrollPosition: {x: 950.655, y: 278.49002}
-    canvasZoom: 0.49218348
+    canvasScrollPosition: {x: 949.652, y: 358.08084}
+    canvasZoom: 0.5569332
   - id: 78
     fields:
     - title: Title
@@ -63927,13 +64091,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 229.60004
-        y: 398.79996
+        x: 230.7779
+        y: 395.40933
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 32}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 137.57497, y: 0}
+    canvasZoom: 0.8489999
   - id: 165
     fields:
     - title: Title
@@ -79870,7 +80034,7 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: CurrentQuestState("Store/Talk/Roberta") ~= "success"
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -83262,8 +83426,8 @@ MonoBehaviour:
         width: 349.9491
         height: 308.8964
       color: {r: 0.6392157, g: 0.7019608, b: 0.93333334, a: 0.5019608}
-    canvasScrollPosition: {x: 1612.7806, y: 1607.5537}
-    canvasZoom: 1.037496
+    canvasScrollPosition: {x: 1875.9269, y: 1709.8856}
+    canvasZoom: 0.21174891
   - id: 193
     fields:
     - title: Title
