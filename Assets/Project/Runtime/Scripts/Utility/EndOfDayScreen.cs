@@ -41,7 +41,11 @@ namespace Project.Runtime.Scripts.Utility
 
         public void StartNextDay()
         {
-            GameManager.instance.StartNewDay();
+            #if UNITY_WEBGL
+            Application.ExternalCall("location.reload()");
+            #endif
+            // uncomment/remove above if we do add multiple days.
+            // GameManager.instance.StartNewDay();
         }
     }
 }

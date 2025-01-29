@@ -79,8 +79,8 @@ using UnityEngine;
             BuildPlayerOptions options = GetDefaultBuildOptions();
             
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
-            PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.None;
-            PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.Embedded;
+            PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.FullWithoutStacktrace;
+            PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.Off;
             EditorUserBuildSettings.il2CppCodeGeneration = Il2CppCodeGeneration.OptimizeSize;
             PlayerSettings.SetIl2CppCompilerConfiguration(BuildTargetGroup.WebGL, Il2CppCompilerConfiguration.Release);
             PlayerSettings.stripEngineCode = true;

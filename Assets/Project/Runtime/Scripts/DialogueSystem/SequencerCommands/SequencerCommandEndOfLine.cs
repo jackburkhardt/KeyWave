@@ -101,7 +101,7 @@ public class SequencerCommandEndOfLine : SequencerCommand
                 : "SetContinueMode(true)@Message(Typed);");
                 */
             
-            Debug.Log($"Entry is last node: {entry.IsLastNode()}");
+            //Debug.Log($"Entry is last node: {entry.IsLastNode()}");
 
             Sequencer.PlaySequence("SetContinueMode(true)@Message(Typed);");
             
