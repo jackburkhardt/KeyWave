@@ -273,7 +273,8 @@ namespace Project.Runtime.Scripts.UI
                 EntryHasNoOutgoingLinks,
                 EntryLeadsToSmartWatchActions,
                 EntryLeadsToSmartWatchPhone,
-                EntryHasTextField
+                EntryHasTextField,
+                EntryGoesToSublocation
             }
             
             public styleCondition condition;
@@ -384,6 +385,13 @@ namespace Project.Runtime.Scripts.UI
                         break;
                     case ResponseButtonStyle.styleCondition.EntryHasTextField:
                         if (response.destinationEntry.fields.Any(field => field.title == style.fieldName && field.value == style.fieldValue))
+                        {
+                            stylePrefab = style.responseButton;
+                            return true;
+                        }
+                        break;
+                    case ResponseButtonStyle.styleCondition.EntryGoesToSublocation:
+                        if (response.destinationEntry.Sequence.Contains("Sublocation"))
                         {
                             stylePrefab = style.responseButton;
                             return true;

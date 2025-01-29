@@ -44,8 +44,14 @@ public class CircularLayoutGroupElement : MonoBehaviour
     private CircularLayoutGroup _circularLayoutGroup;
 
 
-    private CircularLayoutGroup.LayoutMethod LayoutMethod => _circularLayoutGroup.layoutMethod;
-    
+    private CircularLayoutGroup.LayoutMethod LayoutMethod
+    {
+        get
+        {
+            return _circularLayoutGroup ? _circularLayoutGroup.layoutMethod : CircularLayoutGroup.LayoutMethod.GroupAsCircle;
+        }
+    }
+
     private void OnEnable()
     {
         _circularLayoutGroup ??= GetComponentInParent<CircularLayoutGroup>();
@@ -53,7 +59,7 @@ public class CircularLayoutGroupElement : MonoBehaviour
     
     private void Update()
     {
-        
+        _circularLayoutGroup ??= GetComponentInParent<CircularLayoutGroup>();
         if (_circularLayoutGroup == null) return;
         
         _circularLayoutGroup.ArrangeElements();
@@ -63,7 +69,7 @@ public class CircularLayoutGroupElement : MonoBehaviour
     private void OnValidate()
     {
         
-        _circularLayoutGroup ??= GetComponentInParent<CircularLayoutGroup>();
+        
         
         if (_circularLayoutGroup == null) return;
 

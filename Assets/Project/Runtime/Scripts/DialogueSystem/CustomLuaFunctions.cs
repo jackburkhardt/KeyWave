@@ -84,6 +84,9 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
             Lua.RegisterFunction(nameof(SetRootApp), this,
                 SymbolExtensions.GetMethodInfo(() => SetRootApp(string.Empty)));
+            
+            Lua.RegisterFunction(nameof(MapRangeToCurrentTrafficLevel), this,
+                SymbolExtensions.GetMethodInfo(() => MapRangeToCurrentTrafficLevel(0, 0)));
         }
 
         private void DeregisterLuaFunctions()
@@ -129,6 +132,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
             Lua.UnregisterFunction(nameof(PlayerLocation));
             Lua.UnregisterFunction(nameof(SetRootApp));
+            Lua.UnregisterFunction(nameof(MapRangeToCurrentTrafficLevel));
         }
         
         
@@ -471,6 +475,14 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public void SetRootApp(string app)
         {
             GameManager.MostRecentApp = app;
+        }
+
+
+        public int MapRangeToCurrentTrafficLevel(double min, double max)
+        {
+            var traffic = Traffic.GetRawTrafficMultiplier( Clock.DayProgress);
+            
+            return Mathf.RoundToInt(Mathf.Lerp((int)min, (int)max, traffic));
         }
     }
 }

@@ -38,6 +38,7 @@ public class PointsVisualizer : MonoBehaviour
 
     private void VisualizePointType(Points.Type type, int amount)
     {
+        if (amount == 0) return;
         if (pauseDialogueSystem) DialogueManager.instance.Pause();
         
         _isAnimating = true;

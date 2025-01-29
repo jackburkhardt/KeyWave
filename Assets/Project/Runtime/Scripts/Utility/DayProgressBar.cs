@@ -21,9 +21,11 @@ public class DayProgressBar : MonoBehaviour
     public float editorModeProgressValue = 0.5f;
 
 
-    private void Awake()
+    private void Start()
     {
+        Adjust();
         GetComponent<CanvasGroup>().alpha = 0;
+        
     }
 
     private void OnValidate()

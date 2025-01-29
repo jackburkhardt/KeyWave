@@ -204,22 +204,27 @@ namespace Project.Runtime.Scripts.Manager
                 
                 foreach (var pointField in points)
                 {
+                    if (pointField.Points == 0) continue;
                     GameEvent.OnPointsIncrease(pointField, questName);
                     
                 }
                 
-                if (quest.IsFieldAssigned("Points Repeat"))
-                {
-                    foreach (var field in quest.fields.Where(p => p.title == "Points"))
-                    {
-                        var multiplier = float.Parse(quest.AssignedField("Points Repeat").value);
-                        var pointsValue = Points.PointsField.FromLuaField(field).Points;
-                        field.value = Points.PointsField.LuaFieldValue(field, (int)Mathf.Ceil(pointsValue * multiplier));
-                    }
-                }
+               
                     
                 if (repeatable)
                 {
+                    
+                    if (quest.IsFieldAssigned("Points Repeat"))
+                    {
+                        foreach (var field in quest.fields.Where(p => p.title == "Points"))
+                        {
+                            var multiplier = float.Parse(quest.AssignedField("Points Repeat").value);
+                            var pointsValue = Points.PointsField.FromLuaField(field).Points;
+                            field.value = Points.PointsField.LuaFieldValue(field, (int)Mathf.Ceil(pointsValue * multiplier));
+                        }
+                    }
+                    
+                    
                     QuestLog.SetQuestState(questName, QuestState.Active);
                     var completionCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
                     DialogueLua.SetQuestField(questName, "Repeat Count", completionCount + 1);

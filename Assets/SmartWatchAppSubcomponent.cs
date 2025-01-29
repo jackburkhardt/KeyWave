@@ -109,7 +109,7 @@ public class ActionsAppEnableIfQuestRepeatableAndUntouched : AppSubcomponent<Sta
    
 }
         
-public class ActionsAppEnableIfQuestRepeatableAndPreviouslyCompleted : AppSubcomponent<StandardUIResponseButton>
+public class ActionsAppEnableIfQuestRepeatableAndHasPointReduction : AppSubcomponent<StandardUIResponseButton>
 {
     public override bool Evaluate(StandardUIResponseButton standardUIResponseButton, out Action evalPassAction)
     {
@@ -127,7 +127,7 @@ public class ActionsAppEnableIfQuestRepeatableAndPreviouslyCompleted : AppSubcom
     }
 }
         
-public class ActionsAppEnableIfQuestRewardsPointsAndUntouched :AppSubcomponent<StandardUIResponseButton>
+public class ActionsAppEnableIfQuestRewardsPoints :AppSubcomponent<StandardUIResponseButton>
 {
     public override bool Evaluate(StandardUIResponseButton standardUIResponseButton, out Action evalPassAction)
     {
@@ -138,15 +138,15 @@ public class ActionsAppEnableIfQuestRewardsPointsAndUntouched :AppSubcomponent<S
         
         var rewardsPoints = quest.IsFieldAssigned("Points") &&  quest.fields.Any(p => p.title == "Points" && Points.PointsField.FromLuaField(p).Points > 0);
         
-        var rewardsPointsAndUntouched =
-            rewardsPoints && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt == 0;
+       // var rewardsPointsAndUntouched =
+           // rewardsPoints && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt == 0;
         
-        evalPassAction = () => subcomponent.gameObject.SetActive(rewardsPointsAndUntouched);
+        evalPassAction = () => subcomponent.gameObject.SetActive(rewardsPoints);
         return true;
     }
 }
         
-public class ActionsAppEnableIfQuestHasFixedTimeCost : AppSubcomponent<StandardUIResponseButton>
+public class ActionsAppEnableIfQuestHasFixedTimeCostAndReplaceText : AppSubcomponent<StandardUIResponseButton>
 {
     public override bool Evaluate(StandardUIResponseButton standardUIResponseButton, out Action evalPassAction)
     {
@@ -165,15 +165,18 @@ public class ActionsAppEnableIfQuestHasFixedTimeCost : AppSubcomponent<StandardU
             subcomponent.gameObject.SetActive(fixedTimeCost && timeCost > 0);
             Debug.Log("Time cost: " + timeCost);
             
-            var text = subcomponent.gameObject.GetComponentInChildren<TextMeshProUGUI>();
-            if (text != null && timeCost > 0) text.text = text.text.Replace("{0}", $"{timeCost / 60}");
+            var texts = subcomponent.gameObject.GetComponentsInChildren<TextMeshProUGUI>();
+            foreach (var text in texts)
+            {
+                text.text = text.text.Replace("{0}", $"{timespan.Item1 / 60}");
+            }
         };
 
         return true;
     }
 }
         
-public class ActionsAppEnableIfQuestHasVariableTimeCost : AppSubcomponent<StandardUIResponseButton>
+public class ActionsAppEnableIfQuestHasVariableTimeCostAndReplaceText : AppSubcomponent<StandardUIResponseButton>
 {
     public override bool Evaluate(StandardUIResponseButton standardUIResponseButton, out Action evalPassAction)
     {
@@ -190,8 +193,11 @@ public class ActionsAppEnableIfQuestHasVariableTimeCost : AppSubcomponent<Standa
         {
             subcomponent.gameObject.SetActive(variableTimeCost && timespan.Item2 > timespan.Item1);
             
-            var text = subcomponent.gameObject.GetComponentInChildren<TextMeshProUGUI>();
-            if (text != null) text.text = text.text.Replace("{0}", $"{timespan.Item1 / 60}-{timespan.Item2 / 60}");
+            var texts = subcomponent.gameObject.GetComponentsInChildren<TextMeshProUGUI>();
+            foreach (var text in texts)
+            {
+                text.text = text.text.Replace("{0}", $"{timespan.Item1 / 60}-{timespan.Item2 / 60}");
+            }
         };
 
         return true;
