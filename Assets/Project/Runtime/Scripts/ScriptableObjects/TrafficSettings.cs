@@ -21,28 +21,28 @@ public static class Traffic
     
     private static float GetTrafficMultiplier(float progress)
     {
-        if (!Settings.Instance.Traffic  || Settings.Instance.Traffic.trafficCurve == null) return 1f;
+        if (!GameManager.settings.Traffic  || GameManager.settings.Traffic.trafficCurve == null) return 1f;
         
-        var range = Settings.Instance.Traffic.peakTrafficLevel - Settings.Instance.Traffic.baseTrafficLevel;
+        var range = GameManager.settings.Traffic.peakTrafficLevel - GameManager.settings.Traffic.baseTrafficLevel;
     
-        return EvaluateTrafficCurve(progress) * range + Settings.Instance.Traffic.baseTrafficLevel;
+        return EvaluateTrafficCurve(progress) * range + GameManager.settings.Traffic.baseTrafficLevel;
     }
     
     public static float GetNormalizedTrafficMultiplier(float progress)
     {
         var trafficMultiplier = GetTrafficMultiplier(progress);
-        return (trafficMultiplier - Settings.Instance.Traffic.baseTrafficLevel) / Settings.Instance.Traffic.peakTrafficLevel;
+        return (trafficMultiplier - GameManager.settings.Traffic.baseTrafficLevel) / GameManager.settings.Traffic.peakTrafficLevel;
     }
     
     private static float EvaluateTrafficCurve(float progress)
     {
-        progress = Settings.Instance.Traffic.discreteTrafficLevels ? Mathf.Round(progress * Settings.Instance.Traffic.discreteLevels + 1) / (Settings.Instance.Traffic.discreteLevels + 1) : progress;
+        progress = GameManager.settings.Traffic.discreteTrafficLevels ? Mathf.Round(progress * GameManager.settings.Traffic.discreteLevels + 1) / (GameManager.settings.Traffic.discreteLevels + 1) : progress;
         
-        return Settings.Instance.Traffic.trafficCurve.Evaluate(progress);
+        return GameManager.settings.Traffic.trafficCurve.Evaluate(progress);
     }
     
-    public static float BaseTrafficLevel => Settings.Instance.Traffic.baseTrafficLevel;
-    public static float PeakTrafficLevel => Settings.Instance.Traffic.peakTrafficLevel;
+    public static float BaseTrafficLevel => GameManager.settings.Traffic.baseTrafficLevel;
+    public static float PeakTrafficLevel => GameManager.settings.Traffic.peakTrafficLevel;
     
  
     

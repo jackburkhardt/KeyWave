@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -11,30 +13,11 @@ using UnityEngine.AddressableAssets;
 public class Settings : ScriptableObject
 {
     private const string Path = "Settings.asset";
-    private static Settings _instance;
-
 
     public const string FIELD_INT_ACTION_REPEAT_HISTORY_COUNT = "Repeat Count";
     public const string FIELD_FLOAT_POINTS_MULTIPLIER_ON_ACTION_REPEAT = "Points Repeat";
     public const string FIELD_BOOL_ACTION_IS_REPEATABLE = "Repeatable";
     
-    
-    public static Settings Instance
-    {
-        get
-        {
-            if (_instance != null) return _instance;
-              
-            if (TryGetSettings(out var settings))
-            {
-                return settings;
-            }
-            else
-            {
-                return null;
-            }
-        }
-    }
     
     public DialogueDatabase dialogueDatabase;
     
@@ -52,7 +35,7 @@ public class Settings : ScriptableObject
     {
         get
         {
-            if (Instance != null) return Instance.clockSettings;
+            if (clockSettings != null) return clockSettings;
             else
             {
                 var _clockSettings = CreateInstance<ClockSettings>();
@@ -65,7 +48,7 @@ public class Settings : ScriptableObject
     {
         get
         {
-            if (Instance != null) return Instance.trafficSettings;
+            if (trafficSettings != null) return trafficSettings;
             else
             {
                 var _trafficSettings = CreateInstance<TrafficSettings>();
@@ -78,7 +61,7 @@ public class Settings : ScriptableObject
     {
         get
         {
-            if (Instance != null) return Instance.smartWatchSettings;
+            if (smartWatchSettings != null) return smartWatchSettings;
             else
             {
                 var _smartWatchSettings = CreateInstance<SmartWatch>();
@@ -91,41 +74,12 @@ public class Settings : ScriptableObject
     {
         get
         {
-            if (Instance != null) return Instance.audioSettings;
+            if (audioSettings != null) return audioSettings;
             else
             {
                 var _audioSettings = CreateInstance<AudioSettings>();
                 return _audioSettings;
             }
-        }
-    }
-    
-
-    public static bool TryGetSettings(out Settings settings)
-    {
-        if (_instance != null)
-        {
-            settings = _instance;
-            return true;
-        }
-
-        else
-        {
-    
-#if UNITY_WEBGL
-            
-            AddressableLoader.RequestLoad<Settings>(Path, asset =>
-            {
-                _instance = asset;
-            });
-            settings = _instance;
-            return false;
-            
-#else
-            _instance = Resources.Load<Settings>("Settings");
-            settings = _instance;
-            return _instance != null;
-#endif
         }
     }
     

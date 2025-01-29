@@ -30,26 +30,26 @@ public class SmartWatch : ScriptableObject
     public static SmartWatch instance {
         get
         {
-            return Settings.Instance.SmartWatch;
+            return GameManager.settings.SmartWatch;
         }
     }
 
     
     public static App GetApp(string name)
     {
-        if (Settings.Instance.SmartWatch == null || Settings.Instance.SmartWatch.apps == null) return null;
+        if (GameManager.settings.SmartWatch == null || GameManager.settings.SmartWatch.apps == null) return null;
         
         if (name == "Default")
         {
-            return Settings.Instance.SmartWatch.apps[0];
+            return GameManager.settings.SmartWatch.apps[0];
         }
         
         if (name == "Current")
         {
-            return _currentApp ?? Settings.Instance.SmartWatch.apps[0];;
+            return _currentApp ?? GameManager.settings.SmartWatch.apps[0];;
         }
         
-        return Settings.Instance.SmartWatch.apps.Find(app => app.name == name);
+        return GameManager.settings.SmartWatch.apps.Find(app => app.name == name);
     }
     
     public static Action<App> OnAppOpen;
@@ -79,7 +79,7 @@ public class SmartWatch : ScriptableObject
     public static void GoToCurrentApp()
     {
         
-        OpenApp(_currentApp ?? Settings.Instance.SmartWatch.apps[0]);
+        OpenApp(_currentApp ?? GameManager.settings.SmartWatch.apps[0]);
     } 
     
     //SetQuestState("Hotel/Action/Breakfast", "success")

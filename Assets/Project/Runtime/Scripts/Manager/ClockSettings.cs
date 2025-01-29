@@ -21,8 +21,8 @@ namespace Project.Runtime.Scripts.Manager
         public static float DayProgress {
             get
             {
-                float range = Settings.Instance.Clock.DayEndTime - Settings.Instance.Clock.DayStartTime;
-                return (CurrentTimeRaw - Settings.Instance.Clock.DayStartTime)/range;
+                float range = GameManager.settings.Clock.DayEndTime - GameManager.settings.Clock.DayStartTime;
+                return (CurrentTimeRaw - GameManager.settings.Clock.DayStartTime)/range;
             }
         }
 
@@ -30,7 +30,7 @@ namespace Project.Runtime.Scripts.Manager
         
         public static int TimeFromProgress(float progress)
         {
-            return Mathf.RoundToInt(progress * (Settings.Instance.Clock.DayEndTime - Settings.Instance.Clock.DayStartTime) + Settings.Instance.Clock.DayStartTime);
+            return Mathf.RoundToInt(progress * (GameManager.settings.Clock.DayEndTime - GameManager.settings.Clock.DayStartTime) + GameManager.settings.Clock.DayStartTime);
         }
 
         public static int HoursToSeconds(int hours) => hours * 3600;
@@ -95,12 +95,12 @@ namespace Project.Runtime.Scripts.Manager
             return GetHoursAsInt(To24HourClock(time));
         }
         
-        public static int DayStartTime => Settings.Instance.Clock.DayStartTime;
-        public static int DayEndTime => Settings.Instance.Clock.DayEndTime;
+        public static int DayStartTime => GameManager.settings.Clock.DayStartTime;
+        public static int DayEndTime => GameManager.settings.Clock.DayEndTime;
         
-        public static int SecondsPerCharacter => Mathf.RoundToInt(Settings.Instance.Clock.SecondsPerCharacter * Settings.Instance.Clock.globalModifier);
-        public static int SecondsBetweenLines => Mathf.RoundToInt(Settings.Instance.Clock.SecondsBetweenLines * Settings.Instance.Clock.globalModifier);
-        public static int SecondsPerInteract => Mathf.RoundToInt(Settings.Instance.Clock.SecondsPerInteract * Settings.Instance.Clock.globalModifier);
+        public static int SecondsPerCharacter => Mathf.RoundToInt(GameManager.settings.Clock.SecondsPerCharacter * GameManager.settings.Clock.globalModifier);
+        public static int SecondsBetweenLines => Mathf.RoundToInt(GameManager.settings.Clock.SecondsBetweenLines * GameManager.settings.Clock.globalModifier);
+        public static int SecondsPerInteract => Mathf.RoundToInt(GameManager.settings.Clock.SecondsPerInteract * GameManager.settings.Clock.globalModifier);
         
         
     }
@@ -137,7 +137,7 @@ public class ClockSettings : ScriptableObject
 
         if (!Application.isPlaying)
         {
-            if (Settings.Instance != null) Settings.Instance.dialogueDatabase.GetVariable("clock").InitialValue = currentTime.ToString();
+            if (GameManager.settings != null) GameManager.settings.dialogueDatabase.GetVariable("clock").InitialValue = currentTime.ToString();
         }
         
         else currentTime = DialogueLua.GetVariable("clock").asInt;

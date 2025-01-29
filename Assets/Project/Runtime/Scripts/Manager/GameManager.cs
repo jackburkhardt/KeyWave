@@ -12,6 +12,7 @@ using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -27,9 +28,23 @@ namespace Project.Runtime.Scripts.Manager
         public static GameManager instance;
         public static GameStateManager gameStateManager;
         public static PlayerEventStack playerEventStack;
+
+        public static Settings settings
+        {
+            get
+            {
+                #if UNITY_EDITOR
+                if (instance == null) return AssetDatabase.LoadAssetAtPath<Settings>("Assets/Game Settings.asset");
+                #endif
+                return instance.currentSettings;
+            }
+            set => instance.currentSettings = value;
+        }
+        
         public List<Location> locations;
         public bool capFramerate = false;
         public Canvas mainCanvas;
+        [SerializeField] private Settings currentSettings;
         
         public SmartWatch smartWatchAsset;
 
@@ -49,7 +64,6 @@ namespace Project.Runtime.Scripts.Manager
         public UnityEvent OnGameSceneEnd;
         
         
-        
         private static string _mostRecentApp = "SmartWatch/Home";
 
         public static string MostRecentApp
@@ -63,12 +77,9 @@ namespace Project.Runtime.Scripts.Manager
             
             set => _mostRecentApp = $"SmartWatch/{value}";
         }
-        
-        
-       public Settings gameSettings;
 
 
-        private void Awake()
+       private void Awake()
         {
             OnGameManagerAwake?.Invoke();
 
@@ -83,7 +94,6 @@ namespace Project.Runtime.Scripts.Manager
             {
                 Destroy(this);
             }
-
 
             if (gameStateManager == null)
             {
