@@ -1,4 +1,5 @@
 using System.Linq;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.Utility;
 using TMPro;
@@ -62,6 +63,11 @@ namespace Project.Runtime.Scripts.UI
         {
             _onContinue.Invoke();
            App.App.Instance.ContinueGame();
+        }
+        
+        public void PauseGame()
+        {
+            GameManager.instance.TogglePause();
         }
         
         public void BeginSaveRetrieval()

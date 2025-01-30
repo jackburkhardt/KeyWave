@@ -91,7 +91,7 @@ namespace Project.Runtime.Scripts.Audio
                     newSource.loop = source.loop;
                     LoadClipAndPlay(variant.variantAddress, newSource, () =>
                     {
-                        newSource.volume = 0;
+                        newSource.volume = clipData.volume;
                         newSource.outputAudioMixerGroup = variant.variantChannel;
                     }, true);
                 }
@@ -231,24 +231,24 @@ namespace Project.Runtime.Scripts.Audio
         public void SetChannelVolume(string channelName, float volume)
         {
             var mappedVolume = volume.Map(0, 1, minVolume, maxVolume);
-            _userAudioMixer.SetFloat(channelName + "/Volume", mappedVolume);
+            _userAudioMixer.SetFloat(channelName + "/Master", mappedVolume);
         }
 
         public float GetChannelVolume(string channelName)
         {
             
-            _userAudioMixer.GetFloat(channelName + "/Volume", out float volume);
+            _userAudioMixer.GetFloat(channelName + "/Master", out float volume);
             return volume.Map(minVolume, maxVolume, 0, 1);
         }
         
         public void MuteChannel(string channelName)
         {
-            _userAudioMixer.SetFloat(channelName + "/Volume", -80);
+            _userAudioMixer.SetFloat(channelName + "/Master", -80);
         }
         
         public void UnmuteChannel(string channelName)
         {
-            _userAudioMixer.SetFloat(channelName + "/Volume", 0);
+            _userAudioMixer.SetFloat(channelName + "/Master", 0);
         }
         
         public void StopAllAudioOnChannel(string channelName)

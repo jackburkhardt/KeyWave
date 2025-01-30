@@ -10,6 +10,6 @@ public class RestartApplication : MonoBehaviour
     // Start is called before the first frame update
     public void Restart()
     {
-        Project.Runtime.Scripts.App.App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.LoadingScreenType.Black);
+        Project.Runtime.Scripts.App.App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.Transition.Black);
     }
 }

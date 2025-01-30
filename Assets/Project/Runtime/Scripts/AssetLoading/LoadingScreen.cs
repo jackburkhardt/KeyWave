@@ -5,7 +5,7 @@ namespace Project.Runtime.Scripts.AssetLoading
 {
     public class LoadingScreen : MonoBehaviour
     {
-        public enum LoadingScreenType
+        public enum Transition
         {
             Default,
             Black,
@@ -17,7 +17,7 @@ namespace Project.Runtime.Scripts.AssetLoading
         [SerializeField] private Transform _defaultLoadingScreen;
         [SerializeField] private Transform _blackLoadingScreen;
 
-        public LoadingScreenType loadingScreenType = LoadingScreenType.Default;
+        public Transition transition = Transition.Default;
         private float fadeInSpeed = 3;
         private float fadeOutSpeed = 1.5f;
         private float timeSinceLoadStart = 0;
@@ -26,13 +26,13 @@ namespace Project.Runtime.Scripts.AssetLoading
         {
             get
             {
-                switch (loadingScreenType)
+                switch (transition)
                 {
-                    case LoadingScreenType.Default:
+                    case Transition.Default:
                         return _defaultLoadingScreen.GetComponent<CanvasGroup>();
-                    case LoadingScreenType.Black:
+                    case Transition.Black:
                         return _blackLoadingScreen.GetComponent<CanvasGroup>();
-                    case LoadingScreenType.None:
+                    case Transition.None:
                         return null;
                     default:
                         return _defaultLoadingScreen.GetComponent<CanvasGroup>();
@@ -52,13 +52,13 @@ namespace Project.Runtime.Scripts.AssetLoading
             if (loading) timeSinceLoadStart += Time.deltaTime;
         }
 
-        public IEnumerator FadeCanvasIn(LoadingScreenType? type = LoadingScreenType.Default)
+        public IEnumerator Show(Transition? type = Transition.Default)
         {
-            if (loading || type == LoadingScreenType.None) yield break;
+            if (loading || type == Transition.None) yield break;
             loading = true;
             timeSinceLoadStart = 0;
         
-            loadingScreenType = type ?? LoadingScreenType.Default;
+            transition = type ?? Transition.Default;
         
             var canvasGroup = CanvasGroup;
         
@@ -69,7 +69,7 @@ namespace Project.Runtime.Scripts.AssetLoading
             }
         }
 
-        public IEnumerator FadeCanvasOut()
+        public IEnumerator Hide()
         {
         
             while (timeSinceLoadStart < 1.5f)

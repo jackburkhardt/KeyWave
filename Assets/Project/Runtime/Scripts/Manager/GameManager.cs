@@ -17,6 +17,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
+using Transition = Project.Runtime.Scripts.AssetLoading.LoadingScreen.Transition;
 
 namespace Project.Runtime.Scripts.Manager
 {
@@ -121,7 +122,12 @@ namespace Project.Runtime.Scripts.Manager
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                DialogueManager.instance.PlaySequence("Continue()");
+                //DialogueManager.instance.PlaySequence("Continue()");
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                TogglePause();
             }
         }
 
@@ -160,7 +166,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             GameStateManager.instance.StartNextDay();
             dailyReport = new DailyReport(gameState.day);
-            App.App.Instance.ChangeScene("Hotel", "EndOfDay", LoadingScreen.LoadingScreenType.Black);
+            App.App.Instance.ChangeScene("Hotel", "EndOfDay", Transition.Black);
         }
 
         public IEnumerator StartNewSave()
@@ -179,7 +185,7 @@ namespace Project.Runtime.Scripts.Manager
             }
 
             if (DialogueLua.GetVariable("skip_content").asBool)
-                TravelTo(Location.PlayerLocation, LoadingScreen.LoadingScreenType.Black);
+                TravelTo(Location.PlayerLocation, Transition.Black);
 
             else DialogueManager.instance.StartConversation("Intro");
         }
@@ -278,16 +284,16 @@ namespace Project.Runtime.Scripts.Manager
         }
 
 
-        public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, LoadingScreen.LoadingScreenType.Black);
+        public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, Transition.Black);
 
         public void StartOfDay() => App.App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
 
-        public void TravelTo(Location location, LoadingScreen.LoadingScreenType? type =  LoadingScreen.LoadingScreenType.Default)
+        public void TravelTo(Location location, Transition? type =  Transition.Default)
         {
             TravelTo(location.Name, loadingScreenType: type);
         }
 
-        public void TravelTo(string newLocation, string currentScene = "", LoadingScreen.LoadingScreenType? loadingScreenType =  LoadingScreen.LoadingScreenType.Default, Action onStart = null, Action onComplete = null)
+        public void TravelTo(string newLocation, string currentScene = "", Transition? loadingScreenType =  Transition.Default, Action onStart = null, Action onComplete = null)
         {
 
             DialogueManager.StopConversation();
@@ -338,6 +344,21 @@ namespace Project.Runtime.Scripts.Manager
         public void Wait(int duration)
         {
             GameEvent.OnWait(duration);
+        }
+        
+        
+        public void TogglePause()
+        {
+            if (SceneManager.GetSceneByName("PauseMenu").isLoaded != PauseMenu.active) return;
+            
+            if (PauseMenu.active)
+            {
+                PauseMenu.instance.UnpauseGame();
+            }
+            else
+            {
+                App.App.Instance.LoadScene("PauseMenu", transition: Transition.None);
+            }
         }
         
         

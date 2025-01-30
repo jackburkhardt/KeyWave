@@ -7,6 +7,7 @@ using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Transition = Project.Runtime.Scripts.AssetLoading.LoadingScreen.Transition;
 
 namespace Project.Runtime.Scripts.App
 {
@@ -115,11 +116,11 @@ namespace Project.Runtime.Scripts.App
         /// Loads a scene additively to the current scene
         /// </summary>
         /// 
-        public Coroutine LoadScene(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? type = LoadingScreen.LoadingScreenType.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: type));
+        public Coroutine LoadScene(string sceneToLoad, string? sceneToUnload = "", Transition? transition = Transition.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: transition));
 
-        public Coroutine LoadSceneWithoutLoadingScreen(string sceneToLoad, string? sceneToUnload = "") => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: null, waitForUnload: false));
+        public Coroutine LoadSceneWithoutLoadingScreen(string sceneToLoad, string? sceneToUnload = "") => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: null, waitForUnload: false));
         
-        public Coroutine LoadSceneButKeepLoadingScreen(string sceneToLoad, string? sceneToUnload = "", LoadingScreen.LoadingScreenType? type = LoadingScreen.LoadingScreenType.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: type, unloadLoadingScreen: false));
+        public Coroutine LoadSceneButKeepLoadingScreen(string sceneToLoad, string? sceneToUnload = "", Transition? transition = Transition.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: transition, unloadLoadingScreen: false));
 
         public void UnloadScene(string sceneToUnload)
         {
@@ -128,15 +129,15 @@ namespace Project.Runtime.Scripts.App
         
         public void LoadSceneImmediate(string sceneToLoad, string sceneToUnload = "")
         {
-            StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, loadingScreenType: null));
+            StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: null));
         }
 
         /// <summary>
         ///  Unloads the current scene and loads a new scene
         /// </summary>
-        public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload, LoadingScreen.LoadingScreenType? type = null) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload, loadingScreenType: type));
+        public Coroutine ChangeScene(string sceneToLoad, string sceneToUnload, Transition? transition = null) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload, transition: transition));
 
-        private IEnumerator LoadSceneHandler(string sceneToLoad, string sceneToUnload = "", LoadingScreen.LoadingScreenType? loadingScreenType = LoadingScreen.LoadingScreenType.Default, bool? unloadLoadingScreen = true, bool? waitForUnload = true)
+        private IEnumerator LoadSceneHandler(string sceneToLoad, string sceneToUnload = "", Transition? transition = Transition.Default, bool? unloadLoadingScreen = true, bool? waitForUnload = true)
         {
             
             isLoading = true;
@@ -145,23 +146,34 @@ namespace Project.Runtime.Scripts.App
             
             OnLoadStart?.Invoke();
             
-            if (loadingScreenType != null)
+            if (transition != null)
             {
-                if (LoadingScreen == null)
-                {
-                    var loadingSceneLoad = SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
-
-                    while (!loadingSceneLoad.isDone) yield return null;
                 
-                    LoadingScreen = FindObjectOfType<LoadingScreen>();
-                }
-
-                if (LoadingScreen != null)
+                if (transition == Transition.None)
                 {
-                    yield return StartCoroutine(LoadingScreen.FadeCanvasIn(loadingScreenType));
+                    yield return null;
                 }
 
-                else Debug.LogError("Unable to get the canvas group for the loading screen!");
+                else
+                {
+                    if (LoadingScreen == null)
+                    {
+                        var loadingSceneLoad = SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+
+                        while (!loadingSceneLoad.isDone) yield return null;
+                
+                        LoadingScreen = FindObjectOfType<LoadingScreen>();
+                    }
+
+                    if (LoadingScreen != null)
+                    {
+                        yield return StartCoroutine(LoadingScreen.Show(transition));
+                    }
+
+                    else Debug.LogError("Unable to get the canvas group for the loading screen!");
+                }
+                
+               
             }
 
             var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
@@ -198,7 +210,7 @@ namespace Project.Runtime.Scripts.App
             {
                 if (LoadingScreen != null)
                 {
-                    yield return StartCoroutine(LoadingScreen.FadeCanvasOut());
+                    yield return StartCoroutine(LoadingScreen.Hide());
                 }
 
                 var loadingScreenScene = SceneManager.GetSceneByName("LoadingScreen");
@@ -212,9 +224,7 @@ namespace Project.Runtime.Scripts.App
                 isLoading = false;
                 OnLoadEnd?.Invoke();
                 currentScene = sceneToLoad;
-            }
-
-            
+            }    
         }
         
     }

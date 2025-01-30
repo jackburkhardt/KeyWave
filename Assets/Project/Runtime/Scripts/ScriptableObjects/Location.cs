@@ -117,7 +117,7 @@ namespace Project.Runtime.Scripts.ScriptableObjects
             if (LastLocation.area != Area.Café) LastNonCaféLocation = LastLocation;
             //GameEvent.OnMove(this.Name, LastLocation, Distance);
 
-            GameManager.instance.TravelTo(this, LoadingScreen.LoadingScreenType.Black);
+            GameManager.instance.TravelTo(this, LoadingScreen.Transition.Black);
         }
 
         public void MoveHereImmediate()

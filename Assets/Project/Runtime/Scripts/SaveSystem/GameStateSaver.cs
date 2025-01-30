@@ -42,7 +42,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
 
-            App.App.Instance.ChangeScene(data.current_scene, App.App.Instance.currentScene, LoadingScreen.LoadingScreenType.Default);
+            App.App.Instance.ChangeScene(data.current_scene, App.App.Instance.currentScene, LoadingScreen.Transition.Default);
         }
 
     }
