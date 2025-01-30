@@ -36,6 +36,12 @@ namespace Project.Runtime.Scripts.Manager
             {
                 #if UNITY_EDITOR
                 if (instance == null) return AssetDatabase.LoadAssetAtPath<Settings>("Assets/Game Settings.asset");
+                #else
+                if (instance == null)
+                {
+                    // force instantiation of GM instance since there are dependants in Awake, OnEnable of other scripts
+                    instance = FindAnyObjectByType<GameManager>();
+                }
                 #endif
                 return instance.currentSettings;
             }
