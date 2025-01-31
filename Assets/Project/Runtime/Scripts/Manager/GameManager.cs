@@ -125,11 +125,6 @@ namespace Project.Runtime.Scripts.Manager
         private void Update()
         {
             if (capFramerate) Application.targetFrameRate = framerateLimit;
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                //DialogueManager.instance.PlaySequence("Continue()");
-            }
             
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -365,6 +360,12 @@ namespace Project.Runtime.Scripts.Manager
             {
                 App.App.Instance.LoadScene("PauseMenu", transition: Transition.None);
             }
+        }
+
+        public UnityEvent OnGameClose;
+        public void CloseGame()
+        {
+            OnGameClose?.Invoke();
         }
         
         

@@ -5,6 +5,7 @@ using DG.Tweening;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -72,12 +73,29 @@ public class PauseMenu : MonoBehaviour
            
             animator.SetTrigger("Hide");
             yield return new WaitForSecondsRealtime(0.5f);
-            
+            Time.timeScale = 1;
             DialogueManager.Unpause();
             yield return new WaitForEndOfFrame();
-            Time.timeScale = 1;
             App.Instance.UnloadScene("PauseMenu");
             OnUnpaused?.Invoke();
+        }
+    }
+    
+    public void QuitGame()
+    {
+        StartCoroutine(Quit());
+        IEnumerator Quit()
+        {
+            active = false;
+           
+            animator.SetTrigger("Hide");
+            yield return new WaitForSecondsRealtime(0.5f);
+            Time.timeScale = 1;
+            
+            Project.Runtime.Scripts.App.App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.Transition.Black);
+            App.Instance.UnloadScene("PauseMenu");
+            GameManager.instance.CloseGame();
+            
         }
     }
 }

@@ -182,7 +182,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public void OnDeload()
     {
-        CloseNow();
+        //CloseNow();
     }
     
 }

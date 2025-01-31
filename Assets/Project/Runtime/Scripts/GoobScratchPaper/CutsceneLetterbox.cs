@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using NaughtyAttributes;
+using PixelCrushers.DialogueSystem;
+using UnityEngine.UI;
 
 public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutsceneEndHandler
 {
@@ -34,6 +36,14 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
         {
             ShowImmediate();
         }
+        
+        var continueButtons = FindObjectsByType<StandardUIContinueButtonFastForward>( FindObjectsInactive.Include, FindObjectsSortMode.None);
+        
+        foreach (var standardUIContinueButtonFastForward in continueButtons)
+        {
+            standardUIContinueButtonFastForward.enabled = false;
+            standardUIContinueButtonFastForward.GetComponent<Button>().interactable = false;
+        }
     }
     
     [Button]
@@ -44,13 +54,25 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
         if (Application.isPlaying)
         {
             DOTween.To(() => topBar.sizeDelta, x => topBar.sizeDelta = x, new Vector2(topBar.sizeDelta.x, 0), animationDuration);   
-            DOTween.To(() => bottomBar.sizeDelta, x => bottomBar.sizeDelta = x, new Vector2(bottomBar.sizeDelta.x, 0), animationDuration);
+            DOTween.To(() => bottomBar.sizeDelta, x => bottomBar.sizeDelta = x, new Vector2(bottomBar.sizeDelta.x, 0), animationDuration).onComplete += () =>
+            {
+                var continueButtons = FindObjectsByType<StandardUIContinueButtonFastForward>( FindObjectsInactive.Include, FindObjectsSortMode.None);
+        
+                foreach (var standardUIContinueButtonFastForward in continueButtons)
+                {
+                    standardUIContinueButtonFastForward.enabled = true;
+                    standardUIContinueButtonFastForward.GetComponent<Button>().interactable = true;
+                }
+            };
         }
         
         else if (Application.isEditor)
         {
             HideImmediate();
         }
+        
+        
+        
        
     }
     

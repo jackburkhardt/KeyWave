@@ -22,7 +22,12 @@ namespace Project.Runtime.Scripts.UI
         {
             if (_continueButton != null)
             {
-                _continueButton.SetActive(false);
+                if (!SaveDataStorer.SaveDataExists)
+                    _continueButton.SetActive(false);
+                else
+                    _continueButton.SetActive(true);
+                
+                
                 RefreshLayoutGroups.Refresh(_continueButton.transform.parent.gameObject);
             }
 

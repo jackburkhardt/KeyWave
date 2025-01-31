@@ -256,7 +256,7 @@ namespace Project.Runtime.Scripts.Audio
             List<string> keysToRemove = new();
             foreach (var entry in activeAudio)
             {
-                if (entry.Value.outputAudioMixerGroup.name == channelName)
+                if (entry.Value.outputAudioMixerGroup.name.StartsWith(channelName))
                 {
                     keysToRemove.Add(entry.Key);
                 }
@@ -268,7 +268,7 @@ namespace Project.Runtime.Scripts.Audio
         {
             foreach (var entry in activeAudio)
             {
-                if (entry.Value.outputAudioMixerGroup.name == channelName)
+                if (entry.Value.outputAudioMixerGroup.name.StartsWith(channelName))
                 {
                     entry.Value.Pause();
                 }
@@ -279,7 +279,7 @@ namespace Project.Runtime.Scripts.Audio
         {
             foreach (var entry in activeAudio)
             {
-                if (entry.Value.outputAudioMixerGroup.name == channelName)
+                if (entry.Value.outputAudioMixerGroup.name.StartsWith(channelName))
                 {
                     entry.Value.UnPause();
                 }

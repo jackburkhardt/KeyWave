@@ -32,30 +32,6 @@ public class CustomUIPanel : UIPanel
     {
         OnAwake?.Invoke();
     }
-
-
-    protected override void Update()
-    {
-        base.Update();
-        
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            OpenSmartWatch();
-        }
-        
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Open();
-        }
-        
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            DialogueManager.instance.StartConversation("SmartWatch/Home");
-        }
-        
-       
-    }
-    
     
    
     
