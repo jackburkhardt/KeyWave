@@ -121,9 +121,23 @@ namespace Project.Runtime.Scripts.Manager
             GameEvent.OnPlayerEvent += OnPlayerEvent;
             //OnSaveDataApplied();
         }
+        
+        private float autoPauseCooldown = 0.5f;
 
         private void Update()
         {
+            
+            if (autoPauseCooldown > 0)
+            {
+                autoPauseCooldown -= Time.deltaTime;
+            }
+
+            if (!Application.isFocused && !SceneManager.GetSceneByName("PauseMenu").isLoaded && autoPauseCooldown <= 0)
+            {
+                TogglePause();
+                autoPauseCooldown = 0.5f;
+            }
+            
             if (capFramerate) Application.targetFrameRate = framerateLimit;
             
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -365,6 +379,8 @@ namespace Project.Runtime.Scripts.Manager
         public UnityEvent OnGameClose;
         public void CloseGame()
         {
+            AudioEngine.Instance.StopAllAudio();
+            
             OnGameClose?.Invoke();
         }
         

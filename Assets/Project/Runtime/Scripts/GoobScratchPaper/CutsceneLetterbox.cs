@@ -16,6 +16,14 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
     public float bottomBarMaxHeight;
     
     public float animationDuration = 1f;
+    
+    public enum State
+    {
+        Inactive,
+        Active
+    }
+    
+    private State state = State.Inactive;
 
     private void Awake()
     {
@@ -25,6 +33,9 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
     [Button]
     public void Show()
     {
+        if (state == State.Active) return;
+        state = State.Active;
+        
         if (topBar == null || bottomBar == null) return;
         if (Application.isPlaying)
         {
@@ -49,21 +60,25 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
     [Button]
     public void Hide()
     {
+        if (state == State.Inactive) return;
+        state = State.Inactive;
+        
+        
         if (topBar == null || bottomBar == null) return;
 
         if (Application.isPlaying)
         {
-            DOTween.To(() => topBar.sizeDelta, x => topBar.sizeDelta = x, new Vector2(topBar.sizeDelta.x, 0), animationDuration);   
-            DOTween.To(() => bottomBar.sizeDelta, x => bottomBar.sizeDelta = x, new Vector2(bottomBar.sizeDelta.x, 0), animationDuration).onComplete += () =>
-            {
-                var continueButtons = FindObjectsByType<StandardUIContinueButtonFastForward>( FindObjectsInactive.Include, FindObjectsSortMode.None);
+            DOTween.To(() => topBar.sizeDelta, x => topBar.sizeDelta = x, new Vector2(topBar.sizeDelta.x, 0), animationDuration);
+            DOTween.To(() => bottomBar.sizeDelta, x => bottomBar.sizeDelta = x, new Vector2(bottomBar.sizeDelta.x, 0),
+                animationDuration);
+            
+            var continueButtons = FindObjectsByType<StandardUIContinueButtonFastForward>( FindObjectsInactive.Include, FindObjectsSortMode.None);
         
-                foreach (var standardUIContinueButtonFastForward in continueButtons)
-                {
-                    standardUIContinueButtonFastForward.enabled = true;
-                    standardUIContinueButtonFastForward.GetComponent<Button>().interactable = true;
-                }
-            };
+            foreach (var standardUIContinueButtonFastForward in continueButtons)
+            {
+                standardUIContinueButtonFastForward.enabled = true;
+                standardUIContinueButtonFastForward.GetComponent<Button>().interactable = true;
+            }
         }
         
         else if (Application.isEditor)
