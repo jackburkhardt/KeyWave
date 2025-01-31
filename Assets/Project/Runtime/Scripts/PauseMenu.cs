@@ -83,19 +83,22 @@ public class PauseMenu : MonoBehaviour
     
     public void QuitGame()
     {
-        StartCoroutine(Quit());
-        IEnumerator Quit()
-        {
-            active = false;
-           
-            animator.SetTrigger("Hide");
-            yield return new WaitForSecondsRealtime(0.5f);
-            Time.timeScale = 1;
-            
-            Project.Runtime.Scripts.App.App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.Transition.Black);
-            App.Instance.UnloadScene("PauseMenu");
-            GameManager.instance.CloseGame();
-            
-        }
+#if UNITY_WEBGL
+        Application.ExternalCall("location.reload()");
+#endif
+        // StartCoroutine(Quit());
+        // IEnumerator Quit()
+        // {
+        //     active = false;
+        //    
+        //     animator.SetTrigger("Hide");
+        //     yield return new WaitForSecondsRealtime(0.5f);
+        //     Time.timeScale = 1;
+        //     
+        //     Project.Runtime.Scripts.App.App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.Transition.Black);
+        //     App.Instance.UnloadScene("PauseMenu");
+        //     GameManager.instance.CloseGame();
+        //     
+        // }
     }
 }
