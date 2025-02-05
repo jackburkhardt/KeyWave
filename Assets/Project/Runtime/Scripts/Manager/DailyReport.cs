@@ -40,10 +40,10 @@ namespace Project.Runtime.Scripts.Manager
                     EarnedPoints[pointsInfo.Type] += pointsInfo.Points;
                     
                     //poopoo code
-                    DialogueLua.SetVariable("points.Skills", EarnedPoints[Points.Type.Skills]);
-                    DialogueLua.SetVariable("points.Teamwork", EarnedPoints[Points.Type.Teamwork]);
+                    DialogueLua.SetVariable("points.skills", EarnedPoints[Points.Type.Skills]);
+                    DialogueLua.SetVariable("points.teamwork", EarnedPoints[Points.Type.Teamwork]);
                     DialogueLua.SetVariable("points.wellness", EarnedPoints[Points.Type.Wellness]);
-                    DialogueLua.SetVariable("points.Context", EarnedPoints[Points.Type.Context]);
+                    DialogueLua.SetVariable("points.context", EarnedPoints[Points.Type.Context]);
                     
                     break;
                 }

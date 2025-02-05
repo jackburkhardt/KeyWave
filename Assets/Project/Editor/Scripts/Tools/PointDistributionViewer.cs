@@ -33,10 +33,10 @@ namespace Project.Editor.Scripts.Tools
 
         private int wellnessTotal;
 
-        private string wellnessMaxVar = "points.wellnessMAX";
-        private string TeamworkMaxVar = "points.TeamworkMAX";
-        private string SkillsMaxVar = "points.SkillsMAX";
-        private string ContextMaxVar = "points.ContextMAX";
+        private string wellnessMaxVar = "points.wellness.max";
+        private string TeamworkMaxVar = "points.teamwork.max";
+        private string SkillsMaxVar = "points.skills.max";
+        private string ContextMaxVar = "points.context.max";
 
         private void OnGUI()
         {

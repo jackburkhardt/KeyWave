@@ -44,14 +44,14 @@ namespace Project.Runtime.Scripts.Manager
         
         public int TeamworkScore 
         {
-            get => DialogueLua.GetVariable("points.Teamwork").asInt;
-            set => DialogueLua.SetVariable("points.Teamwork", Math.Min(value, MaxTeamworkScore));
+            get => DialogueLua.GetVariable("points.teamwork").asInt;
+            set => DialogueLua.SetVariable("points.teamwork", Math.Min(value, MaxTeamworkScore));
         }
         
         public int SkillsScore 
         {
-            get => DialogueLua.GetVariable("points.Skills").asInt;
-            set => DialogueLua.SetVariable("points.Skills", Math.Min(value, MaxSkillsScore));
+            get => DialogueLua.GetVariable("points.skills").asInt;
+            set => DialogueLua.SetVariable("points.skills", Math.Min(value, MaxSkillsScore));
         }
         
         public int WellnessScore 
@@ -62,21 +62,21 @@ namespace Project.Runtime.Scripts.Manager
         
         public int ContextScore 
         {
-            get => DialogueLua.GetVariable("points.Context").asInt;
-            set => DialogueLua.SetVariable("points.Context", Math.Min(value, ContextScore));
+            get => DialogueLua.GetVariable("points.context").asInt;
+            set => DialogueLua.SetVariable("points.context", Math.Min(value, ContextScore));
         }
         
         
         public int MaxTeamworkScore 
         {
-            get => DialogueLua.GetVariable("points.Teamwork.max").asInt;
-            set => DialogueLua.SetVariable("points.Teamwork.max", value);
+            get => DialogueLua.GetVariable("points.teamwork.max").asInt;
+            set => DialogueLua.SetVariable("points.teamwork.max", value);
         }
         
         public int MaxSkillsScore 
         {
-            get => DialogueLua.GetVariable("points.Skills.max").asInt;
-            set => DialogueLua.SetVariable("points.Skills.max", value);
+            get => DialogueLua.GetVariable("points.skills.max").asInt;
+            set => DialogueLua.SetVariable("points.skills.max", value);
         }
         
         public int MaxWellnessScore 
@@ -87,8 +87,8 @@ namespace Project.Runtime.Scripts.Manager
         
         public int MaxContextScore 
         {
-            get => DialogueLua.GetVariable("points.Context.max").asInt;
-            set => DialogueLua.SetVariable("points.Context.max", value);
+            get => DialogueLua.GetVariable("points.context.max").asInt;
+            set => DialogueLua.SetVariable("points.context.max", value);
         }
         
         
