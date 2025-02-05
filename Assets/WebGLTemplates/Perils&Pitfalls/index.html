@@ -12,6 +12,9 @@
       align-items: center;
       height: 100vh;
       background-color: #1d282b; /* Optional background color */
+      text-align: center;
+      padding: 0;
+      border: 0;
     }
 
     canvas {
@@ -23,17 +26,36 @@
       background: #ccc; /* Optional canvas background */
       outline: 0.15em outset antiquewhite;
       box-shadow: 0px 4px 20px 10px rgba(0, 0, 0, 0.25); /* Optional shadow */
+    }
+    
+    .load-progress {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
 
-
+    .load-progress progress {
+      width: 30vw;
+      height: 20px;
     }
   </style>
 </head>
-<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+
+<body>
 <canvas id="unity-canvas"></canvas>
+
+<div class="load-progress" id="load-progress">
+  <h2>Preparing your experience..</h2>
+  <progress id="progress-bar"></progress>
+</div>
+
 <script src="Build/{{{ LOADER_FILENAME }}}"></script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
 <script>
   let UnityGame = null;
+  let unityCanvas = document.querySelector("#unity-canvas");
+  
   if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
     // Mobile device style: fill the whole browser client area with the game canvas:
     var meta = document.createElement('meta');
@@ -49,7 +71,7 @@
     document.body.style.textAlign = "left";
   }
 
-  createUnityInstance(document.querySelector("#unity-canvas"), {
+  createUnityInstance(unityCanvas, {
     dataUrl: "Build/{{{ DATA_FILENAME }}}",
     frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
     codeUrl: "Build/{{{ CODE_FILENAME }}}",
@@ -61,40 +83,41 @@
     preserveDrawingBuffer: true,
     powerPreference: "{{{ WEBGL_POWER_PREFERENCE }}}",
     
-   
-    
     autoSyncPersistentDataPath: true,
     matchWebGLToCanvasSize: true, // Uncomment this to separately control WebGL canvas render size and DOM element size.
     // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-  }).then((unityInstance) => {
+  }, onProgress).then(onSuccess).catch((err) => alert("An error occurred while loading the game. Please report this.\n\nError message: \n" + err.message))
+  
+  function onProgress (progress) {
+    document.querySelector("#progress-bar").value = progress;
+  }
+  
+  function onSuccess (unityInstance) {
     UnityGame = unityInstance;
+    
+    document.querySelector("#load-progress").style.display = "none";
+  }
 
-    var canvas = document.querySelector("#unity-canvas");
-    const context = canvas.getContext("2d");
-    function resizeCanvas() {
-      const aspectRatio = 16 / 9;
+  function resizeCanvas() {
+    const aspectRatio = 16 / 9;
 
-      if (window.innerWidth / window.innerHeight > aspectRatio) {
-        // Width is greater than height
-        canvas.style.height = "90vh";
-        canvas.style.width = `${90 * aspectRatio}vh`;
-      } else {
-        // Height is greater than or equal to width
-        canvas.style.width = "90vw";
-        canvas.style.height = `${90 / aspectRatio}vw`;
-      }
-
-
-      canvas.width = width;
-      canvas.height = height;
+    if (window.innerWidth / window.innerHeight > aspectRatio) {
+      // Width is greater than height
+      unityCanvas.style.height = "90vh";
+      unityCanvas.style.width = `${90 * aspectRatio}vh`;
+    } else {
+      // Height is greater than or equal to width
+      unityCanvas.style.width = "90vw";
+      unityCanvas.style.height = `${90 / aspectRatio}vw`;
     }
 
-    // Ensure canvas is resized on load and on window resize
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-    
-    
-  }).catch(console.error);
+    //unityCanvas.width = width;
+    //unityCanvas.height = height;
+  }
+
+  // Ensure canvas is resized on load and on window resize
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
 </script>
 <script src="socket.js"></script>
 </body>
