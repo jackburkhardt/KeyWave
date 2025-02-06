@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 
@@ -78,13 +80,24 @@ namespace Project.Runtime.Scripts.Manager
             }
         }
 
-        public string Serialize()
+        public string SerializeForWeb()
         {
-            var settings = new JsonSerializerSettings
+            var settings = new JsonSerializer()
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Converters = { new StringEnumConverter() }
             };
-            return JsonConvert.SerializeObject(this, Formatting.Indented, settings);
+
+            JObject report = new()
+            {
+                ["EventType"] = "daily_report",
+                ["Day"] = Day,
+                ["CompletedTasks"] = JArray.FromObject(_completedTasks),
+                ["ActiveTasks"] = JArray.FromObject(_activeTasks),
+                ["Points"] = JObject.FromObject(EarnedPoints, settings)
+            };
+
+            return JsonConvert.SerializeObject(report, Formatting.None);
         }
 
         ~DailyReport()

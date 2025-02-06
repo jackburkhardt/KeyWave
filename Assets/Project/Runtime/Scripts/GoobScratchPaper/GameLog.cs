@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
@@ -38,11 +42,6 @@ public class GameLog : MonoBehaviour
         
         var log = DialogueLua.GetVariable("game.log").asString;
         
-        if (log.Contains("[temp]"))
-        {
-            log = string.Empty;
-        }
-        
         var color = type switch
         {
             LogType.Default => string.Empty,
@@ -53,7 +52,7 @@ public class GameLog : MonoBehaviour
         };
             
             
-        log += $"[br({color}{Clock.CurrentTime})] {color}{message}";
+        log += $"{color}[{Clock.CurrentTime}] {color}{message}<br>";
         DialogueLua.SetVariable("game.log", log);
     }
     
@@ -112,5 +111,40 @@ public class GameLog : MonoBehaviour
             var message = $"Points: +{amount} {type}";
             LogPoints(message);
         }
+    }
+
+    public static IEnumerable<string> GetLogWithoutFormatting()
+    {
+        var log = DialogueLua.GetVariable("game.log").asString;
+        var logEntries = log.Split("<br>")[1..];
+        for (int i = 0; i < logEntries.Length - 1; i++)
+        {
+            logEntries[i] = Regex.Replace(logEntries[i], @"<[^>]*>", string.Empty);
+        }
+
+        return logEntries.Where(e => !string.IsNullOrEmpty(e));
+    }
+
+    public static string SerializeForWeb()
+    {
+        var entries = GetLogWithoutFormatting();
+        
+        // for splitting timestamp from actual event
+        Dictionary<string, string> logAsDict = new();
+        foreach (var entry in entries)
+        {
+            var time = entry[1..6];
+            var message = entry[8..];
+            
+            logAsDict.Add(time, message);
+        }
+
+        JObject log = new JObject
+        {
+            ["EventType"] = "player_log",
+            ["Entries"] = JObject.FromObject(logAsDict)
+        };
+        
+        return JsonConvert.SerializeObject(log, Formatting.None);
     }
 }

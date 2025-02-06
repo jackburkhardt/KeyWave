@@ -15,7 +15,6 @@ namespace Project.Runtime.Scripts.App
     {
         private static App _instance;
         private static string playerID;
-        private static PlayerEventStack playerEventStack;
 
         public static Action OnLoadStart;
         public static Action OnLoadEnd;

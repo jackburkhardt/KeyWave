@@ -15,8 +15,6 @@ using UnityEngine.AddressableAssets;
 
 public class TextImageFormatter : MonoBehaviour
 {
-    
-
     [SerializeField] private UITextField _sourceText;
     
     [SerializeField] private UITextField _textTemplate;
@@ -27,24 +25,13 @@ public class TextImageFormatter : MonoBehaviour
     
     [ReadOnly] [SerializeField] private string imagePlaceholder = "[img($addressablePath)]";
     
-    
-    [SerializeField] private UITextField _newLineTemplate;
-    [ReadOnly] [SerializeField] private string _newLinePlaceholder = "[br($text)]";
-    
-
-    private void OnValidate()
-    {
-        
-    }
 
     private void Awake()
     {
-        
         _textTemplate.gameObject.SetActive(false);
         _textTemplateHolder.gameObject.SetActive(false);
         _imageTemplate.gameObject.SetActive(false);
         _imageTemplateHolder.gameObject.SetActive(false);
-        _newLineTemplate.gameObject.SetActive(false);
     }
     
     private string _previousText;
@@ -68,83 +55,39 @@ public class TextImageFormatter : MonoBehaviour
     {
         DeleteInstantiatedChildren();
         
-        text = Regex.Replace(text, @"(\[temp\(.*?\)\])", "");
-        
-        var pattern = @"(\[img\(.*?\)\])";
-        
-        var result = Regex.Split(text, pattern);
-        
-        GameObject currentImageContainer = null;
-        GameObject currentTextContainer = null;
-        
-        foreach (var part in result)
+        var imagePattern = @"img\(([A-Za-z0-9_\/]+)\)";
+        var matches = Regex.Matches(text, imagePattern);
+
+        foreach (Match match in matches)
         {
-            
-            if (Regex.IsMatch(part, pattern))
+            if (match.Success && match.Groups.Count > 0)
             {
-                currentTextContainer = null;
-                var imagePath = part.Replace("[img(", "").Replace(")]", "");
-
-                if (currentImageContainer == null)
-                {
-                    currentImageContainer = Instantiate(_imageTemplateHolder.gameObject, transform);
-                    currentImageContainer.SetActive(true);
-                }
+                var imagePath = match.Groups[0].Value;
+                text = text.Replace(match.Value, "");
                 
-                var image = Instantiate(_imageTemplate.gameObject, currentImageContainer.transform).GetComponent<Image>();
+                
+                var imageContainer = Instantiate(_imageTemplateHolder.gameObject, transform);
+                imageContainer.SetActive(true);
+
+                var image = Instantiate(_imageTemplate.gameObject, imageContainer.transform)
+                    .GetComponent<Image>();
                 image.gameObject.SetActive(true);
-                
-                AddressableLoader.RequestLoad<Sprite>(imagePath, sprite =>
-                {
-                    image.sprite = sprite;
-                });
-                
-                
-            }
-            else
-            {
-              
-                
-                var newLinePattern = @"(\[br\(.*?\)\])";
-                var newLineResult = Regex.Split(part, newLinePattern);
-                
-                foreach (var newLinePart in newLineResult)
-                {
-                    if (string.IsNullOrWhiteSpace(newLinePart)) continue;
-                    currentImageContainer = null;
-                    
-                    var newText = newLinePart;
-                    var template = _textTemplate;
 
-                    if (Regex.IsMatch(newLinePart, newLinePattern))
-                    {
-                        newText = newLinePart.Replace("[br(", "").Replace(")]", "");
-                        currentTextContainer = null;
-                        template = _newLineTemplate;
-                    }
-                    
-                    if (currentTextContainer == null)
-                    {
-                        currentTextContainer = Instantiate(_textTemplateHolder.gameObject, transform);
-                        currentTextContainer.SetActive(true);
-                    }
-
-                    var textObject = Instantiate(template.gameObject, currentTextContainer.transform);
-                        textObject.SetActive(true);
-                
-                    if (template.textMeshProUGUI != null)
-                    {
-                        textObject.GetComponent<TextMeshProUGUI>().text = newText;
-                    }
-                    
-                    if (template.uiText != null)
-                    {
-                        textObject.GetComponent<Text>().text = newText;
-                    }
-                }
+                AddressableLoader.RequestLoad<Sprite>(imagePath, sprite => { image.sprite = sprite; });
             }
         }
         
+        var textContainer = Instantiate(_textTemplateHolder.gameObject, transform);
+        textContainer.SetActive(true);
+
+        var textObject = Instantiate(_textTemplate.gameObject, textContainer.transform);
+        textObject.SetActive(true);
+                
+        if (_textTemplate.textMeshProUGUI != null)
+        {
+            textObject.GetComponent<TextMeshProUGUI>().text = text;
+        }
+
     }
     
 
@@ -157,7 +100,6 @@ public class TextImageFormatter : MonoBehaviour
             if (t == _imageTemplateHolder) continue;
             if (t == _imageTemplate.transform) continue;
             if (t == _textTemplate.gameObject.transform) continue;
-            if (t == _newLineTemplate.gameObject.transform) continue;
             if (t == null) continue;
             
             

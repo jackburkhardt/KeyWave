@@ -16,10 +16,11 @@ namespace Project.Runtime.Scripts.Utility
         private void Start()
         {
             _report = GameManager.instance.dailyReport;
-#if !UNITY_EDITOR
-        BrowserInterface.sendPlayerEvent(_report.Serialize());
+#if UNITY_WEBGL
+        BrowserInterface.sendPlayerEvent(_report.SerializeForWeb());
+        BrowserInterface.sendPlayerEvent(GameLog.SerializeForWeb());
 #endif
-        
+            
             foreach (var task in _report.CompletedTasks)
             {
                 var taskObject = Instantiate(_taskDisplayPrefab, _completedPanel) as GameObject;
