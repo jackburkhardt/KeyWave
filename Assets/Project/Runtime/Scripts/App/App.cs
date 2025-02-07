@@ -5,7 +5,6 @@ using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Transition = Project.Runtime.Scripts.AssetLoading.LoadingScreen.Transition;
 

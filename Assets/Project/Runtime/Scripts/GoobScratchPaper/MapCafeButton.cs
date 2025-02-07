@@ -1,10 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 using Button = UnityEngine.UI.Button;
 
 public class MapCafeButton : MonoBehaviour

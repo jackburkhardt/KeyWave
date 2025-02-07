@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.App;
-using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem

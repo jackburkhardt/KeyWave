@@ -1,8 +1,6 @@
 using System;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Events;
-using Unity.Mathematics;
-using UnityEngine;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.Manager

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using DG.Tweening;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.Audio;

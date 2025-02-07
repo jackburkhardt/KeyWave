@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
-using Unity.VisualScripting;
 using UnityEngine;
 using Field = PixelCrushers.DialogueSystem.Field;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
@@ -299,7 +299,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 List<string> extractedContents = new List<string>();
                 string pattern = @"BlackOut\(([^)]*)\)";
                 
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                foreach (Match match in Regex.Matches(dialogueEntry.Sequence, pattern))
                 {
                     extractedContents.Add(match.Groups[1].Value.Trim());
                     
@@ -340,7 +340,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 List<string> extractedContents = new List<string>();
                 string pattern = @"AddSeconds\(([^)]*)\)";
                 
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                foreach (Match match in Regex.Matches(dialogueEntry.Sequence, pattern))
                 {
                     extractedContents.Add(match.Groups[1].Value.Trim());
                 }
@@ -355,7 +355,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 List<string> extractedContents = new List<string>();
                 string pattern = @"AddMinutes\(([^)]*)\)";
                 
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                foreach (Match match in Regex.Matches(dialogueEntry.Sequence, pattern))
                 {
                     extractedContents.Add(match.Groups[1].Value.Trim());
                 }
@@ -371,7 +371,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 List<string> extractedContents = new List<string>();
                 string pattern = @"SetTime\(([^)]*)\)";
                 
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                foreach (Match match in Regex.Matches(dialogueEntry.Sequence, pattern))
                 {
                     extractedContents.Add(match.Groups[1].Value.Trim());
                 }
@@ -392,7 +392,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 List<string> extractedContents = new List<string>();
                 string pattern = @"SetQuestState\(([^)]*)\)";
                 
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.userScript, pattern))
+                foreach (Match match in Regex.Matches(dialogueEntry.userScript, pattern))
                 {
                     extractedContents.Add(match.Groups[1].Value.Trim().Replace("\"", ""));
                 }

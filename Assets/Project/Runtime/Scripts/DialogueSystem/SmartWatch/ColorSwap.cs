@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
-using NaughtyAttributes;
 
 public class ColorSwap : MonoBehaviour
 {

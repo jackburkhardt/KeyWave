@@ -1,12 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using Gilzoide.RoundedCorners;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
 [ExecuteInEditMode]
-public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
+public class RoundedImageWithCornerSync : RoundedImage
 {
     [SerializeField] protected bool syncCorners = true;
     [SerializeField] protected bool proportionalToRect = true;
@@ -59,7 +58,7 @@ public class RoundedImageWithCornerSync : Gilzoide.RoundedCorners.RoundedImage
                 ? proportionalRadius * GetComponent<RectTransform>().rect.width
                 : _bottomLeft.Radius;
             
-            _bottomLeft = _topLeft = _topRight = _bottomRight = new Gilzoide.RoundedCorners.RoundedCorner { Radius = radius, TriangleCount = _bottomLeft.TriangleCount };
+            _bottomLeft = _topLeft = _topRight = _bottomRight = new RoundedCorner { Radius = radius, TriangleCount = _bottomLeft.TriangleCount };
         }
         
         if (Application.isEditor && !Application.isPlaying && (int)Time.time % 5 == 0)

@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
-using Project.Runtime.Scripts.AssetLoading;
 using UnityEngine;
 using UnityEngine.Events;
 

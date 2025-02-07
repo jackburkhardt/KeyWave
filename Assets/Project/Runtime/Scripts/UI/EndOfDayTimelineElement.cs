@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using NaughtyAttributes;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;

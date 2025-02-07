@@ -1,24 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using NaughtyAttributes;
-using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.AssetLoading;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 [CreateAssetMenu(fileName = "Game Settings", menuName = "Game Settings")]
 public class Settings : ScriptableObject
 {
-    private const string Path = "Settings.asset";
-
-    public const string FIELD_INT_ACTION_REPEAT_HISTORY_COUNT = "Repeat Count";
-    public const string FIELD_FLOAT_POINTS_MULTIPLIER_ON_ACTION_REPEAT = "Points Repeat";
-    public const string FIELD_BOOL_ACTION_IS_REPEATABLE = "Repeatable";
-    
-    
     public DialogueDatabase dialogueDatabase;
     
     [Expandable]
@@ -29,6 +15,9 @@ public class Settings : ScriptableObject
     public ClockSettings clockSettings;
     [Expandable]
     public AudioSettings audioSettings;
+
+    [SerializeField]
+    public bool autoPauseOnFocusLost = false;
 
     
     public ClockSettings Clock

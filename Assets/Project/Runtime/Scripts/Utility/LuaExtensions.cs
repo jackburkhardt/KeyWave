@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.DialogueSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

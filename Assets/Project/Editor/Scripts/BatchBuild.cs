@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEngine;
 
-    public static class BatchBuild
+public static class BatchBuild
     {
         public static string GetFolderArg()
         {

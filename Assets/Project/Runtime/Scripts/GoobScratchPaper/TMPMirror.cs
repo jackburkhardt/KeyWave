@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 
 [ExecuteInEditMode]
 public class TMPMirror : MonoBehaviour
 {
-    [SerializeField] private TMPro.TextMeshProUGUI textMeshProToMirror;
+    [SerializeField] private TextMeshProUGUI textMeshProToMirror;
    
-    private TMPro.TextMeshProUGUI _textMeshPro;
+    private TextMeshProUGUI _textMeshPro;
     public bool useFormat;
     public bool mirrorColor;
     
@@ -19,7 +18,7 @@ public class TMPMirror : MonoBehaviour
    
     void Update()
     {
-        _textMeshPro ??= GetComponent<TMPro.TextMeshProUGUI>();
+        _textMeshPro ??= GetComponent<TextMeshProUGUI>();
         
         if (textMeshProToMirror == null || textMeshProToMirror == null) return;
         

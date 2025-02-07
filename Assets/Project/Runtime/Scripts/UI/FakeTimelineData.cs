@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using NaughtyAttributes;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;

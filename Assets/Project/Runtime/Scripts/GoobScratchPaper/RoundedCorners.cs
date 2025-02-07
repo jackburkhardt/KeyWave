@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Sprites;
 using UnityEngine.UI;
 
 namespace Nobi.UiRoundedCorners {
@@ -45,9 +46,9 @@ namespace Nobi.UiRoundedCorners {
 			}
 			
 			if (Application.isPlaying) {
-				Object.Destroy(material);
+				Destroy(material);
 			} else {
-				Object.DestroyImmediate(material);
+				DestroyImmediate(material);
 			}
 			
 			image = null;
@@ -61,9 +62,9 @@ namespace Nobi.UiRoundedCorners {
 			if (other != null) {
 				Radius = other.r.x;                 //When it does, transfer the Radius value to this script
 				if (Application.isPlaying) {
-					Object.Destroy(material);
+					Destroy(material);
 				} else {
-					Object.DestroyImmediate(material);
+					DestroyImmediate(material);
 				}
 			}
 
@@ -91,7 +92,7 @@ namespace Nobi.UiRoundedCorners {
 			}
 
 			if (image is Image uiImage && uiImage.sprite != null) {
-				outerUV = UnityEngine.Sprites.DataUtility.GetOuterUV(uiImage.sprite);
+				outerUV = DataUtility.GetOuterUV(uiImage.sprite);
 			}
 		}
 

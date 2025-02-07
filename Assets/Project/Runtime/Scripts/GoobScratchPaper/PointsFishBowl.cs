@@ -1,13 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
 
 public class PointsFishBowl : MonoBehaviour
 {

@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.SaveSystem;
-using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -34,15 +32,11 @@ namespace Project.Runtime.Scripts.Manager
         {
             get
             {
-                #if UNITY_EDITOR
-                if (instance == null) return AssetDatabase.LoadAssetAtPath<Settings>("Assets/Game Settings.asset");
-                #else
                 if (instance == null)
                 {
                     // force instantiation of GM instance since there are dependants in Awake, OnEnable of other scripts
                     instance = FindAnyObjectByType<GameManager>();
                 }
-                #endif
                 return instance.currentSettings;
             }
             set => instance.currentSettings = value;
@@ -126,18 +120,21 @@ namespace Project.Runtime.Scripts.Manager
 
         private void Update()
         {
-            
-            if (autoPauseCooldown > 0)
+            if (settings.autoPauseOnFocusLost)
             {
-                autoPauseCooldown -= Time.deltaTime;
+                if (autoPauseCooldown > 0)
+                {
+                    autoPauseCooldown -= Time.deltaTime;
+                }
+
+                if (!Application.isFocused && !SceneManager.GetSceneByName("PauseMenu").isLoaded &&
+                    autoPauseCooldown <= 0)
+                {
+                    TogglePause();
+                    autoPauseCooldown = 0.5f;
+                }
             }
 
-            if (!Application.isFocused && !SceneManager.GetSceneByName("PauseMenu").isLoaded && autoPauseCooldown <= 0)
-            {
-                TogglePause();
-                autoPauseCooldown = 0.5f;
-            }
-            
             if (capFramerate) Application.targetFrameRate = framerateLimit;
             
             if (Input.GetKeyDown(KeyCode.Escape))

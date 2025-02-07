@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SettingsMenuItem : MonoBehaviour, IPointerEnterHandler
+public class SettingsMenuSliderItem : MonoBehaviour, IPointerEnterHandler
 {
     public string settingName;
     public string settingDescription;
@@ -23,7 +21,7 @@ public class SettingsMenuItem : MonoBehaviour, IPointerEnterHandler
     
     public SliderSettingType settingType;
 
-    public void Awake()
+    public void OnEnable()
     {
         switch (settingType)
         {

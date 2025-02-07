@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using UnityEngine;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutsceneEndHandler

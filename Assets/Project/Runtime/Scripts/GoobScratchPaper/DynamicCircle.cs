@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-
 
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(AspectRatioFitter))]

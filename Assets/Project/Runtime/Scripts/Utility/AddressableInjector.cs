@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Gilzoide.RoundedCorners;
 using NaughtyAttributes;
+using Project.Runtime.Scripts.AssetLoading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
-
 
 public class AddressableInjector : MonoBehaviour
 {
@@ -83,7 +81,7 @@ public class AddressableInjector : MonoBehaviour
                 
                 if (sprite == null)
                 {
-                    Project.Runtime.Scripts.AssetLoading.AddressableLoader.RequestLoad<Sprite>(addressableName, (s) =>
+                    AddressableLoader.RequestLoad<Sprite>(addressableName, (s) =>
                     {
                         sprite = s;
                         SetSprite();

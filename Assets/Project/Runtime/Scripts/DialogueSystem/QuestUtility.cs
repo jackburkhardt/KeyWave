@@ -5,7 +5,6 @@ using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
-using UnityEngine;
 
 namespace Project.Runtime.Scripts.DialogueSystem
 {

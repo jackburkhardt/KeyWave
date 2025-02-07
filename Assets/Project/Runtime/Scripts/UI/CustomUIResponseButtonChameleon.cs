@@ -1,17 +1,8 @@
 #nullable enable
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using NaughtyAttributes;
-using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
 namespace Project.Runtime.Scripts.UI
 {

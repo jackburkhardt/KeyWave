@@ -1,18 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
-using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
-using Project.Runtime.Scripts.ScriptableObjects;
 using Project.Runtime.Scripts.Utility;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SmartWatchAppSubcomponent : MonoBehaviour
 {

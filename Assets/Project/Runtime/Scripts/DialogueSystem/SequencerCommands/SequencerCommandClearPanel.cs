@@ -1,7 +1,5 @@
 using System.Linq;
 using PixelCrushers.DialogueSystem.SequencerCommands;
-using Project.Runtime.Scripts.Manager;
-using Project.Runtime.Scripts.UI;
 
 namespace Project.Runtime.Scripts.DialogueSystem
 {

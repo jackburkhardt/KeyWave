@@ -1,14 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
-using Michsky.MUIP;
-using Project.Runtime.Scripts.Events;
-using UnityEngine;
-
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
+using UnityEngine;
 
 public class PointsVisualizer : MonoBehaviour
 {

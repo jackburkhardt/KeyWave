@@ -1,9 +1,7 @@
-using System;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Manager;
-using Project.Runtime.Scripts.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Location = Project.Runtime.Scripts.ScriptableObjects.Location;

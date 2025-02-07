@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 using UnityEngine.SceneManagement;
 
 public class RestartApplication : MonoBehaviour
@@ -16,6 +14,6 @@ public class RestartApplication : MonoBehaviour
             PauseMenu.instance.QuitGame();
         }
         
-        else Project.Runtime.Scripts.App.App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.Transition.Black);
+        else App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.Transition.Black);
     }
 }

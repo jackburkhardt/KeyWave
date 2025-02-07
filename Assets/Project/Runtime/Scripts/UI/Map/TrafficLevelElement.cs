@@ -1,4 +1,3 @@
-using System;
 using NaughtyAttributes;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;

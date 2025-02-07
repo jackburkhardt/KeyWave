@@ -1,6 +1,4 @@
 #if UNITY_2021_1_OR_NEWER
-using System;
-using DG.DemiEditor;
 using UnityEditor;
 using UnityEditor.Overlays;
 using UnityEditor.SceneManagement;
