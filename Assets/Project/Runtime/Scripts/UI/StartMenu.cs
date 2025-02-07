@@ -1,3 +1,4 @@
+using System;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.Utility;
@@ -32,7 +33,11 @@ namespace Project.Runtime.Scripts.UI
 
             SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
         }
-        
+
+        private void OnEnable()
+        {
+            UserSettingsSaver.ApplySettings();
+        }
 
         private void OnSaveDataReceived(SaveGameMetadata metadata)
         {
@@ -77,7 +82,6 @@ namespace Project.Runtime.Scripts.UI
         public void BeginSaveRetrieval()
         {
             SaveDataStorer.BeginSaveRetrieval();
-            //Settings.LoadSettings();
         }
         
         private void OnDestroy()

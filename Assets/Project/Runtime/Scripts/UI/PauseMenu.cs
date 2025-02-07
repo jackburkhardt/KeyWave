@@ -3,6 +3,7 @@ using System.Collections;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.SaveSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -69,6 +70,7 @@ public class PauseMenu : MonoBehaviour
             animator.SetTrigger("Hide");
             yield return new WaitForSecondsRealtime(0.5f);
             Time.timeScale = 1;
+            UserSettingsSaver.SaveSettings();
             DialogueManager.Unpause();
             yield return new WaitForEndOfFrame();
             App.Instance.UnloadScene("PauseMenu");
