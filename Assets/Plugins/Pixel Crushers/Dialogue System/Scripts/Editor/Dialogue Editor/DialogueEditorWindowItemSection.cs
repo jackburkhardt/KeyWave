@@ -763,6 +763,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             EditorGUILayout.Space();
 
                 
+            
                 
             EditorWindowTools.EditorGUILayoutBeginGroup();
                 
@@ -847,20 +848,33 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 {
                     var conversation = Field.Lookup(item.fields, "Conversation");
 
-                    int naturalDurationA = -1;
+                    if (conversation == null)
+                    {
+                        
+                    }
+
+                    else
+                    {
+                        int naturalDurationA = -1;
                     int naturalDurationB = -1;
 
                     if (conversation.value == GeneratedConversation)
                     {
                         naturalDurationA = 0;
-                        
-                        for (int i = 1; i < item.LookupInt("Entry Count") + 1; i++)
+
+                        if (item.LookupInt("Entry Count") > 0)
                         {
-                            var subtitleText = item.LookupValue($"Entry {i} Dialogue Text");
-                            naturalDurationA += subtitleText.Length > 0
-                                ? subtitleText.Length * SecondsPerCharacter + SecondsPerLine
-                                : 0;
+                            for (int i = 1; i < item.LookupInt("Entry Count") + 1; i++)
+                            {
+                                var subtitleText = item.LookupValue($"Entry {i} Dialogue Text");
+                                if (!string.IsNullOrEmpty(subtitleText))
+                                    naturalDurationA += subtitleText.Length > 0
+                                        ? subtitleText.Length * SecondsPerCharacter + SecondsPerLine
+                                        : 0;
+                            }
                         }
+                        
+                        
                         
                         
                       
@@ -886,6 +900,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
                     else
                     {
+                        
+                        
                         var conversationTitle  = conversation.value == AutomaticConversation ? ClosestMatch(item.Name, database.conversations.Select(p => p.Title).ToList()) : conversation.value;
                         var timeEstimate = TimeEstimate(database.GetConversation(conversationTitle).GetFirstDialogueEntry());
                     
@@ -924,22 +940,15 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         if (naturalDurationFieldCount > 1)
                             item.fields.Remove(item.fields.Last(p => p.title == "Natural Duration"));
                     }
+                    }
+
+                    
                     
 
                 }
                 
                 
             }
-            
-            
-           
-            
-            
-                
-                
-                
-            
-                
                 
             EditorWindowTools.EditorGUILayoutEndGroup();
             
@@ -1039,6 +1048,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
              {
                  conditions = new Field("Conditions", "True", FieldType.Text);
                  item.fields.Add(conditions);
+             }
+
+             if (!conditions.value.Contains(" and "))
+             {
+                    conditions.value = $"True and (True)";
+                    return;
              }
              
              EditorWindowTools.EditorGUILayoutBeginGroup();
