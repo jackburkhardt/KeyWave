@@ -212,7 +212,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 newDialogueEntry.outgoingLinks = new List<Link>();
                 
              
-                if (conversationTitle == string.Empty)
+                if (conversationTitle == string.Empty || conversationTitle == GeneratedConversation)
                 {
                     var newConversation = template.CreateConversation(  template.GetNextConversationID( DialogueManager.masterDatabase), GeneratedConversation + action.Name);
                     var entryActorID = action.IsFieldAssigned("Entry Actor") ? int.Parse(action.LookupValue("Entry Actor")) : -1;
@@ -224,9 +224,11 @@ public class CustomDialogueUI : StandardDialogueUI
                     newDialogueEntry.outgoingLinks.Add(new Link( newDialogueEntry.conversationID, newDialogueEntry.id, newConversation.id, 0));
                 }
 
-                else
+                else if (conversationTitle != null)
                 {
+                    Debug.Log(conversationTitle);
                     var conversation = DialogueManager.masterDatabase.GetConversation(conversationTitle);
+                    Debug.Log(conversation);
                     conversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
                     newDialogueEntry.outgoingLinks.Add(new Link( newDialogueEntry.conversationID, newDialogueEntry.id, conversation.id, 0));
                 }

@@ -3675,7 +3675,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Hotel/Meal") == "active"
+      value: CurrentQuestState("Hotel/Meal") == "active" and (True)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -3763,6 +3763,10 @@ MonoBehaviour:
       value: Explicit
       type: 0
       typeString: CustomFieldType_Text
+    - title: Explicit Duration
+      value: 1500
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 171
     fields:
     - title: Name
@@ -3810,7 +3814,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Hotel/Nap") == "active"
+      value: CurrentQuestState("Hotel/Nap") == "active" and (True)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -3861,6 +3865,18 @@ MonoBehaviour:
       value: Natural
       type: 0
       typeString: CustomFieldType_Text
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 1800
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 7200
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 172
     fields:
     - title: Name
@@ -3908,7 +3924,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Mall/FoodCourt/QuickBite") == "active"
+      value: CurrentQuestState("Mall/FoodCourt/QuickBite") == "active" and (True)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -3951,6 +3967,18 @@ MonoBehaviour:
       value: 27
       type: 5
       typeString: CustomFieldType_Actor
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 1266
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 1560
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 173
     fields:
     - title: Name
@@ -3989,10 +4017,6 @@ MonoBehaviour:
       value: Wellness:0
       type: 10
       typeString: CustomFieldType_PointsType
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
     - title: Duration
       value: 0
       type: 1
@@ -4030,54 +4054,18 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Time Flow
-      value: Explicit
+      value: Natural
       type: 0
       typeString: CustomFieldType_Text
     - title: Conversation
-      value: /GENERATED/
+      value: /AUTOMATIC/
       type: 0
       typeString: CustomFieldType_Text
-    - title: Entry Count
-      value: 1
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Entry Actor
-      value: 7
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Entry 1
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 1 Menu Text
-      value: boog booa
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 1 Dialogue Text
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Count
+    - title: Natural Duration
       value: 0
       type: 1
-      typeString: CustomFieldType_Number
-    - title: Repeat Points Reduction
-      value: 0.5
-      type: 0
       typeString: CustomFieldType_Number
     - title: Explicit Duration
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Natural Duration
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Repeat Entry Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Natural Duration
       value: 0
       type: 1
       typeString: CustomFieldType_Number
@@ -4128,13 +4116,295 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: 
+      value: CurrentQuestState("New Action 174") == "active" and (True)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
       value: 1
       type: 7
       typeString: CustomFieldType_Location
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 175
+    fields:
+    - title: Name
+      value: New Action 175
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points
+      value: Wellness:0
+      type: 10
+      typeString: CustomFieldType_PointsType
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: CurrentQuestState("New Action 175") == "active" and (True)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 1
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: 
+      type: 0
+      typeString: 
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: 
+  - id: 176
+    fields:
+    - title: Name
+      value: New Action 176
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points
+      value: Wellness:0
+      type: 10
+      typeString: CustomFieldType_PointsType
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: CurrentQuestState("New Action 176") == "active" and (True)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 1
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: 
+      type: 0
+      typeString: 
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: 
+  - id: 177
+    fields:
+    - title: Name
+      value: New Action 177
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points
+      value: Wellness:0
+      type: 10
+      typeString: CustomFieldType_PointsType
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: CurrentQuestState("New Action 177") == "active" and (True)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 1
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: 
+      type: 0
+      typeString: 
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: 
+    - title: Conversation
+      value: /AUTOMATIC/
+      type: 0
+      typeString: 
   locations:
   - id: 1
     fields:
@@ -87361,7 +87631,8 @@ MonoBehaviour:
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Failure
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"active","type":12,"typeString":"CustomFieldType_QuestState"},{"title":"Is
     Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Is
-    Action","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Points","value":"Wellness:0","type":10,"typeString":"CustomFieldType_PointsType"},{"title":"Repeatable","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Duration","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Conditions","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Location","value":"1","type":7,"typeString":"CustomFieldType_Location"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Visits","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Visited","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Display
+    Action","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Points","value":"Wellness:0","type":10,"typeString":"CustomFieldType_PointsType"},{"title":"Repeatable","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Explicit
+    Duration","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Conditions","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Location","value":"1","type":7,"typeString":"CustomFieldType_Location"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Visits","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Visited","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Display
     Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Wellness
     Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Teamwork
     Affinity","value":"0","type":1,"typeString":"CustomFieldType_Number"},{"title":"Context
