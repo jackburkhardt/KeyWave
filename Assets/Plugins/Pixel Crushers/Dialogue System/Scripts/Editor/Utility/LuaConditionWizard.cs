@@ -68,6 +68,7 @@ namespace PixelCrushers.DialogueSystem
         private LogicalOperatorType conditionsLogicalOperator = LogicalOperatorType.All;
         private string savedLuaCode = string.Empty;
         private bool append = true;
+        private bool appendToggle = true;
         private CustomLuaFunctionInfoRecord[] customLuaFuncs = null;
         private CustomLuaFunctionInfoRecord[] builtinLuaFuncs = null;
         private string[] customLuaFuncNames = null;
@@ -85,7 +86,7 @@ namespace PixelCrushers.DialogueSystem
             return height;
         }
 
-        public string Draw(GUIContent guiContent, string luaCode, bool showOpenCloseButton = true)
+        public string Draw(GUIContent guiContent, string luaCode, bool showOpenCloseButton = true, bool showAppendToggle = false)
         {
             if (database == null) isOpen = false;
 
@@ -100,16 +101,34 @@ namespace PixelCrushers.DialogueSystem
                 }
                 EditorGUI.EndDisabledGroup();
             }
+            
+            if (showAppendToggle)
+            {
+                var guiEnabled = GUI.enabled;
+                GUI.enabled = true;
+                appendToggle = EditorGUILayout.ToggleLeft("Append", appendToggle, EditorTools.GUILayoutToggleWidth("Append"));
+                GUI.enabled = guiEnabled;
+            }
+            
             EditorGUILayout.EndHorizontal();
 
-            if (isOpen)
+            if (isOpen && !showAppendToggle)
             {
                 luaCode = DrawConditionsWizard(luaCode);
             }
+            
+            var defaultContentColor = GUI.contentColor;
+
+            if (!appendToggle)
+            {
+                GUI.contentColor = Color.gray;
+            }
 
             luaCode = EditorGUILayout.TextArea(luaCode);
-
-            return luaCode;
+            
+            GUI.contentColor = defaultContentColor;
+            
+            return showAppendToggle && !appendToggle ? "" : luaCode;
         }
 
         public void OpenWizard(string luaCode)

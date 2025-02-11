@@ -288,6 +288,7 @@ namespace PixelCrushers.DialogueSystem
         /// </param>
         public virtual void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
         {
+            /*
             try
             {
                 if (dialogueControls == null)
@@ -312,6 +313,9 @@ namespace PixelCrushers.DialogueSystem
             {
                 Debug.LogError(DialogueDebug.Prefix + ": In ShowResponses(): " + e.Message);
             }
+            */
+            dialogueControls.responseMenuControls.ShowResponses(subtitle, responses, this.transform);
+            if (timeout > 0) dialogueControls.responseMenuControls.StartTimer(timeout);
         }
 
         /// <summary>

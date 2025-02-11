@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PixelCrushers.DialogueSystem.DialogueEditor
 {
@@ -20,7 +21,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
     public partial class DialogueEditorWindow
     {
 
-        private List<string> textAreaFields = new List<string>() { "Description", "Success Description", "Failure Description" };
+        private List<string> textAreaFields => new List<string>() { "Description", "Success Description", "Failure Description", "Conditions"};
         private static readonly string[] questStateStrings = { "(None)", "unassigned", "active", "success", "failure", "done", "abandoned", "grantable", "returnToNPC" };
         private static readonly string[] actorStateStrings = { "(None)", "unidentified", "mentioned", "amicable", "botched", "unapproachable", "approachable", "confronted" };
 
@@ -62,6 +63,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             for (int i = 0; i < fields.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
+                
                 if (IsTextAreaField(fields[i]))
                 {
                     DrawTextAreaFirstPart(fields[i]);
@@ -350,6 +352,40 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             return (newIndex == index)
                 ? value
                 : ((newIndex == 0) ? string.Empty : actorStateStrings[newIndex]);
+        }
+
+        private string DrawLocationField(GUIContent label, string value, bool includeSublocations = true)
+        {
+            if (!includeSublocations)
+            {
+                var location = database.GetLocation(int.Parse(value));
+                if (location != null && location.IsSublocation && location.IsFieldAssigned("Parent Location"))
+                {
+                    value = location.LookupValue("Parent Location");
+//                    Debug.Log("changed value: " + value);
+                }
+                
+                return DrawAssetPopup<Location>(value, (database != null) ? database.locations.Where(p => !p.IsSublocation).ToList() : null, label);
+                
+            }
+            
+            return DrawAssetPopup<Location>(value, (database != null) ? database.locations: null, label);
+        }
+        
+        private string DrawSublocationField(GUIContent label, Location parentLocation, string value)
+        {
+            if (parentLocation == null)
+            {
+                Debug.LogWarning("Dialogue System: Can't draw sublocation field because parent location is null.");
+                return null;
+            }
+            
+          return DrawAssetPopup<Location>(value, (database != null) ? database.locations.Where(p => p.IsSublocation && p.AssignedField("Parent Location").value == parentLocation.id.ToString()).ToList() : null, label);
+        }
+        
+        private string DrawActorField(GUIContent label, string value)
+        {
+            return DrawAssetPopup<Actor>(value, (database != null) ? database.actors : null, label);
         }
 
         private string DrawQuestStateField(GUIContent label, string value)

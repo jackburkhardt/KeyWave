@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Contains approximate string matching
@@ -52,4 +53,23 @@ static class LevenshteinDistance
         // Step 7
         return d[n, m];
     }
+    
+    
+    public static string ClosestMatch(string word, string[] words )
+    {
+        int minDistance = int.MaxValue;
+        string closestWord = null;
+        foreach (var w in words)
+        {
+            var distance = Compute(word, w);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestWord = w;
+            }
+        }
+        return closestWord;
+    }
+    
+    public static string ClosestMatch(string word, List<string> words) => ClosestMatch( word, words.ToArray());
 }

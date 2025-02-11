@@ -98,8 +98,8 @@ public class ActionsAppEnableIfQuestRepeatableAndUntouched : AppSubcomponent<Sta
         
         if (!standardUIResponseButton.response.TryGetQuest( out var quest)  || !standardUIResponseButton.button.interactable) return false;
 
-        var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
-        var repeatableAndUntouched = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt == 0 || DialogueLua.GetQuestField(quest.Name, "Points Repeat").asString == "1";
+        var repeatable = quest.IsRepeatable;
+        var repeatableAndUntouched = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt == 0 || DialogueLua.GetQuestField(quest.Name, "Repeat Points Reduction").asString == "0";
         
         evalPassAction = () => subcomponent.gameObject.SetActive(repeatableAndUntouched);
         return true;
@@ -119,8 +119,8 @@ public class ActionsAppEnableIfQuestRepeatableAndHasPointReduction : AppSubcompo
         
         if (!standardUIResponseButton.response.TryGetQuest( out var quest)  || !standardUIResponseButton.button.interactable) return false;
 
-        var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
-        var repeatableAndDirty = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0 && DialogueLua.GetQuestField(quest.Name, "Points Repeat").asFloat < 1;
+        var repeatable = quest.IsRepeatable;
+        var repeatableAndDirty = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0 && DialogueLua.GetQuestField(quest.Name, "Repeat Points Reduction").asFloat > 0;
 
         evalPassAction = () => subcomponent.gameObject.SetActive(repeatableAndDirty);
         return true;
@@ -136,7 +136,7 @@ public class ActionsAppEnableIfQuestRewardsPoints :AppSubcomponent<StandardUIRes
         
         if (!standardUIResponseButton.response.TryGetQuest( out var quest) || !standardUIResponseButton.button.interactable) return false;
         
-        var rewardsPoints = quest.IsFieldAssigned("Points") &&  quest.fields.Any(p => p.title == "Points" && Points.PointsField.FromLuaField(p).Points > 0);
+        var rewardsPoints = DialogueUtility.GetPointsFromField( quest.fields).Length > 0;
         
        // var rewardsPointsAndUntouched =
            // rewardsPoints && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt == 0;
@@ -163,7 +163,6 @@ public class ActionsAppEnableIfQuestHasFixedTimeCostAndReplaceText : AppSubcompo
         {
             var timeCost = fixedTimeCost ? timespan.Item1 : 0;
             subcomponent.gameObject.SetActive(fixedTimeCost && timeCost > 0);
-            Debug.Log("Time cost: " + timeCost);
             
             var texts = subcomponent.gameObject.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (var text in texts)
@@ -185,7 +184,7 @@ public class ActionsAppEnableIfQuestHasVariableTimeCostAndReplaceText : AppSubco
         
         if (standardUIResponseButton.response == null ||  standardUIResponseButton.response.destinationEntry == null || !standardUIResponseButton.button.interactable) return false;
 
-        var timespan = DialogueUtility.TimeEstimate(standardUIResponseButton.response.destinationEntry);
+        var timespan =  DialogueUtility.TimeEstimate(standardUIResponseButton.response.destinationEntry);
 
         var variableTimeCost = timespan.Item1 != timespan.Item2;
         

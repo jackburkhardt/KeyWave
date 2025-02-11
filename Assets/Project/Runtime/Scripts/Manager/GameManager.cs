@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
@@ -177,13 +178,6 @@ namespace Project.Runtime.Scripts.Manager
             }
         }
 
-        public void StartNewDay()
-        {
-            GameStateManager.instance.StartNextDay();
-            dailyReport = new DailyReport(gameState.day);
-            App.App.Instance.ChangeScene("Hotel", "EndOfDay", Transition.Black);
-        }
-
         public IEnumerator StartNewSave()
         {
             dailyReport = new DailyReport(gameState.day);
@@ -225,45 +219,39 @@ namespace Project.Runtime.Scripts.Manager
             var quest = DialogueManager.masterDatabase.GetQuest(questName);
             var state = QuestLog.GetQuestState(questName);
             var points = DialogueUtility.GetPointsFromField(quest!.fields);
-            var repeatable = quest.IsFieldAssigned("Repeatable") && DialogueLua.GetQuestField(quest.Name, "Repeatable").asBool;
-
+      
             // if this quest already succeeded, we don't want to retrigger events
-            if (dailyReport.CompletedTasks.Contains(questName) && !repeatable) return;
+            if (dailyReport.CompletedTasks.Contains(questName) && !quest.IsRepeatable) return;
 
-            if (state == QuestState.Success && points.Length > 0)
-            {
-                
+            if (state == QuestState.Success)
+            {                
                 foreach (var pointField in points)
                 {
                     if (pointField.Points == 0) continue;
+
+                    if (quest.IsRepeatable)
+                    {
+                        var repeatCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
+                        var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
+                        
+                        for (int i = 0; i < repeatCount; i++)
+                        {
+                            pointField.Points = (int) (pointField.Points * multiplier);
+                        }
+                        
+                    }
+                    
                     GameEvent.OnPointsIncrease(pointField, questName);
                     
                 }
-                
-               
                     
-                if (repeatable)
+                if (quest.IsRepeatable)
                 {
-                    
-                    if (quest.IsFieldAssigned("Points Repeat"))
-                    {
-                        foreach (var field in quest.fields.Where(p => p.title == "Points"))
-                        {
-                            var multiplier = float.Parse(quest.AssignedField("Points Repeat").value);
-                            var pointsValue = Points.PointsField.FromLuaField(field).Points;
-                            field.value = Points.PointsField.LuaFieldValue(field, (int)Mathf.Ceil(pointsValue * multiplier));
-                        }
-                    }
-                    
-                    
                     QuestLog.SetQuestState(questName, QuestState.Active);
-                    var completionCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
-                    DialogueLua.SetQuestField(questName, "Repeat Count", completionCount + 1);
-                        
-                    Debug.Log("Repeat count: " + DialogueLua.GetQuestField(questName, "Repeat Count").asInt);
+                    var completionCount = quest.LookupInt("Repeat Count");
+                    quest.AssignedField("Repeat Count").value = (completionCount + 1).ToString();
+                    Debug.Log( $"Quest {questName} has been repeated {completionCount + 1} times.");
                 }
-                    
-                else quest.fields.RemoveAll(f => f.title == "Points");
                 
             }
         
@@ -272,32 +260,6 @@ namespace Project.Runtime.Scripts.Manager
             GameEvent.OnQuestStateChange(questName, state, duration);
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
         }
-
-        public void OpenMap()
-        {
-            //last_convo = gameState.current_conversation_title;
-            DialogueManager.StopConversation();
-            
-            App.App.Instance.LoadScene("Map");
-            
-            OnMapOpen?.Invoke();
-        }
-
-        public void CloseMap(bool returnToConvo)
-        {
-            App.App.Instance.UnloadScene("Map");
-            if (returnToConvo)
-            {
-                DialogueManager.instance.PlaySequence("SetDialoguePanel(true)");
-                DialogueManager.StartConversation(last_convo);
-            }
-            
-            DialogueManager.instance.PlaySequence(
-                "ChannelFade(Music, out, 1);"
-            );
-            
-        }
-
 
         public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, Transition.Black);
 
@@ -310,6 +272,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public void TravelTo(string newLocation, string currentScene = "", Transition? loadingScreenType =  Transition.Default, Action onStart = null, Action onComplete = null)
         {
+            BroadcastMessage( "OnTravel");
 
             DialogueManager.StopConversation();
             
@@ -383,12 +346,12 @@ namespace Project.Runtime.Scripts.Manager
             
             OnGameClose?.Invoke();
         }
-        
-        
-        
 
-       
-
+        public void OnConversationLineEnd()
+        {
+            
+        }
+        
         
     }
 }

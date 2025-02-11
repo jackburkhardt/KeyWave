@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -145,10 +146,14 @@ namespace Project.Runtime.Scripts.Manager
             OnAnimationComplete?.Invoke();
         }
         
-        
+        public static bool IsPointsField(this Field field)
+        {
+            string pattern = @"^(.*?) Points$";
+            return Regex.IsMatch(field.title, pattern);
+        }
 
 
-        public struct PointsField
+        public class PointsField
         {
             [FormerlySerializedAs("type")] 
             [JsonConverter(typeof(StringEnumConverter))]
@@ -156,20 +161,6 @@ namespace Project.Runtime.Scripts.Manager
         
             [FormerlySerializedAs("points")] 
             public int Points;
-        
-            public override string ToString()
-            {
-                return $"{Enum.GetName(typeof(Type), this.Type)}:{Points}";
-            }
-        
-            public static PointsField FromString(string data)
-            {
-                if (string.IsNullOrEmpty(data)) return new PointsField {Type = Type.Null, Points = 0};
-                var split = data.Split(':');
-                var type = (Type) Enum.Parse(typeof(Type), split[0]);
-                var points = int.Parse(split[1]);
-                return new PointsField {Type = type, Points = points};
-            }
             
             public static PointsField FromJObject(JObject data)
             {
@@ -179,17 +170,16 @@ namespace Project.Runtime.Scripts.Manager
                 var points = (int) data["points"];
                 return new PointsField {Type = type, Points = points};
             }
-            
+
             public static PointsField FromLuaField(Field field)
             {
-                return FromString(field.value);
+                string pattern = @"^(.*?) Points$";
+                var type = (Type)Enum.Parse(typeof(Type), Regex.Replace(field.title, pattern, "$1"));
+                var points = int.Parse(field.value);
+                return new PointsField { Type = type, Points = points };
+
             }
-            
-            public static string LuaFieldValue(Field field, int points)
-            {
-                return $"{field.value.Split(':')[0]}:{points}";
-            }
-        
+
         }
     }
 }

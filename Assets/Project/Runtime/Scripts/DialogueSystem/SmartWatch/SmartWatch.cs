@@ -78,7 +78,6 @@ public class SmartWatch : ScriptableObject
     
     public static void GoToCurrentApp()
     {
-        
         OpenApp(_currentApp ?? GameManager.settings.SmartWatch.apps[0]);
     } 
     

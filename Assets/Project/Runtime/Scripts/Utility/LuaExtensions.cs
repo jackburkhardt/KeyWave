@@ -230,6 +230,9 @@ namespace Project.Runtime.Scripts.Utility
             var splitIndex = sequencer.entrytag.LastIndexOf('_');
             var entryID = int.Parse(sequencer.entrytag.Substring(splitIndex + 1));
             var title = sequencer.entrytag.Substring(0, splitIndex).Replace('_', '/');
+            
+            
+            
             var entry = DialogueManager.instance.masterDatabase.GetConversation(title).GetDialogueEntry(entryID);
             return entry;
         }
@@ -263,10 +266,23 @@ namespace Project.Runtime.Scripts.Utility
         
         public static bool TryGetQuest(this Response? response, out Item? quest)
         {
+            
             quest = null;
             if (response == null || response.destinationEntry == null) return false;
-            quest = response.destinationEntry.GetSubconversationQuest();
+            
+            if (response.destinationEntry.fields.Exists(p => p.title == "Action"))
+            {
+                var questName = response.destinationEntry.fields.First(p => p.title == "Action").value;
+                quest = DialogueManager.instance.masterDatabase.GetItem(questName);
+            }
+            
+            else quest = response.destinationEntry.GetSubconversationQuest();
             return quest != null;
+        }
+        
+        public static string GetConversation(this DialogueSystemController dialogueManager)
+        {
+            return dialogueManager.currentConversationState.subtitle.dialogueEntry.GetConversation().Title;
         }
         
     }
@@ -543,7 +559,7 @@ namespace Project.Runtime.Scripts.Utility
 
         public static void GoToConversation(this DialogueSystemController dialogueSystemController, string conversationName, bool stop = false)
         {
-            DialogueManager.conversationView.sequencer.Stop(); 
+            if (DialogueManager.conversationView != null && DialogueManager.conversationView.sequencer != null) DialogueManager.conversationView.sequencer.Stop(); 
             if (string.IsNullOrEmpty(conversationName)) return;
             var database = DialogueManager.MasterDatabase;
             if (database.GetConversation(conversationName) == null)

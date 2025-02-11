@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Pixel Crushers. All rights reserved.
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -33,15 +34,24 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void ResetLocationSection()
         {
+            UpdateTreatLocationsAsSublocations(template.treatLocationsAsSublocations);
+            
+            
             locationFoldouts = new AssetFoldouts();
             locationAssetList = null;
             locationReorderableList = null;
             locationListSelectedIndex = -1;
             syncedLocationIDs = null;
         }
+        
+        private void UpdateTreatLocationsAsSublocations(bool newValue)
+        {
+            template.treatLocationsAsSublocations = newValue;
+        }
 
         private void DrawLocationSection()
         {
+            
             if (locationReorderableList == null) InitializeLocationReorderableList();
             DrawFilterMenuBar("Location", DrawLocationMenu, ref locationFilter, ref hideFilteredOutLocations);
             if (database.syncInfo.syncLocations)
@@ -58,17 +68,41 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             locationReorderableList.drawHeaderCallback = DrawLocationListHeader;
             locationReorderableList.drawElementCallback = DrawLocationListElement;
             locationReorderableList.drawElementBackgroundCallback = DrawLocationListElementBackground;
-            locationReorderableList.onAddCallback = OnLocationListAdd;
+
+            if (template.treatLocationsAsSublocations)
+            {
+                locationReorderableList.onAddDropdownCallback = OnAddLocationOrSublocationDropdown;
+            }
+
+            else
+            {
+                locationReorderableList.onAddCallback = OnLocationListAdd;
+            }
+            
+           
             locationReorderableList.onRemoveCallback = OnLocationListRemove;
             locationReorderableList.onSelectCallback = OnLocationListSelect;
             locationReorderableList.onReorderCallback = OnLocationListReorder;
         }
+        
+        private const float LocationReorderableListTypeWidth = 65f;
+        private float SublocationReorderableListTypeWidth => LocationReorderableListTypeWidth + 25f;
 
         private void DrawLocationListHeader(Rect rect)
         {
-            var fieldWidth = (rect.width - 14) / 4;
-            EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, fieldWidth, rect.height), "Name");
-            EditorGUI.LabelField(new Rect(rect.x + 14 + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
+            if (template.treatLocationsAsSublocations)
+            {
+                var fieldWidth = (rect.width - 14 - LocationReorderableListTypeWidth) / 4;
+                EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, LocationReorderableListTypeWidth, rect.height), "Type");
+                EditorGUI.LabelField(new Rect(rect.x + 14 + LocationReorderableListTypeWidth, rect.y, fieldWidth, rect.height), "Name");
+                EditorGUI.LabelField(new Rect(rect.x + 14 + LocationReorderableListTypeWidth + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
+            }
+            else
+            {
+                var fieldWidth = (rect.width - 14) / 4;
+                EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, fieldWidth, rect.height), "Name");
+                EditorGUI.LabelField(new Rect(rect.x + 14 + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
+            }
         }
 
         private void DrawLocationListElement(Rect rect, int index, bool isActive, bool isFocused)
@@ -77,18 +111,54 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var nameControl = "LocationName" + index;
             var descriptionControl = "LocationDescription" + index;
             var location = database.locations[index];
-            EditorGUI.BeginDisabledGroup(!EditorTools.IsAssetInFilter(location, locationFilter) || IsLocationSyncedFromOtherDB(location));
-            var fieldWidth = rect.width / 4;
             var locationName = location.Name;
-            EditorGUI.BeginChangeCheck();
-            GUI.SetNextControlName(nameControl);
-            locationName = EditorGUI.TextField(new Rect(rect.x, rect.y + 2, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, locationName);
-            if (EditorGUI.EndChangeCheck()) location.Name = locationName;
             var description = location.Description;
-            EditorGUI.BeginChangeCheck();
-            GUI.SetNextControlName(descriptionControl);
-            description = EditorGUI.TextField(new Rect(rect.x + fieldWidth + 2, rect.y + 2, 3 * fieldWidth - 2, EditorGUIUtility.singleLineHeight), GUIContent.none, description);
-            if (EditorGUI.EndChangeCheck()) location.Description = description;
+            EditorGUI.BeginDisabledGroup(!EditorTools.IsAssetInFilter(location, locationFilter) || IsLocationSyncedFromOtherDB(location));
+            
+            if (template.treatLocationsAsSublocations)
+            {
+                var fieldWidth = (rect.width - LocationReorderableListTypeWidth) / 4;
+                
+                if (location.IsSublocation)
+                {
+                    EditorGUI.LabelField(new Rect(rect.x, rect.y + 2, SublocationReorderableListTypeWidth, EditorGUIUtility.singleLineHeight), "Sublocation");
+                }
+                else
+                {
+                    EditorGUI.LabelField(new Rect(rect.x, rect.y + 2, LocationReorderableListTypeWidth, EditorGUIUtility.singleLineHeight), "Location");
+                }
+                
+                EditorGUI.BeginChangeCheck();
+                GUI.SetNextControlName(nameControl);
+                
+                if (location.IsSublocation)
+                {
+                    locationName = EditorGUI.TextField(new Rect(rect.x + SublocationReorderableListTypeWidth - 2, rect.y + 2,  rect.width - (3 * fieldWidth - 2) - SublocationReorderableListTypeWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, location.Name);
+                 }
+                else
+                {
+                    locationName = EditorGUI.TextField(new Rect(rect.x + LocationReorderableListTypeWidth, rect.y + 2, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, location.Name);
+                }
+                
+                if (EditorGUI.EndChangeCheck()) location.Name = locationName;
+                EditorGUI.BeginChangeCheck();
+                GUI.SetNextControlName(descriptionControl);
+                description = EditorGUI.TextField(new Rect(rect.x + LocationReorderableListTypeWidth + fieldWidth + 2, rect.y + 2, 3 * fieldWidth - 2, EditorGUIUtility.singleLineHeight), GUIContent.none, description);
+                if (EditorGUI.EndChangeCheck()) location.Description = description;
+            }
+            else
+            {
+                var fieldWidth = rect.width / 4;
+                EditorGUI.BeginChangeCheck();
+                GUI.SetNextControlName(nameControl);
+                locationName = EditorGUI.TextField(new Rect(rect.x, rect.y + 2, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, locationName); 
+                if (EditorGUI.EndChangeCheck()) location.Name = locationName;
+                EditorGUI.BeginChangeCheck();
+                GUI.SetNextControlName(descriptionControl);
+                description = EditorGUI.TextField(new Rect(rect.x + fieldWidth + 2, rect.y + 2, 3 * fieldWidth - 2, EditorGUIUtility.singleLineHeight), GUIContent.none, description);
+                if (EditorGUI.EndChangeCheck()) location.Description = description;
+            }
+            
             EditorGUI.EndDisabledGroup();
             var focusedControl = GUI.GetNameOfFocusedControl();
             if (string.Equals(nameControl, focusedControl) || string.Equals(descriptionControl, focusedControl))
@@ -109,6 +179,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 EditorGUI.DrawRect(rect, new Color(0.225f, 0.225f, 0.225f, 1));
             }
+        }
+        
+        private void OnAddLocationOrSublocationDropdown(Rect buttonRect, ReorderableList list)
+        {
+            var menu = new GenericMenu();
+            menu.AddItem(new GUIContent("Add Location"), false, AddNewLocation);
+            menu.AddItem(new GUIContent("Add Sublocation"), false, AddNewSublocation);
+            menu.ShowAsContext();
         }
 
         private void OnLocationListAdd(ReorderableList list)
@@ -170,6 +248,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (GUILayout.Button("Menu", "MiniPullDown", GUILayout.Width(56)))
             {
                 GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("Use Sublocations"), template.treatLocationsAsSublocations, ToggleUseSublocations);
                 menu.AddItem(new GUIContent("New Location"), false, AddNewLocation);
                 menu.AddItem(new GUIContent("Sort/By Name"), false, SortLocationsByName);
                 menu.AddItem(new GUIContent("Sort/By ID"), false, SortLocationsByID);
@@ -180,8 +259,15 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void AddNewLocation()
         {
-            AddNewAsset<Location>(database.locations);
+            var location =   AddNewAsset( database.locations);
             SetDatabaseDirty("Add New Location");
+        }
+
+        private void AddNewSublocation()
+        {
+            var location =  AddNewAsset( database.locations);
+            location.IsSublocation = true;
+            SetDatabaseDirty("Add New Sublocation");
         }
 
         private void SortLocationsByName()
@@ -195,6 +281,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             database.locations.Sort((x, y) => x.id.CompareTo(y.id));
             SetDatabaseDirty("Sort Locations by ID");
         }
+        
+        private void ToggleUseSublocations()
+        {
+            UpdateTreatLocationsAsSublocations(!template.treatLocationsAsSublocations);
+        }
+
 
         private void ToggleSyncLocationsFromDB()
         {
@@ -246,6 +338,128 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         public bool IsLocationSyncedFromOtherDB(Location location)
         {
             return location != null && syncedLocationIDs != null && syncedLocationIDs.Contains(location.id);
+        }
+        
+        private void DrawLocationPropertiesFirstPart(Location location)
+        {
+            if (location.IsSublocation)
+            {
+                DrawSublocationProperties(location);
+            }
+            else
+            
+            {
+                DrawLocationProperties(location);
+            }
+        }
+        
+        
+        
+        private void DrawLocationProperties(Location location)
+        {
+            if (location == null || location.fields == null) return;
+            
+            var displayNameField = Field.Lookup(location.fields, "Display Name");
+            var hasDisplayNameField = (displayNameField != null);
+            var useDisplayNameField = EditorGUILayout.Toggle(new GUIContent("Use Display Name", "Tick to use a Display Name in UIs that's different from the Name."), hasDisplayNameField);
+            if (hasDisplayNameField && !useDisplayNameField)
+            {
+                location.fields.Remove(displayNameField);
+                SetDatabaseDirty("Don't Use Display Name");
+            }
+            else if (useDisplayNameField)
+            {
+                DrawRevisableTextField(displayNameLabel, location, null, location.fields, "Display Name");
+                DrawLocalizedVersions(location, location.fields, "Display Name {0}", false, FieldType.Text);
+            }
+            
+            GUI.enabled = false;
+
+            foreach (var sublocation in database.locations.Where(p => p.IsSublocation))
+            {
+                if (sublocation.fields == null) continue;
+                var parentLocationField = Field.Lookup(sublocation.fields, "Parent Location");
+                if (parentLocationField == null) continue;
+                if (parentLocationField.value == location.id.ToString())
+                {
+                    EditorGUILayout.TextField("Sublocation", sublocation.Name);
+                }
+            }
+            
+            GUI.enabled = true;
+        }
+        
+        private bool autoSetParentLocation = true;
+        
+        private void DrawSublocationProperties(Location location)
+        {
+            if (location == null || location.fields == null) return;
+            
+            var displayNameField = Field.Lookup(location.fields, "Display Name");
+            var hasDisplayNameField = (displayNameField != null);
+            
+            
+            var useDisplayNameField = EditorGUILayout.Toggle(new GUIContent("Use Display Name", "Tick to use a Display Name in UIs that's different from the Name."), hasDisplayNameField);
+            if (hasDisplayNameField && !useDisplayNameField)
+            {
+                location.fields.Remove(displayNameField);
+                SetDatabaseDirty("Don't Use Display Name");
+            }
+            else if (useDisplayNameField)
+            {
+                DrawRevisableTextField(displayNameLabel, location, null, location.fields, "Display Name");
+                DrawLocalizedVersions(location, location.fields, "Display Name {0}", false, FieldType.Text);
+            }
+            
+            var parentLocationField = Field.Lookup(location.fields, "Parent Location");
+
+            if (parentLocationField == null)
+            {
+                parentLocationField = new Field("Parent Location", string.Empty, FieldType.Location);
+                location.fields.Add(parentLocationField);
+                SetDatabaseDirty("Add Parent Location Field");
+            }
+
+            if (autoSetParentLocation)
+            {
+                
+                GUI.enabled = false;
+                
+                var indexInReorderableList = ((List<Location>)locationReorderableList.list).IndexOf( location);
+
+                parentLocationField.value = string.Empty;
+                
+                for (int i = indexInReorderableList - 1; i >= 0; i--)
+                {
+                    if (!((List<Location>)locationReorderableList.list)[i].IsSublocation)
+                    {
+                        parentLocationField.value = ((List<Location>)locationReorderableList.list)[i].id.ToString();
+                        break;
+                    }
+                }
+                
+                if (parentLocationField.value == string.Empty)
+                {
+                    parentLocationField.value =((List<Location>)locationReorderableList.list).First(p => !p.IsSublocation).id.ToString();
+                }
+                
+                DrawLocationField(new GUIContent("Parent", "The location of the action."), parentLocationField.value, false);
+              
+                GUI.enabled = true;
+            }
+
+            else
+            {
+            
+                parentLocationField.value = DrawLocationField(new GUIContent("Location", "The location of the action."), parentLocationField.value, false);
+            }
+            
+            autoSetParentLocation = EditorGUILayout.Toggle(new GUIContent("Auto Set Parent Location", "Tick to automatically set the parent location to the first location above this one that isn't a sublocation."), autoSetParentLocation);
+            
+            
+            
+         
+            
         }
 
     }

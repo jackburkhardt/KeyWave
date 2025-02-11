@@ -29,6 +29,9 @@ public class Settings : ScriptableObject
     public ClockSettings clockSettings;
     [Expandable]
     public AudioSettings audioSettings;
+    
+    
+    public bool skipIntro;
 
     
     public ClockSettings Clock
@@ -82,7 +85,10 @@ public class Settings : ScriptableObject
             }
         }
     }
-    
-    
+
+    private void OnValidate()
+    {
+        
+    }
 }
 

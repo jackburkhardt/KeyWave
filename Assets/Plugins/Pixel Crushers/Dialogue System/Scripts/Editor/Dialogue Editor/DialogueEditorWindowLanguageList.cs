@@ -20,7 +20,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private readonly string[] LanguageFieldPrefixes = new string[] {
             "Dialogue Text ", "Menu Text ", "Sequence ", "Response Menu Sequence ",
-            "Description ", "Success Description ", "Failure Description "
+            "Description ", "Success Description ", "Conditions ", "Failure Description "
         };
 
         private void ResetLanguageList()

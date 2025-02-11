@@ -175,7 +175,7 @@ namespace Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pit
             }
         }
 
-        private int CreateConversation(DialogueDatabase db, Template tp)
+        private int CreateConversation(DialogueDatabase db, Template tp, bool addToDatabase = true)
         {
             // creating the conversation
             bool convoExists = _subconvData.relatedConversation != null;

@@ -17,11 +17,15 @@ namespace PixelCrushers.DialogueSystem
     {
 
         public bool treatItemsAsQuests = true;
+        public bool treatQuestsAsActions = true;
+        public bool treatLocationsAsSublocations = true;
 
         public List<Field> actorFields = new List<Field>();
         public List<Field> itemFields = new List<Field>();
         public List<Field> questFields = new List<Field>();
+        public List<Field> actionFields = new List<Field>();
         public List<Field> locationFields = new List<Field>();
+        public List<Field> sublocationFields = new List<Field>();
         public List<Field> variableFields = new List<Field>();
         public List<Field> conversationFields = new List<Field>();
         public List<Field> dialogueEntryFields = new List<Field>();
@@ -29,6 +33,7 @@ namespace PixelCrushers.DialogueSystem
         public List<string> actorPrimaryFieldTitles = new List<string>();
         public List<string> itemPrimaryFieldTitles = new List<string>();
         public List<string> questPrimaryFieldTitles = new List<string>();
+        public List<string> actionPrimaryFieldTitles = new List<string>();
         public List<string> locationPrimaryFieldTitles = new List<string>();
         public List<string> variablePrimaryFieldTitles = new List<string>();
         public List<string> conversationPrimaryFieldTitles = new List<string>();
@@ -61,11 +66,30 @@ namespace PixelCrushers.DialogueSystem
             template.questFields.Add(new Field("Failure Description", string.Empty, FieldType.Text));
             template.questFields.Add(new Field("State", "unassigned", FieldType.Text));
             template.questFields.Add(new Field("Is Item", "False", FieldType.Boolean));
+            template.questFields.Add(new Field("Is Action", "False", FieldType.Boolean));
+            
+            template.actionFields.Clear();
+            template.actionFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.actionFields.Add(new Field("Pictures", "[]", FieldType.Files));
+            template.actionFields.Add(new Field("Description", string.Empty, FieldType.Text));
+            template.actionFields.Add(new Field("Success Description", string.Empty, FieldType.Text));
+            template.actionFields.Add(new Field("Failure Description", string.Empty, FieldType.Text));
+            
+            template.actionFields.Add(new Field("State", "active", FieldType.Text));
+            template.actionFields.Add(new Field("Is Item", "False", FieldType.Boolean));
+            template.actionFields.Add(new Field("Is Action", "True", FieldType.Boolean));
+            template.actionFields.Add(new Field("Conditions", string.Empty, FieldType.Text));
 
             template.locationFields.Clear();
             template.locationFields.Add(new Field("Name", string.Empty, FieldType.Text));
             //template.locationFields.Add(new Field("Pictures", "[]", FieldType.Files));
             template.locationFields.Add(new Field("Description", string.Empty, FieldType.Text));
+            template.locationFields.Add(new Field("Is Sublocation", "False", FieldType.Boolean));
+            
+            template.sublocationFields.Clear();
+            template.sublocationFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.sublocationFields.Add(new Field("Description", string.Empty, FieldType.Text));
+            template.sublocationFields.Add(new Field("Is Sublocation", "True", FieldType.Boolean));
 
             template.variableFields.Add(new Field("Name", string.Empty, FieldType.Text));
             template.variableFields.Add(new Field("Initial Value", string.Empty, FieldType.Text));
@@ -129,6 +153,18 @@ namespace PixelCrushers.DialogueSystem
             Item item = new Item();
             item.id = id;
             item.fields = CreateFields(questFields);
+            item.Name = name;
+            return item;
+        }
+        
+        /// <summary>
+        /// Creates a new quest with the fields defined in the template.
+        /// </summary>
+        public Item CreteAction(int id, string name)
+        {
+            Item item = new Item();
+            item.id = id;
+            item.fields = CreateFields(actionFields);
             item.Name = name;
             return item;
         }

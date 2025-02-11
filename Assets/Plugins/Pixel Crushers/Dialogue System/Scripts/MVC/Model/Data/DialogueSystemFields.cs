@@ -25,6 +25,11 @@ namespace PixelCrushers.DialogueSystem
         public const string Goals = "Goals"; // Used for AI Addon
 
         public const string IsItem = "Is Item";
+        public const string IsAction = "Is Action";
+        public const string RepeatCount = "Repeat Count";
+        
+        public const string IsSublocation = "Is Sublocation";
+        
         public const string Group = "Group";
 
         public const string InitialValue = "Initial Value";

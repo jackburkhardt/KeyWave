@@ -72,7 +72,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             else {
                 if (typeof(T) != typeof(Location)) Debug.LogError(string.Format("{0}: Internal error: Unexpected type for asset list popup: {1}", DialogueDebug.Prefix, typeof(T).Name));
-                if (locationAssetList == null) locationAssetList = MakeAssetList<T>(assets);
+                locationAssetList = MakeAssetList<T>(assets);
                 return locationAssetList;
             }
         }

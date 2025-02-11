@@ -57,9 +57,9 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public static Points.PointsField[] GetPointsFromField(List<Field> fields)
         {
-            if (fields == null || !Field.FieldExists(fields, "Points")) return Array.Empty<Points.PointsField>();
-            var pointsField = fields.Where(f => f.title == "Points");
-            return pointsField.Select(field => Points.PointsField.FromString(field.value)).ToArray();
+            if (fields == null || !fields.Any(p => p.IsPointsField())) return Array.Empty<Points.PointsField>();
+            var pointsField = fields.Where(p => p.IsPointsField());
+            return pointsField.Select(Points.PointsField.FromLuaField).ToArray();
         }
 
         public static Item GetQuestByName(string questName)
@@ -94,19 +94,31 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public static int GetQuestDuration(Item quest)
         {
-            var durationField = quest.AssignedField("Duration");
+            var durationField = quest.AssignedField("Explicit Duration");
+            
+            /*
             // if (quest.GetQuestState() == PixelCrushers.DialogueSystem.QuestState.Success) return 0;
             if (durationField == null) return 0;
-        
-            var unit = durationField.value.Split(':')[1];
-            var questTime = int.Parse(durationField.value.Split(':')[0]);
-            var duration = 0;
 
-            if (unit == "seconds") duration = questTime;
-            else if (unit == "minutes") duration = questTime * 60;
-            else if (unit == "hours") duration = questTime * 3600;
+            if (durationField.type == FieldType.Timespan)
+            {
+                var unit = durationField.value.Split(':')[1];
+                var questTime = int.Parse(durationField.value.Split(':')[0]);
+                var duration = 0;
+
+                if (unit == "seconds") duration = questTime;
+                else if (unit == "minutes") duration = questTime * 60;
+                else if (unit == "hours") duration = questTime * 3600;
         
-            return duration;
+                return duration;
+            }
+            */
+            
+            if (durationField == null) return 0;
+            
+            if (quest.AssignedField("Time Flow").value != "Explicit") return 0;
+            
+            return int.Parse(durationField.value);
         }
 
         private static List<List<DialogueEntry>> FindAllPathsBetweenNodes(DialogueEntry node1, DialogueEntry node2)
@@ -204,6 +216,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             
             if (timespan != 0) minTimeEstimate = maxTimeEstimate = timespan;
             
+            if (node.Title == "ACTION") return (minTimeEstimate, maxTimeEstimate);
         
         
             //must be a single outgoing link to a different conversation

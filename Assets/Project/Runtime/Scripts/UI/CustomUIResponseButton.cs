@@ -180,7 +180,7 @@ namespace Project.Runtime.Scripts.UI
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
             _hoveredButton = this;
-            simStatus = response?.destinationEntry?.SimStatus()!;
+//            simStatus = response?.destinationEntry?.SimStatus()!;
             Refresh();
         }
 

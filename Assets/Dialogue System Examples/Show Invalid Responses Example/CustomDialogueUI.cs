@@ -1,9 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
+using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class CustomDialogueUI : StandardDialogueUI
 {
@@ -63,11 +67,184 @@ public class CustomDialogueUI : StandardDialogueUI
         
     }
     
-    
+    private const string AutomaticConversation = "/AUTOMATIC/";
+    private const string GeneratedConversation = "/GENERATED/";
 
     public override void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
     {
+       
+        bool ActionLocationIsValid(Item item)
+        {
+            var actionLocation = item.AssignedField("Location");
+            if (actionLocation == null) return true;
+            
+            var location = DialogueManager.masterDatabase.GetLocation(int.Parse(actionLocation.value));
+
+            if (item.IsFieldAssigned("New Sublocation"))
+            {
+                var newSublocation =
+                    DialogueManager.masterDatabase.GetLocation(int.Parse(item.LookupValue("New Sublocation")));
+
+                if (newSublocation == location) return false;
+            }
+
+            if (item.LookupBool("Ignore Sublocations"))
+            {
+                if (location.IsSublocation)
+                    location = DialogueManager.masterDatabase.GetLocation(location.AssignedField("Parent Location")
+                        .value);
+            }
+            
+            return location.Name == Location.PlayerLocation.Name;
+        }
+
+        bool ActionConversationIsValid(Item item, out string conversationTitle)
+        {
+            var conversation = item.AssignedField("Conversation");
+            if (conversation == null)
+            {
+                conversationTitle = null;
+                return true;
+            }
+
+            switch (conversation.value)
+            {
+                case AutomaticConversation:
+                    conversationTitle = LevenshteinDistance.ClosestMatch(item.Name,
+                        DialogueManager.masterDatabase.conversations.Select(p => p.Title).ToList());
+                    break;
+                case GeneratedConversation:
+                    conversationTitle = string.Empty;
+                    break;
+                default:
+                    conversationTitle = conversation.value;
+                    break;
+            }
+
+            return true;
+        }
+        
+        bool ActionRequiredActorsAreValid(Item item)
+        {
+            var actionRequiredActors = item.fields.Where(p => p.title == "Required Nearby Actor");
+            
+            foreach (var actionRequiredActor in actionRequiredActors)
+            {
+                if (actionRequiredActor.value == string.Empty) continue;
+                var actor = DialogueManager.masterDatabase.GetActor(int.Parse(actionRequiredActor.value));
+                if (actor == null) continue;
+                
+                var actorLocation = actor.AssignedField("Location");
+                if (actorLocation == null) continue;
+                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)).Name != Location.PlayerLocation.Name) return false;
+            }
+            return true;
+        }
+
+        List<DialogueEntry> GeneratedDialogueEntries(Item item, int ConversationID, int actorID)
+        {
+            var dialogueEntries = new List<DialogueEntry>();
+            var template = Template.FromDefault();
+            
+            var repeatCount = item.IsRepeatable ? int.Parse(item.LookupValue("Repeat Count")) : 0;
+            var entryFieldLabelStart = repeatCount > 0 ? "Repeat Entry " : "Entry ";
+            var entryCount = item.LookupInt(entryFieldLabelStart + "Count");
+            
+            var startNode = template.CreateDialogueEntry( 0, ConversationID, "START");
+            
+            startNode.ActorID = actorID;
+            startNode.Sequence = "None()";
+            startNode.outgoingLinks = new List<Link> { new Link( ConversationID, 0, ConversationID, 1) };
+            dialogueEntries.Add(startNode);
+            
+
+            for (int i = 1; i < entryCount + 1; i++)
+            {
+                var menuText = item.LookupValue(entryFieldLabelStart + i + " Menu Text");
+                var dialogueText = item.LookupValue(entryFieldLabelStart + i + " Dialogue Text");
+                
+                var newDialogueEntry = template.CreateDialogueEntry( i, ConversationID, "ACTION");
+                newDialogueEntry.MenuText = menuText;
+                newDialogueEntry.DialogueText = dialogueText;
+                
+                newDialogueEntry.ActorID = actorID;
+                
+                if (i < entryCount) newDialogueEntry.outgoingLinks = new List<Link>() { new Link( ConversationID, i, ConversationID, i + 1) };
+                
+                dialogueEntries.Add(newDialogueEntry);
+            };
+            
+           
+            
+            
+            return dialogueEntries;
+        }
+        
+        
+        
+        //generate new responses
+
+        if (subtitle.dialogueEntry.GetConversation().Title == "SmartWatch/Actions")
+        {
+            var newResponses = new List<Response>();
+            
+            foreach (var action in DialogueManager.masterDatabase.items.Where(p => !p.IsItem && p.IsAction))
+            {
+
+              
+                if (!ActionLocationIsValid(action)) continue;
+                if (!ActionRequiredActorsAreValid(action)) continue;
+                if (!ActionConversationIsValid(action, out var conversationTitle)) continue;
+                
+                
+                
+                var template = Template.FromDefault();
+                var newDialogueEntry = template.CreateDialogueEntry( template.GetNextDialogueEntryID( subtitle.dialogueEntry.GetConversation()), subtitle.dialogueEntry.conversationID, "ACTION");
+                
+                
+                newDialogueEntry.MenuText = action.IsFieldAssigned("Display Name") ? action.LookupValue("Display Name") : action.Name;
+                newDialogueEntry.DialogueText = string.Empty;
+                newDialogueEntry.Sequence = action.IsFieldAssigned("Sequence") ? action.LookupValue("Sequence") : string.Empty;
+                newDialogueEntry.userScript = action.IsFieldAssigned("Script") ? action.LookupValue("Script") : string.Empty;
+                newDialogueEntry.conditionsString = action.IsFieldAssigned("Conditions") ? action.AssignedField("Conditions").value : string.Empty; newDialogueEntry.fields.Add( new Field(showInvalidFieldName, action.LookupValue(showInvalidFieldName), FieldType.Boolean));
+                newDialogueEntry.ActorID = subtitle.dialogueEntry.ActorID;
+                newDialogueEntry.ConversantID = subtitle.dialogueEntry.ConversantID;
+                newDialogueEntry.outgoingLinks = new List<Link>();
+                
+             
+                if (conversationTitle == string.Empty)
+                {
+                    var newConversation = template.CreateConversation(  template.GetNextConversationID( DialogueManager.masterDatabase), GeneratedConversation + action.Name);
+                    var entryActorID = action.IsFieldAssigned("Entry Actor") ? int.Parse(action.LookupValue("Entry Actor")) : -1;
+                    
+                    newConversation.ActorID = entryActorID;
+                    newConversation.dialogueEntries = GeneratedDialogueEntries(action, newConversation.id, entryActorID);
+                    newConversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
+                    DialogueManager.masterDatabase.conversations.Add(newConversation);
+                    newDialogueEntry.outgoingLinks.Add(new Link( newDialogueEntry.conversationID, newDialogueEntry.id, newConversation.id, 0));
+                }
+
+                else
+                {
+                    var conversation = DialogueManager.masterDatabase.GetConversation(conversationTitle);
+                    conversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
+                    newDialogueEntry.outgoingLinks.Add(new Link( newDialogueEntry.conversationID, newDialogueEntry.id, conversation.id, 0));
+                }
+                
+                newResponses.Add(new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry));
+                
+            }
+
+            foreach (var newResponse in newResponses)
+            {
+                subtitle.dialogueEntry.outgoingLinks.Add(new Link(subtitle.dialogueEntry.conversationID, subtitle.dialogueEntry.id, newResponse.destinationEntry.conversationID, newResponse.destinationEntry.id));
+            }
+            
+           responses = responses.Concat(newResponses).ToArray();
+        }
+        
         responses = CheckInvalidResponses(responses);
+        
         base.ShowResponses(subtitle, responses, timeout);
     }
 
@@ -143,9 +320,6 @@ public class CustomDialogueUI : StandardDialogueUI
     {
         subtitle.formattedText.text = Regex.Replace(subtitle.formattedText.text, @"[^\x20-\x7F]", "");
         base.ShowSubtitle(subtitle);
-        
-       
-       
     }
 
     public void OnConversationLine(Subtitle subtitle)
@@ -155,6 +329,40 @@ public class CustomDialogueUI : StandardDialogueUI
             Debug.Log("Randomizing next entry");
             DialogueManager.instance.conversationController.randomizeNextEntry = true;
             DialogueManager.instance.conversationController.randomizeNextEntryNoDuplicate = true;
+        }
+        
+        
+//        Debug.Log($"subtitle: {subtitle.formattedText.text} subtitleText: {subtitle.dialogueEntry.subtitleText} conversation: {subtitle.dialogueEntry.conversationID} entry: {subtitle.dialogueEntry.id} child: {subtitle.dialogueEntry.outgoingLinks[0].destinationDialogueID}");
+    }
+
+
+    public void OnConversationEnd()
+    {
+        var conversationID = DialogueManager.currentConversationState.subtitle.dialogueEntry.conversationID;
+        var conversation = DialogueManager.masterDatabase.GetConversation(conversationID);
+
+      
+        foreach (var action in  conversation.fields.Where(p => p.title == "Action"))
+        {
+            var item = DialogueManager.masterDatabase.GetItem(int.Parse(action.value));
+            QuestLog.SetQuestState(item.Name, QuestState.Success);
+        }
+
+        conversation.fields.RemoveAll(p =>  p.title == "Action");
+        
+        if (conversation.Title == GeneratedConversation)
+        {
+            DialogueManager.masterDatabase.conversations.Remove(conversation);
+        }
+    }
+    
+    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FindObjectOfType<StandardUIContinueButtonFastForward>(true).OnFastForward();
         }
     }
 
