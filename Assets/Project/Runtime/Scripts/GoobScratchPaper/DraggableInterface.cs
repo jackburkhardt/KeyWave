@@ -132,7 +132,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
                 if (!childrenWithinBounds.Contains(rect))
                 {
                     childrenWithinBounds.Add( rect);
-                    rect.SendMessage("OnDraggableInterfaceViewportEnter", SendMessageOptions.DontRequireReceiver);
+                        rect.SendMessage("OnDraggableInterfaceViewportEnter", SendMessageOptions.DontRequireReceiver);
                 }
             }
             
