@@ -2,146 +2,54 @@ using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class SequencerCommandEndOfLine : SequencerCommand
 {
    
     public void Start()
     {
-        var input = GetParameter(0, sequencer.entrytag);
-        
-        string conversationType = null;
-        
-        
-        switch (input)
+
+        DialogueEntry entry;
+        try
         {
-            case "Action":
-                conversationType = "Action";
-                input = sequencer.entrytag;
-                break;
-            case "Walk":
-                conversationType = "Walk";
-                input = sequencer.entrytag;
-                break;
-            case "Talk":
-                conversationType = "Talk";
-                input = sequencer.entrytag;
-                break;
-            case "Map":
-                conversationType = "Map";
-                input = sequencer.entrytag;
-                break;
+            entry = sequencer.GetDialogueEntry();
+        }
+        
+        catch
+        {
+            entry = DialogueManager.instance.currentConversationState.subtitle.dialogueEntry;
         }
 
-        var entry = sequencer.GetDialogueEntry();
+        if (entry.fields.Exists(f => f.title == "Actions")) return;
         
         if (entry == null)
         {
             Debug.Log("EndOfLine: Entry is null");
         }
         
-        entry ??= DialogueManager.instance.currentConversationState.subtitle.dialogueEntry;
-
-        var title = entry != null
-            ? entry.GetConversation().Title
-            : DialogueManager.instance.activeConversation.conversationTitle;
-        
-       
-       
-        
-        var debug = entry != null && Field.FieldExists(entry.fields, "Debug") && Field.LookupBool(entry.fields, "Debug");
-        
-    //    debug = true;
-        
-        if (debug) Debug.Log($"End of line: {input}");
-
-        var state = DialogueManager.instance.currentConversationState;
-        var view = DialogueManager.instance.conversationView;
-        var waitForTyped = entry != null && entry.subtitleText.Length > 0 ? "@Message(Typed)" : string.Empty;
-
-
-
-        conversationType ??=
-            title.Split("/").Length > 2 ? title.Split("/")[^2] : title.EndsWith("Actions") ? "Actions" : title == "Map" ? "Map" :
-            string.Empty;
-        
-        conversationType = string.Empty;
-        
-        if (conversationType is not "Actions" and not "Actions" and not "Walk" and not "Talk" and not "Map")
-        {
-            conversationType = string.Empty;
-        }
-        
-       // if (string.IsNullOrEmpty(conversationType) && title.) Sequencer.PlaySequence("SetCustomPanel(SmartWatch, false);");
-
-        
         Sequencer.PlaySequence("SetContinueMode(false);");
-        
-        debug = false;
-
-        if (sequencer.GetDialogueEntry() == null && conversationType != string.Empty && title.EndsWith("Base"))
-        {
-            if (debug) Debug.Log("Entry null.  End of line: Going to base conversation.");
-            
-            
-            Sequencer.PlaySequence("SetContinueMode(true)@Message(Typed);");
-            var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
-            if (title != baseConversation && !title.Contains("SmartWatch"))
-            {
-                Sequencer.PlaySequence("GoToConversation(" + baseConversation + ", true);");
-            }
-        }
-        
-        else if (entry != null)
+      
+        if (entry != null)
         { 
-            /* Sequencer.PlaySequence(entry.IsLastNode()
-                ? $"WaitForMessage(Typed); SetCustomPanel(SmartWatch, true){waitForTyped};"
-                : "SetContinueMode(true)@Message(Typed);");
-                */
-            
-            //Debug.Log($"Entry is last node: {entry.IsLastNode()}");
 
             Sequencer.PlaySequence("SetContinueMode(true)@Message(Typed);");
             
-            if (entry.IsLastNode())
+            var state = DialogueManager.instance.currentConversationState;
+            var view = DialogueManager.instance.conversationView;
+                
+            AnalyzePCResponses(state, view, out var isPCResponseMenuNext, out var isPCAutoResponseNext);
+            
+            if (isPCResponseMenuNext || entry.IsEmpty())
             {
-                var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
-                
-                
-                if (title != baseConversation && !title.Contains("SmartWatch"))
+                if (entry.subtitleText.Length > 0)
                 {
-                    Debug.Log("Last node, going to base conversation.");
-                    Sequencer.PlaySequence("GoToConversation(" + baseConversation + ", true);");
+                    //if (debug) Debug.Log("Auto-continuing to next subtitle after typed.");
+                    sequencer.PlaySequence("Continue()@Message(Typed);");
                 }
                 else
                 {
-                   // Debug.Log("Last node, going to smartwatch conversation: " + GameManager.MostRecentApp[GameManager.CurrentSmartWatchMode]);
-                    Sequencer.PlaySequence($"OpenApp(Current){waitForTyped}");
-                }
-            }
-        
-            else
-            {
-                if (debug) Debug.Log("Not last node, will autocontinue or wait for response menu");
-                
-                AnalyzePCResponses(state, view, out var isPCResponseMenuNext, out var isPCAutoResponseNext);
-                var autoContinue = isPCResponseMenuNext || entry.IsEmpty();
-                
-                if (debug) Debug.Log($"Auto-continue: {autoContinue} (isPCResponseMenuNext={isPCResponseMenuNext}, isPCAutoResponseNext={isPCAutoResponseNext}), entry.IsEmpty()={entry.IsEmpty()}");
-        
-                if (autoContinue)
-                {
-                    if (entry.subtitleText.Length > 0)
-                    {
-                        if (debug) Debug.Log("Auto-continuing to next subtitle after typed.");
-                       sequencer.PlaySequence("Continue()@Message(Typed);");
-                    }
-                    else
-                    {
-                        if (debug) Debug.Log("Auto-continuing to next entry immediately.");
-                        sequencer.PlaySequence("Continue()");
-                    }
+                    //if (debug) Debug.Log("Auto-continuing to next entry immediately.");
+                    sequencer.PlaySequence("Continue()");
                 }
             }
         }

@@ -226,7 +226,7 @@ namespace PixelCrushers.DialogueSystem
                 }
                 else if (selectionType == typeof(Item))
                 {
-                    DrawInspectorSelectionTitle((selection as Item).IsItem ? "Item" : "Quest");
+                    DrawInspectorSelectionTitle((selection as Item).IsItem ? "Item" : (selection as Item).IsAction ? "Action" : "Quest");
                     var item = selection as Item;
                     EditorGUI.BeginDisabledGroup(DialogueEditor.DialogueEditorWindow.instance.IsItemSyncedFromOtherDB(item));
                     DialogueEditor.DialogueEditorWindow.instance.DrawAssetSpecificPropertiesFirstPart(item);
@@ -235,7 +235,7 @@ namespace PixelCrushers.DialogueSystem
                 }
                 else if (selectionType == typeof(Location))
                 {
-                    DrawInspectorSelectionTitle("Location");
+                    DrawInspectorSelectionTitle((selection as Location).IsSublocation ? "Sublocation" : "Location");
                     var location = selection as Location;
                     EditorGUI.BeginDisabledGroup(DialogueEditor.DialogueEditorWindow.instance.IsLocationSyncedFromOtherDB(location));
                     DialogueEditor.DialogueEditorWindow.instance.DrawAssetSpecificPropertiesFirstPart(location);

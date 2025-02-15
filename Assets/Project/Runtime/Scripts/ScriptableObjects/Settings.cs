@@ -15,6 +15,9 @@ public class Settings : ScriptableObject
     public ClockSettings clockSettings;
     [Expandable]
     public AudioSettings audioSettings;
+    
+    
+    public bool skipIntro;
 
     [SerializeField]
     public bool autoPauseOnFocusLost = false;
@@ -71,7 +74,10 @@ public class Settings : ScriptableObject
             }
         }
     }
-    
-    
+
+    private void OnValidate()
+    {
+        
+    }
 }
 

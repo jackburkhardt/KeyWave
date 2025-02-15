@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
+using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -307,7 +309,7 @@ namespace Project.Runtime.Scripts.UI
            {
                
                var title = destinationEntry.GetConversation().Title;
-               var baseConversation = Location.PlayerLocationWithSublocation + "/Base";
+               var baseConversation = GameManager.gameState.PlayerLocation(true).BaseConversation();
                if (title != baseConversation)
                {
                    Debug.Log("No outgoing links. Going to base conversation :" + baseConversation);
@@ -407,18 +409,6 @@ namespace Project.Runtime.Scripts.UI
         {
             yield return new WaitForSeconds(0.1f);
             RefreshLayoutGroups.Refresh(gameObject);
-        }
-        
-        public void StartConversationWithPlayerLocationPrefix(string conversationName)
-        {
-            DialogueManager.StopConversation();
-            DialogueManager.StartConversation(Location.PlayerLocationWithSublocation + "/" + conversationName);
-        }
-        
-        public void StartConversation(string conversationName)
-        {
-            DialogueManager.StopConversation();
-            DialogueManager.StartConversation(conversationName);
         }
         
         public void ForceClose()

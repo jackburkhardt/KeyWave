@@ -11,39 +11,12 @@ namespace Project.Runtime.Scripts.Events.Actions
 
         public void OnConversationLine(Subtitle subtitle)
         {
-           // if (subtitle.dialogueEntry.id == 0) 
-
-            if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Action"))
-            {
-                TutorialPanel.instance.PlayTutorial("ActionTutorial");
-            }
-        
-            if (DialogueUtility.CurrentDialogueEntry.MenuText.Contains("Talk"))
-            {
-                TutorialPanel.instance.PlayTutorial("TalkTutorial");
-            }
-            
-            if (DialogueUtility.CurrentDialogueEntry.Title.Contains("Options"))
-            {
-                TutorialPanel.instance.PlayTutorial("StartTutorial");
-            }
-        
-            GameStateManager.instance.gameState.Clock += (DialogueUtility.CurrentNodeDuration);
-
-            
-
             
         }
         
         
         public void OnConversationLineEnd(Subtitle subtitle)
         {
-            /*
-            if (!subtitle.dialogueEntry.IsEmpty() && !subtitle.dialogueEntry.IsResponseChild())
-            {
-                PixelCrushers.SaveSystem.SaveToSlot(1);
-            }
-            */
             
             foreach (var actor in DialogueManager.masterDatabase.actors)
             {

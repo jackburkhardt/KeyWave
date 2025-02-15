@@ -46,12 +46,12 @@ public class PointsAnimatorHandler : MonoBehaviour
     
     private void Show()
     {
-        animator.SetTrigger(showTrigger);
+       if (!string.IsNullOrEmpty(showTrigger)) animator.SetTrigger(showTrigger);
     }
     
     private void Hide()
     {
-        animator.SetTrigger(hideTrigger);
+        if (!string.IsNullOrEmpty(hideTrigger)) animator.SetTrigger(hideTrigger);
     }
     
     private void SetTriggerIfValid(Points.Type points, string trigger)

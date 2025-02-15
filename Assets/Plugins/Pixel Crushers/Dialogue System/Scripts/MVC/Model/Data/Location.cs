@@ -33,7 +33,6 @@ namespace PixelCrushers.DialogueSystem
         {
             Assign(chatMapperLocation);
         }
-
         /// <summary>
         /// Copies a Chat Mapper location asset.
         /// </summary>
@@ -44,6 +43,14 @@ namespace PixelCrushers.DialogueSystem
         {
             if (chatMapperLocation != null) Assign(chatMapperLocation.ID, chatMapperLocation.Fields);
         }
+        
+        public bool IsSublocation
+        {
+            get { return LookupBool(DialogueSystemFields.IsSublocation); }
+            set { Field.SetValue(fields, DialogueSystemFields.IsSublocation, value); }
+        }
+
+        public int RootID => IsSublocation ? LookupInt("Parent Location") : id;
 
     }
 

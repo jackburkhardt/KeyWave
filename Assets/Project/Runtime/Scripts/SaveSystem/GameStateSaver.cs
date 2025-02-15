@@ -26,7 +26,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             Points.OnPointsChange?.Invoke(Points.Type.Teamwork, data.TeamworkScore);
             Points.OnPointsChange?.Invoke(Points.Type.Context, data.ContextScore);
             
-            GameManager.instance.TravelTo(data.current_scene);
+            GameManager.instance.SetLocation(data.current_scene);
         }
 
 

@@ -26,6 +26,28 @@ namespace PixelCrushers.DialogueSystem
             get { return LookupBool(DialogueSystemFields.IsItem); }
             set { Field.SetValue(fields, DialogueSystemFields.IsItem, value); }
         }
+        
+        public bool IsAction
+        {
+            get { return LookupBool(DialogueSystemFields.IsAction); }
+            set { Field.SetValue(fields, DialogueSystemFields.IsAction, value); }
+        }
+        
+        public bool IsRepeatable
+        {
+            get { return FieldExists(DialogueSystemFields.RepeatCount); }
+            set {
+            {
+                if (value)
+                {
+                    if (FieldExists(DialogueSystemFields.RepeatCount)) return;
+                    Field.SetValue( fields, DialogueSystemFields.RepeatCount, 0);
+                }
+                else fields.Remove(Field.Lookup( fields, DialogueSystemFields.RepeatCount));
+            } }
+        }
+        
+      
 
         /// <summary>
         /// Gets or sets the field 'Group' which is an optional group for quest categorization.

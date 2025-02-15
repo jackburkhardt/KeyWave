@@ -139,6 +139,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (EditorGUI.EndChangeCheck()) SetDatabaseDirty("Name");
             if (asset is Actor) DrawActorPortrait(asset as Actor);
             if (asset is Item) DrawItemPropertiesFirstPart(asset as Item);
+            if (asset is Location) DrawLocationPropertiesFirstPart(asset as Location);
             if (customDrawAssetInspector != null)
             {
                 customDrawAssetInspector(database, asset);
@@ -251,9 +252,16 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             else if (asset is Item)
             {
-                string itemTypeLabel = template.treatItemsAsQuests ? "Quest" : "Item";
+                string itemTypeLabel = !template.treatItemsAsQuests ? "Item" : template.treatItemsAsQuests && template.treatQuestsAsActions ? "Action" : "Quest";
                 asset.Name = string.Format("New {0} {1}", itemTypeLabel, asset.id);
                 Field.SetValue(asset.fields, "Is Item", !template.treatItemsAsQuests);
+                Field.SetValue(asset.fields, "Is Action", template.treatItemsAsQuests && template.treatQuestsAsActions);
+            }
+            else if (asset is Location)
+            {
+                string locaitonTypeLabel = Field.Lookup(asset.fields, "Is Sublocation") != null ? "Sublocation" : "Location";
+                asset.Name = string.Format("New {0} {1}", locaitonTypeLabel, asset.id);
+                Field.SetValue(asset.fields, "Is Sublocation", !template.treatLocationsAsSublocations);
             }
             else
             {
@@ -309,7 +317,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private List<Field> GetTemplateFields(Asset asset)
         {
             if (asset is Actor) return template.actorFields;
-            if (asset is Item) return (asset as Item).IsItem ? template.itemFields : template.questFields;
+            if (asset is Item) return (asset as Item).IsItem ? template.itemFields : (asset as Item).IsAction ? template.actionFields : template.questFields;
             if (asset is Location) return template.locationFields;
             if (asset is Variable) return template.variableFields;
             if (asset is Conversation) return template.conversationFields;

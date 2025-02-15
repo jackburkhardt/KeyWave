@@ -24,6 +24,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             public bool actors = false;
             public bool items = false;
             public bool quests = false;
+            public bool actions = false;
             public bool locations = false;
             public bool conversations = false;
             public bool dialogueEntries = false;
@@ -71,6 +72,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             DrawActorTemplateAIButton();
             DrawTemplate("Items", template.itemFields, template.itemPrimaryFieldTitles, ref templateFoldouts.items);
             DrawTemplate("Quests", template.questFields, template.questPrimaryFieldTitles, ref templateFoldouts.quests);
+            DrawTemplate("Actions", template.actionFields, template.actionPrimaryFieldTitles, ref templateFoldouts.actions);
             DrawTemplate("Locations", template.locationFields, template.locationPrimaryFieldTitles, ref templateFoldouts.locations);
             DrawTemplate("Variables", template.variableFields, null, ref templateFoldouts.variables);
             DrawTemplate("Conversations", template.conversationFields, template.conversationPrimaryFieldTitles, ref templateFoldouts.conversations);
