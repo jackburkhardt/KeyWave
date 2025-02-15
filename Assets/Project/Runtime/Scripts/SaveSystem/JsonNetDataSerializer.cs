@@ -7,7 +7,11 @@ namespace Project.Runtime.Scripts.SaveSystem
     {
         public override string Serialize(object data)
         {
-            return JsonConvert.SerializeObject(data);
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            };
+            return JsonConvert.SerializeObject(data, settings);
         }
 
         public override T Deserialize<T>(string s, T data = default(T))

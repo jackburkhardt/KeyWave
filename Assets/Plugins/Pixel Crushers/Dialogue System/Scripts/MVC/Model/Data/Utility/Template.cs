@@ -160,7 +160,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Creates a new quest with the fields defined in the template.
         /// </summary>
-        public Item CreteAction(int id, string name)
+        public Item CreateAction(int id, string name)
         {
             Item item = new Item();
             item.id = id;

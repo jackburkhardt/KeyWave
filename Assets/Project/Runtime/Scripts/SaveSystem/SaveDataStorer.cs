@@ -47,7 +47,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (File.Exists($"{Application.persistentDataPath}/save.json"))
             {
                 var saveText = File.ReadAllText($"{Application.persistentDataPath}/save.json");
-                Debug.Log("[<- Unity] Local save size: " + saveText.Length * sizeof(char) / 1024 + "kb");
+                Debug.Log("[<- Unity] Local save size: " + System.Text.Encoding.UTF8.GetByteCount(saveText) / 1000 + "kb");
 
                 var localSave = PixelCrushers.SaveSystem.Deserialize<SaveGameMetadata>(saveText);
                 if (localSave.last_played > LatestSaveData.last_played)
