@@ -49,7 +49,8 @@ namespace PixelCrushers.DialogueSystem
             get { return LookupBool(DialogueSystemFields.IsSublocation); }
             set { Field.SetValue(fields, DialogueSystemFields.IsSublocation, value); }
         }
-        
+
+        public int RootID => IsSublocation ? LookupInt("Parent Location") : id;
 
     }
 

@@ -103,13 +103,17 @@ public class LocationPanel : UIPanel
     
     public void ShowLocationInfo(CustomUIResponseButton customUIResponseButton)
     {
-        var location = customUIResponseButton.assignedLocation;
+        var locationField = customUIResponseButton.response.destinationEntry.fields.First(p => p.title == "Location");
         
-        if (location == null)
+        
+        
+        if (locationField == null)
         {
             Debug.LogError("Location not assigned to CustomUIResponseButton");
             return;
         }
+        
+        var location = DialogueManager.masterDatabase.GetLocation(int.Parse(locationField.value));
         
         ShowLocationInfo(location);
     }

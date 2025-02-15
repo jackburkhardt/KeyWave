@@ -347,10 +347,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 DrawSublocationProperties(location);
             }
             else
-            
             {
                 DrawLocationProperties(location);
             }
+
+
+
+            if (!location.IsFieldAssigned("Visit Count"))
+            {
+                var visitCountField = new Field("Visit Count", "0", FieldType.Number);
+                location.fields.Add(visitCountField);
+                SetDatabaseDirty("Add Visit Count Field");
+            }
+            
+            
         }
         
         
@@ -369,24 +379,111 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             else if (useDisplayNameField)
             {
-                DrawRevisableTextField(displayNameLabel, location, null, location.fields, "Display Name");
+                DrawRevisableTextAreaField(displayNameLabel, location, null, location.fields, "Display Name");
                 DrawLocalizedVersions(location, location.fields, "Display Name {0}", false, FieldType.Text);
             }
             
-            GUI.enabled = false;
-
-            foreach (var sublocation in database.locations.Where(p => p.IsSublocation))
+            
+            var descriptionField = Field.Lookup(location.fields, "Description");
+            
+            if (descriptionField == null)
             {
-                if (sublocation.fields == null) continue;
-                var parentLocationField = Field.Lookup(sublocation.fields, "Parent Location");
-                if (parentLocationField == null) continue;
-                if (parentLocationField.value == location.id.ToString())
+                descriptionField = new Field("Description", string.Empty, FieldType.Text);
+                location.fields.Add(descriptionField);
+                SetDatabaseDirty("Add Description Field");
+            }
+            
+            
+            DrawRevisableTextAreaField(descriptionLabel, location, null, location.fields, "Description");
+            
+            
+            DrawLocationConversationProperties(location);
+            
+            
+            // Coordinates
+            
+            var coordinatesField = Field.Lookup(location.fields, "Coordinates");
+            
+            if (coordinatesField == null)
+            {
+                coordinatesField = new Field("Coordinates", string.Empty, FieldType.Vector2);
+                location.fields.Add(coordinatesField);
+                SetDatabaseDirty("Add Coordinates Field");
+            }
+            
+            coordinatesField.value = EditorGUILayout.Vector2Field(new GUIContent("Coordinates", "The location's coordinates on the map."), location.LookupVector2("Coordinates")).ToString();
+            
+            // Audio
+            
+            EditorGUILayout.PrefixLabel("Audio");
+            
+            var musicField = Field.Lookup(location.fields, "Music");
+            
+            if (musicField == null)
+            {
+                musicField = new Field("Music", string.Empty, FieldType.Text);
+                location.fields.Add(musicField);
+                SetDatabaseDirty("Add Music Field");
+            }
+            
+            DrawEditorItemWithAudioClipIcon(
+                () => musicField.value = EditorGUILayout.TextField(new GUIContent("Music", "The location's music."), musicField.value));
+            
+            
+            var environmentAudioField = Field.Lookup(location.fields, "Environment");
+            
+            if (environmentAudioField == null)
+            {
+                environmentAudioField = new Field("Environment", string.Empty, FieldType.Text);
+                location.fields.Add(environmentAudioField);
+                SetDatabaseDirty("Add Environment Field");
+            }
+            
+            DrawEditorItemWithAudioClipIcon(
+                () => environmentAudioField.value = EditorGUILayout.TextField(new GUIContent("Environment", "The location's environment sounds."), environmentAudioField.value), color: Color.cyan);
+            
+           
+            
+            var sublocations = database.locations.Where(p => p.IsSublocation && database.GetLocation(p.RootID) == location).ToList();
+
+            if (sublocations.Count > 0)
+            {
+                EditorGUILayout.PrefixLabel("Sublocations");
+                EditorWindowTools.StartIndentedSection();
+                GUI.enabled = false;
+                foreach (var sublocation in sublocations)
                 {
-                    EditorGUILayout.TextField("Sublocation", sublocation.Name);
+                    DrawLocationField(new GUIContent("Sublocation"), sublocation.id.ToString(), true);
                 }
+                EditorWindowTools.EndIndentedSection();
             }
             
             GUI.enabled = true;
+            
+            EditorGUILayout.Space();
+
+            var presentActors =
+                database.actors.Where(p => p.IsFieldAssigned("Location") && p.LookupInt("Location") == location.id).ToList();
+
+            if (presentActors.Count > 0)
+            {
+                EditorGUILayout.PrefixLabel("Present Actors");
+                
+                EditorWindowTools.StartIndentedSection();
+
+                GUI.enabled = false;
+                foreach (var actor in database.actors.Where(p => p.IsFieldAssigned("Location") && p.LookupInt("Location") == location.id))
+                {
+                    DrawActorField(new GUIContent("Actor"), actor.id.ToString());
+                }
+                
+                EditorWindowTools.EndIndentedSection();
+                
+                GUI.enabled = true;
+            }
+           
+            
+           
         }
         
         private bool autoSetParentLocation = true;
@@ -419,6 +516,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 location.fields.Add(parentLocationField);
                 SetDatabaseDirty("Add Parent Location Field");
             }
+            
+            
 
             if (autoSetParentLocation)
             {
@@ -455,13 +554,44 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             
             autoSetParentLocation = EditorGUILayout.Toggle(new GUIContent("Auto Set Parent Location", "Tick to automatically set the parent location to the first location above this one that isn't a sublocation."), autoSetParentLocation);
-            
-            
-            
-         
-            
+
+
+            DrawLocationConversationProperties(location);
+
+
         }
 
+
+        private void DrawLocationConversationProperties(Location location)
+        {
+            bool startsConversation = Field.Lookup(location.fields, "Conversation") != null;
+            bool newStartsConversation = EditorGUILayout.Toggle(new GUIContent("Starts Conversation", "Tick to mark this quest abandonable in the quest window."), startsConversation);
+
+            if (startsConversation != newStartsConversation)
+            {
+                Field conversation;
+                
+                if (!startsConversation)
+                {
+                    conversation = new Field("Conversation", string.Empty, FieldType.Text);
+                    location.fields.Add(conversation);
+                   
+                }
+                
+                ToggleStartsConversation( location, newStartsConversation);
+                SetDatabaseDirty(!startsConversation ? "Create Starts Conversation Field" : "Remove Starts Conversation Field");
+            }
+
+            if (newStartsConversation)
+            {
+                DrawStartConversationProperties(location);
+            }
+            
+            
+            EditorGUILayout.Space();
+        }
+        
+        
     }
 
 }

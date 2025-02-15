@@ -7,7 +7,6 @@ using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
 using UnityEngine;
 using Field = PixelCrushers.DialogueSystem.Field;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.DialogueSystem
 {
@@ -42,7 +41,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             var leaveColor = new Color(0.2f, 0.05f, 0.05f, 1f);
             var backColor = new Color(0.5f, 0.5f, 0.5f, 1);
             var proceduralColor = new Color(1, 1, 1, 1);
-            var defaultColor = Location.PlayerLocation.responseMenuButtonColor;
+            var defaultColor = Color.white;
         
             if (node == null) return Color.white;
 
@@ -96,24 +95,6 @@ namespace Project.Runtime.Scripts.DialogueSystem
         {
             var durationField = quest.AssignedField("Explicit Duration");
             
-            /*
-            // if (quest.GetQuestState() == PixelCrushers.DialogueSystem.QuestState.Success) return 0;
-            if (durationField == null) return 0;
-
-            if (durationField.type == FieldType.Timespan)
-            {
-                var unit = durationField.value.Split(':')[1];
-                var questTime = int.Parse(durationField.value.Split(':')[0]);
-                var duration = 0;
-
-                if (unit == "seconds") duration = questTime;
-                else if (unit == "minutes") duration = questTime * 60;
-                else if (unit == "hours") duration = questTime * 3600;
-        
-                return duration;
-            }
-            */
-            
             if (durationField == null) return 0;
             
             if (quest.AssignedField("Time Flow").value != "Explicit") return 0;
@@ -131,8 +112,6 @@ namespace Project.Runtime.Scripts.DialogueSystem
             var currentNode = node1;
 
             stack.Add(currentNode);
-
-            // get all paths from node1 to node2 using DFS algorithm
 
 
             void DFS(DialogueEntry node)

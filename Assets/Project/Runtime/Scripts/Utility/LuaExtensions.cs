@@ -236,6 +236,14 @@ namespace Project.Runtime.Scripts.Utility
             var entry = DialogueManager.instance.masterDatabase.GetConversation(title).GetDialogueEntry(entryID);
             return entry;
         }
+        
+        
+        public static string BaseConversation(this Location location)
+        {
+            var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
+            if (location.IsSublocation) return $"{rootLocation.Name}/{location.Name}/Base";
+            return $"{location.Name}/Base";
+        }
        
         
     }

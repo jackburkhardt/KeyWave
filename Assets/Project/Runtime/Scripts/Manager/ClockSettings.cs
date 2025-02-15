@@ -6,7 +6,6 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using UnityEngine;
 using UnityEngine.UI;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.Manager
 {
@@ -79,9 +78,9 @@ namespace Project.Runtime.Scripts.Manager
         }
         
 
-        public static string EstimatedTimeOfArrival(Location location)
+        public static string EstimatedTimeOfArrival(int locationID)
         {
-            return To24HourClock(location.TravelTime + CurrentTimeRaw);
+            return To24HourClock((int)GameManager.DistanceToLocation(locationID) + CurrentTimeRaw);
         }
 
         public static int GetHoursAsInt(string time)
@@ -112,9 +111,14 @@ public class ClockSettings : ScriptableObject
 {
     public float globalModifier = 1;
     
-    public float SecondsPerCharacter = 3f;
-    public int SecondsBetweenLines = 60;
-    public int SecondsPerInteract = 45;
+    private static string secondsPerCharacterKey = "game.clock.secondsPerCharacter";
+    private static string secondsBetweenLinesKey = "game.clock.secondsBetweenLines";
+    private static string secondsPerInteractKey = "game.clock.secondsPerInteract";
+    
+    
+    public float SecondsPerCharacter;
+    public int SecondsBetweenLines;
+    public int SecondsPerInteract;
     
     public int DayStartTime = 21600;
     [ReadOnly] [Label("Time:")] public string DayStartTimeString = "06:00:00";
@@ -129,9 +133,41 @@ public class ClockSettings : ScriptableObject
     [InfoBox( "The current time cannot be directly modified in play mode.")]
     [ReadOnly] [SerializeField] [Label("Current Time")] private int readOnlyCurrentTime;
     [ReadOnly] [Label("Time:")] public string CurrentTimeString = "06:00:00";
+    
+    DialogueDatabase dialogueDatabase;
 
     private void OnValidate()
     {
+        dialogueDatabase ??= GameManager.settings.dialogueDatabase;
+        
+        var secondsPerCharacterVariable = dialogueDatabase.GetVariable(secondsPerCharacterKey);
+        if (secondsPerCharacterVariable == null)
+        {
+            secondsPerCharacterVariable = new Variable();
+            secondsPerCharacterVariable.Name = secondsPerCharacterKey;
+            dialogueDatabase.variables.Add(secondsPerCharacterVariable);
+        }
+        
+        secondsPerCharacterVariable.InitialValue = SecondsPerCharacter.ToString();
+        
+        
+        var secondsBetweenLinesVariable = dialogueDatabase.GetVariable(secondsBetweenLinesKey);
+        if (secondsBetweenLinesVariable == null)
+        {
+            secondsBetweenLinesVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsBetweenLinesKey, SecondsBetweenLines.ToString()); 
+            GameManager.settings.dialogueDatabase.variables.Add(secondsBetweenLinesVariable);
+        }
+        
+        secondsBetweenLinesVariable.InitialValue = SecondsBetweenLines.ToString();
+        
+        var secondsPerInteractVariable = dialogueDatabase.GetVariable(secondsPerInteractKey);
+        if (secondsPerInteractVariable == null)
+        {
+            secondsPerInteractVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsPerInteractKey, SecondsPerInteract.ToString()); 
+            GameManager.settings.dialogueDatabase.variables.Add(secondsPerInteractVariable);
+        }
+        
+        secondsPerInteractVariable.InitialValue = SecondsPerInteract.ToString();
         
         currentTime = Mathf.Clamp(currentTime, DayStartTime, DayEndTime);
 
@@ -143,7 +179,6 @@ public class ClockSettings : ScriptableObject
         else currentTime = DialogueLua.GetVariable("clock").asInt;
         
         readOnlyCurrentTime = currentTime;
-        
         
         DayStartTimeString = Clock.To24HourClock(DayStartTime, true);
         DayEndTimeString = Clock.To24HourClock(DayEndTime, true);

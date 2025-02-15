@@ -387,6 +387,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             return DrawAssetPopup<Actor>(value, (database != null) ? database.actors : null, label);
         }
+        
+        private string DrawPlayerActorField(GUIContent label, string value)
+        {
+            return DrawAssetPopup<Actor>(value, (database != null) ? database.actors.Where(p => p.IsPlayer).ToList() : null, label);
+        }
 
         private string DrawQuestStateField(GUIContent label, string value)
         {

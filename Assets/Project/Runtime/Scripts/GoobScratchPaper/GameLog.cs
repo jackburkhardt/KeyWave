@@ -5,7 +5,6 @@ using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class GameLog : MonoBehaviour
 {
@@ -20,16 +19,12 @@ public class GameLog : MonoBehaviour
     private void OnEnable()
     {
         Points.OnPointsChange += OnPoints;
-        Location.OnLocationEnter += OnLocationEnter;
-        Location.OnLocationLeave += OnLocationLeave;
         QuestUtility.OnQuestComplete += OnQuest;
     }
     
     private void OnDisable()
     {
         Points.OnPointsChange -= OnPoints;
-        Location.OnLocationEnter -= OnLocationEnter;
-        Location.OnLocationLeave -= OnLocationLeave;
         QuestUtility.OnQuestComplete -= OnQuest;
     }
 

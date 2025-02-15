@@ -322,6 +322,34 @@ namespace PixelCrushers.DialogueSystem
         {
             return Tools.StringToBool(LookupValue(fields, title));
         }
+        
+        /// <summary>
+        /// A static utility method that looks up a field in a list and returns its Vector2 value.
+        /// </summary>
+        /// <param name="fields"></param>
+        /// A list of fields.
+        /// <param name="title"></param>
+        /// Title of the field.
+        /// <returns></returns>
+        
+        
+        public static Vector2 LookupVector2(List<Field> fields, string title)
+        {
+            var value = LookupValue(fields, title);
+            if (value == null) return Vector2.zero;
+            
+            try 
+            {
+                var x = value.Split(',')[0].Replace("(", "");
+                var y = value.Split(',')[1].Replace(")", "");
+                
+                return new Vector2(float.Parse(x), float.Parse(y));
+            }
+            catch
+            {
+                return Vector2.zero;
+            }
+        }
 
         /// <summary>
         /// A static utility method that sets the string value of a field.

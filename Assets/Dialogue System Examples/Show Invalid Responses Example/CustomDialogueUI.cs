@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 public class CustomDialogueUI : StandardDialogueUI
 {
@@ -67,8 +67,6 @@ public class CustomDialogueUI : StandardDialogueUI
         
     }
     
-    private const string AutomaticConversation = "/AUTOMATIC/";
-    private const string GeneratedConversation = "/GENERATED/";
 
     public override void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
     {
@@ -85,17 +83,23 @@ public class CustomDialogueUI : StandardDialogueUI
                 var newSublocation =
                     DialogueManager.masterDatabase.GetLocation(int.Parse(item.LookupValue("New Sublocation")));
 
-                if (newSublocation == location) return false;
+                if (newSublocation == GameManager.gameState.PlayerLocation(true))
+                {
+                    return false;
+                }
             }
+            
+            var playerLocation = GameManager.gameState.PlayerLocation(true);
 
             if (item.LookupBool("Ignore Sublocations"))
             {
-                if (location.IsSublocation)
-                    location = DialogueManager.masterDatabase.GetLocation(location.AssignedField("Parent Location")
-                        .value);
+                var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
+                var rootPlayerLocation = DialogueManager.masterDatabase.GetLocation(playerLocation.RootID);
+
+                return rootLocation == rootPlayerLocation;
             }
-            
-            return location.Name == Location.PlayerLocation.Name;
+
+            return location == GameManager.gameState.PlayerLocation(true);
         }
 
         bool ActionConversationIsValid(Item item, out string conversationTitle)
@@ -104,23 +108,13 @@ public class CustomDialogueUI : StandardDialogueUI
             if (conversation == null)
             {
                 conversationTitle = null;
-                return true;
+                return false;
             }
 
-            switch (conversation.value)
-            {
-                case AutomaticConversation:
-                    conversationTitle = LevenshteinDistance.ClosestMatch(item.Name,
-                        DialogueManager.masterDatabase.conversations.Select(p => p.Title).ToList());
-                    break;
-                case GeneratedConversation:
-                    conversationTitle = string.Empty;
-                    break;
-                default:
-                    conversationTitle = conversation.value;
-                    break;
-            }
-
+            if (item.IsFieldAssigned("Entry Count")) conversationTitle = string.Empty;
+            
+            else conversationTitle = item.LookupValue("Conversation");
+            
             return true;
         }
         
@@ -136,7 +130,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 
                 var actorLocation = actor.AssignedField("Location");
                 if (actorLocation == null) continue;
-                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)).Name != Location.PlayerLocation.Name) return false;
+                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.gameState.PlayerLocation(true)) return false;
             }
             return true;
         }
@@ -146,7 +140,7 @@ public class CustomDialogueUI : StandardDialogueUI
             var dialogueEntries = new List<DialogueEntry>();
             var template = Template.FromDefault();
             
-            var repeatCount = item.IsRepeatable ? int.Parse(item.LookupValue("Repeat Count")) : 0;
+            var repeatCount = item.IsRepeatable && item.fields.Any(p => p.title.StartsWith("Repeat Entry ")) ? int.Parse(item.LookupValue("Repeat Count")) : 0;
             var entryFieldLabelStart = repeatCount > 0 ? "Repeat Entry " : "Entry ";
             var entryCount = item.LookupInt(entryFieldLabelStart + "Count");
             
@@ -194,9 +188,6 @@ public class CustomDialogueUI : StandardDialogueUI
               
                 if (!ActionLocationIsValid(action)) continue;
                 if (!ActionRequiredActorsAreValid(action)) continue;
-                if (!ActionConversationIsValid(action, out var conversationTitle)) continue;
-                
-                
                 
                 var template = Template.FromDefault();
                 var newDialogueEntry = template.CreateDialogueEntry( template.GetNextDialogueEntryID( subtitle.dialogueEntry.GetConversation()), subtitle.dialogueEntry.conversationID, "ACTION");
@@ -204,34 +195,50 @@ public class CustomDialogueUI : StandardDialogueUI
                 
                 newDialogueEntry.MenuText = action.IsFieldAssigned("Display Name") ? action.LookupValue("Display Name") : action.Name;
                 newDialogueEntry.DialogueText = string.Empty;
-                newDialogueEntry.Sequence = action.IsFieldAssigned("Sequence") ? action.LookupValue("Sequence") : string.Empty;
-                newDialogueEntry.userScript = action.IsFieldAssigned("Script") ? action.LookupValue("Script") : string.Empty;
                 newDialogueEntry.conditionsString = action.IsFieldAssigned("Conditions") ? action.AssignedField("Conditions").value : string.Empty; newDialogueEntry.fields.Add( new Field(showInvalidFieldName, action.LookupValue(showInvalidFieldName), FieldType.Boolean));
                 newDialogueEntry.ActorID = subtitle.dialogueEntry.ActorID;
                 newDialogueEntry.ConversantID = subtitle.dialogueEntry.ConversantID;
-                newDialogueEntry.outgoingLinks = new List<Link>();
-                
-             
-                if (conversationTitle == string.Empty || conversationTitle == GeneratedConversation)
+
+
+
+                if (ActionConversationIsValid(action, out var conversationTitle))
                 {
-                    var newConversation = template.CreateConversation(  template.GetNextConversationID( DialogueManager.masterDatabase), GeneratedConversation + action.Name);
-                    var entryActorID = action.IsFieldAssigned("Entry Actor") ? int.Parse(action.LookupValue("Entry Actor")) : -1;
-                    
-                    newConversation.ActorID = entryActorID;
-                    newConversation.dialogueEntries = GeneratedDialogueEntries(action, newConversation.id, entryActorID);
-                    newConversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
-                    DialogueManager.masterDatabase.conversations.Add(newConversation);
-                    newDialogueEntry.outgoingLinks.Add(new Link( newDialogueEntry.conversationID, newDialogueEntry.id, newConversation.id, 0));
+                    newDialogueEntry.outgoingLinks = new List<Link>();
+
+                    if (conversationTitle == string.Empty)
+                    {
+                        var newConversation = template.CreateConversation(
+                            template.GetNextConversationID(DialogueManager.masterDatabase),
+                            $"/GENERATED/{action.Name}");
+                        var entryActorID = action.IsFieldAssigned("Entry Actor")
+                            ? int.Parse(action.LookupValue("Entry Actor"))
+                            : -1;
+
+                        newConversation.ActorID = entryActorID;
+                        newConversation.dialogueEntries =
+                            GeneratedDialogueEntries(action, newConversation.id, entryActorID);
+                        newConversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
+                        DialogueManager.masterDatabase.conversations.Add(newConversation);
+                        newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
+                            newDialogueEntry.id, newConversation.id, 0));
+                    }
+
+                    else if (conversationTitle != null)
+                    {
+                        Debug.Log(conversationTitle);
+                        var conversation = DialogueManager.masterDatabase.GetConversation(conversationTitle);
+                        Debug.Log(conversation);
+                        conversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
+                        newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
+                            newDialogueEntry.id, conversation.id, 0));
+                    }
                 }
 
-                else if (conversationTitle != null)
+                else
                 {
-                    Debug.Log(conversationTitle);
-                    var conversation = DialogueManager.masterDatabase.GetConversation(conversationTitle);
-                    Debug.Log(conversation);
-                    conversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
-                    newDialogueEntry.outgoingLinks.Add(new Link( newDialogueEntry.conversationID, newDialogueEntry.id, conversation.id, 0));
+                    newDialogueEntry.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
                 }
+                
                 
                 newResponses.Add(new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry));
                 
@@ -242,7 +249,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 subtitle.dialogueEntry.outgoingLinks.Add(new Link(subtitle.dialogueEntry.conversationID, subtitle.dialogueEntry.id, newResponse.destinationEntry.conversationID, newResponse.destinationEntry.id));
             }
             
-           responses = responses.Concat(newResponses).ToArray();
+            responses = responses.Concat(newResponses).ToArray();
         }
         
         responses = CheckInvalidResponses(responses);
@@ -320,12 +327,13 @@ public class CustomDialogueUI : StandardDialogueUI
 
     public override void ShowSubtitle(Subtitle subtitle)
     {
-        subtitle.formattedText.text = Regex.Replace(subtitle.formattedText.text, @"[^\x20-\x7F]", "");
+        //subtitle.formattedText.text = Regex.Replace(subtitle.formattedText.text, @"[^\x20-\x7F]", "");
         base.ShowSubtitle(subtitle);
     }
 
     public void OnConversationLine(Subtitle subtitle)
     {
+        
         if (Field.FieldExists(subtitle.dialogueEntry.fields, "Randomize Next Entry") && Field.LookupBool(subtitle.dialogueEntry.fields, "Randomize Next Entry"))
         {
             Debug.Log("Randomizing next entry");
@@ -334,29 +342,16 @@ public class CustomDialogueUI : StandardDialogueUI
         }
         
         
-//        Debug.Log($"subtitle: {subtitle.formattedText.text} subtitleText: {subtitle.dialogueEntry.subtitleText} conversation: {subtitle.dialogueEntry.conversationID} entry: {subtitle.dialogueEntry.id} child: {subtitle.dialogueEntry.outgoingLinks[0].destinationDialogueID}");
-    }
-
-
-    public void OnConversationEnd()
-    {
-        var conversationID = DialogueManager.currentConversationState.subtitle.dialogueEntry.conversationID;
-        var conversation = DialogueManager.masterDatabase.GetConversation(conversationID);
-
-      
-        foreach (var action in  conversation.fields.Where(p => p.title == "Action"))
+        foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
         {
             var item = DialogueManager.masterDatabase.GetItem(int.Parse(action.value));
             QuestLog.SetQuestState(item.Name, QuestState.Success);
         }
-
-        conversation.fields.RemoveAll(p =>  p.title == "Action");
         
-        if (conversation.Title == GeneratedConversation)
-        {
-            DialogueManager.masterDatabase.conversations.Remove(conversation);
-        }
     }
+
+
+
     
     
 

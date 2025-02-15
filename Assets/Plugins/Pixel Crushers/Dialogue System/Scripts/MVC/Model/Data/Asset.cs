@@ -185,6 +185,19 @@ namespace PixelCrushers.DialogueSystem
         {
             return Field.LookupBool(fields, title);
         }
+        
+        /// <summary>
+        /// Looks up the value of a field.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <returns>
+        /// The Vector2 value of the field with the specified title, or <c>Vector2.zero</c> if no field matches.
+        /// </returns>
+        
+        public Vector2 LookupVector2(string title)
+        {
+            return Field.LookupVector2(fields, title);
+        }
 
         /// <summary>
         /// Checks whether a field exists and has non-empty text.

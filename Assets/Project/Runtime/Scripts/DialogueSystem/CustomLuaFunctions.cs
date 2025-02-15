@@ -1,10 +1,10 @@
 using System;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.DialogueSystem
 {
@@ -46,22 +46,14 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(QuestInProgressButNascent), this, SymbolExtensions.GetMethodInfo(() => QuestInProgressButNascent(string.Empty)));
             Lua.RegisterFunction(nameof(LocationIDToName), this, SymbolExtensions.GetMethodInfo(() => LocationIDToName(0)));
             Lua.RegisterFunction(nameof(HourMinuteToTime), this, SymbolExtensions.GetMethodInfo(() => HourMinuteToTime(0, 0)));
-            Lua.RegisterFunction(nameof(UnlockLocation), this, SymbolExtensions.GetMethodInfo(() => UnlockLocation(string.Empty)));
-            Lua.RegisterFunction(nameof(IsLocationUnlocked), this, SymbolExtensions.GetMethodInfo(() => IsLocationUnlocked(string.Empty)));
-            Lua.RegisterFunction(nameof(EmailState), this, SymbolExtensions.GetMethodInfo(() => EmailState(string.Empty)));
-            Lua.RegisterFunction(nameof(CartItem), this, SymbolExtensions.GetMethodInfo(() => CartItem(string.Empty)));
             Lua.RegisterFunction(nameof(Not), this, SymbolExtensions.GetMethodInfo(() => Not(false)));
-            Lua.RegisterFunction(nameof(ToggleInventoryItem), this, SymbolExtensions.GetMethodInfo(() => ToggleInventoryItem(string.Empty)));
-            Lua.RegisterFunction(nameof(ClearInventory), this, SymbolExtensions.GetMethodInfo(() => ClearInventory(string.Empty)));
             Lua.RegisterFunction(nameof(MainQuestCount), this, SymbolExtensions.GetMethodInfo(() => MainQuestCount()));
             Lua.RegisterFunction(nameof(ActiveMainQuestCount), this, SymbolExtensions.GetMethodInfo(() => ActiveMainQuestCount()));
             Lua.RegisterFunction(nameof(CompletedMainQuestCount), this, SymbolExtensions.GetMethodInfo(() => CompletedMainQuestCount()));
             Lua.RegisterFunction(nameof(CompletedActionQuestCount), this, SymbolExtensions.GetMethodInfo(() => CompletedActionQuestCount()));
             Lua.RegisterFunction(nameof(LocationETA), this, SymbolExtensions.GetMethodInfo(() => LocationETA(string.Empty)));
             Lua.RegisterFunction(nameof(LocationDistanceInMinutes), this, SymbolExtensions.GetMethodInfo(() => LocationDistanceInMinutes(string.Empty)));
-            Lua.RegisterFunction(nameof(SetExclusiveQuestEntryState), this , SymbolExtensions.GetMethodInfo(() => SetExclusiveQuestEntryState(string.Empty, 0, string.Empty)));
             Lua.RegisterFunction(nameof(SkipTime), this, SymbolExtensions.GetMethodInfo(() => SkipTime(0)));
-            Lua.RegisterFunction(nameof(LikedThat), this, SymbolExtensions.GetMethodInfo(() => LikedThat(string.Empty, true)));
             Lua.RegisterFunction(nameof(SetConversationConditions), this,
                 SymbolExtensions.GetMethodInfo(() => SetConversationConditions(0, string.Empty)));
             Lua.RegisterFunction(nameof(AddMinutes), this, SymbolExtensions.GetMethodInfo(() => AddMinutes(0)));
@@ -81,12 +73,12 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
             
             Lua.RegisterFunction(nameof(PlayerLocation), this, SymbolExtensions.GetMethodInfo(() => PlayerLocation()));
-
-            Lua.RegisterFunction(nameof(SetRootApp), this,
-                SymbolExtensions.GetMethodInfo(() => SetRootApp(string.Empty)));
             
             Lua.RegisterFunction(nameof(MapRangeToCurrentTrafficLevel), this,
                 SymbolExtensions.GetMethodInfo(() => MapRangeToCurrentTrafficLevel(0, 0)));
+            
+            Lua.RegisterFunction(nameof(PlayClipLooped), this, SymbolExtensions.GetMethodInfo(() => PlayClipLooped(string.Empty)));
+            Lua.RegisterFunction(nameof(PlayClip), this, SymbolExtensions.GetMethodInfo(() => PlayClip(string.Empty)));
         }
 
         private void DeregisterLuaFunctions()
@@ -103,22 +95,14 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(QuestInProgressButNascent));
             Lua.UnregisterFunction(nameof(LocationIDToName));
             Lua.UnregisterFunction(nameof(HourMinuteToTime));
-            Lua.UnregisterFunction(nameof(UnlockLocation));
-            Lua.UnregisterFunction(nameof(IsLocationUnlocked));
-            Lua.UnregisterFunction(nameof(EmailState));
-            Lua.UnregisterFunction(nameof(CartItem));
             Lua.UnregisterFunction(nameof(Not));
-            Lua.UnregisterFunction(nameof(ToggleInventoryItem));
-            Lua.UnregisterFunction(nameof(ClearInventory));
             Lua.UnregisterFunction(nameof(MainQuestCount));
             Lua.UnregisterFunction(nameof(ActiveMainQuestCount));
             Lua.UnregisterFunction(nameof(CompletedMainQuestCount));
             Lua.UnregisterFunction(nameof(CompletedActionQuestCount));
             Lua.UnregisterFunction(nameof(LocationETA));
             Lua.UnregisterFunction(nameof(LocationDistanceInMinutes));
-            Lua.UnregisterFunction(nameof(SetExclusiveQuestEntryState));
             Lua.UnregisterFunction(nameof(SkipTime));
-            Lua.UnregisterFunction(nameof(LikedThat));
             Lua.UnregisterFunction(nameof(SetConversationConditions));
             Lua.UnregisterFunction(nameof(AddMinutes));
             Lua.UnregisterFunction(nameof(Increment));
@@ -131,7 +115,6 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(Length));
             Lua.RegisterFunction(nameof(SaveGame), this, SymbolExtensions.GetMethodInfo(() => SaveGame()));
             Lua.UnregisterFunction(nameof(PlayerLocation));
-            Lua.UnregisterFunction(nameof(SetRootApp));
             Lua.UnregisterFunction(nameof(MapRangeToCurrentTrafficLevel));
         }
         
@@ -162,93 +145,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             GameEvent.OnWait((int)seconds);
         }
 
-        public string EmailState(string itemName)
-        {
-            var emailState = QuestLog.GetQuestState(itemName);
-        
-            switch (emailState) {
-                case QuestState.Success:
-                    return "[OPENED]";
-                case QuestState.Failure:
-                    return "[OPENED]";
-                default:
-                    return "[UNREAD]";
-            }
-        }
-
-        public string CartItem(string itemName)
-        {
-            var item = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.Name == itemName);
-            if (item == null) return string.Empty;
-        
-            var itemDisplayName = DialogueLua.GetItemField(itemName, "Display Name").asString;
-        
-            var itemCost = DialogueLua.GetItemField(itemName, "Cost").asInt;
-        
-            var isItemInCart =  DialogueLua.GetItemField(itemName, "In Inventory").asBool;
-        
-            var prefaceText = isItemInCart ? "[REMOVE]" : "[ADD]";
-
-            return $"{prefaceText} {itemDisplayName} - ${itemCost}";
-
-        }
-
-        public void ClearInventory(string cartName)
-        {
-            var cart = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.Name == cartName);
-            if (cart == null) return;
-        
-            // get all items that have an "Inventory" field and check if that field is equal to the cart name
-        
-            var cartItems = DialogueManager.DatabaseManager.masterDatabase.items.FindAll(i => i.fields.Exists(f => f.title == "Inventory" && f.value == cart.id.ToString()));
-        
-   
-            foreach (var item in cartItems)
-            {
-                //if the item has a field "In Inventory" and it's true, set it to false
-                if (item.FieldExists("In Inventory") && item.LookupBool("In Inventory"))
-                {
-                    DialogueLua.SetItemField(item.Name, "In Inventory", false);
-                }
-            }
-        
-            DialogueLua.SetItemField(cartName, "Total", 0);
-        }
-
-        public void ToggleInventoryItem(string itemName)
-        {
-            var item = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.Name == itemName);
-            if (item == null) return;
-        
-            var isItemInCart =  DialogueLua.GetItemField(itemName, "In Inventory").asBool;
-        
-            var itemCost = DialogueLua.GetItemField(itemName, "Cost").asInt;
-        
-            DialogueLua.SetItemField(itemName, "In Inventory", !isItemInCart);
-
-            var inventory = DialogueLua.GetItemField(itemName, "Inventory").asInt;
-        
-            var inventoryItem = DialogueManager.DatabaseManager.masterDatabase.items.Find(i => i.id == inventory);
-        
-            if (inventoryItem == null) return;
-        
-            var totalInventoryCost = DialogueLua.GetItemField(inventoryItem.Name, "Total").asInt;
-        
-            DialogueLua.SetItemField(inventoryItem.Name, "Total", isItemInCart ? totalInventoryCost - itemCost : totalInventoryCost + itemCost);
-        
-        }
-
         public bool Not(bool value) => !value;
-
-        public void UnlockLocation(string location)
-        {
-            Location.FromString(location).unlocked = true;
-        }
-
-        public bool IsLocationUnlocked(string location)
-        {
-            return Location.FromString(location).unlocked;
-        }
 
         public bool QuestInProgressButNascent(string quest) => QuestUtility.QuestInProgressButNascent(quest);
 
@@ -335,36 +232,13 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public string LocationETA(string location)
         {
-            var playerLocation = Location.FromString(location);
-            return Clock.EstimatedTimeOfArrival(playerLocation);
+            var loc = DialogueManager.masterDatabase.GetLocation(location);
+            return Clock.EstimatedTimeOfArrival(loc.RootID);
         }
 
         public int LocationDistanceInMinutes(string location)
         {
-            var playerLocation = Location.FromString(location);
-            return playerLocation.TravelTime / 60;
-        }
-
-        public void SetExclusiveQuestEntryState(string questName, double entry, string questState)
-        {
-            
-            for (int i = 1; i <= QuestLog.GetQuestEntryCount(questName); i++)
-            {
-                if (i == (int)entry) QuestLog.SetQuestEntryState(questName, i, questState);
-                else
-                {
-                    if (QuestLog.GetQuestEntryState(questName, i) != QuestState.Active) continue;
-                    QuestLog.SetQuestEntryState(questName, i, QuestState.Success);
-                }
-            }
-        }
-        
-        public void LikedThat(string actorName, bool liked)
-        {
-            var offset = liked ? 0.25f : -0.25f;
-            var relationship = DialogueLua.GetActorField(actorName, "PlayerRelationship").asFloat;
-            var newRelationship = Mathf.Clamp(relationship + offset, -1f, 1f);
-            DialogueLua.SetActorField(actorName, "PlayerRelationship", relationship + offset);
+            return (int)GameManager.DistanceToLocation(location) / 60;
         }
         
         public void SetConversationConditions(double conversationID, string fieldValue)
@@ -469,12 +343,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public string PlayerLocation()
         {
-            return GameManager.gameState.PlayerLocation;
-        }
-        
-        public void SetRootApp(string app)
-        {
-            GameManager.MostRecentApp = app;
+            return GameManager.gameState.PlayerLocation().Name;
         }
 
 
@@ -484,5 +353,16 @@ namespace Project.Runtime.Scripts.DialogueSystem
             
             return Mathf.RoundToInt(Mathf.Lerp((int)min, (int)max, traffic));
         }
+        
+        public void PlayClipLooped(string clipAddress)
+        {
+            AudioEngine.Instance.PlayClipLooped(clipAddress);
+        }
+        
+        public void PlayClip(string clipAddress)
+        {
+            AudioEngine.Instance.PlayClip(clipAddress);
+        }
+        
     }
 }

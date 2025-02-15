@@ -12,7 +12,6 @@ using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
 namespace Project.Runtime.Scripts.UI
@@ -311,8 +310,6 @@ namespace Project.Runtime.Scripts.UI
         protected void OnValidate()
         {
             Refresh();
-            
-            
             MenuPanelContainer ??= GetComponentInParent<CustomUIMenuPanel>(true);
             
         }
@@ -413,30 +410,24 @@ namespace Project.Runtime.Scripts.UI
                     var locationIndex = Field.LookupInt(response.destinationEntry.fields, locationField);
                     
                     assignedLocation =
-                        DialogueManager.instance.masterDatabase.locations.Find(p => p.id == locationIndex);
-                    
-                    var location = Location.FromString(DialogueManager.instance.masterDatabase.locations.Find(p => p.id == locationIndex).Name); 
+                        DialogueManager.masterDatabase.GetLocation(locationIndex);
                     
                     //Debug.Log(Field.LookupValue(response.destinationEntry.fields, locationField));
                     
-                    if (location != null)
+                    if (assignedLocation != null)
                     {
-                        if (locationLabel != null) locationLabel.text = location.Name;
-                        if (ETALabel != null) ETALabel.text = $"{Clock.EstimatedTimeOfArrival(location)}";
+                        if (locationLabel != null) locationLabel.text = assignedLocation.Name;
+                        if (ETALabel != null) ETALabel.text = $"{Clock.EstimatedTimeOfArrival(assignedLocation.id)}";
                         if (useCoordinates)
                         {
-                            transform.localPosition = location.Coordinates;
+                            transform.localPosition = assignedLocation.LookupVector2("Coordinates");
                         }
                         
-                        if (locationDescription != null) locationDescription.text = location.Description;
+                        if (locationDescription != null) locationDescription.text = assignedLocation.AssignedField("Description").value;
                     }
                     
                     else Debug.LogWarning($"Location not found: {locationIndex}, name: {DialogueManager.instance.masterDatabase.locations[locationIndex].Name}");
                 }
-                
-                
-                
-              //  Debug.Log($"Response: { label.text}");
             }
         
             SetAutonumber();

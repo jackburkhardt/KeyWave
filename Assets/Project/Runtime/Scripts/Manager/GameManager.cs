@@ -17,8 +17,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 using Transition = Project.Runtime.Scripts.AssetLoading.LoadingScreen.Transition;
+
 
 namespace Project.Runtime.Scripts.Manager
 {
@@ -30,6 +30,8 @@ namespace Project.Runtime.Scripts.Manager
         public static GameManager instance;
         public static GameStateManager gameStateManager;
         public static PlayerEventStack playerEventStack;
+        
+        
 
         public static Settings settings
         {
@@ -66,14 +68,13 @@ namespace Project.Runtime.Scripts.Manager
         public static GameState gameState => GameStateManager.instance.gameState;
 
         public static Action OnGameManagerAwake;
-        public static Action OnMapOpen;
-
+    
         public UnityEvent OnGameSceneStart;
         public UnityEvent OnGameSceneEnd;
         
         
         private static string _mostRecentApp = "SmartWatch/Home";
-
+        
         public static string MostRecentApp
         {
             get
@@ -194,18 +195,19 @@ namespace Project.Runtime.Scripts.Manager
             }
 
             if (DialogueLua.GetVariable("skip_content").asBool)
-                TravelTo(Location.PlayerLocation, Transition.Black);
+                SetLocation(gameState.PlayerLocation().Name, Transition.Black);
 
             else DialogueManager.instance.StartConversation("Intro");
         }
 
-        public static void OnConversationStart()
+        public void OnConversationStart()
         {
             var activeConversation = DialogueManager.instance.activeConversation;
             var conversation = DialogueManager.masterDatabase.GetConversation(activeConversation.conversationTitle);
             if (Field.FieldExists(conversation.fields, "Base") &&
                 !DialogueLua.GetConversationField(conversation.id, "Base").asBool) return;
             instance.mainCanvas.BroadcastMessage("SetTrigger", "Show", SendMessageOptions.DontRequireReceiver);
+            
         }
         
         
@@ -214,78 +216,64 @@ namespace Project.Runtime.Scripts.Manager
             PixelCrushers.SaveSystem.SaveToSlot(1);
         }
 
-        public void OnQuestStateChange(string questName)
-        {
-            var quest = DialogueManager.masterDatabase.GetQuest(questName);
-            var state = QuestLog.GetQuestState(questName);
-            var points = DialogueUtility.GetPointsFromField(quest!.fields);
-      
-            // if this quest already succeeded, we don't want to retrigger events
-            if (dailyReport.CompletedTasks.Contains(questName) && !quest.IsRepeatable) return;
-
-            if (state == QuestState.Success)
-            {                
-                foreach (var pointField in points)
-                {
-                    if (pointField.Points == 0) continue;
-
-                    if (quest.IsRepeatable)
-                    {
-                        var repeatCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
-                        var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
-                        
-                        for (int i = 0; i < repeatCount; i++)
-                        {
-                            pointField.Points = (int) (pointField.Points * multiplier);
-                        }
-                        
-                    }
-                    
-                    GameEvent.OnPointsIncrease(pointField, questName);
-                    
-                }
-                    
-                if (quest.IsRepeatable)
-                {
-                    QuestLog.SetQuestState(questName, QuestState.Active);
-                    var completionCount = quest.LookupInt("Repeat Count");
-                    quest.AssignedField("Repeat Count").value = (completionCount + 1).ToString();
-                    Debug.Log( $"Quest {questName} has been repeated {completionCount + 1} times.");
-                }
-                
-            }
-        
-            var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
-            
-            GameEvent.OnQuestStateChange(questName, state, duration);
-            SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
-        }
 
         public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, Transition.Black);
 
         public void StartOfDay() => App.App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
+       
+        
+        private const float DistanceToCafé = 300f;
 
-        public void TravelTo(Location location, Transition? type =  Transition.Default)
+
+        public static float DistanceToLocation(int locationID)
         {
-            TravelTo(location.Name, loadingScreenType: type);
+            var location = DialogueManager.masterDatabase.GetLocation(locationID);
+            if (gameState.PlayerLocation() == location) return 0;
+            // if cafe, distance is relative to current location
+            if (location.Name == "Café")
+            {
+                return DistanceToCafé;
+            }
+                
+            var locationCoordinates = location.LookupVector2("Coordinates");
+            var playerCoordinates = gameState.PlayerLocation().LookupVector2("Coordinates");
+
+            return Vector2.Distance(playerCoordinates, locationCoordinates) * Traffic.CurrentTrafficMultiplier;
         }
 
-        public void TravelTo(string newLocation, string currentScene = "", Transition? loadingScreenType =  Transition.Default, Action onStart = null, Action onComplete = null)
+        public static float DistanceToLocation(string locationName)
         {
+            var location = DialogueManager.masterDatabase.GetLocation(locationName);
+            return DistanceToLocation(location.id);
+        }
+        
+        
+        public void SetLocation(string locationName)
+        {
+            SetLocation(locationName, Transition.Default);
+        }
+        
+        public void SetLocation(int locationID, Transition type =  Transition.Default)
+        {
+            var location = DialogueManager.masterDatabase.GetLocation(locationID);
+            SetLocation(location.Name, type);
+        }
+
+        public void SetLocation(string newLocation,  Transition transition)
+        {
+            var location = DialogueManager.masterDatabase.GetLocation(newLocation);
+        
+            GameEvent.OnMove(newLocation, gameState.PlayerLocation().Name, (int)DistanceToLocation(location.id));
+            
+            
             BroadcastMessage( "OnTravel");
-
             DialogueManager.StopConversation();
-            
             OnGameSceneEnd?.Invoke();
-            
-            onStart?.Invoke();
-            
-            if (currentScene == "")
-            {
-                if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
-                else currentScene = gameState.current_scene;
-            }
 
+            var currentScene = string.Empty;
+            
+            if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
+            else currentScene = gameState.current_scene;
 
             SmartWatch.ResetCurrentApp();
             
@@ -295,10 +283,11 @@ namespace Project.Runtime.Scripts.Manager
             DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
             DialogueManager.PlaySequence("ChannelFade(Environment, out, 1);");
 
+            
             IEnumerator TravelToHandler()
             {
                 
-                yield return App.App.Instance.ChangeScene(newLocation, currentScene, loadingScreenType);
+                yield return App.App.Instance.ChangeScene(newLocation, currentScene, transition);
                 
                 AudioEngine.Instance.StopAllAudioOnChannel("Music");
                 while (App.App.isLoading)
@@ -307,16 +296,49 @@ namespace Project.Runtime.Scripts.Manager
                 }
 
                 yield return new WaitForSeconds(1f);
-
-                DialogueManager.StartConversation($"{newLocation}/Base");
+                
+                gameState.current_scene = newLocation;
                 
                 OnGameSceneStart?.Invoke();
                 
                 
-                gameState.current_scene = newLocation;
+                BroadcastMessage( "OnGameSceneStart");
                 
-                onComplete?.Invoke();
+                location.AssignedField("Visit Count").value = (location.LookupInt("Visit Count") + 1).ToString();
+                
             }
+        }
+        
+        public void StartBaseOrPreBaseConversation()
+        {
+            var visitCount = gameState.PlayerLocation(true).LookupInt("Visit Count");
+            var loopConversation = gameState.PlayerLocation(true).LookupBool("Loop Conversation");
+
+
+            if (!gameState.PlayerLocation(true).FieldExists("Conversation"))
+            {
+                DialogueManager.StartConversation("Base");
+                return;
+            }
+
+            if (visitCount == 0 || loopConversation)
+            {
+                if (gameState.PlayerLocation(true).IsFieldAssigned("Conversation"))
+                    DialogueManager.StartConversation(
+                        gameState.PlayerLocation().LookupValue("Conversation"));
+
+                else
+                {
+                    var generatedConversation =
+                        GameManager.GenerateConversation(gameState.PlayerLocation(true));
+                    // SequencerCommandGoToConversatio
+                    Debug.Log("Generated entries: " + generatedConversation.dialogueEntries.Count);
+                    DialogueManager.StartConversation(generatedConversation.Title);
+                }
+            }
+
+            else DialogueManager.StartConversation("Base");
+
         }
 
         public void Wait(int duration)
@@ -338,6 +360,75 @@ namespace Project.Runtime.Scripts.Manager
                 App.App.Instance.LoadScene("PauseMenu", transition: Transition.None);
             }
         }
+        
+        public static Conversation GenerateConversation(Asset asset)
+            {
+                var template = Template.FromDefault();
+                
+                var dialogueEntries = new List<DialogueEntry>();
+                var conversation = template.CreateConversation( Template.FromDefault().GetNextConversationID(DialogueManager.masterDatabase), $"/GENERATED/{asset.Name}");
+                var entryActorID = asset.IsFieldAssigned("Entry Actor")
+                    ? int.Parse(asset.LookupValue("Entry Actor"))
+                    : -1;
+                
+                var visitCount = asset.LookupInt("Visit Count");
+                var entryFieldLabelStart = visitCount > 0  && asset.FieldExists("Repeat Entry Count") ? "Repeat Entry" : "Entry";
+                var entryCount = asset.LookupInt($"{entryFieldLabelStart} Count");
+
+
+                var startNode = template.CreateDialogueEntry( 0, conversation.id, "START");
+            
+                startNode.ActorID = entryActorID;
+                startNode.Sequence = "None()";
+                startNode.outgoingLinks = new List<Link> { new Link( conversation.id, 0, conversation.id, 1) };
+                dialogueEntries.Add(startNode);
+                
+                int musicEntry = Field.FieldExists( asset.fields, $"Music {entryFieldLabelStart}") ? asset.LookupInt($"Music {entryFieldLabelStart}") : 0;
+            
+
+                for (int i = 1; i < entryCount + 1; i++)
+                {
+                    var menuText = asset.LookupValue($"{entryFieldLabelStart} {i} Menu Text");
+                    
+                    Debug.Log($"{entryFieldLabelStart} {i} Menu Text: {menuText}");
+                    var dialogueText = asset.LookupValue($"{entryFieldLabelStart} {i} Dialogue Text");
+                
+                    var newDialogueEntry = template.CreateDialogueEntry( i, conversation.id, string.Empty);
+                    newDialogueEntry.MenuText = menuText;
+                    newDialogueEntry.DialogueText = dialogueText;
+                
+                    newDialogueEntry.ActorID = entryActorID;
+
+                    if (i == musicEntry)
+                    {
+                        var musicPath = asset.LookupValue("Music");
+                        newDialogueEntry.userScript += $"PlayClipLooped({musicPath})";
+                    }
+                
+                    if (i < entryCount) newDialogueEntry.outgoingLinks = new List<Link>() { new Link( conversation.id, i, conversation.id, i + 1) };
+                
+                    dialogueEntries.Add(newDialogueEntry);
+                };
+                
+                
+                conversation.dialogueEntries = dialogueEntries;
+
+                if (asset is Location)
+                {
+                    conversation.fields.Add( new Field( "Location", asset.id.ToString(), FieldType.Location));
+                }
+                
+                else if (asset is Item item)
+                {
+                    if (item.IsAction)
+                    {
+                        conversation.fields.Add( new Field( "Action", item.id.ToString(), FieldType.Item));
+                    }
+                }
+                
+                DialogueManager.masterDatabase.conversations.Add(conversation);
+                return conversation;
+            }
 
         public UnityEvent OnGameClose;
         public void CloseGame()
@@ -347,11 +438,124 @@ namespace Project.Runtime.Scripts.Manager
             OnGameClose?.Invoke();
         }
 
-        public void OnConversationLineEnd()
+        public void SetSublocation(PixelCrushers.DialogueSystem.Location location)
         {
-            
+            if (location == gameState.PlayerLocation(true)) return;
+            StartCoroutine(SwitchSublocation(location));
         }
         
         
+        static Canvas faderCanvas = null;
+        static UnityEngine.UI.Image faderImage = null;
+        
+        IEnumerator Fade( string direction, float duration = 1f, Color color = default)
+        {
+            
+            bool stay;
+            bool unstay;
+            bool fadeIn;
+            
+            stay = string.Equals(direction, "stay", System.StringComparison.OrdinalIgnoreCase);
+            unstay = string.Equals(direction, "unstay", System.StringComparison.OrdinalIgnoreCase);
+            fadeIn = unstay || string.Equals(direction, "in", System.StringComparison.OrdinalIgnoreCase);
+            
+            if (color == default) color = Color.black;
+            
+            IEnumerator FadeHandler()
+            {
+                float SmoothMoveCutoff = 0.05f;
+                int FaderCanvasSortOrder = 32760;
+                
+               
+                float startTime;
+                float endTime;
+                
+                
+                if (faderCanvas == null)
+                {
+                    faderCanvas = new GameObject("Canvas (Fader)", typeof(Canvas)).GetComponent<Canvas>();
+                    faderCanvas.transform.SetParent(DialogueManager.instance.transform);
+                    faderCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                    faderCanvas.sortingOrder = FaderCanvasSortOrder;
+                }
+                if (faderImage == null)
+                {
+                    faderImage = new GameObject("Fader Image", typeof(UnityEngine.UI.Image)).GetComponent<UnityEngine.UI.Image>();
+                    faderImage.transform.SetParent(faderCanvas.transform, false);
+                    faderImage.rectTransform.anchorMin = Vector2.zero;
+                    faderImage.rectTransform.anchorMax = Vector2.one;
+                    faderImage.sprite = null;
+                    var initializeAlpha = (fadeIn || unstay) ? 1 : 0;
+                    faderImage.color = new Color(color.r, color.g, color.b, initializeAlpha);
+                }
+
+                if (unstay && faderImage != null && Mathf.Approximately(0, faderImage.color.a))
+                {
+                    yield break;
+                }
+                else if (duration > SmoothMoveCutoff)
+                {
+                    faderCanvas.gameObject.SetActive(true);
+                    faderImage.gameObject.SetActive(true);
+
+                    // Set up duration:
+                    startTime = Time.time;
+                    endTime = startTime + duration;
+
+                    // If fade in or out, start from 1 or 0. Otherwise start from current alpha.
+                    var startingAlpha = fadeIn ? 1
+                        : (stay || unstay) ? faderImage.color.a
+                        : 0;
+                    faderImage.color = new Color(color.r, color.g, color.b, startingAlpha);
+
+                }
+                else
+                {
+
+                    yield break;
+                }
+                
+                while (Time.time < endTime)
+                {
+                    var t = (Time.time - startTime) / duration;
+                    var a = fadeIn ? 1 - t : t;
+                    faderImage.color = new Color(color.r, color.g, color.b, a);
+                    yield return null;
+                }
+            }
+            
+            
+            yield return FadeHandler();
+            if (fadeIn) Destroy(faderCanvas.gameObject);
+            if (fadeIn) Destroy(faderImage.gameObject);
+                
+        }
+        
+        IEnumerator SwitchSublocation(PixelCrushers.DialogueSystem.Location location, float transitionDuration = 3f)
+        {
+            Debug.Log(DialogueManager.masterDatabase.GetLocation(location.id).Name);
+            Debug.Log(DialogueManager.masterDatabase.GetLocation(location.RootID).Name);
+            var locationScene = SceneManager.GetSceneByName(DialogueManager.masterDatabase.GetLocation(location.RootID).Name);
+            DialogueManager.Pause();
+                
+            yield return Fade( "stay", transitionDuration/4);
+            yield return new WaitForSeconds(transitionDuration/4);
+                
+            var destinationSublocationGameObject = locationScene.FindGameObject(location.Name);
+            if (destinationSublocationGameObject != null) destinationSublocationGameObject.SetActive(true);
+                
+            if (gameState.PlayerLocation(true).IsSublocation)
+            {
+                var currentSublocationGameObject = locationScene.FindGameObject(gameState.PlayerLocation(true).Name);
+                if (currentSublocationGameObject != null) currentSublocationGameObject.SetActive(false);
+            }
+                
+            yield return Fade( "unstay", transitionDuration/4);
+            yield return new WaitForSeconds(transitionDuration/4);
+            DialogueManager.Unpause();
+                
+            gameState.SetPlayerLocation(location);
+            yield return null;
+        }
     }
 }

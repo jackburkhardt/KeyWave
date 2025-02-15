@@ -8,7 +8,6 @@ using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
-using Project.Runtime.Scripts.ScriptableObjects;
 using Project.Runtime.Scripts.Utility;
 using TMPro;
 using UnityEngine;
@@ -218,6 +217,33 @@ public class ActionsAppEnableIfSequenceChangesSublocation : AppSubcomponent<Stan
         evalPassAction = () =>
         {
             subcomponent.gameObject.SetActive(sublocationSequence);
+        };
+
+        return true;
+    }
+}
+
+
+public class TravelAppSetMapCoordinates : AppSubcomponent<StandardUIResponseButton>
+{
+    public override bool Evaluate(StandardUIResponseButton standardUIResponseButton, out Action evalPassAction)
+    {
+        evalPassAction = null;
+       
+        if (standardUIResponseButton.response == null ||  standardUIResponseButton.response.destinationEntry == null || !standardUIResponseButton.button.interactable) return false;
+
+        var entryHasLocation = standardUIResponseButton.response.destinationEntry.fields.Exists(p => p.title == "Location");
+        if (!entryHasLocation) return false;
+
+        var locationField = standardUIResponseButton.response.destinationEntry.fields.Find(p => p.title == "Location");
+
+        var location = DialogueManager.masterDatabase.GetLocation(int.Parse(locationField.value));
+
+        var coordinates = location.LookupVector2("Coordinates");
+        
+        evalPassAction = () =>
+        {
+            subcomponent.transform.localPosition = new Vector3(coordinates.x, coordinates.y, subcomponent.transform.localPosition.z);
         };
 
         return true;

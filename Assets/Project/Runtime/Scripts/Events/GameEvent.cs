@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
-using Location = Project.Runtime.Scripts.ScriptableObjects.Location;
 
 namespace Project.Runtime.Scripts.Events
 {
@@ -83,11 +82,11 @@ namespace Project.Runtime.Scripts.Events
             }
         }
 
-        public static void OnMove(string locName, Location lastLocation, int duration)
+        public static void OnMove(string locName, string lastLocation, int duration)
         {
             var data = new JObject
             {
-                ["lastLocation"] = lastLocation.Name,
+                ["lastLocation"] = lastLocation,
                 ["newLocation"] = locName
             };
             RegisterPlayerEvent("move", data, duration);
