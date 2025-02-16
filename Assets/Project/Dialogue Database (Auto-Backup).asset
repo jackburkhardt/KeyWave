@@ -3536,106 +3536,6 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 168
-    fields:
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Location
-      value: 
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Name
-      value: New Quest 168
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: unassigned
-      type: 0
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Points
-      value: Wellness:0
-      type: 10
-      typeString: CustomFieldType_PointsType
-    - title: Duration
-      value: 0:seconds
-      type: 11
-      typeString: CustomFieldType_TimespanType
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Points Repeat
-      value: 1
-      type: 1
-      typeString: CustomFieldType_Number
-  - id: 169
-    fields:
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Location
-      value: 
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Name
-      value: New Quest 169
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: unassigned
-      type: 0
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Points
-      value: Wellness:0
-      type: 10
-      typeString: CustomFieldType_PointsType
-    - title: Duration
-      value: 0:seconds
-      type: 11
-      typeString: CustomFieldType_TimespanType
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Points Repeat
-      value: 1
-      type: 1
-      typeString: CustomFieldType_Number
   - id: 170
     fields:
     - title: Name
@@ -4368,7 +4268,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Store/Enter") == "active" and (true)
+      value: CurrentQuestState("Store/Enter") == "active" and (Variable["player_entered_store"]
+        == false)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4380,7 +4281,8 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Store/Enter", "success"); '
+      value: SetQuestState("Store/Enter", "success"); Variable["player_entered_store"]
+        = true
       type: 0
       typeString: CustomFieldType_Text
     - title: Skills Points
@@ -4415,6 +4317,45 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Conversation
+      value: 
+      type: 0
+      typeString: 
+    - title: Entry Count
+      value: 2
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry Actor
+      value: 7
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Entry 1
+      value: 
+      type: 0
+      typeString: 
+    - title: Entry 1 Menu Text
+      value: As you walk into the store, you're hit by a frosty wave of air. Good
+        to know that at least the AC is working.
+      type: 0
+      typeString: 
+    - title: Entry 1 Dialogue Text
+      value: 
+      type: 0
+      typeString: 
+    - title: Entry 2
+      value: 
+      type: 0
+      typeString: 
+    - title: Entry 2 Menu Text
+      value: The store is eerily quiet. There's some quiet chit-chat and music playing,
+        but only a few customers are browsing the racks. The employees do not pay
+        you any mind.
+      type: 0
+      typeString: 
+    - title: Entry 2 Dialogue Text
+      value: 
+      type: 0
+      typeString: 
   - id: 177
     fields:
     - title: Name
@@ -4462,7 +4403,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Store/SecShp/Checkout") == "active" and (True)
+      value: CurrentQuestState("Store/SecShp/Checkout") == "active" and ((CurrentQuestState("Store/SecShp/Greet")
+        == "success") and (Variable["secret_shop_active"] == true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4564,7 +4506,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Store/SecShp/Seasonal") == "active" and (True)
+      value: CurrentQuestState("Store/SecShp/Seasonal") == "active" and ((CurrentQuestState("Store/SecShp/Greet")
+        == "success") and (Variable["secret_shop_active"] == true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4674,7 +4617,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Store/SecShp/Discount") == "active" and (True)
+      value: CurrentQuestState("Store/SecShp/Discount") == "active" and ((CurrentQuestState("Store/SecShp/Greet")
+        == "success") and (Variable["secret_shop_active"] == true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4780,7 +4724,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Store/SecShp/Greet") == "active" and (True)
+      value: CurrentQuestState("Store/SecShp/Greet") == "active" and (Actor["Mariana_Rodriguez"].Introduced
+        ~= true  and (Variable["player_entered_store"] == true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4792,7 +4737,8 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Store/SecShp/Greet", "success"); '
+      value: SetQuestState("Store/SecShp/Greet", "success"); Variable["secret_shop_active"]
+        = true
       type: 0
       typeString: CustomFieldType_Text
     - title: Skills Points
@@ -4887,7 +4833,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Store/Talk/Mariana") == "active" and (True)
+      value: CurrentQuestState("Store/Talk/Mariana") == "active" and ((Variable["secret_shop_active"]
+        == false) and (Variable["player_entered_store"] == true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4999,7 +4946,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Store/Talk/Roberta") == "active" and (CurrentQuestState("Store/Talk/Mariana")
-        == "success")
+        == "success" and (Variable["secret_shop_active"] == false))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -5011,7 +4958,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 
+      value: 'SetQuestState("Store/Talk/Roberta", "success"); '
       type: 0
       typeString: 
     - title: Skills Points
@@ -5119,7 +5066,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Store/Talk/Maria") == "active" and (CurrentQuestState("Store/Talk/Mariana")
-        == "success")
+        == "success" and (Variable["secret_shop_active"] == false))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -5222,7 +5169,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Store/Talk/Laura") == "active" and (CurrentQuestState("Store/Talk/Mariana")
-        == "success")
+        == "success"  and (Variable["secret_shop_active"] == false))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -5234,7 +5181,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 
+      value: 'SetQuestState("Store/Talk/Laura", "success"); '
       type: 0
       typeString: 
     - title: Skills Points
@@ -5329,7 +5276,8 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Store/Door") == "active" and (CurrentQuestState("Store/Talk/Mariana")
-        ~= "success" and (CurrentQuestState("Store/Talk/Maria") ~= "success"))
+        ~= "success" and (CurrentQuestState("Store/Talk/Maria") ~= "success") and
+        (Variable["player_entered_store"] == true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -5341,7 +5289,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 
+      value: 'SetQuestState("Store/Door", "success"); '
       type: 0
       typeString: 
     - title: Skills Points
@@ -7113,13 +7061,13 @@ MonoBehaviour:
   - id: 92
     fields:
     - title: Name
-      value: g
+      value: secret_shop_active
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
     - title: Description
       value: 
       type: 0
@@ -48376,8 +48324,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 40.10675, y: 241.27231}
-    canvasZoom: 0.74800324
+    canvasScrollPosition: {x: 13.044937, y: 0}
+    canvasZoom: 0.9280031
   - id: 158
     fields:
     - title: Title
@@ -48893,8 +48841,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 46.19998}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 43.071148, y: 54.62847}
+    canvasZoom: 1.03
   - id: 159
     fields:
     - title: Title
@@ -51114,7 +51062,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 325.13354, y: 0}
+    canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 0.93500024
   - id: 177
     fields:
@@ -57838,7 +57786,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 614.6766
-        y: 373.4993
+        y: 374.4261
         width: 160
         height: 30
     - id: 3
@@ -58096,7 +58044,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp("Home")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -58186,7 +58134,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 147.26328, y: 42.261353}
+    canvasScrollPosition: {x: 171.35968, y: 0}
     canvasZoom: 1.0790002
   - id: 191
     fields:
@@ -58376,7 +58324,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp("Inbox")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -58814,8 +58762,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 13.657499}
-    canvasZoom: 1.0165018
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.83650196
   - id: 192
     fields:
     - title: Title
@@ -65246,7 +65194,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp(Phone/"Base")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -65487,7 +65435,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp("Travel")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -66236,7 +66184,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp(Help)
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -69860,7 +69808,7 @@ MonoBehaviour:
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.5084995
+    canvasZoom: 0.8084992
   - id: 203
     fields:
     - title: Title
@@ -75003,7 +74951,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 208
+        originDialogueID: 13
+        destinationConversationID: 208
+        destinationDialogueID: 16
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -75011,8 +74965,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 881.7444
-        y: 462.7293
+        x: 905.1486
+        y: 441.4527
         width: 160
         height: 30
     - id: 14
@@ -75133,7 +75087,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 208
+        originDialogueID: 15
+        destinationConversationID: 208
+        destinationDialogueID: 17
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -75141,93 +75101,40 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1135.609
-        y: 382.14285
+        x: 1122.4121
+        y: 382.493
         width: 160
         height: 30
-    entryGroups: []
-    canvasScrollPosition: {x: 445.09174, y: 0}
-    canvasZoom: 0.7900003
-  - id: 209
-    fields:
-    - title: Title
-      value: New Conversation 209
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Actor
-      value: 7
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Conversant
-      value: 7
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Conditions
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    overrideSettings:
-      useOverrides: 0
-      overrideSubtitleSettings: 0
-      showNPCSubtitlesDuringLine: 1
-      showNPCSubtitlesWithResponses: 1
-      showPCSubtitlesDuringLine: 0
-      skipPCSubtitleAfterResponseMenu: 0
-      subtitleCharsPerSecond: 30
-      minSubtitleSeconds: 2
-      continueButton: 0
-      overrideSequenceSettings: 0
-      defaultSequence: 
-      defaultPlayerSequence: 
-      defaultResponseMenuSequence: 
-      overrideInputSettings: 0
-      alwaysForceResponseMenu: 1
-      includeInvalidEntries: 0
-      responseTimeout: 0
-      emTagForOldResponses: 0
-      emTagForInvalidResponses: 0
-      cancelSubtitle:
-        key: 27
-        buttonName: 
-      cancelConversation:
-        key: 27
-        buttonName: 
-    nodeColor: 
-    dialogueEntries:
-    - id: 0
+    - id: 16
       fields:
       - title: Title
-        value: START
+        value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 10
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 7
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
+        value: '"No. Not until tomorrow, at least."'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
         value: 
         type: 0
-        typeString: 
-      - title: Sequence
-        value: None()
-        type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Timespan
         value: -1:seconds
         type: 11
@@ -75243,15 +75150,21 @@ MonoBehaviour:
       - title: NodeColor
         value: '#000000ff'
         type: 14
-        typeString: 
-      conversationID: 0
+        typeString: CustomFieldType_ColorType
+      conversationID: 208
       isRoot: 0
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: 
+      falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 208
+        originDialogueID: 16
+        destinationConversationID: 208
+        destinationDialogueID: 18
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -75259,13 +75172,230 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 160
-        y: 30
+        x: 915.27515
+        y: 509.1742
+        width: 160
+        height: 30
+    - id: 17
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 10
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: '"Maria wants to try and run the store without actually putting in
+          the work. She can do finances, yes, but we also need help unloading trucks,
+          organizing product, and helping customers."'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 208
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 208
+        originDialogueID: 17
+        destinationConversationID: 208
+        destinationDialogueID: 19
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1122.4121
+        y: 432.493
+        width: 160
+        height: 30
+    - id: 18
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 10
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: '"Basically, she gets to pick and choose when to lead, and it is not
+          fair for us."'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 208
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 208
+        originDialogueID: 18
+        destinationConversationID: 208
+        destinationDialogueID: 11
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 915.27515
+        y: 559.1742
+        width: 160
+        height: 30
+    - id: 19
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 10
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: '"Basically, she gets to pick and choose when to lead, and it is not
+          fair for us."'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 208
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 208
+        originDialogueID: 19
+        destinationConversationID: 208
+        destinationDialogueID: 11
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 1122.4121
+        y: 482.493
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 207.34616, y: 0}
+    canvasZoom: 0.7900003
   syncInfo:
     syncActors: 0
     syncItems: 0

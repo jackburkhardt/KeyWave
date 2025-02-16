@@ -6,38 +6,25 @@ using UnityEngine;
 public class RenderTextureAutoResize : MonoBehaviour
 {
     private RenderTexture rt;
+    private Camera cam;
     public static RenderTexture rtInstance;
-    
 
-    // Start is called before the first frame update
-    public void Update()
+    private void OnEnable()
     {
-        rt = GetComponent<Camera>().targetTexture;
-        
-        if ( !rt || rt.width != (int)Camera.main.pixelWidth || rt.height != (int)Camera.main.pixelHeight )
+        cam = GetComponent<Camera>();
+        rt = cam.targetTexture;
+    }
+    
+    // Start is called before the first frame update
+    public void LateUpdate()
+    {
+        var mainCam = Camera.main;
+        if ( !rt || rt.width != (int)mainCam.pixelWidth || rt.height != (int)mainCam.pixelHeight )
         {
-            if (rt)
-            {
-                if (RenderTexture.active == rt)
-                    RenderTexture.active = null;
-                RenderTexture.DestroyImmediate(rt);
-                rt = null;
-            }
-	
-            GetComponent<Camera>().ResetAspect();
-            
-            rt = new RenderTexture((int)Camera.main.pixelWidth, (int)Camera.main.pixelHeight, 16);
-            rt.wrapMode = TextureWrapMode.Clamp;
-            rt.filterMode = FilterMode.Point;
-            rt.hideFlags = HideFlags.DontSave; 
-            rt.isPowerOfTwo = false;
+            rt.Release();
+            rt.width = (int)mainCam.pixelWidth;
+            rt.height = (int)mainCam.pixelHeight;
             rt.Create();
-			
-            RenderTexture.active = rt;
-            GL.Clear(true, true, new Color(0,0,0,0));
-            RenderTexture.active = null;
-			
-            GetComponent<Camera>().targetTexture = rt;
         }
         
         rtInstance = rt;
