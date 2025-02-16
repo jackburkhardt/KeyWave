@@ -6,8 +6,14 @@ using UnityEngine.UI;
 
 public class AutoRenderTexture : MonoBehaviour
 {
+    private RawImage rawImage;
+    private void OnEnable()
+    {
+        rawImage = GetComponent<RawImage>();
+    }
+
     private void Update()
     {
-        GetComponent<RawImage>().texture = RenderTextureAutoResize.rtInstance;
+        rawImage.texture = RenderTextureAutoResize.rtInstance;
     }
 }
