@@ -195,7 +195,10 @@ public class CustomDialogueUI : StandardDialogueUI
                 
                 newDialogueEntry.MenuText = action.IsFieldAssigned("Display Name") ? action.LookupValue("Display Name") : action.Name;
                 newDialogueEntry.DialogueText = string.Empty;
-                newDialogueEntry.conditionsString = action.IsFieldAssigned("Conditions") ? action.AssignedField("Conditions").value : string.Empty; newDialogueEntry.fields.Add( new Field(showInvalidFieldName, action.LookupValue(showInvalidFieldName), FieldType.Boolean));
+                newDialogueEntry.conditionsString = action.IsFieldAssigned("Conditions") ? action.AssignedField("Conditions").value : string.Empty;
+                
+                newDialogueEntry.fields.Add( new Field(showInvalidFieldName, action.LookupValue(showInvalidFieldName), FieldType.Boolean));
+                
                 newDialogueEntry.ActorID = subtitle.dialogueEntry.ActorID;
                 newDialogueEntry.ConversantID = subtitle.dialogueEntry.ConversantID;
 
@@ -239,8 +242,13 @@ public class CustomDialogueUI : StandardDialogueUI
                     newDialogueEntry.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
                 }
                 
+                var newResponse = new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry);
+                newResponse.enabled = Lua.Run($"return {newDialogueEntry.conditionsString}").asBool;
                 
-                newResponses.Add(new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry));
+                if (!newResponse.enabled) Debug.Log("action not available: " + newDialogueEntry.conditionsString);
+                
+                
+                newResponses.Add(newResponse);
                 
             }
 
@@ -301,27 +309,15 @@ public class CustomDialogueUI : StandardDialogueUI
 
     private bool AllowShowInvalid(Response response)
     {
-        //check if response's parent group is valid
         
-        // See if this response has a "Show Invalid" field in Lua:
-        var luaResult = Lua.Run("return Dialog[" + response.destinationEntry.id + "].Show_Invalid");
-        if (luaResult.Equals(Lua.noResult) || luaResult.asString == "nil")
+        if (Field.FieldExists(response.destinationEntry.fields, showInvalidFieldName))
         {
-            // If not, return the design-time Show Invalid field value from the database:
-            if (Field.FieldExists(response.destinationEntry.fields, showInvalidFieldName))
-            {
-                return Field.LookupBool(response.destinationEntry.fields, showInvalidFieldName);
-            }
-            else
-            {
-                // Not sure how to get this
-               return ShowInvalidByDefault;
-            }
+            return Field.LookupBool(response.destinationEntry.fields, showInvalidFieldName);
         }
         else
         {
-            // Otherwise return the runtime Lua value:
-            return luaResult.asBool;
+            // Not sure how to get this
+            return ShowInvalidByDefault;
         }
     }
 
@@ -340,13 +336,7 @@ public class CustomDialogueUI : StandardDialogueUI
             DialogueManager.instance.conversationController.randomizeNextEntry = true;
             DialogueManager.instance.conversationController.randomizeNextEntryNoDuplicate = true;
         }
-        
-        
-        foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
-        {
-            var item = DialogueManager.masterDatabase.GetItem(int.Parse(action.value));
-            QuestLog.SetQuestState(item.Name, QuestState.Success);
-        }
+
         
     }
 

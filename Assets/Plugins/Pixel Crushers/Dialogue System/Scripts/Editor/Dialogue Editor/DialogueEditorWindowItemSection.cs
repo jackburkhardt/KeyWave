@@ -737,19 +737,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
               
             
             //Script
-            
-            Field script = Field.Lookup(item.fields, "Script");
-            if (script == null)
-            {
-                script = new Field("Script", string.Empty, FieldType.Text);
-                item.fields.Add(script);
-                SetDatabaseDirty("Create Script Field");
-            }
-            
-            EditorWindowTools.EditorGUILayoutBeginGroup();
-            luaScriptWizard.database = database;
-            script.value = luaScriptWizard.Draw(new GUIContent("Script", "The lua script to run when the action is performed."), script.value);
-            EditorWindowTools.EditorGUILayoutEndGroup();
+            DrawActionScript(item);
             
             EditorGUILayout.Space();
             
@@ -1069,52 +1057,69 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
              var conditions = Field.Lookup(item.fields, "Conditions");
              if (conditions == null)
              {
-                 conditions = new Field("Conditions", "True", FieldType.Text);
+                 conditions = new Field("Conditions", "true", FieldType.Text);
                  item.fields.Add(conditions);
              }
 
              if (!conditions.value.Contains(" and "))
              {
-                    conditions.value = $"True and (True)";
+                    conditions.value = $"true and (true)";
                     return;
              }
              
              EditorWindowTools.EditorGUILayoutBeginGroup();
-                luaConditionWizard.database = database;
+             
+             luaConditionWizard.database = database; 
+             
+             GUI.enabled = false; 
+             var defaultCondition = $"CurrentQuestState(\"{item.Name}\") == \"active\""; 
+             var newDefaultCondition = luaConditionWizard.Draw(new GUIContent("Default Condition", "Default lua statement for actions."), defaultCondition, false, true); 
+             GUI.enabled = true; 
+             
+             var appendDefaultCondition = !string.IsNullOrWhiteSpace(newDefaultCondition);
+             if (!appendDefaultCondition)
+             {
+                 newDefaultCondition = "true";
+             } 
+             var additionalConditionsText = conditions.value.Substring(conditions.value.Split(" and ")[0].Length + 5);
+             additionalConditionsText = additionalConditionsText.Substring(1, additionalConditionsText.Length - 2); //removes parenthesis
+             if (additionalConditionsText == "true") additionalConditionsText = string.Empty; 
+             var newAdditionalConditions = luaConditionWizard.Draw(new GUIContent( "Additional Conditions", "Optional Lua statement that must be true to use this entry."), additionalConditionsText); 
+             if (newAdditionalConditions.Length == 0) newAdditionalConditions = "true"; 
+             conditions.value = $"{newDefaultCondition} and ({newAdditionalConditions})";
                 
-                GUI.enabled = false;
-                
-                
-                
-                var standardDefaultCondition = $"CurrentQuestState(\"{item.Name}\") == \"active\"";
-                    
-                
-                
-                var defaultCondition = luaConditionWizard.Draw(new GUIContent("Default Condition", "Default lua statement for actions."), standardDefaultCondition, false, true);
-                
-                GUI.enabled = true;
-                
-                var appendDefaultCondition = !string.IsNullOrWhiteSpace(defaultCondition);
-
-                if (!appendDefaultCondition)
-                {
-                    defaultCondition = "True";
-                }
-
-                var currentAdditionalConditionsText = conditions.value.Substring(conditions.value.Split(" and ")[0].Length + 5);
-                
-                //remove parantheses
-                currentAdditionalConditionsText = currentAdditionalConditionsText.Substring(1, currentAdditionalConditionsText.Length - 2);
-                
-                if (currentAdditionalConditionsText == "True") currentAdditionalConditionsText = string.Empty;
-                
-                var additionalConditions = luaConditionWizard.Draw(new GUIContent( "Additional Conditions", "Optional Lua statement that must be true to use this entry."), currentAdditionalConditionsText);
-
-                if (additionalConditions.Length == 0) additionalConditions = "True";
-
-                conditions.value = $"{defaultCondition} and ({additionalConditions})";
-                
-                EditorWindowTools.EditorGUILayoutEndGroup();
+            EditorWindowTools.EditorGUILayoutEndGroup();
+        }
+        
+        private void DrawActionScript(Item item)
+        {
+            var script = Field.Lookup(item.fields, "Script");
+            if (script == null)
+            {
+                script = new Field("Script", string.Empty, FieldType.Text);
+                item.fields.Add(script);
+                SetDatabaseDirty("Create Script Field");
+            }
+            
+            if (!script.value.Contains(";")) 
+            {
+                script.value = $"; {script.value}";
+            }
+            
+            EditorWindowTools.EditorGUILayoutBeginGroup();
+            luaScriptWizard.database = database;
+            
+            GUI.enabled = false;
+            var defaultScript = $"SetQuestState(\"{item.Name}\", \"success\")";
+            var newDefaultScript = luaScriptWizard.Draw(new GUIContent("Default Script", "Default lua script for actions that runs when the action is terminated."), defaultScript, false, true);
+            GUI.enabled = true;
+            
+            var additionalScript = script.value.Substring(script.value.Split(script.value.Contains("; ") ? "; " : ";") [0].Length + 2);
+            var newAdditionalScript = luaScriptWizard.Draw(new GUIContent( "Additional Script", "Optional Lua script that will be run after the default script."), additionalScript);
+            
+            
+            script.value = $"{newDefaultScript}; {newAdditionalScript}";
+            EditorWindowTools.EditorGUILayoutEndGroup();
         }
 
         private void DrawActionPoints(Item item)

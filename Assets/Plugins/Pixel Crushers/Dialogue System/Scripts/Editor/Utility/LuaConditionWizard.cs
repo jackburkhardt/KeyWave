@@ -106,7 +106,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 var guiEnabled = GUI.enabled;
                 GUI.enabled = true;
-                appendToggle = EditorGUILayout.ToggleLeft("Append", appendToggle, EditorTools.GUILayoutToggleWidth("Append"));
+                appendToggle = EditorGUILayout.ToggleLeft("Include Default", appendToggle, EditorTools.GUILayoutToggleWidth("Include Default"));
                 GUI.enabled = guiEnabled;
             }
             
@@ -119,7 +119,7 @@ namespace PixelCrushers.DialogueSystem
             
             var defaultContentColor = GUI.contentColor;
 
-            if (!appendToggle)
+            if (showAppendToggle && !appendToggle)
             {
                 GUI.contentColor = Color.gray;
             }

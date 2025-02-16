@@ -245,36 +245,22 @@ namespace Project.Runtime.Scripts.Manager
         public void OnConversationEnd()
         {
             
-            switch (state)
-            {
-                case State.PreBase:
-                    StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
-                    break;
-                case State.Base:
-                    StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToCurrentApp));
-                    break;
-                case State.SmartWatch:
-                  //  StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToCurrentApp));
-                    break;
-                case State.Travel: // do nothing
-                    break;
-                default:
-                    StartCoroutine(QueueConversationEndEvent(() =>
-                    {
-                        state = State.PreBase;
-                        GameManager.instance.StartBaseOrPreBaseConversation();
-                    }));
-                    break;
-            }
-            
-            
             var conversationID = DialogueManager.currentConversationState.subtitle.dialogueEntry.conversationID;
             var conversation = DialogueManager.masterDatabase.GetConversation(conversationID);
-      
-            foreach (var action in  conversation.fields.Where(p => p.title == "Action"))
+            
+            var actions = conversation.fields.Where(p => p.title == "Action").ToList();
+
+            if (actions.Count > 0) state = State.Action;
+            
+            foreach (var action in  actions)
             {
                 var item = DialogueManager.masterDatabase.GetItem(int.Parse(action.value));
-                if (item.LookupBool("Set Success State")) QuestLog.SetQuestState(item.Name, QuestState.Success);
+                if (item.IsFieldAssigned("Script"))
+                {
+                    var script = item.LookupValue("Script");
+                    Lua.Run(script);
+                }
+                
             }
 
             conversation.fields.RemoveAll(p =>  p.title == "Action" && DialogueManager.masterDatabase.GetItem(int.Parse(p.value)).GetQuestState() == QuestState.Success);
@@ -293,7 +279,44 @@ namespace Project.Runtime.Scripts.Manager
                     AudioEngine.Instance.PlayClipLooped(music);
                 }
             }
+            
+            
+            switch (state)
+            {
+                case State.PreBase:
+                    StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
+                    break;
+                case State.Base:
+                    StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToCurrentApp));
+                    break;
+                case State.SmartWatch:
+                    //  StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToCurrentApp));
+                    break;
+                case State.Travel: // do nothing
+                    break;
+                default:
+                    StartCoroutine(QueueConversationEndEvent(() =>
+                    {
+                        state = State.PreBase;
+                        GameManager.instance.StartBaseOrPreBaseConversation();
+                    }));
+                    break;
+            }
 
+        }
+        
+        public void OnConversationLine(Subtitle subtitle)
+        {
+        
+            foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
+            {
+                var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
+                
+                conversation.fields.Add( action);
+                
+                Debug.Log("Added action to conversation: " + action.value);
+            }
+        
         }
         
         IEnumerator QueueConversationEndEvent(Action callback)

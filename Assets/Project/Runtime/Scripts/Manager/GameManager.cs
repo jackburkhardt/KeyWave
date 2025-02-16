@@ -309,6 +309,7 @@ namespace Project.Runtime.Scripts.Manager
         public void StartBaseOrPreBaseConversation()
         {
             var visitCount = gameState.PlayerLocation(true).LookupInt("Visit Count");
+            Debug.Log("Vist count: " + visitCount);
             var loopConversation = gameState.PlayerLocation(true).LookupBool("Loop Conversation");
 
 
@@ -318,7 +319,7 @@ namespace Project.Runtime.Scripts.Manager
                 return;
             }
 
-            if (visitCount == 0 || loopConversation)
+            if (visitCount == 0)
             {
                 if (gameState.PlayerLocation(true).IsFieldAssigned("Conversation"))
                     DialogueManager.StartConversation(
@@ -333,6 +334,20 @@ namespace Project.Runtime.Scripts.Manager
                     DialogueManager.StartConversation(generatedConversation.Title);
                 }
             }
+            
+            else if (visitCount > 0 && loopConversation)
+                if (gameState.PlayerLocation(true).IsFieldAssigned("Conversation"))
+                    DialogueManager.StartConversation(
+                        gameState.PlayerLocation().LookupValue("Conversation"));
+
+                else
+                {
+                    var generatedConversation =
+                        GameManager.GenerateConversation(gameState.PlayerLocation(true), true);
+                    // SequencerCommandGoToConversatio
+                    Debug.Log("Generated entries: " + generatedConversation.dialogueEntries.Count);
+                    DialogueManager.StartConversation(generatedConversation.Title);
+                }
 
             else DialogueManager.StartConversation("Base");
 
@@ -358,7 +373,7 @@ namespace Project.Runtime.Scripts.Manager
             }
         }
         
-        public static Conversation GenerateConversation(Asset asset)
+        public static Conversation GenerateConversation(Asset asset, bool repeatEntries = false)
             {
                 var template = Template.FromDefault();
                 
@@ -368,8 +383,7 @@ namespace Project.Runtime.Scripts.Manager
                     ? int.Parse(asset.LookupValue("Entry Actor"))
                     : -1;
                 
-                var visitCount = asset.LookupInt("Visit Count");
-                var entryFieldLabelStart = visitCount > 0  && asset.FieldExists("Repeat Entry Count") ? "Repeat Entry" : "Entry";
+                var entryFieldLabelStart = repeatEntries && asset.FieldExists("Repeat Entry Count") ? "Repeat Entry" : "Entry";
                 var entryCount = asset.LookupInt($"{entryFieldLabelStart} Count");
 
 

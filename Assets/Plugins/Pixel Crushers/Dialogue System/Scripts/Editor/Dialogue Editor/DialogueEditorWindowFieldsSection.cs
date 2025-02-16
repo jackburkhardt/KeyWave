@@ -21,7 +21,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
     public partial class DialogueEditorWindow
     {
 
-        private List<string> textAreaFields => new List<string>() { "Description", "Success Description", "Failure Description", "Conditions"};
+        private List<string> textAreaFields => new List<string>() { "Description", "Success Description", "Failure Description", "Conditions", "Script"};
         private static readonly string[] questStateStrings = { "(None)", "unassigned", "active", "success", "failure", "done", "abandoned", "grantable", "returnToNPC" };
         private static readonly string[] actorStateStrings = { "(None)", "unidentified", "mentioned", "amicable", "botched", "unapproachable", "approachable", "confronted" };
 
