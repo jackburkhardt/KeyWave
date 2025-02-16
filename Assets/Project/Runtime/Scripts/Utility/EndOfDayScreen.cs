@@ -16,7 +16,7 @@ namespace Project.Runtime.Scripts.Utility
         private void Start()
         {
             _report = GameManager.instance.dailyReport;
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
         BrowserInterface.sendPlayerEvent(_report.SerializeForWeb());
         BrowserInterface.sendPlayerEvent(GameLog.SerializeForWeb());
 #endif
@@ -42,7 +42,7 @@ namespace Project.Runtime.Scripts.Utility
 
         public void StartNextDay()
         {
-            #if UNITY_WEBGL
+            #if UNITY_WEBGL && !UNITY_EDITOR
             Application.ExternalCall("location.reload()");
             #endif
             // uncomment/remove above if we do add multiple days.

@@ -58,7 +58,7 @@ namespace Project.Runtime.Scripts.App
 
         private void Start()
         {
-            #if !UNITY_EDITOR
+            #if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
             BrowserInterface.unityReadyForData();
             #endif

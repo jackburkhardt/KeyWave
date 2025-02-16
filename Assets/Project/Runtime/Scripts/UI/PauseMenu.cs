@@ -80,7 +80,7 @@ public class PauseMenu : MonoBehaviour
     
     public void QuitGame()
     {
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalCall("location.reload()");
 #endif
     }

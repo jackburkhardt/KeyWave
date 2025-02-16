@@ -33,7 +33,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (!savingEnabled) return;
             
             LatestSaveData = new SaveGameMetadata(DateTime.Now, savedGameData);
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.sendSaveGame(PixelCrushers.SaveSystem.Serialize(LatestSaveData));
 #endif
         }
