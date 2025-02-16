@@ -600,6 +600,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
         private void DrawActionProperties(Item item)
         {
+            
+            var itemsWithMatchingName = database.items.FindAll(x => x.Name == item.Name);
+            if (itemsWithMatchingName.Count > 1)
+            {
+                EditorGUILayout.HelpBox("There are multiple items with the same name. This action must have a unique name or it will not work properly.", MessageType.Warning);
+            }
+            
+            
             if (item == null || item.fields == null) return;
             
             var defaultContentColor = GUI.contentColor;
