@@ -84,7 +84,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: IsPlayer
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
@@ -111,10 +111,10 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
-  - id: 21
+  - id: 22
     fields:
     - title: Name
-      value: Game (NPC)
+      value: Game/Intro
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -127,48 +127,6 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
     - title: IsPlayer
       value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: IsAvailableToTalk
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: IsAvailableToCall
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: NodeColor
-      value: '#6a6a6aff'
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Display Name
-      value: ' '
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: unidentified
-      type: 16
-      typeString: CustomFieldType_ActorState
-    portrait: {fileID: 0}
-    spritePortrait: {fileID: 0}
-    alternatePortraits: []
-    spritePortraits: []
-  - id: 22
-    fields:
-    - title: Name
-      value: Game (Alternate Response Panel)
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: IsPlayer
-      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: IsAvailableToTalk
@@ -4549,7 +4507,7 @@ MonoBehaviour:
     - title: Conversation
       value: Store/SecShp/Seasonal
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Auto Conversation Title
       value: False
       type: 2
@@ -4569,7 +4527,7 @@ MonoBehaviour:
     - title: Display Name
       value: (SecretShopper) Look at the seasonal selection.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
   - id: 179
     fields:
     - title: Name
@@ -7710,8 +7668,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 601.74146
-        y: 532.6072
+        x: 647.22375
+        y: 491.67316
         width: 160
         height: 30
     - id: 36
@@ -8719,7 +8677,9 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: PlayClipLooped(music/intro)@1;
+        value: 'PlayClipLooped(music/intro)@1;
+
+          SetPanel('
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -8763,13 +8723,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 643.0279
-        y: 405.36075
+        x: 649.8343
+        y: 403.3188
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 193.15442, y: 183.25626}
-    canvasZoom: 0.6953572
+    canvasScrollPosition: {x: 409.1853, y: 217.17317}
+    canvasZoom: 1.2053567
   - id: 34
     fields:
     - title: Title
@@ -58044,13 +58004,13 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp("Home")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 431.30057
+        x: 434.2663
         y: 252.57053
         width: 160
         height: 30
@@ -58324,7 +58284,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp("Inbox")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -64981,8 +64941,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 214.83319
-        y: 49.089478
+        x: 205.89465
+        y: 52.565575
         width: 160
         height: 30
     - id: 1
@@ -65194,14 +65154,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp(Phone/"Base")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
         x: 203.04091
-        y: 116.74473
+        y: 115.25497
         width: 160
         height: 30
     entryGroups:
@@ -65435,7 +65395,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp("Travel")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -66184,7 +66144,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetRootApp(Help)
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -70883,7 +70843,7 @@ MonoBehaviour:
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: 
+      falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
       - originConversationID: 205
@@ -70899,8 +70859,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 160
-        y: 30
+        x: 221.8263
+        y: 82.41384
         width: 160
         height: 30
     - id: 5
@@ -70980,8 +70940,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 163.2
-        y: 144
+        x: 224.09627
+        y: 149.72447
         width: 160
         height: 30
     - id: 6
@@ -71069,8 +71029,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 185.8
-        y: 221
+        x: 216.53273
+        y: 211.94635
         width: 160
         height: 30
     - id: 7
@@ -71140,8 +71100,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 21.800003
-        y: 303
+        x: 35.30465
+        y: 299.94266
         width: 160
         height: 30
     - id: 8
@@ -71212,8 +71172,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 210.79999
-        y: 308
+        x: 224.9714
+        y: 300.2286
         width: 160
         height: 30
     - id: 9
@@ -71283,8 +71243,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 405.8
-        y: 306
+        x: 453.65735
+        y: 309.65714
         width: 160
         height: 30
     - id: 10
@@ -71348,8 +71308,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 317.8
-        y: 407
+        x: 224.54282
+        y: 414.77148
         width: 160
         height: 30
     - id: 11
@@ -71419,8 +71379,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 20.44193, y: 46.402843}
+    canvasZoom: 1.5099995
   - id: 206
     fields:
     - title: Title
