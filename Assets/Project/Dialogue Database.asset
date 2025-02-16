@@ -126,7 +126,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: IsPlayer
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: IsAvailableToTalk
@@ -4406,7 +4406,7 @@ MonoBehaviour:
     - title: Script
       value: 'SetQuestState("Store/Talk/Mariana", "success"); '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Skills Points
       value: 0
       type: 1
@@ -4426,7 +4426,7 @@ MonoBehaviour:
     - title: Time Flow
       value: Natural
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Ignore Sublocations
       value: False
       type: 2
@@ -4434,7 +4434,7 @@ MonoBehaviour:
     - title: Display Name
       value: Talk to Mariana, the sales associate.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Natural Duration
       value: 1560
       type: 1
@@ -4442,7 +4442,7 @@ MonoBehaviour:
     - title: Conversation
       value: Store/Talk/Mariana
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Auto Conversation Title
       value: False
       type: 2
@@ -4518,7 +4518,7 @@ MonoBehaviour:
     - title: Script
       value: 'SetQuestState("Store/Talk/Roberta", "success"); '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Skills Points
       value: 0
       type: 1
@@ -4538,7 +4538,7 @@ MonoBehaviour:
     - title: Time Flow
       value: Natural
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Ignore Sublocations
       value: True
       type: 2
@@ -4558,11 +4558,11 @@ MonoBehaviour:
     - title: Display Name
       value: Talk to Roberta, the department supervisor.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Conversation
       value: Store/Talk/Roberta
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Auto Conversation Title
       value: False
       type: 2
@@ -4638,7 +4638,7 @@ MonoBehaviour:
     - title: Script
       value: 'SetQuestState("Store/Talk/Maria", "success"); '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Skills Points
       value: 0
       type: 1
@@ -4658,11 +4658,11 @@ MonoBehaviour:
     - title: Time Flow
       value: Explicit
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Display Name
       value: Talk to Maria, the interim manager.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Repeat Count
       value: 0
       type: 1
@@ -4741,7 +4741,7 @@ MonoBehaviour:
     - title: Script
       value: 'SetQuestState("Store/Talk/Laura", "success"); '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Skills Points
       value: 0
       type: 1
@@ -4761,11 +4761,11 @@ MonoBehaviour:
     - title: Time Flow
       value: Natural
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Display Name
       value: Talk to Laura, the cashier.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Repeat Count
       value: 0
       type: 1
@@ -4781,7 +4781,7 @@ MonoBehaviour:
     - title: Conversation
       value: Store/Talk/Laura
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Auto Conversation Title
       value: False
       type: 2
@@ -4849,7 +4849,7 @@ MonoBehaviour:
     - title: Script
       value: 'SetQuestState("Store/Door", "success"); '
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Skills Points
       value: 0
       type: 1
@@ -4869,19 +4869,19 @@ MonoBehaviour:
     - title: Time Flow
       value: Natural
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Ignore Sublocations
       value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: New Sublocation
-      value: 3
+      value: 14
       type: 7
       typeString: CustomFieldType_Location
     - title: Display Name
       value: Investigate the back office.
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Natural Duration
       value: 0
       type: 1
@@ -4889,9 +4889,9 @@ MonoBehaviour:
     - title: Conversation
       value: Store/Door
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Auto Conversation Title
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
   locations:
@@ -8277,9 +8277,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: 'PlayClipLooped(music/intro)@1;
-
-          SetPanel('
+        value: PlayClipLooped(music/intro)@1;
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -8323,7 +8321,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 649.8343
+        x: 651.82544
         y: 403.3188
         width: 160
         height: 30
@@ -47987,8 +47985,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 366.40002
-        y: 189.19998
+        x: 396.6913
+        y: 155.80196
         width: 160
         height: 30
     - id: 1
