@@ -715,10 +715,46 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (newStartsConversation)
             {
                 DrawStartConversationProperties(item);
+                
+                Field newSublocation = Field.Lookup(item.fields, "New Sublocation");
 
+                if (newSublocation != null)
+                {
+                    Field sublocationSwitcherMethod = Field.Lookup(item.fields, "Sublocation Switcher Method");
+                    if (sublocationSwitcherMethod == null)
+                    {
+                        sublocationSwitcherMethod = new Field("Sublocation Switcher Method", SublocationSwitcherMethod.MoveAfterConversation.ToString(), FieldType.Text);
+                        item.fields.Add(sublocationSwitcherMethod);
+                        SetDatabaseDirty("Create Sublocation Switcher Method Field");
+                    }
+                        
+                    SublocationSwitcherMethod newSublocationSwitcherMethod = (SublocationSwitcherMethod)Enum.Parse(typeof(SublocationSwitcherMethod),
+                        sublocationSwitcherMethod.value);
+                        
+                    DrawEditorItemWithShuffleIcon(() =>
+                        newSublocationSwitcherMethod = (SublocationSwitcherMethod)EditorGUILayout.EnumPopup(
+                            new GUIContent("Switcher Method",
+                                "The method used to change the sublocation."),newSublocationSwitcherMethod));
+                        
+                        
+                    sublocationSwitcherMethod.value = newSublocationSwitcherMethod.ToString();
+                }
+
+                else
+                {
+                    Field sublocationSwitcherMethod = Field.Lookup(item.fields, "Sublocation Switcher Method");
+                    if (sublocationSwitcherMethod != null)
+                    {
+                        item.fields.Remove(sublocationSwitcherMethod);
+                        SetDatabaseDirty("Remove Sublocation Switcher Method Field");
+                    }
+                }
 
                 
             }
+            
+            
+            
 
             
             
@@ -1338,8 +1374,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                             database.GetLocation(int.Parse(chosenLocation)), newSublocationField.value));
 
                     if (newSublocationField.value == "-1") newSublocationField.value = chosenLocation;
-                    
-                    
                 }
                 else
                 {
@@ -1355,6 +1389,13 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             EditorWindowTools.EditorGUILayoutEndGroup();
 
             
+        }
+        
+        private enum SublocationSwitcherMethod
+        {
+            MoveAfterConversation,
+            MoveBeforeConversation,
+            MoveBeforeConversationAndReturnWhenDone
         }
 
         private void DrawStartConversationProperties(Asset asset)
@@ -1609,6 +1650,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                             }
                         }
                     }
+                    
+                   
+                    
+                    
                 }
 
                 conversation.value = newConversationFieldValue;
