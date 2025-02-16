@@ -83,13 +83,13 @@ public class CustomDialogueUI : StandardDialogueUI
                 var newSublocation =
                     DialogueManager.masterDatabase.GetLocation(int.Parse(item.LookupValue("New Sublocation")));
 
-                if (newSublocation == GameManager.gameState.PlayerLocation(true))
+                if (newSublocation == GameManager.gameState.GetPlayerLocation(true))
                 {
                     return false;
                 }
             }
             
-            var playerLocation = GameManager.gameState.PlayerLocation(true);
+            var playerLocation = GameManager.gameState.GetPlayerLocation(true);
 
             if (item.LookupBool("Ignore Sublocations"))
             {
@@ -99,7 +99,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 return rootLocation == rootPlayerLocation;
             }
 
-            return location == GameManager.gameState.PlayerLocation(true);
+            return location == GameManager.gameState.GetPlayerLocation(true);
         }
 
         bool ActionConversationIsValid(Item item, out string conversationTitle)
@@ -130,7 +130,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 
                 var actorLocation = actor.AssignedField("Location");
                 if (actorLocation == null) continue;
-                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.gameState.PlayerLocation(true)) return false;
+                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.gameState.GetPlayerLocation(true)) return false;
             }
             return true;
         }

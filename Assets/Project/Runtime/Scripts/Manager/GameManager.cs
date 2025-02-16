@@ -192,7 +192,7 @@ namespace Project.Runtime.Scripts.Manager
             }
 
             if (DialogueLua.GetVariable("skip_content").asBool)
-                SetLocation(gameState.PlayerLocation().Name, Transition.Black);
+                SetLocation(gameState.GetPlayerLocation().Name, Transition.Black);
 
             else DialogueManager.instance.StartConversation("Intro");
         }
@@ -225,7 +225,7 @@ namespace Project.Runtime.Scripts.Manager
         public static float DistanceToLocation(int locationID)
         {
             var location = DialogueManager.masterDatabase.GetLocation(locationID);
-            if (gameState.PlayerLocation() == location) return 0;
+            if (gameState.GetPlayerLocation() == location) return 0;
             // if cafe, distance is relative to current location
             if (location.Name == "Café")
             {
@@ -233,7 +233,7 @@ namespace Project.Runtime.Scripts.Manager
             }
                 
             var locationCoordinates = location.LookupVector2("Coordinates");
-            var playerCoordinates = gameState.PlayerLocation().LookupVector2("Coordinates");
+            var playerCoordinates = gameState.GetPlayerLocation().LookupVector2("Coordinates");
 
             return Vector2.Distance(playerCoordinates, locationCoordinates) * Traffic.CurrentTrafficMultiplier;
         }
@@ -260,7 +260,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             var location = DialogueManager.masterDatabase.GetLocation(newLocation);
         
-            GameEvent.OnMove(newLocation, gameState.PlayerLocation().Name, (int)DistanceToLocation(location.id));
+            GameEvent.OnMove(newLocation, gameState.GetPlayerLocation().Name, (int)DistanceToLocation(location.id));
             
             
             BroadcastMessage( "OnTravel");
@@ -279,6 +279,8 @@ namespace Project.Runtime.Scripts.Manager
 
             DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
             DialogueManager.PlaySequence("ChannelFade(Environment, out, 1);");
+            
+            gameState.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(newLocation));
 
             
             IEnumerator TravelToHandler()
@@ -308,12 +310,12 @@ namespace Project.Runtime.Scripts.Manager
         
         public void StartBaseOrPreBaseConversation()
         {
-            var visitCount = gameState.PlayerLocation(true).LookupInt("Visit Count");
+            var visitCount = gameState.GetPlayerLocation(true).LookupInt("Visit Count");
             Debug.Log("Vist count: " + visitCount);
-            var loopConversation = gameState.PlayerLocation(true).LookupBool("Loop Conversation");
+            var loopConversation = gameState.GetPlayerLocation(true).LookupBool("Loop Conversation");
 
 
-            if (!gameState.PlayerLocation(true).FieldExists("Conversation"))
+            if (!gameState.GetPlayerLocation(true).FieldExists("Conversation"))
             {
                 DialogueManager.StartConversation("Base");
                 return;
@@ -321,14 +323,14 @@ namespace Project.Runtime.Scripts.Manager
 
             if (visitCount == 0)
             {
-                if (gameState.PlayerLocation(true).IsFieldAssigned("Conversation"))
+                if (gameState.GetPlayerLocation(true).IsFieldAssigned("Conversation"))
                     DialogueManager.StartConversation(
-                        gameState.PlayerLocation().LookupValue("Conversation"));
+                        gameState.GetPlayerLocation().LookupValue("Conversation"));
 
                 else
                 {
                     var generatedConversation =
-                        GameManager.GenerateConversation(gameState.PlayerLocation(true));
+                        GameManager.GenerateConversation(gameState.GetPlayerLocation(true));
                     // SequencerCommandGoToConversatio
                     Debug.Log("Generated entries: " + generatedConversation.dialogueEntries.Count);
                     DialogueManager.StartConversation(generatedConversation.Title);
@@ -336,14 +338,14 @@ namespace Project.Runtime.Scripts.Manager
             }
             
             else if (visitCount > 0 && loopConversation)
-                if (gameState.PlayerLocation(true).IsFieldAssigned("Conversation"))
+                if (gameState.GetPlayerLocation(true).IsFieldAssigned("Conversation"))
                     DialogueManager.StartConversation(
-                        gameState.PlayerLocation().LookupValue("Conversation"));
+                        gameState.GetPlayerLocation().LookupValue("Conversation"));
 
                 else
                 {
                     var generatedConversation =
-                        GameManager.GenerateConversation(gameState.PlayerLocation(true), true);
+                        GameManager.GenerateConversation(gameState.GetPlayerLocation(true), true);
                     // SequencerCommandGoToConversatio
                     Debug.Log("Generated entries: " + generatedConversation.dialogueEntries.Count);
                     DialogueManager.StartConversation(generatedConversation.Title);
@@ -451,7 +453,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public void SetSublocation(PixelCrushers.DialogueSystem.Location location)
         {
-            if (location == gameState.PlayerLocation(true)) return;
+            if (location == gameState.GetPlayerLocation(true)) return;
             StartCoroutine(SwitchSublocation(location));
         }
         
@@ -555,9 +557,9 @@ namespace Project.Runtime.Scripts.Manager
             var destinationSublocationGameObject = locationScene.FindGameObject(location.Name);
             if (destinationSublocationGameObject != null) destinationSublocationGameObject.SetActive(true);
                 
-            if (gameState.PlayerLocation(true).IsSublocation)
+            if (gameState.GetPlayerLocation(true).IsSublocation)
             {
-                var currentSublocationGameObject = locationScene.FindGameObject(gameState.PlayerLocation(true).Name);
+                var currentSublocationGameObject = locationScene.FindGameObject(gameState.GetPlayerLocation(true).Name);
                 if (currentSublocationGameObject != null) currentSublocationGameObject.SetActive(false);
             }
                 

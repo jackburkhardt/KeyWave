@@ -309,7 +309,7 @@ namespace Project.Runtime.Scripts.UI
            {
                
                var title = destinationEntry.GetConversation().Title;
-               var baseConversation = GameManager.gameState.PlayerLocation(true).BaseConversation();
+               var baseConversation = GameManager.gameState.GetPlayerLocation(true).BaseConversation();
                if (title != baseConversation)
                {
                    Debug.Log("No outgoing links. Going to base conversation :" + baseConversation);
