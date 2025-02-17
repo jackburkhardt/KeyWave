@@ -456,9 +456,34 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     DrawLocationField(new GUIContent("Sublocation"), sublocation.id.ToString(), true);
                 }
                 EditorWindowTools.EndIndentedSection();
+                
+                
+                Field spawnPointField = Field.Lookup(location.fields, "Spawn Point");
+                
+                if (spawnPointField == null)
+                {
+                    spawnPointField = new Field("Spawn Point", string.Empty, FieldType.Location);
+                    location.fields.Add(spawnPointField);
+                    SetDatabaseDirty("Add Spawn Point Field");
+                }
+                
+                GUI.enabled = true;
+                
+                spawnPointField.value = DrawSublocationField(new GUIContent("Spawn Point", "The location's spawn point."), location,  spawnPointField.value);
             }
-            
-            GUI.enabled = true;
+
+            else
+            {
+                Field spawnPointField = Field.Lookup(location.fields, "Spawn Point");
+
+                if (spawnPointField != null)
+                {
+                    location.fields.Remove(spawnPointField);
+                    SetDatabaseDirty("Remove Spawn Point Field");
+                }
+            }
+
+           
             
             EditorGUILayout.Space();
 

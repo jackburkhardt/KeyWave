@@ -174,7 +174,10 @@ namespace Project.Runtime.Scripts.Manager
             public static PointsField FromLuaField(Field field)
             {
                 string pattern = @"^(.*?) Points$";
-                var type = (Type)Enum.Parse(typeof(Type), Regex.Replace(field.title, pattern, "$1"));
+                var pointType = Regex.Replace(field.title, pattern, "$1");
+                
+                if (pointType.Split(" ").Length > 1) pointType = pointType.Split(" ")[^1];
+                var type = (Type)Enum.Parse(typeof(Type), pointType);
                 var points = int.Parse(field.value);
                 return new PointsField { Type = type, Points = points };
 

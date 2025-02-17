@@ -503,57 +503,23 @@ namespace PixelCrushers.DialogueSystem
                 case FieldType.Location:
                     item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, GUILayout.Width(60));
                     
-                    int.TryParse(item.stringValue, out int id);
-                    
+                    var id = (int)item.floatValue;
                     var location = database.GetLocation(id);
                     if (location == null)
                     {
-                        item.stringValue = database.GetLocation( locationNames[0]).id.ToString();
-                        break;
+                        id = database.GetLocation( locationNames[0]).id;
+                        location = database.GetLocation(id);
                     }
                     
                     var locationNameIndex = Array.FindIndex(locationNames, p => p == location.Name);
                     locationNameIndex = EditorGUILayout.Popup(locationNameIndex, locationNames);
+                    id = database.GetLocation(locationNames[locationNameIndex]).id;
                    // Debug.Log(id);
-                    if (id >= 0 && id < locationNames.Length) item.stringValue = database.GetLocation(locationNames[locationNameIndex]).id.ToString();
+                    item.floatValue = id;
+                    
+                    item.locationNamesIndex = locationNameIndex;
                     
                     break;
-                    /*
-                    List<string> IDs = new List<string>();
-                    List<GUIContent> names = new List<GUIContent>();
-                    IDs.Add("-1");
-                    names.Add(new GUIContent("(None)", string.Empty));
-                    for (int i = 0; i < locationNames.Length; i++)
-                    {
-                        var location = locationNames[i];
-                        var id = database.GetLocation(location).id;
-                        IDs.Add(id.ToString());
-                        names.Add(new GUIContent(string.Format("{0} [{1}]", location, id), string.Empty));
-                    }
-                    
-                    int _id = -1;
-                    int.TryParse(item.stringValue, out _id);
-
-                    int index = -1;
-                    
-                    for (int i = 0; i < IDs.Count; index++)
-                    {
-                        if (_id == Tools.StringToInt(IDs[index])) index = i;
-                    }
-                    
-                    int newIndex;
-                    if ((assetLabel == null) || string.IsNullOrEmpty(assetLabel.text))
-                    {
-                        newIndex = EditorGUILayout.Popup(index, assetList.names);
-                    }
-                    else {
-                        newIndex = EditorGUILayout.Popup(assetLabel, index, assetList.names);
-                    }
-                    return (newIndex != index) ? assetList.GetID(newIndex) : value;
-                    }
-
-                    ;
-                    */
                     
                     
                 default:
@@ -697,6 +663,14 @@ namespace PixelCrushers.DialogueSystem
                                                     item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                                     closeParen);
                                 }
+                                break;
+                            case FieldType.Location:
+                                sb.AppendFormat("{0}Variable[\"{1}\"] {2} {3}{4}",
+                                                openParen,
+                                                DialogueLua.StringToTableIndex(variableName),
+                                                GetWizardEqualityText(item.equalityType),
+                                                item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                                closeParen);
                                 break;
                             default:
                                 sb.AppendFormat("{0}Variable[\"{1}\"] {2} \"{3}\"{4}",
@@ -999,6 +973,16 @@ namespace PixelCrushers.DialogueSystem
                                         item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                         closeParen);
                     }
+                    break;
+                case FieldType.Location:
+                    sb.AppendFormat("{0}{1}[\"{2}\"].{3} {4} {5}{6}",
+                                    openParen,
+                                    tableName,
+                                    DialogueLua.StringToTableIndex(elementName),
+                                    DialogueLua.StringToFieldName(fieldName),
+                                    GetWizardEqualityText(item.equalityType),
+                                    item.floatValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                    closeParen);
                     break;
                 default:
                     sb.AppendFormat("{0}{1}[\"{2}\"].{3} {4} \"{5}\"{6}",

@@ -33,6 +33,8 @@ namespace Project.Runtime.Scripts.Manager
             }
             set => DialogueLua.SetVariable("game.player.lastNonCaféLocation", value);
         }
+        
+        
 
 
         public PixelCrushers.DialogueSystem.Actor PlayerActor =>  DialogueManager.masterDatabase.actors.First(p => p.IsPlayer && p.IsFieldAssigned("Location"));
@@ -44,9 +46,9 @@ namespace Project.Runtime.Scripts.Manager
         /// <returns>This will only return the player's root location, not the sublocation.</returns>
         public void SetPlayerLocation(Location value)
         {
-            PlayerActor.fields.Find(p => p.title == "Location").value = value.id.ToString();
+            DialogueLua.SetActorField( PlayerActor.Name, "Location", value.id);
                 
-            var location = DialogueManager.masterDatabase.GetLocation(PlayerActor.LookupInt("Location"));
+            var location = DialogueManager.masterDatabase.GetLocation(DialogueLua.GetActorField(PlayerActor.Name, "Location").asInt);
             var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
 
             if (rootLocation.Name != "Café")
@@ -55,11 +57,18 @@ namespace Project.Runtime.Scripts.Manager
         
         public Location PlayerLocation(bool specifySublocation = false)
         {
-            var location = DialogueManager.masterDatabase.GetLocation(PlayerActor.LookupInt("Location"));
+            var location = DialogueManager.masterDatabase.GetLocation(DialogueLua.GetActorField(PlayerActor.Name, "Location").asInt);
             var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
             
             if (specifySublocation) return location;
             return rootLocation;
+        }
+        
+        
+        public int MostRecentSublocation
+        {
+            get => (DialogueLua.GetVariable("game.player.mostRecentSublocation").asInt);
+            set => DialogueLua.SetVariable("game.player.mostRecentSublocation", value);
         }
 
         public int TeamworkScore 
@@ -110,6 +119,9 @@ namespace Project.Runtime.Scripts.Manager
             get => DialogueLua.GetVariable("points.Context.max").asInt;
             set => DialogueLua.SetVariable("points.Context.max", value);
         }
+        
+        
+        
     }
 
     public class GameStateManager : PlayerEventHandler
@@ -149,8 +161,21 @@ namespace Project.Runtime.Scripts.Manager
             switch (playerEvent.EventType)
             {
                 case "move":
-                    var location = playerEvent.Data["newLocation"]?.ToString();
-                    gameState.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(location));
+                    StopAllCoroutines(); 
+                    var locationName = playerEvent.Data["newLocation"]?.ToString();
+                    
+                    Debug.Log("Moving to: " + locationName);
+
+                    var location = DialogueManager.masterDatabase.GetLocation(locationName);
+                    
+                    if (location.FieldExists("Spawn Point"))
+                    {
+                        var spawnPoint = DialogueLua.GetLocationField(location.Name, "Spawn Point").asInt;
+                        if (spawnPoint < 0) spawnPoint = location.id;
+                        location = DialogueManager.masterDatabase.GetLocation(spawnPoint);
+                        Debug.Log("Spawn point: " + location.Name);
+                    }
+                    gameState.SetPlayerLocation(location);
                     break;
                 case "conversation_start":
                     break;
@@ -195,8 +220,31 @@ namespace Project.Runtime.Scripts.Manager
         
         public void OnConversationStart()
         {
+            
             var conversation = DialogueManager.masterDatabase.GetConversation(DialogueManager.currentConversationState
                 .subtitle.dialogueEntry.conversationID);
+            
+            var actions = conversation.fields.Where(p => p.title == "Action").ToList();
+
+            foreach (var action in actions)
+            {
+                var item = DialogueManager.masterDatabase.GetItem(int.Parse(action.value));
+                if (item.FieldExists("New Sublocation"))
+                {
+                    var sublocationSwitcherMethod = item.AssignedField("Sublocation Switcher Method");
+                    if (sublocationSwitcherMethod != null && sublocationSwitcherMethod.value.StartsWith("MoveBeforeConversation"))
+                    {
+                        var currentSublocation = gameState.PlayerLocation(true);
+                        var sublocation = DialogueManager.masterDatabase.GetLocation(item.LookupInt("New Sublocation"));
+                        GameManager.instance.SetSublocation(sublocation);
+                        
+                        if (sublocationSwitcherMethod.value.Contains( "ReturnWhenDone"))
+                        {
+                           gameState.MostRecentSublocation = currentSublocation.id;
+                        }
+                    }
+                }
+            }
             
             if (conversation.Title.StartsWith("SmartWatch")) state = State.SmartWatch;
             else if (conversation.Title == "Base")
@@ -204,13 +252,10 @@ namespace Project.Runtime.Scripts.Manager
                 state = State.Base;
                 var playerLocation = gameState.PlayerLocation(true);
 
-                if (!playerLocation.FieldExists("Conversation"))
+                if (playerLocation.IsFieldAssigned("Music"))
                 {
-                    if (playerLocation.IsFieldAssigned("Music"))
-                    {
-                        var music = playerLocation.LookupValue("Music");
-                        AudioEngine.Instance.PlayClipLooped(music);
-                    }
+                    var music = playerLocation.LookupValue("Music");
+                    AudioEngine.Instance.PlayClipLooped(music);
                 }
             }
             
@@ -226,7 +271,8 @@ namespace Project.Runtime.Scripts.Manager
                 }
             }
             
-           
+            
+            
             
             Debug.Log("State: " + state + ", conversation Title: " + conversation.Title);
         }
@@ -238,6 +284,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public void OnGameSceneStart()
         {
+            
             state = State.PreBase;
             GameManager.instance.StartBaseOrPreBaseConversation();
         }
@@ -256,14 +303,26 @@ namespace Project.Runtime.Scripts.Manager
             {
                 var item = DialogueManager.masterDatabase.GetItem(int.Parse(action.value));
                 
-                
-                
                 if (item.IsFieldAssigned("Script"))
                 {
                     var script = item.LookupValue("Script");
                     Lua.Run(script);
                 }
                 
+                if (item.IsFieldAssigned("New Sublocation"))
+                {
+                    if (!item.FieldExists("Conversation") || item.AssignedField("Sublocation Switcher Method").value == "MoveAfterConversation")
+                    {
+                        var location = DialogueManager.masterDatabase.GetLocation(item.LookupInt("New Sublocation"));
+                        GameManager.instance.SetSublocation(location);
+                    }
+                        
+                    else if (item.AssignedField("Sublocation Switcher Method").value.Contains("ReturnWhenDone"))
+                    {
+                        GameManager.instance.SetSublocation(DialogueManager.masterDatabase.GetLocation(gameState.MostRecentSublocation));
+                        gameState.MostRecentSublocation = -1;
+                    }
+                }
             }
 
             conversation.fields.RemoveAll(p =>  p.title == "Action" && DialogueManager.masterDatabase.GetItem(int.Parse(p.value)).GetQuestState() == QuestState.Success);
@@ -282,6 +341,9 @@ namespace Project.Runtime.Scripts.Manager
                     AudioEngine.Instance.PlayClipLooped(music);
                 }
             }
+            
+            
+            
             
             
             switch (state)
@@ -319,7 +381,6 @@ namespace Project.Runtime.Scripts.Manager
                 
                 Debug.Log("Added action to conversation: " + action.value);
             }
-        
         }
         
         IEnumerator QueueConversationEndEvent(Action callback)
@@ -368,11 +429,7 @@ namespace Project.Runtime.Scripts.Manager
                     quest.AssignedField("Repeat Count").value = (completionCount + 1).ToString();
                     Debug.Log( $"Quest {questName} has been repeated {completionCount + 1} times.");
                     
-                    if (quest.IsFieldAssigned("New Sublocation"))
-                    {
-                        var location = DialogueManager.masterDatabase.GetLocation(quest.LookupInt("New Sublocation"));
-                        GameManager.instance.SetSublocation(location);
-                    }
+                   
                 }
             }
         
@@ -380,6 +437,54 @@ namespace Project.Runtime.Scripts.Manager
             
             GameEvent.OnQuestStateChange(questName, state, duration);
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
+        }
+
+
+        public void OnQuestEntryStateChange(QuestEntryArgs args)
+        {
+            var quest = DialogueManager.masterDatabase.GetQuest(args.questName);
+            var entry = args.entryNumber;
+            var prefix = $"Entry {entry} ";
+            
+            var state = QuestLog.GetQuestEntryState( quest.Name, entry);
+            
+            var points = DialogueUtility.GetPointsFromField(quest!.fields, prefix);
+
+            if (state == QuestState.Success)
+            {
+                foreach (var pointField in points)
+                {
+                    if (pointField.Points == 0) continue;
+
+                    var repeatCount = DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt;
+                    var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
+                        
+                    for (int i = 0; i < repeatCount; i++)
+                    {
+                        pointField.Points = (int) (pointField.Points * multiplier);
+                    }
+                    GameEvent.OnPointsIncrease(pointField, quest.Name);
+                    
+                }
+            }
+
+            if (quest.LookupBool("Auto Set Success"))
+            {
+                
+               // get all states and check if they are success
+               
+               var entryCount = QuestLog.GetQuestEntryCount( quest.Name);
+               
+               for  (int i = 1; i <= entryCount; i++)
+               {
+                   if (i == entry) continue;
+                   var otherState = QuestLog.GetQuestEntryState( quest.Name, i);
+                   if (otherState != QuestState.Success) return;
+               }
+               
+               QuestLog.SetQuestState(quest.Name, QuestState.Success);
+               
+            }
         }
     }
 }

@@ -170,14 +170,11 @@ public class CustomDialogueUI : StandardDialogueUI
                         DialogueManager.masterDatabase.conversations.Add(newConversation);
                         newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
                             newDialogueEntry.id, newConversation.id, 0));
-                        Debug.Log("Playing generated conversation with " + newConversation.dialogueEntries.Count + "dialogue entries");
                     }
 
                     else if (conversationTitle != null)
                     {
-                        Debug.Log(conversationTitle);
                         var conversation = DialogueManager.masterDatabase.GetConversation(conversationTitle);
-                        Debug.Log(conversation);
                         conversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
                         newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
                             newDialogueEntry.id, conversation.id, 0));
@@ -189,10 +186,9 @@ public class CustomDialogueUI : StandardDialogueUI
                     
                     newDialogueEntry.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
                 }
-                
-                var newResponse = new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry);
-                newResponse.enabled = Lua.Run($"return {newDialogueEntry.conditionsString}").asBool;
-                
+
+                var newResponse = new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry,
+                    Lua.IsTrue($"{newDialogueEntry.conditionsString}"));
                 if (!newResponse.enabled) Debug.Log("action not available: " + newDialogueEntry.conditionsString);
                 
                 
@@ -284,8 +280,17 @@ public class CustomDialogueUI : StandardDialogueUI
             DialogueManager.instance.conversationController.randomizeNextEntry = true;
             DialogueManager.instance.conversationController.randomizeNextEntryNoDuplicate = true;
         }
+        
+        
 
         
+    }
+    
+    public void OnLinkedConversationStart(Subtitle subtitle)
+    {
+        var playerActor = GameManager.gameState.PlayerActor;
+        
+     //   DialogueManager.PlaySequence("SetMenuPanel(Player, default)");
     }
 
 

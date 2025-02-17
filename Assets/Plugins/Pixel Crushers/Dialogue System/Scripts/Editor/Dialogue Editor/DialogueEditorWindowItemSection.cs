@@ -6,6 +6,7 @@ using UnityEditorInternal;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Unity.VisualScripting;
 using GUIStyle = UnityEngine.GUIStyle;
 
 namespace PixelCrushers.DialogueSystem.DialogueEditor
@@ -381,8 +382,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void OnActionListRemove(ReorderableList list)
         {
             if (!(0 <= list.index && list.index < actions.Count)) return;
-            var action =actions[list.index];
-            if (actions == null) return;
+            var action = list.list [list.index] as Item;
+            if (action == null) return;
             if (IsItemSyncedFromOtherDB(action)) return;
             var deletedLastOne = list.count == 1;
             if (EditorUtility.DisplayDialog(string.Format("Delete '{0}'?", EditorTools.GetAssetName(action)), "Are you sure you want to delete this?", "Delete", "Cancel"))
@@ -391,36 +392,29 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 if (deletedLastOne) inspectorSelection = null;
                 else inspectorSelection = (list.index < list.count) ? actions[list.index] : (list.count > 0) ? actions[list.count - 1] : null;
                 SetDatabaseDirty("Remove Action");
+                
+                database.items.Remove(action);
             }
         }
 
         private void OnItemListReorder(ReorderableList list)
         {
            
+            var item = list.list [list.index] as Item;
             
+            database.items.Remove(item);
             
-            /*
-            
-            Debug.Log((list.list[list.index] as Item).Name);
-
-            var deadItemWalking = items[list.index];
-            var selectedItem = list.list[list.index] as Item;
-            
-            
-            var deadItemWalkingInIndex = items.FindIndex( x => x.id == deadItemWalking.id);
-            var selectedItemInIndex = items.FindIndex( x => x.id == selectedItem.id);
-            
-            
-            
-            
-            database.items.RemoveAt(selectedItemInIndex);
-            database.items.Insert(deadItemWalkingInIndex, selectedItem);
-            
-            */
+            if (list.index < items.Count - 1)
+            {
+                database.items.Insert(database.items.IndexOf( items[list.index]), item );
+            }
+            else
+            {
+                database.items.Add(item);
+            }
             
            
             SetDatabaseDirty("Reorder Items");
-            InitializeItemReorderableList();
             
         }
         
@@ -429,20 +423,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
         private void OnActionListReorder(ReorderableList list)
         {
-            var action = actions[list.index];
+            var action = list.list [list.index] as Item;
             
-            var indexInDatabase = database.items.FindIndex( x => x.id == action.id);
+            database.items.Remove(action);
             
-            var itemAbove = actions[Mathf.Max(0, list.index - 1)];
-            
-            
-            
-            database.items.RemoveAt(indexInDatabase);
-            
-            var newIndexInDatabase = database.items.FindIndex( x => x.id == itemAbove.id);
-            
-            database.items.Insert(newIndexInDatabase, action);
-            
+            if (list.index < actions.Count - 1)
+            {
+                database.items.Insert(database.items.IndexOf( actions[list.index]), action );
+            }
+            else
+            {
+                database.items.Add(action);
+            }
            
             SetDatabaseDirty("Reorder Actions");
             InitializeActionReorderableList();
@@ -1231,16 +1223,25 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             
             
-            //Points
+            var hasPoints = item.fields.Any(p => p.title.EndsWith(" Points"));
+
+
+         
             
-            if (item.IsStatic)
-            {
-                EditorGUILayout.LabelField("Points");
-                DrawPoints(item);
-            }
-            
-            
-            Field repeatCount = Field.Lookup(item.fields, "Repeat Count");
+           var newHasPoints = EditorGUILayout.Toggle(new GUIContent("Points", "Tick to add points to this action."), hasPoints);
+
+           if (hasPoints) DrawPoints(item);
+           
+           if (newHasPoints != hasPoints)
+
+           {
+               TogglePoints(item, newHasPoints);
+               SetDatabaseDirty(!hasPoints ? "Create Points Field" : "Remove Points Field");
+           }
+
+
+
+           Field repeatCount = Field.Lookup(item.fields, "Repeat Count");
             if (repeatCount == null)
             {
                 repeatCount = new Field("Repeat Count", "0", FieldType.Number);
@@ -1390,9 +1391,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void DrawActionConditions(Item item)
         {
              var conditions = Field.Lookup(item.fields, "Conditions");
+             var defaultCondition = $"CurrentQuestState(\"{item.Name}\") == \"active\""; 
              if (conditions == null)
              {
-                 conditions = new Field("Conditions",  $"true and (true)", FieldType.Text);
+                 conditions = new Field("Conditions",  $"{defaultCondition} and (true)", FieldType.Text);
                  item.fields.Add(conditions);
              }
 
@@ -1416,7 +1418,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
              else
              {
                  GUI.enabled = false; 
-                 var defaultCondition = $"CurrentQuestState(\"{item.Name}\") == \"active\""; 
                  
                  var hasDefault = !conditions.value.StartsWith("true and (");
                  newDefaultCondition = luaConditionWizard.DrawWithToggle(new GUIContent("Default Condition", "Default lua statement for actions."), defaultCondition, hasDefault, "Include"); 
@@ -1620,7 +1621,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var chosenLocation = DrawLocationField(new GUIContent("Location", "The location of the action. If the player is not present, the action will not be presented, regardless of any followup conditions."), location.value, false);
             if (chosenLocation != location.value)
             {
-                var loc = database.GetLocation(int.Parse(location.value));
+                var id = int.TryParse( location.value, out var result) ? result : 0;
+                var loc = database.GetLocation(id);
                 if (loc == null || !loc.IsSublocation || loc.LookupValue("Parent Location") != chosenLocation)
                 {
                     location.value = chosenLocation;
@@ -2183,16 +2185,30 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             else
             {
-                var points = item.fields.FindAll(p => p.title.EndsWith("Points") && int.Parse(p.value) != 0);
-                if (points.Count > 0)
+                item.IsStatic = false;
+            }
+        }
+        
+        private void TogglePoints(Item item, bool hasPoints)
+        {
+            SetDatabaseDirty("Toggle Points");
+            if (hasPoints)
+            {
+                if (!item.FieldExists("Skills Points")) Field.SetValue(item.fields, "Skills Points", (int)0);
+                if (!item.FieldExists("Context Points")) Field.SetValue(item.fields, "Context Points", (int)0);
+                if (!item.FieldExists("Teamwork Points")) Field.SetValue(item.fields, "Teamwork Points", (int)0);
+                if (!item.FieldExists("Wellness Points")) Field.SetValue(item.fields, "Wellness Points", (int)0);
+            }
+            else
+            {
+                if (item.fields.Any(p => p.title.EndsWith(" Points") && p.value != "0"))
                 {
-                    if (!EditorUtility.DisplayDialog("Delete all point values?", "You cannot undo this action.", "Delete", "Cancel"))
+                    if (!EditorUtility.DisplayDialog("Delete all points?", "You cannot undo this action.", "Delete", "Cancel"))
                     {
                         return;
                     }
                 }
-                item.IsStatic = false;
-                item.fields.RemoveAll(field => field.title.EndsWith("Points"));
+                item.fields.RemoveAll(field => field.title.EndsWith(" Points"));
             }
         }
 

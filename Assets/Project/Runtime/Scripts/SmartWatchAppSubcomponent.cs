@@ -180,7 +180,9 @@ public class ActionsAppEnableIfQuestHasVariableTimeCostAndReplaceText : AppSubco
         
         if (standardUIResponseButton.response == null ||  standardUIResponseButton.response.destinationEntry == null || !standardUIResponseButton.button.interactable) return false;
 
-        var timespan =  DialogueUtility.TimeEstimate(standardUIResponseButton.response.destinationEntry);
+        return false;
+  //      var timespan =  DialogueUtility.TimeEstimate(standardUIResponseButton.response.destinationEntry);
+  /*
 
         var variableTimeCost = timespan.Item1 != timespan.Item2;
         
@@ -196,6 +198,7 @@ public class ActionsAppEnableIfQuestHasVariableTimeCostAndReplaceText : AppSubco
         };
 
         return true;
+        */
     }
 }
 

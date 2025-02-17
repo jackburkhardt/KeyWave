@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.Utility;
 using Unity.VisualScripting;
@@ -262,6 +264,8 @@ namespace Project.Runtime.Scripts.Manager
         
             GameEvent.OnMove(newLocation, gameState.PlayerLocation().Name, (int)DistanceToLocation(location.id));
             
+            Debug.Log("New location: " + newLocation);
+            
             
             BroadcastMessage( "OnTravel");
             DialogueManager.StopConversation();
@@ -274,12 +278,14 @@ namespace Project.Runtime.Scripts.Manager
 
             SmartWatch.ResetCurrentApp();
             
+           
             
             StartCoroutine(TravelToHandler());
 
             DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
             DialogueManager.PlaySequence("ChannelFade(Environment, out, 1);");
-
+            
+          
             
             IEnumerator TravelToHandler()
             {
@@ -287,8 +293,24 @@ namespace Project.Runtime.Scripts.Manager
                 yield return App.App.Instance.ChangeScene(newLocation, currentScene, transition);
                 
                 AudioEngine.Instance.StopAllAudioOnChannel("Music");
+                
+                var locationScene = SceneManager.GetSceneByName(newLocation);
+
+                while (!locationScene.isLoaded) yield return null;
+                
+                if (gameState.PlayerLocation(true).IsSublocation)
+                {
+                    var sublocationGameObject = locationScene.FindGameObject(gameState.PlayerLocation(true).Name); 
+                    Debug.Log("Sublocation: " + gameState.PlayerLocation(true).Name);
+                    if (sublocationGameObject != null) sublocationGameObject.SetActive(true);
+                }
+
+
+                
+                
                 while (App.App.isLoading)
                 {
+                    
                     yield return null;
                 }
 
@@ -301,14 +323,13 @@ namespace Project.Runtime.Scripts.Manager
                 
                 BroadcastMessage( "OnGameSceneStart");
                 
-                location.AssignedField("Visit Count").value = (location.LookupInt("Visit Count") + 1).ToString();
-                
             }
         }
         
         public void StartBaseOrPreBaseConversation()
         {
-            var visitCount = gameState.PlayerLocation(true).LookupInt("Visit Count");
+
+            var visitCount = DialogueLua.GetLocationField(gameState.PlayerLocation(true).Name, "Visit Count").asInt;
             Debug.Log("Vist count: " + visitCount);
             var loopConversation = gameState.PlayerLocation(true).LookupBool("Loop Conversation");
 
@@ -323,7 +344,7 @@ namespace Project.Runtime.Scripts.Manager
             {
                 if (gameState.PlayerLocation(true).IsFieldAssigned("Conversation"))
                     DialogueManager.StartConversation(
-                        gameState.PlayerLocation().LookupValue("Conversation"));
+                        gameState.PlayerLocation(true).LookupValue("Conversation"));
 
                 else
                 {
@@ -338,7 +359,7 @@ namespace Project.Runtime.Scripts.Manager
             else if (visitCount > 0 && loopConversation)
                 if (gameState.PlayerLocation(true).IsFieldAssigned("Conversation"))
                     DialogueManager.StartConversation(
-                        gameState.PlayerLocation().LookupValue("Conversation"));
+                        gameState.PlayerLocation(true).LookupValue("Conversation"));
 
                 else
                 {
@@ -350,6 +371,11 @@ namespace Project.Runtime.Scripts.Manager
                 }
 
             else DialogueManager.StartConversation("Base");
+
+            visitCount += 1;
+            DialogueLua.SetLocationField( gameState.PlayerLocation(true).Name, "Visit Count", visitCount);
+            gameState.PlayerLocation(true).AssignedField("Visit Count").value = (visitCount).ToString();
+
 
         }
 
@@ -401,7 +427,6 @@ namespace Project.Runtime.Scripts.Manager
                 {
                     var menuText = asset.LookupValue($"{entryFieldLabelStart} {i} Menu Text");
                     
-                    Debug.Log($"{entryFieldLabelStart} {i} Menu Text: {menuText}");
                     var dialogueText = asset.LookupValue($"{entryFieldLabelStart} {i} Dialogue Text");
                 
                     var newDialogueEntry = template.CreateDialogueEntry( i, conversation.id, string.Empty);
@@ -413,7 +438,7 @@ namespace Project.Runtime.Scripts.Manager
                     if (i == musicEntry)
                     {
                         var musicPath = asset.LookupValue("Music");
-                        newDialogueEntry.userScript += $"PlayClipLooped({musicPath})";
+                        newDialogueEntry.userScript += $"PlayClipLooped(\"{musicPath}\")";
                     }
                 
                     if (i < entryCount) newDialogueEntry.outgoingLinks = new List<Link>() { new Link( conversation.id, i, conversation.id, i + 1) };
@@ -454,8 +479,27 @@ namespace Project.Runtime.Scripts.Manager
             if (location == gameState.PlayerLocation(true)) return;
             StartCoroutine(SwitchSublocation(location));
         }
-        
-        
+
+        public void SetSublocation(string locationName)
+        {
+            var location = DialogueManager.masterDatabase.GetLocation(locationName);
+            if (location == null)
+            {
+                locationName = locationName.Replace($"{gameState.PlayerLocation(false).Name}/", "");
+            }
+
+            location = DialogueManager.masterDatabase.GetLocation(locationName);
+            
+            if (location == null)
+            {
+                Debug.LogError($"Location {locationName} not found.");
+                return;
+            }
+            
+            SetSublocation(DialogueManager.masterDatabase.GetLocation(locationName));
+        }
+
+
         static Canvas faderCanvas = null;
         static UnityEngine.UI.Image faderImage = null;
         
@@ -569,4 +613,21 @@ namespace Project.Runtime.Scripts.Manager
             yield return null;
         }
     }
+}
+
+
+public class SequencerCommandSetLocationImmediate : SequencerCommand
+{
+    IEnumerator Start()
+    {
+        var location = parameters[0];
+        var currentScene = string.Empty;
+            
+        if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
+        else currentScene = GameManager.gameState.current_scene;
+        yield return Project.Runtime.Scripts.App.App.Instance.ChangeScene(location, currentScene, Transition.None);
+        GameManager.gameState.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(location) );
+        Stop();
+    }
+
 }

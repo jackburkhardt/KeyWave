@@ -358,7 +358,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             if (!includeSublocations)
             {
-                var location = database.GetLocation(int.Parse(value));
+                var id = int.TryParse(value, out var result) ? result : 0;
+                var location = database.GetLocation(id);
                 if (location != null && location.IsSublocation && location.IsFieldAssigned("Parent Location"))
                 {
                     value = location.LookupValue("Parent Location");

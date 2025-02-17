@@ -54,10 +54,10 @@ namespace Project.Runtime.Scripts.DialogueSystem
             return defaultColor;
         }
 
-        public static Points.PointsField[] GetPointsFromField(List<Field> fields)
+        public static Points.PointsField[] GetPointsFromField(List<Field> fields, string prefix = "")
         {
             if (fields == null || !fields.Any(p => p.IsPointsField())) return Array.Empty<Points.PointsField>();
-            var pointsField = fields.Where(p => p.IsPointsField());
+            var pointsField = fields.Where(p => p.IsPointsField() && p.value.StartsWith(prefix));
             return pointsField.Select(Points.PointsField.FromLuaField).ToArray();
         }
 
