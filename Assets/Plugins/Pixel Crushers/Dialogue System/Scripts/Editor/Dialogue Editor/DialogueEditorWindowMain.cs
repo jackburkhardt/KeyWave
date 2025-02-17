@@ -1,5 +1,7 @@
 ﻿// Copyright (c) Pixel Crushers. All rights reserved.
 
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
@@ -256,18 +258,23 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             SetReorderableListInspectorSelection();
             SelectObject(database);
         }
+        
 
         private void SetReorderableListInspectorSelection()
         {
             if (database == null) return;
             if (EditorWindow.focusedWindow != instance) return;
+            
             switch (toolbar.current)
             {
                 case Toolbar.Tab.Actors:
                     if (0 <= actorListSelectedIndex && actorListSelectedIndex < database.actors.Count) inspectorSelection = database.actors[actorListSelectedIndex];
                     break;
                 case Toolbar.Tab.Items:
-                    if (0 <= itemListSelectedIndex && itemListSelectedIndex < database.items.Count) inspectorSelection = database.items[itemListSelectedIndex];
+                    if (0 <= itemListSelectedIndex && itemListSelectedIndex < items.Count) inspectorSelection = items[itemListSelectedIndex];
+                    break;
+                case Toolbar.Tab.Actions:
+                    if (0 <= actionListSelectedIndex && actionListSelectedIndex < actions.Count) inspectorSelection = actions[actionListSelectedIndex];
                     break;
                 case Toolbar.Tab.Locations:
                     if (0 <= locationListSelectedIndex && locationListSelectedIndex < database.locations.Count) inspectorSelection = database.locations[locationListSelectedIndex];
@@ -450,7 +457,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 {
                     ResetDatabaseTab();
                 }
-                if (toolbar.Current == Toolbar.Tab.Items)
+                if (toolbar.Current == Toolbar.Tab.Items || toolbar.Current == Toolbar.Tab.Actions)
                 {
                     BuildLanguageListFromItems();
                 }
@@ -492,6 +499,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         break;
                     case Toolbar.Tab.Items:
                         DrawItemSection();
+                        break;
+                    case Toolbar.Tab.Actions:
+                        DrawActionSection();
                         break;
                     case Toolbar.Tab.Locations:
                         DrawLocationSection();

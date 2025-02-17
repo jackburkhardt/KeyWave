@@ -255,6 +255,9 @@ namespace Project.Runtime.Scripts.Manager
             foreach (var action in  actions)
             {
                 var item = DialogueManager.masterDatabase.GetItem(int.Parse(action.value));
+                
+                
+                
                 if (item.IsFieldAssigned("Script"))
                 {
                     var script = item.LookupValue("Script");
@@ -339,7 +342,7 @@ namespace Project.Runtime.Scripts.Manager
             var points = DialogueUtility.GetPointsFromField(quest!.fields);
       
             // if this quest already succeeded, we don't want to retrigger events
-            if (GameManager.instance.dailyReport.CompletedTasks.Contains(questName) && !quest.IsRepeatable) return;
+            if (GameManager.instance.dailyReport.CompletedTasks.Contains(questName) && !quest.IsStatic) return;
 
             if (state == QuestState.Success)
             {                
@@ -347,31 +350,23 @@ namespace Project.Runtime.Scripts.Manager
                 {
                     if (pointField.Points == 0) continue;
 
-                    if (quest.IsRepeatable)
+                    var repeatCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
+                    var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
+                        
+                    for (int i = 0; i < repeatCount; i++)
                     {
-                        var repeatCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
-                        var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
-                        
-                        for (int i = 0; i < repeatCount; i++)
-                        {
-                            pointField.Points = (int) (pointField.Points * multiplier);
-                        }
-                        
+                        pointField.Points = (int) (pointField.Points * multiplier);
                     }
-                    
                     GameEvent.OnPointsIncrease(pointField, questName);
                     
                 }
 
                 if (quest.IsAction)
                 {
-                    if (quest.IsRepeatable)
-                    {
-                        QuestLog.SetQuestState(questName, QuestState.Active);
-                        var completionCount = quest.LookupInt("Repeat Count");
-                        quest.AssignedField("Repeat Count").value = (completionCount + 1).ToString();
-                        Debug.Log( $"Quest {questName} has been repeated {completionCount + 1} times.");
-                    }
+                    if (quest.IsStatic) QuestLog.SetQuestState(questName, QuestState.Active);
+                    var completionCount = quest.LookupInt("Repeat Count");
+                    quest.AssignedField("Repeat Count").value = (completionCount + 1).ToString();
+                    Debug.Log( $"Quest {questName} has been repeated {completionCount + 1} times.");
                     
                     if (quest.IsFieldAssigned("New Sublocation"))
                     {

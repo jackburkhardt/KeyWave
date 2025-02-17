@@ -30,9 +30,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private bool needToBuildLanguageListFromItems = true;
 
         private ReorderableList itemReorderableList = null;
+        
+        private ReorderableList actionReorderableList = null;
 
         [SerializeField]
         private int itemListSelectedIndex = -1;
+        
+        [SerializeField]
+        private int actionListSelectedIndex = -1;
 
         [SerializeField]
         private int questEntrySelectedIdx = -1;
@@ -52,6 +57,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private Field newEntryField;
 
         private List<Item> filteredItems;
+        
+        private List<Item> filteredActions;
 
         private static GUIContent questDescriptionLabel = new GUIContent("Description", "The description when the quest is active.");
         private static GUIContent questSuccessDescriptionLabel = new GUIContent("Success Description", "The description when the quest has been completed successfully. If blank, the Description field is used.");
@@ -68,7 +75,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             UpdateTreatQuestsAsActions(template.treatQuestsAsActions);
             needToBuildLanguageListFromItems = true;
             itemReorderableList = null;
+            actionReorderableList = null;
             itemListSelectedIndex = -1;
+            actionListSelectedIndex = -1;
             syncedItemIDs = null;
         }
 
@@ -91,6 +100,13 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         }
 
         private void BuildLanguageListFromItems()
+        {
+            if (database == null || database.items == null) return;
+            database.items.ForEach(item => { if (item.fields != null) BuildLanguageListFromFields(item.fields); });
+            needToBuildLanguageListFromItems = false;
+        }
+        
+        private void BuildLanguageListFromActions()
         {
             if (database == null || database.items == null) return;
             database.items.ForEach(item => { if (item.fields != null) BuildLanguageListFromFields(item.fields); });
@@ -122,22 +138,39 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
         }
 
+        private void DrawActionSection()
+        {
+            if (needToBuildLanguageListFromItems) BuildLanguageListFromItems();
+            if (actionReorderableList == null) InitializeActionReorderableList();
+            var filterChanged = DrawFilterMenuBar("Action", DrawActionMenu, ref itemFilter, ref hideFilteredOutItems);
+            if (filterChanged) InitializeActionReorderableList();
+            if (database.syncInfo.syncItems)
+            {
+                DrawActionSyncDatabase();
+                if (syncedItemIDs == null) RecordSyncedItemIDs();
+            }
+            actionReorderableList.DoLayoutList();
+        }
+
         private bool HideFilteredOutItems()
         {
             return hideFilteredOutItems && !string.IsNullOrEmpty(itemFilter);
         }
+        
+        private List<Item> items => database.items.FindAll(p => !p.IsAction);
+        private List<Item> actions => database.items.FindAll(p => p.IsAction);
 
         private void InitializeItemReorderableList()
         {
             if (HideFilteredOutItems())
             {
-                filteredItems = database.items.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
+                filteredItems = items.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
                 itemReorderableList = new ReorderableList(filteredItems, typeof(Item), true, true, true, true);
             }
             else
             {
-                filteredItems = database.items;
-                itemReorderableList = new ReorderableList(database.items, typeof(Item), true, true, true, true);
+                filteredItems = items;
+                itemReorderableList = new ReorderableList(filteredItems, typeof(Item), true, true, true, true);
             }
             
             itemReorderableList.drawHeaderCallback = DrawItemListHeader;
@@ -154,7 +187,34 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             itemReorderableList.onRemoveCallback = OnItemListRemove;
             itemReorderableList.onSelectCallback = OnItemListSelect;
             itemReorderableList.onReorderCallback = OnItemListReorder;
+            
+            actionReorderableList = null;
         }
+        
+        private void InitializeActionReorderableList()
+        {
+            if (HideFilteredOutItems())
+            {
+                filteredActions = actions.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
+                actionReorderableList = new ReorderableList(filteredActions, typeof(Item), true, true, true, true);
+            }
+            else
+            {
+                filteredActions = actions;
+                actionReorderableList = new ReorderableList(filteredActions, typeof(Item), true, true, true, true);
+            }
+            
+            actionReorderableList.drawHeaderCallback = DrawActionListHeader;
+            actionReorderableList.drawElementCallback = DrawActionListElement;
+            actionReorderableList.drawElementBackgroundCallback = DrawActionListElementBackground;
+            actionReorderableList.onAddCallback = OnActionListAdd;       
+            actionReorderableList.onRemoveCallback = OnActionListRemove;
+            actionReorderableList.onSelectCallback = OnActionListSelect;
+            actionReorderableList.onReorderCallback = OnActionListReorder;
+            
+            itemReorderableList = null;
+        }
+
 
         private const float ItemReorderableListTypeWidth = 40f;
 
@@ -174,6 +234,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 EditorGUI.LabelField(new Rect(rect.x + 14 + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
             }
         }
+        
+        
+        private void DrawActionListHeader(Rect rect)
+        {
+            var fieldWidth = (rect.width - 14) / 4;
+            EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, fieldWidth, rect.height), "Name");
+            EditorGUI.LabelField(new Rect(rect.x + 14 + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
+        }
 
         private void DrawItemListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
@@ -187,7 +255,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (template.treatItemsAsQuests)
             {
                 var fieldWidth = (rect.width - ItemReorderableListTypeWidth) / 4;
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 2, ItemReorderableListTypeWidth, EditorGUIUtility.singleLineHeight), item.IsItem ? "Item" : item.IsAction ? "Action" : "Quest");
+                EditorGUI.LabelField(new Rect(rect.x, rect.y + 2, ItemReorderableListTypeWidth, EditorGUIUtility.singleLineHeight), item.IsItem ? "Item" : "Quest");
                 EditorGUI.BeginChangeCheck();
                 GUI.SetNextControlName(nameControl);
                 itemName = EditorGUI.TextField(new Rect(rect.x + ItemReorderableListTypeWidth, rect.y + 2, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, item.Name);
@@ -216,11 +284,54 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 inspectorSelection = item;
             }
         }
+        
+        private void DrawActionListElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            
+            //if (!(0 <= index && index < filteredActions.Count)) return;
+            var nameControl = "ItemName" + index;
+            var descriptionControl = "ItemDescription" + index;
+            var item = filteredActions[index];
+            var itemName = item.Name;
+            var description = item.Description;
+            EditorGUI.BeginDisabledGroup(!EditorTools.IsAssetInFilter(item, itemFilter) || IsItemSyncedFromOtherDB(item));
+            {
+                var fieldWidth = rect.width / 4;
+                EditorGUI.BeginChangeCheck();
+                GUI.SetNextControlName(nameControl);
+                itemName = EditorGUI.TextField(new Rect(rect.x, rect.y + 2, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, item.Name);
+                if (EditorGUI.EndChangeCheck()) item.Name = itemName;
+                EditorGUI.BeginChangeCheck();
+                GUI.SetNextControlName(descriptionControl);
+                description = EditorGUI.TextField(new Rect(rect.x + fieldWidth + 2, rect.y + 2, 3 * fieldWidth - 2, EditorGUIUtility.singleLineHeight), GUIContent.none, description);
+                if (EditorGUI.EndChangeCheck()) item.Description = description;
+            }
+            EditorGUI.EndDisabledGroup();
+            var focusedControl = GUI.GetNameOfFocusedControl();
+            if (string.Equals(nameControl, focusedControl) || string.Equals(descriptionControl, focusedControl))
+            {
+                inspectorSelection = item;
+            }
+        }
 
         private void DrawItemListElementBackground(Rect rect, int index, bool isActive, bool isFocused)
         {
             if (!(0 <= index && index < filteredItems.Count)) return;
             var item = filteredItems[index];
+            if (EditorTools.IsAssetInFilter(item, itemFilter))
+            {
+                ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, isActive, isFocused, true);
+            }
+            else
+            {
+                EditorGUI.DrawRect(rect, new Color(0.225f, 0.225f, 0.225f, 1));
+            }
+        }
+        
+        private void DrawActionListElementBackground(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            if (!(0 <= index && index < filteredActions.Count)) return;
+            var item = filteredActions[index];
             if (EditorTools.IsAssetInFilter(item, itemFilter))
             {
                 ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, isActive, isFocused, true);
@@ -236,7 +347,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var menu = new GenericMenu();
             menu.AddItem(new GUIContent("Quest"), false, OnAddNewQuest, null);
             menu.AddItem(new GUIContent("Item"), false, OnAddNewItem, null);
-            menu.AddItem(new GUIContent("Action"), false, OnAddNewAction, null);
             menu.ShowAsContext();
         }
 
@@ -244,11 +354,16 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             AddNewItem();
         }
+        
+        private void OnActionListAdd(ReorderableList list)
+        {
+            AddNewAction();
+        }
 
         private void OnItemListRemove(ReorderableList list)
         {
-            if (!(0 <= list.index && list.index < database.items.Count)) return;
-            var item = database.items[list.index];
+            if (!(0 <= list.index && list.index < items.Count)) return;
+            var item = list.list [list.index] as Item;
             if (item == null) return;
             if (IsItemSyncedFromOtherDB(item)) return;
             var deletedLastOne = list.count == 1;
@@ -256,29 +371,106 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 ReorderableList.defaultBehaviours.DoRemoveButton(list);
                 if (deletedLastOne) inspectorSelection = null;
-                else inspectorSelection = (list.index < list.count) ? database.items[list.index] : (list.count > 0) ? database.items[list.count - 1] : null;
+                else inspectorSelection = (list.index < list.count) ? items[list.index] : (list.count > 0) ? items[list.count - 1] : null;
                 SetDatabaseDirty("Remove Item");
+                
+                database.items.Remove(item);
+            }
+        }
+        
+        private void OnActionListRemove(ReorderableList list)
+        {
+            if (!(0 <= list.index && list.index < actions.Count)) return;
+            var action =actions[list.index];
+            if (actions == null) return;
+            if (IsItemSyncedFromOtherDB(action)) return;
+            var deletedLastOne = list.count == 1;
+            if (EditorUtility.DisplayDialog(string.Format("Delete '{0}'?", EditorTools.GetAssetName(action)), "Are you sure you want to delete this?", "Delete", "Cancel"))
+            {
+                ReorderableList.defaultBehaviours.DoRemoveButton(list);
+                if (deletedLastOne) inspectorSelection = null;
+                else inspectorSelection = (list.index < list.count) ? actions[list.index] : (list.count > 0) ? actions[list.count - 1] : null;
+                SetDatabaseDirty("Remove Action");
             }
         }
 
         private void OnItemListReorder(ReorderableList list)
         {
+           
+            
+            
+            /*
+            
+            Debug.Log((list.list[list.index] as Item).Name);
+
+            var deadItemWalking = items[list.index];
+            var selectedItem = list.list[list.index] as Item;
+            
+            
+            var deadItemWalkingInIndex = items.FindIndex( x => x.id == deadItemWalking.id);
+            var selectedItemInIndex = items.FindIndex( x => x.id == selectedItem.id);
+            
+            
+            
+            
+            database.items.RemoveAt(selectedItemInIndex);
+            database.items.Insert(deadItemWalkingInIndex, selectedItem);
+            
+            */
+            
+           
             SetDatabaseDirty("Reorder Items");
+            InitializeItemReorderableList();
+            
+        }
+        
+        
+        
+        
+        private void OnActionListReorder(ReorderableList list)
+        {
+            var action = actions[list.index];
+            
+            var indexInDatabase = database.items.FindIndex( x => x.id == action.id);
+            
+            var itemAbove = actions[Mathf.Max(0, list.index - 1)];
+            
+            
+            
+            database.items.RemoveAt(indexInDatabase);
+            
+            var newIndexInDatabase = database.items.FindIndex( x => x.id == itemAbove.id);
+            
+            database.items.Insert(newIndexInDatabase, action);
+            
+           
+            SetDatabaseDirty("Reorder Actions");
+            InitializeActionReorderableList();
         }
 
         private void OnItemListSelect(ReorderableList list)
         {
-            if (!(0 <= list.index && list.index < database.items.Count)) return;
-            inspectorSelection = database.items[list.index];
+          
+            if (!(0 <= list.index && list.index < items.Count)) return;
+            inspectorSelection = items[list.index];
             itemListSelectedIndex = list.index;
+        }
+        
+        private void OnActionListSelect(ReorderableList list)
+        {
+         
+            if (!(0 <= list.index && list.index < actions.Count)) return;
+            inspectorSelection = actions[list.index];
+            actionListSelectedIndex = list.index;
         }
 
         public void DrawSelectedItemSecondPart()
         {
             var item = inspectorSelection as Item;
             if (item == null) return;
-            DrawFieldsFoldout<Item>(item, itemListSelectedIndex, itemFoldouts);
-            DrawAssetSpecificPropertiesSecondPart(item, itemListSelectedIndex, itemFoldouts);
+            var index = actionReorderableList != null ? actionListSelectedIndex : itemListSelectedIndex;
+            DrawFieldsFoldout<Item>(item, index, itemFoldouts);
+            DrawAssetSpecificPropertiesSecondPart(item, index, itemFoldouts);
         }
 
         private void DrawItemMenu()
@@ -314,10 +506,26 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 menu.ShowAsContext();
             }
         }
+        
+        private void DrawActionMenu()
+        {
+            if (GUILayout.Button("Menu", "MiniPullDown", GUILayout.Width(56)))
+            {
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(new GUIContent("New Action"), false, AddNewAction);
+                menu.AddItem(new GUIContent("Use Action System"), template.treatQuestsAsActions, ToggleUseActionSystem);
+                menu.AddItem(new GUIContent("Sort/By Name"), false, SortItemsByName);
+                menu.AddItem(new GUIContent("Sort/By Group"), false, SortItemsByGroup);
+                menu.AddItem(new GUIContent("Sort/By ID"), false, SortItemsByID);
+                menu.AddItem(new GUIContent("Sync From DB"), database.syncInfo.syncItems, ToggleSyncItemsFromDB);
+                menu.ShowAsContext();
+            }
+        }
 
         private void OnAddNewItem(object data)
         {
             AddNewItem();
+            
         }
 
         private void OnAddNewQuest(object data)
@@ -334,6 +542,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             AddNewAssetFromTemplate<Item>(database.items, (template != null) ? template.itemFields : null, "Item");
             SetDatabaseDirty("Add New Item");
+            InitializeItemReorderableList();
         }
 
         private void AddNewQuest()
@@ -341,13 +550,15 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             AddNewAssetFromTemplate<Item>(database.items, (template != null) ? template.questFields : null, "Quest");
             BuildLanguageListFromItems();
             SetDatabaseDirty("Add New Quest");
+            InitializeItemReorderableList();
         }
         
         private void AddNewAction()
         {
             AddNewAssetFromTemplate<Item>(database.items, (template != null) ? template.actionFields : null, "Action");
-            BuildLanguageListFromItems();
+            BuildLanguageListFromActions();
             SetDatabaseDirty("Add New Action");
+            InitializeActionReorderableList();
         }
 
         private void SortItemsByName()
@@ -412,6 +623,29 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 database.SyncItems();
                 InitializeItemReorderableList();
+                syncedItemIDs = null;
+                SetDatabaseDirty("Manual Sync Items");
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawActionSyncDatabase()
+        {
+            EditorGUILayout.BeginHorizontal();
+            DialogueDatabase newDatabase = EditorGUILayout.ObjectField(new GUIContent("Sync From", "Database to sync actions from."),
+                                                                       database.syncInfo.syncItemsDatabase, typeof(DialogueDatabase), false) as DialogueDatabase;
+            if (newDatabase != database.syncInfo.syncItemsDatabase)
+            {
+                database.syncInfo.syncItemsDatabase = newDatabase;
+                database.SyncItems();
+                InitializeActionReorderableList();
+                syncedItemIDs = null;
+                SetDatabaseDirty("Change Sync Items Database");
+            }
+            if (GUILayout.Button(new GUIContent("Sync Now", "Syncs from the database."), EditorStyles.miniButton, GUILayout.Width(72)))
+            {
+                database.SyncItems();
+                InitializeActionReorderableList();
                 syncedItemIDs = null;
                 SetDatabaseDirty("Manual Sync Items");
             }
@@ -556,15 +790,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 Field.SetValue(item.fields, "Abandonable", newAbandonable);
                 SetDatabaseDirty("Create Abandonable Field");
             }
-
-            // Has Entries:
-            bool hasQuestEntries = item.FieldExists("Entry Count");
-            bool newHasQuestEntries = EditorGUILayout.Toggle(new GUIContent("Has Entries (Subtasks)", "Tick to add quest entries to this quest."), hasQuestEntries);
-            if (newHasQuestEntries != hasQuestEntries) ToggleHasQuestEntries(item, newHasQuestEntries);
-
-            // Other main fields specified in template:
-            DrawOtherQuestPrimaryFields(item);
-
+            
+            
             // Descriptions:
             DrawRevisableTextAreaField(questDescriptionLabel, item, null, item.fields, "Description");
             DrawLocalizedVersions(item, item.fields, "Description {0}", false, FieldType.Text);
@@ -572,9 +799,59 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             DrawLocalizedVersions(item, item.fields, "Success Description {0}", false, FieldType.Text);
             DrawRevisableTextAreaField(questFailureDescriptionLabel, item, null, item.fields, "Failure Description");
             DrawLocalizedVersions(item, item.fields, "Failure Description {0}", false, FieldType.Text);
+            
+            
 
+            // Has Entries:
+            bool hasQuestEntries = item.FieldExists("Entry Count");
+            
+            
+            bool newHasQuestEntries = EditorGUILayout.Toggle(new GUIContent("Has Entries (Subtasks)", "Tick to add quest entries to this quest."), hasQuestEntries);
+            if (newHasQuestEntries != hasQuestEntries) ToggleHasQuestEntries(item, newHasQuestEntries);
+
+            
+            //Points
+            if (!newHasQuestEntries) DrawPoints(item, string.Empty, false);
+            
             // Entries:
             if (newHasQuestEntries) DrawQuestEntries(item);
+            
+            // Other main fields specified in template:
+            DrawOtherQuestPrimaryFields(item);
+
+
+            if (newHasQuestEntries)
+            {
+                Field autoSetSuccess = Field.Lookup(item.fields, "Auto Set Success");
+            
+                if (autoSetSuccess == null)
+                {
+                    autoSetSuccess = new Field("Auto Set Success", "True", FieldType.Boolean);
+                    item.fields.Add(autoSetSuccess);
+                    SetDatabaseDirty("Create Auto Set Success Field");
+                }
+                
+                
+                autoSetSuccess.value = EditorGUILayout.Toggle(new GUIContent("Auto Set Success", "Tick to automatically set the quest to success when all entries are complete."), item.LookupBool("Auto Set Success")).ToString();
+            }
+
+            else
+            {
+                Field autoSetSuccess = Field.Lookup(item.fields, "Auto Set Success");
+            
+                if (autoSetSuccess != null)
+                {
+                    item.fields.Remove(autoSetSuccess);
+                    SetDatabaseDirty("Remove Auto Set Success Field");
+                }
+            }
+            
+            
+
+            
+            
+            
+            
         }
         
     
@@ -591,6 +868,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             Explicit,
             Natural
         }
+        
+        private bool conversationPropertiesFoldout = false;
+        private bool locationPropertiesFoldout = false;
+        private bool pointsPropertiesFoldout = true;
 
         private int SecondsPerCharacter => int.Parse(database.GetVariable("game.clock.secondsPerCharacter").InitialValue);
         private int SecondsPerLine => int.Parse(database.GetVariable("game.clock.secondsBetweenLines").InitialValue);
@@ -629,34 +910,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 DrawLocalizedVersions(item, item.fields, "Display Name {0}", false, FieldType.Text);
             }
 
-            // Group:
-            var groupField = Field.Lookup(item.fields, "Group");
-            var hasGroupField = (groupField != null);
-            var useGroupField = EditorGUILayout.Toggle(new GUIContent("Use Groups", "Tick to organize this quest under a quest group."), hasGroupField);
-            if (hasGroupField && !useGroupField)
-            {
-                item.fields.Remove(groupField);
-                SetDatabaseDirty("Don't Use Groups");
-            }
-            else if (useGroupField)
-            {
-                if (groupField == null)
-                {
-                    groupField = new Field("Group", string.Empty, FieldType.Text);
-                    item.fields.Add(groupField);
-                    SetDatabaseDirty("Create Group Field");
-                }
-                if (groupField.typeString == "CustomFieldType_Text")
-                {
-                    DrawRevisableTextField(groupLabel, item, null, groupField);
-                    DrawLocalizedVersions(item, item.fields, "Group {0}", false, FieldType.Text);
-                }
-                else
-                {
-                    DrawField(new GUIContent("Group", "The group this quest belongs to."), groupField, false);
-                }
-            }
-
             // State:
             
             Field stateField = Field.Lookup(item.fields, "State");
@@ -670,27 +923,42 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             stateField.value = DrawQuestStateField(new GUIContent("State", "The starting state of the quest."), stateField.value);
 
             
-            //Repeatable
+            // Static
 
-
-            var repeatable = item.IsRepeatable;
+            var isStaticAction = item.IsStatic;
             
-            var newRepeatable = false;
+            var newIsStaticAction = false;
             
-            DrawEditorItemWithRepeatableIcon( () =>  newRepeatable = EditorGUILayout.Toggle(
-                new GUIContent("Repeatable", "Tick to set the action as repeatable."),
-                repeatable));
+            DrawEditorItemWithStaticIcon( () =>  newIsStaticAction = EditorGUILayout.Toggle(
+                new GUIContent("Static", "Static actions show when the state is \"active\" and are set to \"success\" when completed. Static actions that are set to \"success\" will immediately revert to \"active\"."),
+                isStaticAction));
+            
+            
 
-            if (newRepeatable != repeatable)
+            var staticField = Field.Lookup(item.fields, "Is Static");
+                
+            if (staticField == null)
             {
-                ToggleHasRepeatableFields(item, newRepeatable);
-                SetDatabaseDirty("Remove Starts Conversation Field");
+                staticField = new Field("Is Static", newIsStaticAction.ToString(), FieldType.Boolean);
+                item.fields.Add(staticField);
+                SetDatabaseDirty("Create Static Field");
             }
+            
+            if (newIsStaticAction != isStaticAction)
+            {
+                ToggleStatic(item, newIsStaticAction);
+            }
+            
+            SetDatabaseDirty("Remove Starts Conversation Field");
+            
+            
             EditorGUILayout.Space();
             
-            //Location
-            
             DrawActionLocation(item);
+            
+           
+            
+            
             
             //Start Conversation
             
@@ -714,41 +982,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             if (newStartsConversation)
             {
-                DrawStartConversationProperties(item);
                 
-                Field newSublocation = Field.Lookup(item.fields, "New Sublocation");
-
-                if (newSublocation != null)
+                EditorWindowTools.StartIndentedSection();
+                
+                conversationPropertiesFoldout = EditorGUILayout.Foldout( conversationPropertiesFoldout, "Conversation Properties");
+                if (conversationPropertiesFoldout)
                 {
-                    Field sublocationSwitcherMethod = Field.Lookup(item.fields, "Sublocation Switcher Method");
-                    if (sublocationSwitcherMethod == null)
-                    {
-                        sublocationSwitcherMethod = new Field("Sublocation Switcher Method", SublocationSwitcherMethod.MoveAfterConversation.ToString(), FieldType.Text);
-                        item.fields.Add(sublocationSwitcherMethod);
-                        SetDatabaseDirty("Create Sublocation Switcher Method Field");
-                    }
-                        
-                    SublocationSwitcherMethod newSublocationSwitcherMethod = (SublocationSwitcherMethod)Enum.Parse(typeof(SublocationSwitcherMethod),
-                        sublocationSwitcherMethod.value);
-                        
-                    DrawEditorItemWithShuffleIcon(() =>
-                        newSublocationSwitcherMethod = (SublocationSwitcherMethod)EditorGUILayout.EnumPopup(
-                            new GUIContent("Switcher Method",
-                                "The method used to change the sublocation."),newSublocationSwitcherMethod));
-                        
-                        
-                    sublocationSwitcherMethod.value = newSublocationSwitcherMethod.ToString();
+                    DrawStartConversationProperties(item);
+                
+                   
                 }
-
-                else
-                {
-                    Field sublocationSwitcherMethod = Field.Lookup(item.fields, "Sublocation Switcher Method");
-                    if (sublocationSwitcherMethod != null)
-                    {
-                        item.fields.Remove(sublocationSwitcherMethod);
-                        SetDatabaseDirty("Remove Sublocation Switcher Method Field");
-                    }
-                }
+                
+               
+                
+                EditorWindowTools.EndIndentedSection();
 
                 
             }
@@ -785,8 +1032,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             EditorGUILayout.Space();
             
-            //Points
-            DrawActionPoints(item);
+            
+            
+           
               
             // Other main fields specified in template:
             DrawOtherActionPrimaryFields(item);
@@ -862,7 +1110,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 EditorGUILayout.Space();
                 
                 GUI.enabled = false;
-                duration.value = EditorGUILayout.IntField("Duration (s)" , item.LookupInt("Duration")).ToString();
+                duration.value = EditorGUILayout.IntField("Duration (s)" , item.LookupInt("Explicit Duration")).ToString();
                 GUI.enabled = true;
                 
             }
@@ -916,7 +1164,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                       
                         EditorGUILayout.LabelField("Duration", DurationLabel(naturalDurationA));
 
-                        if (item.IsRepeatable && item.IsFieldAssigned("Repeat Entry Count"))
+                        if (item.IsFieldAssigned("Repeat Entry Count"))
                         {
                             
                             naturalDurationB = 0;
@@ -981,6 +1229,25 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 
             EditorWindowTools.EditorGUILayoutEndGroup();
             
+            
+            
+            //Points
+            
+            if (item.IsStatic)
+            {
+                EditorGUILayout.LabelField("Points");
+                DrawPoints(item);
+            }
+            
+            
+            Field repeatCount = Field.Lookup(item.fields, "Repeat Count");
+            if (repeatCount == null)
+            {
+                repeatCount = new Field("Repeat Count", "0", FieldType.Number);
+                item.fields.Add(repeatCount);
+                SetDatabaseDirty("Create Repeat Count Field");
+            }
+            
         }
         
         
@@ -1001,6 +1268,30 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             
             else EditorGUIUtility.labelWidth = defaultLabelWidth - 22;
+            
+            action.Invoke();
+            
+            EditorGUIUtility.labelWidth = defaultLabelWidth;
+            EditorGUILayout.EndHorizontal();
+            
+        }
+        
+        private void DrawEditorItemWithStaticIcon( Action action, float? labelWidth = null)
+        {
+            if (action == null) return;
+            var defaultContentColor = GUI.contentColor;
+            var defaultLabelWidth = EditorGUIUtility.labelWidth;
+                
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label(EditorGUIUtility.IconContent("AnimatorController On Icon").image , GUILayout.Width(22), GUILayout.Height(22));
+            GUI.contentColor = defaultContentColor;
+            
+            if (labelWidth.HasValue)
+            {
+                EditorGUIUtility.labelWidth = labelWidth.Value;
+            }
+            
+            else  EditorGUIUtility.labelWidth = defaultLabelWidth - 25;
             
             action.Invoke();
             
@@ -1101,7 +1392,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
              var conditions = Field.Lookup(item.fields, "Conditions");
              if (conditions == null)
              {
-                 conditions = new Field("Conditions", "true", FieldType.Text);
+                 conditions = new Field("Conditions",  $"true and (true)", FieldType.Text);
                  item.fields.Add(conditions);
              }
 
@@ -1112,23 +1403,41 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
              }
              
              EditorWindowTools.EditorGUILayoutBeginGroup();
+
+             luaConditionWizard.database = database;
+
+             string newDefaultCondition;
+
+             if (item.IsStatic)
+             {
+                 newDefaultCondition =  $"CurrentQuestState(\"{item.Name}\") == \"active\""; 
+             }
+
+             else
+             {
+                 GUI.enabled = false; 
+                 var defaultCondition = $"CurrentQuestState(\"{item.Name}\") == \"active\""; 
+                 
+                 var hasDefault = !conditions.value.StartsWith("true and (");
+                 newDefaultCondition = luaConditionWizard.DrawWithToggle(new GUIContent("Default Condition", "Default lua statement for actions."), defaultCondition, hasDefault, "Include"); 
+                 GUI.enabled = true; 
+
+             }
              
-             luaConditionWizard.database = database; 
-             
-             GUI.enabled = false; 
-             var defaultCondition = $"CurrentQuestState(\"{item.Name}\") == \"active\""; 
-             var newDefaultCondition = luaConditionWizard.Draw(new GUIContent("Default Condition", "Default lua statement for actions."), defaultCondition, false, true); 
-             GUI.enabled = true; 
-             
-             var appendDefaultCondition = !string.IsNullOrWhiteSpace(newDefaultCondition);
-             if (!appendDefaultCondition)
+             if (string.IsNullOrEmpty(newDefaultCondition))
              {
                  newDefaultCondition = "true";
-             } 
+             }
+             
+             
              var additionalConditionsText = conditions.value.Substring(conditions.value.Split(" and ")[0].Length + 5);
              additionalConditionsText = additionalConditionsText.Substring(1, additionalConditionsText.Length - 2); //removes parenthesis
-             if (additionalConditionsText == "true") additionalConditionsText = string.Empty; 
-             var newAdditionalConditions = luaConditionWizard.Draw(new GUIContent( "Additional Conditions", "Optional Lua statement that must be true to use this entry."), additionalConditionsText); 
+             if (additionalConditionsText == "true") additionalConditionsText = string.Empty;
+             
+             
+             var label = item.IsStatic ? "Conditions" : "Additional Conditions";
+             
+             var newAdditionalConditions = luaConditionWizard.Draw(new GUIContent( label, "Optional Lua statement that must be true to use this entry."), additionalConditionsText); 
              if (newAdditionalConditions.Length == 0) newAdditionalConditions = "true"; 
              conditions.value = $"{newDefaultCondition} and ({newAdditionalConditions})";
                 
@@ -1152,22 +1461,37 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             EditorWindowTools.EditorGUILayoutBeginGroup();
             luaScriptWizard.database = database;
+            string newDefaultScript;
             
-            GUI.enabled = false;
-            var defaultScript = $"SetQuestState(\"{item.Name}\", \"success\")";
-            var newDefaultScript = luaScriptWizard.Draw(new GUIContent("Default Script", "Default lua script for actions that runs when the action is terminated."), defaultScript, false, true);
-            GUI.enabled = true;
+            if (item.IsStatic)
+            {
+                newDefaultScript = $"SetQuestState(\"{item.Name}\", \"success\")"; 
+            }
             
+            else
+            {
+                GUI.enabled = false; 
+                var defaultScript = $"SetQuestState(\"{item.Name}\", \"success\")";
+
+                var appendsDefault = !script.value.StartsWith(";");
+                
+                newDefaultScript = luaScriptWizard.DrawWithToggle(new GUIContent("Default Script", "Default lua script for actions that runs when the action is terminated."), defaultScript, appendsDefault, "Include" ); 
+                GUI.enabled = true; 
+            }
+            
+            var label = item.IsStatic ? "Script" : "Additional Script";
+                   
             var additionalScript = script.value.Substring(script.value.Split(script.value.Contains("; ") ? "; " : ";") [0].Length + 2);
-            var newAdditionalScript = luaScriptWizard.Draw(new GUIContent( "Additional Script", "Optional Lua script that will be run after the default script."), additionalScript);
+            var newAdditionalScript = luaScriptWizard.Draw(new GUIContent( label, "Optional Lua script that will be run after the default script."), additionalScript);
             
             
             script.value = $"{newDefaultScript}; {newAdditionalScript}";
             EditorWindowTools.EditorGUILayoutEndGroup();
         }
 
-        private void DrawActionPoints(Item item)
+        private void DrawPoints(Item item, string prefix = "", bool includePointsReduction = true)
         {
+            if (!string.IsNullOrEmpty(prefix) && !prefix.EndsWith(" ")) prefix += " ";
              var points = new string[]
                 {
                     "Skills",
@@ -1188,19 +1512,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 var alignedTextStyle = new GUIStyle( EditorStyles.label );
                 alignedTextStyle.alignment = TextAnchor.MiddleCenter;
 
-                var repeatable = item.IsRepeatable;
                 var defaultContentColor = GUI.contentColor;
                 var defaultLabelWidth = EditorGUIUtility.labelWidth;
+
+                EditorGUILayout.BeginVertical();
                 
                 EditorGUILayout.BeginHorizontal();
 
                 for (int i = 0; i < points.Length; i++)
                 {
-                    Field pointValue = Field.Lookup(item.fields, $"{points[i]} Points");
+                    Field pointValue = Field.Lookup(item.fields, $"{prefix}{points[i]} Points");
                
                     if (pointValue == null)
                     {
-                        pointValue = new Field($"{points[i]} Points", "0", FieldType.Number);
+                        pointValue = new Field($"{prefix}{points[i]} Points", "0", FieldType.Number);
                         item.fields.Add(pointValue);
                         SetDatabaseDirty("Create Points Field");
                     }
@@ -1212,7 +1537,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     GUILayout.FlexibleSpace();
                     GUILayout.Label(points[i], alignedTextStyle,  GUILayout.MaxWidth(100));
 
-                    var pointsAsInt = Field.LookupInt(item.fields, $"{points[i]} Points");
+                    var pointsAsInt = Field.LookupInt(item.fields, $"{prefix}{points[i]} Points");
 
 
 
@@ -1222,7 +1547,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                
                     var icon = EditorGUIUtility.Load($"Icons/{points[i]}.png") as Texture2D;
                
-                    GUILayout.Label(icon , GUILayout.MaxWidth(100), GUILayout.MaxHeight(100), GUILayout.MinWidth(50), GUILayout.MinHeight(50));
+                    GUILayout.Label(icon , GUILayout.MaxWidth(60), GUILayout.MinWidth(50), GUILayout.MaxHeight(60) );
                     GUI.contentColor = defaultContentColor;
                
                     pointValue.value =
@@ -1232,11 +1557,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
                 GUI.contentColor = defaultContentColor;
                 EditorGUILayout.EndHorizontal();
-            
                 
-                if (repeatable)
+                if (includePointsReduction)
                 {
-                    
                     Field pointsReductionOnRepeat = Field.Lookup(item.fields, "Repeat Points Reduction");
                     
                     if (pointsReductionOnRepeat == null)
@@ -1261,6 +1584,22 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         Field.SetValue(item.fields, "Repeat Points Reduction", "1");
                     }
                 }
+                
+                else 
+                {
+                    Field pointsReductionOnRepeat = Field.Lookup(item.fields, "Repeat Points Reduction");
+                    
+                    if (pointsReductionOnRepeat != null)
+                    {
+                        item.fields.Remove(pointsReductionOnRepeat);
+                        SetDatabaseDirty("Remove Repeatable Field");
+                    }
+                }
+            
+                
+                
+                
+                EditorGUILayout.EndVertical();
                 
                 
         }
@@ -1290,105 +1629,177 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 SetDatabaseDirty( "Change Location Field");
             }
             
+            EditorWindowTools.EditorGUILayoutBeginIndent();
+            
+            
+
             var chosenSublocation = string.Empty;
 
             var chosenLocationHasSublocation = database.locations.Any(p =>
                 p.IsSublocation && p.LookupValue("Parent Location") == chosenLocation);
             
+            if (chosenLocationHasSublocation) locationPropertiesFoldout = EditorGUILayout.Foldout(locationPropertiesFoldout, "Sublocation Properties");
+                
             
-            if (!string.IsNullOrEmpty(chosenLocation) || chosenLocation != "-1")
+
+            if (locationPropertiesFoldout)
             {
+
+
+                if (!string.IsNullOrEmpty(chosenLocation) || chosenLocation != "-1")
+                {
+                    if (chosenLocationHasSublocation)
+                    {
+                        Field ignoreSublocations = Field.Lookup(item.fields, "Ignore Sublocations");
+
+                        if (ignoreSublocations == null)
+                        {
+                            ignoreSublocations = new Field("Ignore Sublocations", "False", FieldType.Boolean);
+                            item.fields.Add(ignoreSublocations);
+                            SetDatabaseDirty("Create Ignore Sublocations Field");
+                        }
+
+
+                        if (ignoreSublocations.value == "True")
+                        {
+                            GUI.enabled = false;
+                            EditorGUILayout.LabelField("Sublocation");
+                            GUI.enabled = true;
+                            chosenSublocation = "-1";
+                        }
+
+                        else
+                        {
+                            chosenSublocation = DrawSublocationField(
+                                new GUIContent("Sublocation", "The Sublocation of the location above."),
+                                database.GetLocation(int.Parse(chosenLocation)),
+                                location.value == chosenLocation ? "-1" : location.value);
+
+                        }
+
+                        ignoreSublocations.value =
+                            Field.Lookup(item.fields, "New Sublocation") != null ? "True" : "False";
+                    }
+                }
+
+                location.value = string.IsNullOrEmpty(chosenSublocation) || chosenSublocation == "-1"
+                    ? chosenLocation
+                    : chosenSublocation;
+
+
                 if (chosenLocationHasSublocation)
                 {
-                    Field ignoreSublocations = Field.Lookup(item.fields, "Ignore Sublocations");
-                    
-                    if (ignoreSublocations == null)
-                    {
-                        ignoreSublocations = new Field("Ignore Sublocations", "False", FieldType.Boolean);
-                        item.fields.Add(ignoreSublocations);
-                        SetDatabaseDirty("Create Ignore Sublocations Field");
-                    }
 
+                    var newSublocationFieldExists = Field.Lookup(item.fields, "New Sublocation") != null;
+                    bool changeSublocation = false;
+                    bool newChangeSublocation = false;
 
-                    if (ignoreSublocations.value == "True")
-                    {
-                        GUI.enabled = false;
-                        EditorGUILayout.LabelField("Sublocation");
-                        GUI.enabled = true;
-                        chosenSublocation = "-1";
-                    }
-
-                    else
-                    {
-                        chosenSublocation = DrawSublocationField( new GUIContent("Sublocation", "The Sublocation of the location above."), database.GetLocation(int.Parse(chosenLocation)), location.value == chosenLocation ? "-1" : location.value);
-
-                    }
-                    
-                    ignoreSublocations.value = Field.Lookup(item.fields, "New Sublocation") != null ? "True" : "False";
-                }
-            }
-
-            location.value = string.IsNullOrEmpty(chosenSublocation) || chosenSublocation == "-1" ? chosenLocation : chosenSublocation;
-            
-
-            if (chosenLocationHasSublocation)
-            {
-                var newSublocationFieldExists = Field.Lookup(item.fields, "New Sublocation") != null;
-                bool changeSublocation = false;
-                bool newChangeSublocation = false;
-                
-                DrawEditorItemWithShuffleIcon ( ()=>
+                    DrawEditorItemWithShuffleIcon(() =>
                         newChangeSublocation = EditorGUILayout.Toggle(
-                            new GUIContent("Sublocation Switcher", "Tick to set whether the action changes the sublocation to the selected one."),
+                            new GUIContent("Sublocation Switcher",
+                                "Tick to set whether the action changes the sublocation to the selected one. This will make the action available on all sublocations."),
                             newSublocationFieldExists)
                     );
 
 
 
-                if (changeSublocation != newChangeSublocation)
-                {
-                    SetDatabaseDirty("Change Sublocation Switcher Field");
-
-                }
-                
-                if (newChangeSublocation) {
-                    
-
-                    Field newSublocationField;
-                    
-                    if (!newSublocationFieldExists)
+                    if (changeSublocation != newChangeSublocation)
                     {
-                        newSublocationField = new Field("New Sublocation", "-1", FieldType.Location);
-                        item.fields.Add(newSublocationField);
-                        SetDatabaseDirty("Create New Sublocation Field");
+                        SetDatabaseDirty("Change Sublocation Switcher Field");
+
+                    }
+
+                    if (newChangeSublocation)
+                    {
+
+
+                        Field newSublocationField;
+
+                        if (!newSublocationFieldExists)
+                        {
+                            newSublocationField = new Field("New Sublocation", "-1", FieldType.Location);
+                            item.fields.Add(newSublocationField);
+                            SetDatabaseDirty("Create New Sublocation Field");
+                        }
+
+                        else newSublocationField = Field.Lookup(item.fields, "New Sublocation");
+
+
+                        var label = newSublocationField.value == chosenLocation
+                            ? "(Return to Base Location)"
+                            : "New Sublocation";
+
+                        DrawEditorItemWithShuffleIcon(() =>
+                            newSublocationField.value = DrawSublocationField(
+                                new GUIContent(label, "The Sublocation of the location above."),
+                                database.GetLocation(int.Parse(chosenLocation)), newSublocationField.value));
+
+                        if (newSublocationField.value == "-1") newSublocationField.value = chosenLocation;
+                        
+                        
+                        
+                        
+                        Field conversation = Field.Lookup(item.fields, "Conversation");
+
+                        if (conversation != null)
+                        {
+                            Field sublocationSwitcherMethod = Field.Lookup(item.fields, "Sublocation Switcher Method");
+                            if (sublocationSwitcherMethod == null)
+                            {
+                                sublocationSwitcherMethod = new Field("Sublocation Switcher Method", SublocationSwitcherMethod.MoveAfterConversation.ToString(), FieldType.Text);
+                                item.fields.Add(sublocationSwitcherMethod);
+                                SetDatabaseDirty("Create Sublocation Switcher Method Field");
+                            }
+                        
+                            SublocationSwitcherMethod newSublocationSwitcherMethod = (SublocationSwitcherMethod)Enum.Parse(typeof(SublocationSwitcherMethod),
+                                sublocationSwitcherMethod.value);
+                        
+                            DrawEditorItemWithShuffleIcon(() =>
+                                newSublocationSwitcherMethod = (SublocationSwitcherMethod)EditorGUILayout.EnumPopup(
+                                    new GUIContent("Switcher Method",
+                                        "The method used to change the sublocation."),newSublocationSwitcherMethod));
+                        
+                        
+                            sublocationSwitcherMethod.value = newSublocationSwitcherMethod.ToString();
+                        }
+
+                        else
+                        {
+                            Field sublocationSwitcherMethod = Field.Lookup(item.fields, "Sublocation Switcher Method");
+                            if (sublocationSwitcherMethod != null)
+                            {
+                                item.fields.Remove(sublocationSwitcherMethod);
+                                SetDatabaseDirty("Remove Sublocation Switcher Method Field");
+                            }
+                        }
+                        
+                        
+                    }
+                    else
+                    {
+                        if (newSublocationFieldExists)
+                        {
+                            item.fields.Remove(Field.Lookup(item.fields, "New Sublocation"));
+                            SetDatabaseDirty("Remove New Sublocation Field");
+                        }
                     }
                     
-                    else newSublocationField = Field.Lookup(item.fields, "New Sublocation");
                     
-                     
-                    var label = newSublocationField.value == chosenLocation ? "(Return to Base Location)" : "New Sublocation";
-                              
-                    DrawEditorItemWithShuffleIcon ( ()=>
-                            newSublocationField.value = DrawSublocationField( 
-                            new GUIContent(label, "The Sublocation of the location above."),
-                            database.GetLocation(int.Parse(chosenLocation)), newSublocationField.value));
 
-                    if (newSublocationField.value == "-1") newSublocationField.value = chosenLocation;
+
+
                 }
-                else
-                {
-                    if (newSublocationFieldExists)
-                    {
-                        item.fields.Remove(Field.Lookup(item.fields, "New Sublocation"));
-                        SetDatabaseDirty("Remove New Sublocation Field");
-                    }
-                }
+
+               
             }
             
-            EditorGUILayout.Space();
-            EditorWindowTools.EditorGUILayoutEndGroup();
-
+            EditorWindowTools.EditorGUILayoutEndIndent();
             
+            EditorWindowTools.EditorGUILayoutEndGroup();
+            EditorGUILayout.Space();
+            
+
+
         }
         
         private enum SublocationSwitcherMethod
@@ -1415,10 +1826,22 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 var startConversationTitle = asset.LookupBool( "Auto Conversation Title") ? ClosestMatch(asset.Name, database.conversations.Select(p => p.Title).ToList()) : conversation.value == string.Empty ? string.Empty : conversation.value;
                 var newConversationTitle = string.Empty;
                 var newConversationFieldValue = string.Empty;
+                
+                
+                
 
-                Actor actor = string.IsNullOrEmpty(startConversationTitle) || asset.FieldExists("Entry Actor")
-                    ? database.GetActor(asset.LookupInt("Entry Actor"))
-                    : database.GetActor(database.GetConversation(startConversationTitle).ActorID);
+                Actor actor;
+                    if (string.IsNullOrEmpty(startConversationTitle) || asset.FieldExists("Entry Actor")) actor = database.GetActor(asset.LookupInt("Entry Actor"));
+
+                    else
+                    {
+                        var conv = database.GetConversation(startConversationTitle);
+                        if (conv != null) actor = database.GetActor(conv.ActorID);
+                        else actor = database.GetActor("Game");
+                        
+                        
+                    }
+                    
                 Actor newActor = null;
 
                 if (startConversationMethod != newStartConversationMethod)
@@ -1442,12 +1865,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     
                     DrawGeneratedDialogueEntries(asset);
 
-                    if (asset is Item item)
-                    {
-                        if (item.IsRepeatable) DrawGeneratedRepeatDialogueEntries(item);
-                    }
+                  
 
-                    else if (asset is Location)
+                    if (asset is Location)
                     {
                         Field conversationPlaysMoreThanOnce = Field.Lookup(asset.fields, "Loop Conversation");
                         
@@ -1507,7 +1927,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
                     else
                     {
-                        newEntryActor = DrawPlayerActorField(
+                        newEntryActor = DrawActorField(
                             new GUIContent("Actor", "The player actor that starts the conversation."), entryActor.value);
                     }
                     
@@ -1664,7 +2084,17 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             SetDatabaseDirty("Toggle Has Quest Entries");
             if (hasEntries)
             {
+                if (!item.IsAction && item.fields.Any(p => p.title.EndsWith(" Points") && !p.title.StartsWith("Entry") && int.Parse(p.value) > 0))
+                {
+                    if (!EditorUtility.DisplayDialog("Delete all points?", "You cannot undo this action.", "Delete", "Cancel"))
+                    {
+                        return;
+                    }
+                }
+                
+                
                 if (!item.FieldExists("Entry Count")) Field.SetValue(item.fields, "Entry Count", (int)0);
+                item.fields.RemoveAll(field => field.title.EndsWith(" Points") && !field.title.StartsWith("Entry"));
             }
             else
             {
@@ -1728,7 +2158,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             SetDatabaseDirty("Toggle Has Repeatable Fields");
             if (hasRepeatableFields)
             {
-                item.IsRepeatable = true;
+               // item.IsRepeatable = true;
             }
             else
             {
@@ -1741,6 +2171,28 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     }
                 }
                 item.fields.RemoveAll(field => field.title.StartsWith("Repeat"));
+            }
+        }
+
+        private void ToggleStatic(Item item, bool isStatic)
+        {
+            SetDatabaseDirty( "Toggle Static");
+            if (isStatic)
+            {
+                item.IsStatic = true;
+            }
+            else
+            {
+                var points = item.fields.FindAll(p => p.title.EndsWith("Points") && int.Parse(p.value) != 0);
+                if (points.Count > 0)
+                {
+                    if (!EditorUtility.DisplayDialog("Delete all point values?", "You cannot undo this action.", "Delete", "Cancel"))
+                    {
+                        return;
+                    }
+                }
+                item.IsStatic = false;
+                item.fields.RemoveAll(field => field.title.EndsWith("Points"));
             }
         }
 
@@ -2069,7 +2521,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
 
             // Text:
-            DrawRevisableTextField(new GUIContent(entryTitle), item, null, item.fields, entryTitle);
+            DrawRevisableTextAreaField(new GUIContent(entryTitle), item, null, item.fields, entryTitle);
             DrawLocalizedVersions(item, null, item.fields, entryTitle + " {0}", false, FieldType.Text, alreadyDrawn);
             
             
@@ -2081,6 +2533,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 var field = item.fields[i];
                 if (field.title == null) field.title = string.Empty;
+
+                if (field.title.EndsWith(" Points")) continue;
+                
                 if (!alreadyDrawn.Contains(field) && field.title.StartsWith(entryTitleWithSpace) && !string.Equals(field.title, entryIDTitle))
                 {
                     if (field.type == FieldType.Text && field.typeString == "CustomFieldType_Text")
@@ -2096,6 +2551,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     alreadyDrawn.Add(field);
                 }
             }
+
+
+            var rect = EditorGUILayout.BeginHorizontal();
+            
+            //empty space
+            
+            EditorGUILayout.Space( rect.x / 4);
+            
+            DrawPoints(item, entryTitle, false);
+            
+            EditorGUILayout.Space( rect.x / 4);
+            EditorGUILayout.EndHorizontal();
 
             // Add new entry field:
             if (isAddingNewFieldToEntryNumber == entryNumber)

@@ -47,7 +47,7 @@ namespace PixelCrushers.DialogueSystem
                     {
                         luaConditionWizard.OpenWizard(string.Empty);
                     }
-                    currentLuaWizardContent = luaConditionWizard.Draw(new GUIContent("Lua Condition Wizard", "Use to add Lua conditions below"), currentLuaWizardContent, false);
+                    currentLuaWizardContent = luaConditionWizard.Draw(new GUIContent("Lua Condition Wizard", "Use to add Lua conditions below"), currentLuaWizardContent);
                     if (!luaConditionWizard.IsOpen && !string.IsNullOrEmpty(currentLuaWizardContent))
                     {
                         List<string> luaList = new List<string>(condition.luaConditions);

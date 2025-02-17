@@ -26,6 +26,7 @@ namespace PixelCrushers.DialogueSystem
 
         public const string IsItem = "Is Item";
         public const string IsAction = "Is Action";
+        public const string IsStatic = "Is Static";
         public const string RepeatCount = "Repeat Count";
         
         public const string IsSublocation = "Is Sublocation";

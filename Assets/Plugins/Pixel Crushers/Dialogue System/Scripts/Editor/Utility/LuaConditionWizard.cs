@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PixelCrushers.DialogueSystem
@@ -68,7 +69,6 @@ namespace PixelCrushers.DialogueSystem
         private LogicalOperatorType conditionsLogicalOperator = LogicalOperatorType.All;
         private string savedLuaCode = string.Empty;
         private bool append = true;
-        private bool appendToggle = true;
         private CustomLuaFunctionInfoRecord[] customLuaFuncs = null;
         private CustomLuaFunctionInfoRecord[] builtinLuaFuncs = null;
         private string[] customLuaFuncNames = null;
@@ -85,41 +85,24 @@ namespace PixelCrushers.DialogueSystem
             var height = Mathf.Max(3, conditionItems.Count + 3) * (EditorGUIUtility.singleLineHeight + 2f);
             return height;
         }
-
-        public string Draw(GUIContent guiContent, string luaCode, bool showOpenCloseButton = true, bool showAppendToggle = false)
+        
+        public string DrawWithToggle(GUIContent guiContent, string luaCode, bool toggle, string toggleLabel)
         {
             if (database == null) isOpen = false;
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(guiContent);
-            if (showOpenCloseButton)
-            {
-                EditorGUI.BeginDisabledGroup(database == null);
-                if (GUILayout.Button(new GUIContent("...", "Open Lua wizard."), EditorStyles.miniButton, GUILayout.Width(22)))
-                {
-                    OpenWizard(luaCode);
-                }
-                EditorGUI.EndDisabledGroup();
-            }
             
-            if (showAppendToggle)
-            {
-                var guiEnabled = GUI.enabled;
-                GUI.enabled = true;
-                appendToggle = EditorGUILayout.ToggleLeft("Include Default", appendToggle, EditorTools.GUILayoutToggleWidth("Include Default"));
-                GUI.enabled = guiEnabled;
-            }
+            var guiEnabled = GUI.enabled;
+            GUI.enabled = true;
+            toggle = EditorGUILayout.ToggleLeft(toggleLabel, toggle, EditorTools.GUILayoutToggleWidth(toggleLabel));
+            GUI.enabled = guiEnabled;
             
             EditorGUILayout.EndHorizontal();
-
-            if (isOpen && !showAppendToggle)
-            {
-                luaCode = DrawConditionsWizard(luaCode);
-            }
             
             var defaultContentColor = GUI.contentColor;
 
-            if (showAppendToggle && !appendToggle)
+            if (!toggle)
             {
                 GUI.contentColor = Color.gray;
             }
@@ -128,7 +111,32 @@ namespace PixelCrushers.DialogueSystem
             
             GUI.contentColor = defaultContentColor;
             
-            return showAppendToggle && !appendToggle ? "" : luaCode;
+            return !toggle ? "" : luaCode;
+        }
+
+        public string Draw(GUIContent guiContent, string luaCode)
+        {
+            if (database == null) isOpen = false;
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(guiContent);
+            EditorGUI.BeginDisabledGroup(database == null);
+            if (GUILayout.Button(new GUIContent("...", "Open Lua wizard."), EditorStyles.miniButton, GUILayout.Width(22)))
+            {
+                OpenWizard(luaCode);
+            }
+            EditorGUI.EndDisabledGroup();
+            
+            EditorGUILayout.EndHorizontal();
+
+            if (isOpen)
+            {
+                luaCode = DrawConditionsWizard(luaCode);
+            }
+
+            luaCode = EditorGUILayout.TextArea(luaCode);
+            
+            return luaCode;
         }
 
         public void OpenWizard(string luaCode)
@@ -492,6 +500,62 @@ namespace PixelCrushers.DialogueSystem
                         item.floatValue = EditorGUILayout.FloatField(item.floatValue);
                     }
                     break;
+                case FieldType.Location:
+                    item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, GUILayout.Width(60));
+                    
+                    int.TryParse(item.stringValue, out int id);
+                    
+                    var location = database.GetLocation(id);
+                    if (location == null)
+                    {
+                        item.stringValue = database.GetLocation( locationNames[0]).id.ToString();
+                        break;
+                    }
+                    
+                    var locationNameIndex = Array.FindIndex(locationNames, p => p == location.Name);
+                    locationNameIndex = EditorGUILayout.Popup(locationNameIndex, locationNames);
+                   // Debug.Log(id);
+                    if (id >= 0 && id < locationNames.Length) item.stringValue = database.GetLocation(locationNames[locationNameIndex]).id.ToString();
+                    
+                    break;
+                    /*
+                    List<string> IDs = new List<string>();
+                    List<GUIContent> names = new List<GUIContent>();
+                    IDs.Add("-1");
+                    names.Add(new GUIContent("(None)", string.Empty));
+                    for (int i = 0; i < locationNames.Length; i++)
+                    {
+                        var location = locationNames[i];
+                        var id = database.GetLocation(location).id;
+                        IDs.Add(id.ToString());
+                        names.Add(new GUIContent(string.Format("{0} [{1}]", location, id), string.Empty));
+                    }
+                    
+                    int _id = -1;
+                    int.TryParse(item.stringValue, out _id);
+
+                    int index = -1;
+                    
+                    for (int i = 0; i < IDs.Count; index++)
+                    {
+                        if (_id == Tools.StringToInt(IDs[index])) index = i;
+                    }
+                    
+                    int newIndex;
+                    if ((assetLabel == null) || string.IsNullOrEmpty(assetLabel.text))
+                    {
+                        newIndex = EditorGUILayout.Popup(index, assetList.names);
+                    }
+                    else {
+                        newIndex = EditorGUILayout.Popup(assetLabel, index, assetList.names);
+                    }
+                    return (newIndex != index) ? assetList.GetID(newIndex) : value;
+                    }
+
+                    ;
+                    */
+                    
+                    
                 default:
                     item.equalityType = (EqualityType)EditorGUILayout.EnumPopup(item.equalityType, GUILayout.Width(60));
 

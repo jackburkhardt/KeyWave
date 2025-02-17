@@ -74,7 +74,6 @@ namespace PixelCrushers.DialogueSystem
         private List<ScriptItem> scriptItems = new List<ScriptItem>();
         private string savedLuaCode = string.Empty;
         private bool append = true;
-        private bool appendToggle = true;
         private CustomLuaFunctionInfoRecord[] builtinLuaFuncs = null;
         private string[] builtinLuaFuncNames = null;
         private CustomLuaFunctionInfoRecord[] customLuaFuncs = null;
@@ -94,45 +93,25 @@ namespace PixelCrushers.DialogueSystem
             var height = Mathf.Max(3, scriptItems.Count + 3) * (EditorGUIUtility.singleLineHeight + 2f);
             return height;
         }
-
-        public string Draw(GUIContent guiContent, string luaCode, bool showOpenCloseButton = true, bool showAppendToggle = false)
+        
+        public string DrawWithToggle(GUIContent guiContent, string luaCode, bool toggle, string toggleLabel)
         {
             if (database == null) isOpen = false;
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField(guiContent);
 
-
-            if (showOpenCloseButton)
-            {
-                EditorGUI.BeginDisabledGroup(database == null);
-                if (GUILayout.Button(new GUIContent("...", "Open Lua wizard."), EditorStyles.miniButton, GUILayout.Width(22)))
-                {
-                    ToggleScriptWizard();
-                    if (isOpen) savedLuaCode = luaCode;
-                }
-                EditorGUI.EndDisabledGroup();
-            }
-
-            if (showAppendToggle)
-            {
-                var guiEnabled = GUI.enabled;
-                GUI.enabled = true;
-                appendToggle = EditorGUILayout.ToggleLeft("Include Default", appendToggle, EditorTools.GUILayoutToggleWidth("Include Default"));
-                GUI.enabled = guiEnabled;
-            }
+            var guiEnabled = GUI.enabled;
+            GUI.enabled = true;
+            toggle = EditorGUILayout.ToggleLeft(toggleLabel, toggle, EditorTools.GUILayoutToggleWidth(toggleLabel));
+            GUI.enabled = guiEnabled;
             
             
             EditorGUILayout.EndHorizontal();
             
-            if (isOpen && !showAppendToggle)
-            {
-                luaCode = DrawScriptWizard(luaCode);
-            }
-            
             var defaultContentColor = GUI.contentColor;
 
-            if (showAppendToggle && !appendToggle)
+            if (!toggle)
             {
                 GUI.contentColor = Color.gray;
             }
@@ -141,7 +120,38 @@ namespace PixelCrushers.DialogueSystem
             
             GUI.contentColor = defaultContentColor;
 
-            return  showAppendToggle && !appendToggle ? "" : luaCode;
+            return  !toggle ? "" : luaCode;
+        }
+
+        public string Draw(GUIContent guiContent, string luaCode)
+        {
+            if (database == null) isOpen = false;
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(guiContent);
+
+
+            EditorGUI.BeginDisabledGroup(database == null);
+            if (GUILayout.Button(new GUIContent("...", "Open Lua wizard."), EditorStyles.miniButton, GUILayout.Width(22)))
+            {
+                ToggleScriptWizard();
+                if (isOpen) savedLuaCode = luaCode;
+            }
+            EditorGUI.EndDisabledGroup();
+            
+            
+            EditorGUILayout.EndHorizontal();
+            
+            if (isOpen)
+            {
+                luaCode = DrawScriptWizard(luaCode);
+            }
+            
+            var defaultContentColor = GUI.contentColor;
+            
+            luaCode = EditorGUILayout.TextArea(luaCode, EditorTools.textAreaGuiStyle);
+
+            return  luaCode;
         }
 
         public void OpenWizard(string luaCode)

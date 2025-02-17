@@ -94,10 +94,10 @@ public class ActionsAppEnableIfQuestRepeatableAndUntouched : AppSubcomponent<Sta
         
         if (!standardUIResponseButton.response.TryGetQuest( out var quest)  || !standardUIResponseButton.button.interactable) return false;
 
-        var repeatable = quest.IsRepeatable;
-        var repeatableAndUntouched = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt == 0 || DialogueLua.GetQuestField(quest.Name, "Repeat Points Reduction").asString == "0";
+        //var repeatable = quest.IsRepeatable;
+        //var repeatableAndUntouched = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt == 0 || DialogueLua.GetQuestField(quest.Name, "Repeat Points Reduction").asString == "0";
         
-        evalPassAction = () => subcomponent.gameObject.SetActive(repeatableAndUntouched);
+        evalPassAction = () => subcomponent.gameObject.SetActive(false);
         return true;
         
     }
@@ -115,10 +115,10 @@ public class ActionsAppEnableIfQuestRepeatableAndHasPointReduction : AppSubcompo
         
         if (!standardUIResponseButton.response.TryGetQuest( out var quest)  || !standardUIResponseButton.button.interactable) return false;
 
-        var repeatable = quest.IsRepeatable;
-        var repeatableAndDirty = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0 && DialogueLua.GetQuestField(quest.Name, "Repeat Points Reduction").asFloat > 0;
+    //    var repeatable = quest.IsRepeatable;
+    //    var repeatableAndDirty = repeatable && DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt > 0 && DialogueLua.GetQuestField(quest.Name, "Repeat Points Reduction").asFloat > 0;
 
-        evalPassAction = () => subcomponent.gameObject.SetActive(repeatableAndDirty);
+        evalPassAction = () => subcomponent.gameObject.SetActive(false);
         return true;
     }
 }

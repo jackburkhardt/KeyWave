@@ -33,18 +33,16 @@ namespace PixelCrushers.DialogueSystem
             set { Field.SetValue(fields, DialogueSystemFields.IsAction, value); }
         }
         
-        public bool IsRepeatable
+        public bool IsStatic
         {
-            get { return FieldExists(DialogueSystemFields.RepeatCount); }
-            set {
-            {
-                if (value)
-                {
-                    if (FieldExists(DialogueSystemFields.RepeatCount)) return;
-                    Field.SetValue( fields, DialogueSystemFields.RepeatCount, 0);
-                }
-                else fields.Remove(Field.Lookup( fields, DialogueSystemFields.RepeatCount));
-            } }
+            get { return LookupBool(DialogueSystemFields.IsStatic) && LookupBool(DialogueSystemFields.IsAction); }
+            set { Field.SetValue(fields, DialogueSystemFields.IsStatic, value); }
+        }
+        
+        public int RepeatCount
+        {
+            get { return LookupInt(DialogueSystemFields.RepeatCount); }
+            set { Field.SetValue(fields, DialogueSystemFields.RepeatCount, value); }
         }
         
       
