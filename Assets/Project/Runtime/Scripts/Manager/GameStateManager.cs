@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Newtonsoft.Json;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.DialogueSystem;
@@ -29,16 +30,12 @@ namespace Project.Runtime.Scripts.Manager
             get
             {
                 var lastLocation = DialogueLua.GetVariable("game.player.lastNonCaféLocation").asString;
-                return lastLocation == string.Empty || lastLocation == "nil" ? PlayerLocation().Name : lastLocation;
+                return lastLocation == string.Empty || lastLocation == "nil" ? GetPlayerLocation().Name : lastLocation;
             }
             set => DialogueLua.SetVariable("game.player.lastNonCaféLocation", value);
         }
         
-        
-
-
-        public PixelCrushers.DialogueSystem.Actor PlayerActor =>  DialogueManager.masterDatabase.actors.First(p => p.IsPlayer && p.IsFieldAssigned("Location"));
-
+        private Actor PlayerActor =>  DialogueManager.masterDatabase.actors.First(p => p.IsPlayer && p.IsFieldAssigned("Location"));
 
         /// <summary>
         /// Sets the player's location or sublocation to the specified location.
@@ -55,7 +52,7 @@ namespace Project.Runtime.Scripts.Manager
                 LastNonCaféLocation = DialogueManager.masterDatabase.GetLocation(value.RootID).Name;
         }
         
-        public Location PlayerLocation(bool specifySublocation = false)
+        public Location GetPlayerLocation(bool specifySublocation = false)
         {
             var location = DialogueManager.masterDatabase.GetLocation(DialogueLua.GetActorField(PlayerActor.Name, "Location").asInt);
             var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
@@ -250,7 +247,7 @@ namespace Project.Runtime.Scripts.Manager
             else if (conversation.Title == "Base")
             {
                 state = State.Base;
-                var playerLocation = gameState.PlayerLocation(true);
+                var playerLocation = gameState.GetPlayerLocation(true);
 
                 if (playerLocation.IsFieldAssigned("Music"))
                 {
@@ -263,7 +260,7 @@ namespace Project.Runtime.Scripts.Manager
             
             if (state is State.Base or State.PreBase)
             {
-                var playerLocation = gameState.PlayerLocation(true);
+                var playerLocation = gameState.GetPlayerLocation(true);
                 if (playerLocation.IsFieldAssigned("Environment"))
                 {
                     var environment = playerLocation.LookupValue("Environment");
@@ -409,7 +406,6 @@ namespace Project.Runtime.Scripts.Manager
             {                
                 foreach (var pointField in points)
                 {
-                    if (pointField.Points == 0) continue;
 
                     var repeatCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
                     var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
@@ -418,6 +414,8 @@ namespace Project.Runtime.Scripts.Manager
                     {
                         pointField.Points = (int) (pointField.Points * multiplier);
                     }
+                    
+                    if (pointField.Points == 0) continue;
                     GameEvent.OnPointsIncrease(pointField, questName);
                     
                 }

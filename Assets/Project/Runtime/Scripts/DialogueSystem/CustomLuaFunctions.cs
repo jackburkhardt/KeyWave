@@ -343,7 +343,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public string PlayerLocation()
         {
-            return GameManager.gameState.PlayerLocation().Name;
+            return GameManager.gameState.GetPlayerLocation().Name;
         }
 
 
