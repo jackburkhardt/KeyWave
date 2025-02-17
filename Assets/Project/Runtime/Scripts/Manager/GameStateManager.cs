@@ -231,7 +231,7 @@ namespace Project.Runtime.Scripts.Manager
                     var sublocationSwitcherMethod = item.AssignedField("Sublocation Switcher Method");
                     if (sublocationSwitcherMethod != null && sublocationSwitcherMethod.value.StartsWith("MoveBeforeConversation"))
                     {
-                        var currentSublocation = gameState.PlayerLocation(true);
+                        var currentSublocation = gameState.GetPlayerLocation(true);
                         var sublocation = DialogueManager.masterDatabase.GetLocation(item.LookupInt("New Sublocation"));
                         GameManager.instance.SetSublocation(sublocation);
                         

@@ -68,6 +68,8 @@ namespace Project.Runtime.Scripts.Manager
         public UnityEvent OnGameSceneStart;
         public UnityEvent OnGameSceneEnd;
         
+        public Actor PlayerActor =>  DialogueManager.masterDatabase.actors.First(p => p.IsPlayer && p.IsFieldAssigned("Location"));
+
         
         private static string _mostRecentApp = "SmartWatch/Home";
         
@@ -298,10 +300,10 @@ namespace Project.Runtime.Scripts.Manager
 
                 while (!locationScene.isLoaded) yield return null;
                 
-                if (gameState.PlayerLocation(true).IsSublocation)
+                if (gameState.GetPlayerLocation(true).IsSublocation)
                 {
-                    var sublocationGameObject = locationScene.FindGameObject(gameState.PlayerLocation(true).Name); 
-                    Debug.Log("Sublocation: " + gameState.PlayerLocation(true).Name);
+                    var sublocationGameObject = locationScene.FindGameObject(gameState.GetPlayerLocation(true).Name); 
+                    Debug.Log("Sublocation: " + gameState.GetPlayerLocation(true).Name);
                     if (sublocationGameObject != null) sublocationGameObject.SetActive(true);
                 }
 
@@ -329,7 +331,7 @@ namespace Project.Runtime.Scripts.Manager
         public void StartBaseOrPreBaseConversation()
         {
 
-            var visitCount = DialogueLua.GetLocationField(gameState.PlayerLocation(true).Name, "Visit Count").asInt;
+            var visitCount = DialogueLua.GetLocationField(gameState.GetPlayerLocation(true).Name, "Visit Count").asInt;
             Debug.Log("Vist count: " + visitCount);
             var loopConversation = gameState.GetPlayerLocation(true).LookupBool("Loop Conversation");
 
@@ -344,7 +346,7 @@ namespace Project.Runtime.Scripts.Manager
             {
                 if (gameState.GetPlayerLocation(true).IsFieldAssigned("Conversation"))
                     DialogueManager.StartConversation(
-                        gameState.PlayerLocation(true).LookupValue("Conversation"));
+                        gameState.GetPlayerLocation(true).LookupValue("Conversation"));
 
                 else
                 {
@@ -359,7 +361,7 @@ namespace Project.Runtime.Scripts.Manager
             else if (visitCount > 0 && loopConversation)
                 if (gameState.GetPlayerLocation(true).IsFieldAssigned("Conversation"))
                     DialogueManager.StartConversation(
-                        gameState.PlayerLocation(true).LookupValue("Conversation"));
+                        gameState.GetPlayerLocation(true).LookupValue("Conversation"));
 
                 else
                 {
@@ -373,8 +375,8 @@ namespace Project.Runtime.Scripts.Manager
             else DialogueManager.StartConversation("Base");
 
             visitCount += 1;
-            DialogueLua.SetLocationField( gameState.PlayerLocation(true).Name, "Visit Count", visitCount);
-            gameState.PlayerLocation(true).AssignedField("Visit Count").value = (visitCount).ToString();
+            DialogueLua.SetLocationField( gameState.GetPlayerLocation(true).Name, "Visit Count", visitCount);
+            gameState.GetPlayerLocation(true).AssignedField("Visit Count").value = (visitCount).ToString();
 
 
         }
@@ -485,7 +487,7 @@ namespace Project.Runtime.Scripts.Manager
             var location = DialogueManager.masterDatabase.GetLocation(locationName);
             if (location == null)
             {
-                locationName = locationName.Replace($"{gameState.PlayerLocation(false).Name}/", "");
+                locationName = locationName.Replace($"{gameState.GetPlayerLocation(false).Name}/", "");
             }
 
             location = DialogueManager.masterDatabase.GetLocation(locationName);

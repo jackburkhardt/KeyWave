@@ -148,18 +148,22 @@ public class ActionsAppEnableIfQuestHasFixedTimeCostAndReplaceText : AppSubcompo
     {
         evalPassAction = null;
         subcomponent.gameObject.SetActive(false);
-        
+
+        return false;
+
+        /*
+
         if (standardUIResponseButton.response == null ||  standardUIResponseButton.response.destinationEntry == null || !standardUIResponseButton.button.interactable) return false;
-        
+
         var timespan = DialogueUtility.TimeEstimate(standardUIResponseButton.response.destinationEntry);
 
         var fixedTimeCost = timespan.Item1 == timespan.Item2;
-        
+
         evalPassAction = () =>
         {
             var timeCost = fixedTimeCost ? timespan.Item1 : 0;
             subcomponent.gameObject.SetActive(fixedTimeCost && timeCost > 0);
-            
+
             var texts = subcomponent.gameObject.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (var text in texts)
             {
@@ -168,6 +172,8 @@ public class ActionsAppEnableIfQuestHasFixedTimeCostAndReplaceText : AppSubcompo
         };
 
         return true;
+
+        */
     }
 }
         

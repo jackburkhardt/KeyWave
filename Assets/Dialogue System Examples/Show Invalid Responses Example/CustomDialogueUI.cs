@@ -79,7 +79,7 @@ public class CustomDialogueUI : StandardDialogueUI
             var location = DialogueManager.masterDatabase.GetLocation(int.Parse(actionLocation.value));
             
             
-            var playerLocation = GameManager.gameState.PlayerLocation(true);
+            var playerLocation = GameManager.gameState.GetPlayerLocation(true);
 
             if (item.IsFieldAssigned("New Sublocation"))
             {
@@ -89,7 +89,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 return rootLocation == rootPlayerLocation;
             }
 
-            return location == GameManager.gameState.PlayerLocation(true);
+            return location == GameManager.gameState.GetPlayerLocation(true);
         }
 
         bool ActionConversationIsValid(Item item, out string conversationTitle)
@@ -123,7 +123,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 
                 var actorLocation = actor.AssignedField("Location");
                 if (actorLocation == null) continue;
-                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.gameState.PlayerLocation(true)) return false;
+                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.gameState.GetPlayerLocation(true)) return false;
             }
             return true;
         }
@@ -288,7 +288,7 @@ public class CustomDialogueUI : StandardDialogueUI
     
     public void OnLinkedConversationStart(Subtitle subtitle)
     {
-        var playerActor = GameManager.gameState.PlayerActor;
+        var playerActor = GameManager.instance.PlayerActor;
         
      //   DialogueManager.PlaySequence("SetMenuPanel(Player, default)");
     }
