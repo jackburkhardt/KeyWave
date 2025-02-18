@@ -1062,7 +1062,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var timeFlow = Field.Lookup(item.fields,"Time Flow");
             if (timeFlow == null)
             {
-                timeFlow = new Field("Time Flow", "Explicit", FieldType.Text);
+                timeFlow = new Field("Time Flow", "Natural", FieldType.Text);
                 item.fields.Add(timeFlow);
                 SetDatabaseDirty("Create Time Flow Field");
             }

@@ -2538,7 +2538,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Name
-      value: Store/SecretShopper/Reveal
+      value: Reveal as Secret Shopper.
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -2601,7 +2601,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Name
-      value: Store/SecretShopper/StayHidden
+      value: Complete as Secret Shopper.
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -2753,11 +2753,12 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Talk/Maria") == "active" and (true)
+      value: CurrentQuestState("Talk/Maria") == "active" and (Actor["Mariana_Rodriguez"].Introduced
+        == true and (CurrentQuestState("Complete as Secret Shopper.") ~= "active"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
-      value: -1
+      value: 3
       type: 7
       typeString: CustomFieldType_Location
     - title: Show Invalid
@@ -2785,7 +2786,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Ignore Sublocations
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Is Static
@@ -2808,6 +2809,14 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: New Sublocation
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Sublocation Switcher Method
+      value: MoveBeforeConversationAndReturnWhenDone
+      type: 0
+      typeString: 
   - id: 193
     fields:
     - title: Name
@@ -2831,7 +2840,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: State
-      value: unassigned
+      value: active
       type: 12
       typeString: CustomFieldType_QuestState
     - title: Is Item
@@ -2851,11 +2860,12 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Talk/Roberta") == "active" and (true)
+      value: CurrentQuestState("Talk/Roberta") == "active" and (Actor["Mariana_Rodriguez"].Introduced
+        == true and (CurrentQuestState("Complete as Secret Shopper.") ~= "active"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
-      value: -1
+      value: 3
       type: 7
       typeString: CustomFieldType_Location
     - title: Is Static
@@ -2883,15 +2893,15 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Auto Conversation Title
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Required Nearby Actor
-      value: 7
+      value: 10
       type: 5
       typeString: CustomFieldType_Actor
     - title: Required Nearby Actor
-      value: 10
+      value: 7
       type: 5
       typeString: CustomFieldType_Actor
     - title: Display Name
@@ -2906,6 +2916,18 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Ignore Sublocations
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: New Sublocation
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Sublocation Switcher Method
+      value: MoveBeforeConversationAndReturnWhenDone
+      type: 0
+      typeString: 
   - id: 194
     fields:
     - title: Name
@@ -2949,11 +2971,12 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Talk/Mariana") == "active" and (true)
+      value: CurrentQuestState("Talk/Mariana") == "active" and (Variable["player_entered_store"]
+        == true and (CurrentQuestState("Complete as Secret Shopper.") ~= "active"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
-      value: -1
+      value: 3
       type: 7
       typeString: CustomFieldType_Location
     - title: Is Static
@@ -2977,17 +3000,9 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conversation
-      value: Talk/Maria/Base
+      value: Talk/Mariana/Base
       type: 0
       typeString: CustomFieldType_Text
-    - title: Auto Conversation Title
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Required Nearby Actor
-      value: 9
-      type: 5
-      typeString: CustomFieldType_Actor
     - title: Display Name
       value: Talk to Mariana
       type: 0
@@ -3000,6 +3015,22 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Sublocation Switcher Method
+      value: MoveAfterConversation
+      type: 0
+      typeString: 
+    - title: Auto Conversation Title
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Required Nearby Actor
+      value: 27
+      type: 5
+      typeString: CustomFieldType_Actor
   - id: 195
     fields:
     - title: Name
@@ -3043,11 +3074,12 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Talk/Laura") == "active" and (true)
+      value: CurrentQuestState("Talk/Laura") == "active" and (Actor["Mariana_Rodriguez"].Introduced
+        == true and  (CurrentQuestState("Complete as Secret Shopper.") ~= "active"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
-      value: -1
+      value: 3
       type: 7
       typeString: CustomFieldType_Location
     - title: Is Static
@@ -3075,11 +3107,11 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conversation
-      value: Talk/Laura/Base
+      value: Talk/Laura/Store
       type: 0
       typeString: CustomFieldType_Text
     - title: Auto Conversation Title
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Required Nearby Actor
@@ -3091,11 +3123,11 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Natural Duration
-      value: 0
+      value: 816
       type: 1
       typeString: CustomFieldType_Number
     - title: Required Nearby Actor
-      value: 29
+      value: 7
       type: 5
       typeString: CustomFieldType_Actor
     - title: Ignore Sublocations
@@ -3149,7 +3181,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
-      value: -1
+      value: 5
       type: 7
       typeString: CustomFieldType_Location
     - title: Is Static
@@ -3978,7 +4010,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Mall/Dillon's") == "active" and (Actor["Player"].Location
-        ~= 12)
+        ~= 12 and (Variable["player_kicked_from_dillons"] ~= true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -3998,7 +4030,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
-      value: Explicit
+      value: Natural
       type: 0
       typeString: CustomFieldType_Text
     - title: Repeat Count
@@ -4017,6 +4049,10 @@ MonoBehaviour:
       value: 12
       type: 7
       typeString: CustomFieldType_Location
+    - title: Natural Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 247
     fields:
     - title: Name
@@ -4060,7 +4096,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Mall/Dillon's/Investigate") == "active" and (true)
+      value: CurrentQuestState("Mall/Dillon's/Investigate") == "active" and (Variable["player_kicked_from_dillons"]
+        ~= true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4080,7 +4117,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
-      value: Explicit
+      value: Natural
       type: 0
       typeString: CustomFieldType_Text
     - title: Repeat Count
@@ -4103,6 +4140,34 @@ MonoBehaviour:
       value: Investigate Dillon's.
       type: 0
       typeString: 
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 15
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Repeat Points Reduction
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 954
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 6540
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 246
     fields:
     - title: Name
@@ -4146,7 +4211,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Mall/Dillon's/BrowseShelves") == "active" and (true)
+      value: CurrentQuestState("Mall/Dillon's/BrowseShelves") == "active" and (Variable["player_kicked_from_dillons"]
+        ~= true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4166,7 +4232,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
-      value: Explicit
+      value: Natural
       type: 0
       typeString: CustomFieldType_Text
     - title: Repeat Count
@@ -4193,6 +4259,14 @@ MonoBehaviour:
       value: Browse the shelves.
       type: 0
       typeString: CustomFieldType_Text
+    - title: Natural Duration
+      value: 2832
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 3324
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 173
     fields:
     - title: Name
@@ -4465,7 +4539,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Is Static
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Repeat Points Reduction
@@ -4535,7 +4609,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Is Static
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Show Invalid
@@ -4543,7 +4617,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: '; '
+      value: "SetQuestState(\"Caf\xE9/InternetResearch\", \"success\"); "
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
@@ -4626,8 +4700,10 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: SetQuestState("Store/Enter", "success"); Location["Store"].Spawn_Point
-        = 3
+      value: 'SetQuestState("Store/Enter", "success"); Location["Store"].Spawn_Point
+        = 3;
+
+        Variable["player_entered_store"] = true'
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
@@ -4705,8 +4781,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and ((CurrentQuestState("Store/SecShp/Greet") == "success") and
-        (Variable["secret_shop_active"] == true))
+      value: CurrentQuestState("Store/SecShp/Checkout") == "active" and (CurrentQuestState("Complete
+        as Secret Shopper.") == "active")
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4718,7 +4794,8 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: '; '
+      value: SetQuestState("Store/SecShp/Checkout", "success"); SetQuestState("Complete
+        as Secret Shopper.", "success")
       type: 0
       typeString: CustomFieldType_Text
     - title: Skills Points
@@ -4816,8 +4893,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and ((CurrentQuestState("Store/SecShp/Greet") == "success") and
-        (Variable["secret_shop_active"] == true))
+      value: CurrentQuestState("Store/SecShp/Seasonal") == "active" and (CurrentQuestState("Complete
+        as Secret Shopper.") == "active")
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4869,7 +4946,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Ignore Sublocations
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Display Name
@@ -4888,6 +4965,14 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: New Sublocation
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Sublocation Switcher Method
+      value: MoveBeforeConversationAndReturnWhenDone
+      type: 0
+      typeString: 
   - id: 179
     fields:
     - title: Name
@@ -4931,8 +5016,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and ((CurrentQuestState("Store/SecShp/Greet") == "success") and
-        (Variable["secret_shop_active"] == true))
+      value: CurrentQuestState("Store/SecShp/Discount") == "active" and (CurrentQuestState("Complete
+        as Secret Shopper.") == "active")
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4944,7 +5029,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: '; '
+      value: 'SetQuestState("Store/SecShp/Discount", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Skills Points
@@ -4972,7 +5057,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Ignore Sublocations
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Conversation
@@ -4999,6 +5084,14 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: New Sublocation
+      value: 3
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Sublocation Switcher Method
+      value: MoveBeforeConversationAndReturnWhenDone
+      type: 0
+      typeString: 
   - id: 180
     fields:
     - title: Name
@@ -5042,8 +5135,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and (Actor["Mariana_Rodriguez"].Introduced ~= true  and (CurrentQuestState("Store/Enter")
-        == "success"))
+      value: CurrentQuestState("Store/SecShp/Greet") == "active" and (Actor["Mariana_Rodriguez"].Introduced
+        ~= true and (Variable["player_entered_store"] == true))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -5055,7 +5148,8 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: ; Variable["secret_shop_active"] = true
+      value: SetQuestState("Store/SecShp/Greet", "success"); SetQuestState("Complete
+        as Secret Shopper.", "active")
       type: 0
       typeString: CustomFieldType_Text
     - title: Skills Points
@@ -5883,6 +5977,130 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+  - id: 248
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: Obtain financial records.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Duration
+      value: 0:seconds
+      type: 11
+      typeString: CustomFieldType_TimespanType
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points Repeat
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 20
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+  - id: 249
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: Obtain HR records.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: unassigned
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Duration
+      value: 0:seconds
+      type: 11
+      typeString: CustomFieldType_TimespanType
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points Repeat
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 10
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 10
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
   locations:
   - id: 1
     fields:
@@ -7705,34 +7923,6 @@ MonoBehaviour:
     - title: Initial Value
       value: 6
       type: 0
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 92
-    fields:
-    - title: Name
-      value: secret_shop_active
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 93
-    fields:
-    - title: Name
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 0
-      type: 1
       typeString: CustomFieldType_Number
     - title: Description
       value: 
@@ -39315,7 +39505,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 317.7474
-        y: 241.75217
+        y: 243.31851
         width: 160
         height: 30
     - id: 3
@@ -39642,7 +39832,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Mall/Dillon's/Investigate", "success")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -39937,7 +40127,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 582.4121
+        x: 580.8457
         y: 567.8806
         width: 160
         height: 30
@@ -40011,7 +40201,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 313.4144
-        y: 594.12195
+        y: 597.25464
         width: 160
         height: 30
     - id: 13
@@ -40209,10 +40399,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 'SetQuestState("Mall/Dillon''s/Investigate", "success");
-
-        Variable["player_kicked_from_dillons"]
-        = true'
+      userScript: Variable["player_kicked_from_dillons"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -40440,8 +40627,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 16.972656, y: 323.33563}
-    canvasZoom: 0.84842193
+    canvasScrollPosition: {x: 23.783737, y: 0}
+    canvasZoom: 0.63842213
   - id: 145
     fields:
     - title: Title
@@ -42742,13 +42929,13 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: 'Dilan sighs and puts his head down. "Look, Mall_dillons_chosen_name],
-          if you''re not here for a job, please just leave the store. I think both
-          of our time is better spent elsewhere."
+        value: 'Dilan sighs and puts his head down. "Look, sir, if you''re not here
+          for a job, please just leave the store. I think both of our time is better
+          spent elsewhere."
 
 
-          He takes a deep breath,
-          still keeping his head down.'
+          He takes a deep breath, still keeping his
+          head down.'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -42789,7 +42976,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 401.5364
-        y: 1724.4255
+        y: 1725.8793
         width: 160
         height: 30
     - id: 34
@@ -42851,7 +43038,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Mall/Dillon's/Investigate", "success")
+      userScript: Variable["player_kicked_from_dillons"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -43043,19 +43230,19 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Mall/Dillon's/Investigate", "success")
+      userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
         x: 366.73117
-        y: 620.82227
+        y: 615.8048
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0.04964032, y: 394.2474}
-    canvasZoom: 0.80791765
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.59791785
   - id: 147
     fields:
     - title: Title
@@ -46613,6 +46800,12 @@ MonoBehaviour:
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
+      - originConversationID: 157
+        originDialogueID: 0
+        destinationConversationID: 157
+        destinationDialogueID: 30
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -46690,7 +46883,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 519.42706
-        y: 177.05673
+        y: 178.29434
         width: 160
         height: 30
     - id: 2
@@ -47169,7 +47362,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestState("Store/Talk/Mariana", "success")
+      userScript: SetQuestState("Speak to Mariana at the store.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -48348,9 +48541,80 @@ MonoBehaviour:
         y: 1312.4089
         width: 160
         height: 30
+    - id: 30
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 27
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: '"Hello, Daniel!"'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 157
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 157
+        originDialogueID: 30
+        destinationConversationID: 157
+        destinationDialogueID: 18
+        isConnector: 0
+        priority: 2
+      conditionsString: CurrentQuestState("Speak to Mariana at the store.") == "success"
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 63.309723
+        y: 243.01944
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 628.1369}
-    canvasZoom: 0.7780032
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.8080031
   - id: 158
     fields:
     - title: Title
@@ -49399,7 +49663,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestState("Store/Talk/Maria", "success")
+      userScript: SetQuestState("Speak to Maria at the store.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -49693,7 +49957,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestState("Store/Talk/Maria", "success")
+      userScript: SetQuestState("Speak to Maria at the store.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -50510,7 +50774,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestState("Store/Talk/Maria", "success")
+      userScript: SetQuestState("Speak to Maria at the store.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -50637,7 +50901,7 @@ MonoBehaviour:
         destinationDialogueID: 7
         isConnector: 0
         priority: 2
-      conditionsString: CurrentQuestState("Store/Talk/Maria") == "active"
+      conditionsString: CurrentQuestState("Speak to Maria at the store.") == "success"
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -51087,8 +51351,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 317.32654, y: 0}
-    canvasZoom: 1.0250002
+    canvasScrollPosition: {x: 129.22525, y: 466.0802}
+    canvasZoom: 0.8150004
   - id: 177
     fields:
     - title: Title
@@ -68675,7 +68939,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: CurrentQuestState("Store/FirstVisit") ~= "success" and (Actor["Daniel_Oliviera"].Location
-        == "3")
+        == 3)
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -68759,7 +69023,7 @@ MonoBehaviour:
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1.2524993
+    canvasZoom: 1.0424995
   - id: 202
     fields:
     - title: Title
@@ -70034,7 +70298,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 9
+        value: 27
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -70115,7 +70379,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 9
+        value: 27
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -70186,7 +70450,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 9
+        value: 27
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -70232,7 +70496,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Complete as Secret Shopper.", "abandoned")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -70253,7 +70517,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 9
+        value: 27
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -71872,7 +72136,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Complete as Secret Shopper.", "abandoned")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -71917,7 +72181,7 @@ MonoBehaviour:
         type: 11
         typeString: CustomFieldType_TimespanType
       - title: Points
-        value: Context:1
+        value: Context:0
         type: 10
         typeString: CustomFieldType_PointsType
       - title: Show Invalid
@@ -71925,7 +72189,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Points
-        value: Skills:1
+        value: Skills:0
         type: 10
         typeString: CustomFieldType_PointsType
       - title: UseNodeColorInMenu
@@ -71945,7 +72209,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Complete as Secret Shopper.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -72020,13 +72284,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 434.46225
-        y: 246.53976
+        x: 481.46225
+        y: 211.53976
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 0, y: 12.117031}
+    canvasZoom: 0.94000006
   - id: 207
     fields:
     - title: Title
@@ -72128,13 +72392,19 @@ MonoBehaviour:
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: 
+      falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
       - originConversationID: 207
         originDialogueID: 0
         destinationConversationID: 207
         destinationDialogueID: 1
+        isConnector: 0
+        priority: 2
+      - originConversationID: 207
+        originDialogueID: 0
+        destinationConversationID: 207
+        destinationDialogueID: 26
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -72217,7 +72487,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 437.73413
+        x: 138.8705
         y: 117.73418
         width: 160
         height: 30
@@ -72304,7 +72574,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 438
+        x: 139.13637
         y: 179
         width: 160
         height: 30
@@ -72375,7 +72645,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 188
+        x: 29.409073
         y: 260
         width: 160
         height: 30
@@ -72446,7 +72716,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 427
+        x: 128.13637
         y: 257
         width: 160
         height: 30
@@ -72517,7 +72787,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 667
+        x: 368.13654
         y: 265
         width: 160
         height: 30
@@ -72590,7 +72860,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 368
+        x: 69.13637
         y: 369
         width: 160
         height: 30
@@ -72656,7 +72926,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetQuestState("Speak to Laura at the store.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -72734,7 +73004,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 665
+        x: 366.13654
         y: 376
         width: 160
         height: 30
@@ -73402,8 +73672,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 388
-        y: 535.64557
+        x: 390.2727
+        y: 537.9183
         width: 160
         height: 30
     - id: 18
@@ -73976,9 +74246,80 @@ MonoBehaviour:
         y: 1021.94226
         width: 160
         height: 30
+    - id: 26
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 29
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: '"Hello again."'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: NodeColor
+        value: '#000000ff'
+        type: 14
+        typeString: CustomFieldType_ColorType
+      conversationID: 207
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 207
+        originDialogueID: 26
+        destinationConversationID: 207
+        destinationDialogueID: 17
+        isConnector: 0
+        priority: 2
+      conditionsString: CurrentQuestState("Speak to Laura at the store.") == "success"
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 688.9363
+        y: 231.80849
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.7600002
+    canvasScrollPosition: {x: 0.03488207, y: 235.9602}
+    canvasZoom: 0.7000003
   - id: 208
     fields:
     - title: Title
@@ -75414,8 +75755,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 207.34616, y: 0}
-    canvasZoom: 0.7900003
+    canvasScrollPosition: {x: 361.85434, y: 2.9851074}
+    canvasZoom: 0.67000043
   - id: 209
     fields:
     - title: Title
@@ -75603,7 +75944,7 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: Actor["Maria_Almeida"].Location == "3"
+      conditionsString: Actor["Maria_Almeida"].Location == 3
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -75869,7 +76210,7 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: Actor["Roberta_Santos"].Location == "3"
+      conditionsString: Actor["Roberta_Santos"].Location == 3
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -76135,7 +76476,7 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: Actor["Mariana_Rodriguez"].Location == "3"
+      conditionsString: Actor["Mariana_Rodriguez"].Location == 3
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -76143,7 +76484,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 113.20006
-        y: 263.59998
+        y: 265.59998
         width: 160
         height: 30
     - id: 4
@@ -76401,7 +76742,7 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: Actor["Laura_Lima"].Location == "3"
+      conditionsString: Actor["Laura_Lima"].Location == 3
       userScript: 
       onExecute:
         m_PersistentCalls:
