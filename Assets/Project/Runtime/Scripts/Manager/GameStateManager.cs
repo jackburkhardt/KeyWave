@@ -378,6 +378,19 @@ namespace Project.Runtime.Scripts.Manager
                 
                 Debug.Log("Added action to conversation: " + action.value);
             }
+
+
+            if (subtitle.dialogueEntry.outgoingLinks.Count == 1 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
+            {
+                var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
+                var newConversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
+                foreach (var action in conversation.fields.Where(p => p.title == "Action"))
+                {
+                    newConversation.fields.Add(action);
+                }
+                
+                conversation.fields.RemoveAll(p => p.title == "Action");
+            }
         }
         
         IEnumerator QueueConversationEndEvent(Action callback)

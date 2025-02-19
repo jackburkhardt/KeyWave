@@ -32,6 +32,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private HashSet<int> syncedLocationIDs = null;
 
+        private bool locationConversationPropertiesFoldout;
+        private bool sublocationsFoldout;
+        private bool presentActorsFoldout;
+
         private void ResetLocationSection()
         {
             UpdateTreatLocationsAsSublocations(template.treatLocationsAsSublocations);
@@ -359,8 +363,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 location.fields.Add(visitCountField);
                 SetDatabaseDirty("Add Visit Count Field");
             }
-            
-            
         }
         
         
@@ -448,15 +450,17 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             if (sublocations.Count > 0)
             {
-                EditorGUILayout.PrefixLabel("Sublocations");
-                EditorWindowTools.StartIndentedSection();
-                GUI.enabled = false;
-                foreach (var sublocation in sublocations)
+                sublocationsFoldout = EditorGUILayout.Foldout(sublocationsFoldout, "Sublocations");
+                if (sublocationsFoldout)
                 {
-                    DrawLocationField(new GUIContent("Sublocation"), sublocation.id.ToString(), true);
+                    EditorWindowTools.StartIndentedSection();
+                    GUI.enabled = false;
+                    foreach (var sublocation in sublocations)
+                    {
+                        DrawLocationField(new GUIContent("Sublocation"), sublocation.id.ToString(), "(None)", true);
+                    }
+                    EditorWindowTools.EndIndentedSection();
                 }
-                EditorWindowTools.EndIndentedSection();
-                
                 
                 Field spawnPointField = Field.Lookup(location.fields, "Spawn Point");
                 
@@ -469,7 +473,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 
                 GUI.enabled = true;
                 
-                spawnPointField.value = DrawSublocationField(new GUIContent("Spawn Point", "The location's spawn point."), location,  spawnPointField.value);
+                spawnPointField.value = DrawSublocationField(new GUIContent("Spawn Point", "The location's spawn point."), location,  spawnPointField.value, "(Root Location)");
             }
 
             else
@@ -492,23 +496,29 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             if (presentActors.Count > 0)
             {
-                EditorGUILayout.PrefixLabel("Present Actors");
+                presentActorsFoldout = EditorGUILayout.Foldout(presentActorsFoldout, "Present Actors");
                 
-                EditorWindowTools.StartIndentedSection();
-
-                GUI.enabled = false;
-                foreach (var actor in database.actors.Where(p => p.IsFieldAssigned("Location") && p.LookupInt("Location") == location.id))
+                if (presentActorsFoldout)
                 {
-                    DrawActorField(new GUIContent("Actor"), actor.id.ToString());
+                    EditorWindowTools.StartIndentedSection();
+                    GUI.enabled = false;
+                    foreach (var actor in presentActors)
+                    {
+                        DrawActorField(new GUIContent("Actor"), actor.id.ToString());
+                    }
+                    EditorWindowTools.EndIndentedSection();
                 }
-                
-                EditorWindowTools.EndIndentedSection();
                 
                 GUI.enabled = true;
             }
-           
+
+            DrawConditions(location, "Conditions");
             
-           
+            if (location.LookupValue("Conditions") != string.Empty && location.LookupValue("Conditions") != "true")
+            {
+                EditorGUILayout.HelpBox("Conditions not yet implemented", MessageType.Warning);
+            }
+            
         }
         
         private bool autoSetParentLocation = true;
@@ -567,7 +577,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     parentLocationField.value =((List<Location>)locationReorderableList.list).First(p => !p.IsSublocation).id.ToString();
                 }
                 
-                DrawLocationField(new GUIContent("Parent", "The location of the action."), parentLocationField.value, false);
+                DrawLocationField(new GUIContent("Parent", "The location of the action."), parentLocationField.value, "(None)",false);
               
                 GUI.enabled = true;
             }
@@ -575,7 +585,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             else
             {
             
-                parentLocationField.value = DrawLocationField(new GUIContent("Location", "The location of the action."), parentLocationField.value, false);
+                parentLocationField.value = DrawLocationField(new GUIContent("Location", "The location of the action."), parentLocationField.value, "(None)", false);
             }
             
             autoSetParentLocation = EditorGUILayout.Toggle(new GUIContent("Auto Set Parent Location", "Tick to automatically set the parent location to the first location above this one that isn't a sublocation."), autoSetParentLocation);
@@ -583,6 +593,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             DrawLocationConversationProperties(location);
 
+            DrawConditions(location, "Conditions");
+            
+            if (location.LookupValue("Conditions") != string.Empty && location.LookupValue("Conditions") != "true")
+            {
+                EditorGUILayout.HelpBox("Conditions not yet implemented", MessageType.Warning);
+            }
 
         }
 
@@ -609,7 +625,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             if (newStartsConversation)
             {
-                DrawStartConversationProperties(location);
+                locationConversationPropertiesFoldout = EditorGUILayout.Foldout(locationConversationPropertiesFoldout, "Conversation Properties");
+                
+                if (locationConversationPropertiesFoldout)
+                {
+                    DrawStartConversationProperties(location);
+                }
             }
             
             

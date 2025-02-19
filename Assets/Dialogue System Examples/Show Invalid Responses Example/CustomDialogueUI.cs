@@ -128,6 +128,30 @@ public class CustomDialogueUI : StandardDialogueUI
             return true;
         }
         
+        string GetActionDisplayName(Item item)
+        {
+            var conditionalDisplayEntryCount = item.LookupInt("Conditional Display Entry Count");
+            
+            if (conditionalDisplayEntryCount > 0)
+            {
+                for (int i = 0; i < conditionalDisplayEntryCount; i++)
+                {
+                    var displayEntry = item.AssignedField($"Conditional Display Entry {i}");
+                    if (displayEntry == null) continue;
+                    
+                    
+                    var condition = item.LookupValue( $"Conditional Display Entry {i} Conditions");
+                    
+                    if (Lua.IsTrue(condition) && !string.IsNullOrEmpty(condition) && condition != "true")
+                    {
+                        return displayEntry.value;
+                    }
+                }
+            }
+            
+            return item.IsFieldAssigned( "Display Name") ? item.LookupValue("Display Name") : item.Name;
+        }
+        
         
         //generate new responses
 
@@ -146,7 +170,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 var newDialogueEntry = template.CreateDialogueEntry( template.GetNextDialogueEntryID( subtitle.dialogueEntry.GetConversation()), subtitle.dialogueEntry.conversationID, "ACTION");
                 
                 
-                newDialogueEntry.MenuText = action.IsFieldAssigned("Display Name") ? action.LookupValue("Display Name") : action.Name;
+                newDialogueEntry.MenuText = GetActionDisplayName(action);
                 newDialogueEntry.DialogueText = string.Empty;
                 newDialogueEntry.conditionsString = action.IsFieldAssigned("Conditions") ? action.AssignedField("Conditions").value : string.Empty;
                 

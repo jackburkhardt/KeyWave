@@ -354,7 +354,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 : ((newIndex == 0) ? string.Empty : actorStateStrings[newIndex]);
         }
 
-        private string DrawLocationField(GUIContent label, string value, bool includeSublocations = true)
+        private string DrawLocationField(GUIContent label, string value, string nullText, bool includeSublocations = true)
         {
             if (!includeSublocations)
             {
@@ -366,22 +366,63 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 //                    Debug.Log("changed value: " + value);
                 }
                 
-                return DrawAssetPopup<Location>(value, (database != null) ? database.locations.Where(p => !p.IsSublocation).ToList() : null, label);
+                var assetList = database != null ? GetAssetList<Location>(database.locations.Where(p => !p.IsSublocation).ToList()) : null;
+                
+                if (assetList == null) return value;
+
+                for (int i = 0; i < assetList.IDs.Length; i++)
+                {
+                   if (assetList.names[i].text == "(None)")
+                   {
+                       assetList.names[i].text = nullText;
+                   }
+                }
+                
+                return DrawAssetPopup<Location>(value, assetList, label);
                 
             }
             
             return DrawAssetPopup<Location>(value, (database != null) ? database.locations: null, label);
         }
         
-        private string DrawSublocationField(GUIContent label, Location parentLocation, string value)
+        private string DrawSublocationField(GUIContent label, Location parentLocation, string value, string nullText)
         {
             if (parentLocation == null)
             {
                 Debug.LogWarning("Dialogue System: Can't draw sublocation field because parent location is null.");
                 return null;
             }
+
+
+            var assetList = database != null
+                ? GetAssetList<Location>(database.locations.Where(p =>
+                        p.IsSublocation && p.AssignedField("Parent Location").value == parentLocation.id.ToString())
+                    .ToList())
+                : null;
+
+
+            if (assetList == null) return value;
             
-          return DrawAssetPopup<Location>(value, (database != null) ? database.locations.Where(p => p.IsSublocation && p.AssignedField("Parent Location").value == parentLocation.id.ToString()).ToList() : null, label);
+            for (int i = 0; i < assetList.IDs.Length; i++)
+            {
+                if (assetList.names[i].text == "(None)")
+                {
+                    assetList.names[i].text = nullText;
+                }
+                
+                if (assetList.names[i].text.StartsWith($"{parentLocation.Name}/"))
+                {
+                    assetList.names[i].text = assetList.names[i].text.Substring(parentLocation.Name.Length + 1);
+                }
+            }
+            
+            return DrawAssetPopup<Location>(value, assetList, label);
+        }
+        
+        private string DrawSublocationField(GUIContent label, Location parentLocation, string value, string nullText, out string newValue)
+        {
+            newValue = DrawSublocationField(label, parentLocation, value, nullText);
+            return newValue;
         }
         
         private string DrawActorField(GUIContent label, string value)
@@ -420,24 +461,30 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (assets != null)
             {
                 AssetList assetList = GetAssetList<T>(assets);
-                int id = -1;
-                int.TryParse(value, out id);
-                int index = assetList.GetIndex(id);
-                int newIndex;
-                if ((assetLabel == null) || string.IsNullOrEmpty(assetLabel.text))
-                {
-                    newIndex = EditorGUILayout.Popup(index, assetList.names);
-                }
-                else {
-                    newIndex = EditorGUILayout.Popup(assetLabel, index, assetList.names);
-                }
-                return (newIndex != index) ? assetList.GetID(newIndex) : value;
+                return DrawAssetPopup<T>(value, assetList, assetLabel);
             }
             else {
                 EditorGUILayout.LabelField("(no database)");
                 return value;
             }
         }
+        
+        private string DrawAssetPopup<T>(string value, AssetList assetList, GUIContent assetLabel) where T : Asset
+        {
+            int id = -1;
+            int.TryParse(value, out id);
+            int index = assetList.GetIndex(id);
+            int newIndex;
+            if ((assetLabel == null) || string.IsNullOrEmpty(assetLabel.text))
+            {
+                newIndex = EditorGUILayout.Popup(index, assetList.names);
+            }
+            else {
+                newIndex = EditorGUILayout.Popup(assetLabel, index, assetList.names);
+            }
+            return (newIndex != index) ? assetList.GetID(newIndex) : value;
+        }
+
 
         public string DrawAssetPopup<T>(Rect rect, string value, List<T> assets, GUIContent assetLabel) where T : Asset
         {
@@ -464,7 +511,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 return value;
             }
         }
-
+        
+        
         private string DrawLabeledAssetPopup<T>(string label, string value, List<T> assets) where T : Asset
         {
             AssetList assetList = GetAssetList<T>(assets);
