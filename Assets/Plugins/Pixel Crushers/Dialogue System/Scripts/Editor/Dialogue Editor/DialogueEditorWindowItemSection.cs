@@ -61,6 +61,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private HashSet<int> syncedItemIDs = null;
 
         private int isAddingNewFieldToEntryNumber = -1;
+        
+        private int itemToolbarIndex = 0;
+        
         private Field newEntryField;
 
         private List<Item> filteredItems;
@@ -122,6 +125,24 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void DrawItemSection()
         {
+            
+            
+            itemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, new string[] {"Items", "Quests", "Actions", "Inbox", "Notes"}, GUILayout.Width(500f));
+
+            if (itemToolbarIndex < 2)
+            {
+                DrawItems();
+            }
+
+            else
+            {
+                DrawActions();
+            }
+           
+        }
+
+        private void DrawItems()
+        {
             if (template.treatItemsAsQuests)
             {
                 if (needToBuildLanguageListFromItems) BuildLanguageListFromItems();
@@ -143,6 +164,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 if (database.syncInfo.syncItems) DrawItemSyncDatabase();
                 itemReorderableList.DoLayoutList();
             }
+        }
+
+        private void DrawActions()
+        {
+            if (needToBuildLanguageListFromItems) BuildLanguageListFromItems();
+            if (actionReorderableList == null) InitializeActionReorderableList();
+            var filterChanged = DrawFilterMenuBar("Action", DrawActionMenu, ref itemFilter, ref hideFilteredOutItems);
+            if (filterChanged) InitializeActionReorderableList();
+            if (database.syncInfo.syncItems)
+            {
+                DrawActionSyncDatabase();
+                if (syncedItemIDs == null) RecordSyncedItemIDs();
+            }
+            actionReorderableList.DoLayoutList();
         }
 
         private void DrawActionSection()
