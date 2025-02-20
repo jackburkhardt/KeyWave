@@ -271,10 +271,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     if (0 <= actorListSelectedIndex && actorListSelectedIndex < database.actors.Count) inspectorSelection = database.actors[actorListSelectedIndex];
                     break;
                 case Toolbar.Tab.Items:
-                    if (0 <= itemListSelectedIndex && itemListSelectedIndex < items.Count) inspectorSelection = items[itemListSelectedIndex];
-                    break;
-                case Toolbar.Tab.Actions:
-                    if (0 <= actionListSelectedIndex && actionListSelectedIndex < actions.Count) inspectorSelection = actions[actionListSelectedIndex];
+                    if (0 <= itemListSelectedIndex && itemListSelectedIndex < CurrentItemList.Count) inspectorSelection = CurrentItemList[itemListSelectedIndex];
                     break;
                 case Toolbar.Tab.Locations:
                     if (0 <= locationListSelectedIndex && locationListSelectedIndex < database.locations.Count) inspectorSelection = database.locations[locationListSelectedIndex];
@@ -457,7 +454,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 {
                     ResetDatabaseTab();
                 }
-                if (toolbar.Current == Toolbar.Tab.Items || toolbar.Current == Toolbar.Tab.Actions)
+                if (toolbar.Current == Toolbar.Tab.Items )
                 {
                     BuildLanguageListFromItems();
                 }
@@ -499,9 +496,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                         break;
                     case Toolbar.Tab.Items:
                         DrawItemSection();
-                        break;
-                    case Toolbar.Tab.Actions:
-                        DrawActionSection();
                         break;
                     case Toolbar.Tab.Locations:
                         DrawLocationSection();

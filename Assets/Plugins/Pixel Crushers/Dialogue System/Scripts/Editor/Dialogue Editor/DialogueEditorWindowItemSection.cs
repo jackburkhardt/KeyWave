@@ -36,9 +36,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         [SerializeField]
         private int itemListSelectedIndex = -1;
-        
-        [SerializeField]
-        private int actionListSelectedIndex = -1;
 
         [SerializeField]
         private int questEntrySelectedIdx = -1;
@@ -68,7 +65,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private List<Item> filteredItems;
         
-        private List<Item> filteredActions;
+        private string CurrentItemLabel => new[] {"Item", "Quest", "Action"}[itemToolbarIndex];
+        private List<Item> CurrentItemList => new[] {items, quests, actions}[itemToolbarIndex];
+        private List<Field> CurrentItemTemplateFields => new[] {template.itemFields, template.questFields, template.actionFields}[itemToolbarIndex];
         
         private static GUIContent questDescriptionLabel = new GUIContent("Description", "The description when the quest is active.");
         private static GUIContent questSuccessDescriptionLabel = new GUIContent("Success Description", "The description when the quest has been completed successfully. If blank, the Description field is used.");
@@ -85,9 +84,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             UpdateTreatQuestsAsActions(template.treatQuestsAsActions);
             needToBuildLanguageListFromItems = true;
             itemReorderableList = null;
-            actionReorderableList = null;
             itemListSelectedIndex = -1;
-            actionListSelectedIndex = -1;
             syncedItemIDs = null;
         }
 
@@ -126,72 +123,25 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void DrawItemSection()
         {
             
+            var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, new string[] {"Items", "Quests", "Actions"}, GUILayout.Width(300f));
+
+            if (newItemToolbarIndex != itemToolbarIndex)
+            {
+                itemToolbarIndex = newItemToolbarIndex;
+                itemReorderableList = null;
+            }
             
-            itemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, new string[] {"Items", "Quests", "Actions", "Inbox", "Notes"}, GUILayout.Width(500f));
-
-            if (itemToolbarIndex < 2)
-            {
-                DrawItems();
-            }
-
-            else
-            {
-                DrawActions();
-            }
-           
+            DrawItems( CurrentItemLabel, CurrentItemList);
         }
 
-        private void DrawItems()
-        {
-            if (template.treatItemsAsQuests)
-            {
-                if (needToBuildLanguageListFromItems) BuildLanguageListFromItems();
-                if (itemReorderableList == null) InitializeItemReorderableList();
-                var filterChanged = DrawFilterMenuBar("Quests/Item", DrawItemMenu, ref itemFilter, ref hideFilteredOutItems);
-                if (filterChanged) InitializeItemReorderableList();
-                if (database.syncInfo.syncItems)
-                {
-                    DrawItemSyncDatabase();
-                    if (syncedItemIDs == null) RecordSyncedItemIDs();
-                }
-                itemReorderableList.DoLayoutList();
-            }
-            else
-            {
-                if (itemReorderableList == null) InitializeItemReorderableList();
-                var filterChanged = DrawFilterMenuBar("Item", DrawItemMenu, ref itemFilter, ref hideFilteredOutItems);
-                if (filterChanged) InitializeItemReorderableList();
-                if (database.syncInfo.syncItems) DrawItemSyncDatabase();
-                itemReorderableList.DoLayoutList();
-            }
-        }
 
-        private void DrawActions()
+        private void DrawItems(string label, List<Item> itemList)
         {
-            if (needToBuildLanguageListFromItems) BuildLanguageListFromItems();
-            if (actionReorderableList == null) InitializeActionReorderableList();
-            var filterChanged = DrawFilterMenuBar("Action", DrawActionMenu, ref itemFilter, ref hideFilteredOutItems);
-            if (filterChanged) InitializeActionReorderableList();
-            if (database.syncInfo.syncItems)
-            {
-                DrawActionSyncDatabase();
-                if (syncedItemIDs == null) RecordSyncedItemIDs();
-            }
-            actionReorderableList.DoLayoutList();
-        }
-
-        private void DrawActionSection()
-        {
-            if (needToBuildLanguageListFromItems) BuildLanguageListFromItems();
-            if (actionReorderableList == null) InitializeActionReorderableList();
-            var filterChanged = DrawFilterMenuBar("Action", DrawActionMenu, ref itemFilter, ref hideFilteredOutItems);
-            if (filterChanged) InitializeActionReorderableList();
-            if (database.syncInfo.syncItems)
-            {
-                DrawActionSyncDatabase();
-                if (syncedItemIDs == null) RecordSyncedItemIDs();
-            }
-            actionReorderableList.DoLayoutList();
+            if (itemReorderableList == null) InitializeItemReorderableList(itemList);
+            var filterChanged = DrawFilterMenuBar(label, DrawItemMenu, ref itemFilter, ref hideFilteredOutItems);
+            if (filterChanged)  InitializeItemReorderableList(itemList);
+            if (database.syncInfo.syncItems) DrawItemSyncDatabase();
+            itemReorderableList.DoLayoutList();
         }
 
         private bool HideFilteredOutItems()
@@ -199,33 +149,27 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             return hideFilteredOutItems && !string.IsNullOrEmpty(itemFilter);
         }
         
-        private List<Item> items => database.items.FindAll(p => !p.IsAction);
+        private List<Item> items => database.items.FindAll(p => !p.IsAction && p.IsItem);
+        private List<Item> quests => database.items.FindAll(p => !p.IsAction && !p.IsItem);
         private List<Item> actions => database.items.FindAll(p => p.IsAction);
 
-        private void InitializeItemReorderableList()
+        private void InitializeItemReorderableList(List<Item> itemsList)
         {
             if (HideFilteredOutItems())
             {
-                filteredItems = items.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
+                filteredItems = itemsList.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
                 itemReorderableList = new ReorderableList(filteredItems, typeof(Item), true, true, true, true);
             }
             else
             {
-                filteredItems = items;
+                filteredItems = itemsList;
                 itemReorderableList = new ReorderableList(filteredItems, typeof(Item), true, true, true, true);
             }
             
             itemReorderableList.drawHeaderCallback = DrawItemListHeader;
             itemReorderableList.drawElementCallback = DrawItemListElement;
             itemReorderableList.drawElementBackgroundCallback = DrawItemListElementBackground;
-            if (template.treatItemsAsQuests)
-            {
-                itemReorderableList.onAddDropdownCallback = OnAddItemOrQuestDropdown;
-            }
-            else
-            {
-                itemReorderableList.onAddCallback = OnItemListAdd;
-            }            
+            itemReorderableList.onAddCallback = OnItemListAdd;    
             itemReorderableList.onRemoveCallback = OnItemListRemove;
             itemReorderableList.onSelectCallback = OnItemListSelect;
             itemReorderableList.onReorderCallback = OnItemListReorder;
@@ -233,29 +177,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             actionReorderableList = null;
         }
         
-        private void InitializeActionReorderableList()
-        {
-            if (HideFilteredOutItems())
-            {
-                filteredActions = actions.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
-                actionReorderableList = new ReorderableList(filteredActions, typeof(Item), true, true, true, true);
-            }
-            else
-            {
-                filteredActions = actions;
-                actionReorderableList = new ReorderableList(filteredActions, typeof(Item), true, true, true, true);
-            }
-            
-            actionReorderableList.drawHeaderCallback = DrawActionListHeader;
-            actionReorderableList.drawElementCallback = DrawActionListElement;
-            actionReorderableList.drawElementBackgroundCallback = DrawActionListElementBackground;
-            actionReorderableList.onAddCallback = OnActionListAdd;       
-            actionReorderableList.onRemoveCallback = OnActionListRemove;
-            actionReorderableList.onSelectCallback = OnActionListSelect;
-            actionReorderableList.onReorderCallback = OnActionListReorder;
-            
-            itemReorderableList = null;
-        }
+        
+        
 
 
         private const float ItemReorderableListTypeWidth = 40f;
@@ -293,51 +216,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var item = filteredItems[index];
             var itemName = item.Name;
             var description = item.Description;
-            EditorGUI.BeginDisabledGroup(!EditorTools.IsAssetInFilter(item, itemFilter) || IsItemSyncedFromOtherDB(item));
-            if (template.treatItemsAsQuests)
-            {
-                var fieldWidth = (rect.width - ItemReorderableListTypeWidth) / 4;
-                EditorGUI.LabelField(new Rect(rect.x, rect.y + 2, ItemReorderableListTypeWidth, EditorGUIUtility.singleLineHeight), item.IsItem ? "Item" : "Quest");
-                EditorGUI.BeginChangeCheck();
-                GUI.SetNextControlName(nameControl);
-                itemName = EditorGUI.TextField(new Rect(rect.x + ItemReorderableListTypeWidth, rect.y + 2, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, item.Name);
-                if (EditorGUI.EndChangeCheck()) item.Name = itemName;
-                EditorGUI.BeginChangeCheck();
-                GUI.SetNextControlName(descriptionControl);
-                description = EditorGUI.TextField(new Rect(rect.x + ItemReorderableListTypeWidth + fieldWidth + 2, rect.y + 2, 3 * fieldWidth - 2, EditorGUIUtility.singleLineHeight), GUIContent.none, description);
-                if (EditorGUI.EndChangeCheck()) item.Description = description;
-            }
-            else
-            {
-                var fieldWidth = rect.width / 4;
-                EditorGUI.BeginChangeCheck();
-                GUI.SetNextControlName(nameControl);
-                itemName = EditorGUI.TextField(new Rect(rect.x, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, item.Name);
-                if (EditorGUI.EndChangeCheck()) item.Name = itemName;
-                EditorGUI.BeginChangeCheck();
-                GUI.SetNextControlName(descriptionControl);
-                description = EditorGUI.TextField(new Rect(rect.x + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, EditorGUIUtility.singleLineHeight), GUIContent.none, description);
-                if (EditorGUI.EndChangeCheck()) item.Description = description;
-            }
-            EditorGUI.EndDisabledGroup();
-            var focusedControl = GUI.GetNameOfFocusedControl();
-            if (string.Equals(nameControl, focusedControl) || string.Equals(descriptionControl, focusedControl))
-            {
-                inspectorSelection = item;
-            }
-        }
-        
-        private void DrawActionListElement(Rect rect, int index, bool isActive, bool isFocused)
-        {
             
-            //if (!(0 <= index && index < filteredActions.Count)) return;
-            var nameControl = "ItemName" + index;
-            var descriptionControl = "ItemDescription" + index;
-            var item = filteredActions[index];
-            var itemName = item.Name;
-            var description = item.Description;
             EditorGUI.BeginDisabledGroup(!EditorTools.IsAssetInFilter(item, itemFilter) || IsItemSyncedFromOtherDB(item));
-            {
+           
                 var fieldWidth = rect.width / 4;
                 EditorGUI.BeginChangeCheck();
                 GUI.SetNextControlName(nameControl);
@@ -347,7 +228,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 GUI.SetNextControlName(descriptionControl);
                 description = EditorGUI.TextField(new Rect(rect.x + fieldWidth + 2, rect.y + 2, 3 * fieldWidth - 2, EditorGUIUtility.singleLineHeight), GUIContent.none, description);
                 if (EditorGUI.EndChangeCheck()) item.Description = description;
-            }
+           
+                
             EditorGUI.EndDisabledGroup();
             var focusedControl = GUI.GetNameOfFocusedControl();
             if (string.Equals(nameControl, focusedControl) || string.Equals(descriptionControl, focusedControl))
@@ -358,8 +240,32 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void DrawItemListElementBackground(Rect rect, int index, bool isActive, bool isFocused)
         {
-            if (!(0 <= index && index < filteredItems.Count)) return;
             var item = filteredItems[index];
+
+            if (itemToolbarIndex == 2)
+            {
+                if (!(0 <= index && index < filteredItems.Count)) return;
+                var defaultColor = new Color(0.225f, 0.225f, 0.225f, 1);
+                var location = item.LookupLocation("Location", database);
+          
+                if (location != null && template.useLocationColors)
+                {
+                    location = location.GetRootLocation(database);
+                    var color = location.LookupColor("Color");
+                    if (!isActive)
+                    {
+                        color = EditorTools.ColorBlend(color, defaultColor, EditorTools.ColorBlendMode.SoftLight);
+                        // color *= 0.5f;
+                        // color += defaultColor * 0.3f;
+                        color = Color.Lerp(defaultColor, color, 0.25f);
+                    }
+
+                    else color = Color.Lerp(defaultColor, color, 0.5f);
+                    EditorGUI.DrawRect(rect, color);
+                    return;
+                }
+            }
+            
             if (EditorTools.IsAssetInFilter(item, itemFilter))
             {
                 ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, isActive, isFocused, true);
@@ -370,67 +276,22 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
         }
         
-        private void DrawActionListElementBackground(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            if (!(0 <= index && index < filteredActions.Count)) return;
-            var item = filteredActions[index];
-
-
-            var defaultColor = new Color(0.225f, 0.225f, 0.225f, 1);
-
-            var location = item.LookupLocation("Location", database);
-          
-            if (location != null && template.useLocationColors)
-            {
-                location = location.GetRootLocation(database);
-                var color = location.LookupColor("Color");
-                if (!isActive)
-                {
-
-                    color = EditorTools.ColorBlend(  color, defaultColor, EditorTools.ColorBlendMode.SoftLight);
-                    // color *= 0.5f;
-                    // color += defaultColor * 0.3f;
-                    color = Color.Lerp(defaultColor, color, 0.25f);
-                   
-                }
-                
-                else color = Color.Lerp(defaultColor, color, 0.5f);
-                
-                EditorGUI.DrawRect(rect, color);
-            }
-            
-            
-            else if (EditorTools.IsAssetInFilter(item, itemFilter))
-            {
-                ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, isActive, isFocused, true);
-            }
-            else
-            {
-                EditorGUI.DrawRect(rect, new Color(0.225f, 0.225f, 0.225f, 1));
-            }
-        }
-
         private void OnAddItemOrQuestDropdown(Rect buttonRect, ReorderableList list)
         {
-            var menu = new GenericMenu();
-            menu.AddItem(new GUIContent("Quest"), false, OnAddNewQuest, null);
-            menu.AddItem(new GUIContent("Item"), false, OnAddNewItem, null);
-            menu.ShowAsContext();
+          //  var menu = new GenericMenu();
+            //menu.AddItem(new GUIContent("Quest"), false, OnAddNewQuest, null);
+          //  menu.AddItem(new GUIContent("Item"), false, OnAddNewItem, null);
+           // menu.ShowAsContext();
         }
 
         private void OnItemListAdd(ReorderableList list)
         {
-            AddNewItem();
-        }
-        
-        private void OnActionListAdd(ReorderableList list)
-        {
-            AddNewAction();
+            OnAddNewItem( null);
         }
 
         private void OnItemListRemove(ReorderableList list)
         {
-            if (!(0 <= list.index && list.index < items.Count)) return;
+            if (!(0 <= list.index && list.index < CurrentItemList.Count)) return;
             var item = list.list [list.index] as Item;
             if (item == null) return;
             if (IsItemSyncedFromOtherDB(item)) return;
@@ -439,7 +300,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 ReorderableList.defaultBehaviours.DoRemoveButton(list);
                 if (deletedLastOne) inspectorSelection = null;
-                else inspectorSelection = (list.index < list.count) ? items[list.index] : (list.count > 0) ? items[list.count - 1] : null;
+                else inspectorSelection = (list.index < list.count) ? CurrentItemList[list.index] : (list.count > 0) ? CurrentItemList[list.count - 1] : null;
                 SetDatabaseDirty("Remove Item");
                 
                 database.items.Remove(item);
@@ -466,19 +327,25 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void OnItemListReorder(ReorderableList list)
         {
-           
+            
+            
+            
+            
             var item = list.list [list.index] as Item;
+            var currentIndexInDatabase = database.items.IndexOf(CurrentItemList[list.index]) - 1;
+            currentIndexInDatabase = Mathf.Clamp(currentIndexInDatabase, 0, database.items.Count - 1);
             
             database.items.Remove(item);
             
-            if (list.index < items.Count - 1)
+            if (list.index < CurrentItemList.Count - 1)
             {
-                database.items.Insert(database.items.IndexOf( items[list.index]), item );
+                database.items.Insert(currentIndexInDatabase, item );
             }
             else
             {
                 database.items.Add(item);
             }
+            
             
            
             SetDatabaseDirty("Reorder Items");
@@ -487,47 +354,21 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
         
         
-        
-        private void OnActionListReorder(ReorderableList list)
-        {
-            var action = list.list [list.index] as Item;
-            
-            database.items.Remove(action);
-            
-            if (list.index < actions.Count - 1)
-            {
-                database.items.Insert(database.items.IndexOf( actions[list.index]), action );
-            }
-            else
-            {
-                database.items.Add(action);
-            }
-           
-            SetDatabaseDirty("Reorder Actions");
-            InitializeActionReorderableList();
-        }
 
         private void OnItemListSelect(ReorderableList list)
         {
           
-            if (!(0 <= list.index && list.index < items.Count)) return;
-            inspectorSelection = items[list.index];
+            if (!(0 <= list.index && list.index < CurrentItemList.Count)) return;
+            inspectorSelection = CurrentItemList[list.index];
             itemListSelectedIndex = list.index;
         }
         
-        private void OnActionListSelect(ReorderableList list)
-        {
-         
-            if (!(0 <= list.index && list.index < actions.Count)) return;
-            inspectorSelection = actions[list.index];
-            actionListSelectedIndex = list.index;
-        }
 
         public void DrawSelectedItemSecondPart()
         {
             var item = inspectorSelection as Item;
             if (item == null) return;
-            var index = actionReorderableList != null ? actionListSelectedIndex : itemListSelectedIndex;
+            var index = itemListSelectedIndex;
             DrawFieldsFoldout<Item>(item, index, itemFoldouts);
             DrawAssetSpecificPropertiesSecondPart(item, index, itemFoldouts);
         }
@@ -537,41 +378,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (GUILayout.Button("Menu", "MiniPullDown", GUILayout.Width(56)))
             {
                 GenericMenu menu = new GenericMenu();
-                menu.AddItem(new GUIContent("New Item"), false, AddNewItem);
-                if (template.treatItemsAsQuests)
-                {
-                    menu.AddItem(new GUIContent("New Quest"), false, AddNewQuest);
-                    
-                    if (template.treatQuestsAsActions)
-                    {
-                        menu.AddItem(new GUIContent("New Action"), false, AddNewAction);
-                    }
-                    
-                    else 
-                    {
-                        menu.AddDisabledItem(new GUIContent("New Action"));
-                    }
-                }
-                else
-                {
-                    menu.AddDisabledItem(new GUIContent("New Quest"));
-                }
-                menu.AddItem(new GUIContent("Use Quest System"), template.treatItemsAsQuests, ToggleUseQuestSystem);
-                menu.AddItem(new GUIContent("Sort/By Name"), false, SortItemsByName);
-                menu.AddItem(new GUIContent("Sort/By Group"), false, SortItemsByGroup);
-                menu.AddItem(new GUIContent("Sort/By ID"), false, SortItemsByID);
-                menu.AddItem(new GUIContent("Sync From DB"), database.syncInfo.syncItems, ToggleSyncItemsFromDB);
-                menu.ShowAsContext();
-            }
-        }
-        
-        private void DrawActionMenu()
-        {
-            if (GUILayout.Button("Menu", "MiniPullDown", GUILayout.Width(56)))
-            {
-                GenericMenu menu = new GenericMenu();
-                menu.AddItem(new GUIContent("New Action"), false, AddNewAction);
-                menu.AddItem(new GUIContent("Use Location Colors"), template.useLocationColors, ToggleUseLocationColors);
+                menu.AddItem(new GUIContent($"New {CurrentItemLabel}"), false, AddNewItem);
+                
+                if (CurrentItemLabel == "Action") 
+                    menu.AddItem(new GUIContent("Use Location Colors"), template.useLocationColors, ToggleUseLocationColors);
+                
                 menu.AddItem(new GUIContent("Sort/By Name"), false, SortItemsByName);
                 menu.AddItem(new GUIContent("Sort/By Group"), false, SortItemsByGroup);
                 menu.AddItem(new GUIContent("Sort/By ID"), false, SortItemsByID);
@@ -583,41 +394,16 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void OnAddNewItem(object data)
         {
             AddNewItem();
-            
-        }
 
-        private void OnAddNewQuest(object data)
-        {
-            AddNewQuest();
-        }
-        
-        private void OnAddNewAction(object data)
-        {
-            AddNewAction();
         }
 
         private void AddNewItem()
         {
-            AddNewAssetFromTemplate<Item>(database.items, (template != null) ? template.itemFields : null, "Item");
+            AddNewAssetFromTemplate<Item>(database.items, CurrentItemTemplateFields, CurrentItemLabel);
             SetDatabaseDirty("Add New Item");
-            InitializeItemReorderableList();
-        }
-
-        private void AddNewQuest()
-        {
-            AddNewAssetFromTemplate<Item>(database.items, (template != null) ? template.questFields : null, "Quest");
-            BuildLanguageListFromItems();
-            SetDatabaseDirty("Add New Quest");
-            InitializeItemReorderableList();
+            InitializeItemReorderableList(CurrentItemList);
         }
         
-        private void AddNewAction()
-        {
-            AddNewAssetFromTemplate<Item>(database.items, (template != null) ? template.actionFields : null, "Action");
-            BuildLanguageListFromActions();
-            SetDatabaseDirty("Add New Action");
-            InitializeActionReorderableList();
-        }
 
         private void SortItemsByName()
         {
@@ -637,18 +423,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             SetDatabaseDirty("Sort by ID");
         }
 
-        private void ToggleUseQuestSystem()
-        {
-            UpdateTreatItemsAsQuests(!template.treatItemsAsQuests);
-            showStateFieldAsQuest = template.treatItemsAsQuests;
-        }
-        
-        private void ToggleUseActionSystem()
-        {
-            UpdateTreatQuestsAsActions(!template.treatQuestsAsActions);
-            showStateFieldAsQuest = template.treatItemsAsQuests;
-        }
-        
         private void ToggleUseLocationColors()
         {
             template.useLocationColors = !template.useLocationColors;
@@ -666,7 +440,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     database.items.RemoveAll(x => syncedItemIDs.Contains(x.id));
                 }
             }
-            InitializeItemReorderableList();
+            InitializeItemReorderableList(items);
             SetDatabaseDirty("Toggle Sync Items");
         }
 
@@ -679,42 +453,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 database.syncInfo.syncItemsDatabase = newDatabase;
                 database.SyncItems();
-                InitializeItemReorderableList();
+                InitializeItemReorderableList(items);
                 syncedItemIDs = null;
                 SetDatabaseDirty("Change Sync Items Database");
             }
             if (GUILayout.Button(new GUIContent("Sync Now", "Syncs from the database."), EditorStyles.miniButton, GUILayout.Width(72)))
             {
                 database.SyncItems();
-                InitializeItemReorderableList();
+                InitializeItemReorderableList(items);
                 syncedItemIDs = null;
                 SetDatabaseDirty("Manual Sync Items");
             }
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawActionSyncDatabase()
-        {
-            EditorGUILayout.BeginHorizontal();
-            DialogueDatabase newDatabase = EditorGUILayout.ObjectField(new GUIContent("Sync From", "Database to sync actions from."),
-                                                                       database.syncInfo.syncItemsDatabase, typeof(DialogueDatabase), false) as DialogueDatabase;
-            if (newDatabase != database.syncInfo.syncItemsDatabase)
-            {
-                database.syncInfo.syncItemsDatabase = newDatabase;
-                database.SyncItems();
-                InitializeActionReorderableList();
-                syncedItemIDs = null;
-                SetDatabaseDirty("Change Sync Items Database");
-            }
-            if (GUILayout.Button(new GUIContent("Sync Now", "Syncs from the database."), EditorStyles.miniButton, GUILayout.Width(72)))
-            {
-                database.SyncItems();
-                InitializeActionReorderableList();
-                syncedItemIDs = null;
-                SetDatabaseDirty("Manual Sync Items");
-            }
-            EditorGUILayout.EndHorizontal();
-        }
 
         private void RecordSyncedItemIDs()
         {

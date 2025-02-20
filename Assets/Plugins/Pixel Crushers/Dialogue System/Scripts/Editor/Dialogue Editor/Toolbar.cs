@@ -14,7 +14,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
     public class Toolbar
     {
 
-        public enum Tab { Database, Actors, Items, Actions, Locations, Variables, Conversations, Templates }
+        public enum Tab { Database, Actors, Items, Locations, Variables, Conversations, Templates }
 
         public Tab current = Tab.Database;
         public Tab Current
@@ -23,18 +23,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             set { current = value; }
         }
 
-        private string[] ToolbarStrings = new []{ "Database", "Actors", "Items", "Actions", "Locations", "Variables", "Conversations", "Templates" };
+        private string[] ToolbarStrings = new []{ "Database", "Actors", "Items", "Locations", "Variables", "Conversations", "Templates" };
         private const int ItemsToolbarIndex = 2;
         private const string ItemsToolbarString = "Items";
         private const string ItemsAsQuestsToolbarString = "Quests/Items";
-        private const int TemplatesToolbarIndex = 7;
+        private const int TemplatesToolbarIndex = 6;
         private const string TemplatesToolbarString = "Templates";
         private const string WatchesToolbarString = "Watches";
-        private const float ToolbarWidth = 750;
+        private const float ToolbarWidth = 700;
 
         public void UpdateTabNames(bool treatItemsAsQuests)
         {
-            ToolbarStrings[ItemsToolbarIndex] = treatItemsAsQuests ? ItemsAsQuestsToolbarString : ItemsToolbarString;
+         //   ToolbarStrings[ItemsToolbarIndex] = treatItemsAsQuests ? ItemsAsQuestsToolbarString : ItemsToolbarString;
             ToolbarStrings[TemplatesToolbarIndex] = Application.isPlaying ? WatchesToolbarString : TemplatesToolbarString;
         }
 
