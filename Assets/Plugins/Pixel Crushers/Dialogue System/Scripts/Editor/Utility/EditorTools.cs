@@ -151,6 +151,40 @@ namespace PixelCrushers.DialogueSystem
                     return Tools.WebColor(s);
             }
         }
+        
+        public enum ColorBlendMode
+        {
+            Overlay,
+            SoftLight
+        }
+        public static Color ColorBlend(Color baseColor, Color blendColor, ColorBlendMode blendMode)
+        {
+            float BlendChannel(float baseChannel, float blendChannel)
+            {
+                switch (blendMode)
+                {
+                    case ColorBlendMode.Overlay:
+                        return baseChannel < 0.5f 
+                            ? 2 * baseChannel * blendChannel 
+                            : 1 - 2 * (1 - baseChannel) * (1 - blendChannel);
+                    case ColorBlendMode.SoftLight:
+                        return (1 - 2 * blendChannel) * baseChannel * baseChannel + (2 * blendChannel * baseChannel);
+                    default:
+                        return 0;
+                }
+            }
+            
+            float r = BlendChannel(baseColor.r, blendColor.r);
+            float g = BlendChannel(baseColor.g, blendColor.g);
+            float b = BlendChannel(baseColor.b, blendColor.b);
+            float a = Mathf.Lerp(baseColor.a, blendColor.a, 0.5f); // Optional alpha blending
+
+            return new Color(r, g, b, a);
+        }
+
+       
+        
+        
 
         //---No longer used, now that we allow a full color palette:
         //public static string[] StylesColorStrings = new string[]

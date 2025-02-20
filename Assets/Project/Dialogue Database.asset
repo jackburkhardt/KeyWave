@@ -2816,7 +2816,7 @@ MonoBehaviour:
     - title: Sublocation Switcher Method
       value: MoveBeforeConversationAndReturnWhenDone
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
   - id: 193
     fields:
     - title: Name
@@ -3022,7 +3022,7 @@ MonoBehaviour:
     - title: Sublocation Switcher Method
       value: MoveAfterConversation
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Auto Conversation Title
       value: False
       type: 2
@@ -3215,7 +3215,7 @@ MonoBehaviour:
     - title: Display Name
       value: Talk to Sara
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Repeat Points Reduction
       value: 0
       type: 1
@@ -3224,6 +3224,140 @@ MonoBehaviour:
       value: 11
       type: 5
       typeString: CustomFieldType_Actor
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 163
+    fields:
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Location
+      value: 1
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Name
+      value: Hotel/Nap
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points
+      value: Wellness:0
+      type: 10
+      typeString: CustomFieldType_PointsType
+    - title: Duration
+      value: 0:seconds
+      type: 11
+      typeString: CustomFieldType_TimespanType
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Points Repeat
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Static
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Conditions
+      value: CurrentQuestState("Hotel/Nap") == "active" and (true)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: 'SetQuestState("Hotel/Nap", "success"); '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Time Flow
+      value: Natural
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Points Reduction
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Repeat Count
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conversation
+      value: Hotel/Nap
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Auto Conversation Title
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Required Nearby Actor
+      value: 7
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Natural Duration
+      value: 1800
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 7200
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 10
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Display Name
+      value: Take a nap.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
   - id: 238
     fields:
     - title: Name
@@ -3363,20 +3497,20 @@ MonoBehaviour:
       value: Grab a meal.
       type: 0
       typeString: CustomFieldType_Text
-  - id: 163
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 173
     fields:
-    - title: Pictures
-      value: '[]'
-      type: 3
-      typeString: CustomFieldType_Files
-    - title: Location
-      value: 1
-      type: 7
-      typeString: CustomFieldType_Location
     - title: Name
-      value: Hotel/Nap
+      value: "Caf\xE9/GrabCoffee"
       type: 0
       typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
     - title: Description
       value: 
       type: 0
@@ -3391,84 +3525,40 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
     - title: State
       value: active
-      type: 0
+      type: 12
       typeString: CustomFieldType_QuestState
     - title: Is Item
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: Points
-      value: Wellness:0
-      type: 10
-      typeString: CustomFieldType_PointsType
-    - title: Duration
-      value: 0:seconds
-      type: 11
-      typeString: CustomFieldType_TimespanType
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Points Repeat
-      value: 1
-      type: 1
-      typeString: CustomFieldType_Number
     - title: Is Action
       value: True
       type: 2
       typeString: CustomFieldType_Boolean
-    - title: Is Static
-      value: True
+    - title: Repeatable
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 540
+      type: 1
+      typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Hotel/Nap") == "active" and (true)
+      value: "CurrentQuestState(\"Caf\xE9/GrabCoffee\") == \"active\" and (true)"
       type: 0
       typeString: CustomFieldType_Text
+    - title: Location
+      value: 2
+      type: 7
+      typeString: CustomFieldType_Location
     - title: Show Invalid
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Hotel/Nap", "success"); '
+      value: "SetQuestState(\"Caf\xE9/GrabCoffee\", \"success\"); "
       type: 0
       typeString: CustomFieldType_Text
-    - title: Explicit Duration
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Time Flow
-      value: Natural
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Points Reduction
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Repeat Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conversation
-      value: Hotel/Nap
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Auto Conversation Title
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Required Nearby Actor
-      value: 7
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Natural Duration
-      value: 1800
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Natural Duration
-      value: 7200
-      type: 1
-      typeString: CustomFieldType_Number
     - title: Skills Points
       value: 0
       type: 1
@@ -3482,13 +3572,427 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Wellness Points
-      value: 10
+      value: 5
       type: 1
       typeString: CustomFieldType_Number
-    - title: Display Name
-      value: Take a nap.
+    - title: Time Flow
+      value: Explicit
       type: 0
       typeString: CustomFieldType_Text
+    - title: Display Name
+      value: Grab some coffee.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Conversation
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry Count
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry Actor
+      value: 7
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Entry 1
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 1 Menu Text
+      value: You get some coffee.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 1 Dialogue Text
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Count
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Repeat Points Reduction
+      value: 0.5
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Set Success State
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Static
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 190
+    fields:
+    - title: Name
+      value: "Caf\xE9/Radio"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: true and (CurrentQuestState("Radio Podcast") ~= "success")
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 2
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Is Static
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: '; '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Count
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conversation
+      value: "Caf\xE9/Listen to the Radio"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Auto Conversation Title
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Required Nearby Actor
+      value: 26
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 175
+    fields:
+    - title: Name
+      value: "Caf\xE9/PublicSpeaking"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: "CurrentQuestState(\"Caf\xE9/PublicSpeaking\") == \"active\" and (CurrentQuestState(\"Public
+        Speaking Course\") == \"success\")"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 2
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: "SetQuestState(\"Caf\xE9/PublicSpeaking\", \"success\"); "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Auto Conversation Title
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Static
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeat Points Reduction
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Repeat Count
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conversation
+      value: "Caf\xE9/Public Speaking"
+      type: 0
+      typeString: 
+    - title: Required Nearby Actor
+      value: 14
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 187
+    fields:
+    - title: Name
+      value: "Caf\xE9/InternetResearch"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: "CurrentQuestState(\"Caf\xE9/InternetResearch\") == \"active\" and (true)"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 2
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Is Static
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: "SetQuestState(\"Caf\xE9/InternetResearch\", \"success\"); "
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Count
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Auto Conversation Title
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeat Points Reduction
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conversation
+      value: "Caf\xE9/Internet Research"
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Required Nearby Actor
+      value: 14
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+  - id: 246
+    fields:
+    - title: Name
+      value: Mall/Dillon's/BrowseShelves
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: CurrentQuestState("Mall/Dillon's/BrowseShelves") == "active" and (Variable["player_kicked_from_dillons"]
+        ~= true)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 12
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Is Static
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: '; '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Time Flow
+      value: Natural
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Count
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conversation
+      value: Mall/Dillon's/Browse Shelves
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Auto Conversation Title
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Required Nearby Actor
+      value: 25
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Display Name
+      value: Browse the shelves.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Natural Duration
+      value: 2832
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Natural Duration
+      value: 3324
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 172
     fields:
     - title: Name
@@ -4168,482 +4672,6 @@ MonoBehaviour:
       value: 6540
       type: 1
       typeString: CustomFieldType_Number
-  - id: 246
-    fields:
-    - title: Name
-      value: Mall/Dillon's/BrowseShelves
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: 
-      type: 0
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: active
-      type: 12
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Action
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Explicit Duration
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conditions
-      value: CurrentQuestState("Mall/Dillon's/BrowseShelves") == "active" and (Variable["player_kicked_from_dillons"]
-        ~= true)
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Location
-      value: 12
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Is Static
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Show Invalid
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Script
-      value: '; '
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Time Flow
-      value: Natural
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conversation
-      value: Mall/Dillon's/Browse Shelves
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Auto Conversation Title
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Required Nearby Actor
-      value: 25
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Ignore Sublocations
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Display Name
-      value: Browse the shelves.
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Natural Duration
-      value: 2832
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Natural Duration
-      value: 3324
-      type: 1
-      typeString: CustomFieldType_Number
-  - id: 173
-    fields:
-    - title: Name
-      value: "Caf\xE9/GrabCoffee"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: 
-      type: 0
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: active
-      type: 12
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Action
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Explicit Duration
-      value: 540
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conditions
-      value: "CurrentQuestState(\"Caf\xE9/GrabCoffee\") == \"active\" and (true)"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Location
-      value: 2
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Show Invalid
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Script
-      value: "SetQuestState(\"Caf\xE9/GrabCoffee\", \"success\"); "
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Skills Points
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Context Points
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Teamwork Points
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Wellness Points
-      value: 5
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Time Flow
-      value: Explicit
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Display Name
-      value: Grab some coffee.
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Conversation
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry Count
-      value: 1
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Entry Actor
-      value: 7
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Entry 1
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 1 Menu Text
-      value: You get some coffee.
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 1 Dialogue Text
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Repeat Points Reduction
-      value: 0.5
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Set Success State
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Static
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-  - id: 190
-    fields:
-    - title: Name
-      value: "Caf\xE9/Radio"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: 
-      type: 0
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: active
-      type: 12
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Action
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Explicit Duration
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conditions
-      value: true and (CurrentQuestState("Radio Podcast") ~= "success")
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Location
-      value: 2
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Is Static
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Show Invalid
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Script
-      value: '; '
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Time Flow
-      value: Explicit
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conversation
-      value: "Caf\xE9/Listen to the Radio"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Auto Conversation Title
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Required Nearby Actor
-      value: 26
-      type: 5
-      typeString: CustomFieldType_Actor
-  - id: 175
-    fields:
-    - title: Name
-      value: "Caf\xE9/PublicSpeaking"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: 
-      type: 0
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: active
-      type: 12
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Action
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Explicit Duration
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conditions
-      value: "CurrentQuestState(\"Caf\xE9/PublicSpeaking\") == \"active\" and (CurrentQuestState(\"Public
-        Speaking Course\") == \"success\")"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Location
-      value: 2
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Show Invalid
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Script
-      value: "SetQuestState(\"Caf\xE9/PublicSpeaking\", \"success\"); "
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Time Flow
-      value: Explicit
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Auto Conversation Title
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Static
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeat Points Reduction
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Repeat Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conversation
-      value: "Caf\xE9/Public Speaking"
-      type: 0
-      typeString: 
-    - title: Required Nearby Actor
-      value: 14
-      type: 5
-      typeString: CustomFieldType_Actor
-  - id: 187
-    fields:
-    - title: Name
-      value: "Caf\xE9/InternetResearch"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: 
-      type: 0
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: active
-      type: 12
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Action
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Explicit Duration
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conditions
-      value: "CurrentQuestState(\"Caf\xE9/InternetResearch\") == \"active\" and (true)"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Location
-      value: 2
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Is Static
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Show Invalid
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Script
-      value: "SetQuestState(\"Caf\xE9/InternetResearch\", \"success\"); "
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Time Flow
-      value: Explicit
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Auto Conversation Title
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeat Points Reduction
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conversation
-      value: "Caf\xE9/Internet Research"
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Required Nearby Actor
-      value: 14
-      type: 5
-      typeString: CustomFieldType_Actor
   - id: 176
     fields:
     - title: Name
@@ -5091,7 +5119,7 @@ MonoBehaviour:
     - title: Sublocation Switcher Method
       value: MoveBeforeConversationAndReturnWhenDone
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
   - id: 180
     fields:
     - title: Name
@@ -5297,7 +5325,178 @@ MonoBehaviour:
     - title: Display Name
       value: Collect Store Metrics
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
+  - id: 239
+    fields:
+    - title: Name
+      value: Park/Stroll
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: 
+      type: 0
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Success Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Failure Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 12
+      typeString: CustomFieldType_QuestState
+    - title: Is Item
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Is Action
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeatable
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Explicit Duration
+      value: 1800
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conditions
+      value: CurrentQuestState("Park/Stroll") == "active" and (true)
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Location
+      value: 5
+      type: 7
+      typeString: CustomFieldType_Location
+    - title: Is Static
+      value: True
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Show Invalid
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Script
+      value: 'SetQuestState("Park/Stroll", "success"); '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Time Flow
+      value: Explicit
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Count
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Skills Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Context Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Teamwork Points
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Wellness Points
+      value: 20
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Repeat Points Reduction
+      value: 0.5
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Conversation
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry Count
+      value: 3
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry Actor
+      value: 7
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Required Nearby Actor
+      value: 7
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Entry 2
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 Menu Text
+      value: 'You hear the jingling of bells in the distance coming from a man pushing
+        an ice cream cart. Ice cream sounds like a great idea, and you spend a few
+        moments deciding what to buy. You pay and then sit down on a nearby bench
+        to reflect on what has turned out to be a gorgeous day. '
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 2 Dialogue Text
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 Menu Text
+      value: The park is quiet except for the wind rushing through the trees. You
+        are aware of the challenges waiting for you on Monday morning, but you try
+        your best to stay in the moment and relax.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 3 Dialogue Text
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 1
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 1 Menu Text
+      value: You decide to take a stroll.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Entry 1 Dialogue Text
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Entry Count
+      value: 1
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Repeat Entry 1
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Entry 1 Menu Text
+      value: You take another stroll.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Repeat Entry 1 Dialogue Text
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Display Name
+      value: Take a stroll.
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Ignore Sublocations
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
   - id: 147
     fields:
     - title: Pictures
@@ -5578,173 +5777,6 @@ MonoBehaviour:
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
-  - id: 239
-    fields:
-    - title: Name
-      value: Park/Stroll
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Pictures
-      value: 
-      type: 0
-      typeString: CustomFieldType_Files
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Success Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Failure Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: State
-      value: active
-      type: 12
-      typeString: CustomFieldType_QuestState
-    - title: Is Item
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Is Action
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Repeatable
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Explicit Duration
-      value: 1800
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conditions
-      value: CurrentQuestState("Park/Stroll") == "active" and (true)
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Location
-      value: 5
-      type: 7
-      typeString: CustomFieldType_Location
-    - title: Is Static
-      value: True
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Show Invalid
-      value: False
-      type: 2
-      typeString: CustomFieldType_Boolean
-    - title: Script
-      value: 'SetQuestState("Park/Stroll", "success"); '
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Time Flow
-      value: Explicit
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Count
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Skills Points
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Context Points
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Teamwork Points
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Wellness Points
-      value: 20
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Repeat Points Reduction
-      value: 0.5
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Conversation
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry Count
-      value: 3
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Entry Actor
-      value: 7
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Required Nearby Actor
-      value: 7
-      type: 5
-      typeString: CustomFieldType_Actor
-    - title: Entry 2
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 2 Menu Text
-      value: 'You hear the jingling of bells in the distance coming from a man pushing
-        an ice cream cart. Ice cream sounds like a great idea, and you spend a few
-        moments deciding what to buy. You pay and then sit down on a nearby bench
-        to reflect on what has turned out to be a gorgeous day. '
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 2 Dialogue Text
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 3
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 3 Menu Text
-      value: The park is quiet except for the wind rushing through the trees. You
-        are aware of the challenges waiting for you on Monday morning, but you try
-        your best to stay in the moment and relax.
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 3 Dialogue Text
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 1
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 1 Menu Text
-      value: You decide to take a stroll.
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Entry 1 Dialogue Text
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Entry Count
-      value: 1
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Repeat Entry 1
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Entry 1 Menu Text
-      value: You take another stroll.
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Repeat Entry 1 Dialogue Text
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Display Name
-      value: Take a stroll.
-      type: 0
-      typeString: CustomFieldType_Text
   - id: 240
     fields:
     - title: Name
@@ -6273,6 +6305,14 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+    - title: Conditions
+      value: true
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Color
+      value: '#a2615eff'
+      type: 13
+      typeString: CustomFieldType_Color
   - id: 2
     fields:
     - title: Name
@@ -6340,6 +6380,14 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Conditions
+      value: true
+      type: 0
+      typeString: 
+    - title: Color
+      value: '#a2ae30ff'
+      type: 13
+      typeString: 
   - id: 3
     fields:
     - title: Name
@@ -6449,6 +6497,14 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+    - title: Color
+      value: '#895088ff'
+      type: 13
+      typeString: 
+    - title: Conditions
+      value: true
+      type: 0
+      typeString: 
   - id: 15
     fields:
     - title: Name
@@ -6653,6 +6709,10 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Conditions
+      value: true
+      type: 0
+      typeString: 
   - id: 4
     fields:
     - title: Name
@@ -6825,7 +6885,15 @@ MonoBehaviour:
     - title: Spawn Point
       value: -1
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
+    - title: Color
+      value: '#c77952ff'
+      type: 13
+      typeString: CustomFieldType_Color
+    - title: Conditions
+      value: true
+      type: 0
+      typeString: CustomFieldType_Text
   - id: 9
     fields:
     - title: Name
@@ -6909,6 +6977,10 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Conditions
+      value: true
+      type: 0
+      typeString: 
   - id: 10
     fields:
     - title: Name
@@ -7148,6 +7220,10 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
+    - title: Conditions
+      value: true
+      type: 0
+      typeString: 
   - id: 5
     fields:
     - title: Name
@@ -7272,6 +7348,10 @@ MonoBehaviour:
       value: true
       type: 0
       typeString: 
+    - title: Color
+      value: '#62ae6dff'
+      type: 13
+      typeString: 
   - id: 6
     fields:
     - title: Name
@@ -7388,6 +7468,10 @@ MonoBehaviour:
     - title: Conditions
       value: true
       type: 0
+      typeString: 
+    - title: Color
+      value: '#6284aeff'
+      type: 13
       typeString: 
   - id: 8
     fields:
@@ -65802,8 +65886,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: NodeColor
         value: '#a2615eff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: CoordinateX
         value: -221
         type: 1
@@ -65818,8 +65902,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Location
       - title: DisabledColor
         value: '#8a8a8aff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: EventGuid
         value: 6872f6a1-8d52-4c62-8d15-7314076edb2f
         type: 0
@@ -65891,8 +65975,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: NodeColor
         value: '#a2ae30ff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: CoordinateX
         value: 10
         type: 1
@@ -65907,8 +65991,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Location
       - title: DisabledColor
         value: '#8a8a8aff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: EventGuid
         value: e3415cb1-3a36-4b76-83fa-7a5896ef5d1a
         type: 0
@@ -65980,8 +66064,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: NodeColor
         value: '#62ae6dff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: CoordinateX
         value: 539
         type: 1
@@ -65996,8 +66080,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Location
       - title: DisabledColor
         value: '#8a8a8aff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: EventGuid
         value: 243e7d3c-d6f0-4046-b980-e0eadce11e68
         type: 0
@@ -66069,8 +66153,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: NodeColor
         value: '#c77952ff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: CoordinateX
         value: -470
         type: 1
@@ -66085,8 +66169,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Location
       - title: DisabledColor
         value: '#8a8a8aff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: EventGuid
         value: bb040071-76a2-4cd3-9a71-20c3b7bfe8be
         type: 0
@@ -66106,7 +66190,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 447.9498
+        x: 451.9102
         y: 444.2382
         width: 160
         height: 30
@@ -66158,8 +66242,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: NodeColor
         value: '#895088ff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: CoordinateX
         value: -645
         type: 1
@@ -66174,8 +66258,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Location
       - title: DisabledColor
         value: '#8a8a8aff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: EventGuid
         value: 02164622-e6d1-4bbe-a8df-c4dc3122c1d5
         type: 0
@@ -66247,8 +66331,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: NodeColor
         value: '#6284aeff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: CoordinateX
         value: 685
         type: 1
@@ -66263,8 +66347,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Location
       - title: DisabledColor
         value: '#8a8a8aff'
-        type: 14
-        typeString: CustomFieldType_ColorType
+        type: 13
+        typeString: CustomFieldType_Color
       - title: EventGuid
         value: dfcfe4e3-a648-4307-b59b-5affc79b8055
         type: 0
@@ -77116,7 +77200,7 @@ MonoBehaviour:
     syncItemsDatabase: {fileID: 0}
     syncLocationsDatabase: {fileID: 0}
     syncVariablesDatabase: {fileID: 0}
-  templateJson: '{"treatItemsAsQuests":true,"treatQuestsAsActions":true,"treatLocationsAsSublocations":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unidentified","type":16,"typeString":"CustomFieldType_ActorState"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"IsAvailableToTalk","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"IsAvailableToCall","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Notable","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Introduced","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Is
+  templateJson: '{"treatItemsAsQuests":true,"treatQuestsAsActions":true,"treatLocationsAsSublocations":true,"useLocationColors":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"State","value":"unidentified","type":16,"typeString":"CustomFieldType_ActorState"},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"IsAvailableToTalk","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"IsAvailableToCall","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Notable","value":"False","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Introduced","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Is
     Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"},{"title":"Display
     Name","value":"","type":0,"typeString":"CustomFieldType_Text"}],"questFields":[{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Location","value":"","type":7,"typeString":"CustomFieldType_Location"},{"title":"Name","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Success
     Description","value":"","type":0,"typeString":"CustomFieldType_Text"},{"title":"Failure

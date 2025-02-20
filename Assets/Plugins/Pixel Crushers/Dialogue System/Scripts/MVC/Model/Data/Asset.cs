@@ -198,6 +198,16 @@ namespace PixelCrushers.DialogueSystem
         {
             return Field.LookupVector2(fields, title);
         }
+        
+        public Color LookupColor(string title)
+        {
+            return Field.LookupColor(fields, title);
+        }
+        
+        public Location LookupLocation(string title, DialogueDatabase database)
+        {
+            return Field.LookupLocation(fields, title, database);
+        }
 
         /// <summary>
         /// Checks whether a field exists and has non-empty text.

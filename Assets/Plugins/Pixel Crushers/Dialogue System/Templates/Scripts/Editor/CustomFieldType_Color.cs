@@ -11,16 +11,11 @@ using UnityEditor.Build.Content;
 
 namespace PixelCrushers.DialogueSystem
 {
-
-    
-    
-    
-    
     
     // STEP 1: Name your type below, replacing "My Type":
     [CustomFieldTypeService.Name("Color")]
     // STEP 2: Rename the class by changing TemplateType to your type name:
-    public class CustomFieldType_ColorType : CustomFieldType
+    public class CustomFieldType_Color : CustomFieldType
     {
         
         public override FieldType storeFieldAsType
@@ -40,7 +35,8 @@ namespace PixelCrushers.DialogueSystem
             
             Rect r = EditorGUILayout.BeginHorizontal();
             //EditorGUILayout.TextField("Conversation,Entry", currentValue);
-            var nodeColor = EditorGUILayout.ColorField(GUIContent.none, EditorTools.NodeColorStringToColor(currentValue), true, true, false);
+            var value = EditorTools.NodeColorStringToColor(currentValue);
+            var nodeColor = EditorGUILayout.ColorField(GUIContent.none, value, true, true, false);
             
             EditorGUILayout.EndHorizontal();
             return Tools.ToWebColor(nodeColor);

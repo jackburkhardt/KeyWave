@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -348,6 +349,50 @@ namespace PixelCrushers.DialogueSystem
             catch
             {
                 return Vector2.zero;
+            }
+        }
+
+        /// <summary>
+        /// A static utility method that looks up a field in a list and returns its Location value.
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <param name="title"></param>
+        /// <param name="database"></param>
+        /// <returns></returns>
+        public static Location LookupLocation(List<Field> fields, string title, DialogueDatabase database)
+        {
+            var value = LookupValue(fields, title);
+            
+            if (value == null) return null;
+            
+            try 
+            {
+                if (int.TryParse(value, out int result))
+                {
+                    if (result <= 0) return null;
+                    return database.GetLocation(int.Parse(value));
+                }
+                return database.GetLocation(value);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        
+        public static Color LookupColor(List<Field> fields, string title)
+        {
+            var value = LookupValue(fields, title);
+            if (value == null) return Color.white;
+            
+            try
+            {
+                return Tools.WebColor(value);
+            }
+            catch
+            {
+                return Color.white;
             }
         }
 

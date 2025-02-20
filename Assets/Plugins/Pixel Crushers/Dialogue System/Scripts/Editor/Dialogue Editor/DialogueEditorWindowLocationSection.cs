@@ -401,7 +401,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             DrawLocationConversationProperties(location);
             
+            // Color
             
+            var colorField = Field.Lookup(location.fields, "Color");
+            
+            if (colorField == null)
+            {
+                colorField = new Field("Color", string.Empty, FieldType.Color);
+                location.fields.Add(colorField);
+                SetDatabaseDirty("Add Color Field");
+            }
+
+            var color = EditorGUILayout.ColorField(new GUIContent("Color", "The location's color."),
+                EditorTools.NodeColorStringToColor(colorField.value), true, true, false);
+            colorField.value = Tools.ToWebColor(color);
             // Coordinates
             
             var coordinatesField = Field.Lookup(location.fields, "Coordinates");

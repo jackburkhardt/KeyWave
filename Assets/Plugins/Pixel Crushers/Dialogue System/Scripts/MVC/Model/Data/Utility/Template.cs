@@ -19,6 +19,7 @@ namespace PixelCrushers.DialogueSystem
         public bool treatItemsAsQuests = true;
         public bool treatQuestsAsActions = true;
         public bool treatLocationsAsSublocations = true;
+        public bool useLocationColors = true;
 
         public List<Field> actorFields = new List<Field>();
         public List<Field> itemFields = new List<Field>();

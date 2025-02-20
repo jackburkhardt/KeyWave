@@ -66,7 +66,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private List<Item> filteredItems;
         
         private List<Item> filteredActions;
-
+        
         private static GUIContent questDescriptionLabel = new GUIContent("Description", "The description when the quest is active.");
         private static GUIContent questSuccessDescriptionLabel = new GUIContent("Success Description", "The description when the quest has been completed successfully. If blank, the Description field is used.");
         private static GUIContent questFailureDescriptionLabel = new GUIContent("Failure Description", "The description when the quest has failed. If blank, the Description field is used.");
@@ -339,7 +339,33 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             if (!(0 <= index && index < filteredActions.Count)) return;
             var item = filteredActions[index];
-            if (EditorTools.IsAssetInFilter(item, itemFilter))
+
+
+            var defaultColor = new Color(0.225f, 0.225f, 0.225f, 1);
+
+            var location = item.LookupLocation("Location", database);
+          
+            if (location != null && template.useLocationColors)
+            {
+                location = location.GetRootLocation(database);
+                var color = location.LookupColor("Color");
+                if (!isActive)
+                {
+
+                    color = EditorTools.ColorBlend(  color, defaultColor, EditorTools.ColorBlendMode.SoftLight);
+                    // color *= 0.5f;
+                    // color += defaultColor * 0.3f;
+                    color = Color.Lerp(defaultColor, color, 0.25f);
+                   
+                }
+                
+                else color = Color.Lerp(defaultColor, color, 0.5f);
+                
+                EditorGUI.DrawRect(rect, color);
+            }
+            
+            
+            else if (EditorTools.IsAssetInFilter(item, itemFilter))
             {
                 ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, isActive, isFocused, true);
             }
@@ -496,7 +522,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     menu.AddDisabledItem(new GUIContent("New Quest"));
                 }
                 menu.AddItem(new GUIContent("Use Quest System"), template.treatItemsAsQuests, ToggleUseQuestSystem);
-                menu.AddItem(new GUIContent("Use Action System"), template.treatQuestsAsActions, ToggleUseActionSystem);
                 menu.AddItem(new GUIContent("Sort/By Name"), false, SortItemsByName);
                 menu.AddItem(new GUIContent("Sort/By Group"), false, SortItemsByGroup);
                 menu.AddItem(new GUIContent("Sort/By ID"), false, SortItemsByID);
@@ -511,7 +536,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent("New Action"), false, AddNewAction);
-                menu.AddItem(new GUIContent("Use Action System"), template.treatQuestsAsActions, ToggleUseActionSystem);
+                menu.AddItem(new GUIContent("Use Location Colors"), template.useLocationColors, ToggleUseLocationColors);
                 menu.AddItem(new GUIContent("Sort/By Name"), false, SortItemsByName);
                 menu.AddItem(new GUIContent("Sort/By Group"), false, SortItemsByGroup);
                 menu.AddItem(new GUIContent("Sort/By ID"), false, SortItemsByID);
@@ -587,6 +612,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             UpdateTreatQuestsAsActions(!template.treatQuestsAsActions);
             showStateFieldAsQuest = template.treatItemsAsQuests;
+        }
+        
+        private void ToggleUseLocationColors()
+        {
+            template.useLocationColors = !template.useLocationColors;
+            SetDatabaseDirty("Toggle Use Location Colors");
         }
 
         private void ToggleSyncItemsFromDB()
