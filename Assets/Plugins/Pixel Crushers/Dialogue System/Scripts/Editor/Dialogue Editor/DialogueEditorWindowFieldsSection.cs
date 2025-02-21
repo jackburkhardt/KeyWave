@@ -424,10 +424,19 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             newValue = DrawSublocationField(label, parentLocation, value, nullText);
             return newValue;
         }
-        
+
         private string DrawActorField(GUIContent label, string value)
         {
-            return DrawAssetPopup<Actor>(value, (database != null) ? database.actors : null, label);
+            var result =  DrawAssetPopup<Actor>(value, (database != null) ? database.actors : null, label);
+            return result;
+        }
+        
+        private string DrawActorField(GUIContent label, string value, out Actor actor)
+        {
+         
+            var result = DrawActorField( label, value);
+            actor = (string.IsNullOrEmpty(result)) ? null : database.GetActor(int.Parse(result));
+            return result;
         }
 
         private string DrawQuestStateField(GUIContent label, string value)

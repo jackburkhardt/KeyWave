@@ -86,7 +86,7 @@ namespace PixelCrushers.DialogueSystem
             return height;
         }
         
-        public string DrawWithToggle(GUIContent guiContent, string luaCode, bool toggle, string toggleLabel)
+        public string DrawWithToggle(GUIContent guiContent, string luaCode, ref bool toggle, string toggleLabel)
         {
             if (database == null) isOpen = false;
 
@@ -102,16 +102,11 @@ namespace PixelCrushers.DialogueSystem
             
             var defaultContentColor = GUI.contentColor;
 
-            if (!toggle)
-            {
-                GUI.contentColor = Color.gray;
-            }
-
             luaCode = EditorGUILayout.TextArea(luaCode);
             
             GUI.contentColor = defaultContentColor;
             
-            return !toggle ? "" : luaCode;
+            return luaCode;
         }
 
         public string Draw(GUIContent guiContent, string luaCode)

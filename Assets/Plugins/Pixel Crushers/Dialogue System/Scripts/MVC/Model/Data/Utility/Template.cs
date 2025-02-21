@@ -25,11 +25,14 @@ namespace PixelCrushers.DialogueSystem
         public List<Field> itemFields = new List<Field>();
         public List<Field> questFields = new List<Field>();
         public List<Field> actionFields = new List<Field>();
+        public List<Field> emailFields = new List<Field>();
         public List<Field> locationFields = new List<Field>();
         public List<Field> sublocationFields = new List<Field>();
         public List<Field> variableFields = new List<Field>();
         public List<Field> conversationFields = new List<Field>();
         public List<Field> dialogueEntryFields = new List<Field>();
+        public List<Field> tutorialFields = new List<Field>();
+        public List<Field> contactFields = new List<Field>();
 
         public List<string> actorPrimaryFieldTitles = new List<string>();
         public List<string> itemPrimaryFieldTitles = new List<string>();
@@ -55,32 +58,46 @@ namespace PixelCrushers.DialogueSystem
 
             template.itemFields.Clear();
             template.itemFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.itemFields.Add(new Field("Item Type", "Item", FieldType.Text));
             template.itemFields.Add(new Field("Pictures", "[]", FieldType.Files));
             template.itemFields.Add(new Field("Description", string.Empty, FieldType.Text));
-            template.itemFields.Add(new Field("Is Item", "True", FieldType.Boolean));
-            template.questFields.Add(new Field("Is Action", "False", FieldType.Boolean));
 
             template.questFields.Clear();
             template.questFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.questFields.Add(new Field("Item Type", "Quest", FieldType.Text));
             template.questFields.Add(new Field("Pictures", "[]", FieldType.Files));
             template.questFields.Add(new Field("Description", string.Empty, FieldType.Text));
             template.questFields.Add(new Field("Success Description", string.Empty, FieldType.Text));
             template.questFields.Add(new Field("Failure Description", string.Empty, FieldType.Text));
             template.questFields.Add(new Field("State", "unassigned", FieldType.Text));
-            template.questFields.Add(new Field("Is Item", "False", FieldType.Boolean));
-            template.questFields.Add(new Field("Is Action", "False", FieldType.Boolean));
             
             template.actionFields.Clear();
             template.actionFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.actionFields.Add(new Field("Item Type", "Action", FieldType.Text));
             template.actionFields.Add(new Field("Pictures", "[]", FieldType.Files));
             template.actionFields.Add(new Field("Description", string.Empty, FieldType.Text));
             template.actionFields.Add(new Field("Success Description", string.Empty, FieldType.Text));
             template.actionFields.Add(new Field("Failure Description", string.Empty, FieldType.Text));
-            
             template.actionFields.Add(new Field("State", "active", FieldType.Text));
-            template.actionFields.Add(new Field("Is Item", "False", FieldType.Boolean));
-            template.actionFields.Add(new Field("Is Action", "True", FieldType.Boolean));
             template.actionFields.Add(new Field("Conditions", string.Empty, FieldType.Text));
+            
+            template.emailFields.Clear();
+            template.emailFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.emailFields.Add(new Field("Item Type", "Email", FieldType.Text));
+            template.emailFields.Add(new Field("Description", string.Empty, FieldType.Text));
+            template.emailFields.Add(new Field("Body", string.Empty, FieldType.Text));
+            template.emailFields.Add(new Field("Sender", string.Empty, FieldType.Actor));
+            template.emailFields.Add(new Field("Is Read", "False", FieldType.Boolean));
+            
+            template.tutorialFields.Clear();
+            template.tutorialFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.tutorialFields.Add(new Field("Item Type", "Tutorial", FieldType.Text));
+            template.tutorialFields.Add(new Field("Description", string.Empty, FieldType.Text));
+            
+            template.contactFields.Clear();
+            template.contactFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.contactFields.Add( new Field("Item Type", "Contact", FieldType.Text));
+            template.contactFields.Add(new Field("Description", string.Empty, FieldType.Text));
 
             template.locationFields.Clear();
             template.locationFields.Add(new Field("Name", string.Empty, FieldType.Text));

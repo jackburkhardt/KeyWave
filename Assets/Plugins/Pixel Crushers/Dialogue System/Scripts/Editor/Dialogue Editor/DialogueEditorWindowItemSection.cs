@@ -65,9 +65,28 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private List<Item> filteredItems;
         
-        private string CurrentItemLabel => new[] {"Item", "Quest", "Action"}[itemToolbarIndex];
-        private List<Item> CurrentItemList => new[] {items, quests, actions}[itemToolbarIndex];
-        private List<Field> CurrentItemTemplateFields => new[] {template.itemFields, template.questFields, template.actionFields}[itemToolbarIndex];
+        private List<Item> items => database.items.FindAll(p => p.IsItem);
+        private List<Item> quests => database.items.FindAll(p => p.IsQuest);
+        private List<Item> actions => database.items.FindAll(p => p.IsAction);
+        private List<Item> emails => database.items.FindAll(p => p.IsEmail);
+        
+        private List<Item> tutorials => database.items.FindAll(p => p.IsTutorial);
+        
+        private List<Item> contacts => database.items.FindAll(p => p.IsContact);
+        
+        
+        private string[] itemToolbarNames => new[] {"Item", "Quest", "Action", "Email", "Contact", "Tutorial"};
+        private string[] itemToolbarNamesPlural => new[] {"Items", "Quests", "Actions", "Emails", "Contacts", "Tutorials"};
+        
+        private List<Action<Item>> drawMethods => new() {DrawItemProperties,  DrawQuestProperties, DrawActionProperties, DrawEmailProperties, DrawContactProperties, DrawTutorialProperties};
+        
+        private List<List<Item>> itemMatrix => new() { items, quests, actions, emails, contacts, tutorials};
+        private List<Field> CurrentItemTemplateFields => new[] {template.itemFields, template.questFields, template.actionFields, template.emailFields, template.contactFields, template.tutorialFields}[itemToolbarIndex];
+
+        private string CurrentItemLabel => itemToolbarNames[itemToolbarIndex];
+        private List<Item> CurrentItemList => itemMatrix[itemToolbarIndex];
+        
+        private Action<Item> CurrentDrawMethod => drawMethods[itemToolbarIndex];
         
         private static GUIContent questDescriptionLabel = new GUIContent("Description", "The description when the quest is active.");
         private static GUIContent questSuccessDescriptionLabel = new GUIContent("Success Description", "The description when the quest has been completed successfully. If blank, the Description field is used.");
@@ -80,8 +99,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             itemFoldouts = new AssetFoldouts();
             itemAssetList = null;
-            UpdateTreatItemsAsQuests(template.treatItemsAsQuests);
-            UpdateTreatQuestsAsActions(template.treatQuestsAsActions);
+           // UpdateTreatItemsAsQuests(template.treatItemsAsQuests);
+            //UpdateTreatQuestsAsActions(template.treatQuestsAsActions);
             needToBuildLanguageListFromItems = true;
             itemReorderableList = null;
             itemListSelectedIndex = -1;
@@ -113,17 +132,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             needToBuildLanguageListFromItems = false;
         }
         
-        private void BuildLanguageListFromActions()
-        {
-            if (database == null || database.items == null) return;
-            database.items.ForEach(item => { if (item.fields != null) BuildLanguageListFromFields(item.fields); });
-            needToBuildLanguageListFromItems = false;
-        }
 
         private void DrawItemSection()
         {
-            
-            var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, new string[] {"Items", "Quests", "Actions"}, GUILayout.Width(300f));
+            var truncatedToolbar = new[] { "Items", "Quests", "Actions" };
+            var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, truncatedToolbar, GUILayout.Width(truncatedToolbar.Length * 100));
 
             if (newItemToolbarIndex != itemToolbarIndex)
             {
@@ -141,20 +154,50 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var filterChanged = DrawFilterMenuBar(label, DrawItemMenu, ref itemFilter, ref hideFilteredOutItems);
             if (filterChanged)  InitializeItemReorderableList(itemList);
             if (database.syncInfo.syncItems) DrawItemSyncDatabase();
-            itemReorderableList.DoLayoutList();
+
+            if (itemReorderableList != null && itemReorderableList.list != null && itemReorderableList.list.Count > 0)
+            {
+                itemReorderableList.DoLayoutList();
+            }
+
+            else
+            {
+                EditorGUILayout.HelpBox("No items found.", MessageType.Info);
+            }
         }
 
         private bool HideFilteredOutItems()
         {
             return hideFilteredOutItems && !string.IsNullOrEmpty(itemFilter);
         }
-        
-        private List<Item> items => database.items.FindAll(p => !p.IsAction && p.IsItem);
-        private List<Item> quests => database.items.FindAll(p => !p.IsAction && !p.IsItem);
-        private List<Item> actions => database.items.FindAll(p => p.IsAction);
 
         private void InitializeItemReorderableList(List<Item> itemsList)
         {
+            foreach (var item in database.items)
+            {
+                if (item.FieldExists("Is Item") && item.LookupBool("Is Item") && !item.LookupBool("Is Action"))
+                {
+                    item.IsItem = true;
+                    item.fields.Remove( Field.Lookup(item.fields, "Is Item"));
+                }
+
+                else if (item.FieldExists("Is Item") && !item.LookupBool("Is Item") && !item.LookupBool("Is Action"))
+                {
+                    item.IsQuest = true;
+                    item.fields.Remove( Field.Lookup(item.fields, "Is Item"));
+                }
+                else if (item.FieldExists("Is Static") && !item.IsAction)
+                {
+                    item.IsAction = true; item.fields.Remove( Field.Lookup(item.fields, "Is Action"));
+                }
+                
+                if (!item.FieldExists("Item Type")) item.fields.Add(new Field("Item Type", "Quest", FieldType.Text));
+
+                if (item.IsFieldAssigned("Item Type") && item.AssignedField("Item Type").value == "Static")
+                    item.AssignedField("Item Type").value = "Action";
+            }
+            
+            
             if (HideFilteredOutItems())
             {
                 filteredItems = itemsList.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
@@ -173,8 +216,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             itemReorderableList.onRemoveCallback = OnItemListRemove;
             itemReorderableList.onSelectCallback = OnItemListSelect;
             itemReorderableList.onReorderCallback = OnItemListReorder;
+
+
             
-            actionReorderableList = null;
+            
         }
         
         
@@ -185,28 +230,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void DrawItemListHeader(Rect rect)
         {
-            if (template.treatItemsAsQuests)
-            {
-                var fieldWidth = (rect.width - 14 - ItemReorderableListTypeWidth) / 4;
-                EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, ItemReorderableListTypeWidth, rect.height), "Type");
-                EditorGUI.LabelField(new Rect(rect.x + 14 + ItemReorderableListTypeWidth, rect.y, fieldWidth, rect.height), "Name");
-                EditorGUI.LabelField(new Rect(rect.x + 14 + ItemReorderableListTypeWidth + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
-            }
-            else
-            {
-                var fieldWidth = (rect.width - 14) / 4;
-                EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, fieldWidth, rect.height), "Name");
-                EditorGUI.LabelField(new Rect(rect.x + 14 + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
-            }
-        }
-        
-        
-        private void DrawActionListHeader(Rect rect)
-        {
+            var label = CurrentItemLabel == "Email" ? "Subject" : "Name";
+            var description = CurrentItemLabel == "Email" ? "Body" : "Description";
+            
             var fieldWidth = (rect.width - 14) / 4;
-            EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, fieldWidth, rect.height), "Name");
-            EditorGUI.LabelField(new Rect(rect.x + 14 + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), "Description");
+            EditorGUI.LabelField(new Rect(rect.x + 14, rect.y, fieldWidth, rect.height), label);
+            EditorGUI.LabelField(new Rect(rect.x + 14 + fieldWidth + 2, rect.y, 3 * fieldWidth - 2, rect.height), description);
         }
+        
 
         private void DrawItemListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
@@ -328,9 +359,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void OnItemListReorder(ReorderableList list)
         {
             
-            
-            
-            
             var item = list.list [list.index] as Item;
             var currentIndexInDatabase = database.items.IndexOf(CurrentItemList[list.index]) - 1;
             currentIndexInDatabase = Mathf.Clamp(currentIndexInDatabase, 0, database.items.Count - 1);
@@ -345,16 +373,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 database.items.Add(item);
             }
-            
-            
-           
             SetDatabaseDirty("Reorder Items");
             
         }
         
-        
-        
-
         private void OnItemListSelect(ReorderableList list)
         {
           
@@ -399,6 +421,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void AddNewItem()
         {
+            template = Template.FromDefault();
             AddNewAssetFromTemplate<Item>(database.items, CurrentItemTemplateFields, CurrentItemLabel);
             SetDatabaseDirty("Add New Item");
             InitializeItemReorderableList(CurrentItemList);
@@ -484,19 +507,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void DrawItemPropertiesFirstPart(Item item)
         {
-            if (item.IsItem)
-            {
-                DrawItemProperties(item);
-            }
-            else if (item.IsAction)
-            {
-                DrawActionProperties(item);
-            }
-            else
-            
-            {
-                DrawQuestProperties(item);
-            }
+            if (item == null) return;
+            CurrentDrawMethod.Invoke(item);
         }
 
         private void DrawItemProperties(Item item)
@@ -660,13 +672,42 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     SetDatabaseDirty("Remove Auto Set Success Field");
                 }
             }
-            
-            
+        }
 
+
+        private void DrawEmailProperties(Item item)
+        {
             
+            // Descriptions:
+            DrawRevisableTextAreaField(new GUIContent("Body"), item, null, item.fields, "Description");
             
+            // From:
             
+            Field senderField = Field.Lookup(item.fields, "Sender");
+            if (senderField == null)
+            {
+                senderField = new Field("Sender", string.Empty, FieldType.Actor);
+                item.fields.Add(senderField);
+                SetDatabaseDirty("Create Sender Field");
+            }
+
+            senderField.value = DrawActorField(new GUIContent("Sender"), senderField.value);
+         
+        }
+
+        private void DrawContactProperties(Item item)
+        {
+            // Descriptions:
+            DrawRevisableTextAreaField(new GUIContent("Body"), item, null, item.fields, "Description");
             
+            DrawStartConversationProperties( item);
+        }
+        
+        private void DrawTutorialProperties(Item item)
+        {
+            // Descriptions:
+            DrawRevisableTextAreaField(new GUIContent("Body"), item, null, item.fields, "Description");
+         
         }
         
     
@@ -743,10 +784,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 EditorGUILayout.HelpBox( "Static actions must be \"active\" to become available. You can set this state during a conversation.", MessageType.Warning);
             }
-            
-            
-            
-            
             
             
             
@@ -868,7 +905,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
               
             
             //Script
-            DrawActionScript(item);
+            
+            if (item.IsStatic) DrawScript( item, "Script", $"SetQuestState(\"{item.Name}\", \"success\");");
+            else DrawDoubleScripts( item, "Success", $"SetQuestState(\"{item.Name}\", \"success\");");
             
             EditorGUILayout.Space();
             
@@ -1244,59 +1283,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 DrawMainSectionField(field);
             }
         }
-
-        private void DrawDoubleConditions(Asset asset, string fieldName, string firstConditionDefaultValue)
-        {
-             var conditions = Field.Lookup(asset.fields, fieldName);
-             
-             if (conditions == null)
-             {
-                 conditions = new Field(fieldName,  $"{firstConditionDefaultValue} and (true)", FieldType.Text);
-                 asset.fields.Add(conditions);
-             }
-
-             if (!conditions.value.Contains(" and "))
-             {
-                    conditions.value = $"{firstConditionDefaultValue} and (true)";
-                    return;
-             }
-             
-             EditorWindowTools.EditorGUILayoutBeginGroup();
-
-             luaConditionWizard.database = database;
-
-             string newDefaultCondition;
-
-             //if (item.IsStatic)
-             //{
-             //    newDefaultCondition =  $"CurrentQuestState(\"{item.Name}\") == \"active\""; 
-             //}
-
-             GUI.enabled = false; 
-             var hasDefault = conditions.value.StartsWith($"{firstConditionDefaultValue} and (");
-             newDefaultCondition = luaConditionWizard.DrawWithToggle(new GUIContent("Default Condition", "Default lua statement for actions."), firstConditionDefaultValue, hasDefault, "Include"); 
-             GUI.enabled = true;
-             
-             if (string.IsNullOrEmpty(newDefaultCondition))
-             {
-                 newDefaultCondition = "true";
-             }
-             
-             
-             var additionalConditionsText = conditions.value.Substring(conditions.value.Split(" and ")[0].Length + 5);
-             additionalConditionsText = additionalConditionsText.Substring(1, additionalConditionsText.Length - 2); //removes parenthesis
-             if (additionalConditionsText == "true") additionalConditionsText = string.Empty;
-             
-             
-             //var label = item.IsStatic ? "Conditions" : "Additional Conditions";
-             
-             var newAdditionalConditions = luaConditionWizard.Draw(new GUIContent( "Additional Conditions", "Optional Lua statement that must be true to use this entry."), additionalConditionsText); 
-             if (newAdditionalConditions.Length == 0) newAdditionalConditions = "true"; 
-             conditions.value = $"{newDefaultCondition} and ({newAdditionalConditions})";
-                
-             EditorWindowTools.EditorGUILayoutEndGroup();
-        }
-
+        
         private void DrawConditions(Asset asset, string fieldName, string prependedCondition = "")
         {
             var conditions = Field.Lookup(asset.fields, fieldName);
@@ -1327,8 +1314,110 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 
             EditorWindowTools.EditorGUILayoutEndGroup();
         }
-        private void DrawActionScript(Item item)
+
+        private void DrawDoubleConditions(Asset asset, string fieldName, string firstConditionDefaultValue)
         {
+             var conditions = Field.Lookup(asset.fields, fieldName);
+             
+             if (conditions == null)
+             {
+                 conditions = new Field(fieldName,  $"{firstConditionDefaultValue} and (true)", FieldType.Text);
+                 asset.fields.Add(conditions);
+             }
+
+             if (!conditions.value.Contains(" and "))
+             {
+                    conditions.value = $"{firstConditionDefaultValue} and (true)";
+                    return;
+             }
+             
+             EditorWindowTools.EditorGUILayoutBeginGroup();
+
+             luaConditionWizard.database = database;
+
+             string newDefaultCondition;
+             
+             var additionalConditionsText = conditions.value.Substring(conditions.value.Split(" and ")[0].Length + 5);
+             additionalConditionsText = additionalConditionsText.Substring(1, additionalConditionsText.Length - 2); //removes parenthesis
+             if (additionalConditionsText == "true") additionalConditionsText = string.Empty;
+
+             
+             var hasDefault = conditions.value.StartsWith($"{firstConditionDefaultValue} and (");
+
+           
+             if (hasDefault)
+             {
+                 GUI.enabled = false; 
+                 newDefaultCondition = luaConditionWizard.DrawWithToggle(new GUIContent("Default Condition", "Default lua statement for actions."), firstConditionDefaultValue, ref hasDefault, "Include Default ");
+                 if (!hasDefault || string.IsNullOrEmpty(newDefaultCondition)) newDefaultCondition = "true";
+                 
+                 GUI.enabled = true;
+                 
+                 var newAdditionalConditions = luaConditionWizard.Draw(new GUIContent( "Additional Conditions", "Optional Lua statement that must be true to use this entry."), additionalConditionsText); 
+                 if (newAdditionalConditions.Length == 0) newAdditionalConditions = "true"; 
+                 conditions.value = $"{newDefaultCondition} and ({newAdditionalConditions})";
+             }
+
+             else
+             {
+                 newDefaultCondition = "true";
+                 var newAdditionalConditions = luaConditionWizard.DrawWithToggle(new GUIContent( "Conditions", "Optional Lua statement that must be true to use this entry."), additionalConditionsText, ref hasDefault, "Include Default ");
+                 if (newAdditionalConditions.Length == 0) newAdditionalConditions = "true"; 
+                 if (hasDefault)
+                 {
+                     conditions.value = $"{firstConditionDefaultValue} and ({newAdditionalConditions})";
+                 }
+                 else
+                 {
+                     conditions.value = $"{newDefaultCondition} and ({newAdditionalConditions})";
+                 }
+             }
+                
+             EditorWindowTools.EditorGUILayoutEndGroup();
+        }
+        
+        
+        private void DrawScript(Asset asset, string fieldName, string prependedScript = "")
+        {
+            
+            var script = Field.Lookup(asset.fields, fieldName);
+            
+            
+                
+            var hasPrepended = !string.IsNullOrEmpty(prependedScript);
+            
+            if (hasPrepended && prependedScript.EndsWith(";")) prependedScript = prependedScript.Substring(0, prependedScript.Length - 1);
+            
+            if (script == null)
+            {
+                script = new Field(fieldName,  hasPrepended ? $"{prependedScript};" : "", FieldType.Text);
+                asset.fields.Add(script);
+            }
+            
+            
+            EditorWindowTools.EditorGUILayoutBeginGroup();
+
+            luaConditionWizard.database = database;
+             
+            var scriptText = hasPrepended ? script.value.Substring(script.value.Split(script.value.Contains("; ") ? "; " : ";") [0].Length + 2) : script.value;
+            
+            
+          
+             
+             
+            //var label = item.IsStatic ? "Conditions" : "Additional Conditions";
+             
+            var newScript = luaConditionWizard.Draw(new GUIContent( "Script", "Script that runs when this action is completed."), scriptText); 
+            script.value = hasPrepended ? $"{prependedScript}; {newScript}" : newScript;
+                
+            EditorWindowTools.EditorGUILayoutEndGroup();
+        }
+
+       
+        private void DrawDoubleScripts(Item item, string fieldName, string firstScriptDefaultValue)
+        {
+            if (firstScriptDefaultValue.EndsWith(";")) firstScriptDefaultValue = firstScriptDefaultValue.Substring(0, firstScriptDefaultValue.Length - 1);
+            
             var script = Field.Lookup(item.fields, "Script");
             if (script == null)
             {
@@ -1344,31 +1433,34 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             EditorWindowTools.EditorGUILayoutBeginGroup();
             luaScriptWizard.database = database;
-            string newDefaultScript;
+            string newDefaultScript = string.Empty;
             
-            if (item.IsStatic)
-            {
-                newDefaultScript = $"SetQuestState(\"{item.Name}\", \"success\")"; 
-            }
             
-            else
+            var additionalScript = script.value.Substring(script.value.Split(script.value.Contains("; ") ? "; " : ";") [0].Length + 2);
+            var newAdditionalScript = string.Empty;
+            
+             
+            var hasDefault = script.value.StartsWith($"{firstScriptDefaultValue}; ");
+            if (hasDefault)
             {
                 GUI.enabled = false; 
-                var defaultScript = $"SetQuestState(\"{item.Name}\", \"success\")";
+                newDefaultScript = luaScriptWizard.DrawWithToggle(new GUIContent("Default Script", "Default lua script for actions."), firstScriptDefaultValue, ref hasDefault, "Include Default ");
+                if (!hasDefault || string.IsNullOrEmpty(newDefaultScript)) newDefaultScript = string.Empty;
+                 
+                GUI.enabled = true;
+                 
+                newAdditionalScript = luaConditionWizard.Draw(new GUIContent( "Additional Script", "Optional Lua script that runs after this action."), additionalScript); 
+            }
 
-                var appendsDefault = !script.value.StartsWith(";");
-                
-                newDefaultScript = luaScriptWizard.DrawWithToggle(new GUIContent("Default Script", "Default lua script for actions that runs when the action is terminated."), defaultScript, appendsDefault, "Include" ); 
-                GUI.enabled = true; 
+            else
+            {
+                newAdditionalScript = luaConditionWizard.DrawWithToggle(new GUIContent( "Script", "Optional Lua statement that must be true to use this entry."), additionalScript, ref hasDefault, "Include Default ");
+                if (hasDefault) newDefaultScript = firstScriptDefaultValue;
+               
             }
             
-            var label = item.IsStatic ? "Script" : "Additional Script";
-                   
-            var additionalScript = script.value.Substring(script.value.Split(script.value.Contains("; ") ? "; " : ";") [0].Length + 2);
-            var newAdditionalScript = luaScriptWizard.Draw(new GUIContent( label, "Optional Lua script that will be run after the default script."), additionalScript);
+            script.value =  $"{newDefaultScript}; {newAdditionalScript}";
             
-            
-            script.value = $"{newDefaultScript}; {newAdditionalScript}";
             EditorWindowTools.EditorGUILayoutEndGroup();
         }
 
@@ -1690,6 +1782,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void DrawStartConversationProperties(Asset asset)
         {
                 Field conversation = Field.Lookup(asset.fields, "Conversation");
+                if (conversation == null)
+                {
+                    conversation = new Field("Conversation", string.Empty, FieldType.Text);
+                    asset.fields.Add(conversation);
+                    SetDatabaseDirty("Create Conversation Field");
+                }
+                
+                
                 StartConversationMethod startConversationMethod = asset.FieldExists("Entry Count")
                     ?  StartConversationMethod.Generate : asset.LookupBool( "Auto Conversation Title")
                         ?
@@ -2871,7 +2971,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 
                 if (int.TryParse( extractedContents[0] , out var secondsFromInt)) blackoutTime = secondsFromInt;
                 
-                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) blackoutTime = secondsFromLua;
+               // else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) blackoutTime = secondsFromLua;
                 
                 if (extractedContents.Count > 1)
                 {

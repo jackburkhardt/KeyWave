@@ -23,10 +23,13 @@ namespace PixelCrushers.DialogueSystem
         public const string VoiceID = "Voice ID";
         public const string Knowledge = "Knowledge"; // Used for AI Addon
         public const string Goals = "Goals"; // Used for AI Addon
-
+        
+        public const string ItemType = "Item Type";
         public const string IsItem = "Is Item";
         public const string IsAction = "Is Action";
         public const string IsStatic = "Is Static";
+        public const string IsEmail = "Is Email";
+        public const string IsQuest = "Is Quest";
         public const string RepeatCount = "Repeat Count";
         
         public const string IsSublocation = "Is Sublocation";

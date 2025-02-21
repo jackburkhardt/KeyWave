@@ -23,20 +23,65 @@ namespace PixelCrushers.DialogueSystem
         /// </value>
         public bool IsItem
         {
-            get { return LookupBool(DialogueSystemFields.IsItem); }
-            set { Field.SetValue(fields, DialogueSystemFields.IsItem, value); }
+            get { return LookupValue(DialogueSystemFields.ItemType) == "Item"; }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Item");
+            }
+        }
+        
+        public bool IsQuest
+        {
+            get { return LookupValue(DialogueSystemFields.ItemType) == "Quest"; }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Quest");
+            }
         }
         
         public bool IsAction
         {
-            get { return LookupBool(DialogueSystemFields.IsAction); }
-            set { Field.SetValue(fields, DialogueSystemFields.IsAction, value); }
+            get { return LookupValue(DialogueSystemFields.ItemType) == "Action"; }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Action");
+            }
         }
         
         public bool IsStatic
         {
-            get { return LookupBool(DialogueSystemFields.IsStatic) && LookupBool(DialogueSystemFields.IsAction); }
-            set { Field.SetValue(fields, DialogueSystemFields.IsStatic, value); }
+            get { return LookupBool(DialogueSystemFields.IsStatic); }
+            set
+            {
+                Field.SetValue(fields, DialogueSystemFields.IsStatic, value);
+            }
+        }
+        
+        public bool IsEmail
+        {
+            get { return LookupValue(DialogueSystemFields.ItemType) == "Email"; }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Email");
+            }
+        }
+        
+        public bool IsTutorial
+        {
+            get { return LookupValue(DialogueSystemFields.ItemType) == "Tutorial"; }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Tutorial");
+            }
+        }
+        
+        public bool IsContact
+        {
+            get {  return LookupValue(DialogueSystemFields.ItemType) == "Contact";  }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Contact");
+            }
         }
         
         public int RepeatCount

@@ -135,7 +135,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 EditorGUI.EndDisabledGroup();
             }
             EditorGUI.BeginChangeCheck();
-            asset.Name = EditorGUILayout.TextField(new GUIContent("Name", "Name of this asset."), asset.Name);
+            
+            if (asset is Item && CurrentItemLabel == "Email") 
+                asset.Name = EditorGUILayout.TextField(new GUIContent("Subject", "The subject of this email."), asset.Name);
+            
+            else asset.Name = EditorGUILayout.TextField(new GUIContent("Name", "Name of this asset."), asset.Name);
             if (EditorGUI.EndChangeCheck()) SetDatabaseDirty("Name");
             if (asset is Actor) DrawActorPortrait(asset as Actor);
             if (asset is Item) DrawItemPropertiesFirstPart(asset as Item);
