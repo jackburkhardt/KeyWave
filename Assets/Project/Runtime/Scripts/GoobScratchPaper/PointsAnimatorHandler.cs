@@ -7,11 +7,9 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Animator))]
 public class PointsAnimatorHandler : MonoBehaviour
 {
-    public Points.Type type;
+    public string type;
     
-    [HideIf("type", Points.Type.Null)]
     public string showTrigger = "Show";
-    [HideIf("type", Points.Type.Null)]
     public string hideTrigger = "Hide";
 
     public string onPointsIncreaseTrigger = "OnPointsIncrease";
@@ -54,12 +52,12 @@ public class PointsAnimatorHandler : MonoBehaviour
         if (!string.IsNullOrEmpty(hideTrigger)) animator.SetTrigger(hideTrigger);
     }
     
-    private void SetTriggerIfValid(Points.Type points, string trigger)
+    private void SetTriggerIfValid(string points, string trigger)
     {
-        if (!string.IsNullOrEmpty(trigger) && (points == this.type || points == Points.Type.Null)) animator.SetTrigger(trigger);
+        if (!string.IsNullOrEmpty(trigger) && (points == this.type || points == string.Empty)) animator.SetTrigger(trigger);
     }
     
-    private void HandlePointsChange(Points.Type pointType, int amount)
+    private void HandlePointsChange(string pointType, int amount)
     {
         
         if (amount > 0)

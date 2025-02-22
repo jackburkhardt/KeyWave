@@ -33,6 +33,7 @@ namespace PixelCrushers.DialogueSystem
         public List<Field> dialogueEntryFields = new List<Field>();
         public List<Field> tutorialFields = new List<Field>();
         public List<Field> contactFields = new List<Field>();
+        public List<Field> pointsCategoryFields = new List<Field>();
 
         public List<string> actorPrimaryFieldTitles = new List<string>();
         public List<string> itemPrimaryFieldTitles = new List<string>();
@@ -98,6 +99,12 @@ namespace PixelCrushers.DialogueSystem
             template.contactFields.Add(new Field("Name", string.Empty, FieldType.Text));
             template.contactFields.Add( new Field("Item Type", "Contact", FieldType.Text));
             template.contactFields.Add(new Field("Description", string.Empty, FieldType.Text));
+            
+            template.pointsCategoryFields.Clear();
+            template.pointsCategoryFields.Add(new Field("Name", string.Empty, FieldType.Text));
+            template.pointsCategoryFields.Add(new Field("Description", string.Empty, FieldType.Text));
+            template.pointsCategoryFields.Add(new Field("Color", string.Empty, FieldType.Color));
+            template.pointsCategoryFields.Add( new Field("Item Type", "Points Category", FieldType.Text));
 
             template.locationFields.Clear();
             template.locationFields.Add(new Field("Name", string.Empty, FieldType.Text));

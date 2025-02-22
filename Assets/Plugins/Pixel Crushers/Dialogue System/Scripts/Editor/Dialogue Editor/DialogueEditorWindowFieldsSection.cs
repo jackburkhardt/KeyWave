@@ -20,7 +20,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
     /// </summary>
     public partial class DialogueEditorWindow
     {
-
         private List<string> textAreaFields => new List<string>() { "Description", "Success Description", "Failure Description", "Conditions", "Script"};
         private static readonly string[] questStateStrings = { "(None)", "unassigned", "active", "success", "failure", "done", "abandoned", "grantable", "returnToNPC" };
         private static readonly string[] actorStateStrings = { "(None)", "unidentified", "mentioned", "amicable", "botched", "unapproachable", "approachable", "confronted" };
@@ -232,6 +231,24 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             EditorGUILayout.EndHorizontal();
             field.value = EditorGUILayout.TextArea(field.value);
         }
+        
+        
+        private void DrawColorField(GUIContent label, Asset asset, string fieldTitle)
+        {
+            Field colorField = Field.Lookup(asset.fields, fieldTitle);
+            
+            if (colorField == null)
+            {
+                colorField = new Field(fieldTitle, "FFFFFF", FieldType.Color);
+                asset.fields.Add(colorField);
+                SetDatabaseDirty("Create Color Field");
+            }
+            
+            var color = EditorGUILayout.ColorField(label,
+                EditorTools.NodeColorStringToColor(colorField.value), true, true, false);
+            colorField.value = Tools.ToWebColor(color);
+        }
+        
         private void DrawTextArea(Field field)
         {
             EditorGUI.BeginChangeCheck();

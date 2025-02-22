@@ -74,15 +74,19 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
         private List<Item> contacts => database.items.FindAll(p => p.IsContact);
         
+        private List<Item> points => database.items.FindAll(p => p.IsPointCategory);
         
-        private string[] itemToolbarNames => new[] {"Item", "Quest", "Action", "Email", "Contact", "Tutorial"};
-        private string[] itemToolbarNamesPlural => new[] {"Items", "Quests", "Actions", "Emails", "Contacts", "Tutorials"};
         
-        private List<Action<Item>> drawMethods => new() {DrawItemProperties,  DrawQuestProperties, DrawActionProperties, DrawEmailProperties, DrawContactProperties, DrawTutorialProperties};
+        private string[] itemToolbarNames => new[] {"Item", "Quest", "Action", "Email", "Contact", "Tutorial", "Point", "Uncategorized"};
+        private string[] itemToolbarNamesPlural => new[] {"Items", "Quests", "Actions", "Emails", "Contacts", "Tutorials", "Points"};
         
-        private List<List<Item>> itemMatrix => new() { items, quests, actions, emails, contacts, tutorials};
-        private List<Field> CurrentItemTemplateFields => new[] {template.itemFields, template.questFields, template.actionFields, template.emailFields, template.contactFields, template.tutorialFields}[itemToolbarIndex];
+        private List<Action<Item>> drawMethods => new() {DrawItemProperties,  DrawQuestProperties, DrawActionProperties, DrawEmailProperties, DrawContactProperties, DrawTutorialProperties, DrawPointsCategoryProperties, DrawUncategorizedProperties};
+        
+        private List<List<Item>> itemMatrix => new() { items, quests, actions, emails, contacts, tutorials, points, uncategorized};
 
+        private List<Item> uncategorized;
+        private List<Field> CurrentItemTemplateFields => new[] {template.itemFields, template.questFields, template.actionFields, template.emailFields, template.contactFields, template.tutorialFields, template.pointsCategoryFields}[itemToolbarIndex];
+        
         private string CurrentItemLabel => itemToolbarNames[itemToolbarIndex];
         private List<Item> CurrentItemList => itemMatrix[itemToolbarIndex];
         
@@ -134,14 +138,23 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
 
         private void DrawItemSection()
-        {
-            var truncatedToolbar = new[] { "Items", "Quests", "Actions" };
-            var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, truncatedToolbar, GUILayout.Width(truncatedToolbar.Length * 100));
+        { 
+            uncategorized = database.items.FindAll(p => !p.IsItem && !p.IsQuest && !p.IsAction && !p.IsEmail && !p.IsContact && !p.IsTutorial && !p.IsPointCategory);
+
+            var toolbarNames = itemToolbarNamesPlural.ToList();
+            
+            if (uncategorized.Count != 0)
+            {
+                toolbarNames.Add($"Uncategorized");
+            }
+            
+            var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, toolbarNames.ToArray(), GUILayout.Width(toolbarNames.Count * 100));
 
             if (newItemToolbarIndex != itemToolbarIndex)
             {
                 itemToolbarIndex = newItemToolbarIndex;
                 itemReorderableList = null;
+                inspectorSelection = null;
             }
             
             DrawItems( CurrentItemLabel, CurrentItemList);
@@ -201,13 +214,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (HideFilteredOutItems())
             {
                 filteredItems = itemsList.FindAll(item => EditorTools.IsAssetInFilter(item, itemFilter));
-                itemReorderableList = new ReorderableList(filteredItems, typeof(Item), true, true, true, true);
+               
             }
             else
             {
                 filteredItems = itemsList;
-                itemReorderableList = new ReorderableList(filteredItems, typeof(Item), true, true, true, true);
             }
+            
+            itemReorderableList = new ReorderableList(filteredItems, typeof(Item), true, true, true, true);
             
             itemReorderableList.drawHeaderCallback = DrawItemListHeader;
             itemReorderableList.drawElementCallback = DrawItemListElement;
@@ -405,6 +419,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 if (CurrentItemLabel == "Action") 
                     menu.AddItem(new GUIContent("Use Location Colors"), template.useLocationColors, ToggleUseLocationColors);
                 
+                if (CurrentItemLabel == "Point") 
+                    menu.AddItem(new GUIContent("Cleanup Excess Points"), false, CleanupExcessPoints);
+                
                 menu.AddItem(new GUIContent("Sort/By Name"), false, SortItemsByName);
                 menu.AddItem(new GUIContent("Sort/By Group"), false, SortItemsByGroup);
                 menu.AddItem(new GUIContent("Sort/By ID"), false, SortItemsByID);
@@ -465,6 +482,42 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             InitializeItemReorderableList(items);
             SetDatabaseDirty("Toggle Sync Items");
+        }
+
+        private void CleanupExcessPoints()
+        {
+            var pointLabels = points.Select(x => x.Name).ToList();
+            
+            bool cleanup = false;
+            List<Field> fieldsToRemove = new List<Field>();
+            List<string> excessPointLabels = new List<string>();
+
+            foreach (var item in database.items)
+            {
+                var nonmatchingPoints = item.fields
+                    .Where(p => p.title.EndsWith(" Points") && !pointLabels.Contains(p.title.Split(" ")[^2])).ToList();
+                if (nonmatchingPoints.Count > 0)
+                {
+                    fieldsToRemove.AddRange(nonmatchingPoints);
+                    excessPointLabels.AddRange(nonmatchingPoints.Select(x => x.title));
+                }
+            }
+
+            excessPointLabels = excessPointLabels.Distinct().ToList();
+            
+            if (fieldsToRemove.Count > 0)
+            {
+                if (EditorUtility.DisplayDialog("Cleanup Excess Points",
+                        $"Delete {fieldsToRemove.Count} fields that don't match any point category?", "Yes", "No"))
+                {
+                    foreach (var item in database.items)
+                    {
+                        item.fields.RemoveAll(x => fieldsToRemove.Contains(x));
+                    }
+                }
+            }
+            
+            
         }
 
         private void DrawItemSyncDatabase()
@@ -709,6 +762,144 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             DrawRevisableTextAreaField(new GUIContent("Body"), item, null, item.fields, "Description");
          
         }
+
+        private void DrawPointsCategoryIconPreview(Item item, float size = 100f, Color multiplyColor = default, Color backgroundColor = default)
+        {
+            if (item.icon == null) return;
+            Color defaultBGColor = backgroundColor == default ? EditorGUIUtility.isProSkin ? new Color(0.18f, 0.18f, 0.18f) : new Color(0.76f, 0.76f, 0.76f) : backgroundColor;
+
+            
+            
+            void DrawImageWithRing(Texture2D image, float size, float thickness, Color imageColor, Color ringColor,  float imageScale = 0.3f)
+            {
+                thickness *= size;
+                // Get position
+                Rect rect = GUILayoutUtility.GetRect(size, size, GUILayout.ExpandWidth(false));
+                Vector2 center = rect.center;
+
+                // Draw the outer ring
+                Handles.color = multiplyColor == default ? ringColor : EditorTools.ColorBlend( ringColor, multiplyColor, EditorTools.ColorBlendMode.Multiply);
+                
+                
+                Handles.DrawSolidArc(center, Vector3.forward, Vector2.up, 360, size * 0.5f);
+
+                // Fill the center with the default Unity inspector background color
+                 Handles.color = defaultBGColor;
+                
+                
+                Handles.DrawSolidArc(center, Vector3.forward, Vector2.up, 360, size * 0.5f - thickness);
+
+                // Draw the image inside the ring
+                float innerSize = size - thickness * 2 * imageScale;  // Ensure it fits within the ring
+                Rect imageRect = new Rect(center.x - innerSize * 0.5f, center.y - innerSize * 0.5f, innerSize, innerSize);
+                var oldColor = GUI.color;
+                GUI.color = multiplyColor == default ? imageColor : EditorTools.ColorBlend( imageColor, multiplyColor, EditorTools.ColorBlendMode.Multiply);
+                GUI.DrawTexture(imageRect, image, ScaleMode.ScaleToFit);
+                GUI.color = oldColor;
+            }
+            
+            DrawImageWithRing(item.icon, size, 0.05f, item.LookupColor("Color"), item.LookupColor("Ring Color"), item.LookupFloat("Icon Scale"));
+            
+        }
+        private void DrawPointsCategoryProperties(Item item)
+        {
+            
+            Field name = Field.Lookup(item.fields, "Name");
+            if (name == null)
+            {
+                name = new Field("Name", $"New Points {item.id}", FieldType.Text);
+                item.fields.Add(name);
+                SetDatabaseDirty("Create Name Field");
+            }
+            
+            var newName = EditorGUILayout.TextField(new GUIContent("Name"), name.value);
+            
+            
+            
+            if (string.IsNullOrEmpty(newName)) newName = name.value;
+            
+            if (points.Any(p => p.Name == newName))
+            {
+                newName = name.value;
+            }
+            
+            if (newName != name.value)
+            {
+                SetDatabaseDirty("Change Name Field");
+
+                foreach (var i in database.items)
+                {
+                    if (i.IsFieldAssigned($"{name.value} Points"))
+                    {
+                        i.AssignedField($"{name.value} Points").title = $"{newName} Points";
+                    }
+                }
+            }
+            
+            name.value = newName;
+            
+            DrawRevisableTextAreaField(new GUIContent("Description"), item, null, item.fields, "Description");
+            
+            
+            DrawColorField( new GUIContent("Color"), item, "Color");
+            
+            DrawColorField( new GUIContent("Ring Color"), item, "Ring Color");
+            
+            Field iconScale = Field.Lookup(item.fields, "Icon Scale");
+            if (iconScale == null)
+            {
+                iconScale = new Field("Icon Scale", "0.3", FieldType.Text);
+                item.fields.Add(iconScale);
+                SetDatabaseDirty("Create Icon Scale Field");
+            }
+            
+            iconScale.value = EditorGUILayout.TextField(new GUIContent("Icon Scale"), iconScale.value);
+            
+            
+            var newIcon = EditorGUILayout.ObjectField(new GUIContent("Icon", "The icon used for this point category."),
+                item.icon, typeof(Texture2D), false, GUILayout.Height(64)) as Texture2D;
+            if (newIcon != item.icon)
+            {
+                item.icon = newIcon;
+                ClearActorInfoCaches();
+                SetDatabaseDirty("Item Icon");
+            }
+            
+            
+            DrawPointsCategoryIconPreview(item);
+            
+            var currentScore = item.LookupInt("Score");
+            var newScore = EditorGUILayout.IntField(new GUIContent("Score"), currentScore);
+            if (newScore != currentScore)
+            {
+                Field.SetValue(item.fields, "Score", newScore);
+                SetDatabaseDirty("Change Score Field");
+            }
+            
+            var maxScore = item.LookupInt("Max Score");
+            var newMaxScore = EditorGUILayout.IntField(new GUIContent("Max Score"), maxScore);
+            if (newMaxScore != maxScore)
+            {
+                Field.SetValue(item.fields, "Max Score", newMaxScore);
+                SetDatabaseDirty("Change Score Field");
+            }
+            
+        }
+        
+        private void DrawUncategorizedProperties(Item item)
+        {
+            
+            Field itemTypeField = Field.Lookup(item.fields, "Item Type");
+            if (itemTypeField == null)
+            {
+                itemTypeField = new Field("Item Type", "Uncategorized", FieldType.Text);
+                item.fields.Add(itemTypeField);
+                SetDatabaseDirty("Create Item Type Field");
+            }
+            
+            itemTypeField.value = EditorGUILayout.TextField(new GUIContent("Item Type"), itemTypeField.value);
+         
+        }
         
     
 
@@ -831,10 +1022,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             EditorGUILayout.Space();
             
             DrawActionLocation(item);
-            
-           
-            
-            
             
             //Start Conversation
             
@@ -1464,25 +1651,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             EditorWindowTools.EditorGUILayoutEndGroup();
         }
 
-        private void DrawPoints(Asset item, string prefix = "", bool includePointsReduction = true)
+        private void DrawPoints(Asset asset, string prefix = "", bool includePointsReduction = true, Color backgroundColor = default)
         {
             if (!string.IsNullOrEmpty(prefix) && !prefix.EndsWith(" ")) prefix += " ";
-             var points = new string[]
-                {
-                    "Skills",
-                    "Context",
-                    "Teamwork",
-                    "Wellness",
-                };
+             var pointsLabels = points.Select(p => p.Name).ToArray();
+             var pointsColors = points.Select(p => p.LookupColor("Color")).ToArray();
            
-                var pointColors = new Color[]
-                {
-                    new Color(  243f/255f, 223f/255f, 184f/255f),
-                    new Color(  242f/255f, 184f/255f, 194f/255f),
-                    new Color( 191f/255f, 184f/255f, 242f/255f),
-                    new Color( 213f/255f, 242f/255f, 201f/255f),
-                
-                };
 
                 var alignedTextStyle = new GUIStyle( EditorStyles.label );
                 alignedTextStyle.alignment = TextAnchor.MiddleCenter;
@@ -1494,14 +1668,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 
                 EditorGUILayout.BeginHorizontal();
 
-                for (int i = 0; i < points.Length; i++)
+                for (int i = 0; i < points.Count; i++)
                 {
-                    Field pointValue = Field.Lookup(item.fields, $"{prefix}{points[i]} Points");
+                    Field pointValue = Field.Lookup(asset.fields, $"{prefix}{points[i].Name} Points");
                
                     if (pointValue == null)
                     {
-                        pointValue = new Field($"{prefix}{points[i]} Points", "0", FieldType.Number);
-                        item.fields.Add(pointValue);
+                        pointValue = new Field($"{prefix}{points[i].Name} Points", "0", FieldType.Number);
+                        asset.fields.Add(pointValue);
                         SetDatabaseDirty("Create Points Field");
                     }
                 
@@ -1510,21 +1684,14 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     EditorGUILayout.Separator();
                     EditorGUILayout.BeginVertical();
                     GUILayout.FlexibleSpace();
-                    GUILayout.Label(points[i], alignedTextStyle,  GUILayout.MaxWidth(100));
+                    GUILayout.Label(points[i].Name, alignedTextStyle,  GUILayout.MaxWidth(100));
 
-                    var pointsAsInt = Field.LookupInt(item.fields, $"{prefix}{points[i]} Points");
+                    var pointsAsInt = Field.LookupInt(asset.fields, $"{prefix}{points[i].Name} Points");
 
-
-
-                    if (pointsAsInt > 0) GUI.contentColor = pointColors[i];
-                    else if (pointsAsInt < 0) GUI.contentColor = Color.Lerp(new Color(0.25f, 0, 0), pointColors[i], 0.05f);
-                    else GUI.contentColor = new Color(0.1f, 0.1f, 0.1f);
-               
-                    var icon = EditorGUIUtility.Load($"Icons/{points[i]}.png") as Texture2D;
-               
-                    GUILayout.Label(icon , GUILayout.MaxWidth(60), GUILayout.MinWidth(50), GUILayout.MaxHeight(60) );
-                    GUI.contentColor = defaultContentColor;
-               
+                    var colorMultiplier = pointsAsInt < 0 ? Color.red : pointsAsInt == 0 ? Color.grey : default;
+                    
+                    DrawPointsCategoryIconPreview(points[i], 100f, colorMultiplier, backgroundColor);
+                    
                     pointValue.value =
                         $"{EditorGUILayout.IntField(pointsAsInt, GUILayout.MaxWidth(100))}";
                     EditorGUILayout.EndVertical();
@@ -1535,38 +1702,38 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 
                 if (includePointsReduction)
                 {
-                    Field pointsReductionOnRepeat = Field.Lookup(item.fields, "Repeat Points Reduction");
+                    Field pointsReductionOnRepeat = Field.Lookup(asset.fields, "Repeat Points Reduction");
                     
                     if (pointsReductionOnRepeat == null)
                     {
                         pointsReductionOnRepeat = new Field("Repeat Points Reduction", "0", FieldType.Number);
-                        item.fields.Add(pointsReductionOnRepeat);
+                        asset.fields.Add(pointsReductionOnRepeat);
                         SetDatabaseDirty("Create Repeatable Field");
                     }
                     
                     DrawEditorItemWithRepeatableIcon( ()=>
-                            pointsReductionOnRepeat.value = EditorGUILayout.FloatField(new GUIContent($"{Field.LookupFloat( item.fields, "Repeat Points Reduction") * 100}% Points Reduction", "The amount of points reduced from the action when repeated."), Field.LookupFloat(item.fields, "Repeat Points Reduction")).ToString(), 
+                            pointsReductionOnRepeat.value = EditorGUILayout.FloatField(new GUIContent($"{Field.LookupFloat( asset.fields, "Repeat Points Reduction") * 100}% Points Reduction", "The amount of points reduced from the action when repeated."), Field.LookupFloat(asset.fields, "Repeat Points Reduction")).ToString(), 
                         150f);
                     
                  
-                    if (Field.LookupFloat(item.fields, "Repeat Points Reduction") < 0)
+                    if (Field.LookupFloat(asset.fields, "Repeat Points Reduction") < 0)
                     {
-                        Field.SetValue(item.fields, "Repeat Points Reduction", "0");
+                        Field.SetValue(asset.fields, "Repeat Points Reduction", "0");
                     }
                     
-                    if (Field.LookupFloat(item.fields, "Repeat Points Reduction") > 1)
+                    if (Field.LookupFloat(asset.fields, "Repeat Points Reduction") > 1)
                     {
-                        Field.SetValue(item.fields, "Repeat Points Reduction", "1");
+                        Field.SetValue(asset.fields, "Repeat Points Reduction", "1");
                     }
                 }
                 
                 else 
                 {
-                    Field pointsReductionOnRepeat = Field.Lookup(item.fields, "Repeat Points Reduction");
+                    Field pointsReductionOnRepeat = Field.Lookup(asset.fields, "Repeat Points Reduction");
                     
                     if (pointsReductionOnRepeat != null)
                     {
-                        item.fields.Remove(pointsReductionOnRepeat);
+                        asset.fields.Remove(pointsReductionOnRepeat);
                         SetDatabaseDirty("Remove Repeatable Field");
                     }
                 }
@@ -1756,8 +1923,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                             }
                         }
                     }
-                    
-                    
                 }
 
                
@@ -2521,7 +2686,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             EditorGUILayout.Space( rect.x / 4);
             
-            DrawPoints(item, entryTitle, false);
+            DrawPoints(item, entryTitle, false, backgroundColor: new Color(0.3f, 0.3f, 0.3f));
             
             EditorGUILayout.Space( rect.x / 4);
             EditorGUILayout.EndHorizontal();

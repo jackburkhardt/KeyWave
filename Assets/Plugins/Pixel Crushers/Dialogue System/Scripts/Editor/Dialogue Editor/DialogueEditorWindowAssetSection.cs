@@ -139,6 +139,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             if (asset is Item && CurrentItemLabel == "Email") 
                 asset.Name = EditorGUILayout.TextField(new GUIContent("Subject", "The subject of this email."), asset.Name);
             
+            else if (asset is Item && CurrentItemLabel == "Point")
+            {
+                asset.Name = asset.LookupValue("Name");
+            }
+            
             else asset.Name = EditorGUILayout.TextField(new GUIContent("Name", "Name of this asset."), asset.Name);
             if (EditorGUI.EndChangeCheck()) SetDatabaseDirty("Name");
             if (asset is Actor) DrawActorPortrait(asset as Actor);

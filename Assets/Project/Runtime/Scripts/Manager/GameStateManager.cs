@@ -67,55 +67,6 @@ namespace Project.Runtime.Scripts.Manager
             get => (DialogueLua.GetVariable("game.player.mostRecentSublocation").asInt);
             set => DialogueLua.SetVariable("game.player.mostRecentSublocation", value);
         }
-
-        public int TeamworkScore 
-        {
-            get => DialogueLua.GetVariable("points.Teamwork").asInt;
-            set => DialogueLua.SetVariable("points.Teamwork", Math.Min(value, MaxTeamworkScore));
-        }
-        
-        public int SkillsScore 
-        {
-            get => DialogueLua.GetVariable("points.Skills").asInt;
-            set => DialogueLua.SetVariable("points.Skills", Math.Min(value, MaxSkillsScore));
-        }
-        
-        public int WellnessScore 
-        {
-            get => DialogueLua.GetVariable("points.wellness").asInt;
-            set => DialogueLua.SetVariable("points.wellness", Math.Min(value, MaxWellnessScore));
-        }
-        
-        public int ContextScore 
-        {
-            get => DialogueLua.GetVariable("points.Context").asInt;
-            set => DialogueLua.SetVariable("points.Context", Math.Min(value, ContextScore));
-        }
-        
-        
-        public int MaxTeamworkScore 
-        {
-            get => DialogueLua.GetVariable("points.Teamwork.max").asInt;
-            set => DialogueLua.SetVariable("points.Teamwork.max", value);
-        }
-        
-        public int MaxSkillsScore 
-        {
-            get => DialogueLua.GetVariable("points.Skills.max").asInt;
-            set => DialogueLua.SetVariable("points.Skills.max", value);
-        }
-        
-        public int MaxWellnessScore 
-        {
-            get => DialogueLua.GetVariable("points.wellness.max").asInt;
-            set => DialogueLua.SetVariable("points.wellness.max", value);
-        }
-        
-        public int MaxContextScore 
-        {
-            get => DialogueLua.GetVariable("points.Context.max").asInt;
-            set => DialogueLua.SetVariable("points.Context.max", value);
-        }
         
         
         
@@ -190,20 +141,15 @@ namespace Project.Runtime.Scripts.Manager
                     break;
                 case "points":
                     var pointsField = Points.PointsField.FromJObject(playerEvent.Data);
-                    switch (pointsField.Type)
+                    
+                    
+                    var pointItem = GameManager.settings.dialogueDatabase.items.Find( p => p.IsPointCategory && p.Name == pointsField.Type);
+                    
+                    if (pointItem != null)
                     {
-                        case Points.Type.Wellness:
-                            gameState.WellnessScore += pointsField.Points;
-                            break;
-                        case Points.Type.Teamwork:
-                            gameState.TeamworkScore += pointsField.Points;
-                            break;
-                        case Points.Type.Context:
-                            gameState.ContextScore += pointsField.Points;
-                            break;
-                        case Points.Type.Skills:
-                            gameState.SkillsScore += pointsField.Points;
-                            break;
+                        var score = pointItem.AssignedField("Score");
+                        score.value = $"{pointItem.LookupInt("Score") + pointsField.Points}";
+                        DialogueLua.SetItemField( pointItem.Name, "Score", score.value);
                     }
                     
                     Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);

@@ -1,5 +1,7 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using UnityEngine;
+
 namespace PixelCrushers.DialogueSystem
 {
 
@@ -83,12 +85,23 @@ namespace PixelCrushers.DialogueSystem
                 if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Contact");
             }
         }
+
+        public bool IsPointCategory
+        {
+            get {  return LookupValue(DialogueSystemFields.ItemType) == "Points Category";  }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "Points Category");
+            }
+        }
         
         public int RepeatCount
         {
             get { return LookupInt(DialogueSystemFields.RepeatCount); }
             set { Field.SetValue(fields, DialogueSystemFields.RepeatCount, value); }
         }
+        
+        public Texture2D icon = null;
         
       
 

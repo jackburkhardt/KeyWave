@@ -11,7 +11,7 @@ public class PointsFishBowl : MonoBehaviour
 
     [SerializeField] private float timeToFill = 1f;
     
-    public Points.Type type;
+    public string type;
 
     [SerializeField] Animator animator;
     [SerializeField] private string animationTrigger = "Fill";
@@ -43,7 +43,7 @@ public class PointsFishBowl : MonoBehaviour
         Points.OnPointsChange -= SetPoints;
     }
 
-    private void SetPoints(Points.Type pointType, int amount)
+    private void SetPoints(string pointType, int amount)
     {
         if (pointType != type)
         {

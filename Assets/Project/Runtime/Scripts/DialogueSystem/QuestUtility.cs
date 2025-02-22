@@ -12,27 +12,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
     {
         public static Action<Item> OnQuestComplete;
         
-        public static Points.PointsField[] GetPoints(string questTitle, DialogueDatabase database = null)
-        {
-            database ??= DialogueManager.MasterDatabase;
-            return DialogueUtility.GetPointsFromField(database.GetQuest(questTitle)?.fields);
-        }
         
-        public static Points.PointsField[] GetPoints(Item quest, [CanBeNull] DialogueDatabase database = null)
-        {
-            return GetPoints(quest.Name, database);
-        }
-
-        public static Points.PointsField[] GetPoints(DialogueEntry dialogueEntry, [CanBeNull] DialogueDatabase database = null)
-        {
-            var conversation = dialogueEntry.GetConversation(database);
-            if (conversation.IsUnityNull())
-            {
-                return null;
-            }
-            return GetPoints(dialogueEntry.GetConversation(database).Title, database);
-        }
-
 
         public static Lua.Result GetField(string questTitle, string questField)
         {

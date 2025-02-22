@@ -10,31 +10,15 @@ namespace Project.Editor.Scripts.Tools
 {
     public class PointDistributionViewer : EditorWindow
     {
-        private Dictionary<Item, int> SkillsEntries = new();
-        private int SkillsTotal;
-        private Dictionary<Item, int> TeamworkEntries = new();
-        private int TeamworkTotal;
-        private Dictionary<Item, int> ContextEntries = new();
-        private int ContextTotal;
+        
+        Dictionary<Item, (bool, int)> points = new Dictionary<Item, (bool, int)>();
+        
         private Vector2 scrollPos;
 
         private DialogueDatabase selectedDB;
-        private bool showCred;
         private bool showData;
-        private bool showTeamwork;
-        private bool showWellness;
-        private bool showCommit;
         private int totalPoints;
         private bool includeZeroPointEntries;
-
-        private Dictionary<Item, int> wellnessEntries = new();
-
-        private int wellnessTotal;
-
-        private string wellnessMaxVar = "points.wellness.max";
-        private string TeamworkMaxVar = "points.teamwork.max";
-        private string SkillsMaxVar = "points.skills.max";
-        private string ContextMaxVar = "points.context.max";
 
         private void OnGUI()
         {
@@ -68,129 +52,66 @@ namespace Project.Editor.Scripts.Tools
 
             if (!showData) return;
 
-            EditorGUILayout.LabelField(
-                $"Total wellness points: {wellnessTotal} ({(wellnessTotal / (float)totalPoints):P})");
-            EditorGUILayout.LabelField(
-                $"Total Skills points: {SkillsTotal} ({(SkillsTotal / (float)totalPoints):P})");
-            EditorGUILayout.LabelField(
-                $"Total Teamwork points: {TeamworkTotal} ({(TeamworkTotal / (float)totalPoints):P})");
-            EditorGUILayout.LabelField(
-                $"Total Context points: {ContextTotal} ({(ContextTotal / (float)totalPoints):P})");
-
+            for (int i = 0; i < points.Count(); i++)
+            {
+                EditorGUILayout.LabelField(
+                    $"Total {points.ElementAt(i).Key.Name} points: {points.ElementAt(i).Key.LookupInt("Score")} ({(points.ElementAt(i).Key.LookupInt("Max Score") / (float)totalPoints):P})");
+            }
+            
+            
             EditorGUILayout.Space(20);
-
+            
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-            showWellness = EditorGUILayout.Foldout(showWellness, $"Show Wellness Entries ({wellnessEntries.Count})");
-            if (showWellness)
+            for ( int i = 0; i < points.Count; i++)
             {
-                foreach (var entry in wellnessEntries)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
-                        GUILayout.Width(400));
-                    if (GUILayout.Button("Open", GUILayout.Width(50)))
-                    {
-                       // DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
-                    }
+                var element = points.ElementAt(i);
+                var item = points.ElementAt(i).Key;
+                var foldout = EditorGUILayout.Foldout( element.Value.Item1, $"Show {item.Name} Entries ({item.LookupInt("Score")})");
+                points[item] = (foldout, element.Value.Item2);
+                
+                var quests = Points.GetAllItemsWithPointsType( item, selectedDB, false);
 
-                    EditorGUILayout.EndHorizontal();
+                if (foldout)
+                {
+                    foreach (var quest in quests)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+
+                        foreach (var field in quest.fields)
+                        {
+                            if (field.title.EndsWith($"{item.Name} Points"))
+                            {
+                                var label = $"{quest.Name}";
+                                if (!field.title.StartsWith($"{item.Name}"))
+                                {
+                                    label += $"{field.title.Split( $" {item.Name}")[0]}";
+                                }
+
+                                label += $" ({field.value} points)";
+                                EditorGUILayout.LabelField(label, GUILayout.Width(400));
+                            }
+                        }
+                        
+                        /*
+                        if (GUILayout.Button("Open", GUILayout.Width(50)))
+                        {
+                            //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
+                        }
+                        */
+
+                        EditorGUILayout.EndHorizontal();
+                    }
                 }
             }
-
-            showCred = EditorGUILayout.Foldout(showCred, $"Show Skills Entries ({SkillsEntries.Count})");
-            if (showCred)
-            {
-                foreach (var entry in SkillsEntries)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
-                        GUILayout.Width(400));
-                    if (GUILayout.Button("Open", GUILayout.Width(50)))
-                    {
-                        //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
-                    }
-
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-
-            showTeamwork =
-                EditorGUILayout.Foldout(showTeamwork, $"Show Teamwork Entries ({TeamworkEntries.Count})");
-            if (showTeamwork)
-            {
-                foreach (var entry in TeamworkEntries)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
-                        GUILayout.Width(400));
-                    if (GUILayout.Button("Open", GUILayout.Width(50)))
-                    {
-                        //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
-                    }
-
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-
-            showCommit = EditorGUILayout.Foldout(showCommit, $"Show Context Entries ({ContextEntries.Count})");
-            if (showCommit)
-            {
-                foreach (var entry in ContextEntries)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField($"{entry.Key.Name} ({entry.Value} points)",
-                        GUILayout.Width(400));
-                    if (GUILayout.Button("Open", GUILayout.Width(50)))
-                    {
-                        //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.id, entry.Key.id);
-                    }
-
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-
-            
-
-            
             
             EditorGUILayout.BeginVertical();
             
             EditorGUILayout.Space(30);
             
-
-            EditorGUILayout.LabelField("Max Points Variables", EditorStyles.boldLabel);
             
-            wellnessMaxVar = EditorGUILayout.TextField("Wellness", wellnessMaxVar);
-            
-            if (selectedDB.variables.Find(p => p.Name == wellnessMaxVar) == null)
+            if (GUILayout.Button("Set Max Points", GUILayout.MaxWidth(100)))
             {
-                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
-            }
-            
-            TeamworkMaxVar = EditorGUILayout.TextField("Teamwork", TeamworkMaxVar);
-            
-            if (selectedDB.variables.Find(p => p.Name == TeamworkMaxVar) == null)
-            {
-                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
-            }
-           
-            SkillsMaxVar = EditorGUILayout.TextField("Skills", SkillsMaxVar);
-            
-            if (selectedDB.variables.Find(p => p.Name == SkillsMaxVar) == null)
-            {
-                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
-            }
-            
-            ContextMaxVar = EditorGUILayout.TextField("Context", ContextMaxVar);
-            
-            if (selectedDB.variables.Find(p => p.Name == ContextMaxVar) == null)
-            {
-                EditorGUILayout.HelpBox("Variable not found in database!", MessageType.Error);
-            }
-            
-            if (GUILayout.Button("Set Variables", GUILayout.MaxWidth(100)))
-            {
-                SetMaxPoints(selectedDB);
+                SetMaxPoints();
             }
             
             EditorGUILayout.Space(20);
@@ -209,91 +130,32 @@ namespace Project.Editor.Scripts.Tools
             window.titleContent = new GUIContent("Point Distribution Viewer");
             window.Show();
         }
-
+        private void ResetPoints()
+        {
+            points.Clear();
+            showData = false;
+        }
+        
         private void FindPoints(DialogueDatabase database)
         {
             ResetPoints();
-            foreach (var quest in database.items)
+            
+            var allPointTypes = Points.AllPointsTypes(database);
+            
+            for (int i = 0; i < allPointTypes.Count; i++)
             {
-                if (quest.IsItem) continue;
-                
-                var pointsField = QuestUtility.GetPoints(quest, database);
-                if (pointsField == null || pointsField.Length == 0) continue;
-
-                foreach (Points.PointsField field in pointsField)
-                {
-                    var points = field.Points;
-                    if (points <= 0 && !includeZeroPointEntries) continue;
-                    
-                    switch (field.Type)
-                    {
-                        case Points.Type.Wellness:
-                            wellnessEntries.Add(quest, points);
-                            wellnessTotal += points;
-                            break;
-                        case Points.Type.Skills:
-                            SkillsEntries.Add(quest, points);
-                            SkillsTotal += points;
-                            break;
-                        case Points.Type.Teamwork:
-                            TeamworkEntries.Add(quest, points);
-                            TeamworkTotal += points;
-                            break;
-                        case Points.Type.Context:
-                            ContextEntries.Add(quest, points);
-                            ContextTotal += points;
-                            break;
-                    }
-                }
-                
+                points.Add(allPointTypes[i], (false, Points.MaxScore( allPointTypes[i].Name, database)));
             }
-
-            totalPoints = wellnessTotal + SkillsTotal + TeamworkTotal + ContextTotal;
-
-            // sort dictionaries on the value (highest to lowest)
-            wellnessEntries = wellnessEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            SkillsEntries = SkillsEntries.OrderByDescending(x => x.Value)
-                .ToDictionary(x => x.Key, x => x.Value);
-            TeamworkEntries =
-                TeamworkEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            ContextEntries =
-                ContextEntries.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            
+            totalPoints = Points.TotalMaxScore(database);
         }
 
-        private void ResetPoints()
+        private void SetMaxPoints()
         {
-            wellnessEntries.Clear();
-            SkillsEntries.Clear();
-            TeamworkEntries.Clear();
-            ContextEntries.Clear();
-            wellnessTotal = 0;
-            SkillsTotal = 0;
-            TeamworkTotal = 0;
-            ContextTotal = 0;
-            showData = false;
-        }
-
-        private void SetMaxPoints(DialogueDatabase database)
-        {
-            database.variables.FindAll(v => v.Name.StartsWith("points.")).ForEach(v =>
+            for (int i = 0; i < points.Count; i++)
             {
-                if (v.Name == wellnessMaxVar)
-                {
-                    v.InitialFloatValue = wellnessTotal;
-                }
-                else if (v.Name == TeamworkMaxVar)
-                {
-                    v.InitialFloatValue = SkillsTotal;
-                }
-                else if (v.Name == SkillsMaxVar)
-                {
-                    v.InitialFloatValue = TeamworkTotal;
-                }
-                else if (v.Name == ContextMaxVar)
-                {
-                    v.InitialFloatValue = ContextTotal;
-                }
-            });
+                points.ElementAt(i).Key.AssignedField("Max Score").value = $"{points.ElementAt(i).Value.Item2}";
+            }
         }
     }
 }

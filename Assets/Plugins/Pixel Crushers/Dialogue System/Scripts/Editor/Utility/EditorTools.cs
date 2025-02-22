@@ -155,6 +155,7 @@ namespace PixelCrushers.DialogueSystem
         public enum ColorBlendMode
         {
             Overlay,
+            Multiply,
             SoftLight
         }
         public static Color ColorBlend(Color baseColor, Color blendColor, ColorBlendMode blendMode)
@@ -169,6 +170,8 @@ namespace PixelCrushers.DialogueSystem
                             : 1 - 2 * (1 - baseChannel) * (1 - blendChannel);
                     case ColorBlendMode.SoftLight:
                         return (1 - 2 * blendChannel) * baseChannel * baseChannel + (2 * blendChannel * baseChannel);
+                    case ColorBlendMode.Multiply:
+                        return baseChannel * blendChannel;
                     default:
                         return 0;
                 }

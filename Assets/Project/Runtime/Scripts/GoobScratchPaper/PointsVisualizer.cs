@@ -30,7 +30,7 @@ public class PointsVisualizer : MonoBehaviour
     }
 
 
-    private void VisualizePointType(Points.Type type, int amount)
+    private void VisualizePointType(string type, int amount)
     {
         if (amount == 0) return;
         if (pauseDialogueSystem) DialogueManager.instance.Pause();
@@ -39,7 +39,7 @@ public class PointsVisualizer : MonoBehaviour
         
         StartCoroutine(Animate(type));
         
-        IEnumerator Animate(Points.Type type)
+        IEnumerator Animate(string type)
         {
             yield return new WaitForEndOfFrame();
         

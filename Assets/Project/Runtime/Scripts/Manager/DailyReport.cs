@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -14,13 +15,7 @@ namespace Project.Runtime.Scripts.Manager
         private List<string> _completedTasks = new();
         private List<string> _failedTasks = new();
 
-        public Dictionary<Points.Type, int> EarnedPoints = new()
-        {
-            {Points.Type.Skills, 0},
-            {Points.Type.Teamwork, 0},
-            {Points.Type.Wellness, 0},
-            {Points.Type.Context, 0}
-        };
+        public Dictionary<string, int> EarnedPoints;
 
         public DailyReport(int day)
         {
@@ -34,6 +29,17 @@ namespace Project.Runtime.Scripts.Manager
 
         private void OnPlayerEvent(PlayerEvent playerEvent)
         {
+            
+            if (EarnedPoints == null)
+            {
+                EarnedPoints = new Dictionary<string, int>();
+
+                foreach (var pointType in Points.AllPointsTypes())
+                {
+                    EarnedPoints.Add(pointType.Name , 0);
+                }
+            }
+            
             switch (playerEvent.EventType)
             {
                 case "points":
@@ -41,11 +47,11 @@ namespace Project.Runtime.Scripts.Manager
                     Points.PointsField pointsInfo = Points.PointsField.FromJObject(playerEvent.Data);
                     EarnedPoints[pointsInfo.Type] += pointsInfo.Points;
                     
-                    //poopoo code
-                    DialogueLua.SetVariable("points.skills", EarnedPoints[Points.Type.Skills]);
-                    DialogueLua.SetVariable("points.teamwork", EarnedPoints[Points.Type.Teamwork]);
-                    DialogueLua.SetVariable("points.wellness", EarnedPoints[Points.Type.Wellness]);
-                    DialogueLua.SetVariable("points.context", EarnedPoints[Points.Type.Context]);
+                    
+                    for( int i = 0; i < EarnedPoints.Count; i++)
+                    {
+                        DialogueLua.SetItemField( EarnedPoints.ElementAt(i).Key, "Score", EarnedPoints.ElementAt(i).Value);
+                    }
                     
                     break;
                 }

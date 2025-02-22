@@ -91,7 +91,7 @@ public class GameLog : MonoBehaviour
         LogQuest(message);
     }
     
-    public void OnPoints(Points.Type type, int amount)
+    public void OnPoints(string type, int amount)
     {
         if (amount < 0)
         {

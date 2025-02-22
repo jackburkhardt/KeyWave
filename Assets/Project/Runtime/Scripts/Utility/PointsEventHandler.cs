@@ -14,7 +14,7 @@ public class PointsEventHandler : MonoBehaviour
     }
     
     
-    public void OnPointsChange(Points.Type pointType, int amount)
+    public void OnPointsChange(string pointType, int amount)
     {
         onPointsChange.Invoke();
         if (amount > 0)

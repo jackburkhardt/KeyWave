@@ -15,7 +15,7 @@ public class FakeTimelineData : MonoBehaviour, IEndOfDayTimelineDataHandler
    
     public FakeDataType fakeDataType;
     [ShowIf("fakeDataType", FakeDataType.Points)]
-    public Points.Type pointsType;
+    public string pointsType;
     
    
     

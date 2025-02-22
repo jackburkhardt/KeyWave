@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -14,32 +16,94 @@ namespace Project.Runtime.Scripts.Manager
         /// <summary>
         /// Type of points given to player.
         /// </summary>
-    
-        // If you want to add or change these for the Dialogue Manager to use, make sure to update CustomFieldType_PointsType.cs
-        public enum Type
-        {
-            Wellness,
-            Skills,
-            Teamwork,
-            Context,
-            Null
-        }
+      
 
         private static bool isAnimating;
 
         private static Vector2 spawnPosition;
         
-        public static Action<Type, int> OnPointsChange;
+        public static Action<string, int> OnPointsChange;
 
-        public static Action<Type> OnAnimationStart;
+        public static Action<string> OnAnimationStart;
 
         public static Action OnAnimationComplete;
-        public static int TeamworkScore => GameStateManager.instance.gameState.TeamworkScore;
-        public static int SkillsScore => GameStateManager.instance.gameState.SkillsScore;
-        public static int WellnessScore => GameStateManager.instance.gameState.WellnessScore;
-        public static int ContextScore => GameStateManager.instance.gameState.ContextScore;
-        public static int TotalScore =>  TeamworkScore + SkillsScore + WellnessScore + ContextScore;
+        public static int TotalScore {
+            get
+            {
+                var score = 0;
+                foreach (var type in AllPointsTypes())
+                {
+                    score += type.LookupInt("Score");
+                }
+
+                return score;
+            }
+        }
+        
+        public static int TotalMaxScore(DialogueDatabase database = null) {
+            database ??= GameManager.settings.dialogueDatabase;
+            var score = 0;
+            foreach (var type in AllPointsTypes(database))
+            {
+                score += type.LookupInt("Max Score");
+            }
+
+            return score;
+        }
+        
         public static bool IsAnimating => isAnimating;
+
+        public static List<Item> AllPointsTypes(DialogueDatabase database = null)
+        {
+            if (database == null) database = GameManager.settings.dialogueDatabase;
+            
+            return database.items.FindAll(item => item.IsPointCategory);
+        } 
+
+        public static List<PointsField> GetPointsFieldsFromItem(Item item, DialogueDatabase database = null)
+        {
+            
+            if (database == null) database = GameManager.settings.dialogueDatabase;
+            
+            List<PointsField> itemPointsFields = new List<PointsField>();
+            
+            HashSet<string> pointTypeNames = new HashSet<string>(AllPointsTypes(database).Select(item => item.Name));
+
+         
+            foreach (var field in item.fields)
+            {
+                string[] words = field.title.Split(' ');
+                
+                if (words.Length >= 2)
+                {
+                    string possiblePointType = words[words.Length - 2]; // Second-to-last word
+                    string lastWord = words[words.Length - 1]; // Last word
+
+                    if (lastWord == "Points" && pointTypeNames.Contains(possiblePointType))
+                    {
+                        itemPointsFields.Add(PointsField.FromLuaField(field));
+                    }
+                }
+            }
+            return itemPointsFields;
+        }
+        
+        public static List<Item> GetAllItemsWithPointsType(Item pointType, DialogueDatabase database = null, bool includeZeroPoints = false)
+        {
+            if (database == null) database = GameManager.settings.dialogueDatabase;
+            
+            List<Item> items = new List<Item>();
+            foreach (var item in database.items)
+            {
+                if (item.fields.Any(field => field.title.EndsWith( $"{pointType.Name} Points")))
+                {
+                    if (item.LookupInt( $"{pointType.Name} Points") == 0 && !includeZeroPoints) continue;
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
 
         /// <summary>
         /// Gets the position currently used for spawning orbs in animations.
@@ -51,53 +115,35 @@ namespace Project.Runtime.Scripts.Manager
             return $"{field.Type}:{field.Points}";
         }
 
-        public static int Score(Type type)
+        public static Item GetDatabaseItem(string type, DialogueDatabase database = null)
         {
-            var score = 0;
-            switch (type)
-            {
-                case Type.Teamwork:
-                    score = GameStateManager.instance.gameState.TeamworkScore;
-                    break;
-                case Type.Skills:
-                    score = GameStateManager.instance.gameState.SkillsScore;
-                    break;
-                case Type.Wellness:
-                    score = GameStateManager.instance.gameState.WellnessScore;
-                    break;
-                case Type.Context:
-                    score = GameStateManager.instance.gameState.ContextScore;
-                    break;
-            }
+            database ??= GameManager.settings.dialogueDatabase;
+            var pointsType = database.items.Find(item => item.IsPointCategory && string.Equals(item.Name, type, StringComparison.CurrentCultureIgnoreCase));
 
-            return score;
+            return pointsType;
+            
         }
 
-        public static int MaxScore(Type type)
+        public static int Score(string type)
         {
             var score = 0;
-            switch (type)
-            {
-                case Type.Teamwork:
-                    score = GameStateManager.instance.gameState.MaxTeamworkScore;
-                    break;
-                case Type.Skills:
-                    score = GameStateManager.instance.gameState.MaxSkillsScore;
-                    break;
-                case Type.Wellness:
-                    score = GameStateManager.instance.gameState.MaxWellnessScore;
-                    break;
-                case Type.Context:
-                    score = GameStateManager.instance.gameState.MaxContextScore;
-                    break;
-            }
 
-            return score;
+            var pointsType = GetDatabaseItem(type);
+            if (pointsType == null) return 0;
+
+            return pointsType.LookupInt("Score");
+        }
+
+        public static int MaxScore(string type, DialogueDatabase database = null)
+        {
+            database ??= GameManager.settings.dialogueDatabase;
+            var score = 0;
+            var pointsType = GetDatabaseItem( type);
+            if (pointsType == null) return 0;
+
+            return pointsType.LookupInt("Max Score");
         }
         
-        public static int TotalMaxScore
-        => GameStateManager.instance.gameState.MaxTeamworkScore + GameStateManager.instance.gameState.MaxSkillsScore + GameStateManager.instance.gameState.MaxWellnessScore + GameStateManager.instance.gameState.MaxContextScore;
-         
 
         public static Action OnPointsAnimEnd;
         public static Action OnPointsAnimStart;
@@ -112,28 +158,21 @@ namespace Project.Runtime.Scripts.Manager
         /// </summary>
         /// <param name="type">Type of point.</param>
         /// <returns></returns>
-        public static Color Color(Type type)
+        public static Color Color(string type)
         {
-            switch (type)
-            {
-                case Type.Wellness:
-                    return UnityEngine.Color.green;
-                case Type.Skills:
-                    return UnityEngine.Color.red;
-                case Type.Teamwork:
-                    return new Color(0, 153, 255, 255);
-                default:
-                    return UnityEngine.Color.white;
-            }
+            var pointsType = GetDatabaseItem(type);
+            if (pointsType == null) return default;
+
+            return pointsType.LookupColor("Color");
         }
 
-        public static void AnimationStart(Type type, Vector2 position)
+        public static void AnimationStart(string type, Vector2 position)
         {
             spawnPosition = position;
             AnimationStart(type);
         }
 
-        public static void AnimationStart(Type type)
+        public static void AnimationStart(string type)
         {
             isAnimating = true;
             OnAnimationStart?.Invoke(type);
@@ -156,17 +195,16 @@ namespace Project.Runtime.Scripts.Manager
         public class PointsField
         {
             [FormerlySerializedAs("type")] 
-            [JsonConverter(typeof(StringEnumConverter))]
-            public Type Type;
+            public string Type;
         
             [FormerlySerializedAs("points")] 
             public int Points;
             
             public static PointsField FromJObject(JObject data)
             {
-                if (data["points"] == null || data["pointsType"] == null) return new PointsField {Type = Type.Null, Points = 0};
+                if (data["points"] == null || data["pointsType"] == null) return new PointsField {Type = string.Empty, Points = 0};
                 
-                var type = (Type) Enum.Parse(typeof(Type), (string) data["pointsType"]);
+                var type = (string) data["pointsType"];
                 var points = (int) data["points"];
                 return new PointsField {Type = type, Points = points};
             }
@@ -177,7 +215,7 @@ namespace Project.Runtime.Scripts.Manager
                 var pointType = Regex.Replace(field.title, pattern, "$1");
                 
                 if (pointType.Split(" ").Length > 1) pointType = pointType.Split(" ")[^1];
-                var type = (Type)Enum.Parse(typeof(Type), pointType);
+                var type = pointType;
                 var points = int.Parse(field.value);
                 return new PointsField { Type = type, Points = points };
 
