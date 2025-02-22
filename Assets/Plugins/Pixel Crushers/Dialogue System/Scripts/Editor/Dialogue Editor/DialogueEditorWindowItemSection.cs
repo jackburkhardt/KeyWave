@@ -136,6 +136,9 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void DrawItemSection()
         {
             var truncatedToolbar = new[] { "Items", "Quests", "Actions" };
+            
+            itemToolbarIndex = Mathf.Clamp(itemToolbarIndex, 0, truncatedToolbar.Length - 1);
+            
             var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, truncatedToolbar, GUILayout.Width(truncatedToolbar.Length * 100));
 
             if (newItemToolbarIndex != itemToolbarIndex)
