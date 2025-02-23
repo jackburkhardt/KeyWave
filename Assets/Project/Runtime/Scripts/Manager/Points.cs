@@ -31,7 +31,7 @@ namespace Project.Runtime.Scripts.Manager
             get
             {
                 var score = 0;
-                foreach (var type in AllPointsTypes())
+                foreach (var type in GetAllPointsTypes())
                 {
                     score += type.LookupInt("Score");
                 }
@@ -43,7 +43,7 @@ namespace Project.Runtime.Scripts.Manager
         public static int TotalMaxScore(DialogueDatabase database = null) {
             database ??= GameManager.settings.dialogueDatabase;
             var score = 0;
-            foreach (var type in AllPointsTypes(database))
+            foreach (var type in GetAllPointsTypes(database))
             {
                 score += type.LookupInt("Max Score");
             }
@@ -53,7 +53,7 @@ namespace Project.Runtime.Scripts.Manager
         
         public static bool IsAnimating => isAnimating;
 
-        public static List<Item> AllPointsTypes(DialogueDatabase database = null)
+        public static List<Item> GetAllPointsTypes(DialogueDatabase database = null)
         {
             if (database == null) database = GameManager.settings.dialogueDatabase;
             
@@ -67,7 +67,7 @@ namespace Project.Runtime.Scripts.Manager
             
             List<PointsField> itemPointsFields = new List<PointsField>();
             
-            HashSet<string> pointTypeNames = new HashSet<string>(AllPointsTypes(database).Select(item => item.Name));
+            HashSet<string> pointTypeNames = new HashSet<string>(GetAllPointsTypes(database).Select(item => item.Name));
 
          
             foreach (var field in item.fields)
@@ -95,9 +95,9 @@ namespace Project.Runtime.Scripts.Manager
             List<Item> items = new List<Item>();
             foreach (var item in database.items)
             {
-                if (item.fields.Any(field => field.title.EndsWith( $"{pointType.Name} Points")))
+                foreach (var itemWithPointType in item.fields.Where( p => p.title.EndsWith( $"{pointType.Name} Points")))
                 {
-                    if (item.LookupInt( $"{pointType.Name} Points") == 0 && !includeZeroPoints) continue;
+                    if (int.Parse(itemWithPointType.value) == 0 && !includeZeroPoints) continue;
                     items.Add(item);
                 }
             }

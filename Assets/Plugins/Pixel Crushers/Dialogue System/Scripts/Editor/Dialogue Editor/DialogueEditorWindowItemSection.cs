@@ -267,6 +267,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 var fieldWidth = rect.width / 4;
                 EditorGUI.BeginChangeCheck();
                 GUI.SetNextControlName(nameControl);
+                
+                
                 itemName = EditorGUI.TextField(new Rect(rect.x, rect.y + 2, fieldWidth, EditorGUIUtility.singleLineHeight), GUIContent.none, item.Name);
                 if (EditorGUI.EndChangeCheck()) item.Name = itemName;
                 EditorGUI.BeginChangeCheck();
@@ -561,6 +563,13 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void DrawItemPropertiesFirstPart(Item item)
         {
             if (item == null) return;
+
+            foreach (var field in item.fields)
+            {
+                if (field.title == null) field.title = string.Empty;
+                if (field.value == null) field.value = string.Empty;
+            }
+            
             CurrentDrawMethod.Invoke(item);
         }
 
@@ -833,6 +842,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     {
                         i.AssignedField($"{name.value} Points").title = $"{newName} Points";
                     }
+                    
+                    if (i.IsFieldAssigned($"{name.value} Affinity"))
+                    {
+                        i.AssignedField($"{name.value} Affinity").title = $"{newName} Affinity";
+                    }
                 }
             }
             
@@ -875,14 +889,48 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 Field.SetValue(item.fields, "Score", newScore);
                 SetDatabaseDirty("Change Score Field");
             }
+
+            var maxScore = 0;
             
-            var maxScore = item.LookupInt("Max Score");
-            var newMaxScore = EditorGUILayout.IntField(new GUIContent("Max Score"), maxScore);
-            if (newMaxScore != maxScore)
+            Field overrideMaxScore = Field.Lookup(item.fields, "Override Max Score");
+            if (overrideMaxScore == null)
             {
-                Field.SetValue(item.fields, "Max Score", newMaxScore);
-                SetDatabaseDirty("Change Score Field");
+                overrideMaxScore = new Field("Override Max Score", "False", FieldType.Boolean);
+                item.fields.Add(overrideMaxScore);
+                SetDatabaseDirty("Create Override Max Score Field");
             }
+
+
+            for (int i = 0; i < database.items.Count(); i++)
+            {
+                foreach (var pointsField in database.items[i].fields.Where(p => p.title.EndsWith(" Points")))
+                {
+                    var type = pointsField.title.Split(" ")[^2];
+                    if (type == item.Name)
+                    {
+                        var value = database.items[i].LookupInt(pointsField.title);
+                        if (value > 0) maxScore += database.items[i].LookupInt(pointsField.title);
+                    }
+                }
+            }
+
+            EditorGUI.BeginDisabledGroup((overrideMaxScore.value == "True"));
+            var newMaxScore = overrideMaxScore.value == "True" ? item.LookupInt("Max Score") : maxScore;
+            EditorGUILayout.IntField(new GUIContent("Max Score"), maxScore);
+            EditorGUI.EndDisabledGroup();
+            
+            
+            EditorWindowTools.EditorGUILayoutBeginIndent();
+            overrideMaxScore.value = EditorGUILayout.Toggle(new GUIContent("Override Max Score", "Tick to override the max score with the value above."), item.LookupBool("Override Max Score")).ToString();
+            
+            if (overrideMaxScore.value == "True")
+            {
+                newMaxScore = EditorGUILayout.IntField(new GUIContent("Max Score"), newMaxScore);
+            }
+            
+            Field.SetValue(item.fields, "Max Score", newMaxScore);
+            
+            EditorWindowTools.EditorGUILayoutEndIndent();
             
         }
         

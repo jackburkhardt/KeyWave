@@ -52,10 +52,17 @@ namespace Project.Editor.Scripts.Tools
 
             if (!showData) return;
 
+            Item pointsCategory;
+            List<Item> questsWithMatchingPoints;
+
             for (int i = 0; i < points.Count(); i++)
             {
+                
+                pointsCategory = points.ElementAt(i).Key;
+                questsWithMatchingPoints = Points.GetAllItemsWithPointsType(pointsCategory, selectedDB, includeZeroPointEntries);
+                
                 EditorGUILayout.LabelField(
-                    $"Total {points.ElementAt(i).Key.Name} points: {points.ElementAt(i).Key.LookupInt("Score")} ({(points.ElementAt(i).Key.LookupInt("Max Score") / (float)totalPoints):P})");
+                    $"Total {pointsCategory.Name} points: {pointsCategory.LookupInt("Max Score")} ({(points.ElementAt(i).Key.LookupInt("Max Score") / (float)totalPoints):P})");
             }
             
             
@@ -66,11 +73,12 @@ namespace Project.Editor.Scripts.Tools
             {
                 var element = points.ElementAt(i);
                 var item = points.ElementAt(i).Key;
-                var foldout = EditorGUILayout.Foldout( element.Value.Item1, $"Show {item.Name} Entries ({item.LookupInt("Score")})");
-                points[item] = (foldout, element.Value.Item2);
                 
                 var quests = Points.GetAllItemsWithPointsType( item, selectedDB, false);
-
+                var foldout = EditorGUILayout.Foldout( element.Value.Item1, $"Show {item.Name} Entries ({quests.Count})");
+                
+                points[item] = (foldout, element.Value.Item2);
+                
                 if (foldout)
                 {
                     foreach (var quest in quests)
@@ -84,21 +92,13 @@ namespace Project.Editor.Scripts.Tools
                                 var label = $"{quest.Name}";
                                 if (!field.title.StartsWith($"{item.Name}"))
                                 {
-                                    label += $"{field.title.Split( $" {item.Name}")[0]}";
+                                    label += $" {field.title.Split( $" {item.Name}")[0]}";
                                 }
 
                                 label += $" ({field.value} points)";
                                 EditorGUILayout.LabelField(label, GUILayout.Width(400));
                             }
                         }
-                        
-                        /*
-                        if (GUILayout.Button("Open", GUILayout.Width(50)))
-                        {
-                            //DialogueEditorWindow.OpenDialogueEntry(selectedDB, entry.Key.conversationID, entry.Key.id);
-                        }
-                        */
-
                         EditorGUILayout.EndHorizontal();
                     }
                 }
@@ -108,13 +108,6 @@ namespace Project.Editor.Scripts.Tools
             
             EditorGUILayout.Space(30);
             
-            
-            if (GUILayout.Button("Set Max Points", GUILayout.MaxWidth(100)))
-            {
-                SetMaxPoints();
-            }
-            
-            EditorGUILayout.Space(20);
             
             EditorGUILayout.EndVertical();
             
@@ -140,7 +133,7 @@ namespace Project.Editor.Scripts.Tools
         {
             ResetPoints();
             
-            var allPointTypes = Points.AllPointsTypes(database);
+            var allPointTypes = Points.GetAllPointsTypes(database);
             
             for (int i = 0; i < allPointTypes.Count; i++)
             {

@@ -119,6 +119,9 @@ namespace Project.Runtime.Scripts.Manager
         private void Start()
         {
             GameEvent.OnPlayerEvent += OnPlayerEvent;
+            
+            SmartWatch.ResetCurrentApp();
+            
             //OnSaveDataApplied();
         }
         
@@ -272,6 +275,7 @@ namespace Project.Runtime.Scripts.Manager
             BroadcastMessage( "OnTravel");
             DialogueManager.StopConversation();
             OnGameSceneEnd?.Invoke();
+            DialogueManager.instance.BroadcastMessage( "OnGameSceneEnd");
 
             var currentScene = string.Empty;
             
@@ -321,9 +325,7 @@ namespace Project.Runtime.Scripts.Manager
                 gameState.current_scene = newLocation;
                 
                 OnGameSceneStart?.Invoke();
-                
-                
-                BroadcastMessage( "OnGameSceneStart");
+                DialogueManager.instance.BroadcastMessage( "OnGameSceneStart");
                 
             }
         }
@@ -628,7 +630,11 @@ public class SequencerCommandSetLocationImmediate : SequencerCommand
         if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
         else currentScene = GameManager.gameState.current_scene;
         yield return Project.Runtime.Scripts.App.App.Instance.ChangeScene(location, currentScene, Transition.None);
-        GameManager.gameState.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(location) );
+        GameManager.gameState.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(location));
+        
+        GameManager.instance.OnGameSceneStart?.Invoke();
+        DialogueManager.instance.BroadcastMessage( "OnGameSceneStart");
+        
         Stop();
     }
 

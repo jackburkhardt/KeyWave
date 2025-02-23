@@ -21,7 +21,7 @@ namespace Project.Runtime.Scripts.SaveSystem
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
 
-            foreach (var type in Points.AllPointsTypes())
+            foreach (var type in Points.GetAllPointsTypes())
             {
                 Points.OnPointsChange?.Invoke(type.Name, type.LookupInt("Score"));
             }

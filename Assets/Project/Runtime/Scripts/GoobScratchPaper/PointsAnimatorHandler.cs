@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using NaughtyAttributes;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
@@ -7,13 +9,29 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Animator))]
 public class PointsAnimatorHandler : MonoBehaviour
 {
+    [NaughtyAttributes.Dropdown("pointTypes")]
+    [HideIf("hideType")]
     public string type;
+
+    private List<string> pointTypes
+    {
+        get
+        {
+            var types = Points.GetAllPointsTypes().Select( p => p.Name).ToList();
+            types.Insert(0, "(All)");
+            return types;
+        }
+    }
+    
+    private bool hideType => GetComponent<PointsFishBowl>() != null;
     
     public string showTrigger = "Show";
     public string hideTrigger = "Hide";
 
     public string onPointsIncreaseTrigger = "OnPointsIncrease";
     public string onPointsDecreaseTrigger = "OnPointsDecrease";
+    
+    
     
     public string onPointsAnimationStartTrigger = "OnPointsAnimStart";
     public string onPointsAnimationEndTrigger = "OnPointsAnimEnd";
@@ -29,6 +47,8 @@ public class PointsAnimatorHandler : MonoBehaviour
     private void OnValidate()
     {
         animator ??= GetComponent<Animator>();
+        if (!string.IsNullOrEmpty(type)) type = pointTypes[0];
+        if (hideType) type = GetComponent<PointsFishBowl>().GetType().Name;
     }
 
     private void OnEnable()

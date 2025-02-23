@@ -34,7 +34,7 @@ namespace Project.Runtime.Scripts.Manager
             {
                 EarnedPoints = new Dictionary<string, int>();
 
-                foreach (var pointType in Points.AllPointsTypes())
+                foreach (var pointType in Points.GetAllPointsTypes())
                 {
                     EarnedPoints.Add(pointType.Name , 0);
                 }

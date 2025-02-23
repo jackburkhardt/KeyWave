@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
 public class MetricsGrid : MonoBehaviour
@@ -10,10 +13,37 @@ public class MetricsGrid : MonoBehaviour
         HighLocationAffinity
     }
     
-    public RectTransform credibiltyContainer;
-    public RectTransform wellnessContainer;
-    public RectTransform TeamworkContainer;
-    public RectTransform ContextContainer;
+    public PointsFishBowl template;
+    
+
+    private void OnEnable()
+    {
+        
+        foreach (Transform metric in transform)
+        {
+            if (metric == template.transform) continue;
+            Destroy(metric.gameObject);
+        }
+        
+        template.gameObject.SetActive(false);
+        var metrics = Points.GetAllPointsTypes();
+        foreach (var metric in metrics)
+        {
+            var newMetric = Instantiate(template, transform);
+            newMetric.SetPointType(metric);
+            newMetric.gameObject.SetActive(true);
+        }
+    }
+
+    private void OnDisable()
+    {
+        var metrics = transform;
+        foreach (PointsFishBowl metric in metrics)
+        {
+            if (metric == template) continue;
+            Destroy(metric.gameObject);
+        }
+    }
 
     public List<RectTransform> GetValidMetrics(DisplayCondition displayCondition = DisplayCondition.All, Location location = null)
     {
@@ -21,29 +51,22 @@ public class MetricsGrid : MonoBehaviour
         switch (displayCondition)
         {
             case DisplayCondition.All:
-                validMetrics.Add(credibiltyContainer);
-                validMetrics.Add(wellnessContainer);
-                validMetrics.Add(TeamworkContainer);
-                validMetrics.Add(ContextContainer);
+                foreach (PointsFishBowl metric in transform)
+                {
+                    if (metric == template) continue;
+                    validMetrics.Add(metric.transform as RectTransform);
+                }
                 break;
             case DisplayCondition.HighLocationAffinity:
-                if (int.Parse(location.AssignedField("Wellness Affinity").value) > 0)
+              
+                foreach (PointsFishBowl metric in transform)
                 {
-                    validMetrics.Add(wellnessContainer);
+                    if (metric == template) continue;
+                    if (location != null && location.LookupInt($"{metric.GetType().Name} Affinity") > 0)
+                    {
+                        validMetrics.Add(metric.transform as RectTransform);
+                    }
                 }
-                if (int.Parse(location.AssignedField("Teamwork Affinity").value) > 0)
-                {
-                    validMetrics.Add(TeamworkContainer);
-                }
-                if (int.Parse(location.AssignedField("Context Affinity").value) > 0)
-                {
-                    validMetrics.Add(ContextContainer);
-                }
-                if (int.Parse(location.AssignedField("Skills Affinity").value) > 0)
-                {
-                    validMetrics.Add(credibiltyContainer);
-                }
-                
                 break;
         }
 
@@ -52,11 +75,11 @@ public class MetricsGrid : MonoBehaviour
     
     public void EnableValidMetrics(DisplayCondition displayCondition = DisplayCondition.All, Location location = null)
     {
-        credibiltyContainer.gameObject.SetActive(false);
-        wellnessContainer.gameObject.SetActive(false);
-        TeamworkContainer.gameObject.SetActive(false);
-        ContextContainer.gameObject.SetActive(false);
-        
+     
+        foreach (PointsFishBowl metric in transform)
+        {
+            metric.gameObject.SetActive(false);
+        }
         
         var validMetrics = GetValidMetrics(displayCondition, location);
         foreach (var metric in validMetrics)
