@@ -16,10 +16,11 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public bool accumulateByInstantiation;
 
-    private bool haha;
+    private bool markForRemoveOverride;
   
     public override void Close()
     {
+        if (markForRemoveOverride) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
         base.Close(); 
         DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
     }
@@ -31,6 +32,15 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public override void Open()
     {
+        var responseMenu = GetComponentInChildren<StandardUIMenuPanel>();
+        
+        if (responseMenu != null)
+        {
+            FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( responseMenu);
+            markForRemoveOverride = true;
+        }
+      
+        
         base.Open();
         DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
         RefreshLayoutGroups.Refresh(gameObject);

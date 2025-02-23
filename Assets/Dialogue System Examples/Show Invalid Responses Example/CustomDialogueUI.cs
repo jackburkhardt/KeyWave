@@ -67,6 +67,11 @@ public class CustomDialogueUI : StandardDialogueUI
         
     }
     
+    public void ClearForcedMenuOverride()
+    {
+        conversationUIElements.standardMenuControls.ForceOverrideMenuPanel( null);
+    }
+    
 
     public override void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
     {
@@ -98,7 +103,7 @@ public class CustomDialogueUI : StandardDialogueUI
             if (!conversation)
             {
                 conversationTitle = null;
-                Debug.Log("No conversation assigned to action: " + item.Name);
+           //     Debug.Log("No conversation assigned to action: " + item.Name);
                 return false;
             }
 
@@ -106,7 +111,7 @@ public class CustomDialogueUI : StandardDialogueUI
             
             else conversationTitle = item.LookupValue("Conversation");
             
-            Debug.Log("Action conversation: " + conversationTitle);
+//            Debug.Log("Action conversation: " + conversationTitle);
             
             return true;
         }
@@ -130,17 +135,27 @@ public class CustomDialogueUI : StandardDialogueUI
         
         string GetActionDisplayName(Item item)
         {
+
+            if (Field.FieldExists(item.fields, "Conditional Display Entry Count"))
+            {
+                Debug.Log("Conditional display entry count exists");
+                Debug.Log("Value: " + item.LookupInt("Conditional Display Entry Count"));
+            }
             var conditionalDisplayEntryCount = item.LookupInt("Conditional Display Entry Count");
+            
+            
             
             if (conditionalDisplayEntryCount > 0)
             {
-                for (int i = 0; i < conditionalDisplayEntryCount; i++)
+                for (int i = 1; i < conditionalDisplayEntryCount + 1; i++)
                 {
                     var displayEntry = item.AssignedField($"Conditional Display Entry {i}");
                     if (displayEntry == null) continue;
                     
                     
                     var condition = item.LookupValue( $"Conditional Display Entry {i} Conditions");
+                    
+                    Debug.Log("Checking condition: " + condition + "; value: " + Lua.IsTrue(condition));
                     
                     if (Lua.IsTrue(condition) && !string.IsNullOrEmpty(condition) && condition != "true")
                     {
@@ -185,7 +200,7 @@ public class CustomDialogueUI : StandardDialogueUI
                 {
                     newDialogueEntry.outgoingLinks = new List<Link>();
                     
-                    Debug.Log("Action conversation is valid: " + conversationTitle);
+                  //  Debug.Log("Action conversation is valid: " + conversationTitle);
 
                     if (conversationTitle == string.Empty)
                     {
@@ -213,7 +228,7 @@ public class CustomDialogueUI : StandardDialogueUI
 
                 var newResponse = new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry,
                     Lua.IsTrue($"{newDialogueEntry.conditionsString}"));
-                if (!newResponse.enabled) Debug.Log("action not available: " + newDialogueEntry.conditionsString);
+              //  if (!newResponse.enabled) Debug.Log("action not available: " + newDialogueEntry.conditionsString);
                 
                 
                 newResponses.Add(newResponse);
@@ -229,6 +244,9 @@ public class CustomDialogueUI : StandardDialogueUI
         }
         
         responses = CheckInvalidResponses(responses);
+        
+        var player = GameManager.instance.PlayerActor;
+     //   conversationUIElements.standardMenuControls.OverrideActorMenuPanel(player,  MenuPanelNumber.Panel0, conversationUIElements.defaultMenuPanel);
         
         base.ShowResponses(subtitle, responses, timeout);
     }
@@ -309,14 +327,11 @@ public class CustomDialogueUI : StandardDialogueUI
 
         
     }
-    
-    public void OnLinkedConversationStart(Subtitle subtitle)
-    {
-        var playerActor = GameManager.instance.PlayerActor;
-        
-     //   DialogueManager.PlaySequence("SetMenuPanel(Player, default)");
-    }
 
+    public void OnConversationLine()
+    {
+       
+    }
 
 
     
@@ -324,6 +339,7 @@ public class CustomDialogueUI : StandardDialogueUI
 
     private void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             FindObjectOfType<StandardUIContinueButtonFastForward>(true).OnFastForward();
