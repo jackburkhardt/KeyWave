@@ -298,7 +298,11 @@ namespace Project.Runtime.Scripts.Manager
                     StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToCurrentApp));
                     break;
                 case State.SmartWatch:
-                    //  StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToCurrentApp));
+                    var smartWatchAppConversationTitles = SmartWatch.GetAllApps().Select( p => p.dialogueSystemConversationTitle).ToList();
+                    if (smartWatchAppConversationTitles.All(p => p != conversation.Title))
+                    {
+                        StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
+                    }
                     break;
                 case State.Travel: // do nothing
                     break;
@@ -425,7 +429,7 @@ namespace Project.Runtime.Scripts.Manager
                     var pointsField = new Points.PointsField
                     {
                         Points = int.Parse(value),
-                        Type = (Points.Type) Enum.Parse(typeof(Points.Type), pointType)
+                        Type = pointType
                     };
                     
                     

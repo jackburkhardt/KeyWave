@@ -39,6 +39,7 @@ namespace PixelCrushers.DialogueSystem
                     EditorGUILayout.PropertyField(serializedObject.FindProperty("accumulatedContentHolder"), true);
                 }
             }
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("forceOverrideMenuPanel"), true);
             
             
             

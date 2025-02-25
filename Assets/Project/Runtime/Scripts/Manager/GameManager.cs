@@ -326,6 +326,7 @@ namespace Project.Runtime.Scripts.Manager
                 
                 OnGameSceneStart?.Invoke();
                 DialogueManager.instance.BroadcastMessage( "OnGameSceneStart");
+                DoLocalSave();
                 
             }
         }

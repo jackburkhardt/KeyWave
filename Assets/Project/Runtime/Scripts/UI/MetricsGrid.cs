@@ -38,9 +38,9 @@ public class MetricsGrid : MonoBehaviour
     private void OnDisable()
     {
         var metrics = transform;
-        foreach (PointsFishBowl metric in metrics)
+        foreach (Transform metric in metrics)
         {
-            if (metric == template) continue;
+            if (metric == template.transform) continue;
             Destroy(metric.gameObject);
         }
     }

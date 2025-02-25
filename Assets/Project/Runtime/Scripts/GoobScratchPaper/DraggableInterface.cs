@@ -121,6 +121,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     // used to check if children are visible in the viewport
     public void CheckChildBounds()
     {
+        return;
         if (childrenWithinBounds == null) childrenWithinBounds = new List<RectTransform>();
         
         foreach (var rect in _rectChildren)

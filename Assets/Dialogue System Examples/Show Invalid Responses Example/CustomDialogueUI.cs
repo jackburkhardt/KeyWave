@@ -75,6 +75,7 @@ public class CustomDialogueUI : StandardDialogueUI
 
     public override void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
     {
+        DialogueManager.conversationModel.GetConversationOverrideSettings( DialogueManager.currentConversationState).skipPCSubtitleAfterResponseMenu = true;
        
         bool ActionLocationIsValid(Item item)
         {
@@ -244,11 +245,9 @@ public class CustomDialogueUI : StandardDialogueUI
         }
         
         responses = CheckInvalidResponses(responses);
-        
-        var player = GameManager.instance.PlayerActor;
-     //   conversationUIElements.standardMenuControls.OverrideActorMenuPanel(player,  MenuPanelNumber.Panel0, conversationUIElements.defaultMenuPanel);
-        
+            
         base.ShowResponses(subtitle, responses, timeout);
+        
     }
 
     private Response[] CheckInvalidResponses(Response[] responses)
@@ -311,10 +310,15 @@ public class CustomDialogueUI : StandardDialogueUI
     {
         //subtitle.formattedText.text = Regex.Replace(subtitle.formattedText.text, @"[^\x20-\x7F]", "");
         base.ShowSubtitle(subtitle);
+        
+        
     }
 
     public void OnConversationLine(Subtitle subtitle)
     {
+        //overkill but I'm desperate
+        DialogueManager.conversationModel.GetConversationOverrideSettings( DialogueManager.currentConversationState).skipPCSubtitleAfterResponseMenu = true;
+        
         
         if (Field.FieldExists(subtitle.dialogueEntry.fields, "Randomize Next Entry") && Field.LookupBool(subtitle.dialogueEntry.fields, "Randomize Next Entry"))
         {
@@ -323,18 +327,7 @@ public class CustomDialogueUI : StandardDialogueUI
             DialogueManager.instance.conversationController.randomizeNextEntryNoDuplicate = true;
         }
         
-        
-
-        
     }
-
-    public void OnConversationLine()
-    {
-       
-    }
-
-
-    
     
 
     private void Update()
@@ -344,6 +337,17 @@ public class CustomDialogueUI : StandardDialogueUI
         {
             FindObjectOfType<StandardUIContinueButtonFastForward>(true).OnFastForward();
         }
+    }
+
+
+    private void OnConversationStart()
+    {
+        DialogueManager.conversationModel.GetConversationOverrideSettings( DialogueManager.currentConversationState).skipPCSubtitleAfterResponseMenu = true;
+    }
+
+    private void OnLinkedConversationStart()
+    {
+        DialogueManager.conversationModel.GetConversationOverrideSettings( DialogueManager.currentConversationState).skipPCSubtitleAfterResponseMenu = true;
     }
 
     #endregion

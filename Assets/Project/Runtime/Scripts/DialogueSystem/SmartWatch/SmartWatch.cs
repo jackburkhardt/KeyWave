@@ -50,6 +50,11 @@ public class SmartWatch : ScriptableObject
         return GameManager.settings.SmartWatch.apps.Find(app => app.name == name);
     }
     
+    public static List<App> GetAllApps()
+    {
+        return GameManager.settings.SmartWatch.apps;
+    }
+    
     public static Action<App> OnAppOpen;
     
     
@@ -78,6 +83,11 @@ public class SmartWatch : ScriptableObject
     {
         OpenApp(_currentApp ?? GameManager.settings.SmartWatch.apps[0]);
     } 
+    
+    public static App GetCurrentApp()
+    {
+        return _currentApp;
+    }
     
     //SetQuestState("Hotel/Action/Breakfast", "success")
     public static void OpenApp(App app)

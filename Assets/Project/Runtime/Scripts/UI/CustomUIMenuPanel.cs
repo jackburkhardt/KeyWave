@@ -265,7 +265,6 @@ namespace Project.Runtime.Scripts.UI
                 app.OnEnable();
             }
             
-            DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
             RefreshLayoutGroups.Refresh(gameObject);
             StartCoroutine(DelayedRefresh());
             
@@ -334,7 +333,6 @@ namespace Project.Runtime.Scripts.UI
         public List<ResponseButtonStyle> buttonStyles = new List<ResponseButtonStyle>();
 
         
-        
      
        
         public virtual void OnChoiceClick(StandardUIResponseButton responseButton)
@@ -348,33 +346,18 @@ namespace Project.Runtime.Scripts.UI
             //   Clock.Freeze(true);
            }
 
-           if (destinationEntry.outgoingLinks.Count == 0)
+           if (accumulateResponse && accumulatedResponseContainer != null)
            {
-               
-               var title = destinationEntry.GetConversation().Title;
-               var baseConversation = GameManager.gameState.GetPlayerLocation(true).BaseConversation();
-               if (title != baseConversation)
-               {
-                   Debug.Log("No outgoing links. Going to base conversation :" + baseConversation);
-                   DialogueManager.PlaySequence("GoToConversation(" + baseConversation + ", true);");
-               }
-           }
-
-           else
-           {
-               if (accumulateResponse && accumulatedResponseContainer != null)
-               {
-                   var text = responseButton.text;
-                   var button = Instantiate(responseButton, accumulatedResponseContainer);
-                   button.gameObject.SetActive(true);
-                   button.button.interactable = false;
-                   button.enabled = false;
-                   button.text = text;
+               var text = responseButton.text;
+               var button = Instantiate(responseButton, accumulatedResponseContainer);
+               button.gameObject.SetActive(true);
+               button.button.interactable = false;
+               button.enabled = false;
+               button.text = text;
             
-                   RefreshLayoutGroups.Refresh(accumulatedResponseContainer.gameObject);
-               }
-
+               RefreshLayoutGroups.Refresh(accumulatedResponseContainer.gameObject);
            }
+           
         }
    
 

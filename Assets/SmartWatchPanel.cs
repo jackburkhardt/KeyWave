@@ -69,5 +69,64 @@ public class SmartWatchPanel : UIPanel
             DialogueManager.instance.StartConversation("SmartWatch/Home");
         }
     }
+
+    public void OnConversationStart()
+    {
+        var currentApp = SmartWatch.GetCurrentApp();
+        var conversation = DialogueManager.instance.activeConversation.conversationTitle;
+        var conversationTitle = DialogueManager.instance.masterDatabase.GetConversation(conversation).Title;
+
+        var appConversations = SmartWatch.GetAllApps().ConvertAll(app => app.dialogueSystemConversationTitle);
+        
+        Debug.Log("conversation title: " + conversationTitle);
+
+        if (!string.IsNullOrEmpty(conversationTitle)) return;
+
+        if (appConversations.Contains(conversationTitle) || conversationTitle == "Base")
+            GetComponent<Animator>().SetTrigger("Focus");
+
+        else
+        {
+
+            switch (currentApp.name)
+            {
+                case "Phone":
+                {
+                    GetComponent<Animator>().SetTrigger("Down");
+                    break;
+                }
+
+                case "Home":
+                {
+                    //  GetComponent<Animator>().SetTrigger(showAnimationTrigger);
+                    break;
+                }
+
+                default:
+                  
+                    Debug.Log( "unfocusing for conversation " + conversationTitle);
+                    GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
+                    break;
+            }
+        }
+    }
+
+    public void OnLinkedConversationStart()
+    {
+        OnConversationStart();
+    }
+
+   
+
+    public void OnConversationEnd()
+    {
+        var currentApp = SmartWatch.GetCurrentApp();
+        if (currentApp.name == "Travel")
+        {
+            GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
+        }
+    }
+    
+    
     
 }

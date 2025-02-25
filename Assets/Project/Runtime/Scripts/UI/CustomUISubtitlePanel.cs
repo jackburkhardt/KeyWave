@@ -17,10 +17,13 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     public bool accumulateByInstantiation;
 
     private bool markForRemoveOverride;
+    
+    public StandardUIMenuPanel forceOverrideMenuPanel;
+    
   
     public override void Close()
     {
-        if (markForRemoveOverride) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
+        if (forceOverrideMenuPanel != null) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
         base.Close(); 
     }
 
@@ -31,12 +34,11 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public override void Open()
     {
-        var responseMenu = GetComponentInChildren<StandardUIMenuPanel>();
         
-        if (responseMenu != null)
+        
+        if (forceOverrideMenuPanel != null)
         {
-            FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( responseMenu);
-            markForRemoveOverride = true;
+            FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( forceOverrideMenuPanel);
         }
       
         

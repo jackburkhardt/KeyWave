@@ -5,6 +5,7 @@ using DG.Tweening;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 
@@ -34,6 +35,8 @@ public class ItemUITextPanel : UIPanel
             var actor = item.LookupActor(actorFieldName, DialogueManager.masterDatabase);
             actorField.text = actor.Name;
         }
+
+        RefreshLayoutGroups.Refresh(transform.gameObject);
     }
 }
 

@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using PixelCrushers;
 using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,6 +49,8 @@ public class TextImageFormatter : MonoBehaviour
     {
         DeleteInstantiatedChildren();
         
+        
+        
         var imagePattern = @"img\(([A-Za-z0-9_\/]+)\)";
         var matches = Regex.Matches(text, imagePattern);
 
@@ -80,6 +83,8 @@ public class TextImageFormatter : MonoBehaviour
         {
             textObject.GetComponent<TextMeshProUGUI>().text = text;
         }
+        
+        RefreshLayoutGroups.Refresh(transform.parent.gameObject);
 
     }
     
