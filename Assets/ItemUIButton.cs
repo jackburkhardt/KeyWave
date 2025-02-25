@@ -5,41 +5,69 @@ using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemUIButton : MonoBehaviour
 {
-    [ShowIf("showInfoBox")]
-    [HelpBox("Make sure that the button has an OnClick event that calls the OnClick method.",
-        HelpBoxMessageType.Warning)]
-    [ReadOnly]
-    public string infoBox;
+    /// <summary>
+    /// Button that handles the display of an information of an Item, such as emails.
+    /// </summary>
     
-    public Button button;
     
-    public List< FieldLabel> fieldLabels;
+    [HelpBox("If Button's OnClick() event is empty, this Standard UI Response Button component will automatically assign its OnClick method at runtime. If Button's OnClick() event has other elements, you *must* manually assign the StandardUIResponseButton.OnClick method to it.", HelpBoxMessageType.Info)]
+    public UnityEngine.UI.Button button;
+   
     
-    private ItemUIPanel _panel;
-    private Item _item;
+    // <summary>
+    /// Gets or sets the target that will receive click notifications.
+    /// </summary>
+    public virtual Transform target { get; set; }
+    
+    public virtual Item item { get; set; }
 
-    public void SetButtonFromItem(Item item, ItemUIPanel panel)
+    public UITextField name;
+    public UITextField description;
+    
+    public UITextField actorField;
+    private bool actorFieldVisible => actorField != null && actorField.gameObject != null;
+    [ShowIf("actorFieldVisible")] public string actorFieldName;
+    
+    [Tooltip("Object to enable when the item is active.")]
+    public GameObject activeStateIndicator;
+
+    
+    
+    public void SetItem(Item item)
     {
-        _panel = panel;
+        if (name != null) name.text = item.Name;
+        if (description != null) description.text = item.Description;
 
-        foreach (var fieldLabel in fieldLabels)
+        if (item.FieldExists("State"))
         {
-            var field = item.fields.Find(f => f.title == fieldLabel.fieldName);
-            if (field == null) continue;
-            fieldLabel.fieldLabel.text = field.value;
+            var itemState = QuestLog.GetQuestState(item.Name);
+            if (activeStateIndicator != null) activeStateIndicator.SetActive(itemState == QuestState.Active);
         }
+        
+        if (actorFieldVisible)
+        {
+            var actor = item.LookupActor(actorFieldName, DialogueManager.masterDatabase);
+            if (actor != null) actorField.text = actor.Name;
+        }
+        
+        this.item = item;
     }
     
     public void OnClick()
     {
-        _panel.SetPanel(_item);
+        
+        if (item.FieldExists("State"))
+        {
+            QuestLog.SetQuestState(item.Name, QuestState.Success);
+            if (activeStateIndicator != null) activeStateIndicator.SetActive(false);
+        }
+        
+        target.SendMessage("OnClick", item, SendMessageOptions.RequireReceiver);
     }
 
-    private bool showInfoBox => button.onClick.GetPersistentEventCount() == 0;
  
 
     public void OnEnable()
@@ -48,5 +76,10 @@ public class ItemUIButton : MonoBehaviour
         {
             button.onClick.AddListener(OnClick);
         }
+    }
+
+    public void OnValidate()
+    {
+        button ??= GetComponent<UnityEngine.UI.Button>();
     }
 }

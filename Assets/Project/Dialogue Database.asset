@@ -6776,7 +6776,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
-      value: 
+      value: gonna poopoo
       type: 0
       typeString: CustomFieldType_Text
     - title: Body
@@ -6784,13 +6784,73 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Sender
-      value: 
+      value: 11
       type: 5
       typeString: CustomFieldType_Actor
     - title: Is Read
       value: False
       type: 2
       typeString: CustomFieldType_Boolean
+    - title: 
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    - title: Script
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    icon: {fileID: 0}
+  - id: 262
+    fields:
+    - title: Name
+      value: Time
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Item Type
+      value: Tutorial
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: "1. How does time work?\n\n In this game, time only moves forward when
+        a decision is made. Some activities take more time than others, and traveling
+        consumes time as well. Note that you are not expected to explore all the
+        possible decisions within the allotted time, so be judicious regarding what
+        you decide to invest your time in. \n\n2. How much time do I have?\n\n The
+        game is set the day before your first day in a new role. Since you intend
+        to arrive well rested, you only have XY hours available to fit in the preparation
+        you believe necessary. \n\n3. Can I turn back time?\n\n Unfortunately, no.
+        Time invested in an activity cannot be recovered. However, we do not have
+        hearts of stone so you are welcome to reset your progress by restarting the
+        activity at any point."
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
+    icon: {fileID: 0}
+  - id: 264
+    fields:
+    - title: Name
+      value: Log
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Item Type
+      value: Tutorial
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: '[var=game.log]'
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: State
+      value: active
+      type: 0
+      typeString: CustomFieldType_QuestState
     icon: {fileID: 0}
   locations:
   - id: 1
@@ -9211,6 +9271,12 @@ MonoBehaviour:
         destinationDialogueID: 62
         isConnector: 0
         priority: 2
+      - originConversationID: 28
+        originDialogueID: 0
+        destinationConversationID: 28
+        destinationDialogueID: 61
+        isConnector: 0
+        priority: 3
       conditionsString: 
       userScript: 
       onExecute:
@@ -9218,8 +9284,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1053.6783
-        y: 302.25278
+        x: 1349.8846
+        y: 310.76987
         width: 160
         height: 30
     - id: 32
@@ -10362,8 +10428,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 277.7679, y: 237.26897}
-    canvasZoom: 0.96535695
+    canvasScrollPosition: {x: 183.80089, y: 203.35799}
+    canvasZoom: 0.84535706
   - id: 34
     fields:
     - title: Title
@@ -25789,8 +25855,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1727.9073
-        y: 56.905357
+        x: 1765.0841
+        y: 37.920097
         width: 160
         height: 30
     - id: 3
@@ -25941,8 +26007,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 707.857
-        y: 250.44495
+        x: 694.04425
+        y: 284.76382
         width: 160
         height: 30
     - id: 73
@@ -26009,7 +26075,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1014.728
+        x: 1018.4381
         y: 280.3582
         width: 160
         height: 30
@@ -26077,7 +26143,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 459.786
+        x: 457.00342
         y: 307.56836
         width: 160
         height: 30
@@ -26144,8 +26210,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1018.6393
-        y: 333.2227
+        x: 1006.5813
+        y: 346.2082
         width: 160
         height: 30
     - id: 76
@@ -26211,8 +26277,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 714.28845
-        y: 351.84796
+        x: 694.8102
+        y: 422.34082
         width: 160
         height: 30
     - id: 77
@@ -26402,13 +26468,7 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 77
-        originDialogueID: 84
-        destinationConversationID: 193
-        destinationDialogueID: 0
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: 
       userScript: SetQuestState("Hotel/Talk/Douglas", "success")
       onExecute:
@@ -26416,8 +26476,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 936.856
-        y: 821.9273
+        x: 947.4266
+        y: 792.1375
         width: 160
         height: 30
     - id: 89
@@ -26443,8 +26503,8 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: '"Daniel! I was hoping you''d give me a call. Glad you didn''t forget
-          *everything* after the retreat."'
+        value: Daniel! I was hoping you'd give me a call. Glad you didn't forget
+          *everything* after the retreat.
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -26484,8 +26544,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 721.20135
-        y: 55.154892
+        x: 700.79553
+        y: 102.459274
         width: 160
         height: 30
     - id: 90
@@ -26623,8 +26683,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1532.5422
-        y: 294.18484
+        x: 1505.5099
+        y: 253.37323
         width: 160
         height: 30
     - id: 155
@@ -26727,7 +26787,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: '"So, what''s on your mind?"'
+        value: So, what's on your mind?
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -26771,8 +26831,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 715.14905
-        y: 178.02328
+        x: 694.7432
+        y: 225.32767
         width: 160
         height: 30
     - id: 159
@@ -26844,8 +26904,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 718.2856
-        y: 115.186615
+        x: 697.87976
+        y: 162.491
         width: 160
         height: 30
     - id: 160
@@ -27208,8 +27268,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 421.50235, y: 26.662228}
-    canvasZoom: 1.0724989
+    canvasScrollPosition: {x: 798.7241, y: 0}
+    canvasZoom: 0.83249915
   - id: 78
     fields:
     - title: Title
@@ -58710,12 +58770,12 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     overrideSettings:
-      useOverrides: 0
-      overrideSubtitleSettings: 0
+      useOverrides: 1
+      overrideSubtitleSettings: 1
       showNPCSubtitlesDuringLine: 1
       showNPCSubtitlesWithResponses: 1
       showPCSubtitlesDuringLine: 0
-      skipPCSubtitleAfterResponseMenu: 0
+      skipPCSubtitleAfterResponseMenu: 1
       subtitleCharsPerSecond: 30
       minSubtitleSeconds: 2
       continueButton: 0
@@ -58804,8 +58864,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 421.588
-        y: 201.82118
+        x: 398.91125
+        y: 116.24098
         width: 160
         height: 30
     - id: 1
@@ -58883,8 +58943,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 422.70694
-        y: 445.09766
+        x: 402.21478
+        y: 428.97595
         width: 160
         height: 30
     - id: 2
@@ -59045,8 +59105,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 201.7564
-        y: 317.02432
+        x: 133.63678
+        y: 259.2045
         width: 160
         height: 30
     - id: 4
@@ -59132,8 +59192,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 308.29904
-        y: 384.96512
+        x: 189.71756
+        y: 339.76025
         width: 160
         height: 30
     - id: 5
@@ -59221,14 +59281,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetSmartWatch(true);
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 420.1394
-        y: 262.51163
+        x: 402.9038
+        y: 192.54108
         width: 160
         height: 30
     - id: 6
@@ -59311,8 +59371,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 272.76227, y: 46.683937}
-    canvasZoom: 1.1990001
+    canvasScrollPosition: {x: 106.88226, y: 46.44153}
+    canvasZoom: 1.2590001
   - id: 191
     fields:
     - title: Title
@@ -59336,12 +59396,12 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     overrideSettings:
-      useOverrides: 0
-      overrideSubtitleSettings: 0
+      useOverrides: 1
+      overrideSubtitleSettings: 1
       showNPCSubtitlesDuringLine: 1
       showNPCSubtitlesWithResponses: 1
       showPCSubtitlesDuringLine: 0
-      skipPCSubtitleAfterResponseMenu: 0
+      skipPCSubtitleAfterResponseMenu: 1
       subtitleCharsPerSecond: 30
       minSubtitleSeconds: 2
       continueButton: 0
@@ -59430,14 +59490,14 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 351.44333
-        y: 64.51852
+        x: 333.3907
+        y: 37.77388
         width: 160
         height: 30
     - id: 19
       fields:
       - title: Title
-        value: 
+        value: HIDDEN
         type: 0
         typeString: CustomFieldType_Text
       - title: Description
@@ -59487,28 +59547,16 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 191
-        originDialogueID: 19
-        destinationConversationID: 191
-        destinationDialogueID: 20
-        isConnector: 0
-        priority: 2
-      - originConversationID: 191
-        originDialogueID: 19
-        destinationConversationID: 191
-        destinationDialogueID: 21
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: SetItemMenuPanel("Email", true);
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 364.0076
-        y: 192.27023
+        x: 99.90427
+        y: 162.18246
         width: 160
         height: 30
     - id: 20
@@ -59939,7 +59987,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
+    canvasScrollPosition: {x: 22.66827, y: 12.700784}
     canvasZoom: 1.1965016
   - id: 192
     fields:
@@ -59965,11 +60013,11 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
     overrideSettings:
       useOverrides: 1
-      overrideSubtitleSettings: 0
+      overrideSubtitleSettings: 1
       showNPCSubtitlesDuringLine: 1
       showNPCSubtitlesWithResponses: 1
       showPCSubtitlesDuringLine: 0
-      skipPCSubtitleAfterResponseMenu: 0
+      skipPCSubtitleAfterResponseMenu: 1
       subtitleCharsPerSecond: 30
       minSubtitleSeconds: 2
       continueButton: 0
@@ -66039,8 +66087,8 @@ MonoBehaviour:
         width: 349.9491
         height: 308.8964
       color: {r: 0.6392157, g: 0.7019608, b: 0.93333334, a: 0.5019608}
-    canvasScrollPosition: {x: 1779.5087, y: 1466.9067}
-    canvasZoom: 0.80449986
+    canvasScrollPosition: {x: 1156.9479, y: 80.723274}
+    canvasZoom: 1.1644995
   - id: 193
     fields:
     - title: Title
@@ -66064,12 +66112,12 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     overrideSettings:
-      useOverrides: 0
-      overrideSubtitleSettings: 0
+      useOverrides: 1
+      overrideSubtitleSettings: 1
       showNPCSubtitlesDuringLine: 1
       showNPCSubtitlesWithResponses: 1
       showPCSubtitlesDuringLine: 0
-      skipPCSubtitleAfterResponseMenu: 0
+      skipPCSubtitleAfterResponseMenu: 1
       subtitleCharsPerSecond: 30
       minSubtitleSeconds: 2
       continueButton: 0
@@ -66229,7 +66277,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 55.199158
+        x: 56.95643
         y: 217.38988
         width: 160
         height: 30
@@ -66300,8 +66348,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 344.419
-        y: 222.41267
+        x: 334.3147
+        y: 217.14082
         width: 160
         height: 30
     - id: 3
@@ -67157,7 +67205,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 113.35625, y: 0}
+    canvasScrollPosition: {x: 105.59508, y: 104.47763}
     canvasZoom: 1.3399998
   - id: 196
     fields:
@@ -67183,11 +67231,11 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
     overrideSettings:
       useOverrides: 1
-      overrideSubtitleSettings: 0
+      overrideSubtitleSettings: 1
       showNPCSubtitlesDuringLine: 1
       showNPCSubtitlesWithResponses: 1
       showPCSubtitlesDuringLine: 0
-      skipPCSubtitleAfterResponseMenu: 0
+      skipPCSubtitleAfterResponseMenu: 1
       subtitleCharsPerSecond: 30
       minSubtitleSeconds: 2
       continueButton: 0
@@ -67280,7 +67328,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 331.16397
+        x: 303.17804
         y: 1
         width: 160
         height: 30
@@ -67341,34 +67389,16 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 196
-        originDialogueID: 26
-        destinationConversationID: 196
-        destinationDialogueID: 27
-        isConnector: 0
-        priority: 2
-      - originConversationID: 196
-        originDialogueID: 26
-        destinationConversationID: 196
-        destinationDialogueID: 28
-        isConnector: 0
-        priority: 2
-      - originConversationID: 196
-        originDialogueID: 26
-        destinationConversationID: 196
-        destinationDialogueID: 31
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: SetItemMenuPanel("Tutorial", true);
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 360.0479
-        y: 127.36305
+        x: 525.5648
+        y: 109.771835
         width: 160
         height: 30
     - id: 27
@@ -67846,7 +67876,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 24.542158, y: 36.451485}
+    canvasScrollPosition: {x: 56.771484, y: 0}
     canvasZoom: 1.000502
   - id: 197
     fields:

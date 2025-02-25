@@ -13,11 +13,17 @@ using UnityEngine;
 public class ItemUIMenuPanel : UIPanel
 {
 
-    public ItemUIPanel itemUIPanel;
+    public ItemUITextPanel itemUIPanel;
     public ItemUIButton itemButtonTemplate;
     
     public string itemType;
+    [Tooltip("If true, the quest state will be used to determine if the item should be shown.")]
+    public bool useQuestStateForItemValidity;
+    [HideIf("useQuestStateForItemValidity")]
+    [Tooltip( "Field to check if the item should be shown.")]
     public string itemValidField;
+    [HideIf("useQuestStateForItemValidity")]
+    [Tooltip( "If true, the item will be shown if the field is false.")]
     public bool flipValidField;
     
     public List<Item> items => DialogueManager.masterDatabase.items.Where(item => item.LookupValue("Item Type") == itemType).ToList();
@@ -26,16 +32,29 @@ public class ItemUIMenuPanel : UIPanel
     public void ShowItemButtons()
     {
         itemButtonTemplate.gameObject.SetActive(false);
+        itemUIPanel.Open();
         
         foreach (var item in items)
         {
-            var itemVisible = item.LookupBool(itemValidField);
-            if (flipValidField) itemVisible = !itemVisible;
-            if (!itemVisible) continue;
+
+            if (useQuestStateForItemValidity)
+            {
+                var questState = QuestLog.GetQuestState(item.Name);
+                if (questState == QuestState.Unassigned) continue;
+            }
+
+            else
+            {
+                var itemVisible = item.LookupBool(itemValidField);
+                if (flipValidField) itemVisible = !itemVisible;
+                if (!itemVisible) continue;
+            }
+            
             
             var itemButton = Instantiate(itemButtonTemplate, itemButtonTemplate.transform.parent);
-            itemButton.SetButtonFromItem(item, itemUIPanel);
+            itemButton.SetItem(item);
             itemButton.gameObject.SetActive(true);
+            itemButton.target = this.transform;
         }
     }
     
@@ -43,6 +62,28 @@ public class ItemUIMenuPanel : UIPanel
     {
         ShowItemButtons();
         base.Open();
+    }
+
+    protected override void OnHidden()
+    {
+        foreach (Transform child in itemButtonTemplate.transform.parent)
+        {
+            if (child == itemButtonTemplate.transform) continue;
+            Destroy(child.gameObject);
+        }
+        base.OnHidden();
+    }
+    
+    public void OnClick(Item item)
+    {
+        
+        if (item.FieldExists("State"))
+        {
+            QuestLog.SetQuestState(item.Name, QuestState.Success);
+        }
+        
+        
+        itemUIPanel.SetItem(item);
     }
     
     

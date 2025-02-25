@@ -169,19 +169,6 @@ namespace UnityEngine.UI
             
             
         }
-
-
-        public void AnimateElementsIndividuallyWithDelay(float delay)
-        {
-            GetComponent<Animator>().SetBool("Dirty", true);
-            for (int i = 0; i < rectChildren.Count; i++)
-            {
-                var animator = rectChildren[i].GetComponent<Animator>();
-                DOTween.Sequence()
-                    .AppendInterval(i * delay + delay)
-                    .AppendCallback(() => animator.SetTrigger("Show"));
-            }
-        }
         
         public void DestroyAllElements()
         {
@@ -190,6 +177,5 @@ namespace UnityEngine.UI
                 Destroy(rectChildren[i].gameObject);
             }
         }
-        
     }
 }

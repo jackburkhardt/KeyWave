@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
@@ -18,9 +19,12 @@ namespace Project.Runtime.Scripts.UI
         public static List<string> CustomFields = new List<string>
         {
           "buttonStyles",
-          "persistentMenuPanel",
           "accumulateResponse",
-          "accumulatedResponseContainer"
+          "accumulatedResponseContainer",
+          "forceConversation",
+          "conversation",
+          "animateButtonsShow",
+          "delayBetweenButtonShow"
         };
         
 
@@ -35,9 +39,31 @@ namespace Project.Runtime.Scripts.UI
         
         [ShowIf("accumulateResponse")]
         public RectTransform accumulatedResponseContainer;
+
+        public bool forceConversation;
+
+        [ShowIf("forceConversation")]
+        [ConversationPopup]
+        public string conversation;
         
+        public bool animateButtonsShow;
+        public float delayBetweenButtonShow;
         
-        
+        public void AnimateButtonsShow()
+        {
+            IEnumerator AnimateButtons()
+            {
+                for (int i = 0; i < ResponseButtons.Count; i++)
+                {
+                    while ( ResponseButtons[i].GetComponent<Animator>() == null) yield return new WaitForEndOfFrame();
+                    ResponseButtons[i].GetComponent<Animator>().SetTrigger("Show");
+                    yield return new WaitForSeconds( delayBetweenButtonShow);
+                }
+               
+            }
+            
+            StartCoroutine(AnimateButtons());
+        }    
 
         #region overrides
 
@@ -211,6 +237,12 @@ namespace Project.Runtime.Scripts.UI
             }
             
             base.ShowResponsesNow(subtitle, responses, target);
+            
+            
+            if (animateButtonsShow)
+            {
+                AnimateButtonsShow();
+            }
         }
             
             
@@ -232,21 +264,38 @@ namespace Project.Runtime.Scripts.UI
             {
                 app.OnEnable();
             }
-            ;
             
             DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
             RefreshLayoutGroups.Refresh(gameObject);
             StartCoroutine(DelayedRefresh());
-        }
-        
-        public override void Close()
-        {
-            if (!persistentMenuPanel)
+            
+            
+            
+            if (forceConversation)
             {
-                CloseNow();
+                
+                var conversationState = DialogueManager.currentConversationState;
+
+                if (conversationState == null)
+                {
+                    DialogueManager.instance.StartConversation(conversation);
+                }
+
+                else
+                {
+                    var dialogueEntry = DialogueManager.currentConversationState.subtitle.dialogueEntry;
+                    var currentConversation = DialogueManager.masterDatabase.GetConversation(dialogueEntry.conversationID);
+                
+                    if (currentConversation.Title != conversation)
+                    {
+                        DialogueManager.instance.StopConversation();
+                        DialogueManager.instance.StartConversation(conversation);
+                    }
+                }
             }
             
         }
+        
         
         public override void MakeButtonsNonclickable()
         {
@@ -257,12 +306,6 @@ namespace Project.Runtime.Scripts.UI
 
         #endregion
 
-        private void CloseNow()
-        {
-            base.Close();
-            DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
-            DestroyInstantiatedButtons();
-        }
        
         [Serializable]
         public class ResponseButtonStyle
@@ -411,10 +454,7 @@ namespace Project.Runtime.Scripts.UI
             RefreshLayoutGroups.Refresh(gameObject);
         }
         
-        public void ForceClose()
-        {
-           CloseNow();
-        }
+     
    
     }
 }

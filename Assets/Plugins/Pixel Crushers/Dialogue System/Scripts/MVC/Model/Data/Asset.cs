@@ -208,6 +208,11 @@ namespace PixelCrushers.DialogueSystem
         {
             return Field.LookupLocation(fields, title, database);
         }
+        
+        public Actor LookupActor(string title, DialogueDatabase database)
+        {
+            return Field.LookupActor(fields, title, database);
+        }
 
         /// <summary>
         /// Checks whether a field exists and has non-empty text.

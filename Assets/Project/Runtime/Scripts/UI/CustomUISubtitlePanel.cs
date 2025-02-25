@@ -21,7 +21,6 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     public override void Close()
     {
         base.Close(); 
-        DialogueManager.instance.BroadcastMessage("OnUIPanelClose", this);
     }
 
     public void CloseNow()
@@ -32,7 +31,6 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     public override void Open()
     {
         base.Open();
-        DialogueManager.instance.BroadcastMessage("OnUIPanelOpen", this);
         RefreshLayoutGroups.Refresh(gameObject);
         StartCoroutine(DelayedRefresh());
     }
@@ -47,15 +45,12 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public override void ShowSubtitle(Subtitle subtitle)
     {
-       
         
         if (accumulateText && accumulateByInstantiation) RevealAccumulatedContent();
         
         base.ShowSubtitle(subtitle);
         
         if (accumulateText && accumulateByInstantiation) AccumulateContentSecretly(subtitle);
-        
-       
       
     }
 

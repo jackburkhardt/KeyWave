@@ -380,6 +380,29 @@ namespace PixelCrushers.DialogueSystem
             }
         }
         
+        public static Actor LookupActor(List<Field> fields, string title, DialogueDatabase database)
+        {
+            var value = LookupValue(fields, title);
+            
+            if (value == null) return null;
+            
+            try 
+            {
+                if (int.TryParse(value, out int result))
+                {
+                    if (result <= 0) return null;
+                    return database.GetActor(int.Parse(value));
+                }
+                return database.GetActor(value);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        
+        
         
         public static Color LookupColor(List<Field> fields, string title)
         {

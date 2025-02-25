@@ -67,7 +67,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public virtual Transform target { get; set; }
 
-
+        
         /// <summary>
         /// Clears the button.
         /// </summary>

@@ -62,72 +62,6 @@ public class CustomUIPanel : UIPanel
         base.CheckFocus();
     }
     
-    public void OnConversationEnd()
-    {
-        //CheckFocus();
-    }
-
-    public void OnUIPanelClose(UIPanel panel)
-    {
-    }
-    
-
-    public void OnUIPanelOpen(UIPanel panel)
-    {
-        if (GetComponentsInChildren<UIPanel>().Contains(panel))
-        {
-            Open();
-            TakeFocus();
-        }
-        
-       
-        
-    }
-    
-    
-    public void AddFocus()
-    {
-        PushToPanelStack();
-        CheckFocus();
-    }
-
-    public void RemoveFocus()
-    {
-        PopFromPanelStack();
-        CheckFocus();
-        DialogueManager.instance.StopConversation();
-    }
-    
-    private string currentConversation;
-    
-    public void OnConversationLine(Subtitle subtitle)
-    {
-        currentConversation = subtitle.dialogueEntry.GetConversation().Title;
-    }
-    
-    
-    public void OpenSmartWatch()
-    {
-        if (DialogueManager.instance.IsConversationActive)
-        {
-            Debug.Log(currentConversation);
-            DialogueManager.instance.StopConversation();
-            
-            if (currentConversation != "SmartWatch/Home")
-            {
-                DialogueManager.instance.StartConversation("SmartWatch/Home");
-            }
-            
-            else RemoveFocus();
-        }
-          
-        else if (!DialogueManager.instance.IsConversationActive)
-        {
-            DialogueManager.instance.StartConversation("SmartWatch/Home");
-        }
-       
-    }
-    
     public void ForceClose()
     {
         Close();
@@ -180,11 +114,11 @@ public class SequencerCommandFocusCustomPanel : SequencerCommand
             {
                 if (show)
                 {
-                    panel.AddFocus();
+                   // panel.AddFocus();
                 }
                 else
                 {
-                    panel.RemoveFocus();
+                  //  panel.RemoveFocus();
                 }
             }
         }

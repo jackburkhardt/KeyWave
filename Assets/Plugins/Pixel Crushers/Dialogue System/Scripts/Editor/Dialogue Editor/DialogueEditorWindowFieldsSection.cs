@@ -469,6 +469,20 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 : ((newIndex == 0) ? string.Empty : questStateStrings[newIndex]);
         }
 
+        private string DrawQuestStateFieldTruncated(GUIContent label, string value)
+        {
+            int index = 0;
+            var truncatedQuestStateStrings = new string[] { "unassigned", "active", "success" };
+            for (int i = 0; i < truncatedQuestStateStrings.Length; i++)
+            {
+                if (string.Equals(value, truncatedQuestStateStrings[i])) index = i;
+            }
+            int newIndex = EditorGUILayout.Popup(label.text, index, truncatedQuestStateStrings);
+            return (newIndex == index)
+                ? value
+                : ((newIndex == 0) ? string.Empty : truncatedQuestStateStrings[newIndex]);
+        }
+
         private string DrawActorStateField(GUIContent label, string value)
         {
             int index = 0;

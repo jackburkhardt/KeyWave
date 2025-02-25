@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
+using PixelCrushers.Wrappers;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.Utility
@@ -10,6 +11,8 @@ namespace Project.Runtime.Scripts.Utility
         [Dropdown("apps")] public string app;
 
         private List<string> apps => SmartWatch.instance.appNames;
+        
+        
 
         public void OnEnable()
         {
@@ -22,6 +25,15 @@ namespace Project.Runtime.Scripts.Utility
                     subcomponent.Evaluate(standardUIResponseButton);
                     
                 }
+            }
+        }
+        
+        public void OnAppOpen(SmartWatch.App app)
+        {
+            if (app.name != this.app && this.gameObject.activeSelf)
+            {
+                Debug.Log("Closing " + this.app);
+                gameObject.SendMessage("Close");
             }
         }
     }

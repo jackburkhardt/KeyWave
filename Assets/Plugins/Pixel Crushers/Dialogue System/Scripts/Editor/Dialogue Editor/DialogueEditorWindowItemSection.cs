@@ -752,8 +752,36 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 item.fields.Add(senderField);
                 SetDatabaseDirty("Create Sender Field");
             }
-
+            
             senderField.value = DrawActorField(new GUIContent("Sender"), senderField.value);
+            
+            
+            Field stateField = Field.Lookup(item.fields, "State");
+            if (stateField == null)
+            {
+                stateField = new Field("State", "unassigned", FieldType.Text);
+                item.fields.Add(stateField);
+                SetDatabaseDirty("Create State Field");
+            }
+            //EditorGUILayout.LabelField(new GUIContent("State", "The starting state of the quest."), GUILayout.Width(140));
+            stateField.value = DrawQuestStateFieldTruncated(new GUIContent("State", "The starting state of this email."), stateField.value);
+
+            switch (stateField.value)
+            {
+                case "active":
+                    EditorGUILayout.HelpBox("This email is delivered but unread. It will appear in the player's inbox", MessageType.Info);
+                    break;
+                case "success":
+                    EditorGUILayout.HelpBox("This email has been read by the player.", MessageType.Info);
+                    break;
+                default:
+                    EditorGUILayout.HelpBox("This email is unsent. It will not appear in the player's inbox.", MessageType.Info);
+                    break;
+            }
+            
+            
+            EditorGUILayout.Space();
+            DrawScript( item, "Script", label: new GUIContent( "Script", "The script that is sent when the player reads the email for the first time."));
          
         }
 
@@ -769,6 +797,30 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             // Descriptions:
             DrawRevisableTextAreaField(new GUIContent("Body"), item, null, item.fields, "Description");
+            
+            
+            Field stateField = Field.Lookup(item.fields, "State");
+            if (stateField == null)
+            {
+                stateField = new Field("State", "unassigned", FieldType.Text);
+                item.fields.Add(stateField);
+                SetDatabaseDirty("Create State Field");
+            }
+            //EditorGUILayout.LabelField(new GUIContent("State", "The starting state of the quest."), GUILayout.Width(140));
+            stateField.value = DrawQuestStateFieldTruncated(new GUIContent("State", "The starting state of this email."), stateField.value);
+
+            switch (stateField.value)
+            {
+                case "active":
+                    EditorGUILayout.HelpBox("This tutorial is available to the player but unread.", MessageType.Info);
+                    break;
+                case "success":
+                    EditorGUILayout.HelpBox("This tutorial has been read by the player.", MessageType.Info);
+                    break;
+                default:
+                    EditorGUILayout.HelpBox("This tutorial is not visible to the player.", MessageType.Info);
+                    break;
+            }
          
         }
 
@@ -1612,12 +1664,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         }
         
         
-        private void DrawScript(Asset asset, string fieldName, string prependedScript = "")
+        private void DrawScript(Asset asset, string fieldName, string prependedScript = "", GUIContent label = null)
         {
             
             var script = Field.Lookup(asset.fields, fieldName);
-            
-            
                 
             var hasPrepended = !string.IsNullOrEmpty(prependedScript);
             
@@ -1635,14 +1685,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             luaConditionWizard.database = database;
              
             var scriptText = hasPrepended ? script.value.Substring(script.value.Split(script.value.Contains("; ") ? "; " : ";") [0].Length + 2) : script.value;
-            
-            
-          
-             
              
             //var label = item.IsStatic ? "Conditions" : "Additional Conditions";
+
+            label ??= new GUIContent("Script", "Script that runs when this action is completed.");
              
-            var newScript = luaConditionWizard.Draw(new GUIContent( "Script", "Script that runs when this action is completed."), scriptText); 
+            var newScript = luaConditionWizard.Draw(label, scriptText); 
             script.value = hasPrepended ? $"{prependedScript}; {newScript}" : newScript;
                 
             EditorWindowTools.EditorGUILayoutEndGroup();
