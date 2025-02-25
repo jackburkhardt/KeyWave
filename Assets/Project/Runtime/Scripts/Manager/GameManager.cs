@@ -633,10 +633,17 @@ public class SequencerCommandSetLocationImmediate : SequencerCommand
         yield return Project.Runtime.Scripts.App.App.Instance.ChangeScene(location, currentScene, Transition.None);
         GameManager.gameState.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(location));
         
-        GameManager.instance.OnGameSceneStart?.Invoke();
-        DialogueManager.instance.BroadcastMessage( "OnGameSceneStart");
-        
         Stop();
     }
 
+}
+
+public class SequencerCommandOnGameSceneStart : SequencerCommand
+{
+    public void Awake()
+    {
+        return;
+        GameManager.instance.OnGameSceneStart?.Invoke();
+        DialogueManager.instance.BroadcastMessage("OnGameSceneStart");
+    }
 }

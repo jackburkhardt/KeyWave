@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using System.Text.RegularExpressions;
 using PixelCrushers;
@@ -85,7 +86,15 @@ public class TextImageFormatter : MonoBehaviour
         }
         
         RefreshLayoutGroups.Refresh(transform.parent.gameObject);
+        
+        StartCoroutine(DelayedRefresh());
 
+    }
+    
+    IEnumerator DelayedRefresh()
+    {
+        yield return new WaitForSeconds(0.05f);
+        RefreshLayoutGroups.Refresh(transform.parent.gameObject);
     }
     
 

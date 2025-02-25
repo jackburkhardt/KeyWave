@@ -51,18 +51,18 @@ public class MetricsGrid : MonoBehaviour
         switch (displayCondition)
         {
             case DisplayCondition.All:
-                foreach (PointsFishBowl metric in transform)
+                foreach (Transform metric in transform)
                 {
-                    if (metric == template) continue;
+                    if (metric.GetComponent<PointsFishBowl>() == template) continue;
                     validMetrics.Add(metric.transform as RectTransform);
                 }
                 break;
             case DisplayCondition.HighLocationAffinity:
               
-                foreach (PointsFishBowl metric in transform)
+                foreach (Transform metric in transform)
                 {
-                    if (metric == template) continue;
-                    if (location != null && location.LookupInt($"{metric.GetType().Name} Affinity") > 0)
+                    if (metric.GetComponent<PointsFishBowl>() == template) continue;
+                    if (location != null && location.LookupInt($"{metric.GetComponent<PointsFishBowl>().GetPointType().Name} Affinity") > 0)
                     {
                         validMetrics.Add(metric.transform as RectTransform);
                     }
@@ -76,7 +76,7 @@ public class MetricsGrid : MonoBehaviour
     public void EnableValidMetrics(DisplayCondition displayCondition = DisplayCondition.All, Location location = null)
     {
      
-        foreach (PointsFishBowl metric in transform)
+        foreach (Transform metric in transform)
         {
             metric.gameObject.SetActive(false);
         }
