@@ -217,7 +217,7 @@ namespace Project.Runtime.Scripts.Manager
             
             
             
-            Debug.Log("State: " + state + ", conversation Title: " + conversation.Title);
+//            Debug.Log("State: " + state + ", conversation Title: " + conversation.Title);
         }
 
         public void OnLinkedConversationStart()
@@ -391,56 +391,50 @@ namespace Project.Runtime.Scripts.Manager
             }
         
             var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
+            var displayName = QuestLog.GetQuestTitle(questName);
             
-            GameEvent.OnQuestStateChange(questName, state, duration);
+            GameEvent.OnQuestStateChange(displayName, state, duration);
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
         }
 
 
         public void OnQuestEntryStateChange(QuestEntryArgs args)
         {
+            
+            Debug.Log("Quest entry state change: " + args.questName + ", " + args.entryNumber);
+            
             var quest = DialogueManager.masterDatabase.GetQuest(args.questName);
             var entry = args.entryNumber;
-            var prefix = $"Entry {entry} ";
+            var prefix = $"Entry {entry}";
             
             var state = QuestLog.GetQuestEntryState( quest.Name, entry);
             
-            var points = DialogueUtility.GetPointsFromField(quest!.fields, prefix);
+            var points = quest.fields.Where(p => p.title.StartsWith(prefix) && p.title.EndsWith(" Points")).ToList();
+            
+          
 
             if (state == QuestState.Success)
             {
+                Debug.Log("Points count: " + points.Count);
+                
                 foreach (var pointField in points)
                 {
-                    if (pointField.Points == 0) continue;
-
-                    var repeatCount = DialogueLua.GetQuestField(quest.Name, "Repeat Count").asInt;
-                    var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
-                        
-                    for (int i = 0; i < repeatCount; i++)
-                    {
-                        pointField.Points = (int) (pointField.Points * multiplier);
-                    }
-                    GameEvent.OnPointsIncrease(pointField, quest.Name);
+                    var value = pointField.value;
+                    var pointType = pointField.title.Split(" ")[^2];
                     
+                    var pointsField = new Points.PointsField
+                    {
+                        Points = int.Parse(value),
+                        Type = (Points.Type) Enum.Parse(typeof(Points.Type), pointType)
+                    };
+                    
+                    
+                    if (pointsField.Points == 0) continue;
+                    
+                    else Debug.Log(pointsField.Type + " Points: " + pointsField.Points);
+                   
+                    GameEvent.OnPointsIncrease(pointsField, $"{quest.Name} + {prefix}");
                 }
-            }
-
-            if (quest.LookupBool("Auto Set Success"))
-            {
-                
-               // get all states and check if they are success
-               
-               var entryCount = QuestLog.GetQuestEntryCount( quest.Name);
-               
-               for  (int i = 1; i <= entryCount; i++)
-               {
-                   if (i == entry) continue;
-                   var otherState = QuestLog.GetQuestEntryState( quest.Name, i);
-                   if (otherState != QuestState.Success) return;
-               }
-               
-               QuestLog.SetQuestState(quest.Name, QuestState.Success);
-               
             }
         }
     }
