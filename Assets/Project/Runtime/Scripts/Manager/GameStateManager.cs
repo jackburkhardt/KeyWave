@@ -182,7 +182,7 @@ namespace Project.Runtime.Scripts.Manager
                         
                         if (sublocationSwitcherMethod.value.Contains( "ReturnWhenDone"))
                         {
-                           gameState.MostRecentSublocation = currentSublocation.id;
+                           if (gameState.MostRecentSublocation == -1) gameState.MostRecentSublocation = currentSublocation.id;
                         }
                     }
                 }
@@ -324,6 +324,7 @@ namespace Project.Runtime.Scripts.Manager
             {
                 
                 conversation.fields.Add( action);
+                subtitle.dialogueEntry.fields.Remove(action);
                 
                 Debug.Log("Added action to conversation: " + action.value);
             }
@@ -335,6 +336,7 @@ namespace Project.Runtime.Scripts.Manager
                 foreach (var action in conversation.fields.Where(p => p.title == "Action"))
                 {
                     newConversation.fields.Add(action);
+                    Debug.Log("Added action to linked conversation: " + action.value);
                 }
                 
                 conversation.fields.RemoveAll(p => p.title == "Action");
@@ -343,14 +345,14 @@ namespace Project.Runtime.Scripts.Manager
 
             
             var subtitleActor = DialogueManager.masterDatabase.GetActor(subtitle.dialogueEntry.ActorID);
-            if (subtitleActor.Name.Split(" ").Any( p => subtitle.formattedText.text.Split(" ").Contains(p)))
+            if (subtitleActor != null && subtitleActor.Name.Split(" ").Any( p => subtitle.formattedText.text.Split(" ").Contains(p)))
             {
                 DialogueLua.SetActorField(subtitleActor.Name, "Introduced", true);
             }
 
             var conversationActor = DialogueManager.masterDatabase.GetActor(conversation.ActorID);
             
-            if (conversationActor.Name.Split(" ").Any( p => subtitle.formattedText.text.Split(" ").Contains(p)))
+            if (conversationActor != null && conversationActor.Name.Split(" ").Any( p => subtitle.formattedText.text.Split(" ").Contains(p)))
             {
                 DialogueLua.SetActorField(conversationActor.Name, "Introduced", true);
             }
@@ -413,6 +415,17 @@ namespace Project.Runtime.Scripts.Manager
             
             GameEvent.OnQuestStateChange(displayName, state, duration);
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
+            
+            
+            if (QuestLog.GetQuestEntryCount( questName) > 0 && quest.LookupBool("Auto Set Success"))
+            {
+                for (int i = 1; i < QuestLog.GetQuestEntryCount( questName) + 1; i++)
+                {
+                    var entryState = QuestLog.GetQuestEntryState(questName, i);
+                    if (entryState != QuestState.Success) QuestLog.SetQuestEntryState( questName, i, QuestState.Success);
+                }
+            }
+            
         }
 
 
@@ -454,6 +467,19 @@ namespace Project.Runtime.Scripts.Manager
                     GameEvent.OnPointsIncrease(pointsField, $"{quest.Name} + {prefix}");
                 }
             }
+
+            
+            bool autoSetSuccess = quest.LookupBool("Auto Set Success");
+            for (int i = 0; i < QuestLog.GetQuestEntryCount( quest.Name); i++)
+            {
+                autoSetSuccess = autoSetSuccess && QuestLog.GetQuestEntryState(quest.Name, i) == QuestState.Success;
+            }
+            
+            if (autoSetSuccess)
+            {
+                QuestLog.SetQuestState(quest.Name, QuestState.Success);
+            }
+            
         }
     }
 }

@@ -721,7 +721,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 }
                 
                 
-                autoSetSuccess.value = EditorGUILayout.Toggle(new GUIContent("Auto Set Success", "Tick to automatically set the quest to success when all entries are complete."), item.LookupBool("Auto Set Success")).ToString();
+                autoSetSuccess.value = EditorGUILayout.Toggle(new GUIContent("Auto Set Success", "If true, when all quest entries are Success, then the quest itself is set to Success. Conversely, if the quest is Success, then all quest entries are set to Success."), item.LookupBool("Auto Set Success")).ToString();
             }
 
             else

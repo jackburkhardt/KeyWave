@@ -137,11 +137,6 @@ public class CustomDialogueUI : StandardDialogueUI
         string GetActionDisplayName(Item item)
         {
 
-            if (Field.FieldExists(item.fields, "Conditional Display Entry Count"))
-            {
-                Debug.Log("Conditional display entry count exists");
-                Debug.Log("Value: " + item.LookupInt("Conditional Display Entry Count"));
-            }
             var conditionalDisplayEntryCount = item.LookupInt("Conditional Display Entry Count");
             
             
@@ -155,8 +150,6 @@ public class CustomDialogueUI : StandardDialogueUI
                     
                     
                     var condition = item.LookupValue( $"Conditional Display Entry {i} Conditions");
-                    
-                    Debug.Log("Checking condition: " + condition + "; value: " + Lua.IsTrue(condition));
                     
                     if (Lua.IsTrue(condition) && !string.IsNullOrEmpty(condition) && condition != "true")
                     {
@@ -206,7 +199,6 @@ public class CustomDialogueUI : StandardDialogueUI
                     if (conversationTitle == string.Empty)
                     {
                         var newConversation = GameManager.GenerateConversation(action, action.RepeatCount > 0);
-                        newConversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
                         DialogueManager.masterDatabase.conversations.Add(newConversation);
                         newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
                             newDialogueEntry.id, newConversation.id, 0));
@@ -215,17 +207,13 @@ public class CustomDialogueUI : StandardDialogueUI
                     else if (conversationTitle != null)
                     {
                         var conversation = DialogueManager.masterDatabase.GetConversation(conversationTitle);
-                        conversation.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
                         newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
                             newDialogueEntry.id, conversation.id, 0));
                     }
                 }
 
-                else
-                {
-                    
-                    newDialogueEntry.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
-                }
+                newDialogueEntry.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
+                
 
                 var newResponse = new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry,
                     Lua.IsTrue($"{newDialogueEntry.conditionsString}"));
