@@ -93,7 +93,7 @@ public class TextImageFormatter : MonoBehaviour
     
     IEnumerator DelayedRefresh()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.005f);
         RefreshLayoutGroups.Refresh(transform.parent.gameObject);
     }
     
