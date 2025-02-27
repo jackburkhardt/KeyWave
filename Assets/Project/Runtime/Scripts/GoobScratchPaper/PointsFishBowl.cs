@@ -115,7 +115,7 @@ public class PointsFishBowl : MonoBehaviour
     {
         if (pointType != type)
         {
-            GetComponent<Selectable>().interactable = false;
+//            GetComponent<Selectable>().interactable = false;
             return;
         }
         

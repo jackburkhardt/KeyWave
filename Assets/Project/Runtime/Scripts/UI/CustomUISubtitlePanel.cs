@@ -8,7 +8,6 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
 {
    
     
-    public string unintroducedSpeakerName;
     public UITextField conversantName;
     
     public RectTransform templateContent;
@@ -71,13 +70,12 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     {
         if (addSpeakerName && !string.IsNullOrEmpty(subtitle.speakerInfo.Name))
         {
-            subtitle.formattedText.text =
+            subtitle.formattedText.text = 
                 Field.FieldExists(
                     DialogueManager.instance.masterDatabase.GetActor(subtitle.speakerInfo.nameInDatabase).fields,
                     "Introduced")
-                && !subtitle.speakerInfo.GetFieldBool("Introduced")
-                    ? FormattedText.Parse(string.Format(addSpeakerNameFormat,
-                        new object[] { unintroducedSpeakerName, subtitle.formattedText.text })).text
+                && !DialogueLua.GetActorField(subtitle.speakerInfo.Name, "Introduced" ).asBool
+                    ? subtitle.formattedText.text
                     : FormattedText.Parse(string.Format(addSpeakerNameFormat,
                         new object[] { subtitle.speakerInfo.Name, subtitle.formattedText.text })).text;
         }

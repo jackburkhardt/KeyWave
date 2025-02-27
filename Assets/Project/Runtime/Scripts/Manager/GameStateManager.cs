@@ -147,9 +147,8 @@ namespace Project.Runtime.Scripts.Manager
                     
                     if (pointItem != null)
                     {
-                        var score = pointItem.AssignedField("Score");
-                        score.value = $"{pointItem.LookupInt("Score") + pointsField.Points}";
-                        DialogueLua.SetItemField( pointItem.Name, "Score", score.value);
+                        var currentScore = DialogueLua.GetItemField( pointItem.Name, "Score").asInt;
+                        DialogueLua.SetItemField( pointItem.Name, "Score", currentScore);
                     }
                     
                     Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
@@ -319,10 +318,10 @@ namespace Project.Runtime.Scripts.Manager
         
         public void OnConversationLine(Subtitle subtitle)
         {
+            var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
         
             foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
             {
-                var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
                 
                 conversation.fields.Add( action);
                 
@@ -332,7 +331,6 @@ namespace Project.Runtime.Scripts.Manager
 
             if (subtitle.dialogueEntry.outgoingLinks.Count == 1 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
             {
-                var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
                 var newConversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
                 foreach (var action in conversation.fields.Where(p => p.title == "Action"))
                 {
@@ -341,6 +339,22 @@ namespace Project.Runtime.Scripts.Manager
                 
                 conversation.fields.RemoveAll(p => p.title == "Action");
             }
+
+
+            
+            var subtitleActor = DialogueManager.masterDatabase.GetActor(subtitle.dialogueEntry.ActorID);
+            if (subtitleActor.Name.Split(" ").Any( p => subtitle.formattedText.text.Split(" ").Contains(p)))
+            {
+                DialogueLua.SetActorField(subtitleActor.Name, "Introduced", true);
+            }
+
+            var conversationActor = DialogueManager.masterDatabase.GetActor(conversation.ActorID);
+            
+            if (conversationActor.Name.Split(" ").Any( p => subtitle.formattedText.text.Split(" ").Contains(p)))
+            {
+                DialogueLua.SetActorField(conversationActor.Name, "Introduced", true);
+            }
+
         }
         
         IEnumerator QueueConversationEndEvent(Action callback)

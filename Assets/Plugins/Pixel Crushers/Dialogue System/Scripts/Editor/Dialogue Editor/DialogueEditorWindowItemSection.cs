@@ -931,8 +931,16 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 SetDatabaseDirty("Item Icon");
             }
             
-            
             DrawPointsCategoryIconPreview(item);
+            
+            Field scoreField = Field.Lookup(item.fields, "Score");
+            
+            if (scoreField == null)
+            {
+                scoreField = new Field("Score", "0", FieldType.Number);
+                item.fields.Add(scoreField);
+                SetDatabaseDirty("Create Score Field");
+            }
             
             var currentScore = item.LookupInt("Score");
             var newScore = EditorGUILayout.IntField(new GUIContent("Score"), currentScore);

@@ -18,18 +18,6 @@ namespace Project.Runtime.Scripts.Events.Actions
         public void OnConversationLineEnd(Subtitle subtitle)
         {
             
-            foreach (var actor in DialogueManager.masterDatabase.actors)
-            {
-                foreach (var name in actor.Name.Split(" "))
-                {
-                    if (subtitle.formattedText.text.Contains(name))
-                    {
-                        Field.SetValue(actor.fields, "Introduced", true);
-                        DialogueLua.SetActorField(actor.Name, "Introduced", true);
-                    }
-                }
-                
-            }
         }
 
 

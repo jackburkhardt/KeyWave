@@ -48,7 +48,6 @@ namespace PixelCrushers.DialogueSystem
             
             EditorGUILayout.PropertyField(serializedObject.FindProperty("addSpeakerName"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("addSpeakerNameFormat"), true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("unintroducedSpeakerName"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("delayTypewriterUntilOpen"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("clearTextOnConversationStart"), true);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("scrollbarEnabler"), true);

@@ -131,7 +131,7 @@ namespace Project.Runtime.Scripts.Manager
             var pointsType = GetDatabaseItem(type);
             if (pointsType == null) return 0;
 
-            return pointsType.LookupInt("Score");
+            return DialogueLua.GetItemField( pointsType.Name, "Score").asInt;
         }
 
         public static int MaxScore(string type, DialogueDatabase database = null)
@@ -141,7 +141,7 @@ namespace Project.Runtime.Scripts.Manager
             var pointsType = GetDatabaseItem( type);
             if (pointsType == null) return 0;
 
-            return pointsType.LookupInt("Max Score");
+            return DialogueLua.GetItemField( pointsType.Name, "Max Score").asInt;
         }
         
 
