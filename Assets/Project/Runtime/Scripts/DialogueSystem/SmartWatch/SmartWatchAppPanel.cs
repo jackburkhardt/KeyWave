@@ -1,16 +1,20 @@
+using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
-using PixelCrushers.Wrappers;
+using Project.Editor.Scripts.Attributes.DrawerAttributes;
 using UnityEngine;
 
 namespace Project.Runtime.Scripts.Utility
 {
-    public class SmartWatchApp : MonoBehaviour
+    public class SmartWatchAppPanel : MonoBehaviour
     {
-        [Dropdown("apps")] public string app;
 
-        private List<string> apps => SmartWatch.instance.appNames;
+        public UIPanel panel;
+
+        [SmartWatchAppPopup]
+        public string app;
         
         
 
@@ -23,7 +27,6 @@ namespace Project.Runtime.Scripts.Utility
                 foreach (var subcomponent in standardUIResponseButton.GetComponentsInChildren<SmartWatchAppSubcomponent>(true))
                 {
                     subcomponent.Evaluate(standardUIResponseButton);
-                    
                 }
             }
         }
@@ -32,8 +35,7 @@ namespace Project.Runtime.Scripts.Utility
         {
             if (app.name != this.app && this.gameObject.activeSelf)
             {
-                Debug.Log("Closing " + this.app);
-                gameObject.SendMessage("Close");
+                panel.Close();
             }
         }
     }

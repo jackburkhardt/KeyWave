@@ -8,6 +8,7 @@ using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,8 +22,7 @@ namespace Project.Runtime.Scripts.UI
           "buttonStyles",
           "accumulateResponse",
           "accumulatedResponseContainer",
-          "forceConversation",
-          "conversation",
+          "forceOverride",
           "animateButtonsShow",
           "delayBetweenButtonShow"
         };
@@ -40,12 +40,7 @@ namespace Project.Runtime.Scripts.UI
         [ShowIf("accumulateResponse")]
         public RectTransform accumulatedResponseContainer;
 
-        public bool forceConversation;
-
-        [ShowIf("forceConversation")]
-        [ConversationPopup]
-        public string conversation;
-        
+        public bool forceOverride = false;
         public bool animateButtonsShow;
         public float delayBetweenButtonShow;
         
@@ -116,6 +111,7 @@ namespace Project.Runtime.Scripts.UI
             {
                 if (GetButtonStyle(response, out var stylePrefab))
                 {
+                    Debug.Log("Using style prefab for response: " + response.destinationEntry.Title);
                     var button = Instantiate(stylePrefab.gameObject);
                     button.SetActive(true);
                     return button;
@@ -224,13 +220,12 @@ namespace Project.Runtime.Scripts.UI
             NotifyContentChanged();
         }
 
-
         protected override void ShowResponsesNow(Subtitle subtitle, Response[] responses, Transform target)
         {
             
             if (responses == null || responses.Length == 0)
             {
-                if (TryGetComponent<SmartWatchApp>(out var app))
+                if (TryGetComponent<SmartWatchAppPanel>(out var app))
                 {
                     app.OnEnable();
                 }
@@ -258,9 +253,20 @@ namespace Project.Runtime.Scripts.UI
         
         public override void Open()
         {
+
+            if (forceOverride)
+            {
+                var standardDialogueUI = DialogueManager.dialogueUI as CustomDialogueUI;
+                if (standardDialogueUI == null) return;
+                standardDialogueUI.ForceOverrideMenuPanel( this);
+            }
+
+          
+            
+            
             base.Open();
             
-            if (!deactivateOnHidden && TryGetComponent<SmartWatchApp>(out var app))
+            if (!deactivateOnHidden && TryGetComponent<SmartWatchAppPanel>(out var app))
             {
                 app.OnEnable();
             }
@@ -270,28 +276,6 @@ namespace Project.Runtime.Scripts.UI
             
             
             
-            if (forceConversation)
-            {
-                
-                var conversationState = DialogueManager.currentConversationState;
-
-                if (conversationState == null)
-                {
-                    DialogueManager.instance.StartConversation(conversation);
-                }
-
-                else
-                {
-                    var dialogueEntry = DialogueManager.currentConversationState.subtitle.dialogueEntry;
-                    var currentConversation = DialogueManager.masterDatabase.GetConversation(dialogueEntry.conversationID);
-                
-                    if (currentConversation.Title != conversation)
-                    {
-                        DialogueManager.instance.StopConversation();
-                        DialogueManager.instance.StartConversation(conversation);
-                    }
-                }
-            }
             
         }
         
@@ -441,6 +425,8 @@ namespace Project.Runtime.Scripts.UI
    
     }
 }
+
+
 
 
 public class SequencerCommandSetMenuPanelTrigger : SequencerCommand

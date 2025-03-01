@@ -10,7 +10,7 @@ using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
-public class ItemUIMenuPanel : UIPanel
+public class ItemUIPanel : UIPanel
 {
 
     public ItemUITextPanel itemUIPanel;
@@ -86,8 +86,5 @@ public class ItemUIMenuPanel : UIPanel
         itemUIPanel.SetItem(item);
     }
     
-    
-    
-    
-    
 }
+

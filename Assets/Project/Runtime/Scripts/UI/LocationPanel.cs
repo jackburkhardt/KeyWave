@@ -18,10 +18,24 @@ public class LocationPanel : UIPanel
     
     private Animator _animator;
     public RectTransform noCharactersPresent;
+    
+    private Location _location;
 
     private void Awake()
     {
         _animator ??= GetComponent<Animator>();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        LocationUIResponseButton.OnLocationSelected += ShowLocationInfo;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        LocationUIResponseButton.OnLocationSelected -= ShowLocationInfo;
     }
 
     private void OnValidate()
@@ -57,33 +71,45 @@ public class LocationPanel : UIPanel
         
     }
 
-    public void SetLocationInfo(CustomUIResponseButton customUIResponseButton)
+    public void ShowLocationInfo(StandardUIResponseButton standardUIResponseButton)
     {
-        var location = customUIResponseButton.assignedLocation;
+       
+        var dialogueEntry = standardUIResponseButton.response.destinationEntry;
+        var locationField = dialogueEntry.fields.First(p => p.title == "Location");
+        var location = DialogueManager.masterDatabase.GetLocation(int.Parse(locationField.value));
         
-        if (location == null)
-        {
-            Debug.LogError("Location not assigned to CustomUIResponseButton");
-            return;
-        }
-        
-        SetLocationInfo(location);
+        ShowLocationInfo(location);
+    }
+
+    public override void Open()
+    {
+        gameObject.SetActive(true);
+        if (_location == null) return;
+        base.Open();
+    }
+
+    public override void Close()
+    {
+        _location = null;
+        base.Close();
     }
     
     public void ShowLocationInfo(Location location)
     {
+        
         if (isOpen)
         {
-            StartCoroutine(ShowLocation());
+            StartCoroutine(CloseThenShowLocation());
         }
 
         else
         {
+            _location = location;
             Open();
             SetLocationInfo(location);
         }
         
-        IEnumerator ShowLocation()
+        IEnumerator CloseThenShowLocation()
         {
             Close();
             yield return new WaitForEndOfFrame();
@@ -94,26 +120,9 @@ public class LocationPanel : UIPanel
             var longestClip = clip.Max(c => c.clip.length) * state.speed;
             var animationLength = Mathf.Max(longestClip, transition.duration);
             yield return new WaitForSeconds(animationLength);
-            
+            _location = location;
             ShowLocationInfo(location);
         }
-    }
-    
-    public void ShowLocationInfo(CustomUIResponseButton customUIResponseButton)
-    {
-        var locationField = customUIResponseButton.response.destinationEntry.fields.First(p => p.title == "Location");
-        
-        
-        
-        if (locationField == null)
-        {
-            Debug.LogError("Location not assigned to CustomUIResponseButton");
-            return;
-        }
-        
-        var location = DialogueManager.masterDatabase.GetLocation(int.Parse(locationField.value));
-        
-        ShowLocationInfo(location);
     }
     
  

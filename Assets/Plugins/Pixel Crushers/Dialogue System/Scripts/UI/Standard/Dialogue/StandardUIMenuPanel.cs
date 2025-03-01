@@ -213,7 +213,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 if (string.IsNullOrEmpty(response.formattedText.text))
                 {
-                    Debug.LogWarning($"Dialogue System: Response [{response.destinationEntry.conversationID}:{response.destinationEntry.id}] has no text for a response button.");
+//                    Debug.LogWarning($"Dialogue System: Response [{response.destinationEntry.conversationID}:{response.destinationEntry.id}] has no text for a response button.");
                 }
             }
         }

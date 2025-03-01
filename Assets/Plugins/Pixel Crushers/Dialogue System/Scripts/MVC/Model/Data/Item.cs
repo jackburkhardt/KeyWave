@@ -95,6 +95,15 @@ namespace PixelCrushers.DialogueSystem
             }
         }
         
+        public bool IsApp
+        {
+            get {  return LookupValue(DialogueSystemFields.ItemType) == "App";  }
+            set
+            {
+                if (value) Field.SetValue(fields, DialogueSystemFields.ItemType, "App");
+            }
+        }
+        
         public int RepeatCount
         {
             get { return LookupInt(DialogueSystemFields.RepeatCount); }

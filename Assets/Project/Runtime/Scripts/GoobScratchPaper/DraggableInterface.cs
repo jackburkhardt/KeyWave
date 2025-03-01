@@ -36,8 +36,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     [Tooltip("Scales the radius used to check if a child is inside or outside the viewport.")]
     public float BoundsCheckRadiusMultiplier = 1.6f;
 
-    private float? _initialScale = null;
-    private Vector2? _initialPosition = null;
+   
     
     private float Scale
     {
@@ -87,12 +86,6 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
         }
     }
     
-    private void Awake()
-    {
-        _initialScale = Scale;
-        _initialPosition = _rectTransform.anchoredPosition;
-    }
-
     private void OnValidate()
     {
         _rectTransform ??= GetComponent<RectTransform>();
@@ -117,8 +110,8 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
 
     public void Reset()
     {
-        if (_initialScale != null) Scale = _initialScale.Value;
-        if (_initialPosition != null) _rectTransform.anchoredPosition = _initialPosition.Value;
+        Scale = 0.95f;
+        _rectTransform.anchoredPosition = Vector2.zero;
     }
 
     public void OnDrag(PointerEventData eventData)

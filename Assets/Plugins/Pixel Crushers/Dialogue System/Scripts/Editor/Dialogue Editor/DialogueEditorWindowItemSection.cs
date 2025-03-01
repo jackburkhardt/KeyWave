@@ -76,16 +76,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
         private List<Item> points => database.items.FindAll(p => p.IsPointCategory);
         
+        private List<Item> apps => database.items.FindAll(p => p.IsApp);
         
-        private string[] itemToolbarNames => new[] {"Item", "Quest", "Action", "Email", "Contact", "Tutorial", "Point", "Uncategorized"};
-        private string[] itemToolbarNamesPlural => new[] {"Items", "Quests", "Actions", "Emails", "Contacts", "Tutorials", "Points"};
         
-        private List<Action<Item>> drawMethods => new() {DrawItemProperties,  DrawQuestProperties, DrawActionProperties, DrawEmailProperties, DrawContactProperties, DrawTutorialProperties, DrawPointsCategoryProperties, DrawUncategorizedProperties};
+        private string[] itemToolbarNames => new[] {"Item", "Quest", "Action", "Email", "Contact", "Tutorial", "Point", "App", "Uncategorized"};
+        private string[] itemToolbarNamesPlural => new[] {"Items", "Quests", "Actions", "Emails", "Contacts", "Tutorials", "Points", "Apps"};
         
-        private List<List<Item>> itemMatrix => new() { items, quests, actions, emails, contacts, tutorials, points, uncategorized};
+        private List<Action<Item>> drawMethods => new() {DrawItemProperties,  DrawQuestProperties, DrawActionProperties, DrawEmailProperties, DrawContactProperties, DrawTutorialProperties, DrawPointsCategoryProperties, DrawAppProperties, DrawUncategorizedProperties};
+        
+        private List<List<Item>> itemMatrix => new() { items, quests, actions, emails, contacts, tutorials, points, apps, uncategorized};
 
         private List<Item> uncategorized;
-        private List<Field> CurrentItemTemplateFields => new[] {template.itemFields, template.questFields, template.actionFields, template.emailFields, template.contactFields, template.tutorialFields, template.pointsCategoryFields}[itemToolbarIndex];
+        private List<Field> CurrentItemTemplateFields => new[] {template.itemFields, template.questFields, template.actionFields, template.emailFields, template.contactFields, template.tutorialFields, template.pointsCategoryFields, template.appFields}[itemToolbarIndex];
         
         private string CurrentItemLabel => itemToolbarNames[itemToolbarIndex];
         private List<Item> CurrentItemList => itemMatrix[itemToolbarIndex];
@@ -139,7 +141,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
         private void DrawItemSection()
         { 
-            uncategorized = database.items.FindAll(p => !p.IsItem && !p.IsQuest && !p.IsAction && !p.IsEmail && !p.IsContact && !p.IsTutorial && !p.IsPointCategory);
+            uncategorized = database.items.FindAll(p => !p.IsItem && !p.IsQuest && !p.IsAction && !p.IsEmail && !p.IsContact && !p.IsTutorial && !p.IsPointCategory && !p.IsApp);
 
             var toolbarNames = itemToolbarNamesPlural.ToList();
             
@@ -148,7 +150,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 toolbarNames.Add($"Uncategorized");
             }
             
-            var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, toolbarNames.ToArray(), GUILayout.Width(toolbarNames.Count * 100));
+            var newItemToolbarIndex = GUILayout.Toolbar(itemToolbarIndex, toolbarNames.ToArray(), GUILayout.Width(toolbarNames.Count * 90));
 
             if (newItemToolbarIndex != itemToolbarIndex)
             {
@@ -791,6 +793,18 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             DrawRevisableTextAreaField(new GUIContent("Body"), item, null, item.fields, "Description");
             
             DrawStartConversationProperties( item);
+            
+            Field availableField = Field.Lookup(item.fields, "Available");
+            
+            if (availableField == null)
+            {
+                availableField = new Field("Available", "True", FieldType.Boolean);
+                item.fields.Add(availableField);
+                SetDatabaseDirty("Create Available Field");
+            }
+            
+            availableField.value = EditorGUILayout.Toggle(new GUIContent("Available", "Tick to make this contact available to the player."), item.LookupBool("Available")).ToString();
+           
         }
         
         private void DrawTutorialProperties(Item item)
@@ -920,16 +934,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
             
             iconScale.value = EditorGUILayout.TextField(new GUIContent("Icon Scale"), iconScale.value);
-            
-            
-            var newIcon = EditorGUILayout.ObjectField(new GUIContent("Icon", "The icon used for this point category."),
-                item.icon, typeof(Texture2D), false, GUILayout.Height(64)) as Texture2D;
-            if (newIcon != item.icon)
-            {
-                item.icon = newIcon;
-                ClearActorInfoCaches();
-                SetDatabaseDirty("Item Icon");
-            }
+
+            DrawIconField(new GUIContent("Icon", "The icon used for this point category."), item);
             
             DrawPointsCategoryIconPreview(item);
             
@@ -994,9 +1000,62 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
         }
         
+        private void DrawAppProperties(Item item)
+        {
+            Field isDefaultField = Field.Lookup(item.fields, "Is Default");
+            
+            if (isDefaultField == null)
+            {
+                isDefaultField = new Field("Is Default", "False", FieldType.Boolean);
+                item.fields.Add(isDefaultField);
+                SetDatabaseDirty("Create Is Default Field");
+            }
+            
+            var anyAppDefault = apps.Any(x => x.LookupBool("Is Default"));
+
+            if (!anyAppDefault || isDefaultField.value == "True")
+            {
+                var newIsDefault = EditorGUILayout.Toggle(new GUIContent("Is Default", "Tick to make this the default (home screen) app."), item.LookupBool("Is Default")).ToString();
+                if (newIsDefault != isDefaultField.value)
+                {
+                    foreach (var app in apps)
+                    {
+                        if (app != item)
+                        {
+                            app.fields.Find(x => x.title == "Is Default").value = "False";
+                        }
+                    }
+                
+                    isDefaultField.value = newIsDefault;
+                }
+            }
+
+           
+
+            if (item.LookupBool("Is Default")) return;
+            
+            DrawDoubleScripts( item, "Script", $"SetSmartWatchApp(\"{item.Name}\")");
+            
+            var forceResponseMenu = Field.Lookup(item.fields, "Force Response Menu");
+            if (forceResponseMenu == null)
+            {
+                forceResponseMenu = new Field("Force Response Menu", "False", FieldType.Boolean);
+                item.fields.Add(forceResponseMenu);
+                SetDatabaseDirty("Create Force Response Menu Field");
+            }
+            
+            forceResponseMenu.value = EditorGUILayout.Toggle(new GUIContent("Force Response Menu", "Tick to force the response menu to appear when this app is opened by generating a dialogue entry."), item.LookupBool("Force Response Menu")).ToString();
+            
+            EditorGUILayout.Space();
+            
+            DrawColorField( new GUIContent("Color"), item, "Color");
+            
+            DrawIconField(new GUIContent("Icon", "The icon used for this app in the home screen."), item);
+            
+        }
+        
         private void DrawUncategorizedProperties(Item item)
         {
-            
             Field itemTypeField = Field.Lookup(item.fields, "Item Type");
             if (itemTypeField == null)
             {
@@ -1007,6 +1066,19 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             itemTypeField.value = EditorGUILayout.TextField(new GUIContent("Item Type"), itemTypeField.value);
          
+        }
+        
+        private void DrawIconField( GUIContent label, Item item)
+        {
+            var newIcon = EditorGUILayout.ObjectField(label,
+                item.icon, typeof(Texture2D), false, GUILayout.Height(64)) as Texture2D;
+            if (newIcon != item.icon)
+            {
+                item.icon = newIcon;
+                ClearActorInfoCaches();
+                SetDatabaseDirty("Item Icon");
+            }
+
         }
         
     

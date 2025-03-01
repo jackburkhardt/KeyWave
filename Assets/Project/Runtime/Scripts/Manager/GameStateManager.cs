@@ -162,11 +162,13 @@ namespace Project.Runtime.Scripts.Manager
         
         public void OnConversationStart()
         {
-            
+            Debug.Log("Conversation started");
             var conversation = DialogueManager.masterDatabase.GetConversation(DialogueManager.currentConversationState
                 .subtitle.dialogueEntry.conversationID);
             
             var actions = conversation.fields.Where(p => p.title == "Action").ToList();
+            
+            if (actions.Count > 0) Debug.Log("Actions found: " + actions.Count);
 
             foreach (var action in actions)
             {
@@ -212,11 +214,6 @@ namespace Project.Runtime.Scripts.Manager
                     AudioEngine.Instance.PlayClipLooped(environment);
                 }
             }
-            
-            
-            
-            
-//            Debug.Log("State: " + state + ", conversation Title: " + conversation.Title);
         }
 
         public void OnLinkedConversationStart()
@@ -294,7 +291,7 @@ namespace Project.Runtime.Scripts.Manager
                     StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
                     break;
                 case State.Base:
-                    StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToCurrentApp));
+                    StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToDefaultApp));
                     break;
                 case State.SmartWatch:
                     var smartWatchAppConversationTitles = SmartWatch.GetAllApps().Select( p => p.dialogueSystemConversationTitle).ToList();
@@ -322,8 +319,13 @@ namespace Project.Runtime.Scripts.Manager
         
             foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
             {
-                
-                conversation.fields.Add( action);
+                if ( subtitle.dialogueEntry.outgoingLinks.Count > 0 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
+                {
+                    
+                    var destinationConversation =  DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
+                    destinationConversation.fields.Add(action);
+                }
+                else conversation.fields.Add( action);
                 subtitle.dialogueEntry.fields.Remove(action);
                 
                 Debug.Log("Added action to conversation: " + action.value);

@@ -16,9 +16,14 @@ public class PhoneCallPanel : UIPanel
     public AudioClip ringtone;
     public AudioClip answerSound;
     public string answerAnimationTrigger;
-
+    
+    public StandardUISubtitlePanel subtitlePanel;
+    public StandardUIMenuPanel menuPanel;
     public StandardUISubtitlePanel thoughtPanel;
+    public DialogueActor thoughtActor;
     private bool _markForAwakeAnimation;
+
+    private CustomDialogueUI _customDialogueUI;
 
     protected override void OnEnable()
     {
@@ -35,17 +40,16 @@ public class PhoneCallPanel : UIPanel
 
     public override void Open()
     {
+        _customDialogueUI ??= FindObjectOfType<CustomDialogueUI>();
+        
+        _customDialogueUI.OverrideDefaultPanels(subtitlePanel, subtitlePanel, menuPanel);
 
-        if (thoughtPanel != null)
+        if (thoughtPanel != null && thoughtActor != null)
         {
-            var thought = FindObjectsByType<DialogueActor>( FindObjectsInactive.Include, FindObjectsSortMode.None).First( p => p.actor == "Thought");
-            FindObjectsOfType< CustomDialogueUI>().First().SetActorMenuPanelNumber( thought, MenuPanelNumber.Panel8);
-            FindObjectsOfType<CustomDialogueUI>().First().SetActorSubtitlePanelNumber(thought, SubtitlePanelNumber.Panel2);
+             _customDialogueUI.SetActorMenuPanelNumber( thoughtActor, MenuPanelNumber.Panel8);
+            _customDialogueUI.SetActorSubtitlePanelNumber(thoughtActor, SubtitlePanelNumber.Panel2);
         }
         
-       
-        
-    
         base.Open();
         if (_markForAwakeAnimation) StartCoroutine(AwakeAnimation());
         _markForAwakeAnimation = false;

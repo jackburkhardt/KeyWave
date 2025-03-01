@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace Project.Editor.Scripts
 {
-    [CustomEditor(typeof(CustomUIMenuPanel))]
+    [CustomEditor(typeof(CustomUIMenuPanel) , true)]
     public class CustomMenuPanelEditor : StandardUIMenuPanelEditor
     {
         public override void OnInspectorGUI()

@@ -83,6 +83,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.RegisterFunction(nameof(SetItemMenuPanel), this, SymbolExtensions.GetMethodInfo(() => SetItemMenuPanel(string.Empty, false)));
             Lua.RegisterFunction(nameof(SetSmartWatch), this,
                 SymbolExtensions.GetMethodInfo(() => SetSmartWatch(false)));
+            Lua.RegisterFunction(nameof(SetSmartWatchApp), this,  SymbolExtensions.GetMethodInfo(() => SetSmartWatchApp(string.Empty)));
         }
 
         private void DeregisterLuaFunctions()
@@ -124,6 +125,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(PlayClip));
             Lua.UnregisterFunction(nameof(SetItemMenuPanel));
             Lua.UnregisterFunction(nameof(SetSmartWatch));
+            Lua.UnregisterFunction(nameof(SetSmartWatchApp));
         }
         
         
@@ -374,7 +376,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public void SetItemMenuPanel(string name, bool value = true)
         {
-            var itemPanel = FindObjectsByType<ItemUIMenuPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault(p => p.itemType == name);
+            var itemPanel = FindObjectsByType<ItemUIPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault(p => p.itemType == name);
             if (itemPanel != null)
             {
                if (value)   itemPanel.Open();
@@ -382,13 +384,23 @@ namespace Project.Runtime.Scripts.DialogueSystem
             }
         }
 
-        public void SetSmartWatch(bool value = true)
+        public void SetSmartWatch(bool value)
         {
             var smartWatch = FindObjectsByType<SmartWatchPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault();
             if (smartWatch != null)
             {
                 if (value)   smartWatch.Open();
+                
                 else smartWatch.Close();
+            }
+        }
+
+        public void SetSmartWatchApp(string app)
+        {
+            var smartWatch = FindObjectsByType<SmartWatchPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault();
+            if (smartWatch != null)
+            {
+                smartWatch.OpenApp(app);
             }
         }
         

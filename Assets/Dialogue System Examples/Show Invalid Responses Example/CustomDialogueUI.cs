@@ -66,179 +66,46 @@ public class CustomDialogueUI : StandardDialogueUI
         base.Start();
         
     }
+
+    private StandardUIMenuPanel _currentMenuOverride;
     
-    public void ClearForcedMenuOverride()
+    public override void ForceOverrideMenuPanel(StandardUIMenuPanel customPanel)
     {
-        conversationUIElements.standardMenuControls.ForceOverrideMenuPanel( null);
+        conversationUIElements.standardMenuControls.ForceOverrideMenuPanel(customPanel);
+    }
+
+    
+    public void ClearForcedMenuOverride(StandardUIMenuPanel customPanel)
+    {
+        if (customPanel == _currentMenuOverride) conversationUIElements.standardMenuControls.ForceOverrideMenuPanel( null);
+    }
+    
+    public void OverrideDefaultPanels( StandardUISubtitlePanel pcSubtitlePanel = null, StandardUISubtitlePanel npcSubtitlePanel = null, StandardUIMenuPanel menuPanel = null)
+    {
+        if (pcSubtitlePanel != null) conversationUIElements.standardSubtitleControls.defaultPCPanel = pcSubtitlePanel;
+        if (npcSubtitlePanel != null) conversationUIElements.standardSubtitleControls.defaultNPCPanel = npcSubtitlePanel;
+        if (menuPanel != null) conversationUIElements.standardMenuControls.defaultPanel = menuPanel;
+    }
+    
+    public void ClearAllDefaultOverrides()
+    {
+        conversationUIElements.standardSubtitleControls.defaultPCPanel = conversationUIElements.defaultPCSubtitlePanel;
+        conversationUIElements.standardSubtitleControls.defaultNPCPanel = conversationUIElements.defaultNPCSubtitlePanel;
+        conversationUIElements.standardMenuControls.defaultPanel = conversationUIElements.defaultMenuPanel;
     }
     
 
     public override void ShowResponses(Subtitle subtitle, Response[] responses, float timeout)
     {
         DialogueManager.conversationModel.GetConversationOverrideSettings( DialogueManager.currentConversationState).skipPCSubtitleAfterResponseMenu = true;
-       
-        bool ActionLocationIsValid(Item item)
-        {
-            var actionLocation = item.AssignedField("Location");
-            if (actionLocation == null) return true;
-            
-            var location = DialogueManager.masterDatabase.GetLocation(int.Parse(actionLocation.value));
-            
-            
-            var playerLocation = GameManager.gameState.GetPlayerLocation(true);
-
-            if (item.IsFieldAssigned("New Sublocation"))
-            {
-                var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
-                var rootPlayerLocation = DialogueManager.masterDatabase.GetLocation(playerLocation.RootID);
-
-                return rootLocation == rootPlayerLocation;
-            }
-
-            return location == GameManager.gameState.GetPlayerLocation(true);
-        }
-
-        bool ActionConversationIsValid(Item item, out string conversationTitle)
-        {
-            var conversation = item.FieldExists("Conversation");
-            if (!conversation)
-            {
-                conversationTitle = null;
-           //     Debug.Log("No conversation assigned to action: " + item.Name);
-                return false;
-            }
-
-            if (item.IsFieldAssigned("Entry Count")) conversationTitle = string.Empty;
-            
-            else conversationTitle = item.LookupValue("Conversation");
-            
-//            Debug.Log("Action conversation: " + conversationTitle);
-            
-            return true;
-        }
-        
-        bool ActionRequiredActorsAreValid(Item item)
-        {
-            var actionRequiredActors = item.fields.Where(p => p.title == "Required Nearby Actor");
-            
-            foreach (var actionRequiredActor in actionRequiredActors)
-            {
-                if (actionRequiredActor.value == string.Empty) continue;
-                var actor = DialogueManager.masterDatabase.GetActor(int.Parse(actionRequiredActor.value));
-                if (actor == null) continue;
-                
-                var actorLocation = actor.AssignedField("Location");
-                if (actorLocation == null) continue;
-                if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.gameState.GetPlayerLocation(true)) return false;
-            }
-            return true;
-        }
-        
-        string GetActionDisplayName(Item item)
-        {
-
-            var conditionalDisplayEntryCount = item.LookupInt("Conditional Display Entry Count");
-            
-            
-            
-            if (conditionalDisplayEntryCount > 0)
-            {
-                for (int i = 1; i < conditionalDisplayEntryCount + 1; i++)
-                {
-                    var displayEntry = item.AssignedField($"Conditional Display Entry {i}");
-                    if (displayEntry == null) continue;
-                    
-                    
-                    var condition = item.LookupValue( $"Conditional Display Entry {i} Conditions");
-                    
-                    if (Lua.IsTrue(condition) && !string.IsNullOrEmpty(condition) && condition != "true")
-                    {
-                        return displayEntry.value;
-                    }
-                }
-            }
-            
-            return item.IsFieldAssigned( "Display Name") ? item.LookupValue("Display Name") : item.Name;
-        }
-        
-        
         //generate new responses
-
-        if (subtitle.dialogueEntry.GetConversation().Title == "SmartWatch/Actions")
-        {
-            var newResponses = new List<Response>();
-            
-            foreach (var action in DialogueManager.masterDatabase.items.Where(p => !p.IsItem && p.IsAction))
-            {
-
-              
-                if (!ActionLocationIsValid(action)) continue;
-                if (!ActionRequiredActorsAreValid(action)) continue;
-                
-                var template = Template.FromDefault();
-                var newDialogueEntry = template.CreateDialogueEntry( template.GetNextDialogueEntryID( subtitle.dialogueEntry.GetConversation()), subtitle.dialogueEntry.conversationID, "ACTION");
-                
-                
-                newDialogueEntry.MenuText = GetActionDisplayName(action);
-                newDialogueEntry.DialogueText = string.Empty;
-                newDialogueEntry.conditionsString = action.IsFieldAssigned("Conditions") ? action.AssignedField("Conditions").value : string.Empty;
-                
-                newDialogueEntry.fields.Add( new Field(showInvalidFieldName, action.LookupValue(showInvalidFieldName), FieldType.Boolean));
-                
-                newDialogueEntry.ActorID = subtitle.dialogueEntry.ActorID;
-                newDialogueEntry.ConversantID = subtitle.dialogueEntry.ConversantID;
-
-
-
-                if (ActionConversationIsValid(action, out var conversationTitle))
-                {
-                    newDialogueEntry.outgoingLinks = new List<Link>();
-                    
-                  //  Debug.Log("Action conversation is valid: " + conversationTitle);
-
-                    if (conversationTitle == string.Empty)
-                    {
-                        var newConversation = GameManager.GenerateConversation(action, action.RepeatCount > 0);
-                        DialogueManager.masterDatabase.conversations.Add(newConversation);
-                        newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
-                            newDialogueEntry.id, newConversation.id, 0));
-                    }
-
-                    else if (conversationTitle != null)
-                    {
-                        var conversation = DialogueManager.masterDatabase.GetConversation(conversationTitle);
-                        newDialogueEntry.outgoingLinks.Add(new Link(newDialogueEntry.conversationID,
-                            newDialogueEntry.id, conversation.id, 0));
-                    }
-                }
-
-                newDialogueEntry.fields.Add(new Field("Action", action.id.ToString(), FieldType.Number));
-                
-
-                var newResponse = new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry,
-                    Lua.IsTrue($"{newDialogueEntry.conditionsString}"));
-              //  if (!newResponse.enabled) Debug.Log("action not available: " + newDialogueEntry.conditionsString);
-                
-                
-                newResponses.Add(newResponse);
-                
-            }
-
-            foreach (var newResponse in newResponses)
-            {
-                subtitle.dialogueEntry.outgoingLinks.Add(new Link(subtitle.dialogueEntry.conversationID, subtitle.dialogueEntry.id, newResponse.destinationEntry.conversationID, newResponse.destinationEntry.id));
-            }
-            
-            responses = responses.Concat(newResponses).ToArray();
-        }
         
         responses = CheckInvalidResponses(responses);
-            
         base.ShowResponses(subtitle, responses, timeout);
         
     }
 
-    private Response[] CheckInvalidResponses(Response[] responses)
+    public Response[] CheckInvalidResponses(Response[] responses)
     {
         if (!HasAnyInvalid(responses)) return responses;
         var list = new List<Response>();
@@ -265,8 +132,7 @@ public class CustomDialogueUI : StandardDialogueUI
         }
         for (int i = 0; i < responses.Length; i++)
         {
-        //    Debug.Log("Checking response: " + responses[i].formattedText.text);
-         //   Debug.Log("Response condition: " + responses[i].destinationEntry.conditionsString);
+    
             if (!responses[i].enabled)
             {
             //    Debug.Log("Found invalid response: " + responses[i].formattedText.text);
@@ -283,15 +149,7 @@ public class CustomDialogueUI : StandardDialogueUI
     private bool AllowShowInvalid(Response response)
     {
         
-        if (Field.FieldExists(response.destinationEntry.fields, showInvalidFieldName))
-        {
-            return Field.LookupBool(response.destinationEntry.fields, showInvalidFieldName);
-        }
-        else
-        {
-            // Not sure how to get this
-            return ShowInvalidByDefault;
-        }
+        return Field.LookupBool(response.destinationEntry.fields, showInvalidFieldName);
     }
 
     public override void ShowSubtitle(Subtitle subtitle)
@@ -369,9 +227,6 @@ public class CustomUIDialogueControls : StandardUIDialogueControls
     }
 }                   
 
-
-
-
 public class CustomUISubtitleControls : StandardUISubtitleControls
 {
     StandardUISubtitleControls _standardUISubtitleControls;
@@ -403,4 +258,6 @@ public class CustomUISubtitleControls : StandardUISubtitleControls
             }
         }
     }
+    
+    
 }

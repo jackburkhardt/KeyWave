@@ -479,6 +479,28 @@ namespace Project.Runtime.Scripts.Manager
             OnGameClose?.Invoke();
         }
 
+        public void ForceConversation(string conversation)
+        {
+            var conversationState = DialogueManager.currentConversationState;
+
+            if (conversationState == null)
+            {
+                DialogueManager.instance.StartConversation(conversation);
+            }
+
+            else
+            {
+                var dialogueEntry = DialogueManager.currentConversationState.subtitle.dialogueEntry;
+                var currentConversation = DialogueManager.masterDatabase.GetConversation(dialogueEntry.conversationID);
+                
+                if (currentConversation.Title != conversation)
+                {
+                    DialogueManager.instance.StopConversation();
+                    DialogueManager.instance.StartConversation(conversation);
+                }
+            }
+        }
+
         public void SetSublocation(PixelCrushers.DialogueSystem.Location location)
         {
             if (location == gameState.GetPlayerLocation(true)) return;

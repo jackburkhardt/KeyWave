@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers.DialogueSystem;
-using PixelCrushers.Wrappers;
+using PixelCrushers;
+using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
@@ -11,29 +13,49 @@ public class SmartWatchPanel : UIPanel
     public string focusAnimationTrigger;
     public string unfocusAnimationTrigger;
 
+    public List<SmartWatchAppPanel> appPanels =>
+        GetComponentsInChildren<SmartWatchAppPanel>(true).ToList();
+
+    public override void Open()
+    {
+        var currentApp = SmartWatch.GetCurrentApp();
+        OpenApp( currentApp.name);
+        base.Open();
+    }
+    
+    public void OpenApp( string appName)
+    {
+        var appPanel = appPanels.FirstOrDefault(p => p.app == appName);
+        appPanel.panel.Open();
+    }
+
 
     protected override void OnEnable()
     {
         base.OnEnable();
 
-        var smartWatchApps = FindObjectsByType<SmartWatchApp>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        var smartWatchApps = FindObjectsByType<SmartWatchAppPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         
         foreach (var smartWatchApp in smartWatchApps)
         {
             SmartWatch.OnAppOpen += smartWatchApp.OnAppOpen;
         }
+        
+        SmartWatch.OnAppOpen += OnAppOpen;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         
-        var smartWatchApps = FindObjectsByType<SmartWatchApp>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        var smartWatchApps = FindObjectsByType<SmartWatchAppPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         
         foreach (var smartWatchApp in smartWatchApps)
         {
             SmartWatch.OnAppOpen -= smartWatchApp.OnAppOpen;
         }
+        
+        SmartWatch.OnAppOpen -= OnAppOpen;
     }
     
     protected override void OnVisible()
@@ -111,12 +133,24 @@ public class SmartWatchPanel : UIPanel
         }
     }
 
+    public void ForceDefaultApp()
+    {
+        SmartWatch.ResetCurrentApp();
+        DialogueManager.instance.StopConversation();
+        DialogueManager.instance.StartConversation(SmartWatch.GetCurrentApp().dialogueSystemConversationTitle);
+        
+    }
+
     public void OnLinkedConversationStart()
     {
         OnConversationStart();
     }
 
-   
+    public void OnAppOpen(SmartWatch.App app)
+    {
+        animatorMonitor.SetTrigger(focusAnimationTrigger, null);
+        FindObjectOfType<CustomDialogueUI>().ClearAllDefaultOverrides();
+    }
 
     public void OnConversationEnd()
     {
@@ -126,6 +160,7 @@ public class SmartWatchPanel : UIPanel
             GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
         }
     }
+
     
     
     

@@ -84,9 +84,14 @@ public class SmartWatch : ScriptableObject
         OpenApp(_currentApp ?? GameManager.settings.SmartWatch.apps[0]);
     } 
     
+    public static void GoToDefaultApp()
+    {
+        OpenApp(GameManager.settings.SmartWatch.apps[0]);
+    }
+    
     public static App GetCurrentApp()
     {
-        return _currentApp;
+        return _currentApp ?? GameManager.settings.SmartWatch.apps[0];
     }
     
     //SetQuestState("Hotel/Action/Breakfast", "success")
