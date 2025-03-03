@@ -25,6 +25,10 @@ public class ItemUIPanel : UIPanel
     [HideIf("useQuestStateForItemValidity")]
     [Tooltip( "If true, the item will be shown if the field is false.")]
     public bool flipValidField;
+
+    public List<UIPanel> panelsToOffset;
+    public string offsetAnimatorTrigger;
+    public string revertAnimatorTrigger;
     
     public List<Item> items => DialogueManager.masterDatabase.items.Where(item => item.LookupValue("Item Type") == itemType).ToList();
     
@@ -62,6 +66,21 @@ public class ItemUIPanel : UIPanel
     {
         ShowItemButtons();
         base.Open();
+        
+        foreach (var panel in panelsToOffset)
+        {
+            panel.GetComponent<Animator>().SetTrigger(offsetAnimatorTrigger);
+        }
+    }
+    
+    public override void Close()
+    {
+        base.Close();
+        
+        foreach (var panel in panelsToOffset)
+        {
+            panel.GetComponent<Animator>().SetTrigger(revertAnimatorTrigger);
+        }
     }
 
     protected override void OnHidden()

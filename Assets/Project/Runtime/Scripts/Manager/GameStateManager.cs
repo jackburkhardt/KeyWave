@@ -80,8 +80,8 @@ namespace Project.Runtime.Scripts.Manager
             PreBase,
             Base,
             Action,
-            Talk,
-            SmartWatch
+            SmartWatch,
+            StorySequence
         }
         
         public static State state = State.Base;
@@ -102,6 +102,8 @@ namespace Project.Runtime.Scripts.Manager
             {
                 Destroy(this);
             }
+
+            state = State.PreBase;
         }
 
         protected override void OnPlayerEvent(PlayerEvent playerEvent)
@@ -162,13 +164,11 @@ namespace Project.Runtime.Scripts.Manager
         
         public void OnConversationStart()
         {
-            Debug.Log("Conversation started");
             var conversation = DialogueManager.masterDatabase.GetConversation(DialogueManager.currentConversationState
                 .subtitle.dialogueEntry.conversationID);
             
             var actions = conversation.fields.Where(p => p.title == "Action").ToList();
             
-            if (actions.Count > 0) Debug.Log("Actions found: " + actions.Count);
 
             foreach (var action in actions)
             {
@@ -203,6 +203,11 @@ namespace Project.Runtime.Scripts.Manager
                 }
             }
             
+            else if (conversation.Title == "Intro")
+            {
+                state = State.StorySequence;
+            }
+            
             else if (state != State.PreBase) state = State.Action;
             
             if (state is State.Base or State.PreBase)
@@ -223,9 +228,10 @@ namespace Project.Runtime.Scripts.Manager
 
         public void OnGameSceneStart()
         {
-            
-            state = State.PreBase;
-            GameManager.instance.StartBaseOrPreBaseConversation();
+            StartCoroutine(QueueConversationEndEvent(() => { 
+                GameManager.instance.StartBaseOrPreBaseConversation();
+                state = State.PreBase;
+            }));
         }
         
         public void OnConversationEnd()
@@ -282,25 +288,20 @@ namespace Project.Runtime.Scripts.Manager
             }
             
             
-            
-            
-            
             switch (state)
             {
                 case State.PreBase:
                     StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
                     break;
                 case State.Base:
-                    StartCoroutine(QueueConversationEndEvent(SmartWatch.GoToDefaultApp));
+                    var smartWatch = FindObjectOfType<SmartWatchPanel>();
+                    StartCoroutine(QueueConversationEndEvent(smartWatch.Open));
                     break;
-                case State.SmartWatch:
-                    var smartWatchAppConversationTitles = SmartWatch.GetAllApps().Select( p => p.dialogueSystemConversationTitle).ToList();
-                    if (smartWatchAppConversationTitles.All(p => p != conversation.Title))
-                    {
-                        StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
-                    }
+                case State.SmartWatch:  // do nothing
                     break;
                 case State.Travel: // do nothing
+                    break;
+                case State.StorySequence:  // do nothing
                     break;
                 default:
                     StartCoroutine(QueueConversationEndEvent(() =>
@@ -363,6 +364,7 @@ namespace Project.Runtime.Scripts.Manager
         
         IEnumerator QueueConversationEndEvent(Action callback)
         {
+            Debug.Log( "queing event from state: " + state);
             yield return new WaitForEndOfFrame();
             while (DialogueManager.instance.isConversationActive || DialogueTime.isPaused) yield return new WaitForSecondsRealtime(0.25f);
             callback?.Invoke();

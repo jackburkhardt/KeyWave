@@ -2,11 +2,15 @@ using System.Collections;
 using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Editor.Scripts.Attributes.DrawerAttributes;
 using Project.Runtime.Scripts.UI;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 public class LocationPanel : UIPanel
 {
+    [SmartWatchAppPopup] public string app;
+    
     public UITextField locationName;
     public UITextField locationDescription;
     public UITextField specialDescription;
@@ -43,8 +47,21 @@ public class LocationPanel : UIPanel
         _animator ??= GetComponent<Animator>();
     }
 
+    public void OnGameSceneStart()
+    {
+        Debug.Log( "Location Panel is starting");
+        SmartWatchPanel.onAppOpen += OnAppOpen;
+    }
+
+    public void OnGameSceneEnd()
+    {
+        SmartWatchPanel.onAppOpen -= OnAppOpen;
+        Close();
+    }
+
     public void SetLocationInfo(Location location)
     {
+        _location = location;
         locationName.text = location.IsFieldAssigned("Display Name") ? location.AssignedField("Display Name").value: location.Name;
         locationDescription.text = location.Description;
         specialDescription.text = location.IsFieldAssigned("Special Description") ? location.AssignedField("Special Description").value : "";
@@ -80,10 +97,21 @@ public class LocationPanel : UIPanel
         
         ShowLocationInfo(location);
     }
+    
+    public void OnAppOpen(SmartWatchAppPanel appPanel)
+    {
+        if (appPanel.Name != app)
+        {
+            Close(); return;
+        }
+        
+        Open();
+    }
 
     public override void Open()
     {
         gameObject.SetActive(true);
+        StopAllCoroutines();
         if (_location == null) return;
         base.Open();
     }
@@ -97,21 +125,20 @@ public class LocationPanel : UIPanel
     public void ShowLocationInfo(Location location)
     {
         
-        if (isOpen)
+        if (_location != null)
         {
             StartCoroutine(CloseThenShowLocation());
         }
 
         else
         {
-            _location = location;
-            Open();
             SetLocationInfo(location);
+            Open();
         }
         
         IEnumerator CloseThenShowLocation()
         {
-            Close();
+            _animator.SetTrigger(hideAnimationTrigger);
             yield return new WaitForEndOfFrame();
             var clip = _animator.GetCurrentAnimatorClipInfo(0);
             var state = _animator.GetCurrentAnimatorStateInfo(0);
@@ -120,8 +147,9 @@ public class LocationPanel : UIPanel
             var longestClip = clip.Max(c => c.clip.length) * state.speed;
             var animationLength = Mathf.Max(longestClip, transition.duration);
             yield return new WaitForSeconds(animationLength);
-            _location = location;
-            ShowLocationInfo(location);
+            SetLocationInfo(location);
+            _animator.SetTrigger(showAnimationTrigger);
+           
         }
     }
     

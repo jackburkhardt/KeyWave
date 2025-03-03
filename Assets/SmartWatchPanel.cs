@@ -1,31 +1,45 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 public class SmartWatchPanel : UIPanel
 {
-   
+    
     public string focusAnimationTrigger;
     public string unfocusAnimationTrigger;
 
+    private static SmartWatchAppPanel _currentApp;
+    public static Action<SmartWatchAppPanel> onAppOpen;
+    
+    [ConversationPopup] public string conversation;
+    
     public List<SmartWatchAppPanel> appPanels =>
         GetComponentsInChildren<SmartWatchAppPanel>(true).ToList();
 
     public override void Open()
     {
-        var currentApp = SmartWatch.GetCurrentApp();
-        OpenApp( currentApp.name);
+        DialogueManager.StartConversation(conversation);
+        if (_currentApp == null)
+        {
+            var defaultApp = GetAllApps().Find(x => x.LookupBool("Is Default"));
+            Debug.Log(defaultApp.Name);
+            _currentApp = appPanels.Find(p => p.Name == defaultApp.Name);
+        }
+        
+        OpenApp( _currentApp.Name);
         base.Open();
     }
     
     public void OpenApp( string appName)
     {
-        var appPanel = appPanels.FirstOrDefault(p => p.app == appName);
+        var appPanel = appPanels.FirstOrDefault(p => p.Name == appName);
         appPanel.panel.Open();
     }
 
@@ -38,10 +52,10 @@ public class SmartWatchPanel : UIPanel
         
         foreach (var smartWatchApp in smartWatchApps)
         {
-            SmartWatch.OnAppOpen += smartWatchApp.OnAppOpen;
+            onAppOpen += smartWatchApp.OnAppOpen;
         }
         
-        SmartWatch.OnAppOpen += OnAppOpen;
+        onAppOpen += OnAppOpen;
     }
 
     protected override void OnDisable()
@@ -52,93 +66,64 @@ public class SmartWatchPanel : UIPanel
         
         foreach (var smartWatchApp in smartWatchApps)
         {
-            SmartWatch.OnAppOpen -= smartWatchApp.OnAppOpen;
+            onAppOpen -= smartWatchApp.OnAppOpen;
         }
         
-        SmartWatch.OnAppOpen -= OnAppOpen;
+        onAppOpen -= OnAppOpen;
     }
     
     protected override void OnVisible()
     {
         base.OnVisible();
         
-        
         if (DialogueManager.instance.IsConversationActive)
         {
             var currentSubtitle = DialogueManager.instance.currentConversationState.subtitle;
             var conversation =
                 DialogueManager.instance.masterDatabase.GetConversation(currentSubtitle.dialogueEntry.conversationID);
-
-            if (conversation.Name == "SmartWatch/Home") return;
-            
-            DialogueManager.instance.StopConversation();
-            
-            if (conversation.Name != "SmartWatch/Home")
-            {
-                DialogueManager.instance.StartConversation("SmartWatch/Home");
-            }
-
-            else
-            {
-                PopFromPanelStack();
-                CheckFocus();
-                DialogueManager.instance.StopConversation();
-            }
-        }
-          
-        else if (!DialogueManager.instance.IsConversationActive)
-        {
-            DialogueManager.instance.StartConversation("SmartWatch/Home");
         }
     }
 
     public void OnConversationStart()
     {
-        var currentApp = SmartWatch.GetCurrentApp();
-        var conversation = DialogueManager.instance.activeConversation.conversationTitle;
-        var conversationTitle = DialogueManager.instance.masterDatabase.GetConversation(conversation).Title;
 
-        var appConversations = SmartWatch.GetAllApps().ConvertAll(app => app.dialogueSystemConversationTitle);
-        
-        Debug.Log("conversation title: " + conversationTitle);
-
-        if (!string.IsNullOrEmpty(conversationTitle)) return;
-
-        if (appConversations.Contains(conversationTitle) || conversationTitle == "Base")
-            GetComponent<Animator>().SetTrigger("Focus");
-
-        else
+        if (_currentApp == null) return;
+        switch (_currentApp.Name)
         {
-
-            switch (currentApp.name)
+            case "Phone":
             {
-                case "Phone":
-                {
-                    GetComponent<Animator>().SetTrigger("Down");
-                    break;
-                }
-
-                case "Home":
-                {
-                    //  GetComponent<Animator>().SetTrigger(showAnimationTrigger);
-                    break;
-                }
-
-                default:
-                  
-                    Debug.Log( "unfocusing for conversation " + conversationTitle);
-                    GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
-                    break;
+                GetComponent<Animator>().SetTrigger("Down");
+                break;
             }
+
+            case "Home":
+            {
+                //  GetComponent<Animator>().SetTrigger(showAnimationTrigger);
+                break;
+            }
+
+            default:
+                
+                GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
+                break;
         }
+    }
+
+    public static List<Item> GetAllApps()
+    {
+        return GameManager.settings.dialogueDatabase.items.FindAll(p => p.IsApp);
     }
 
     public void ForceDefaultApp()
     {
-        SmartWatch.ResetCurrentApp();
+        _currentApp = null;
         DialogueManager.instance.StopConversation();
-        DialogueManager.instance.StartConversation(SmartWatch.GetCurrentApp().dialogueSystemConversationTitle);
-        
+        Open();
+    }
+
+    public void ResetCurrentApp()
+    {
+        _currentApp = null;
     }
 
     public void OnLinkedConversationStart()
@@ -146,7 +131,7 @@ public class SmartWatchPanel : UIPanel
         OnConversationStart();
     }
 
-    public void OnAppOpen(SmartWatch.App app)
+    private void OnAppOpen(SmartWatchAppPanel app)
     {
         animatorMonitor.SetTrigger(focusAnimationTrigger, null);
         FindObjectOfType<CustomDialogueUI>().ClearAllDefaultOverrides();
@@ -154,14 +139,58 @@ public class SmartWatchPanel : UIPanel
 
     public void OnConversationEnd()
     {
-        var currentApp = SmartWatch.GetCurrentApp();
-        if (currentApp.name == "Travel")
+        if (_currentApp != null)
         {
-            GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
+            if (_currentApp.Name == "Travel")
+            {
+                GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
+            }
         }
+        
+        
     }
+    
 
-    
-    
+    private void ForceResponseMenuPanel()
+    {
+        DialogueManager.StopConversation();
+        if (DialogueManager.masterDatabase.GetConversation("GENERATED/SmartWatch") != null) return;
+        
+        var template = Template.FromDefault();
+        var newConversation =
+            template.CreateConversation(template.GetNextConversationID(DialogueManager.masterDatabase), "GENERATED/SmartWatch");
+        var startEntry = template.CreateDialogueEntry(template.GetNextDialogueEntryID(newConversation), newConversation.id,
+            "Start");
+        startEntry.Title = "START";
+        startEntry.Sequence = "(None)";
+        startEntry.ActorID = DialogueManager.masterDatabase.actors.Find(p => p.IsPlayer).id;
+        startEntry.isRoot = true;
+        
+        var followupEntry = template.CreateDialogueEntry(template.GetNextDialogueEntryID(newConversation), newConversation.id,
+            "Followup");
+        followupEntry.Title = "FOLLOWUP";
+        followupEntry.ActorID = startEntry.ActorID;
+        
+        startEntry.outgoingLinks.Add(new Link(newConversation.id, startEntry.id, newConversation.id, followupEntry.id));
+        
+        var responseMenuEntry = template.CreateDialogueEntry(template.GetNextDialogueEntryID(newConversation), newConversation.id,
+            "Response Menu");
+        responseMenuEntry.Title = "RESPONSE MENU";
+        responseMenuEntry.MenuText = "[f]()"; // this text will force a response menu to show.
+        responseMenuEntry.ActorID = startEntry.ActorID;
+        
+        followupEntry.outgoingLinks.Add(new Link(newConversation.id, followupEntry.id, newConversation.id, responseMenuEntry.id));
+        
+        newConversation.dialogueEntries.Add(startEntry);
+        newConversation.dialogueEntries.Add(followupEntry);
+        newConversation.dialogueEntries.Add(responseMenuEntry);
+        
+        newConversation.ActorID = startEntry.ActorID;
+        
+        DialogueManager.masterDatabase.AddConversation( newConversation);
+        
+        Debug.Log("Conversation generated: " + newConversation.Title);
+        DialogueManager.instance.StartConversation( "GENERATED/SmartWatch");
+    }
     
 }

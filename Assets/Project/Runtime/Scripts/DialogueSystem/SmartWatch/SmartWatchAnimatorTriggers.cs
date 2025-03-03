@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 public class SmartWatchAnimatorTriggers : MonoBehaviour
 {
-    
     [SerializeField] private Animator animator;
 
     public enum TriggerType
@@ -41,32 +42,32 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
 
     private void OnEnable()
     {
-        SmartWatch.OnAppOpen += OnAppOpen;
+        SmartWatchPanel.onAppOpen += OnAppOpen;
     }
     
     private void OnDisable()
     {
-        SmartWatch.OnAppOpen -= OnAppOpen;
+        SmartWatchPanel.onAppOpen -= OnAppOpen;
     }
 
     private void OnValidate()
     {
         animator ??= GetComponent<Animator>();
-        if (SmartWatch.instance == null || SmartWatch.instance.apps == null) return;
         
         if (animatorTriggers == null) animatorTriggers = new List<string>();
-        if (animatorTriggers.Count != SmartWatch.instance.apps.Count)
+        var apps = SmartWatchPanel.GetAllApps();
+        if (animatorTriggers != null && animatorTriggers.Count != apps.Count && apps.Count > 0)
         {
             animatorTriggers.Clear();
-            foreach (var app in SmartWatch.instance.apps)
+            foreach (var app in apps)
             {
-                animatorTriggers.Add(app.animatorTrigger);
+                animatorTriggers.Add(app.Name);
             }
         }
         
         if (customTriggers == null) customTriggers = new List<CustomTrigger>();
        
-        if (customTriggers.Count < animatorTriggers.Count)
+        if (customTriggers.Count < animatorTriggers.Count && animatorTriggers.Count > 0)
         {
             for (var i = customTriggers.Count; i < animatorTriggers.Count; i++)
             {
@@ -82,20 +83,18 @@ public class SmartWatchAnimatorTriggers : MonoBehaviour
 
     }
     
-    private void OnAppOpen(SmartWatch.App app)
+    private void OnAppOpen(SmartWatchAppPanel app)
     {
         if (app == null) return;
         if (animatorTriggers == null) return;
         if (animatorTriggers.Count == 0) return;
-        if (app.name == null) return;
-        if (app.animatorTrigger == null) return;
         if (animator == null) return;
-        if (animatorTriggers.Contains(app.animatorTrigger))
+        if (animatorTriggers.Contains(app.Name))
         {
-            if (triggerType.HasFlag(TriggerType.Default)) animator.SetTrigger(app.animatorTrigger);
+            if (triggerType.HasFlag(TriggerType.Default)) animator.SetTrigger(app.Name);
             if (triggerType.HasFlag(TriggerType.Custom))
             {
-                var customTrigger = customTriggers[animatorTriggers.IndexOf(app.animatorTrigger)].trigger;
+                var customTrigger = customTriggers[animatorTriggers.IndexOf(app.Name)].trigger;
                 if (!string.IsNullOrEmpty(customTrigger)) animator.SetTrigger(customTrigger);
             }
         }

@@ -83,7 +83,6 @@ namespace Project.Runtime.Scripts.Manager
 
         public static int GetHoursAsInt(string time)
         {
-            Debug.Log(time);
             return int.Parse(time.Split(":")[0]);
         }
         

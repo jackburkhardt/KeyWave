@@ -38975,7 +38975,7 @@ RectTransform:
   - {fileID: 254724413423094760}
   - {fileID: 254724414003289022}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -40378,7 +40378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1405479722}
-  app: Inbox
+  Name: 
 --- !u!222 &7004929156521935578
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -40482,6 +40482,9 @@ MonoBehaviour:
   useQuestStateForItemValidity: 1
   itemValidField: 
   flipValidField: 0
+  panelsToOffset: []
+  offsetAnimatorTrigger: 
+  revertAnimatorTrigger: 
 --- !u!1 &254724414858659853
 GameObject:
   m_ObjectHideFlags: 0
@@ -42645,7 +42648,6 @@ GameObject:
   - component: {fileID: 254724413694398010}
   - component: {fileID: 254724413857197703}
   - component: {fileID: 254724413857197756}
-  - component: {fileID: 1518462746}
   - component: {fileID: 1518462752}
   - component: {fileID: 1518462751}
   m_Layer: 5
@@ -42668,7 +42670,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6316805294609867973}
-  - {fileID: 6551269330640350642}
   m_Father: {fileID: 1388256223348691364}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -42824,174 +42825,6 @@ MonoBehaviour:
       data:
         name: Notes
         trigger: Extend
---- !u!114 &1518462746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 471735864545948876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f670762ff23b049fab7e8e90e1448c60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 254724413694398010}
-  actions: 1
-  apps:
-  - rid: 6012556845242908690
-  - rid: 6012556845242908691
-  - rid: 6012556845242908692
-  - rid: 6012556845242908693
-  - rid: 6012556845242908694
-  - rid: 6012556845242908695
-  references:
-    version: 2
-    RefIds:
-    - rid: 6012556845242908690
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Home
-        app:
-          name: Home
-          dialogueSystemConversationTitle: SmartWatch/Home
-          animatorTrigger: Home
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 254724413857197703}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Default
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908691
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Inbox
-        app:
-          name: Inbox
-          dialogueSystemConversationTitle: SmartWatch/Inbox
-          animatorTrigger: Inbox
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 254724413857197703}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Inbox
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908692
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Actions
-        app:
-          name: Actions
-          dialogueSystemConversationTitle: SmartWatch/Actions
-          animatorTrigger: Actions
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 254724413857197703}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Actions
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908693
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Phone
-        app:
-          name: Phone
-          dialogueSystemConversationTitle: SmartWatch/Phone/Base
-          animatorTrigger: Phone
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 254724413857197703}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Phone
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908694
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Travel
-        app:
-          name: Travel
-          dialogueSystemConversationTitle: SmartWatch/Travel
-          animatorTrigger: Travel
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 254724413857197703}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Map
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908695
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Notes
-        app:
-          name: Notes
-          dialogueSystemConversationTitle: SmartWatch/Help
-          animatorTrigger: Notes
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 254724413857197703}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Notes
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
 --- !u!223 &1518462752
 Canvas:
   m_ObjectHideFlags: 0
@@ -45763,6 +45596,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 495529062159580983}
+  - {fileID: 6551269330640350642}
   - {fileID: 2554918480716544442}
   - {fileID: 1388256223905950779}
   - {fileID: 1388256223964653041}
@@ -47080,7 +46914,7 @@ RectTransform:
   - {fileID: 1388256223828617646}
   - {fileID: 1388256223738901584}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -47212,7 +47046,7 @@ RectTransform:
   - {fileID: 8014972701684869920}
   - {fileID: 8014972702731594670}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -49414,7 +49248,7 @@ RectTransform:
   m_Children:
   - {fileID: 1388256223712435871}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -50380,7 +50214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1176860789}
-  app: Phone
+  Name: 
 --- !u!114 &1176860789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51025,7 +50859,7 @@ RectTransform:
   m_Children:
   - {fileID: 1608924141479145458}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -51546,8 +51380,6 @@ GameObject:
   - component: {fileID: 1608924140295832655}
   - component: {fileID: 1608924140713718561}
   - component: {fileID: 1376330795159761575}
-  - component: {fileID: 2045589039}
-  - component: {fileID: 2045589040}
   - component: {fileID: 2045589041}
   m_Layer: 5
   m_Name: Time (ClockUI)
@@ -51741,201 +51573,6 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &2045589039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1608924139886353556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f670762ff23b049fab7e8e90e1448c60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 254724413694398010}
-  actions: 1
-  apps:
-  - rid: 6012556845242908690
-  - rid: 6012556845242908691
-  - rid: 6012556845242908692
-  - rid: 6012556845242908693
-  - rid: 6012556845242908694
-  - rid: 6012556845242908695
-  references:
-    version: 2
-    RefIds:
-    - rid: 6012556845242908690
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Home
-        app:
-          name: Home
-          dialogueSystemConversationTitle: SmartWatch/Home
-          animatorTrigger: Home
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2045589040}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Default
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908691
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Inbox
-        app:
-          name: Inbox
-          dialogueSystemConversationTitle: SmartWatch/Inbox
-          animatorTrigger: Inbox
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2045589040}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Inbox
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908692
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Actions
-        app:
-          name: Actions
-          dialogueSystemConversationTitle: SmartWatch/Actions
-          animatorTrigger: Actions
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2045589040}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Actions
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908693
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Phone
-        app:
-          name: Phone
-          dialogueSystemConversationTitle: SmartWatch/Phone/Base
-          animatorTrigger: Phone
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2045589040}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Phone
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908694
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Travel
-        app:
-          name: Travel
-          dialogueSystemConversationTitle: SmartWatch/Travel
-          animatorTrigger: Travel
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2045589040}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Map
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
-    - rid: 6012556845242908695
-      type: {class: SmartWatchEvents/SmartWatchApp, ns: , asm: Assembly-CSharp}
-      data:
-        name: Notes
-        app:
-          name: Notes
-          dialogueSystemConversationTitle: SmartWatch/Help
-          animatorTrigger: Notes
-        onAppOpen:
-          m_PersistentCalls:
-            m_Calls:
-            - m_Target: {fileID: 2045589040}
-              m_TargetAssemblyTypeName: ColorSwap, Assembly-CSharp
-              m_MethodName: SetColor
-              m_Mode: 5
-              m_Arguments:
-                m_ObjectArgument: {fileID: 0}
-                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-                m_IntArgument: 0
-                m_FloatArgument: 0
-                m_StringArgument: Notes
-                m_BoolArgument: 0
-              m_CallState: 2
-        animatorTrigger: 
---- !u!114 &2045589040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1608924139886353556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 725b8fabdc1ed0f408cc5514a555589b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colors:
-  - name: Default
-    color: {r: 0.13333334, g: 0.12941177, b: 0.12941177, a: 1}
-  - name: Actions
-    color: {r: 0.6981132, g: 0.28846562, b: 0.40739566, a: 1}
-  - name: Inbox
-    color: {r: 0.6666667, g: 0.34117648, b: 0.18431373, a: 1}
-  - name: Phone
-    color: {r: 0.54509807, g: 0.5686275, b: 0.29803923, a: 1}
-  - name: Map
-    color: {r: 0.23529412, g: 0.6392157, b: 0.7490196, a: 1}
-  - name: Notes
-    color: {r: 0.24510501, g: 0.3412246, b: 0.509434, a: 1}
-  transitionAmount: 1
-  transitionDuration: 0.15
 --- !u!114 &2045589041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53043,7 +52680,7 @@ RectTransform:
   - {fileID: 1608924139942419270}
   - {fileID: 1608924141242685071}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -55540,7 +55177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1870135093}
-  app: Actions
+  Name: 
 --- !u!114 &948943100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58144,7 +57781,7 @@ RectTransform:
   m_Children:
   - {fileID: 1608924140883171441}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -60212,7 +59849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 7841209898947772567}
-  app: Notes
+  Name: 
 --- !u!222 &560322968214856772
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -60316,6 +59953,9 @@ MonoBehaviour:
   useQuestStateForItemValidity: 1
   itemValidField: 
   flipValidField: 0
+  panelsToOffset: []
+  offsetAnimatorTrigger: 
+  revertAnimatorTrigger: 
 --- !u!1 &2505154352197012170
 GameObject:
   m_ObjectHideFlags: 0
@@ -74100,12 +73740,12 @@ RectTransform:
   - {fileID: 6551269331648433317}
   - {fileID: 375994384}
   - {fileID: 8156071705190980296}
-  m_Father: {fileID: 495529062159580983}
+  m_Father: {fileID: 1388256223348691364}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 366.82, y: 0}
+  m_AnchoredPosition: {x: 1110.4865, y: 0}
   m_SizeDelta: {x: 0, y: 1064.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6551269330640350606
@@ -75017,7 +74657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 229848892}
-  app: Travel
+  Name: 
 --- !u!114 &229848892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76211,7 +75851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panel: {fileID: 1979048284}
-  app: Home
+  Name: 
 --- !u!114 &1979048284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80533,7 +80173,7 @@ Transform:
   - {fileID: 368063852}
   - {fileID: 237318368}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8014972702282960767
 GameObject:
@@ -82042,7 +81682,7 @@ RectTransform:
   - {fileID: 8014972702019448420}
   - {fileID: 8014972703657986520}
   m_Father: {fileID: 1388256223348691364}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -93119,7 +92759,7 @@ PrefabInstance:
     - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
       propertyPath: OnGameSceneEnd.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 2045589040}
+      objectReference: {fileID: 0}
     - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
       propertyPath: OnGameSceneEnd.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
@@ -93127,7 +92767,7 @@ PrefabInstance:
     - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
       propertyPath: OnGameSceneEnd.m_PersistentCalls.m_Calls.Array.data[4].m_Target
       value: 
-      objectReference: {fileID: 2045589040}
+      objectReference: {fileID: 0}
     - target: {fileID: 1486809509058593699, guid: 7313e6333cd494d46b219838b12e37ff, type: 3}
       propertyPath: OnGameSceneEnd.m_PersistentCalls.m_Calls.Array.data[5].m_Target
       value: 

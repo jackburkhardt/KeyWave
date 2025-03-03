@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
+using Project.Editor.Scripts.Attributes.DrawerAttributes;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
@@ -12,9 +13,8 @@ using UnityEngine;
 
 public class SmartWatchAppSubcomponent : MonoBehaviour
 {
-    [Dropdown("apps")]
+    [SmartWatchAppPopup]
     public string app;
-    private List<string> apps => SmartWatch.instance.appNames;
     
     private bool showCondition => conditionTypes.Count > 0;
     [ShowIf("showCondition")]

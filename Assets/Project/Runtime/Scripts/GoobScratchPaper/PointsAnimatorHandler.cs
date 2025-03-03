@@ -17,6 +17,7 @@ public class PointsAnimatorHandler : MonoBehaviour
     {
         get
         {
+            if (Points.GetAllPointsTypes() == null) return new List<string>();
             var types = Points.GetAllPointsTypes().Select( p => p.Name).ToList();
             types.Insert(0, "(All)");
             return types;

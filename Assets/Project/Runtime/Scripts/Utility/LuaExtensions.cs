@@ -297,6 +297,23 @@ namespace Project.Runtime.Scripts.Utility
     public static class BaseExtensions
     {
         
+        public static void BroadcastMessageExt(this GameObject gameObject, string methodName)
+        {
+            List<MonoBehaviour> monoList = new List<MonoBehaviour>();
+            gameObject.GetComponentsInChildren<MonoBehaviour>(true, monoList);
+            for (int i = 0; i < monoList.Count; i++)
+            {
+                try
+                {
+                    if (monoList[i].GetType().GetMethod( methodName) != null)
+                    monoList[i].Invoke(methodName, 0);
+                }
+                catch
+                {
+                }
+            }
+        }
+        
        public static IEnumerable<T> GetChildren<T>(this Transform transform, IEnumerable<T>? exclude, bool? directChildrenOnly = false)
                 where T : Component
             {

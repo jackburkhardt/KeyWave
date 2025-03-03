@@ -12,15 +12,14 @@ namespace Project.Runtime.Scripts.Utility
     {
 
         public UIPanel panel;
+        
 
-        [SmartWatchAppPopup]
-        public string app;
-        
-        
+        [SmartWatchAppPopup] [Label("App")]
+        public string Name;
 
         public void OnEnable()
         {
-            SmartWatch.OnAppOpen?.Invoke(SmartWatch.GetApp(app));
+            SmartWatchPanel.onAppOpen?.Invoke(this);
 
             foreach (var standardUIResponseButton in GetComponentsInChildren<StandardUIResponseButton>(true))
             {
@@ -31,9 +30,9 @@ namespace Project.Runtime.Scripts.Utility
             }
         }
         
-        public void OnAppOpen(SmartWatch.App app)
+        public void OnAppOpen(SmartWatchAppPanel app)
         {
-            if (app.name != this.app && this.gameObject.activeSelf)
+            if (app.Name != this.Name && this.gameObject.activeSelf)
             {
                 panel.Close();
             }

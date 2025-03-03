@@ -52,7 +52,6 @@ namespace Project.Runtime.Scripts.Manager
         public Canvas mainCanvas;
         [SerializeField] private Settings currentSettings;
         
-        public SmartWatch smartWatchAsset;
 
         [ShowIf("capFramerate")] public int framerateLimit;
 
@@ -119,8 +118,6 @@ namespace Project.Runtime.Scripts.Manager
         private void Start()
         {
             GameEvent.OnPlayerEvent += OnPlayerEvent;
-            
-            SmartWatch.ResetCurrentApp();
             
             //OnSaveDataApplied();
         }
@@ -262,6 +259,8 @@ namespace Project.Runtime.Scripts.Manager
             var location = DialogueManager.masterDatabase.GetLocation(locationID);
             SetLocation(location.Name, type);
         }
+        
+        
 
         public void SetLocation(string newLocation,  Transition transition)
         {
@@ -271,27 +270,17 @@ namespace Project.Runtime.Scripts.Manager
             
             Debug.Log("New location: " + newLocation);
             
-            
             BroadcastMessage( "OnTravel");
-            DialogueManager.StopConversation();
-            OnGameSceneEnd?.Invoke();
-            DialogueManager.instance.BroadcastMessage( "OnGameSceneEnd");
+          
+            EndGameScene();
 
             var currentScene = string.Empty;
             
             if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
             else currentScene = gameState.current_scene;
-
-            SmartWatch.ResetCurrentApp();
-            
-           
             
             StartCoroutine(TravelToHandler());
-
-            DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
-            DialogueManager.PlaySequence("ChannelFade(Environment, out, 1);");
             
-          
             
             IEnumerator TravelToHandler()
             {
@@ -323,10 +312,7 @@ namespace Project.Runtime.Scripts.Manager
                 yield return new WaitForSeconds(1f);
                 
                 gameState.current_scene = newLocation;
-                
-                OnGameSceneStart?.Invoke();
-                DialogueManager.instance.BroadcastMessage( "OnGameSceneStart");
-                DoLocalSave();
+                StartGameScene(gameState.GetPlayerLocation(true));
                 
             }
         }
@@ -335,12 +321,19 @@ namespace Project.Runtime.Scripts.Manager
         {
 
             var visitCount = DialogueLua.GetLocationField(gameState.GetPlayerLocation(true).Name, "Visit Count").asInt;
-            Debug.Log("Vist count: " + visitCount);
-            var loopConversation = gameState.GetPlayerLocation(true).LookupBool("Loop Conversation");
+                 var loopConversation = gameState.GetPlayerLocation(true).LookupBool("Loop Conversation");
+            
+            if (DialogueLua.GetLocationField( gameState.GetPlayerLocation(true).Name, "Dirty").asBool)
+            {
+                Debug.Log("Location is dirty");
+                DialogueManager.StartConversation("Base");
+                return;
+            }
 
 
             if (!gameState.GetPlayerLocation(true).FieldExists("Conversation"))
             {
+                Debug.Log("No conversation field");
                 DialogueManager.StartConversation("Base");
                 return;
             }
@@ -375,18 +368,60 @@ namespace Project.Runtime.Scripts.Manager
                     DialogueManager.StartConversation(generatedConversation.Title);
                 }
 
-            else DialogueManager.StartConversation("Base");
+            else DialogueManager.StartConversation("Base"); Debug.Log("Starting base conversation");
+            
+            MarkLocationAsDirty( gameState.GetPlayerLocation(true));
+        }
 
+        public void MarkLocationAsDirty(Location location)
+        {
+            DialogueLua.SetLocationField(gameState.GetPlayerLocation(true).Name, "Dirty", true);
+            var visitCount = DialogueLua.GetLocationField(gameState.GetPlayerLocation(true).Name, "Visit Count").asInt;
             visitCount += 1;
             DialogueLua.SetLocationField( gameState.GetPlayerLocation(true).Name, "Visit Count", visitCount);
             gameState.GetPlayerLocation(true).AssignedField("Visit Count").value = (visitCount).ToString();
-
-
+        }
+        
+        public void UnmarkLocationAsDirty(Location location)
+        {
+            DialogueLua.SetLocationField(gameState.GetPlayerLocation(true).Name, "Dirty", false);
         }
 
         public void Wait(int duration)
         {
             GameEvent.OnWait(duration);
+        }
+
+        public void StartGameScene( Location location)
+        {
+            GameManager.gameState.SetPlayerLocation(location);
+            GameManager.instance.OnGameSceneStart?.Invoke();
+            DialogueManager.instance.gameObject.BroadcastMessageExt( "OnGameSceneStart");
+            DoLocalSave();
+            
+        }
+
+        public void StartGameScene(int locationID)
+        {
+            var location = DialogueManager.masterDatabase.GetLocation(locationID);
+            StartGameScene(location);
+        }
+        
+        public void StartGameScene(string locationName)
+        {
+            var location = DialogueManager.masterDatabase.GetLocation(locationName);
+            StartGameScene(location);
+        }
+
+        public void EndGameScene()
+        {
+            DialogueManager.StopConversation();
+            OnGameSceneEnd?.Invoke();
+            DialogueManager.instance.gameObject.BroadcastMessageExt( "OnGameSceneEnd");
+            FindObjectOfType<SmartWatchPanel>().ResetCurrentApp();
+            DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
+            DialogueManager.PlaySequence("ChannelFade(Environment, out, 1);");
+            UnmarkLocationAsDirty( gameState.GetPlayerLocation(true));
         }
         
         
@@ -653,8 +688,7 @@ public class SequencerCommandSetLocationImmediate : SequencerCommand
         if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
         else currentScene = GameManager.gameState.current_scene;
         yield return Project.Runtime.Scripts.App.App.Instance.ChangeScene(location, currentScene, Transition.None);
-        GameManager.gameState.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(location));
-        
+        GameManager.instance.StartGameScene(location); 
         Stop();
     }
 

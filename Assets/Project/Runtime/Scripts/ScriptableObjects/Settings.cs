@@ -6,9 +6,6 @@ using UnityEngine;
 public class Settings : ScriptableObject
 {
     public DialogueDatabase dialogueDatabase;
-    
-    [Expandable]
-    public SmartWatch smartWatchSettings;
     [Expandable]
     public TrafficSettings trafficSettings;
     [Expandable]
@@ -49,18 +46,6 @@ public class Settings : ScriptableObject
         }
     }
     
-    public SmartWatch SmartWatch
-    {
-        get
-        {
-            if (smartWatchSettings != null) return smartWatchSettings;
-            else
-            {
-                var _smartWatchSettings = CreateInstance<SmartWatch>();
-                return _smartWatchSettings;
-            }
-        }
-    }
     
     public AudioSettings Audio
     {

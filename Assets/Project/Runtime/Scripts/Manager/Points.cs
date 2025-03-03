@@ -54,14 +54,15 @@ namespace Project.Runtime.Scripts.Manager
         public static bool IsAnimating => isAnimating;
 
         public static List<Item> GetAllPointsTypes(DialogueDatabase database = null)
-        {
-            if (database == null) database = GameManager.settings.dialogueDatabase;
-            
+        { 
+           
+            database ??= GameManager.settings.dialogueDatabase;
             return database.items.FindAll(item => item.IsPointCategory);
         } 
 
         public static List<PointsField> GetPointsFieldsFromItem(Item item, DialogueDatabase database = null)
         {
+            
             
             if (database == null) database = GameManager.settings.dialogueDatabase;
             
