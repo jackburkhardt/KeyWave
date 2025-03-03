@@ -1138,6 +1138,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 DrawLocalizedVersions(item, item.fields, "Display Name {0}", false, FieldType.Text);
             }
             
+            /*
             
             var isQuestParasite = item.IsFieldAssigned("Quest Parasitism Target");
             
@@ -1153,6 +1154,8 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             {
                 
             }
+            
+            */
             
             // State:
             
