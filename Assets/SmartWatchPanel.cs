@@ -153,7 +153,7 @@ public class SmartWatchPanel : UIPanel
 
     private void ForceResponseMenuPanel()
     {
-        DialogueManager.StopConversation();
+  //      DialogueManager.StopConversation();
         if (DialogueManager.masterDatabase.GetConversation("GENERATED/SmartWatch") != null) return;
         
         var template = Template.FromDefault();
@@ -163,7 +163,7 @@ public class SmartWatchPanel : UIPanel
             "Start");
         startEntry.Title = "START";
         startEntry.Sequence = "(None)";
-        startEntry.ActorID = DialogueManager.masterDatabase.actors.Find(p => p.IsPlayer).id;
+        startEntry.ActorID = DialogueManager.masterDatabase.actors.Find(p => p.Name == "SmartWatch").id;
         startEntry.isRoot = true;
         
         var followupEntry = template.CreateDialogueEntry(template.GetNextDialogueEntryID(newConversation), newConversation.id,

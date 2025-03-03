@@ -1137,7 +1137,23 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 DrawRevisableTextField(displayNameLabel, item, null, item.fields, "Display Name");
                 DrawLocalizedVersions(item, item.fields, "Display Name {0}", false, FieldType.Text);
             }
+            
+            
+            var isQuestParasite = item.IsFieldAssigned("Quest Parasitism Target");
+            
+            var newIsQuestParasite = EditorGUILayout.Toggle(new GUIContent("Quest Parasite", "Tick to make this action's availability and points dependent on a quest."), isQuestParasite);
 
+            if (newIsQuestParasite != isQuestParasite)
+            {
+                if (newIsQuestParasite) item.fields.Add(new Field("Quest Parasitism Target", string.Empty, FieldType.Item));
+                else item.fields.RemoveAll(x => x.title == "Quest Parasitism Target");
+            }
+            
+            if (newIsQuestParasite)
+            {
+                
+            }
+            
             // State:
             
             Field stateField = Field.Lookup(item.fields, "State");
@@ -1183,7 +1199,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 {
                     var hasConditionalDisplayText = Field.Lookup(item.fields, "Conditional Display Entry Count") != null;
                     
-                    var newHasConditionalDisplayText = EditorGUILayout.Toggle(new GUIContent("Conditional Display", "Tick to show this action only if the specified number of entries are complete."), hasConditionalDisplayText);
+                    var newHasConditionalDisplayText = EditorGUILayout.Toggle(new GUIContent("Conditional Display", "Use different display names depending on specified conditions."), hasConditionalDisplayText);
                     
                     if (newHasConditionalDisplayText != hasConditionalDisplayText)
                     {
@@ -1296,7 +1312,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             EditorGUILayout.Space();
 
                 
-            
+            /*
                 
             EditorWindowTools.EditorGUILayoutBeginGroup();
                 
@@ -1476,6 +1492,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 
             EditorWindowTools.EditorGUILayoutEndGroup();
             
+            */
             
             
             var hasPoints = item.fields.Any(p => p.title.EndsWith(" Points"));
@@ -3216,7 +3233,107 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 return d[n, m];
             }
         }
+
+        public int SingleNodeTimeEstimate(DialogueEntry node, bool includeSequencesAndScripts = true)
+        {
+            
+            
+            int GetNodeDuration(DialogueEntry dialogueEntry)
+        {
+            
+            var time = 0;
+
+            if (includeSequencesAndScripts && dialogueEntry.Sequence.Contains("BlackOut"))
+            {
+                List<string> extractedContents = new List<string>();
+                string pattern = @"BlackOut\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim());
+                    
+                }
+
+                var blackoutTime = 0;
+                
+                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) blackoutTime = secondsFromInt;
+                
+               // else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) blackoutTime = secondsFromLua;
+                
+                if (extractedContents.Count > 1)
+                {
+                    switch (extractedContents[1])
+                    {
+                        case "seconds":
+                            time += blackoutTime;
+                            break;
+                        case "minutes":
+                            time += blackoutTime * 60;
+                            break;
+                        case "hours":
+                            time += blackoutTime * 3600;
+                            break;
+                    }
+                    
+                }
+                
+                else blackoutTime *= 60;
+                
+                time += blackoutTime;
+
+            }
+           
+            
+            if (includeSequencesAndScripts && dialogueEntry.Sequence.Contains("AddSeconds"))
+            {
+                List<string> extractedContents = new List<string>();
+                string pattern = @"AddSeconds\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim());
+                }
+                
+                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) time += secondsFromInt;
+                
+                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) time += secondsFromLua;
+            }
+            
+            if (includeSequencesAndScripts && dialogueEntry.Sequence.Contains("AddMinutes"))
+            {
+                List<string> extractedContents = new List<string>();
+                string pattern = @"AddMinutes\(([^)]*)\)";
+                
+                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
+                {
+                    extractedContents.Add(match.Groups[1].Value.Trim());
+                }
+                
+                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) time += secondsFromInt;
+                
+                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) time += secondsFromLua;
+            }
+            
+            int GetLineAutoDuration(string line)
+            {
+
+                if (line == string.Empty)
+                {
+            
+                    return 0;
+                }
+                
+                return (int)(line.Length * SecondsPerCharacter + SecondsPerLine);
+            }
+            
         
+            return time += GetLineAutoDuration(dialogueEntry.currentDialogueText);
+        }
+            
+            return  GetNodeDuration(node);
+        
+        }
+    
 
         public (int, int) TimeEstimate(DialogueEntry node)
         {
@@ -3262,127 +3379,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
             }
             
-            int GetTimespan(DialogueEntry dialogueEntry)
-            {
-                if (!Field.FieldExists(dialogueEntry.fields, "Timespan")) return -1;
-        
-                var timespanField = Field.Lookup(dialogueEntry.fields, "Timespan");
-        
-                var value = timespanField.value.Split(':')[0] == null ? 0 : int.Parse(timespanField.value.Split(':')[0]);
-
-                var unit = timespanField.value.Split(':')[1];
-
-                switch (unit)
-                {
-                    case "seconds":
-                        break;
-                    case "minutes":
-                        value *= 60;
-                        break;
-                    case "hours":
-                        value *= 3600;
-                        break;
-                }
-
-                return value;
-            }
-            
-            int GetNodeDuration(DialogueEntry dialogueEntry)
-        {
-            var time = 0;
-            var timespan = GetTimespan(dialogueEntry);
-            
-            if (timespan >= 0)
-            {
-                time += timespan;
-            }
-
-            if (dialogueEntry.Sequence.Contains("BlackOut"))
-            {
-                List<string> extractedContents = new List<string>();
-                string pattern = @"BlackOut\(([^)]*)\)";
-                
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
-                {
-                    extractedContents.Add(match.Groups[1].Value.Trim());
-                    
-                }
-
-                var blackoutTime = 0;
-                
-                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) blackoutTime = secondsFromInt;
-                
-               // else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) blackoutTime = secondsFromLua;
-                
-                if (extractedContents.Count > 1)
-                {
-                    switch (extractedContents[1])
-                    {
-                        case "seconds":
-                            time += blackoutTime;
-                            break;
-                        case "minutes":
-                            time += blackoutTime * 60;
-                            break;
-                        case "hours":
-                            time += blackoutTime * 3600;
-                            break;
-                    }
-                    
-                }
-                
-                else blackoutTime *= 60;
-                
-                time += blackoutTime;
-
-            }
            
-            
-            if (dialogueEntry.Sequence.Contains("AddSeconds"))
-            {
-                List<string> extractedContents = new List<string>();
-                string pattern = @"AddSeconds\(([^)]*)\)";
-                
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
-                {
-                    extractedContents.Add(match.Groups[1].Value.Trim());
-                }
-                
-                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) time += secondsFromInt;
-                
-                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) time += secondsFromLua;
-            }
-            
-            if (dialogueEntry.Sequence.Contains("AddMinutes"))
-            {
-                List<string> extractedContents = new List<string>();
-                string pattern = @"AddMinutes\(([^)]*)\)";
-                
-                foreach (System.Text.RegularExpressions.Match match in System.Text.RegularExpressions.Regex.Matches(dialogueEntry.Sequence, pattern))
-                {
-                    extractedContents.Add(match.Groups[1].Value.Trim());
-                }
-                
-                if (int.TryParse( extractedContents[0] , out var secondsFromInt)) time += secondsFromInt;
-                
-                else if (int.TryParse(Lua.Run($"return {extractedContents[0]}))]").AsString, out var secondsFromLua)) time += secondsFromLua;
-            }
-            
-        
-            return time > 0 ? time : GetLineAutoDuration(dialogueEntry.currentDialogueText);
-        }
-            
-            int GetLineAutoDuration(string line)
-            {
-
-                if (line == string.Empty)
-                {
-            
-                    return 0;
-                }
-                
-                return (int)(line.Length * SecondsPerCharacter + SecondsPerLine);
-            }
             
             int FindShortestDurationBetweenPaths(List<List<DialogueEntry>> paths)
             {
@@ -3394,7 +3391,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
                     for (int i = 0; i < path.Count; i++)
                     {
-                        distance += GetNodeDuration(database.GetDialogueEntry(path[i].conversationID, path[i].id));
+                        distance += SingleNodeTimeEstimate(database.GetDialogueEntry(path[i].conversationID, path[i].id));
                     }
             
                     if (distance < shortestDistance) shortestDistance = distance;
@@ -3412,7 +3409,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
                     for (int i = 0; i < path.Count; i++)
                     {
-                        distance += GetNodeDuration(database.GetDialogueEntry(path[i].conversationID, path[i].id));
+                        distance += SingleNodeTimeEstimate(database.GetDialogueEntry(path[i].conversationID, path[i].id));
                     }
             
                     if (distance > largestDistance) largestDistance = distance;
@@ -3434,7 +3431,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             var minTimeEstimate = int.MaxValue;
             var maxTimeEstimate = 0;
             
-            var timespan = GetNodeDuration(node);
+            var timespan = SingleNodeTimeEstimate(node);
             
             if (timespan != 0) minTimeEstimate = maxTimeEstimate = timespan;
             

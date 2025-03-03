@@ -359,6 +359,13 @@ namespace Project.Runtime.Scripts.Manager
             {
                 DialogueLua.SetActorField(conversationActor.Name, "Introduced", true);
             }
+            
+            
+            if (subtitle.dialogueEntry.fields.Any(p => p.title == "Duration"))
+            {
+                var duration = int.Parse(subtitle.dialogueEntry.fields.First(p => p.title == "Duration").value);
+                GameEvent.OnWait( duration);
+            }
 
         }
         

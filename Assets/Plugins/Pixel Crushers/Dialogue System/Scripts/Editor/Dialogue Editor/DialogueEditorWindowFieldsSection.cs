@@ -455,6 +455,13 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             actor = (string.IsNullOrEmpty(result)) ? null : database.GetActor(int.Parse(result));
             return result;
         }
+        
+        private string DrawQuestfield(GUIContent label, string value)
+        {
+            var databaseItems = database != null ? database.items.Where(p => p.IsQuest).ToList() : null;
+            var result = DrawAssetPopup<Item>(value, databaseItems, label);
+            return result;
+        }
 
         private string DrawQuestStateField(GUIContent label, string value)
         {

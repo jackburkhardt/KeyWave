@@ -750,6 +750,74 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             entry.userScript = luaScriptWizard.Draw(new GUIContent("Script", "Optional Lua code to run when entry is spoken."), entry.userScript);
             EditorWindowTools.EditorGUILayoutEndGroup();
             
+            
+            // Time:
+            
+            var overrideTime = entry.fields.Exists(f => f.title == "Override Time") && Field.LookupBool(entry.fields, "Override Time");
+            var duration = Field.Lookup(entry.fields, "Duration");
+            var timeEstimate = SingleNodeTimeEstimate(entry, false);
+            
+            if (duration == null)
+            {
+                duration = new Field("Duration", timeEstimate.ToString(), FieldType.Text);
+                entry.fields.Add(duration);
+            }
+            
+            if (database.GetActor(entry.ActorID) == null || !database.GetActor(entry.ActorID).IsPlayer)
+            {
+                EditorWindowTools.EditorGUILayoutBeginGroup();
+                var defaultLabelWidth =  EditorGUIUtility.labelWidth;
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(EditorGUIUtility.IconContent("clock") , GUILayout.MaxWidth(30f));
+                var newOverrideTime = EditorGUILayout.ToggleLeft(new GUIContent("Override", "Toggle whether duration is determined explicitly or by the Dialogue Text."), overrideTime, GUILayout.MaxWidth(90f));
+               
+                var time = timeEstimate;
+
+                if (overrideTime)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.BeginVertical();
+                    EditorGUIUtility.labelWidth = 45f;
+                    var hours = EditorGUILayout.IntField("Hours" , int.Parse(duration.value) / 3600, GUILayout.MaxWidth(130f), GUILayout.MinWidth(60f));
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.Space(3);
+                    EditorGUILayout.BeginVertical();
+                    EditorGUIUtility.labelWidth = 60f;
+                    var mins = EditorGUILayout.IntField("Minutes" , int.Parse(duration.value) % 3600 / 60, GUILayout.MaxWidth(140f), GUILayout.MinWidth(85f));
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.Space(3);
+                    EditorGUILayout.BeginVertical();
+                    EditorGUIUtility.labelWidth = 60f;
+                    var secs = EditorGUILayout.IntField("Seconds" , int.Parse(duration.value) % 3600 % 60, GUILayout.MaxWidth(140f) , GUILayout.MinWidth(85f));
+                    EditorGUILayout.EndVertical();
+                
+                    //duration.value = (hours * 3600 + mins * 60 + secs).ToString();
+                    EditorGUIUtility.labelWidth = defaultLabelWidth;
+                    EditorGUILayout.EndHorizontal();
+                    time = hours * 3600 + mins * 60 + secs;
+                }
+                
+                else EditorGUILayout.LabelField(DurationLabel( timeEstimate));
+                EditorGUILayout.EndHorizontal();
+                EditorWindowTools.EditorGUILayoutEndGroup();
+                
+                
+                if (newOverrideTime != overrideTime)
+                {
+                    Field.SetValue(entry.fields, "Override Time", newOverrideTime);
+                    changed = true;
+                }
+                
+                time = Mathf.Max(0, time);
+                time = Mathf.Min(  86400, time);
+
+                duration.value = time.ToString();
+            }
+            
+            
+           
+            
             /*
 
             if (entry.outgoingLinks.Count > 1 && entry.isGroup)

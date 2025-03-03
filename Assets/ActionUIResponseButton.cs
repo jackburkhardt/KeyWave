@@ -14,6 +14,10 @@ public class ActionUIResponseButton : StandardUIResponseButton
         set
         {
             base.response = value;
+            var actionField =  response.destinationEntry.fields.Find( f => f.title == "Action");
+            var action = DialogueManager.masterDatabase.GetItem( int.Parse(actionField.value));
+            description.text = action.LookupValue("Description");
+            if (description.text == "") description.gameObject.SetActive(false);
         }
     }
 }
