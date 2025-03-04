@@ -298,7 +298,7 @@ public class SequencerCommandSetAllContinueButtons : SequencerCommand
         foreach (var standardUIContinueButtonFastForward in continueButtons)
         {
             standardUIContinueButtonFastForward.enabled = param;
-            standardUIContinueButtonFastForward.GetComponent<Button>().interactable = param;
+            if (standardUIContinueButtonFastForward.TryGetComponent<Button>(out var _button)) _button.interactable = param;
         }
     }
 }

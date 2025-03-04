@@ -332,6 +332,19 @@ namespace Project.Runtime.Scripts.Manager
                 Debug.Log("Added action to conversation: " + action.value);
             }
 
+            foreach (var locationField in conversation.fields.Where(p => p.title == "Location"))
+            { 
+                
+                if ( subtitle.dialogueEntry.outgoingLinks.Count > 0 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
+                {
+                    
+                    var destinationConversation =  DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
+                    destinationConversation.fields.Add(locationField);
+                }
+                else conversation.fields.Add( locationField);
+                subtitle.dialogueEntry.fields.Remove(locationField);
+            }
+
 
             if (subtitle.dialogueEntry.outgoingLinks.Count == 1 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
             {
@@ -371,7 +384,6 @@ namespace Project.Runtime.Scripts.Manager
         
         IEnumerator QueueConversationEndEvent(Action callback)
         {
-            Debug.Log( "queing event from state: " + state);
             yield return new WaitForEndOfFrame();
             while (DialogueManager.instance.isConversationActive || DialogueTime.isPaused) yield return new WaitForSecondsRealtime(0.25f);
             callback?.Invoke();

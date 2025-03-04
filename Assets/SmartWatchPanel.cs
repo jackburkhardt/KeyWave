@@ -29,7 +29,6 @@ public class SmartWatchPanel : UIPanel
         if (_currentApp == null)
         {
             var defaultApp = GetAllApps().Find(x => x.LookupBool("Is Default"));
-            Debug.Log(defaultApp.Name);
             _currentApp = appPanels.Find(p => p.Name == defaultApp.Name);
         }
         

@@ -484,19 +484,6 @@ namespace Project.Runtime.Scripts.Manager
                 
                 
                 conversation.dialogueEntries = dialogueEntries;
-
-                if (asset is Location)
-                {
-                    conversation.fields.Add( new Field( "Location", asset.id.ToString(), FieldType.Location));
-                }
-                
-                else if (asset is Item item)
-                {
-                    if (item.IsAction)
-                    {
-                        conversation.fields.Add( new Field( "Action", item.id.ToString(), FieldType.Item));
-                    }
-                }
                 
                 DialogueManager.masterDatabase.conversations.Add(conversation);
                 return conversation;
