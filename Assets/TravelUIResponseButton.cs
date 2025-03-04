@@ -37,6 +37,8 @@ public class TravelUIResponseButton : StandardUIResponseButton
             ETALabel.text = $"{Clock.EstimatedTimeOfArrival(location.id)}";
             GetComponent<Image>().color = location.LookupColor("Color");
             transform.localPosition = location.LookupVector2("Coordinates");
+            
+            confirmButton.interactable = true;
 
             if (location.FieldExists("Open Time"))
             {
