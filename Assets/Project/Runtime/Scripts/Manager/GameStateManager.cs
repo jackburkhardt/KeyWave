@@ -316,6 +316,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
         
+            //transfers actions from dialogue entry to conversation
             foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
             {
                 if ( subtitle.dialogueEntry.outgoingLinks.Count > 0 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
@@ -325,11 +326,11 @@ namespace Project.Runtime.Scripts.Manager
                     destinationConversation.fields.Add(action);
                 }
                 else conversation.fields.Add( action);
-                subtitle.dialogueEntry.fields.Remove(action);
-                
-                Debug.Log("Added action to conversation: " + action.value);
             }
+            
+            subtitle.dialogueEntry.fields.RemoveAll(p => p.title == "Action");
 
+            //transfer locations from dialogue entry to conversation
             foreach (var locationField in conversation.fields.Where(p => p.title == "Location"))
             { 
                 
@@ -340,17 +341,19 @@ namespace Project.Runtime.Scripts.Manager
                     destinationConversation.fields.Add(locationField);
                 }
                 else conversation.fields.Add( locationField);
-                subtitle.dialogueEntry.fields.Remove(locationField);
             }
+            
+            subtitle.dialogueEntry.fields.RemoveAll(p => p.title == "Location");
 
 
+            
+            //transfer actions to linked conversation
             if (subtitle.dialogueEntry.outgoingLinks.Count == 1 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
             {
                 var newConversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
                 foreach (var action in conversation.fields.Where(p => p.title == "Action"))
                 {
                     newConversation.fields.Add(action);
-                    Debug.Log("Added action to linked conversation: " + action.value);
                 }
                 
                 conversation.fields.RemoveAll(p => p.title == "Action");
