@@ -1812,10 +1812,6 @@ MonoBehaviour:
       value: active
       type: 12
       typeString: CustomFieldType_QuestState
-    - title: Display Name
-      value: Go to the back office door.
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Points
       value: Wellness:15
       type: 10
@@ -1919,10 +1915,6 @@ MonoBehaviour:
       value: active
       type: 12
       typeString: CustomFieldType_QuestState
-    - title: Display Name
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Points
       value: Teamwork:20
       type: 10
@@ -2157,10 +2149,6 @@ MonoBehaviour:
       value: active
       type: 12
       typeString: CustomFieldType_QuestState
-    - title: Display Name
-      value: Approach the staff member.
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Points
       value: Context:20
       type: 10
@@ -3171,7 +3159,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Name
-      value: Hotel/Nap
+      value: Take a nap.
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -3211,7 +3199,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Conditions
-      value: CurrentQuestState("Hotel/Nap") == "active" and (true)
+      value: CurrentQuestState("Take a nap.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Show Invalid
@@ -3219,7 +3207,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Hotel/Nap", "success"); '
+      value: 'SetQuestState("Take a nap.", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Explicit Duration
@@ -3270,10 +3258,6 @@ MonoBehaviour:
       value: 10
       type: 1
       typeString: CustomFieldType_Number
-    - title: Display Name
-      value: Take a nap.
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Ignore Sublocations
       value: False
       type: 2
@@ -3290,7 +3274,7 @@ MonoBehaviour:
   - id: 238
     fields:
     - title: Name
-      value: Hotel/Meal
+      value: Grab a meal.
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -3322,7 +3306,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Hotel/Meal") == "active" and (true)
+      value: CurrentQuestState("Grab a meal.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -3338,7 +3322,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Hotel/Meal", "success"); '
+      value: 'SetQuestState("Grab a meal.", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
@@ -3414,10 +3398,6 @@ MonoBehaviour:
       value: 0.5
       type: 0
       typeString: CustomFieldType_Number
-    - title: Display Name
-      value: Grab a meal.
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Ignore Sublocations
       value: False
       type: 2
@@ -3430,7 +3410,7 @@ MonoBehaviour:
   - id: 173
     fields:
     - title: Name
-      value: "Caf\xE9/GrabCoffee"
+      value: Grab some coffee.
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -3462,7 +3442,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: "CurrentQuestState(\"Caf\xE9/GrabCoffee\") == \"active\" and (true)"
+      value: CurrentQuestState("Grab some coffee.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -3474,7 +3454,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: "SetQuestState(\"Caf\xE9/GrabCoffee\", \"success\"); "
+      value: 'SetQuestState("Grab some coffee.", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Skills Points
@@ -3495,10 +3475,6 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Time Flow
       value: Explicit
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Display Name
-      value: Grab some coffee.
       type: 0
       typeString: CustomFieldType_Text
     - title: Conversation
@@ -4752,7 +4728,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Name
-      value: Harbor/CityTour
+      value: Take a city tour.
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -4797,7 +4773,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Conditions
-      value: CurrentQuestState("Harbor/CityTour") == "active" and (true)
+      value: true and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Show Invalid
@@ -4805,7 +4781,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Harbor/CityTour", "success"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Explicit Duration
@@ -4824,10 +4800,6 @@ MonoBehaviour:
       value: 0
       type: 1
       typeString: CustomFieldType_Number
-    - title: Display Name
-      value: Take a city tour.
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Ignore Sublocations
       value: False
       type: 2
@@ -4860,7 +4832,7 @@ MonoBehaviour:
   - id: 242
     fields:
     - title: Name
-      value: Harbor/Friends
+      value: Meet with hometown friends.
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -4892,7 +4864,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Harbor/Friends") == "active" and (true)
+      value: true and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4963,10 +4935,6 @@ MonoBehaviour:
       value: 7200
       type: 1
       typeString: CustomFieldType_Number
-    - title: Display Name
-      value: Meet with hometown friends.
-      type: 0
-      typeString: CustomFieldType_Text
     - title: Item Type
       value: Action
       type: 0
@@ -4975,7 +4943,7 @@ MonoBehaviour:
   - id: 145
     fields:
     - title: Name
-      value: Harbor/Colleague
+      value: Meet with a past colleague.
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -4984,10 +4952,6 @@ MonoBehaviour:
       typeString: CustomFieldType_Files
     - title: Description
       value: Spend some time with your colleage who lives nearby  the sea.
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Display Name
-      value: Meet with a past colleague.
       type: 0
       typeString: CustomFieldType_Text
     - title: Cost
@@ -5024,7 +4988,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Conditions
-      value: CurrentQuestState("Harbor/Colleague") == "active" and (true)
+      value: true and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Show Invalid
@@ -5032,7 +4996,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Harbor/Colleague", "success"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Explicit Duration
@@ -5095,7 +5059,7 @@ MonoBehaviour:
   - id: 240
     fields:
     - title: Name
-      value: Harbor/Beach
+      value: Go to the beach.
       type: 0
       typeString: CustomFieldType_Text
     - title: Pictures
@@ -5127,7 +5091,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Harbor/Beach") == "active" and (true)
+      value: true and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -5143,7 +5107,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: 'SetQuestState("Harbor/Beach", "success"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
@@ -5188,10 +5152,6 @@ MonoBehaviour:
       typeString: CustomFieldType_Location
     - title: Sublocation Switcher Method
       value: MoveBeforeConversationAndReturnWhenDone
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Display Name
-      value: Go to the beach.
       type: 0
       typeString: CustomFieldType_Text
     - title: Auto Conversation Title
@@ -7456,7 +7416,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 21600
+      value: 70000
       type: 0
       typeString: CustomFieldType_Number
     - title: Description
@@ -7764,7 +7724,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: '[temp]<color=#7B7C7A>Your actions will be displayed here.'
+      value: <color=#7B7C7A>Your actions will be displayed here.<br>
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -7904,7 +7864,7 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Initial Value
-      value: 21600
+      value: 70000
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -8070,6 +8030,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 25
       isRoot: 0
       isGroup: 0
@@ -8143,6 +8107,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 25
       isRoot: 0
       isGroup: 0
@@ -8211,6 +8179,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 25
       isRoot: 0
       isGroup: 0
@@ -8263,7 +8235,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
-        value: EndOfDay()
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Timespan
@@ -8280,6 +8252,10 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: EventGuid
         value: 6eb2fc42-453b-4b9e-8d10-d71dc92d848f
+        type: 0
+        typeString: 
+      - title: Duration
+        value: 0
         type: 0
         typeString: 
       conversationID: 25
@@ -50488,7 +50464,7 @@ MonoBehaviour:
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
-      conditionsString: Actor["Maria_Almeida"].Introduced == true
+      conditionsString: 
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -51834,6 +51810,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 678
+        type: 0
+        typeString: 
       conversationID: 159
       isRoot: 0
       isGroup: 0
@@ -51856,7 +51836,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 430.843
-        y: 444.26102
+        y: 443.09555
         width: 160
         height: 30
     - id: 25
@@ -51927,7 +51907,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 432.62833
-        y: 526.9512
+        y: 528.11664
         width: 160
         height: 30
     - id: 27

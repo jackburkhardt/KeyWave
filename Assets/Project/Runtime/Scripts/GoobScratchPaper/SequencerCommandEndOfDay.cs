@@ -6,7 +6,6 @@ public class SequencerCommandEndOfDay : SequencerCommand
 {
     public void Awake()
     {
-        GameManager.instance.EndOfDay();
         
         DialogueManager.instance.PlaySequence("HideCustomPanel(SmartWatch)");
         

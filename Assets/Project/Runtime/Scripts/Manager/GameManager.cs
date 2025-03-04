@@ -266,7 +266,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             var location = DialogueManager.masterDatabase.GetLocation(newLocation);
         
-            GameEvent.OnMove(newLocation, gameState.GetPlayerLocation().Name, (int)DistanceToLocation(location.id));
+            GameEvent.OnMove(newLocation, gameState.GetPlayerLocation().Name);
             
             Debug.Log("New location: " + newLocation);
             
