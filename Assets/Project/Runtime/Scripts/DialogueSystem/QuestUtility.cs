@@ -10,9 +10,6 @@ namespace Project.Runtime.Scripts.DialogueSystem
 {
     public class QuestUtility
     {
-        public static Action<Item> OnQuestComplete;
-        
-        
 
         public static Lua.Result GetField(string questTitle, string questField)
         {

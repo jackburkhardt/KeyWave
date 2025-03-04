@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
+using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
@@ -22,13 +23,21 @@ public class GameLog : MonoBehaviour
     private void OnEnable()
     {
         Points.OnPointsChange += OnPoints;
-        QuestUtility.OnQuestComplete += OnQuest;
+        GameEvent.OnPlayerEvent += OnPlayerEvent;
     }
     
     private void OnDisable()
     {
         Points.OnPointsChange -= OnPoints;
-        QuestUtility.OnQuestComplete -= OnQuest;
+        GameEvent.OnPlayerEvent -= OnPlayerEvent;
+    }
+
+    private void OnPlayerEvent(PlayerEvent e) 
+    {
+        if (e.EventType == "quest_state_change" && e.Data["state"].ToString() == "Success")
+        {
+            OnQuestComplete(e.Data["questName"].ToString());
+        }
     }
 
     public static void Log(string message, LogType type = LogType.Default)
@@ -85,26 +94,28 @@ public class GameLog : MonoBehaviour
     }
 
     
-    public void OnQuest(Item quest)
+    public void OnQuestComplete(string questName)
     {
-        var message = $"{quest.Description}";
+        var quest = QuestLog.GetQuestDescription(questName);
+        var message = $"{quest}";
         LogQuest(message);
     }
     
     public void OnPoints(string type, int amount)
     {
-        if (amount < 0)
-        {
-            var message = $"Points: -{Math.Abs(amount)} {type}";
-            LogPoints(message);
-            return;
-        }
-
-        else
-        {
-            var message = $"Points: +{amount} {type}";
-            LogPoints(message);
-        }
+        // Removed for being too verbose
+        // if (amount < 0)
+        // {
+        //     var message = $"Points: -{Math.Abs(amount)} {type}";
+        //     LogPoints(message);
+        //     return;
+        // }
+        //
+        // else
+        // {
+        //     var message = $"Points: +{amount} {type}";
+        //     LogPoints(message);
+        // }
     }
 
     public static IEnumerable<string> GetLogWithoutFormatting()

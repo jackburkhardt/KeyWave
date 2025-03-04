@@ -420,11 +420,8 @@ namespace Project.Runtime.Scripts.Manager
                    
                 }
             }
-        
-            var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
-            var displayName = QuestLog.GetQuestTitle(questName);
             
-            GameEvent.OnQuestStateChange(displayName, state, duration);
+            GameEvent.OnQuestStateChange(questName, state, points);
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
             
             
