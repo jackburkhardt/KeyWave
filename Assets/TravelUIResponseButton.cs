@@ -9,7 +9,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LocationUIResponseButton : StandardUIResponseButton
+public class TravelUIResponseButton : StandardUIResponseButton
 {
     public UITextField ETALabel;
     public UITextField description;

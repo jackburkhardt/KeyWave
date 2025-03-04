@@ -33,13 +33,13 @@ public class LocationPanel : UIPanel
     protected override void OnEnable()
     {
         base.OnEnable();
-        LocationUIResponseButton.OnLocationSelected += ShowLocationInfo;
+        TravelUIResponseButton.OnLocationSelected += ShowLocationInfo;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        LocationUIResponseButton.OnLocationSelected -= ShowLocationInfo;
+        TravelUIResponseButton.OnLocationSelected -= ShowLocationInfo;
     }
 
     private void OnValidate()
