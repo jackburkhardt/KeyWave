@@ -18,6 +18,10 @@ public class TravelUIResponseButton : StandardUIResponseButton
     
     public static Action<Location> OnLocationSelected;
     public UnityEvent onLocationSelected;
+
+    public Button confirmButton;
+    public Graphic confirmButtonGraphic;
+    public UITextField confirmButtonText;
     
     public override Response response
     {
@@ -34,6 +38,20 @@ public class TravelUIResponseButton : StandardUIResponseButton
             GetComponent<Image>().color = location.LookupColor("Color");
             transform.localPosition = location.LookupVector2("Coordinates");
 
+            if (location.FieldExists("Open Time"))
+            {
+                var openTime = location.LookupInt("Open Time");
+                var closeTime = location.LookupInt("Close Time");
+                var rawETA = Clock.EstimatedTimeOfArrivalRaw(location.id);
+                
+                if (rawETA < openTime || rawETA > closeTime)
+                {
+                    confirmButton.interactable = false;
+                    confirmButtonGraphic.color = Color.red;
+                    confirmButtonText.text = "Closed";
+                }
+            }
+            
         }
     }
 

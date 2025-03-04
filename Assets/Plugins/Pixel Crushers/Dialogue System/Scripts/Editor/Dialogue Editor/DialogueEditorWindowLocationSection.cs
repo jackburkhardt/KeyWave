@@ -526,11 +526,83 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             }
 
             DrawConditions(location, "Conditions");
-            
+
             if (location.LookupValue("Conditions") != string.Empty && location.LookupValue("Conditions") != "true")
             {
                 EditorGUILayout.HelpBox("Conditions not yet implemented", MessageType.Warning);
             }
+            
+            var dayStartTime = float.Parse(database.GetVariable("game.clock.dayStartTime").InitialValue);
+            var dayEndTime = float.Parse(database.GetVariable("game.clock.dayEndTime").InitialValue);
+
+            
+            var opentimeField = Field.Lookup(location.fields, "Open Time");
+            var closetimeField = Field.Lookup(location.fields, "Close Time");
+            
+            var hasOpenTimeField = (opentimeField != null);
+
+          
+            
+            EditorGUILayout.BeginHorizontal();
+            var newHasOpenTimeFields = EditorGUILayout.ToggleLeft("Time Range", hasOpenTimeField);
+            
+            if (hasOpenTimeField != newHasOpenTimeFields)
+            {
+                if (newHasOpenTimeFields)
+                {
+                    opentimeField = new Field("Open Time",  $"{dayStartTime}", FieldType.Number);
+                    location.fields.Add(opentimeField);
+                    closetimeField = new Field("Close Time", $"{dayEndTime}", FieldType.Number);
+                    location.fields.Add(closetimeField);
+                    SetDatabaseDirty("Add Open Time Field");
+                }
+                else
+                {
+                    location.fields.Remove(opentimeField);
+                    location.fields.Remove(closetimeField);
+                    SetDatabaseDirty("Remove Open Time Field");
+                }
+            }
+
+            if (newHasOpenTimeFields)
+            {
+                float openTime = float.Parse( opentimeField.value); 
+                float closeTime = float.Parse( closetimeField.value);
+                
+                EditorGUILayout.MinMaxSlider(  ref openTime, ref closeTime, dayStartTime, dayEndTime);
+                EditorGUILayout.EndHorizontal();
+            
+                int openTimeInt = (int)openTime; // round to the nearest 15 minutes
+            
+                if (openTimeInt % (15 * 60) != 0)
+                {
+                    openTimeInt = openTimeInt / (15 * 60) * 15 * 60;
+                }
+            
+                int closeTimeInt = (int)closeTime; // round to the nearest 15 minutes
+            
+                if (closeTimeInt % (15 * 60) != 0)
+                {
+                    closeTimeInt = closeTimeInt / (15 * 60) * 15 * 60;
+                }
+            
+               
+                opentimeField.value = openTimeInt.ToString();
+                closetimeField.value = closeTimeInt.ToString();
+            
+                var openTimeAsTimeSpan = new System.TimeSpan(0, openTimeInt / 3600, (openTimeInt % 3600) / 60, 0);
+                var closeTimeAsTimeSpan = new System.TimeSpan(0, closeTimeInt / 3600, (closeTimeInt % 3600) / 60, 0);
+            
+                EditorWindowTools.EditorGUILayoutBeginIndent();
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUILayout.LabelField( new GUIContent($"Open Time: {openTimeAsTimeSpan}", "The time the location opens."));
+                EditorGUILayout.LabelField( new GUIContent($"Close Time: {closeTimeAsTimeSpan}", "The time the location closes."));
+                EditorGUI.EndDisabledGroup();
+                EditorWindowTools.EditorGUILayoutEndIndent();
+            }
+            
+            else EditorGUILayout.EndHorizontal();
+           
             
         }
         

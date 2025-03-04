@@ -80,6 +80,11 @@ namespace Project.Runtime.Scripts.Manager
         {
             return To24HourClock((int)GameManager.DistanceToLocation(locationID) + CurrentTimeRaw);
         }
+        
+        public static int EstimatedTimeOfArrivalRaw(int locationID)
+        {
+            return (int)GameManager.DistanceToLocation(locationID) + CurrentTimeRaw;
+        }
 
         public static int GetHoursAsInt(string time)
         {
@@ -140,8 +145,7 @@ public class ClockSettings : ScriptableObject
         var secondsPerCharacterVariable = dialogueDatabase.GetVariable(secondsPerCharacterKey);
         if (secondsPerCharacterVariable == null)
         {
-            secondsPerCharacterVariable = new Variable();
-            secondsPerCharacterVariable.Name = secondsPerCharacterKey;
+            secondsPerCharacterVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsPerCharacterKey, SecondsPerCharacter.ToString());
             dialogueDatabase.variables.Add(secondsPerCharacterVariable);
         }
         
@@ -176,6 +180,24 @@ public class ClockSettings : ScriptableObject
         else currentTime = DialogueLua.GetVariable("clock").asInt;
         
         readOnlyCurrentTime = currentTime;
+        
+        var dayStartTime = dialogueDatabase.GetVariable("game.clock.dayStartTime");
+        if (dayStartTime == null)
+        {
+            dayStartTime = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), "game.clock.dayStartTime", DayStartTime.ToString());
+            dialogueDatabase.variables.Add(dayStartTime);
+        }
+        
+        dayStartTime.InitialValue = DayStartTime.ToString();
+        
+        var dayEndTime = dialogueDatabase.GetVariable("game.clock.dayEndTime");
+        if (dayEndTime == null)
+        {
+            dayEndTime = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), "game.clock.dayEndTime", DayEndTime.ToString());
+            dialogueDatabase.variables.Add(dayEndTime);
+        }
+        
+        dayEndTime.InitialValue = DayEndTime.ToString();
         
         DayStartTimeString = Clock.To24HourClock(DayStartTime, true);
         DayEndTimeString = Clock.To24HourClock(DayEndTime, true);

@@ -3,15 +3,23 @@ using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Editor.Scripts.Attributes.DrawerAttributes;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LocationPanel : UIPanel
 {
     [SmartWatchAppPopup] public string app;
+
+    public Graphic panel;
+    public Color defaultColor;
+    public Color closedColor;
+    
     
     public UITextField locationName;
+    public UITextField locationHours;
     public UITextField locationDescription;
     public UITextField specialDescription;
     
@@ -63,6 +71,39 @@ public class LocationPanel : UIPanel
     {
         _location = location;
         locationName.text = location.IsFieldAssigned("Display Name") ? location.AssignedField("Display Name").value: location.Name;
+        
+        var locationHasHours = location.IsFieldAssigned("Open Time") && location.IsFieldAssigned("Close Time");
+        var locationIsOpen = !locationHasHours || Clock.EstimatedTimeOfArrivalRaw(location.id) >= location.LookupInt("Open Time") && Clock.EstimatedTimeOfArrivalRaw(location.id) <= location.LookupInt("Close Time");
+
+        locationHours.gameObject.SetActive(locationHasHours);
+
+        if (locationHasHours)
+        {
+            var openTime = Clock.To24HourClock( location.LookupInt("Open Time"));
+            var closeTime = Clock.To24HourClock( location.LookupInt("Close Time"));
+            locationHours.text = $"Hours:  <b>{openTime} - {closeTime}</b>";
+            
+            if (!locationIsOpen)
+            {
+                locationHours.text += " (Closed)";
+                locationHours.color = Color.red;
+                panel.color = closedColor;
+            }
+            
+            else
+            {
+                locationHours.text += " (Open)";
+                locationHours.color = Color.green;
+                panel.color = defaultColor;
+            }
+        }
+
+        else
+        {
+            panel.color = defaultColor;
+        }
+        
+        
         locationDescription.text = location.Description;
         specialDescription.text = location.IsFieldAssigned("Special Description") ? location.AssignedField("Special Description").value : "";
         
@@ -74,15 +115,20 @@ public class LocationPanel : UIPanel
         
         actorStatusTemplate.gameObject.SetActive(false);
         noCharactersPresent.gameObject.SetActive(true);
-        
-        foreach (var actor in DialogueManager.instance.masterDatabase.actors)
+
+        if (locationIsOpen)
         {
-            if (!actor.IsFieldAssigned("Location") || actor.AssignedField("Location").value != location.id.ToString()) continue;
-            var actorStatus = Instantiate(actorStatusTemplate, actorStatusContainer);
-            actorStatus.gameObject.SetActive(true);
-            actorStatus.SetActorInfo(actor, "is present.");
-            noCharactersPresent.gameObject.SetActive(false);
+            foreach (var actor in DialogueManager.instance.masterDatabase.actors)
+            {
+                if (!actor.IsFieldAssigned("Location") || actor.AssignedField("Location").value != location.id.ToString()) continue;
+                var actorStatus = Instantiate(actorStatusTemplate, actorStatusContainer);
+                actorStatus.gameObject.SetActive(true);
+                actorStatus.SetActorInfo(actor, "is present.");
+                noCharactersPresent.gameObject.SetActive(false);
+            }
         }
+        
+        
         
         metricsGrid.EnableValidMetrics(MetricsGrid.DisplayCondition.HighLocationAffinity, location);
         

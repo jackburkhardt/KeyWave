@@ -6478,11 +6478,11 @@ MonoBehaviour:
     - title: Conditions
       value: true
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Color
       value: '#a2ae30ff'
       type: 13
-      typeString: 
+      typeString: CustomFieldType_Color
   - id: 3
     fields:
     - title: Name
@@ -6592,6 +6592,14 @@ MonoBehaviour:
       value: true
       type: 0
       typeString: 
+    - title: Open Time
+      value: 30600
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Close Time
+      value: 62100
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 15
     fields:
     - title: Name
@@ -6949,6 +6957,14 @@ MonoBehaviour:
       value: true
       type: 0
       typeString: CustomFieldType_Text
+    - title: Open Time
+      value: 32400
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Close Time
+      value: 68400
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 9
     fields:
     - title: Name
@@ -7741,118 +7757,6 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 77
-    fields:
-    - title: Name
-      value: points.skills
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 78
-    fields:
-    - title: Name
-      value: points.teamwork
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 79
-    fields:
-    - title: Name
-      value: points.wellness
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 80
-    fields:
-    - title: Name
-      value: points.context
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 81
-    fields:
-    - title: Name
-      value: points.skills.max
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 100
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 82
-    fields:
-    - title: Name
-      value: points.teamwork.max
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 90
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 83
-    fields:
-    - title: Name
-      value: points.wellness.max
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 155
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
-  - id: 84
-    fields:
-    - title: Name
-      value: points.context.max
-      type: 0
-      typeString: 
-    - title: Initial Value
-      value: 135
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: 
   - id: 85
     fields:
     - title: Name
@@ -7993,6 +7897,34 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 99
+    fields:
+    - title: Name
+      value: game.clock.dayStartTime
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 21600
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
+  - id: 100
+    fields:
+    - title: Name
+      value: game.clock.dayEndTime
+      type: 0
+      typeString: 
+    - title: Initial Value
+      value: 72000
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: 
   conversations:
   - id: 25
     fields:
@@ -45297,6 +45229,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 149
       isRoot: 0
       isGroup: 0
