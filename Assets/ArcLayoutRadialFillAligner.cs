@@ -11,9 +11,9 @@ using UnityEngine.UI;
 public class ArcLayoutRadialFillAligner : MonoBehaviour
 {
     
-    Image image;
-    ArcLayoutGroup arcLayoutGroup;
-    RectTransform rect;
+    [SerializeField] Image image;
+    [SerializeField] ArcLayoutGroup arcLayoutGroup;
+    [SerializeField] RectTransform rect;
     public float angleOffset;
     public bool rotateChildren;
 
@@ -21,13 +21,6 @@ public class ArcLayoutRadialFillAligner : MonoBehaviour
     
     [ShowIf("useMaterial")]
     public string thicknessProperty = "_Thickness";
-
-    public void OnValidate()
-    {
-        image ??= GetComponent<Image>();
-        arcLayoutGroup ??= GetComponent<ArcLayoutGroup>();
-        rect ??= GetComponent<RectTransform>();
-    }
     
     private void Align()
     {
