@@ -186,5 +186,11 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     {
         //CloseNow();
     }
+
+    public void OnGameSceneEnd()
+    {
+        Close();
+        ClearContents();
+    }
     
 }

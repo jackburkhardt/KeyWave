@@ -3857,7 +3857,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: "SetQuestState(\"Caf\xE9/EmotionalIntel\", \"success\"); "
+      value: '; '
       type: 0
       typeString: 
     - title: Repeat Count
@@ -45007,6 +45007,10 @@ MonoBehaviour:
         value: 146:3
         type: 0
         typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 149
       isRoot: 0
       isGroup: 0
@@ -45020,13 +45024,13 @@ MonoBehaviour:
         destinationConversationID: 149
         destinationDialogueID: 1
         isConnector: 0
-        priority: 3
+        priority: 2
       - originConversationID: 149
         originDialogueID: 0
         destinationConversationID: 149
         destinationDialogueID: 28
         isConnector: 0
-        priority: 2
+        priority: 3
       conditionsString: 
       userScript: 
       onExecute:
@@ -45034,8 +45038,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 514.37085
-        y: 1
+        x: 540.31177
+        y: 26.01445
         width: 160
         height: 30
     - id: 1
@@ -45049,7 +45053,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 21
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -45099,17 +45103,15 @@ MonoBehaviour:
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
-      conditionsString: (CurrentQuestEntryState("Complete an emotional intelligence
-        course.", 2) ~= "success") and (CurrentQuestEntryState("Complete an emotional
-        intelligence course.", 1) == "success")
+      conditionsString: 
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 422.31378
-        y: 83.64113
+        x: 417.68155
+        y: 104.94972
         width: 160
         height: 30
     - id: 2
@@ -45664,6 +45666,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 149
       isRoot: 0
       isGroup: 0
@@ -45686,7 +45692,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 520.1043
-        y: 553.784
+        y: 568.60736
         width: 160
         height: 30
     - id: 16
@@ -45904,7 +45910,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 21
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -45953,7 +45959,8 @@ MonoBehaviour:
         destinationDialogueID: 29
         isConnector: 0
         priority: 2
-      conditionsString: 
+      conditionsString: (CurrentQuestEntryState("Complete an emotional intelligence
+        course.", 1) == "success")
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -45961,7 +45968,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 690.3798
-        y: 129.00461
+        y: 134.56339
         width: 160
         height: 30
     - id: 29
@@ -46085,8 +46092,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 88.420135, y: 0}
-    canvasZoom: 0.713501
+    canvasScrollPosition: {x: 143.41794, y: 0}
+    canvasZoom: 0.83350086
   - id: 150
     fields:
     - title: Title
@@ -46251,6 +46258,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46814,6 +46825,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46978,8 +46993,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 28.675077, y: 0}
-    canvasZoom: 0.9660003
+    canvasScrollPosition: {x: 115.00792, y: 0}
+    canvasZoom: 1.266
   - id: 151
     fields:
     - title: Title
