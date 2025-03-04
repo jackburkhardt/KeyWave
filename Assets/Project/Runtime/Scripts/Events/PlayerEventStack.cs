@@ -21,15 +21,13 @@ namespace Project.Runtime.Scripts.Events
         public PlayerEvent(string eventType, JObject data, int duration = 0)
         {
             this.EventType = eventType;
-            this.LocalTimeStamp = DateTime.Now;
+            this.LocalTimeStamp = DateTime.UtcNow.ToString("s");
             this.Data = data;
-            this.Duration = duration;
         }
 
         public string EventType { get; }
-        public DateTime LocalTimeStamp { get; }
+        public string LocalTimeStamp { get; }
         public JObject Data { get; }
-        public int Duration { get; }
 
         public override string ToString()
         {

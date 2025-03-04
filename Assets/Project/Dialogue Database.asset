@@ -1102,7 +1102,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Auto Set Success
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Item Type
@@ -1361,7 +1361,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Auto Set Success
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Item Type
@@ -1461,7 +1461,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Auto Set Success
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Item Type
@@ -7864,7 +7864,7 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Initial Value
-      value: 70000
+      value: 21600
       type: 0
       typeString: CustomFieldType_Text
     - title: Description
@@ -44761,7 +44761,10 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestEntryState("Listen to a podcast.", 2, "success");
+      userScript: 'SetQuestEntryState("Listen to a podcast.", 2, "success");
+
+        SetQuestState("Listen
+        to a podcast.", "success")'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -45729,8 +45732,11 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestEntryState("Complete an emotional intelligence course.",
-        2, "success")
+      userScript: 'SetQuestEntryState("Complete an emotional intelligence course.",
+        2, "success");
+
+        SetQuestState("Complete an emotional intelligence
+        course.", "success")'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -46004,8 +46010,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 143.41794, y: 0}
-    canvasZoom: 0.83350086
+    canvasScrollPosition: {x: 92.30986, y: 0}
+    canvasZoom: 0.5827499
   - id: 150
     fields:
     - title: Title
@@ -46094,6 +46100,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46113,7 +46123,7 @@ MonoBehaviour:
         destinationConversationID: 150
         destinationDialogueID: 21
         isConnector: 0
-        priority: 3
+        priority: 4
       conditionsString: 
       userScript: 
       onExecute:
@@ -46202,7 +46212,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 362.0808
-        y: 114.687836
+        y: 112.46437
         width: 160
         height: 30
     - id: 2
@@ -46247,6 +46257,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46314,6 +46328,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46405,16 +46423,13 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 'SetQuestState("Public Speaking Course", "active");
-
-        SetQuestEntryState("Complete
-        a public speaking course.", 1, "success");'
+      userScript: SetQuestEntryState("Complete a public speaking course.", 1, "success");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 373.40698
+        x: 372.29526
         y: 349.83478
         width: 160
         height: 30
@@ -46531,6 +46546,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46546,7 +46565,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 584.8415
+        x: 583.7298
         y: 435.14294
         width: 160
         height: 30
@@ -46625,8 +46644,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 89.616394
-        y: 114.91852
+        x: 87.392914
+        y: 116.03024
         width: 160
         height: 30
     - id: 43
@@ -46685,7 +46704,10 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestEntryState("Complete a public speaking course.", 2, "success")
+      userScript: 'SetQuestEntryState("Complete a public speaking course.", 2, "success");
+
+        SetQuestState("Complete
+        a public speaking course.", "success")'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -46905,8 +46927,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 115.00792, y: 0}
-    canvasZoom: 1.266
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.89949965
   - id: 151
     fields:
     - title: Title
@@ -57871,6 +57893,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 184
       isRoot: 0
       isGroup: 0
@@ -57907,7 +57933,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 1
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -57938,6 +57964,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 184
       isRoot: 0
       isGroup: 0
@@ -57974,7 +58004,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 1
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -58005,6 +58035,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 184
       isRoot: 0
       isGroup: 0
@@ -58512,7 +58546,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 1
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -58543,6 +58577,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 184
       isRoot: 0
       isGroup: 0
@@ -58653,7 +58691,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 7
+        value: 1
         type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -58684,6 +58722,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 184
       isRoot: 0
       isGroup: 0
@@ -58705,8 +58747,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 687.1468
-        y: 818.3504
+        x: 679.2479
+        y: 808.87177
         width: 160
         height: 30
     - id: 14

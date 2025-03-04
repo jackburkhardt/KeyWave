@@ -156,8 +156,6 @@ namespace Project.Runtime.Scripts.Manager
                     Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
                     break;
             }
-
-            gameState.Clock += playerEvent.Duration;
         
             OnGameStateChanged?.Invoke(gameState);
         }
@@ -431,21 +429,21 @@ namespace Project.Runtime.Scripts.Manager
                     
                    
                 }
-            }
-            
-            GameEvent.OnQuestStateChange(questName, state, points);
-            SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
-            
-            
-            if (QuestLog.GetQuestEntryCount( questName) > 0 && quest.LookupBool("Auto Set Success"))
-            {
-                for (int i = 1; i < QuestLog.GetQuestEntryCount( questName) + 1; i++)
+                
+                if (QuestLog.GetQuestEntryCount( questName) > 0 && quest.LookupBool("Auto Set Success"))
                 {
-                    var entryState = QuestLog.GetQuestEntryState(questName, i);
-                    if (entryState != QuestState.Success) QuestLog.SetQuestEntryState( questName, i, QuestState.Success);
+                    for (int i = 1; i < QuestLog.GetQuestEntryCount( questName) + 1; i++)
+                    {
+                        var entryState = QuestLog.GetQuestEntryState(questName, i);
+                        if (entryState != QuestState.Success) QuestLog.SetQuestEntryState( questName, i, QuestState.Success);
+                    }
                 }
+                
+                SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
             }
-            
+
+            GameEvent.OnQuestStateChange(questName, state, points);
+
         }
 
 
@@ -486,18 +484,23 @@ namespace Project.Runtime.Scripts.Manager
                    
                     GameEvent.OnPointsIncrease(pointsField, $"{quest.Name} + {prefix}");
                 }
-            }
 
-            
-            bool autoSetSuccess = quest.LookupBool("Auto Set Success");
-            for (int i = 0; i < QuestLog.GetQuestEntryCount( quest.Name); i++)
-            {
-                autoSetSuccess = autoSetSuccess && QuestLog.GetQuestEntryState(quest.Name, i) == QuestState.Success;
-            }
-            
-            if (autoSetSuccess)
-            {
-                QuestLog.SetQuestState(quest.Name, QuestState.Success);
+
+                bool autoSuccess = quest.LookupBool("Auto Set Success");
+                bool allStatesSuccess = true;
+                for (int i = 0; i < QuestLog.GetQuestEntryCount( quest.Name); i++)
+                {
+                    if (QuestLog.GetQuestEntryState(quest.Name, i) != QuestState.Success)
+                    {
+                        allStatesSuccess = false;
+                        break;
+                    }
+                }
+                
+                if (autoSuccess && allStatesSuccess)
+                {
+                    QuestLog.SetQuestState(quest.Name, QuestState.Success);
+                }
             }
             
         }
