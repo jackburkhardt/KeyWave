@@ -111,7 +111,6 @@ namespace Project.Runtime.Scripts.UI
             {
                 if (GetButtonStyle(response, out var stylePrefab))
                 {
-                    Debug.Log("Using style prefab for response: " + response.destinationEntry.Title);
                     var button = Instantiate(stylePrefab.gameObject);
                     button.SetActive(true);
                     return button;

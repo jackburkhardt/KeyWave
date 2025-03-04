@@ -74,7 +74,7 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
             foreach (var standardUIContinueButtonFastForward in continueButtons)
             {
                 standardUIContinueButtonFastForward.enabled = true;
-                standardUIContinueButtonFastForward.GetComponent<Button>().interactable = true;
+                if (standardUIContinueButtonFastForward.TryGetComponent<Button>( out var _button)) _button.interactable = true;
             }
         }
         

@@ -325,7 +325,6 @@ namespace Project.Runtime.Scripts.Manager
             
             if (DialogueLua.GetLocationField( gameState.GetPlayerLocation(true).Name, "Dirty").asBool)
             {
-                Debug.Log("Location is dirty");
                 DialogueManager.StartConversation("Base");
                 return;
             }
@@ -333,7 +332,6 @@ namespace Project.Runtime.Scripts.Manager
 
             if (!gameState.GetPlayerLocation(true).FieldExists("Conversation"))
             {
-                Debug.Log("No conversation field");
                 DialogueManager.StartConversation("Base");
                 return;
             }
@@ -349,7 +347,6 @@ namespace Project.Runtime.Scripts.Manager
                     var generatedConversation =
                         GameManager.GenerateConversation(gameState.GetPlayerLocation(true));
                     // SequencerCommandGoToConversatio
-                    Debug.Log("Generated entries: " + generatedConversation.dialogueEntries.Count);
                     DialogueManager.StartConversation(generatedConversation.Title);
                 }
             }
@@ -364,11 +361,10 @@ namespace Project.Runtime.Scripts.Manager
                     var generatedConversation =
                         GameManager.GenerateConversation(gameState.GetPlayerLocation(true), true);
                     // SequencerCommandGoToConversatio
-                    Debug.Log("Generated entries: " + generatedConversation.dialogueEntries.Count);
                     DialogueManager.StartConversation(generatedConversation.Title);
                 }
 
-            else DialogueManager.StartConversation("Base"); Debug.Log("Starting base conversation");
+            else DialogueManager.StartConversation("Base");
             
             MarkLocationAsDirty( gameState.GetPlayerLocation(true));
         }
