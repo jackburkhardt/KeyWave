@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor.EditorTools;
 
 namespace PixelCrushers.DialogueSystem
 {
