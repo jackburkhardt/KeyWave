@@ -24,6 +24,9 @@ public class PhoneCallPanel : UIPanel
     private bool _markForAwakeAnimation;
 
     private CustomDialogueUI _customDialogueUI;
+    
+    public UITextField contactName;
+    public UITextField contactDescription;
 
     protected override void OnEnable()
     {
@@ -71,5 +74,11 @@ public class PhoneCallPanel : UIPanel
         yield return new WaitForSeconds(totalStandbyTime - ringTime);
         DialogueManager.Unpause();
         GetComponent<Animator>().SetTrigger(answerAnimationTrigger);
+    }
+    
+    public void SetContactInfo( Item contact)
+    {
+        contactName.text = contact.Name;
+        contactDescription.text = contact.Description;
     }
 }

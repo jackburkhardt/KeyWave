@@ -7,7 +7,8 @@ using UnityEngine;
 public class ContactUIResponseButton : StandardUIResponseButton
 {
     public UITextField contactDescription;
-    public UIPanel callScreenPanel;
+    public PhoneCallPanel callScreenPanel;
+    private Item _contact;
     
     public override Response response
     {
@@ -16,15 +17,16 @@ public class ContactUIResponseButton : StandardUIResponseButton
         {
             base.response = value;
             var itemField = response.destinationEntry.fields.Find( f => f.title == "Contact");
-            var item = DialogueManager.masterDatabase.GetItem(int.Parse(itemField.value));
-            label.text = item.Name;
-            contactDescription.text = item.Description;
+            _contact = DialogueManager.masterDatabase.GetItem(int.Parse(itemField.value));
+            label.text = _contact.Name;
+            contactDescription.text = _contact.Description;
         }
     }
 
     public override void OnClick()
     {
         callScreenPanel.Open();
+        callScreenPanel.SetContactInfo( _contact);
         base.OnClick();
     }
 }
