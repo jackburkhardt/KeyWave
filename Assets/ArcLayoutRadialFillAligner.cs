@@ -31,6 +31,8 @@ public class ArcLayoutRadialFillAligner : MonoBehaviour
     
     private void Align()
     {
+        if (image == null || arcLayoutGroup == null || rect == null) return;
+        
         var fillAngle = image.fillAmount * 360;
         var angle = fillAngle / 2;
         angle += angleOffset;
@@ -47,9 +49,13 @@ public class ArcLayoutRadialFillAligner : MonoBehaviour
         if (useMaterial)
         {
             var material = image.materialForRendering;
-            if (!material.HasFloat(thicknessProperty)) return;
-            var radius = rect.rect.width / 2;
-            material.SetFloat( thicknessProperty,  1 - (1 - arcLayoutGroup.Radius / radius) * 2 );
+            if (material != null)
+            {
+                if (!material.HasFloat(thicknessProperty)) return;
+                var radius = rect.rect.width / 2;
+                material.SetFloat( thicknessProperty,  1 - (1 - arcLayoutGroup.Radius / radius) * 2 );
+            }
+            
         }
     }
 
