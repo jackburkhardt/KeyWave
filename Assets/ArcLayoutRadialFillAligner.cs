@@ -24,8 +24,6 @@ public class ArcLayoutRadialFillAligner : MonoBehaviour
     
     private void Align()
     {
-        if (image == null || arcLayoutGroup == null || rect == null) return;
-        
         var fillAngle = image.fillAmount * 360;
         var angle = fillAngle / 2;
         angle += angleOffset;
