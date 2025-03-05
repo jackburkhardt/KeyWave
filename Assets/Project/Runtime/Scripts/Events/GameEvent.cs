@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
-using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
@@ -56,10 +55,10 @@ namespace Project.Runtime.Scripts.Events
 
         public static event PlayerEventDelegate OnRegisterPlayerEvent;
 
-        private static void RegisterPlayerEvent(string eventType, JObject data)
+        private static void RegisterPlayerEvent(string eventType, JObject data, int duration = 0)
         {
            
-            var playerEvent = new PlayerEvent(eventType, data);
+            var playerEvent = new PlayerEvent(eventType, data, duration);
             OnRegisterPlayerEvent?.Invoke(playerEvent);
         }
 
@@ -79,19 +78,19 @@ namespace Project.Runtime.Scripts.Events
                     ["target"] = interactable.name,
                     ["trigger"] = dialogueSystemTrigger.ToString()
                 };
-                RegisterPlayerEvent("interact", data);
+                RegisterPlayerEvent("interact", data, Clock.SecondsPerInteract);
                 dialogueSystemTrigger.OnUse();
             }
         }
 
-        public static void OnMove(string locName, string lastLocation)
+        public static void OnMove(string locName, string lastLocation, int duration)
         {
             var data = new JObject
             {
                 ["lastLocation"] = lastLocation,
                 ["newLocation"] = locName
             };
-            RegisterPlayerEvent("move", data);
+            RegisterPlayerEvent("move", data, duration);
         }
 
         public static void OnPointsIncrease(Points.PointsField pointData, string source)
@@ -105,7 +104,7 @@ namespace Project.Runtime.Scripts.Events
             RegisterPlayerEvent("points", data);
         }
 
-        public static void OnQuestStateChange(string questName, QuestState state, Points.PointsField[] points)
+        public static void OnQuestStateChange(string questName, QuestState state, Points.PointsField[] points, int duration)
         {
             var questData = new JObject
             {
@@ -113,15 +112,12 @@ namespace Project.Runtime.Scripts.Events
                 ["state"] = state.ToString(),
                 ["points"] = JArray.FromObject(points.Where(pf => pf.Points != 0))
             };
-            RegisterPlayerEvent("quest_state_change", questData);
+            RegisterPlayerEvent("quest_state_change", questData, duration);
         }
 
         public static void OnWait(int duration)
         {
-            RegisterPlayerEvent("wait", new JObject
-            {
-                ["duration"] = duration.ToString()
-            });
+            RegisterPlayerEvent("wait", null, duration);
         }
 
         public static void OnDayEnd()

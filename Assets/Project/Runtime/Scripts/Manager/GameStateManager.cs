@@ -156,6 +156,8 @@ namespace Project.Runtime.Scripts.Manager
                     Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
                     break;
             }
+
+            gameState.Clock += playerEvent.Duration;
         
             OnGameStateChanged?.Invoke(gameState);
         }
@@ -316,7 +318,6 @@ namespace Project.Runtime.Scripts.Manager
         {
             var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
         
-            //transfers actions from dialogue entry to conversation
             foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
             {
                 if ( subtitle.dialogueEntry.outgoingLinks.Count > 0 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
@@ -326,34 +327,19 @@ namespace Project.Runtime.Scripts.Manager
                     destinationConversation.fields.Add(action);
                 }
                 else conversation.fields.Add( action);
-            }
-            
-            subtitle.dialogueEntry.fields.RemoveAll(p => p.title == "Action");
-
-            //transfer locations from dialogue entry to conversation
-            foreach (var locationField in conversation.fields.Where(p => p.title == "Location"))
-            { 
+                subtitle.dialogueEntry.fields.Remove(action);
                 
-                if ( subtitle.dialogueEntry.outgoingLinks.Count > 0 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
-                {
-                    
-                    var destinationConversation =  DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
-                    destinationConversation.fields.Add(locationField);
-                }
-                else conversation.fields.Add( locationField);
+                Debug.Log("Added action to conversation: " + action.value);
             }
-            
-            subtitle.dialogueEntry.fields.RemoveAll(p => p.title == "Location");
 
 
-            
-            //transfer actions to linked conversation
             if (subtitle.dialogueEntry.outgoingLinks.Count == 1 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
             {
                 var newConversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
                 foreach (var action in conversation.fields.Where(p => p.title == "Action"))
                 {
                     newConversation.fields.Add(action);
+                    Debug.Log("Added action to linked conversation: " + action.value);
                 }
                 
                 conversation.fields.RemoveAll(p => p.title == "Action");
@@ -385,6 +371,7 @@ namespace Project.Runtime.Scripts.Manager
         
         IEnumerator QueueConversationEndEvent(Action callback)
         {
+            Debug.Log( "queing event from state: " + state);
             yield return new WaitForEndOfFrame();
             while (DialogueManager.instance.isConversationActive || DialogueTime.isPaused) yield return new WaitForSecondsRealtime(0.25f);
             callback?.Invoke();
@@ -432,21 +419,23 @@ namespace Project.Runtime.Scripts.Manager
                     
                    
                 }
-                
-                if (QuestLog.GetQuestEntryCount( questName) > 0 && quest.LookupBool("Auto Set Success"))
-                {
-                    for (int i = 1; i < QuestLog.GetQuestEntryCount( questName) + 1; i++)
-                    {
-                        var entryState = QuestLog.GetQuestEntryState(questName, i);
-                        if (entryState != QuestState.Success) QuestLog.SetQuestEntryState( questName, i, QuestState.Success);
-                    }
-                }
-                
-                SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
             }
-
-            GameEvent.OnQuestStateChange(questName, state, points);
-
+        
+            var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
+            
+            GameEvent.OnQuestStateChange(questName, state, points, duration);
+            SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
+            
+            
+            if (QuestLog.GetQuestEntryCount( questName) > 0 && quest.LookupBool("Auto Set Success"))
+            {
+                for (int i = 1; i < QuestLog.GetQuestEntryCount( questName) + 1; i++)
+                {
+                    var entryState = QuestLog.GetQuestEntryState(questName, i);
+                    if (entryState != QuestState.Success) QuestLog.SetQuestEntryState( questName, i, QuestState.Success);
+                }
+            }
+            
         }
 
 
@@ -487,23 +476,18 @@ namespace Project.Runtime.Scripts.Manager
                    
                     GameEvent.OnPointsIncrease(pointsField, $"{quest.Name} + {prefix}");
                 }
+            }
 
-
-                bool autoSuccess = quest.LookupBool("Auto Set Success");
-                bool allStatesSuccess = true;
-                for (int i = 0; i < QuestLog.GetQuestEntryCount( quest.Name); i++)
-                {
-                    if (QuestLog.GetQuestEntryState(quest.Name, i) != QuestState.Success)
-                    {
-                        allStatesSuccess = false;
-                        break;
-                    }
-                }
-                
-                if (autoSuccess && allStatesSuccess)
-                {
-                    QuestLog.SetQuestState(quest.Name, QuestState.Success);
-                }
+            
+            bool autoSetSuccess = quest.LookupBool("Auto Set Success");
+            for (int i = 0; i < QuestLog.GetQuestEntryCount( quest.Name); i++)
+            {
+                autoSetSuccess = autoSetSuccess && QuestLog.GetQuestEntryState(quest.Name, i) == QuestState.Success;
+            }
+            
+            if (autoSetSuccess)
+            {
+                QuestLog.SetQuestState(quest.Name, QuestState.Success);
             }
             
         }
