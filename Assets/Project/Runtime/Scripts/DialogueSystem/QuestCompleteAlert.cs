@@ -63,7 +63,7 @@ public class QuestCompleteAlert : MonoBehaviour
     public void OnContinue()
     {
         var bob = Instantiate<Image>(image);
-        var quest = DialogueManager.masterDatabase.GetQuest(currentQuestName);
+        var quest = DialogueManager.masterDatabase.GetItem(currentQuestName);
         var pointsFields =  DialogueUtility.GetPointsFromField(quest!.fields);
         foreach (var field in pointsFields)
         {

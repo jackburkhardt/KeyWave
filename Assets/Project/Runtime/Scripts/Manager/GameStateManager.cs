@@ -398,7 +398,9 @@ namespace Project.Runtime.Scripts.Manager
         
         public void OnQuestStateChange(string questName)
         {
-            var quest = DialogueManager.masterDatabase.GetQuest(questName);
+            var quest = DialogueManager.masterDatabase.GetItem(questName);
+            if (!quest.IsAction || !quest.IsQuest) return;
+            
             var state = QuestLog.GetQuestState(questName);
             var points = DialogueUtility.GetPointsFromField(quest!.fields);
       
@@ -455,7 +457,9 @@ namespace Project.Runtime.Scripts.Manager
             
             Debug.Log("Quest entry state change: " + args.questName + ", " + args.entryNumber);
             
-            var quest = DialogueManager.masterDatabase.GetQuest(args.questName);
+            var quest = DialogueManager.masterDatabase.GetItem(args.questName);
+            if (!quest.IsAction || !quest.IsQuest) return;
+            
             var entry = args.entryNumber;
             var prefix = $"Entry {entry}";
             

@@ -181,11 +181,6 @@ namespace Project.Runtime.Scripts.Utility
             return quests;
         }
 
-        public static Item? GetQuest(this DialogueDatabase database, string questName)
-        {
-            return database.items.Find(i => i.Name == questName);
-        }
-
         public static Field? GetField(this Item item, string fieldName)
         {
             return item.fields.Find(f => f.title == fieldName);
