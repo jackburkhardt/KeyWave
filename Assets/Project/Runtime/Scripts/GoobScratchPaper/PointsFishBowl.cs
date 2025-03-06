@@ -103,6 +103,7 @@ public class PointsFishBowl : MonoBehaviour
 
     private void OnEnable()
     {
+        SetFishBowl();
         Points.OnPointsChange += SetPoints;
     }
 

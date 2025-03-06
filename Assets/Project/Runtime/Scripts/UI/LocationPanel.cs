@@ -40,6 +40,7 @@ public class LocationPanel : UIPanel
 
     protected override void OnEnable()
     {
+        _animator ??= GetComponent<Animator>();
         base.OnEnable();
         
     }
@@ -57,7 +58,6 @@ public class LocationPanel : UIPanel
 
     public void OnGameSceneStart()
     {
-        Debug.Log( "Location Panel is starting");
         SmartWatchPanel.onAppOpen += OnAppOpen;
         TravelUIResponseButton.OnLocationSelected += ShowLocationInfo;
     }
