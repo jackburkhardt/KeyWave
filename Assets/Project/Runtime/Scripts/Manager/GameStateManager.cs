@@ -296,6 +296,7 @@ namespace Project.Runtime.Scripts.Manager
                 case State.Base:
                     var smartWatch = FindObjectOfType<SmartWatchPanel>();
                     StartCoroutine(QueueConversationEndEvent(smartWatch.Open));
+                    GameManager.DoLocalSave();
                     break;
                 case State.SmartWatch:  // do nothing
                     break;

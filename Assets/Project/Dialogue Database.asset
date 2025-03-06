@@ -3167,7 +3167,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: Took a nap.
       type: 0
       typeString: CustomFieldType_Text
     - title: Failure Description
@@ -4773,7 +4773,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Take a city tour.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Show Invalid
@@ -4864,7 +4864,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Meet with hometown friends.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4938,7 +4938,7 @@ MonoBehaviour:
     - title: Item Type
       value: Action
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     icon: {fileID: 0}
   - id: 145
     fields:
@@ -4988,7 +4988,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Meet with a past colleague.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Show Invalid
@@ -5054,7 +5054,7 @@ MonoBehaviour:
     - title: Item Type
       value: Action
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     icon: {fileID: 0}
   - id: 240
     fields:
@@ -5091,7 +5091,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Go to the beach.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -56051,7 +56051,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -56085,6 +56085,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 180
       isRoot: 0
       isGroup: 0
@@ -56242,8 +56246,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 525.65625
-        y: 467.6554
+        x: 596.41895
+        y: 624.07806
         width: 160
         height: 30
     - id: 4
@@ -56333,7 +56337,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -56364,6 +56368,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 180
       isRoot: 0
       isGroup: 1
@@ -56391,7 +56399,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 419.6173
+        x: 423.34164
         y: 344.2187
         width: 160
         height: 30
@@ -56889,7 +56897,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Harbor/Colleague", "success")
+      userScript: SetQuestState("Meet with a past colleague.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -57121,8 +57129,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 113.36957, y: 430.70914}
-    canvasZoom: 0.6477535
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 0.26850328
   - id: 182
     fields:
     - title: Title
@@ -57448,7 +57456,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Harbor/Friends", "success")
+      userScript: SetQuestState("Meet with hometown friends.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -57725,8 +57733,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 196.99983, y: 5.177952}
-    canvasZoom: 1.2999997
+    canvasScrollPosition: {x: 154.19714, y: 0}
+    canvasZoom: 0.91449994
   - id: 184
     fields:
     - title: Title
@@ -58441,6 +58449,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 184
       isRoot: 0
       isGroup: 0
@@ -58450,7 +58462,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Harbor/Action/CityTour", "success")
+      userScript: SetQuestState("Take a city tour.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -58945,6 +58957,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 184
       isRoot: 0
       isGroup: 0
@@ -58954,7 +58970,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: SetQuestState("Harbor/Action/CityTour", "failure")
+      userScript: SetQuestState("Take a city tour.", "abandoned")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -58965,8 +58981,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 73.70963, y: 0}
-    canvasZoom: 0.6330017
+    canvasScrollPosition: {x: 241.128, y: 458.37115}
+    canvasZoom: 0.67625153
   - id: 188
     fields:
     - title: Title
@@ -60127,6 +60143,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 199
       isRoot: 0
       isGroup: 1
@@ -60142,7 +60162,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetQuestState("Harbor/Beach", "success")
+      userScript: SetQuestState("Go to the beach.", "success")
       onExecute:
         m_PersistentCalls:
           m_Calls: []
