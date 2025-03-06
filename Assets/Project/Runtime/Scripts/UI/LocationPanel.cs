@@ -41,13 +41,13 @@ public class LocationPanel : UIPanel
     protected override void OnEnable()
     {
         base.OnEnable();
-        TravelUIResponseButton.OnLocationSelected += ShowLocationInfo;
+        
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        TravelUIResponseButton.OnLocationSelected -= ShowLocationInfo;
+       
     }
 
     private void OnValidate()
@@ -59,11 +59,13 @@ public class LocationPanel : UIPanel
     {
         Debug.Log( "Location Panel is starting");
         SmartWatchPanel.onAppOpen += OnAppOpen;
+        TravelUIResponseButton.OnLocationSelected += ShowLocationInfo;
     }
 
     public void OnGameSceneEnd()
     {
         SmartWatchPanel.onAppOpen -= OnAppOpen;
+        TravelUIResponseButton.OnLocationSelected -= ShowLocationInfo;
         Close();
     }
 
@@ -136,11 +138,12 @@ public class LocationPanel : UIPanel
 
     public void ShowLocationInfo(StandardUIResponseButton standardUIResponseButton)
     {
-       
+        
         var dialogueEntry = standardUIResponseButton.response.destinationEntry;
         var locationField = dialogueEntry.fields.First(p => p.title == "Location");
         var location = DialogueManager.masterDatabase.GetLocation(int.Parse(locationField.value));
         
+        if (!isOpen) Open();
         ShowLocationInfo(location);
     }
     

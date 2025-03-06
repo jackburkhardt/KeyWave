@@ -3,6 +3,7 @@ using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomUISubtitlePanel : StandardUISubtitlePanel
 {
@@ -23,27 +24,39 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     public override void Close()
     {
         if (forceOverrideMenuPanel != null) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
+        
+        if (TryGetComponent<Button>( out var button))
+        {
+            button.enabled = false;
+        }
         base.Close(); 
     }
 
-    public void CloseNow()
-    {
-        base.Close();
-    }
     
     public override void Open()
     {
         
+   //     ClearContents();
         
         if (forceOverrideMenuPanel != null)
         {
             FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( forceOverrideMenuPanel);
         }
       
+        if (TryGetComponent<Button>( out var button))
+        {
+            button.enabled = true;
+        }
         
         base.Open();
         RefreshLayoutGroups.Refresh(gameObject);
         StartCoroutine(DelayedRefresh());
+    }
+
+    protected override void OnHidden()
+    {
+        base.OnHidden();
+        ClearContents();
     }
     
     private IEnumerator DelayedRefresh()
@@ -122,14 +135,18 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     {
         accumulatedText = string.Empty;
         numAccumulatedLines = 0;
-        foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
+        if (accumulatedContentHolder != null)
         {
-            if (go.parent == accumulatedContentHolder)
+            foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
             {
-                Destroy(go.gameObject);
+                if (go.parent == accumulatedContentHolder)
+                {
+                    Destroy(go.gameObject);
+                }
             }
+            subtitleText.text = string.Empty;
         }
-        subtitleText.text = string.Empty;
+        
     }
 
     private void RevealAccumulatedContent()
@@ -176,17 +193,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
             RefreshLayoutGroups.Refresh(gameObject);
         }
     }
-
-    public void OnSuperceded()
-    {
-       CloseNow();
-    }
     
-    public void OnDeload()
-    {
-        //CloseNow();
-    }
-
     public void OnGameSceneEnd()
     {
         Close();
