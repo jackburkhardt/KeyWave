@@ -114,6 +114,17 @@ namespace Project.Runtime.Scripts.Events
             };
             RegisterPlayerEvent("quest_state_change", questData, duration);
         }
+        
+        public static void OnActionStateChange(string actionName, QuestState state, Points.PointsField[] points, int duration)
+        {
+            var actionData = new JObject
+            {
+                ["actionName"] = actionName,
+                ["state"] = state.ToString(),
+                ["points"] = JArray.FromObject(points.Where(pf => pf.Points != 0))
+            };
+            RegisterPlayerEvent("action_state_change", actionData, duration);
+        }
 
         public static void OnWait(int duration)
         {

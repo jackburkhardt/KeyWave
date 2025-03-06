@@ -101,7 +101,7 @@ namespace Project.Runtime.Scripts.App
 
         private void SendPlayerEvent(PlayerEvent e)
         {
-            if (e.EventType is "quest_state_change")
+            if (e.EventType is "quest_state_change" or "action_state_change")
             {
     #if UNITY_WEBGL && !UNITY_EDITOR
                 BrowserInterface.sendPlayerEvent(e.ToString());

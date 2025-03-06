@@ -317,20 +317,23 @@ namespace Project.Runtime.Scripts.Manager
         public void OnConversationLine(Subtitle subtitle)
         {
             var conversation = DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.conversationID);
-        
-            foreach (var action in  subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
+
+            foreach (var action in subtitle.dialogueEntry.fields.Where(p => p.title == "Action"))
             {
-                if ( subtitle.dialogueEntry.outgoingLinks.Count > 0 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
+                if (subtitle.dialogueEntry.outgoingLinks.Count > 0 &&
+                    subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID !=
+                    subtitle.dialogueEntry.conversationID)
                 {
-                    
-                    var destinationConversation =  DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID);
+
+                    var destinationConversation =
+                        DialogueManager.masterDatabase.GetConversation(subtitle.dialogueEntry.outgoingLinks[0]
+                            .destinationConversationID);
                     destinationConversation.fields.Add(action);
                 }
-                else conversation.fields.Add( action);
-                subtitle.dialogueEntry.fields.Remove(action);
-                
-                Debug.Log("Added action to conversation: " + action.value);
+                else conversation.fields.Add(action);
             }
+            
+            subtitle.dialogueEntry.fields.RemoveAll(p => p.title == "Action");
 
 
             if (subtitle.dialogueEntry.outgoingLinks.Count == 1 && subtitle.dialogueEntry.outgoingLinks[0].destinationConversationID != subtitle.dialogueEntry.conversationID)
@@ -339,7 +342,6 @@ namespace Project.Runtime.Scripts.Manager
                 foreach (var action in conversation.fields.Where(p => p.title == "Action"))
                 {
                     newConversation.fields.Add(action);
-                    Debug.Log("Added action to linked conversation: " + action.value);
                 }
                 
                 conversation.fields.RemoveAll(p => p.title == "Action");
@@ -386,16 +388,19 @@ namespace Project.Runtime.Scripts.Manager
         public void OnQuestStateChange(string questName)
         {
             var quest = DialogueManager.masterDatabase.GetItem(questName);
-            if (!quest.IsAction || !quest.IsQuest) return;
+            if (!quest.IsAction && !quest.IsQuest) return;
             
             var state = QuestLog.GetQuestState(questName);
-            var points = DialogueUtility.GetPointsFromField(quest!.fields);
+            
+            Points.PointsField[] points =  new []{ new Points.PointsField()};
       
             // if this quest already succeeded, we don't want to retrigger events
             if (GameManager.instance.dailyReport.CompletedTasks.Contains(questName) && !quest.IsStatic) return;
 
             if (state == QuestState.Success)
             {                
+                points = DialogueUtility.GetPointsFromField(quest!.fields);
+                
                 foreach (var pointField in points)
                 {
 
@@ -418,14 +423,15 @@ namespace Project.Runtime.Scripts.Manager
                     var completionCount = quest.LookupInt("Repeat Count");
                     quest.AssignedField("Repeat Count").value = (completionCount + 1).ToString();
                     Debug.Log( $"Quest {questName} has been repeated {completionCount + 1} times.");
-                    
-                   
                 }
             }
         
             var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
             
-            GameEvent.OnQuestStateChange(questName, state, points, duration);
+            if (quest.IsQuest) GameEvent.OnQuestStateChange(questName, state, points, duration);
+            else if (quest.IsAction && ((quest.IsStatic && state == QuestState.Success) || !quest.IsStatic)) GameEvent.OnActionStateChange(questName, state, points, duration);
+            
+            
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
             
             
@@ -460,7 +466,6 @@ namespace Project.Runtime.Scripts.Manager
 
             if (state == QuestState.Success)
             {
-                Debug.Log("Points count: " + points.Count);
                 
                 foreach (var pointField in points)
                 {
@@ -475,8 +480,6 @@ namespace Project.Runtime.Scripts.Manager
                     
                     
                     if (pointsField.Points == 0) continue;
-                    
-                    else Debug.Log(pointsField.Type + " Points: " + pointsField.Points);
                    
                     GameEvent.OnPointsIncrease(pointsField, $"{quest.Name} + {prefix}");
                 }
