@@ -122,7 +122,9 @@ public class LocationPanel : UIPanel
         {
             foreach (var actor in DialogueManager.instance.masterDatabase.actors)
             {
-                if (!actor.IsFieldAssigned("Location") || actor.AssignedField("Location").value != location.id.ToString()) continue;
+                if (actor.IsPlayer) continue;
+                var actorLocation = DialogueLua.GetActorField(actor.Name, "Location").asInt;
+                if (actorLocation != location.id) continue;
                 var actorStatus = Instantiate(actorStatusTemplate, actorStatusContainer);
                 actorStatus.gameObject.SetActive(true);
                 actorStatus.SetActorInfo(actor, "is present.");

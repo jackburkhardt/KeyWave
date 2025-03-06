@@ -35,8 +35,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public override void Open()
     {
-        
-   //     ClearContents();
+        animatorMonitor?.SetTrigger(focusAnimationTrigger, null, false );
         
         if (forceOverrideMenuPanel != null)
         {
