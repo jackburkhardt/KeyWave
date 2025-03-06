@@ -393,8 +393,6 @@ namespace Project.Runtime.Scripts.Manager
             GameManager.gameState.SetPlayerLocation(location);
             GameManager.instance.OnGameSceneStart?.Invoke();
             DialogueManager.instance.gameObject.BroadcastMessageExt( "OnGameSceneStart");
-            DoLocalSave();
-            
         }
 
         public void StartGameScene(int locationID)

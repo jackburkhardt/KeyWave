@@ -8,6 +8,7 @@ using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 public class GameLog : MonoBehaviour
@@ -37,6 +38,11 @@ public class GameLog : MonoBehaviour
         if (e.EventType == "quest_state_change" && e.Data["state"].ToString() == "Success")
         {
             OnQuestComplete(e.Data["questName"].ToString());
+        }
+        
+        if (e.EventType == "action_state_change" && e.Data["state"].ToString() == "Success")
+        {
+            OnActionComplete(e.Data["actionName"].ToString());
         }
     }
 
@@ -98,6 +104,13 @@ public class GameLog : MonoBehaviour
     {
         var quest = QuestLog.GetQuestDescription(questName);
         var message = $"{quest}";
+        LogQuest(message);
+    }
+    
+    public void OnActionComplete(string actionName)
+    {
+        var desc = DialogueLua.GetItemField(actionName, "Success Description").asString;
+        var message = $"{desc}";
         LogQuest(message);
     }
     
