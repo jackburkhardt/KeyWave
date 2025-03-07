@@ -110,8 +110,8 @@ public class GameLog : MonoBehaviour
     public void OnActionComplete(string actionName)
     {
         var desc = DialogueLua.GetItemField(actionName, "Success Description").asString;
-        var message = $"{desc}";
-        LogQuest(message);
+        if (string.IsNullOrEmpty(desc)) return;
+        LogQuest(desc);
     }
     
     public void OnPoints(string type, int amount)

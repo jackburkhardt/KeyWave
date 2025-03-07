@@ -117,7 +117,6 @@ namespace Project.Runtime.Scripts.Manager
 
         private void Start()
         {
-            GameEvent.OnPlayerEvent += OnPlayerEvent;
             
             //OnSaveDataApplied();
         }
@@ -170,14 +169,10 @@ namespace Project.Runtime.Scripts.Manager
             dailyReport ??= new DailyReport(gameState.day);
         }
 
-        private void OnPlayerEvent(PlayerEvent e)
+        public void DoEndOfDay()
         {
-            if (gameState.Clock > Clock.DayEndTime)
-            {
-                GameEvent.OnDayEnd();
-                DialogueManager.StopAllConversations();
-                DialogueManager.StartConversation("EndOfDay");
-            }
+            GameEvent.OnDayEnd();
+            App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, Transition.Black);
         }
 
         public IEnumerator StartNewSave()
@@ -216,10 +211,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             PixelCrushers.SaveSystem.SaveToSlot(1);
         }
-
-
-        public void EndOfDay() => App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, Transition.Black);
-
+        
         public void StartOfDay() => App.App.Instance.ChangeScene("StartOfDay", gameStateManager.gameState.current_scene);
        
         

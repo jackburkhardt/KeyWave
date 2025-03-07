@@ -7417,7 +7417,7 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
     - title: Initial Value
       value: 21600
-      type: 0
+      type: 1
       typeString: CustomFieldType_Number
     - title: Description
       value: 
@@ -7864,9 +7864,9 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Initial Value
-      value: 21600
-      type: 0
-      typeString: CustomFieldType_Text
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
     - title: Description
       value: 
       type: 0
@@ -7878,9 +7878,9 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Initial Value
-      value: 72000
-      type: 0
-      typeString: CustomFieldType_Text
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
     - title: Description
       value: 
       type: 0
@@ -8078,9 +8078,9 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: "The day has come to an end. You spent the last 14 hours preparing\r
-          for the next big chapter of your life, and your most difficult assignment\r
-          yet."
+        value: The day has come to an end. You spent the last 14 hours preparing
+          for the next big chapter of your life, and your most difficult assignment
+          yet.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -8205,7 +8205,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 541.7384
-        y: 423.55328
+        y: 424.61517
         width: 160
         height: 30
     - id: 9
@@ -39832,8 +39832,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "You enter the store and look around. The shelves are lined neatly
-          with\r suit jackets, shirts, and many, many ties."
+        value: You enter the store and look around. The shelves are lined neatly
+          with suit jackets, shirts, and many, many ties.
         type: 0
         typeString: 
       - title: Sequence
@@ -39841,7 +39841,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Duration
-        value: 804
+        value: 798
         type: 0
         typeString: 
       conversationID: 140
@@ -60848,6 +60848,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 201
       isRoot: 0
       isGroup: 0
@@ -60856,6 +60860,12 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
+      - originConversationID: 201
+        originDialogueID: 0
+        destinationConversationID: 201
+        destinationDialogueID: 3
+        isConnector: 0
+        priority: 3
       - originConversationID: 201
         originDialogueID: 0
         destinationConversationID: 201
@@ -60869,8 +60879,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 177.97598
-        y: 388.33347
+        x: 178.83621
+        y: 359.94638
         width: 160
         height: 30
     - id: 1
@@ -60940,8 +60950,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 178.565
-        y: 466.32593
+        x: 181.14566
+        y: 511.05713
         width: 160
         height: 30
     - id: 2
@@ -60990,8 +61000,67 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 178.565
-        y: 554.8635
+        x: 181.14566
+        y: 599.5947
+        width: 160
+        height: 30
+    - id: 3
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 44
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 44
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
+      conversationID: 201
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 201
+        originDialogueID: 3
+        destinationConversationID: 25
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["clock"] >= Variable["game.clock.dayEndTime"]
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 419.69656
+        y: 477.04315
         width: 160
         height: 30
     entryGroups: []
