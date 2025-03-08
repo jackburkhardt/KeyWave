@@ -19,18 +19,20 @@ public class HomeScreenMenuPanel : ItemResponsePanel
         return item.IsApp && !item.LookupBool("Is Default");
     }
     
-    protected override void SetFollowupConversationOrDialogueEntries(Item item, ref DialogueEntry dialogueEntry)
+    protected override void SetupFollowupConversationOrDialogueEntries(Item item, ref DialogueEntry dialogueEntry)
     {
         var conversation = DialogueManager.masterDatabase.GetConversation(dialogueEntry.conversationID);
         var followUpEntry = Template.FromDefault().CreateDialogueEntry(Template.FromDefault().GetNextDialogueEntryID(conversation), dialogueEntry.conversationID, string.Empty);
 
         followUpEntry.ActorID = dialogueEntry.ActorID;
-        followUpEntry.userScript = item.LookupValue("Script");
+        //followUpEntry.userScript = item.LookupValue("Script");
         
         dialogueEntry.outgoingLinks.Add(new Link(dialogueEntry.conversationID, dialogueEntry.id, dialogueEntry.conversationID, followUpEntry.id));
         conversation.dialogueEntries.Add(followUpEntry);
+        
+        
 
-        if (item.LookupBool("Force Response Menu"))
+        if (item.LookupBool("Force Response Menu")) // creates a response menu if the item has the "Force Response Menu" field set to true
         {
             var responseMenuEntry = Template.FromDefault().CreateDialogueEntry(
                 Template.FromDefault().GetNextDialogueEntryID(conversation), dialogueEntry.conversationID,
@@ -49,6 +51,11 @@ public class HomeScreenMenuPanel : ItemResponsePanel
             dialogueEntry.fields.Add(new Field("Style", "Inbox", FieldType.Number));
         }
 
+    }
+
+    public override void Open()
+    {
+        base.Open();
     }
     
 }

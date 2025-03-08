@@ -44,7 +44,7 @@ public class TrafficLevels : MonoBehaviour
     
     private RectTransform GetElementFromPercentage(float percentage)
     {
-        var index = Mathf.FloorToInt(Mathf.Round(percentage * (content.childCount + 1)));
+        var index = Mathf.FloorToInt(percentage * (content.childCount));
         return content.GetChild(index).GetComponent<RectTransform>();
     }
     
@@ -56,7 +56,8 @@ public class TrafficLevels : MonoBehaviour
             element.GetComponent<CanvasGroup>().alpha =  element.GetSiblingIndex() == 0 ? currentTrafficLevelAlpha : defaultTrafficLevelAlpha;
             return;
         }
-        
+
+        if (Clock.DayProgress < 0) return;
       
         if (GetElementFromPercentage(Clock.DayProgress) == element)
         {

@@ -20,7 +20,6 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public StandardUIMenuPanel forceOverrideMenuPanel;
     
-  
     public override void Close()
     {
         if (forceOverrideMenuPanel != null) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
@@ -32,10 +31,16 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         base.Close(); 
     }
 
+    private void Show()
+    {
+        if (!string.IsNullOrEmpty(showAnimationTrigger)) GetComponent<Animator>().SetTrigger(showAnimationTrigger);
+        if (!string.IsNullOrEmpty( focusAnimationTrigger)) GetComponent<Animator>().SetTrigger( focusAnimationTrigger);
+    }
+
     
     public override void Open()
     {
-        animatorMonitor?.SetTrigger(focusAnimationTrigger, null, false );
+        Show();
         
         if (forceOverrideMenuPanel != null)
         {
@@ -143,9 +148,8 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
                     Destroy(go.gameObject);
                 }
             }
-            subtitleText.text = string.Empty;
         }
-        
+        subtitleText.text = string.Empty;
     }
 
     private void RevealAccumulatedContent()
@@ -191,6 +195,20 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         
             RefreshLayoutGroups.Refresh(gameObject);
         }
+    }
+    
+    protected override void Awake()
+    {
+        base.Awake();
+        var typewriter = subtitleText.gameObject.GetComponentInChildren<TextMeshProTypewriterEffect>(true);
+        typewriter.onBegin.AddListener( Show);
+        typewriter.onFirstCharacter.AddListener( Show);
+        typewriter.onEnd.AddListener( Show);
+    }
+
+    public void OnGameSceneStart()
+    {
+        ClearContents();
     }
     
     public void OnGameSceneEnd()

@@ -39,7 +39,7 @@ namespace Project.Runtime.Scripts.UI
 
         protected void Start()
         {
-            CurrentVisualizedTimeRaw = GameStateManager.instance.gameState.Clock;
+            CurrentVisualizedTimeRaw = Clock.CurrentTimeRaw;
             timeText.text = RemoveColon(CurrentVisualizedTime);
         }
         

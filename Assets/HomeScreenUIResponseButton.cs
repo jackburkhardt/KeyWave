@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,8 @@ public class HomeScreenUIResponseButton : StandardUIResponseButton
     public float timeBetweenButtonShow = 0.1f;
     public Animator animator;
     public string showTrigger = "Show";
+    private string _app;
+    private bool _fakeResponseButton = false;
     public override Response response
     {
         get { return base.response; }
@@ -29,7 +32,10 @@ public class HomeScreenUIResponseButton : StandardUIResponseButton
                 {
                     appIcon.sprite = Sprite.Create( app.icon, new Rect(0, 0, app.icon.width, app.icon.height), new Vector2(0.5f, 0.5f));
                     appColor.color = app.LookupColor("Color");
+                    _fakeResponseButton = !app.LookupBool("Force Response Menu");
+                    _app = app.Name;
                 }
+                
             }
            
             
@@ -42,6 +48,20 @@ public class HomeScreenUIResponseButton : StandardUIResponseButton
         {
             animator.SetTrigger(showTrigger);
         });
+    }
+
+    public override void OnClick()
+    {
+        var smartWatchPanel = FindObjectOfType<SmartWatchPanel>();
+        if (smartWatchPanel != null)
+        {
+            smartWatchPanel.OpenApp(_app);
+        }
+        
+        if (!_fakeResponseButton)
+        {
+            base.OnClick();
+        }
     }
 
 }

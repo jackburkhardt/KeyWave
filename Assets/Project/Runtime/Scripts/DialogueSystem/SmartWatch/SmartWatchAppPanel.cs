@@ -16,9 +16,10 @@ namespace Project.Runtime.Scripts.Utility
 
         [SmartWatchAppPopup] [Label("App")]
         public string Name;
-
         public void OnEnable()
         {
+            
+            
             SmartWatchPanel.onAppOpen?.Invoke(this);
 
             foreach (var standardUIResponseButton in GetComponentsInChildren<StandardUIResponseButton>(true))
@@ -29,13 +30,11 @@ namespace Project.Runtime.Scripts.Utility
                 }
             }
         }
-        
-        public void OnAppOpen(SmartWatchAppPanel app)
+
+
+        public void OnGameSceneEnd()
         {
-            if (app.Name != this.Name && this.gameObject.activeSelf)
-            {
-                panel.Close();
-            }
+            panel.Close();
         }
     }
 }

@@ -3326,7 +3326,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                     return 0;
                 }
                 
-                return (int)(line.Length * SecondsPerCharacter + SecondsPerLine);
+                return (int)(line.Split(" ").Length * SecondsPerCharacter + SecondsPerLine);
             }
             
         

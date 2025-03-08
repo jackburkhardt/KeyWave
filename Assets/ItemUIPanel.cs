@@ -13,7 +13,7 @@ using UnityEngine;
 public class ItemUIPanel : UIPanel
 {
 
-    public ItemUITextPanel itemUIPanel;
+    public ItemUITextPanel itemUITextPanel;
     public ItemUIButton itemButtonTemplate;
     
     public string itemType;
@@ -36,7 +36,7 @@ public class ItemUIPanel : UIPanel
     public void ShowItemButtons()
     {
         itemButtonTemplate.gameObject.SetActive(false);
-        itemUIPanel.Open();
+        itemUITextPanel.Open();
         
         foreach (var item in items)
         {
@@ -75,6 +75,7 @@ public class ItemUIPanel : UIPanel
     
     public override void Close()
     {
+        if (!isOpen) return;
         base.Close();
         
         foreach (var panel in panelsToOffset)
@@ -102,7 +103,7 @@ public class ItemUIPanel : UIPanel
         }
         
         
-        itemUIPanel.SetItem(item);
+        itemUITextPanel.SetItem(item);
     }
     
 }

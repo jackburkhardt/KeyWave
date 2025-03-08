@@ -270,7 +270,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 return 0;
             }
             //Debug.Log($"Auto Node Duration from Line: {line.Length / Clock.TimeScales.SpokenCharactersPerSecond + Clock.TimeScales.SecondsBetweenLines}");
-            return line.Length * Clock.SecondsPerCharacter +
+            return line.Length * Clock.SecondsPerWord +
                           Clock.SecondsBetweenLines;
         }
 

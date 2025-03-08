@@ -12,8 +12,26 @@ public abstract class AbstractAssetPanel : CustomUIMenuPanel
     protected CustomDialogueUI customDialogueUI;
     protected abstract List<Asset> assetList { get; }
 
+    /// <summary>
+    /// Checks if an asset is valid. If it is not, it will not be displayed in the response menu, regardless of other conditions.
+    /// </summary>
+    /// <param name="asset"></param>
+    /// <returns></returns>
     protected abstract bool AssetIsValid(Asset asset);
-    protected abstract void SetFollowupConversationOrDialogueEntries(Asset asset, ref DialogueEntry dialogueEntry);
+    
+    /// <summary>
+    /// Sets up the followup conversation or dialogue entries that will be linked to the response.
+    /// </summary>
+    /// <param name="asset"></param>
+    /// <param name="dialogueEntry"></param>
+    protected abstract void SetupFollowupConversationOrDialogueEntries(Asset asset, ref DialogueEntry dialogueEntry);
+    
+    /// <summary>
+    ///  Sets the fields of the dialogue entries that will be created as responses.
+    /// </summary>
+    /// <param name="asset"></param>
+    /// <param name="originSubtitle">The subtitle that precedes the response menu.</param>
+    /// <param name="dialogueEntry">The entry that will appear as a response.</param>
     protected abstract void SetDestinationDialogueEntryFields(Asset asset, Subtitle originSubtitle, ref DialogueEntry dialogueEntry);
    
     public override void Open()
@@ -25,10 +43,16 @@ public abstract class AbstractAssetPanel : CustomUIMenuPanel
 
     public override void Close()
     {
+        customDialogueUI ??= FindObjectOfType<CustomDialogueUI>();
         customDialogueUI.ClearForcedMenuOverride(this);
         base.Close();
     }
     
+    /// <summary>
+    /// Generates the responses that will be displayed in the response menu. This overrides the default method in the Dialogue System, ignoring other responses that are already present in the Dialogue Editor.
+    /// </summary>
+    /// <param name="subtitle"></param>
+    /// <returns></returns>
     protected virtual Response[] GetAssetResponses(Subtitle subtitle)
     {
         customDialogueUI ??= FindObjectOfType<CustomDialogueUI>();
@@ -40,7 +64,7 @@ public abstract class AbstractAssetPanel : CustomUIMenuPanel
             var newDialogueEntry = template.CreateDialogueEntry( template.GetNextDialogueEntryID( subtitle.dialogueEntry.GetConversation()), subtitle.dialogueEntry.conversationID, string.Empty);
                 
             SetDestinationDialogueEntryFields( asset, subtitle, ref newDialogueEntry);
-            SetFollowupConversationOrDialogueEntries( asset, ref newDialogueEntry);
+            SetupFollowupConversationOrDialogueEntries( asset, ref newDialogueEntry);
                 
             var newResponse = new Response(new FormattedText(newDialogueEntry.MenuText), newDialogueEntry,
                 newDialogueEntry.conditionsString == string.Empty || Lua.IsTrue($"{newDialogueEntry.conditionsString}"));
@@ -67,6 +91,11 @@ public abstract class AbstractAssetPanel : CustomUIMenuPanel
         base.ShowResponsesNow(subtitle, responses, target);
     }
     
+    /// <summary>
+    /// Gets the display name of the asset. If the asset has a conditional display entry, it will return the display name of the first entry that meets the conditions.
+    /// </summary>
+    /// <param name="asset"></param>
+    /// <returns></returns>
     protected virtual string GetAssetDisplayName(Asset asset)
     {
         var conditionalDisplayEntryCount = asset.LookupInt("Conditional Display Entry Count");
@@ -94,13 +123,18 @@ public abstract class AbstractAssetPanel : CustomUIMenuPanel
 
 public abstract class ItemResponsePanel : AbstractAssetPanel
 {
+    /// <summary>
+    /// Checks if the item has a valid conversation field. If it does, it returns the conversation title. Used for generating new conversations or linking to existing ones.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="conversationTitle"></param>
+    /// <returns></returns>
     protected virtual bool ItemConversationIsValid(Item item, out string conversationTitle)
     {
         var conversation = item.FieldExists("Conversation");
         if (!conversation)
         {
             conversationTitle = null;
-            //     Debug.Log("No conversation assigned to action: " + item.Name);
             return false;
         }
 
@@ -117,6 +151,13 @@ public abstract class ItemResponsePanel : AbstractAssetPanel
         SetDestinationDialogueEntryFields(asset as Item, originSubtitle, ref dialogueEntry);
     }
     
+    /// <summary>
+    /// Sets the fields of the dialogue entries that will be created as responses. 
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="originSubtitle">The subtitle that precedes the response menu.</param>
+    /// <param name="dialogueEntry">The entry that will appear as a response.</param>
+    
     protected abstract void SetDestinationDialogueEntryFields(Item item, Subtitle originSubtitle, ref DialogueEntry dialogueEntry);
     
     protected override bool AssetIsValid(Asset asset)
@@ -124,9 +165,20 @@ public abstract class ItemResponsePanel : AbstractAssetPanel
         return ItemIsValid(asset as Item);
     }
     
+    /// <summary>
+    /// Sets the condition for whether the item is valid or not. An invalid item will not be displayed in the response menu regardless of other conditions.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    
     protected abstract bool ItemIsValid(Item item);
 
-    protected virtual void SetFollowupConversationOrDialogueEntries(Item item, ref DialogueEntry dialogueEntry)
+    /// <summary>
+    /// Sets up the followup conversation or dialogue entries that will be linked to the response.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="dialogueEntry"></param>
+    protected virtual void SetupFollowupConversationOrDialogueEntries(Item item, ref DialogueEntry dialogueEntry)
     {
         if (ItemConversationIsValid(item, out var conversationTitle))
         {
@@ -151,9 +203,9 @@ public abstract class ItemResponsePanel : AbstractAssetPanel
         }
     }
     
-    protected override void SetFollowupConversationOrDialogueEntries(Asset asset, ref DialogueEntry dialogueEntry)
+    protected override void SetupFollowupConversationOrDialogueEntries(Asset asset, ref DialogueEntry dialogueEntry)
     {
-        SetFollowupConversationOrDialogueEntries( asset as Item, ref dialogueEntry);
+        SetupFollowupConversationOrDialogueEntries( asset as Item, ref dialogueEntry);
     }
 }
 
@@ -167,6 +219,12 @@ public abstract class LocationResponsePanel : AbstractAssetPanel
         SetDestinationDialogueEntryFields(asset as Location, originSubtitle, ref dialogueEntry);
     }
     
+    /// <summary>
+    /// Sets the fields of the dialogue entries that will be created as responses.
+    /// </summary>
+    /// <param name="location"></param>
+    /// <param name="originSubtitle"></param>
+    /// <param name="dialogueEntry"></param>
     protected abstract void SetDestinationDialogueEntryFields(Location location, Subtitle originSubtitle, ref DialogueEntry dialogueEntry);
     
     protected override bool AssetIsValid(Asset asset)
@@ -174,9 +232,14 @@ public abstract class LocationResponsePanel : AbstractAssetPanel
         return LocationIsValid(asset as Location);
     }
     
+    /// <summary>
+    /// Sets the condition for whether the location is valid or not. An invalid location will not be displayed in the response menu regardless of other conditions.
+    /// </summary>
+    /// <param name="location"></param>
+    /// <returns></returns>
     protected abstract bool LocationIsValid(Location location);
 
-    protected override void SetFollowupConversationOrDialogueEntries(Asset asset, ref DialogueEntry dialogueEntry)
+    protected override void SetupFollowupConversationOrDialogueEntries(Asset asset, ref DialogueEntry dialogueEntry)
     {
         // do nothing
     }

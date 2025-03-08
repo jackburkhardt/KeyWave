@@ -341,7 +341,7 @@ namespace PixelCrushers.DialogueSystem
         {
             if (!hasFocus) return;
             hasFocus = false;
-            animatorMonitor.SetTrigger(unfocusAnimationTrigger, null, false);
+            if (!string.IsNullOrEmpty(unfocusAnimationTrigger)) animatorMonitor.SetTrigger(unfocusAnimationTrigger, null, false);
             onUnfocus.Invoke();
         }
 

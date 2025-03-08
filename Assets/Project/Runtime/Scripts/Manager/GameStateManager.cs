@@ -19,12 +19,6 @@ namespace Project.Runtime.Scripts.Manager
         public string current_scene = "Hotel";
         public int day = 1;
 
-        public int Clock
-        {
-            get => DialogueLua.GetVariable("clock").asInt;
-            set => DialogueLua.SetVariable("clock", value);
-        }
-
         public string LastNonCaféLocation
         {
             get
@@ -80,7 +74,6 @@ namespace Project.Runtime.Scripts.Manager
             PreBase,
             Base,
             Action,
-            SmartWatch,
             StorySequence
         }
         
@@ -137,7 +130,7 @@ namespace Project.Runtime.Scripts.Manager
                 case "awaiting_response":
                     break;
                 case "end_day":
-                    gameState.Clock = Clock.DayEndTime;
+                   // gameState.Clock = Clock.DayEndTime;
                     break;
                 case "conversation_decision":
                     break;
@@ -157,7 +150,7 @@ namespace Project.Runtime.Scripts.Manager
                     break;
             }
 
-            gameState.Clock += playerEvent.Duration;
+            Clock.AddSeconds(playerEvent.Duration);
         
             OnGameStateChanged?.Invoke(gameState);
         }
@@ -190,8 +183,7 @@ namespace Project.Runtime.Scripts.Manager
                 }
             }
             
-            if (conversation.Title.StartsWith("SmartWatch")) state = State.SmartWatch;
-            else if (conversation.Title == "Base")
+            if (conversation.Title == "Base")
             {
                 state = State.Base;
                 var playerLocation = gameState.GetPlayerLocation(true);
@@ -203,7 +195,7 @@ namespace Project.Runtime.Scripts.Manager
                 }
             }
             
-            else if (conversation.Title == "Intro")
+            else if (conversation.Title == "Intro" || conversation.Title == "EndOfDay")
             {
                 state = State.StorySequence;
             }
@@ -294,11 +286,7 @@ namespace Project.Runtime.Scripts.Manager
                     StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
                     break;
                 case State.Base:
-                    var smartWatch = FindObjectOfType<SmartWatchPanel>();
-                    StartCoroutine(QueueConversationEndEvent(smartWatch.Open));
                     GameManager.DoLocalSave();
-                    break;
-                case State.SmartWatch:  // do nothing
                     break;
                 case State.Travel: // do nothing
                     break;
@@ -312,7 +300,6 @@ namespace Project.Runtime.Scripts.Manager
                     }));
                     break;
             }
-
         }
         
         public void OnConversationLine(Subtitle subtitle)

@@ -755,11 +755,11 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             
             var overrideTime = entry.fields.Exists(f => f.title == "Override Time") && Field.LookupBool(entry.fields, "Override Time");
             var duration = Field.Lookup(entry.fields, "Duration");
-            var timeEstimate = SingleNodeTimeEstimate(entry, false);
+            var timeEstimate = Field.LookupInt( entry.fields, "Duration");
             
             if (duration == null)
             {
-                duration = new Field("Duration", timeEstimate.ToString(), FieldType.Text);
+                duration = new Field("Duration", timeEstimate.ToString(), FieldType.Number);
                 entry.fields.Add(duration);
             }
             

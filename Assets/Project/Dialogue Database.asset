@@ -6021,7 +6021,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Script
-      value: 'SetSmartWatchApp("Travel"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Is Default
@@ -6056,7 +6056,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Script
-      value: 'SetSmartWatchApp("Phone"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Is Default
@@ -6091,7 +6091,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Script
-      value: 'SetSmartWatchApp("Notes"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Is Default
@@ -6157,7 +6157,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Script
-      value: 'SetSmartWatchApp("Inbox"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Is Default
@@ -6188,7 +6188,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Script
-      value: 'SetSmartWatchApp("Actions"); '
+      value: '; '
       type: 0
       typeString: CustomFieldType_Text
     - title: Is Default
@@ -6220,7 +6220,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Wellness Affinity
-      value: 0
+      value: 1
       type: 1
       typeString: CustomFieldType_Number
     - title: Context Affinity
@@ -6547,11 +6547,11 @@ MonoBehaviour:
     - title: Color
       value: '#895088ff'
       type: 13
-      typeString: 
+      typeString: CustomFieldType_Color
     - title: Conditions
       value: true
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Open Time
       value: 29700
       type: 1
@@ -7409,20 +7409,6 @@ MonoBehaviour:
       type: 0
       typeString: 
   variables:
-  - id: 3
-    fields:
-    - title: Name
-      value: clock
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 21600
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
   - id: 34
     fields:
     - title: Name
@@ -7433,20 +7419,6 @@ MonoBehaviour:
       value: 
       type: 5
       typeString: CustomFieldType_Actor
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 17
-    fields:
-    - title: Name
-      value: day
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 1
-      type: 1
-      typeString: CustomFieldType_Number
     - title: Description
       value: 
       type: 0
@@ -7794,8 +7766,8 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 6
-      type: 0
+      value: 3
+      type: 1
       typeString: CustomFieldType_Number
     - title: Description
       value: 
@@ -7822,8 +7794,8 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 90
-      type: 0
+      value: 45
+      type: 1
       typeString: CustomFieldType_Number
     - title: Description
       value: 
@@ -7836,8 +7808,8 @@ MonoBehaviour:
       type: 0
       typeString: 
     - title: Initial Value
-      value: 120
-      type: 0
+      value: 90
+      type: 1
       typeString: CustomFieldType_Number
     - title: Description
       value: 
@@ -7857,34 +7829,48 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
-  - id: 99
+  - id: 102
+    fields:
+    - title: Name
+      value: game.clock.currentTime
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: 21600
+      type: 0
+      typeString: CustomFieldType_Number
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+  - id: 103
     fields:
     - title: Name
       value: game.clock.dayStartTime
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 0
+      value: 21600
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
       value: 
       type: 0
-      typeString: 
-  - id: 100
+      typeString: CustomFieldType_Text
+  - id: 104
     fields:
     - title: Name
       value: game.clock.dayEndTime
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 0
+      value: 72000
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
       value: 
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
   conversations:
   - id: 25
     fields:
@@ -7960,6 +7946,10 @@ MonoBehaviour:
         typeString: 
       - title: Sequence
         value: None()
+        type: 0
+        typeString: 
+      - title: Duration
+        value: 0
         type: 0
         typeString: 
       conversationID: 25
@@ -8055,8 +8045,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 556.15454
-        y: 290.8923
+        x: 553.60596
+        y: 325.72253
         width: 160
         height: 30
     - id: 7
@@ -8132,8 +8122,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 550.50183
-        y: 350.01016
+        x: 536.90955
+        y: 441.75806
         width: 160
         height: 30
     - id: 8
@@ -8204,8 +8194,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 541.7384
-        y: 424.61517
+        x: 539.1898
+        y: 513.8145
         width: 160
         height: 30
     - id: 9
@@ -8278,7 +8268,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 280.02304, y: 132.42715}
+    canvasScrollPosition: {x: 167.23479, y: 177.13078}
     canvasZoom: 0.94171077
   - id: 28
     fields:
@@ -9950,7 +9940,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 2520
+        value: 0
         type: 1
         typeString: CustomFieldType_Number
       conversationID: 35
@@ -12254,7 +12244,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 1800
+        value: 0
         type: 1
         typeString: CustomFieldType_Number
       conversationID: 37
@@ -25015,9 +25005,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 1
@@ -25091,6 +25081,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 93
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 77
       isRoot: 0
       isGroup: 1
@@ -25171,6 +25165,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25311,9 +25309,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 450
+        value: 117
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25335,8 +25333,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1018.6393
-        y: 333.2227
+        x: 1023.3279
+        y: 328.53406
         width: 160
         height: 30
     - id: 76
@@ -25384,7 +25382,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25456,9 +25454,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1596
+        value: 237
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25528,9 +25526,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 912
+        value: 150
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25661,9 +25659,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 714
+        value: 141
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25733,7 +25731,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 732
+        value: 153
         type: 0
         typeString: 
       conversationID: 77
@@ -25808,9 +25806,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 360
+        value: 114
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25833,7 +25831,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 1397.8619
-        y: 342.6697
+        y: 339.15323
         width: 160
         height: 30
     - id: 155
@@ -25879,9 +25877,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 330
+        value: 111
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25956,9 +25954,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 276
+        value: 105
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26031,7 +26029,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26053,8 +26051,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 718.2856
-        y: 115.186615
+        x: 722.97424
+        y: 110.49797
         width: 160
         height: 30
     - id: 160
@@ -26101,9 +26099,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 750
+        value: 150
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26173,9 +26171,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 846
+        value: 159
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26243,6 +26241,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26312,9 +26314,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 834
+        value: 162
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26384,9 +26386,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 636
+        value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26417,11 +26419,11 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
         value: 5
         type: 5
@@ -26433,19 +26435,19 @@ MonoBehaviour:
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: '"I hope you found this conversation helpful."'
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Duration
-        value: 390
+        value: 111
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -26472,7 +26474,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 470.24994, y: 18.754578}
+    canvasScrollPosition: {x: 612.08154, y: 0}
     canvasZoom: 0.68249923
   - id: 78
     fields:
@@ -26555,7 +26557,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: 
       conversationID: 78
@@ -26626,7 +26628,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 216
+        value: 0
         type: 0
         typeString: 
       conversationID: 78
@@ -26697,7 +26699,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 420
+        value: 120
         type: 0
         typeString: 
       conversationID: 78
@@ -27249,7 +27251,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1542
+        value: 222
         type: 0
         typeString: 
       conversationID: 78
@@ -27309,7 +27311,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 792
+        value: 0
         type: 0
         typeString: 
       conversationID: 78
@@ -27368,7 +27370,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Duration
-        value: 474
+        value: 120
         type: 0
         typeString: 
       conversationID: 78
@@ -27427,7 +27429,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Duration
-        value: 552
+        value: 129
         type: 0
         typeString: 
       conversationID: 78
@@ -27487,7 +27489,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Duration
-        value: 648
+        value: 141
         type: 0
         typeString: 
       conversationID: 78
@@ -27547,7 +27549,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Duration
-        value: 798
+        value: 0
         type: 0
         typeString: 
       conversationID: 78
@@ -36425,7 +36427,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -36496,7 +36498,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -36578,6 +36580,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -36645,6 +36651,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -36754,13 +36764,13 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
         value: '"Oh, one second!" She flips through the magazine pages a couple more
           times, focused on some obscure goal. She closes the magazine before you''re
           able to ask her about it.'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -36780,7 +36790,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1134
+        value: 180
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -36858,7 +36868,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 1458
+        value: 216
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -36934,6 +36944,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37002,7 +37016,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 468
+        value: 123
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37084,6 +37098,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37219,7 +37237,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 552
+        value: 129
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37292,7 +37310,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1056
+        value: 180
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37431,7 +37449,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 642
+        value: 144
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37496,7 +37514,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 306
+        value: 105
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37636,7 +37654,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 690
+        value: 144
         type: 0
         typeString: 
       conversationID: 137
@@ -37666,7 +37684,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 135.39705
+        x: 139.00931
         y: 1388.797
         width: 160
         height: 30
@@ -37712,6 +37730,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37779,6 +37801,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37847,7 +37873,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37922,7 +37948,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37993,6 +38019,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -38061,7 +38091,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 396
+        value: 114
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -38132,7 +38162,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -38203,6 +38233,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -38271,7 +38305,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 246
+        value: 99
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -38342,7 +38376,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -38413,6 +38447,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -38548,7 +38586,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -38660,13 +38698,13 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
         value: An older woman is sitting in one of the salon chairs, laser-focused
           on a magazine. Your intuition tells you she is probably the owner of the
           salon.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -38674,7 +38712,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 1002
+        value: 171
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -38703,7 +38741,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 1.1964874, y: 1028.6062}
+    canvasScrollPosition: {x: 9.933807, y: 1076.9404}
     canvasZoom: 0.8858701
   - id: 140
     fields:
@@ -38861,7 +38899,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 312
+        value: 108
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 140
@@ -38892,7 +38930,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 418.4983
-        y: 136.29373
+        y: 132.82068
         width: 160
         height: 30
     - id: 2
@@ -38937,6 +38975,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 140
       isRoot: 0
       isGroup: 0
@@ -39078,7 +39120,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1344
+        value: 204
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 140
@@ -39293,7 +39335,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 468
+        value: 123
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 140
@@ -39364,7 +39406,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 390
+        value: 111
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 140
@@ -39549,12 +39591,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 7
-        type: 5
+        value: 1
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: You find a nice unstructured jacket that fits you pretty well, plus
@@ -39583,6 +39625,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 140
       isRoot: 0
       isGroup: 0
@@ -39619,12 +39665,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 7
-        type: 5
+        value: 1
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: "Finally, you have a new bespoke sport coat. However, you are feeling
@@ -39654,6 +39700,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 140
       isRoot: 0
       isGroup: 0
@@ -39787,7 +39837,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 240
+        value: 99
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 140
@@ -39828,12 +39878,12 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
+        value: You enter the store and look around. The shelves are lined neatly
+          with suit jackets, shirts, and many, many ties.
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: You enter the store and look around. The shelves are lined neatly
-          with suit jackets, shirts, and many, many ties.
+        value: 
         type: 0
         typeString: 
       - title: Sequence
@@ -39841,7 +39891,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Duration
-        value: 798
+        value: 0
         type: 0
         typeString: 
       conversationID: 140
@@ -39870,7 +39920,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 145.09322, y: 0}
+    canvasScrollPosition: {x: 69.46115, y: 0}
     canvasZoom: 0.9213787
   - id: 144
     fields:
@@ -39996,14 +40046,14 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
         value: Most of the mannequins are nicely accessorized and the shelves are
           well organized. Most of the merchandise is sorted by size, with some items
           organized by brand to make them easier to find. The items that are on sale
           are clearly identified with a bright yellow tag that catches the eye.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -40103,7 +40153,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1182
+        value: 180
         type: 0
         typeString: 
       conversationID: 144
@@ -40185,6 +40235,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40252,6 +40306,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40319,6 +40377,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40466,6 +40528,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40527,6 +40593,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40548,8 +40618,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 244.85788
-        y: 747.6203
+        x: 217.48816
+        y: 713.40814
         width: 160
         height: 30
     - id: 9
@@ -40766,7 +40836,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1488
+        value: 204
         type: 0
         typeString: 
       conversationID: 144
@@ -40837,7 +40907,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: 
       conversationID: 144
@@ -40882,28 +40952,17 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 25
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 25
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 'You stop taking pictures and instead pick up a couple items off the
-          shelf. Now you''re listening in on the behavior of the employees and taking
+        value: You stop taking pictures and instead pick up a couple items off the
+          shelf. Now you're listening in on the behavior of the employees and taking
           notes in your head.
-
-
-          The employees have a series of bells that
-          they ring to signal when a department needs additional staff. This seems
-          to help them get customers'' problems solved much faster.
-
-
-          These
-          employees also go the extra mile to help close a sale. Even if they don''t
-          have an item that a customer is looking for, they show the customer alternatives
-          and direct them to the online store. '
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -40926,6 +40985,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 180
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40937,7 +41000,7 @@ MonoBehaviour:
       - originConversationID: 144
         originDialogueID: 13
         destinationConversationID: 144
-        destinationDialogueID: 14
+        destinationDialogueID: 20
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -40947,8 +41010,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 244.85788
-        y: 818.62933
+        x: 227.26303
+        y: 810.80945
         width: 160
         height: 30
     - id: 14
@@ -40962,12 +41025,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
-        type: 5
+        value: 25
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 25
-        type: 5
+        value: 7
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: You get caught up in what you are learning and almost reflexively
@@ -40994,6 +41057,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 165
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -41015,8 +41082,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 244.85788
-        y: 882.3374
+        x: 223.35306
+        y: 1090.543
         width: 160
         height: 30
     - id: 15
@@ -41038,11 +41105,11 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
+        value: Oops, you got a little too close there. Better just leave now.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Oops, you got a little too close there. Better just leave now.
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -41057,6 +41124,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 126
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -41072,8 +41143,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 244.85788
-        y: 1029.1392
+        x: 223.35306
+        y: 1237.3446
         width: 160
         height: 30
     - id: 16
@@ -41119,6 +41190,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -41189,7 +41264,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1242
+        value: 195
         type: 0
         typeString: 
       conversationID: 144
@@ -41213,8 +41288,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 244.85788
-        y: 951.0492
+        x: 227.26303
+        y: 1155.345
         width: 160
         height: 30
     - id: 18
@@ -41261,7 +41336,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 129
         type: 0
         typeString: 
       conversationID: 144
@@ -41285,8 +41360,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 573.952
-        y: 631.1399
+        x: 580.7945
+        y: 628.2074
         width: 160
         height: 30
     - id: 19
@@ -41308,10 +41383,6 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
-        type: 0
-        typeString: 
-      - title: Dialogue Text
         value: 'You snap a few pictures of these details to study later, but you''re
           trying to be inconspicuous.
 
@@ -41320,12 +41391,16 @@ MonoBehaviour:
           you can see someone approaching you.'
         type: 0
         typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
       - title: Sequence
         value: 
         type: 0
         typeString: 
       - title: Duration
-        value: 1104
+        value: 0
         type: 0
         typeString: 
       conversationID: 144
@@ -41353,9 +41428,131 @@ MonoBehaviour:
         y: 196.43536
         width: 160
         height: 30
+    - id: 20
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 25
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: The employees have a series of bells that they ring to signal when
+          a department needs additional staff. This seems to help them get customers'
+          problems solved much faster.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 177
+        type: 0
+        typeString: 
+      conversationID: 144
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 144
+        originDialogueID: 20
+        destinationConversationID: 144
+        destinationDialogueID: 21
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 252.15045
+        y: 879.68384
+        width: 160
+        height: 30
+    - id: 21
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 25
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 'These employees also go the extra mile to help close a sale. Even
+          if they don''t have an item that a customer is looking for, they show the
+          customer alternatives and direct them to the online store. '
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 204
+        type: 0
+        typeString: 
+      conversationID: 144
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 144
+        originDialogueID: 21
+        destinationConversationID: 144
+        destinationDialogueID: 14
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 199.366
+        y: 979.5593
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 15.069824, y: 13.609512}
-    canvasZoom: 0.84842193
+    canvasScrollPosition: {x: 0, y: 370.46912}
+    canvasZoom: 0.81842196
   - id: 145
     fields:
     - title: Title
@@ -41509,7 +41706,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 954
+        value: 159
         type: 0
         typeString: 
       conversationID: 145
@@ -41652,7 +41849,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -41767,8 +41964,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 32.745773
-        y: 407.1371
+        x: 2.7959518
+        y: 424.25122
         width: 160
         height: 30
     - id: 6
@@ -41813,6 +42010,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -41834,8 +42035,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 224.93802
-        y: 466.19635
+        x: 142.57605
+        y: 431.968
         width: 160
         height: 30
     - id: 7
@@ -41881,6 +42082,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -41948,6 +42153,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -41970,7 +42179,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 611.41754
-        y: 493.05975
+        y: 489.85077
         width: 160
         height: 30
     - id: 9
@@ -42015,6 +42224,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42030,8 +42243,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 819.5009
-        y: 476.2741
+        x: 880.47015
+        y: 486.97034
         width: 160
         height: 30
     - id: 10
@@ -42079,7 +42292,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1356
+        value: 213
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -42150,7 +42363,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 414
+        value: 120
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -42168,8 +42381,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 20.642273
-        y: 478.64825
+        x: 1
+        y: 495.7624
         width: 160
         height: 30
     - id: 12
@@ -42217,7 +42430,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1014
+        value: 162
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -42256,11 +42469,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 25
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 25
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -42288,6 +42501,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 138
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42361,6 +42578,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42428,6 +42649,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42464,11 +42689,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 25
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 25
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -42498,6 +42723,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 207
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42567,7 +42796,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 546
+        value: 132
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -42649,6 +42878,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42716,6 +42949,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42783,6 +43020,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42857,7 +43098,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1710
+        value: 234
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -42934,7 +43175,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1674
+        value: 231
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -43011,7 +43252,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1656
+        value: 231
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -43081,6 +43322,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 1
@@ -43160,6 +43405,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -43297,6 +43546,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -43318,8 +43571,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 871.23914
-        y: 1385.4893
+        x: 980.342
+        y: 1572.6757
         width: 160
         height: 30
     - id: 28
@@ -43333,11 +43586,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 25
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 25
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -43366,6 +43619,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 177
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -43439,7 +43696,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 972
+        value: 144
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -43521,6 +43778,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -43588,6 +43849,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -43656,6 +43921,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -43730,7 +43999,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1398
+        value: 210
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -43870,7 +44139,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 414
+        value: 120
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -43937,7 +44206,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1440
+        value: 201
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 145
@@ -43976,11 +44245,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 25
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 25
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -44008,6 +44277,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 129
+        type: 0
+        typeString: 
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -44028,7 +44301,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 1102.9667}
+    canvasScrollPosition: {x: 0, y: 18.35553}
     canvasZoom: 0.7479177
   - id: 147
     fields:
@@ -44417,7 +44690,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 147
@@ -44489,7 +44762,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 150
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 147
@@ -44704,7 +44977,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 147
@@ -45323,7 +45596,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1728
+        value: 0
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 149
@@ -47921,7 +48194,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 372
+        value: 114
         type: 0
         typeString: 
       conversationID: 157
@@ -48003,6 +48276,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48071,6 +48348,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48144,7 +48425,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1182
+        value: 189
         type: 0
         typeString: 
       conversationID: 157
@@ -48220,7 +48501,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1062
+        value: 183
         type: 0
         typeString: 
       conversationID: 157
@@ -48290,6 +48571,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 93
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 1
@@ -48358,7 +48643,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 123
         type: 0
         typeString: 
       conversationID: 157
@@ -48428,6 +48713,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 93
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 1
@@ -48513,6 +48802,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48580,6 +48873,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48647,6 +48944,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48714,6 +49015,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48778,7 +49083,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1242
+        value: 195
         type: 0
         typeString: 
       conversationID: 157
@@ -48848,6 +49153,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48918,7 +49227,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1056
+        value: 174
         type: 0
         typeString: 
       conversationID: 157
@@ -48991,7 +49300,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1260
+        value: 186
         type: 0
         typeString: 
       conversationID: 157
@@ -49065,7 +49374,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1716
+        value: 237
         type: 0
         typeString: 
       conversationID: 157
@@ -49136,7 +49445,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 111
         type: 0
         typeString: 
       conversationID: 157
@@ -49208,7 +49517,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 876
+        value: 150
         type: 0
         typeString: 
       conversationID: 157
@@ -49280,7 +49589,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 666
+        value: 147
         type: 0
         typeString: 
       conversationID: 157
@@ -49353,7 +49662,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1296
+        value: 210
         type: 0
         typeString: 
       conversationID: 157
@@ -49426,7 +49735,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1170
+        value: 177
         type: 0
         typeString: 
       conversationID: 157
@@ -49499,7 +49808,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1008
+        value: 180
         type: 0
         typeString: 
       conversationID: 157
@@ -49639,7 +49948,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 216
+        value: 96
         type: 0
         typeString: 
       conversationID: 157
@@ -49697,6 +50006,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -49712,13 +50025,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 765.63983
+        x: 775.96857
         y: 521.3922
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 611.2115}
-    canvasZoom: 0.55200183
+    canvasScrollPosition: {x: 0, y: 686.2041}
+    canvasZoom: 0.85200167
   - id: 158
     fields:
     - title: Title
@@ -50257,8 +50570,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 19.437468}
-    canvasZoom: 0.93875307
+    canvasScrollPosition: {x: 2.6654336, y: 27.400772}
+    canvasZoom: 0.96875304
   - id: 159
     fields:
     - title: Title
@@ -50348,7 +50661,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -50430,7 +50743,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 600
+        value: 135
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -50729,7 +51042,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 183
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -50800,7 +51113,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 342
+        value: 111
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -50961,7 +51274,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1398
+        value: 204
         type: 0
         typeString: 
       conversationID: 159
@@ -51031,6 +51344,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 159
       isRoot: 0
       isGroup: 0
@@ -51101,7 +51418,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1062
+        value: 174
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51238,6 +51555,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 159
       isRoot: 0
       isGroup: 0
@@ -51309,7 +51630,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1788
+        value: 237
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51381,7 +51702,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 978
+        value: 183
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51452,7 +51773,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 117
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51476,8 +51797,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 53.407173
-        y: 1228.3312
+        x: 48.438263
+        y: 1242.244
         width: 160
         height: 30
     - id: 18
@@ -51503,9 +51824,9 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "She sighs.\r \"They've just stopped listening to me. Especially since
+        value: She sighs. "They've just stopped listening to me. Especially since
           they got rid of Sara. Roberta would still listen to her, but with Sara
-          gone she trusts me even less.\""
+          gone she trusts me even less."
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -51525,7 +51846,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1134
+        value: 180
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51597,7 +51918,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 870
+        value: 159
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51648,10 +51969,10 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "She smiles at you.\r \"And now you're here! Please talk some sense
-          into Roberta. You've probably seen those hideous window displays that she
-          refuses to change. I keep passing the corporate memos on seasonal display
-          requirements to her and she just ignores it.\""
+        value: She smiles at you. "And now you're here! Please talk some sense into
+          Roberta. You've probably seen those hideous window displays that she refuses
+          to change. I keep passing the corporate memos on seasonal display requirements
+          to her and she just ignores it."
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -51671,7 +51992,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1668
+        value: 219
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51742,7 +52063,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 318
+        value: 111
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51813,7 +52134,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 504
+        value: 120
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -51838,7 +52159,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 50.82675
-        y: 1049.0186
+        y: 1043.0559
         width: 160
         height: 30
     - id: 24
@@ -51885,7 +52206,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 678
+        value: 0
         type: 0
         typeString: 
       conversationID: 159
@@ -51956,7 +52277,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 438
+        value: 120
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -52027,7 +52348,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 390
+        value: 117
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -52177,7 +52498,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1308
+        value: 195
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -52250,7 +52571,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1320
+        value: 207
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -52321,7 +52642,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 528
+        value: 132
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -52393,7 +52714,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 822
+        value: 165
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 159
@@ -52418,7 +52739,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 740.5633
-        y: 1128.1919
+        y: 1132.1671
         width: 160
         height: 30
     - id: 33
@@ -52465,7 +52786,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 852
+        value: 0
         type: 0
         typeString: 
       conversationID: 159
@@ -52555,8 +52876,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 6.442374, y: 164.64644}
-    canvasZoom: 0.7750046
+    canvasScrollPosition: {x: 0, y: 585.33826}
+    canvasZoom: 0.8050046
   - id: 177
     fields:
     - title: Title
@@ -52704,10 +53025,10 @@ MonoBehaviour:
           the bend and a woman who matches Sara''s description -- well-dressed, mid-30s,
           blonde hair. She recognizes you too.
 
-          <br> \,
+          \,
 
-          Before
-          you have a chance to say anything, she stands up.'
+          Before you
+          have a chance to say anything, she stands up.'
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -52756,7 +53077,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 242.77493
-        y: 109.42647
+        y: 106.14891
         width: 160
         height: 30
     - id: 2
@@ -52802,7 +53123,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 390
+        value: 117
         type: 0
         typeString: 
       conversationID: 177
@@ -52874,7 +53195,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 948
+        value: 171
         type: 0
         typeString: 
       conversationID: 177
@@ -52956,6 +53277,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -52977,7 +53302,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 30.40001
+        x: 34.770126
         y: 380.4001
         width: 160
         height: 30
@@ -53023,6 +53348,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -53045,7 +53374,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 216.79999
-        y: 444.39996
+        y: 426.9195
         width: 160
         height: 30
     - id: 6
@@ -53160,7 +53489,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 570
+        value: 129
         type: 0
         typeString: 
       conversationID: 177
@@ -53207,11 +53536,11 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
+        value: "She stops and turns to you.\r"
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: "She stops and turns to you.\r"
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -53231,7 +53560,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 288
+        value: 108
         type: 0
         typeString: 
       conversationID: 177
@@ -53302,7 +53631,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 306
+        value: 105
         type: 0
         typeString: 
       conversationID: 177
@@ -53374,7 +53703,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 780
+        value: 153
         type: 0
         typeString: 
       conversationID: 177
@@ -53450,7 +53779,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 2550
+        value: 282
         type: 0
         typeString: 
       conversationID: 177
@@ -53602,9 +53931,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 960
+        value: 168
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -53685,6 +54014,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -53754,6 +54087,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -53822,6 +54159,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -53891,9 +54232,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 846
+        value: 144
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -53965,11 +54306,11 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 642
+        value: 219
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Override Time
-        value: True
+        value: False
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 177
@@ -54055,11 +54396,11 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 636
+        value: 228
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Override Time
-        value: True
+        value: False
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 177
@@ -54083,8 +54424,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 613.8574
-        y: 1167.9823
+        x: 729.4833
+        y: 1167.9993
         width: 160
         height: 30
     - id: 20
@@ -54130,6 +54471,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54198,6 +54543,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54219,7 +54568,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 238.8122
+        x: 232.58405
         y: 1172.9348
         width: 160
         height: 30
@@ -54267,6 +54616,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54336,9 +54689,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 942
+        value: 168
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54407,9 +54760,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 192
+        value: 96
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54431,7 +54784,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 395.63034
+        x: 378.78006
         y: 1393.5643
         width: 160
         height: 30
@@ -54480,9 +54833,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 180
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54504,8 +54857,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 376.49002
-        y: 1499.0044
+        x: 363.36273
+        y: 1479.8185
         width: 160
         height: 30
     - id: 26
@@ -54551,9 +54904,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 312
+        value: 111
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54621,6 +54974,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54694,6 +55051,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54767,6 +55128,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54843,9 +55208,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1278
+        value: 204
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -54917,11 +55282,11 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 624
+        value: 231
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Override Time
-        value: True
+        value: False
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 177
@@ -54995,11 +55360,11 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 600
+        value: 234
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Override Time
-        value: True
+        value: False
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 177
@@ -55069,6 +55434,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 177
       isRoot: 0
       isGroup: 1
@@ -55090,7 +55459,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 942.3247
+        x: 937.7291
         y: 1083.1001
         width: 160
         height: 30
@@ -55137,9 +55506,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 558
+        value: 126
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55207,6 +55576,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 1
@@ -55293,9 +55666,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 216
+        value: 96
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55318,7 +55691,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 297.24472
-        y: 2173.1553
+        y: 2168.1726
         width: 160
         height: 30
     - id: 37
@@ -55363,6 +55736,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55391,7 +55768,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 1030.4977
-        y: 1761.7063
+        y: 1757.9695
         width: 160
         height: 30
     - id: 38
@@ -55438,9 +55815,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 576
+        value: 129
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55510,9 +55887,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 126
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55583,9 +55960,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1038
+        value: 174
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55657,11 +56034,11 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 624
+        value: 240
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Override Time
-        value: True
+        value: False
         type: 2
         typeString: CustomFieldType_Boolean
       conversationID: 177
@@ -55691,7 +56068,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 730.1957
+        x: 715.0488
         y: 2097.608
         width: 160
         height: 30
@@ -55738,9 +56115,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 492
+        value: 129
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55805,9 +56182,9 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 96
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55872,7 +56249,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1314
+        value: 195
         type: 0
         typeString: 
       conversationID: 177
@@ -55946,7 +56323,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 177
       isRoot: 0
       isGroup: 0
@@ -55973,8 +56350,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 208.9462, y: 1222.2664}
-    canvasZoom: 0.7322461
+    canvasScrollPosition: {x: 0, y: 55.146362}
+    canvasZoom: 0.5222463
   - id: 180
     fields:
     - title: Title
@@ -56354,7 +56731,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 630
+        value: 135
         type: 0
         typeString: 
       conversationID: 180
@@ -56504,7 +56881,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1266
+        value: 201
         type: 0
         typeString: 
       conversationID: 180
@@ -56579,7 +56956,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 288
         type: 0
         typeString: 
       conversationID: 180
@@ -56792,7 +57169,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1128
+        value: 195
         type: 0
         typeString: 
       conversationID: 180
@@ -56941,7 +57318,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: 
       conversationID: 180
@@ -57083,7 +57460,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 294
+        value: 0
         type: 0
         typeString: 
       conversationID: 180
@@ -59344,8 +59721,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 357.5015
-        y: 244.9508
+        x: 347.79868
+        y: 359.44443
         width: 160
         height: 30
     - id: 21
@@ -59360,12 +59737,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 40
-        type: 5
+        value: 1
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
         value: 
-        type: 5
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: 
@@ -59398,14 +59775,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: SetSmartWatch(true)
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 356.23944
-        y: 316.07086
+        x: 345.5663
+        y: 433.47537
         width: 160
         height: 30
     - id: 29
@@ -59420,12 +59797,12 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 40
-        type: 5
+        value: 1
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
-        type: 5
+        value: 
+        type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: '[f]()'
@@ -59458,12 +59835,12 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 357.6309
-        y: 384.12692
+        x: 348.8983
+        y: 520.452
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 160.22203, y: 123.892105}
+    canvasScrollPosition: {x: 201.54025, y: 226.75795}
     canvasZoom: 1.6489996
   - id: 198
     fields:
@@ -60612,7 +60989,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 337.59998
-        y: 213.59998
+        y: 211.19998
         width: 160
         height: 30
     - id: 2
@@ -60684,7 +61061,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 337.59998
+        x: 334.4
         y: 307.59998
         width: 160
         height: 30
@@ -60775,7 +61152,7 @@ MonoBehaviour:
       type: 5
       typeString: CustomFieldType_Actor
     - title: Conditions
-      value: 
+      value: 'Variable["game.clock.currentTime"] >= '
       type: 0
       typeString: CustomFieldType_Text
     overrideSettings:
@@ -60865,13 +61242,19 @@ MonoBehaviour:
         destinationConversationID: 201
         destinationDialogueID: 3
         isConnector: 0
-        priority: 3
+        priority: 4
       - originConversationID: 201
         originDialogueID: 0
         destinationConversationID: 201
         destinationDialogueID: 1
         isConnector: 0
         priority: 2
+      - originConversationID: 201
+        originDialogueID: 0
+        destinationConversationID: 201
+        destinationDialogueID: 4
+        isConnector: 0
+        priority: 3
       conditionsString: 
       userScript: 
       onExecute:
@@ -60879,8 +61262,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 178.83621
-        y: 359.94638
+        x: 173.33078
+        y: 326.9141
         width: 160
         height: 30
     - id: 1
@@ -60950,8 +61333,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 181.14566
-        y: 511.05713
+        x: 170.13489
+        y: 634.9283
         width: 160
         height: 30
     - id: 2
@@ -60985,6 +61368,10 @@ MonoBehaviour:
         value: 
         type: 0
         typeString: 
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 201
       isRoot: 0
       isGroup: 0
@@ -60992,7 +61379,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 201
+        originDialogueID: 2
+        destinationConversationID: 190
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -61000,14 +61393,14 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 181.14566
-        y: 599.5947
+        x: 163.25316
+        y: 731.0357
         width: 160
         height: 30
     - id: 3
       fields:
       - title: Title
-        value: 
+        value: EndOfDay
         type: 0
         typeString: CustomFieldType_Text
       - title: Description
@@ -61015,7 +61408,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 44
+        value: 7
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
@@ -61052,19 +61445,78 @@ MonoBehaviour:
         destinationDialogueID: 0
         isConnector: 0
         priority: 2
-      conditionsString: Variable["clock"] >= Variable["game.clock.dayEndTime"]
+      conditionsString: Variable["game.clock.currentTime"] >= Variable["game.clock.dayEndTime"]
       userScript: 
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 419.69656
-        y: 477.04315
+        x: 382.5352
+        y: 554.1184
+        width: 160
+        height: 30
+    - id: 4
+      fields:
+      - title: Title
+        value: PlayerLocationClose
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 21
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
+      conversationID: 201
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 201
+        originDialogueID: 4
+        destinationConversationID: 216
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
+      conditionsString: PlayerLocationIsClosed()
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 576.5999
+        y: 555.1508
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 22.979042, y: 98.06705}
+    canvasScrollPosition: {x: 31.92527, y: 210.92737}
     canvasZoom: 1.1624993
   - id: 202
     fields:
@@ -61960,7 +62412,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 204
+        value: 0
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 202
@@ -62129,7 +62581,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 36.618225, y: 0}
+    canvasScrollPosition: {x: 0, y: 24.125}
     canvasZoom: 0.928499
   - id: 203
     fields:
@@ -62223,6 +62675,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 203
       isRoot: 0
       isGroup: 0
@@ -62364,7 +62820,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 372
+        value: 114
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 203
@@ -62417,11 +62873,11 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
+        value: (Secret Shopper) I'm looking for a new pair of shoes.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: (Secret Shopper) I'm looking for a new pair of shoes.
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -62441,7 +62897,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 438
+        value: 0
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 203
@@ -62488,11 +62944,11 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
+        value: (Reveal Yourself) Hi, I'm Daniel Olivera, your incoming manager.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: (Reveal Yourself) Hi, I'm Daniel Olivera, your incoming manager.
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -62511,6 +62967,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 203
       isRoot: 0
       isGroup: 0
@@ -62586,7 +63046,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 894
+        value: 162
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 203
@@ -62844,13 +63304,13 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
         value: 'A realization hits you: none of your staff will recognize you yet.
           You could take advantage of this, but it might backfire if you''re not
           careful.'
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -62858,7 +63318,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 990
+        value: 0
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 203
@@ -62887,7 +63347,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 155.96332, y: 203.03781}
+    canvasScrollPosition: {x: 8.07341, y: 128.44394}
     canvasZoom: 1.0899999
   - id: 204
     fields:
@@ -63494,6 +63954,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 205
       isRoot: 0
       isGroup: 0
@@ -63562,6 +64026,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 205
       isRoot: 0
       isGroup: 0
@@ -63629,6 +64097,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 205
       isRoot: 0
       isGroup: 0
@@ -63650,8 +64122,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 453.65735
-        y: 299.0611
+        x: 456.17706
+        y: 297.17133
         width: 160
         height: 30
     - id: 10
@@ -63786,7 +64258,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 78.74016, y: 0}
+    canvasScrollPosition: {x: 0, y: 63.62207}
     canvasZoom: 1.2699997
   - id: 206
     fields:
@@ -63881,7 +64353,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: 
       conversationID: 206
@@ -63958,7 +64430,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 192
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 206
@@ -64034,7 +64506,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 168
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 206
@@ -64375,7 +64847,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
+    canvasScrollPosition: {x: 0, y: 20.469105}
     canvasZoom: 1.2099998
   - id: 207
     fields:
@@ -64545,7 +65017,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 171
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -64620,7 +65092,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 600
+        value: 129
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -64702,6 +65174,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -64769,6 +65245,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -64836,6 +65316,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -64906,7 +65390,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1164
+        value: 180
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -64978,7 +65462,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 564
+        value: 132
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -65050,7 +65534,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 630
+        value: 135
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -65256,7 +65740,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 930
+        value: 183
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -65328,7 +65812,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 660
+        value: 141
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -65615,7 +66099,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 606
+        value: 132
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -65832,7 +66316,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 180
+        value: 93
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -65898,7 +66382,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 804
+        value: 156
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -65969,7 +66453,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 552
+        value: 129
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -66043,7 +66527,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 426
+        value: 111
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -66115,7 +66599,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 786
+        value: 150
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -66187,7 +66671,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 942
+        value: 177
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -66260,7 +66744,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1050
+        value: 186
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -66331,7 +66815,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 204
+        value: 96
         type: 0
         typeString: 
       conversationID: 207
@@ -66355,12 +66839,12 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 688.9363
+        x: 692.48395
         y: 231.80849
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 39.024414}
+    canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 0.9020001
   - id: 208
     fields:
@@ -66672,7 +67156,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 294
+        value: 105
         type: 0
         typeString: 
       conversationID: 208
@@ -66753,7 +67237,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 774
+        value: 150
         type: 0
         typeString: 
       conversationID: 208
@@ -66896,7 +67380,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1314
+        value: 204
         type: 0
         typeString: 
       conversationID: 208
@@ -66969,7 +67453,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1152
+        value: 186
         type: 0
         typeString: 
       conversationID: 208
@@ -67042,7 +67526,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1008
+        value: 168
         type: 0
         typeString: 
       conversationID: 208
@@ -67117,7 +67601,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 708
+        value: 138
         type: 0
         typeString: 
       conversationID: 208
@@ -67188,7 +67672,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 93
         type: 0
         typeString: 
       conversationID: 208
@@ -67278,7 +67762,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 906
+        value: 159
         type: 0
         typeString: 
       conversationID: 208
@@ -67538,7 +68022,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 330
+        value: 108
         type: 0
         typeString: 
       conversationID: 208
@@ -67611,7 +68095,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 1230
+        value: 183
         type: 0
         typeString: 
       conversationID: 208
@@ -67683,7 +68167,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 678
+        value: 138
         type: 0
         typeString: 
       conversationID: 208
@@ -67755,7 +68239,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 606
+        value: 141
         type: 0
         typeString: 
       conversationID: 208
@@ -68540,7 +69024,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 0
+        value: 132
         type: 0
         typeString: 
       conversationID: 208
@@ -70184,12 +70668,12 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: 
+        value: The smells of the many food vendors waft over to you and compete for
+          your attention.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: The smells of the many food vendors waft over to you and compete for
-          your attention.
+        value: 
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -70209,7 +70693,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 624
+        value: 0
         type: 0
         typeString: 
       conversationID: 214
@@ -70316,8 +70800,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 279.0613
-        y: 203.55695
+        x: 301.10858
+        y: 228.1239
         width: 160
         height: 30
     - id: 3
@@ -70363,7 +70847,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 282
+        value: 0
         type: 0
         typeString: 
       conversationID: 214
@@ -70381,8 +70865,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 477.34537
-        y: 273.74805
+        x: 346.9516
+        y: 339.8898
         width: 160
         height: 30
     - id: 4
@@ -70428,7 +70912,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 372
+        value: 0
         type: 0
         typeString: 
       conversationID: 214
@@ -70452,8 +70936,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 279.378
-        y: 354.07874
+        x: 172.92126
+        y: 361.00784
         width: 160
         height: 30
     - id: 5
@@ -70499,7 +70983,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 324
+        value: 0
         type: 0
         typeString: 
       conversationID: 214
@@ -70662,7 +71146,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 306
+        value: 0
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 215
@@ -70721,7 +71205,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Duration
-        value: 234
+        value: 0
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 215
@@ -70777,6 +71261,10 @@ MonoBehaviour:
         typeString: 
       - title: Sequence
         value: 
+        type: 0
+        typeString: 
+      - title: Duration
+        value: 0
         type: 0
         typeString: 
       conversationID: 215
@@ -70843,7 +71331,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Duration
-        value: 1218
+        value: 0
         type: 0
         typeString: 
       conversationID: 215
@@ -70874,6 +71362,331 @@ MonoBehaviour:
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
     canvasZoom: 1.2399998
+  - id: 216
+    fields:
+    - title: Title
+      value: OnLocationClose
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Actor
+      value: 1
+      type: 5
+      typeString: CustomFieldType_Actor
+    - title: Conversant
+      value: 2
+      type: 5
+      typeString: CustomFieldType_Actor
+    overrideSettings:
+      useOverrides: 0
+      overrideSubtitleSettings: 0
+      showNPCSubtitlesDuringLine: 1
+      showNPCSubtitlesWithResponses: 1
+      showPCSubtitlesDuringLine: 0
+      skipPCSubtitleAfterResponseMenu: 0
+      subtitleCharsPerSecond: 30
+      minSubtitleSeconds: 2
+      continueButton: 0
+      overrideSequenceSettings: 0
+      defaultSequence: 
+      defaultPlayerSequence: 
+      defaultResponseMenuSequence: 
+      overrideInputSettings: 0
+      alwaysForceResponseMenu: 1
+      includeInvalidEntries: 0
+      responseTimeout: 0
+      emTagForOldResponses: 0
+      emTagForInvalidResponses: 0
+      cancelSubtitle:
+        key: 27
+        buttonName: 
+      cancelConversation:
+        key: 27
+        buttonName: 
+    nodeColor: 
+    dialogueEntries:
+    - id: 0
+      fields:
+      - title: Title
+        value: START
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: None()
+        type: 0
+        typeString: 
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
+      conversationID: 216
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 216
+        originDialogueID: 0
+        destinationConversationID: 216
+        destinationDialogueID: 6
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 561.15955
+        y: 208.9877
+        width: 160
+        height: 30
+    - id: 6
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: "ChannelFade(Music, out, 1); ChannelFade(Environment, out, 1); SetDialoguePanel(false);\r
+          Continue()@1;"
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
+      conversationID: 216
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 216
+        originDialogueID: 6
+        destinationConversationID: 216
+        destinationDialogueID: 7
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 556.71277
+        y: 276.01376
+        width: 160
+        height: 30
+    - id: 7
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: "This area is now closed. You make your way to the nearest caf\xE9
+          to figure out what to do next."
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: EventGuid
+        value: 
+        type: 0
+        typeString: 
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
+      conversationID: 216
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 216
+        originDialogueID: 7
+        destinationConversationID: 216
+        destinationDialogueID: 9
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 557.88043
+        y: 345.44745
+        width: 160
+        height: 30
+    - id: 9
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Timespan
+        value: -1:seconds
+        type: 11
+        typeString: CustomFieldType_TimespanType
+      - title: Show Invalid
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: UseNodeColorInMenu
+        value: False
+        type: 2
+        typeString: CustomFieldType_Boolean
+      - title: EventGuid
+        value: 6eb2fc42-453b-4b9e-8d10-d71dc92d848f
+        type: 0
+        typeString: 
+      - title: Duration
+        value: 0
+        type: 0
+        typeString: 
+      conversationID: 216
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 551.1402
+        y: 414.43484
+        width: 160
+        height: 30
+    entryGroups: []
+    canvasScrollPosition: {x: 207.85852, y: 179.86148}
+    canvasZoom: 1.03
   syncInfo:
     syncActors: 0
     syncItems: 0

@@ -80,11 +80,12 @@ namespace Project.Runtime.Scripts.DialogueSystem
             
             Lua.RegisterFunction(nameof(PlayClipLooped), this, SymbolExtensions.GetMethodInfo(() => PlayClipLooped(string.Empty)));
             Lua.RegisterFunction(nameof(PlayClip), this, SymbolExtensions.GetMethodInfo(() => PlayClip(string.Empty)));
-            Lua.RegisterFunction(nameof(SetItemMenuPanel), this, SymbolExtensions.GetMethodInfo(() => SetItemMenuPanel(string.Empty, false)));
-            Lua.RegisterFunction(nameof(SetSmartWatch), this,
+               Lua.RegisterFunction(nameof(SetSmartWatch), this,
                 SymbolExtensions.GetMethodInfo(() => SetSmartWatch(false)));
-            Lua.RegisterFunction(nameof(SetSmartWatchApp), this,  SymbolExtensions.GetMethodInfo(() => SetSmartWatchApp(string.Empty)));
+               Lua.RegisterFunction(nameof(PlayerLocationIsClosed), this,
+                SymbolExtensions.GetMethodInfo(() => PlayerLocationIsClosed()));
         }
+        
 
         private void DeregisterLuaFunctions()
         {
@@ -123,9 +124,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(MapRangeToCurrentTrafficLevel));
             Lua.UnregisterFunction(nameof(PlayClipLooped));
             Lua.UnregisterFunction(nameof(PlayClip));
-            Lua.UnregisterFunction(nameof(SetItemMenuPanel));
             Lua.UnregisterFunction(nameof(SetSmartWatch));
-            Lua.UnregisterFunction(nameof(SetSmartWatchApp));
+            Lua.UnregisterFunction(nameof(PlayerLocationIsClosed));
         }
         
         
@@ -374,16 +374,6 @@ namespace Project.Runtime.Scripts.DialogueSystem
             AudioEngine.Instance.PlayClip(clipAddress);
         }
 
-        public void SetItemMenuPanel(string name, bool value = true)
-        {
-            var itemPanel = FindObjectsByType<ItemUIPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault(p => p.itemType == name);
-            if (itemPanel != null)
-            {
-               if (value)   itemPanel.Open();
-               else itemPanel.Close();
-            }
-        }
-
         public void SetSmartWatch(bool value)
         {
             var smartWatch = FindObjectsByType<SmartWatchPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault();
@@ -395,13 +385,15 @@ namespace Project.Runtime.Scripts.DialogueSystem
             }
         }
 
-        public void SetSmartWatchApp(string app)
+        public bool PlayerLocationIsClosed()
         {
-            var smartWatch = FindObjectsByType<SmartWatchPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault();
-            if (smartWatch != null)
+            if (GameManager.gameState.GetPlayerLocation().FieldExists("Close Time"))
             {
-                smartWatch.OpenApp(app);
+                var closeTime = GameManager.gameState.GetPlayerLocation().LookupInt("Close Time");
+                return Clock.CurrentTimeRaw > closeTime;
             }
+            
+            return false;
         }
         
     }

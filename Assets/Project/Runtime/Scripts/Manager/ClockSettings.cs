@@ -9,11 +9,7 @@ namespace Project.Runtime.Scripts.Manager
 {
     public class Clock
     {
-        public static int CurrentTimeRaw
-        {
-            get { return GameManager.gameState.Clock; }
-            set { GameManager.gameState.Clock = value; }
-        }
+        public static int CurrentTimeRaw => GameManager.settings.Clock.CurrentTime;
 
         public static float DayProgress {
             get
@@ -52,7 +48,12 @@ namespace Project.Runtime.Scripts.Manager
         
         public static void AddSeconds(int seconds)
         {
-            CurrentTimeRaw += seconds;
+            GameManager.settings.Clock.AddSeconds( seconds);
+        }
+
+        public static void SetTime(int timeInSeconds)
+        {
+            GameManager.settings.Clock.SetTime( timeInSeconds);
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace Project.Runtime.Scripts.Manager
         public static int DayStartTime => GameManager.settings.Clock.DayStartTime;
         public static int DayEndTime => GameManager.settings.Clock.DayEndTime;
         
-        public static int SecondsPerCharacter => Mathf.RoundToInt(GameManager.settings.Clock.SecondsPerCharacter * GameManager.settings.Clock.globalModifier);
+        public static int SecondsPerWord => Mathf.RoundToInt(GameManager.settings.Clock.SecondsPerWord * GameManager.settings.Clock.globalModifier);
         public static int SecondsBetweenLines => Mathf.RoundToInt(GameManager.settings.Clock.SecondsBetweenLines * GameManager.settings.Clock.globalModifier);
         public static int SecondsPerInteract => Mathf.RoundToInt(GameManager.settings.Clock.SecondsPerInteract * GameManager.settings.Clock.globalModifier);
         
@@ -116,9 +117,10 @@ public class ClockSettings : ScriptableObject
     private static string secondsPerCharacterKey = "game.clock.secondsPerCharacter";
     private static string secondsBetweenLinesKey = "game.clock.secondsBetweenLines";
     private static string secondsPerInteractKey = "game.clock.secondsPerInteract";
+    private static string currentTimeKey = "game.clock.currentTime";
     
     
-    public float SecondsPerCharacter;
+    public int SecondsPerWord;
     public int SecondsBetweenLines;
     public int SecondsPerInteract;
     
@@ -145,64 +147,116 @@ public class ClockSettings : ScriptableObject
         var secondsPerCharacterVariable = dialogueDatabase.GetVariable(secondsPerCharacterKey);
         if (secondsPerCharacterVariable == null)
         {
-            secondsPerCharacterVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsPerCharacterKey, SecondsPerCharacter.ToString());
+            secondsPerCharacterVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsPerCharacterKey, SecondsPerWord.ToString(), FieldType.Number);
             dialogueDatabase.variables.Add(secondsPerCharacterVariable);
         }
-        
-        secondsPerCharacterVariable.InitialValue = SecondsPerCharacter.ToString();
+
+        secondsPerCharacterVariable.InitialFloatValue = SecondsPerWord;
         
         
         var secondsBetweenLinesVariable = dialogueDatabase.GetVariable(secondsBetweenLinesKey);
         if (secondsBetweenLinesVariable == null)
         {
-            secondsBetweenLinesVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsBetweenLinesKey, SecondsBetweenLines.ToString()); 
+            secondsBetweenLinesVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsBetweenLinesKey, SecondsBetweenLines.ToString(), FieldType.Number); 
             GameManager.settings.dialogueDatabase.variables.Add(secondsBetweenLinesVariable);
         }
-        
-        secondsBetweenLinesVariable.InitialValue = SecondsBetweenLines.ToString();
+
+        secondsBetweenLinesVariable.InitialFloatValue = SecondsBetweenLines;
         
         var secondsPerInteractVariable = dialogueDatabase.GetVariable(secondsPerInteractKey);
         if (secondsPerInteractVariable == null)
         {
-            secondsPerInteractVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsPerInteractKey, SecondsPerInteract.ToString()); 
+            secondsPerInteractVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), secondsPerInteractKey, SecondsPerInteract.ToString(), FieldType.Number); 
             GameManager.settings.dialogueDatabase.variables.Add(secondsPerInteractVariable);
         }
+
+        secondsPerInteractVariable.InitialFloatValue = SecondsPerInteract;
         
-        secondsPerInteractVariable.InitialValue = SecondsPerInteract.ToString();
+        var currentTimeVariable = dialogueDatabase.GetVariable(currentTimeKey);
+        if (currentTimeVariable == null)
+        {
+            currentTimeVariable = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), currentTimeKey, currentTime.ToString(), FieldType.Number);
+            dialogueDatabase.variables.Add(currentTimeVariable);
+        }
+
+
+        foreach (var conversation in dialogueDatabase.conversations)
+        {
+            foreach (var node in conversation.dialogueEntries)
+            {
+               if (Field.LookupBool(node.fields, "Override Time")) continue;
+               
+               var durationField = Field.Lookup( node.fields, "Duration");
+
+               if (durationField == null)
+               {
+                   durationField = new Field( "Duration", "0", FieldType.Number);
+               }
+
+               var actor = dialogueDatabase.GetActor(node.ActorID);
+               if (actor == null || actor.IsPlayer || actor.Name == "Thought"  || actor.Name == "Computer" || actor.Name.StartsWith("Game")) durationField.value = "0";
+
+               else
+               {
+                   var line = string.IsNullOrEmpty(node.DialogueText) ? node.MenuText : node.DialogueText;
+               
+                   durationField.value = Mathf.RoundToInt( (line.Split(" ").Length * (float)SecondsPerWord) + SecondsBetweenLines).ToString();
+               }
+            }
+        }
         
         currentTime = Mathf.Clamp(currentTime, DayStartTime, DayEndTime);
 
         if (!Application.isPlaying)
         {
-            if (GameManager.settings != null) GameManager.settings.dialogueDatabase.GetVariable("clock").InitialValue = currentTime.ToString();
+            dialogueDatabase.GetVariable(  currentTimeKey ).InitialValue = currentTime.ToString();
         }
         
-        else currentTime = DialogueLua.GetVariable("clock").asInt;
+        else currentTime = DialogueLua.GetVariable(currentTimeKey).asInt;
         
         readOnlyCurrentTime = currentTime;
         
         var dayStartTime = dialogueDatabase.GetVariable("game.clock.dayStartTime");
         if (dayStartTime == null)
         {
-            dayStartTime = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), "game.clock.dayStartTime", DayStartTime.ToString());
+            dayStartTime = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), "game.clock.dayStartTime", DayStartTime.ToString(), FieldType.Number);
             dialogueDatabase.variables.Add(dayStartTime);
         }
         
-        dayStartTime.InitialValue = DayStartTime.ToString();
+        // NOT LIKE THIS:  dayStartTime.InitialValue = DayStartTime.ToString();
+
+        dayStartTime.InitialFloatValue = DayStartTime; // LIKE THIS
         
         var dayEndTime = dialogueDatabase.GetVariable("game.clock.dayEndTime");
         if (dayEndTime == null)
         {
-            dayEndTime = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), "game.clock.dayEndTime", DayEndTime.ToString());
+            dayEndTime = Template.FromDefault().CreateVariable(Template.FromDefault().GetNextVariableID(dialogueDatabase), "game.clock.dayEndTime", DayEndTime.ToString(), FieldType.Number);
             dialogueDatabase.variables.Add(dayEndTime);
         }
-        
-        dayEndTime.InitialValue = DayEndTime.ToString();
+
+        dayEndTime.InitialFloatValue = DayEndTime;
         
         DayStartTimeString = Clock.To24HourClock(DayStartTime, true);
         DayEndTimeString = Clock.To24HourClock(DayEndTime, true);
         CurrentTimeString = Clock.To24HourClock(currentTime, true);
     }
+    
+    public void AddSeconds(int seconds)
+    {
+        var time = DialogueLua.GetVariable(currentTimeKey).asInt;
+        time += seconds;
+        time = Mathf.Clamp(time, DayStartTime, DayEndTime);
+        DialogueLua.SetVariable(currentTimeKey, time);
+    }
+    
+    public void SetTime(int timeInSeconds)
+    {
+        var time = timeInSeconds;
+        time = Mathf.Clamp(time, DayStartTime, DayEndTime);
+        DialogueLua.SetVariable(currentTimeKey, time);
+    }
+    
+    public int CurrentTime => DialogueLua.GetVariable(currentTimeKey).asInt;
     
 }
 
@@ -232,9 +286,7 @@ public class SequencerCommandSetTime : SequencerCommand
     public void Awake()
     {
         var time = GetParameter(0);
-       // var endOfLine = GetParameterAsBool(1, true);
-        Clock.CurrentTimeRaw = Clock.ToSeconds(time);
-       // if (endOfLine) sequencer.PlaySequence("EndOfLine()@Message(ClockUpdated)");
+        Clock.SetTime( Clock.ToSeconds(time));
         Stop();
     }
 }
