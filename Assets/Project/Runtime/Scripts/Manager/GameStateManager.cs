@@ -185,6 +185,7 @@ namespace Project.Runtime.Scripts.Manager
             
             if (conversation.Title == "Base")
             {
+                GameManager.DoLocalSave();
                 state = State.Base;
                 var playerLocation = gameState.GetPlayerLocation(true);
 
@@ -286,7 +287,7 @@ namespace Project.Runtime.Scripts.Manager
                     StartCoroutine(QueueConversationEndEvent(() =>
                     {
                         DialogueManager.StartConversation("Base"); 
-                        GameManager.DoLocalSave();
+                   
                     }));
                     break;
                 case State.Base:
