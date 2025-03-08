@@ -278,15 +278,18 @@ namespace Project.Runtime.Scripts.Manager
                     AudioEngine.Instance.PlayClipLooped(music);
                 }
             }
-            
-            
+
+
             switch (state)
             {
                 case State.PreBase:
-                    StartCoroutine(QueueConversationEndEvent(() => DialogueManager.StartConversation("Base")));
+                    StartCoroutine(QueueConversationEndEvent(() =>
+                    {
+                        DialogueManager.StartConversation("Base"); 
+                        GameManager.DoLocalSave();
+                    }));
                     break;
                 case State.Base:
-                    GameManager.DoLocalSave();
                     break;
                 case State.Travel: // do nothing
                     break;

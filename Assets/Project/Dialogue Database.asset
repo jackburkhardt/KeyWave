@@ -3167,7 +3167,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: Take a nap.
       type: 0
       typeString: CustomFieldType_Text
     - title: Failure Description
@@ -3286,7 +3286,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Success Description
-      value: 
+      value: Grab a meal at the hotel.
       type: 0
       typeString: CustomFieldType_Text
     - title: Failure Description
@@ -4773,7 +4773,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Take a city tour.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Show Invalid
@@ -4781,7 +4781,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: '; '
+      value: 'SetQuestState("Take a city tour.", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Explicit Duration
@@ -4864,7 +4864,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Meet with hometown friends.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4880,7 +4880,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: '; '
+      value: 'SetQuestState("Meet with hometown friends.", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
@@ -4988,7 +4988,7 @@ MonoBehaviour:
       type: 7
       typeString: CustomFieldType_Location
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Meet with a past colleague.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Show Invalid
@@ -4996,7 +4996,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: '; '
+      value: 'SetQuestState("Meet with a past colleague.", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Explicit Duration
@@ -5091,7 +5091,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: true and (true)
+      value: CurrentQuestState("Go to the beach.") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -5107,7 +5107,7 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Script
-      value: '; '
+      value: 'SetQuestState("Go to the beach.", "success"); '
       type: 0
       typeString: CustomFieldType_Text
     - title: Time Flow
@@ -7836,7 +7836,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
-      value: 21600
+      value: 65000
       type: 0
       typeString: CustomFieldType_Number
     - title: Description
@@ -8172,7 +8172,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 25
       isRoot: 0
       isGroup: 0
@@ -8241,13 +8241,13 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: EventGuid
-        value: 6eb2fc42-453b-4b9e-8d10-d71dc92d848f
+        value: f9c4130f-3369-4c5f-928e-452dd5abab0f
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 25
       isRoot: 0
       isGroup: 0
@@ -8268,8 +8268,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 167.23479, y: 177.13078}
-    canvasZoom: 0.94171077
+    canvasScrollPosition: {x: 205.92062, y: 0}
+    canvasZoom: 0.8817109
   - id: 28
     fields:
     - title: Title
@@ -45454,6 +45454,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 149
       isRoot: 0
       isGroup: 0
@@ -45524,7 +45528,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 149
       isRoot: 0
       isGroup: 0
@@ -46033,7 +46037,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 149
       isRoot: 0
       isGroup: 0
@@ -46191,7 +46195,13 @@ MonoBehaviour:
       - originConversationID: 149
         originDialogueID: 28
         destinationConversationID: 149
-        destinationDialogueID: 29
+        destinationDialogueID: 14
+        isConnector: 0
+        priority: 2
+      - originConversationID: 149
+        originDialogueID: 28
+        destinationConversationID: 149
+        destinationDialogueID: 4
         isConnector: 0
         priority: 2
       conditionsString: (CurrentQuestEntryState("Complete an emotional intelligence
@@ -46204,73 +46214,6 @@ MonoBehaviour:
         serializedVersion: 2
         x: 690.3798
         y: 134.56339
-        width: 160
-        height: 30
-    - id: 29
-      fields:
-      - title: Title
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Description
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Actor
-        value: 14
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Conversant
-        value: 21
-        type: 5
-        typeString: CustomFieldType_Actor
-      - title: Menu Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Dialogue Text
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Sequence
-        value: 
-        type: 0
-        typeString: CustomFieldType_Text
-      - title: Timespan
-        value: -1:seconds
-        type: 11
-        typeString: CustomFieldType_TimespanType
-      - title: Points
-        value: Context:0
-        type: 10
-        typeString: CustomFieldType_PointsType
-      - title: Show Invalid
-        value: False
-        type: 2
-        typeString: CustomFieldType_Boolean
-      conversationID: 149
-      isRoot: 0
-      isGroup: 1
-      nodeColor: 
-      delaySimStatus: 0
-      falseConditionAction: Block
-      conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 149
-        originDialogueID: 29
-        destinationConversationID: 149
-        destinationDialogueID: 14
-        isConnector: 0
-        priority: 2
-      conditionsString: 
-      userScript: 
-      onExecute:
-        m_PersistentCalls:
-          m_Calls: []
-      canvasRect:
-        serializedVersion: 2
-        x: 612.2275
-        y: 329.2898
         width: 160
         height: 30
     - id: 30
@@ -46306,7 +46249,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 149
       isRoot: 0
       isGroup: 0
@@ -46327,8 +46270,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 413.2542}
-    canvasZoom: 0.8827496
+    canvasScrollPosition: {x: 0, y: 604.76605}
+    canvasZoom: 0.9127496
   - id: 150
     fields:
     - title: Title
@@ -46500,7 +46443,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46577,7 +46520,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46648,7 +46591,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46718,7 +46661,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46795,7 +46738,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46866,7 +46809,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46931,7 +46874,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -46976,11 +46919,11 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Actor
-        value: 1
+        value: 14
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 14
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -47011,7 +46954,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -47079,7 +47022,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -47091,7 +47034,7 @@ MonoBehaviour:
       - originConversationID: 150
         originDialogueID: 51
         destinationConversationID: 150
-        destinationDialogueID: 19
+        destinationDialogueID: 52
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -47150,7 +47093,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -47172,7 +47115,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 367.3853
+        x: 366.2736
         y: 531.6974
         width: 160
         height: 30
@@ -47218,6 +47161,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 150
       isRoot: 0
       isGroup: 0
@@ -47244,8 +47191,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.9294996
+    canvasScrollPosition: {x: 91.161804, y: 0}
+    canvasZoom: 0.89949965
   - id: 151
     fields:
     - title: Title
@@ -61516,7 +61463,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 31.92527, y: 210.92737}
+    canvasScrollPosition: {x: 191.92535, y: 197.16391}
     canvasZoom: 1.1624993
   - id: 202
     fields:
@@ -71573,7 +71520,7 @@ MonoBehaviour:
       - title: EventGuid
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Timespan
         value: -1:seconds
         type: 11
@@ -71589,7 +71536,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 216
       isRoot: 0
       isGroup: 0
@@ -71658,13 +71605,13 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: EventGuid
-        value: 6eb2fc42-453b-4b9e-8d10-d71dc92d848f
+        value: 7b7a5a1b-dd26-426c-abd6-fa870655dfed
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 216
       isRoot: 0
       isGroup: 0
@@ -71681,7 +71628,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 551.1402
-        y: 414.43484
+        y: 413.46396
         width: 160
         height: 30
     entryGroups: []
