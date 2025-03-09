@@ -217,7 +217,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void DrawRevisableTextAreaField(GUIContent label, Asset asset, DialogueEntry entry, Field field)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(label);
+            if (label != null) EditorGUILayout.LabelField(label);
             DrawAIReviseTextButton(asset, entry, field);
             EditorGUILayout.EndHorizontal();
             field.value = EditorGUILayout.TextArea(field.value);

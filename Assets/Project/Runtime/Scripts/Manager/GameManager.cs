@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
@@ -172,6 +173,7 @@ namespace Project.Runtime.Scripts.Manager
         public void DoEndOfDay()
         {
             GameEvent.OnDayEnd();
+            DialogueManager.instance.gameObject.BroadcastMessageExt( "OnEndOfDay");
             App.App.Instance.ChangeScene("EndOfDay", gameStateManager.gameState.current_scene, Transition.Black);
         }
 
@@ -280,17 +282,6 @@ namespace Project.Runtime.Scripts.Manager
                 yield return App.App.Instance.ChangeScene(newLocation, currentScene, transition);
                 
                 AudioEngine.Instance.StopAllAudioOnChannel("Music");
-                
-                var locationScene = SceneManager.GetSceneByName(newLocation);
-
-                while (!locationScene.isLoaded) yield return null;
-                
-                if (gameState.GetPlayerLocation(true).IsSublocation)
-                {
-                    var sublocationGameObject = locationScene.FindGameObject(gameState.GetPlayerLocation(true).Name); 
-                    Debug.Log("Sublocation: " + gameState.GetPlayerLocation(true).Name);
-                    if (sublocationGameObject != null) sublocationGameObject.SetActive(true);
-                }
 
 
                 
@@ -452,14 +443,16 @@ namespace Project.Runtime.Scripts.Manager
                 for (int i = 1; i < entryCount + 1; i++)
                 {
                     var menuText = asset.LookupValue($"{entryFieldLabelStart} {i} Menu Text");
-                    
                     var dialogueText = asset.LookupValue($"{entryFieldLabelStart} {i} Dialogue Text");
-                
+                    var duration = asset.LookupInt($"{entryFieldLabelStart} {i} Duration");
+                    
                     var newDialogueEntry = template.CreateDialogueEntry( i, conversation.id, string.Empty);
                     newDialogueEntry.MenuText = menuText;
                     newDialogueEntry.DialogueText = dialogueText;
                 
                     newDialogueEntry.ActorID = entryActorID;
+                    
+                    newDialogueEntry.fields.Add(new Field("Duration", duration.ToString(CultureInfo.InvariantCulture), FieldType.Number));
 
                     if (i == musicEntry)
                     {

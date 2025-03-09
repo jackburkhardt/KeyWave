@@ -134,20 +134,6 @@ namespace Project.Runtime.Scripts.Manager
                     break;
                 case "conversation_decision":
                     break;
-                case "points":
-                    var pointsField = Points.PointsField.FromJObject(playerEvent.Data);
-                    
-                    
-                    var pointItem = GameManager.settings.dialogueDatabase.items.Find( p => p.IsPointCategory && p.Name == pointsField.Type);
-                    
-                    if (pointItem != null)
-                    {
-                        var currentScore = DialogueLua.GetItemField( pointItem.Name, "Score").asInt;
-                        DialogueLua.SetItemField( pointItem.Name, "Score", currentScore);
-                    }
-                    
-                    Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
-                    break;
             }
 
             Clock.AddSeconds(playerEvent.Duration);
@@ -392,11 +378,10 @@ namespace Project.Runtime.Scripts.Manager
             if (state == QuestState.Success)
             {                
                 points = DialogueUtility.GetPointsFromField(quest!.fields);
+                var repeatCount =  DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
                 
                 foreach (var pointField in points)
                 {
-
-                    var repeatCount = DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
                     var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
                         
                     for (int i = 0; i < repeatCount; i++)
@@ -405,24 +390,34 @@ namespace Project.Runtime.Scripts.Manager
                     }
                     
                     if (pointField.Points == 0) continue;
-                    GameEvent.OnPointsIncrease(pointField, questName);
-                    
                 }
 
                 if (quest.IsAction)
                 {
                     if (quest.IsStatic) QuestLog.SetQuestState(questName, QuestState.Active);
-                    var completionCount = quest.LookupInt("Repeat Count");
-                    quest.AssignedField("Repeat Count").value = (completionCount + 1).ToString();
-                    Debug.Log( $"Quest {questName} has been repeated {completionCount + 1} times.");
+                    DialogueLua.SetQuestField(questName, "Repeat Count", repeatCount + 1);
                 }
             }
         
-            var duration = state == QuestState.Success ? DialogueUtility.GetQuestDuration(quest) : 0;
+            var duration = 0;
             
             if (quest.IsQuest) GameEvent.OnQuestStateChange(questName, state, points, duration);
             else if (quest.IsAction && ((quest.IsStatic && state == QuestState.Success) || !quest.IsStatic)) GameEvent.OnActionStateChange(questName, state, points, duration);
             
+            if (state == QuestState.Success)
+            {
+
+                foreach (var pointsField in points)
+                {
+                    var pointAsItem = Points.GetDatabaseItem( pointsField.Type);
+                    if (pointAsItem != null)
+                    {
+                        var currentScore = DialogueLua.GetItemField( pointAsItem.Name, "Score").asInt;
+                        DialogueLua.SetItemField( pointAsItem.Name, "Score", currentScore + pointsField.Points);
+                        Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
+                    }
+                }
+            }
             
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
             
@@ -458,7 +453,6 @@ namespace Project.Runtime.Scripts.Manager
 
             if (state == QuestState.Success)
             {
-                
                 foreach (var pointField in points)
                 {
                     var value = pointField.value;
@@ -472,11 +466,17 @@ namespace Project.Runtime.Scripts.Manager
                     
                     
                     if (pointsField.Points == 0) continue;
-                   
-                    GameEvent.OnPointsIncrease(pointsField, $"{quest.Name} + {prefix}");
+                    
+                    var pointAsItem = Points.GetDatabaseItem( pointsField.Type);
+                    if (pointAsItem != null)
+                    {
+                        var currentScore = Math.Min(0, DialogueLua.GetItemField( pointAsItem.Name, "Score").asInt);
+                        DialogueLua.SetItemField( pointAsItem.Name, "Score", currentScore + pointsField.Points);
+                        Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
+                    }
                 }
             }
-
+            
             
             bool autoSetSuccess = quest.LookupBool("Auto Set Success");
             for (int i = 0; i < QuestLog.GetQuestEntryCount( quest.Name); i++)

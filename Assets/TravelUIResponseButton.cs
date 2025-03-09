@@ -36,7 +36,8 @@ public class TravelUIResponseButton : StandardUIResponseButton
             description.text = location.Description;
             ETALabel.text = $"{Clock.EstimatedTimeOfArrival(location.id)}";
             GetComponent<Image>().color = location.LookupColor("Color");
-            transform.localPosition = location.LookupVector2("Coordinates");
+
+            transform.localPosition = location.Name == "Café" ? GameManager.gameState.GetPlayerLocation().LookupVector2("Coordinates") : location.LookupVector2("Coordinates");
             
             confirmButton.interactable = true;
 
@@ -50,7 +51,7 @@ public class TravelUIResponseButton : StandardUIResponseButton
                 {
                     confirmButton.interactable = false;
                     confirmButtonGraphic.color = Color.red;
-                    confirmButtonText.text = "Closed";
+                    confirmButtonText.text = "Closed on Arrival";
                 }
             }
             

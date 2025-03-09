@@ -318,7 +318,7 @@ namespace PixelCrushers.DialogueSystem
         protected virtual void FocusNow()
         {
             panelState = PanelState.Open;
-            animatorMonitor.SetTrigger(focusAnimationTrigger, null, false);
+            if (!string.IsNullOrEmpty(focusAnimationTrigger)) animatorMonitor.SetTrigger(focusAnimationTrigger, null, false);
             UITools.EnableInteractivity(gameObject);
             if (hasFocus) return;
             if (string.IsNullOrEmpty(focusAnimationTrigger))

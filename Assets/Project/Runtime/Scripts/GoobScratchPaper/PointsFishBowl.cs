@@ -43,23 +43,81 @@ public class PointsFishBowl : MonoBehaviour
     public Image inverseFill;
     
     private Item pointItem => Points.GetDatabaseItem( type);
+    
+    
+    [Range(0, 1)] [SerializeField] private float shine;
 
+    private Color RingColor
+    {
+        get
+        {
+            if (DialogueManager.instance != null && pointItem != null)
+            {
+                return pointItem.LookupColor("Ring Color");
+            }
+            
+            return Color.white;
+            
+        }
+        
+    }
+    private Color IconColor
+    {
+        get
+        {
+            if (DialogueManager.instance != null && pointItem != null)
+            {
+                return pointItem.LookupColor("Color");
+            }
+            
+            return Color.white;
+            
+        }
+    }
+
+    private Color InverseIconColor
+    {
+        get
+        {
+            if (DialogueManager.instance != null && pointItem != null)
+            {
+                return pointItem.LookupColor("Inverse Color");
+            }
+            
+            return Color.white;
+        }
+    }
+
+    public float Shine
+    {
+        get => shine;
+        set
+        {
+            shine = value;
+            SetColors(shine);
+        }
+    }
 
     private float Fill
     {
         get => fillAmount;
         set
         {
-            
+            fillAmount = value;
             if (fill) fill.fillAmount = value;
             if (inverseFill) inverseFill.fillAmount = value;
         } 
     }
 
+    private void OnAwake()
+    {
+         SetPoints( type, 1);
+    }
+
     
     private void OnValidate()
     {
-        SetFishBowl();
+        if (!Application.isPlaying) SetFishBowl();
     }
 
     public void SetPointType(Item item)
@@ -73,12 +131,64 @@ public class PointsFishBowl : MonoBehaviour
         return pointItem;
     }
 
+    private void SetColors()
+    {
+        if (ring) ring.color = RingColor;
+        if (icon) icon.color = IconColor;
+        if (inverseIcon) inverseIcon.color = IconColor;
+        if (fill) fill.color = IconColor;
+        if (inverseFill) inverseFill.color = InverseIconColor;
+    }
+
+    private bool isPointsDecreasing = false;
+
+    private void SetColors(float shine, float amount = 1)
+    {
+     
+        var blendColor = !isPointsDecreasing ? IconColor : Color.red;
+        var backgroundColor = !isPointsDecreasing ? IconColor : Color.red;
+
+        if (ring) ring.color = ColorBlend(RingColor, blendColor, "Multiply", shine / 2);
+        if (icon) icon.color = ColorBlend(IconColor, blendColor, "Multiply", shine / 2);
+        if (inverseIcon) inverseIcon.color = ColorBlend(IconColor, blendColor, "Multiply", shine/ 2);
+        if (fill) fill.color = ColorBlend(IconColor, blendColor, "Multiply", shine / 2);
+        if (inverseFill) inverseFill.color = ColorBlend(InverseIconColor, blendColor, "Multiply", shine / 2);
+        
+        if (TryGetComponent<Graphic>(out  var graphic)) graphic.color = Color.Lerp( new Color(0, 0, 0, 1f/255f), backgroundColor, shine);
+
+    }
+    
+    public static Color ColorBlend(Color baseColor, Color blendColor, string blendMode, float lerp = 1f)
+    {
+        float BlendChannel(float baseChannel, float blendChannel)
+        {
+            switch (blendMode)
+            {
+                case "Overlay":
+                    return baseChannel < 0.5f 
+                        ? 2 * baseChannel * blendChannel 
+                        : 1 - 2 * (1 - baseChannel) * (1 - blendChannel);
+                case "SoftLight":
+                    return (1 - 2 * blendChannel) * baseChannel * baseChannel + (2 * blendChannel * baseChannel);
+                case "Multiply":
+                    return baseChannel * blendChannel;
+                default:
+                    return 0;
+            }
+        }
+            
+        float r = BlendChannel(baseColor.r, blendColor.r);
+        float g = BlendChannel(baseColor.g, blendColor.g);
+        float b = BlendChannel(baseColor.b, blendColor.b);
+        float a = Mathf.Lerp(baseColor.a, blendColor.a, 0.5f); // Optional alpha blending
+
+        return Color.Lerp( baseColor, new Color(r, g, b, a), lerp);
+    }
+
     private void SetFishBowl()
     {
-        if (ring) ring.color = pointItem.LookupColor("Ring Color");
         if (icon)
-        {
-            icon.color = pointItem.LookupColor("Color");
+        { 
             icon.sprite = Sprite.Create( pointItem.icon, new Rect(0, 0, pointItem.icon.width, pointItem.icon.height), Vector2.zero);
         }
 
@@ -87,13 +197,11 @@ public class PointsFishBowl : MonoBehaviour
             Fill = fillAmount;
             if (inverseIcon)
             {
-                inverseIcon.color = pointItem.LookupColor("Color");
                 inverseIcon.sprite = Sprite.Create( pointItem.icon, new Rect(0, 0,  pointItem.icon.width,  pointItem.icon.height), Vector2.zero);
             }
-        
-            if (fill) fill.color = pointItem.LookupColor("Color");
-            if (inverseFill) inverseFill.color = pointItem.LookupColor("Inverse Color");
         }
+        
+        SetColors(shine);
 
 
         var panel = GetComponentInChildren<PointsPanel>();
@@ -114,15 +222,22 @@ public class PointsFishBowl : MonoBehaviour
 
     private void SetPoints(string pointType, int amount)
     {
-        if (pointType != type)
-        {
-//            GetComponent<Selectable>().interactable = false;
-            return;
-        }
-        
+        if (pointType != type)  return;
         animator.SetTrigger(animationTrigger);
-        if (Points.MaxScore(pointType) != 0) 
-            DOTween.To(() => Fill, x => Fill = x, Points.Score(pointType) / (float) Points.MaxScore(pointType), timeToFill);
+        
+        if (amount == 0)  return;
+        if (Points.MaxScore(pointType) == 0) return;
+        
+        isPointsDecreasing = amount < 0;
+       
+        
+        DOTween.To(() => Fill, x => Fill = x, (float) Points.Score( pointType) / Points.MaxScore(pointType), timeToFill).SetEase(Ease.InOutSine);
+            
+        DOTween.To(() => Shine, x => Shine = x, 1, timeToFill / 2).SetEase(Ease.InOutSine).OnComplete( () =>
+        DOTween.To( () => Shine, x => Shine = x, 0,  timeToFill / 2).SetEase(Ease.InOutSine));
+        
+     
+        
     }
 
 

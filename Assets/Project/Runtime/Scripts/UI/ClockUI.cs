@@ -91,7 +91,7 @@ namespace Project.Runtime.Scripts.UI
                     timeText.color = _hourChangedColor;
                     OnHourChanged?.Invoke();
                     
-                    yield return new WaitForSeconds(2);
+                    //yield return new WaitForSeconds(2);
                     if (!hourChanged)
                     {
                         hourChanged = true;

@@ -2971,6 +2971,85 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 asset.fields, dialogueTextFieldTitle);
             DrawLocalizedVersions(asset, null, asset.fields, entryTitle + " {0}", false, FieldType.Text, alreadyDrawn);
             alreadyDrawn.Add(dialogueTextField);
+            
+            
+            // Time:
+            
+            var overrideTimeFieldTitle = entryTitle + " Override Time";
+            var overrideTimeField = Field.Lookup(asset.fields, overrideTimeFieldTitle);
+            
+            if (overrideTimeField == null)
+            {
+                overrideTimeField = new Field(overrideTimeFieldTitle, "False", FieldType.Boolean);
+                asset.fields.Add(overrideTimeField);
+            }
+            
+            var durationFieldTitle = entryTitle + " Duration";
+            var durationField = Field.Lookup(asset.fields, durationFieldTitle);
+            
+            if (durationField == null)
+            {
+                durationField = new Field(durationFieldTitle, "0", FieldType.Number);
+                asset.fields.Add(durationField);
+            }
+
+          
+            
+            var overrideTime = asset.LookupBool(overrideTimeFieldTitle);
+            var duration = int.Parse(durationField.value);
+            var actor = database.GetActor(asset.LookupInt("Entry Actor"));
+            
+            if (!actor.IsPlayer)
+            {
+                EditorWindowTools.EditorGUILayoutBeginGroup();
+                var defaultLabelWidth =  EditorGUIUtility.labelWidth;
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(EditorGUIUtility.IconContent("clock") , GUILayout.MaxWidth(30f));
+                var newOverrideTime = EditorGUILayout.ToggleLeft(new GUIContent("Override", "Toggle whether duration is determined explicitly or by the Dialogue Text."), overrideTime, GUILayout.MaxWidth(90f));
+               
+                var time = duration;
+
+                if (overrideTime)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.BeginVertical();
+                    EditorGUIUtility.labelWidth = 45f;
+                    var hours = EditorGUILayout.IntField("Hours" , duration / 3600, GUILayout.MaxWidth(130f), GUILayout.MinWidth(60f));
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.Space(3);
+                    EditorGUILayout.BeginVertical();
+                    EditorGUIUtility.labelWidth = 60f;
+                    var mins = EditorGUILayout.IntField("Minutes" , duration % 3600 / 60, GUILayout.MaxWidth(140f), GUILayout.MinWidth(85f));
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.Space(3);
+                    EditorGUILayout.BeginVertical();
+                    EditorGUIUtility.labelWidth = 60f;
+                    var secs = EditorGUILayout.IntField("Seconds" , duration % 3600 % 60, GUILayout.MaxWidth(140f) , GUILayout.MinWidth(85f));
+                    EditorGUILayout.EndVertical();
+                
+                    //duration.value = (hours * 3600 + mins * 60 + secs).ToString();
+                    EditorGUIUtility.labelWidth = defaultLabelWidth;
+                    EditorGUILayout.EndHorizontal();
+                    time = hours * 3600 + mins * 60 + secs;
+                }
+                
+                else EditorGUILayout.LabelField(DurationLabel( duration));
+                EditorGUILayout.EndHorizontal();
+                EditorWindowTools.EditorGUILayoutEndGroup();
+                
+                
+                if (newOverrideTime != overrideTime)
+                {
+                    Field.SetValue(asset.fields, overrideTimeFieldTitle, newOverrideTime);
+                    SetDatabaseDirty("Change Override Time");
+                }
+                
+                time = Mathf.Max(0, time);
+                time = Mathf.Min(  86400, time);
+
+                durationField.value = time.ToString();
+            }
 
             EditorWindowTools.EditorGUILayoutEndGroup();
 
@@ -2997,23 +3076,40 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             var descriptionFieldTitle = $"{entryTitle} Description";
             var descriptionField = Field.Lookup(asset.fields, descriptionFieldTitle);
-            if (descriptionField == null)
-            {
-                descriptionField = new Field(descriptionFieldTitle, "", FieldType.Text);
-                asset.fields.Add(descriptionField);
-            }
-
-            var descriptionText = descriptionField.value;
+            
+            var hasDescriptionOverride = descriptionField != null;
             
            
-            var descriptionTextLabel = "Description";
+            var descriptionTextLabel = "Override Description";
             if (asset is Item item && item.IsAction) descriptionTextLabel += " (Tooltip)";
-            DrawRevisableTextAreaField(
-                new GUIContent(descriptionTextLabel, "The description text shown as a tooltip when this condition is true."), asset, null,
-                asset.fields, descriptionFieldTitle);
-            DrawLocalizedVersions(asset, null, asset.fields, entryTitle + " {0}", false, FieldType.Text, alreadyDrawn);
-            alreadyDrawn.Add(descriptionField);
-            
+
+            var newHasDescriptionOverride = EditorGUILayout.ToggleLeft(
+                new GUIContent(descriptionTextLabel,
+                    "The description text shown as a tooltip when this condition is true."), hasDescriptionOverride);
+
+
+            if (newHasDescriptionOverride != hasDescriptionOverride)
+            {
+                if (newHasDescriptionOverride)
+                {
+                    descriptionField = new Field(descriptionFieldTitle, "", FieldType.Text);
+                    asset.fields.Add(descriptionField);
+                }
+                
+                else
+                {
+                    asset.fields.Remove(descriptionField);
+                }
+            }
+
+            if (newHasDescriptionOverride)
+            {
+                DrawRevisableTextAreaField(
+                    null, asset, null,
+                    asset.fields, descriptionFieldTitle);
+                DrawLocalizedVersions(asset, null, asset.fields, entryTitle + " {0}", false, FieldType.Text, alreadyDrawn);
+                alreadyDrawn.Add(descriptionField);
+            }
             
 
             EditorWindowTools.EditorGUILayoutEndGroup();

@@ -84,6 +84,12 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 SymbolExtensions.GetMethodInfo(() => SetSmartWatch(false)));
                Lua.RegisterFunction(nameof(PlayerLocationIsClosed), this,
                 SymbolExtensions.GetMethodInfo(() => PlayerLocationIsClosed()));
+               
+               Lua.RegisterFunction(nameof(SetLocation), this,
+                SymbolExtensions.GetMethodInfo(() => SetLocation(string.Empty)));
+               
+               Lua.RegisterFunction(nameof(DoEndOfDay), this,
+                SymbolExtensions.GetMethodInfo(() => DoEndOfDay()));
         }
         
 
@@ -126,6 +132,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(PlayClip));
             Lua.UnregisterFunction(nameof(SetSmartWatch));
             Lua.UnregisterFunction(nameof(PlayerLocationIsClosed));
+            Lua.UnregisterFunction(nameof(SetLocation));
+            Lua.UnregisterFunction(nameof(DoEndOfDay));
         }
         
         
@@ -394,6 +402,16 @@ namespace Project.Runtime.Scripts.DialogueSystem
             }
             
             return false;
+        }
+
+        public void SetLocation(string locationName)
+        {
+            GameManager.instance.SetLocation(locationName);
+        }
+        
+        public void DoEndOfDay()
+        {
+            GameManager.instance.DoEndOfDay();
         }
         
     }
