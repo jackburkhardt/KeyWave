@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.Utility;
@@ -14,7 +15,8 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private GameObject _continueButton;
         [SerializeField] private TextMeshProUGUI _continueTimestamp;
         
-        [SerializeField] private GameObject _saveExistsWarningPopup;
+        [SerializeField] private UIPanel _saveExistsWarningPopup;
+        [SerializeField] private UIPanel _mainMenuButtonsPanel;
         [SerializeField] private TextMeshProUGUI _saveExistsWarningTimestamp;
         [SerializeField] private UnityEvent _onNewGame;
         [SerializeField] private UnityEvent _onContinue;
@@ -57,7 +59,7 @@ namespace Project.Runtime.Scripts.UI
                 return;
             }
             
-            _saveExistsWarningPopup.SetActive(true);
+            _saveExistsWarningPopup.Open();
             string saveTimestamp = SaveDataStorer.LatestSaveData.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
             _saveExistsWarningTimestamp.text =
                 $"Existing progress found! Last played: {saveTimestamp}.\nStart a new game and overwrite this data?";
@@ -83,6 +85,15 @@ namespace Project.Runtime.Scripts.UI
         public void BeginSaveRetrieval()
         {
             SaveDataStorer.BeginSaveRetrieval();
+        }
+
+        public void OnFirstClick()
+        {
+            GetComponent<Animator>().SetTrigger("Click");
+            SaveDataStorer.BeginSaveRetrieval();
+            DOTween.Sequence( )
+                .AppendInterval(2f)
+                .AppendCallback(() => _mainMenuButtonsPanel.Open());
         }
         
         private void OnDestroy()

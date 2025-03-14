@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 
 public class TimeRemainingText : MonoBehaviour

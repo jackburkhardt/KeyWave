@@ -22,7 +22,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     [SerializeField] private float _scale;
     private Vector2 _scaleAsVector;
 
-    private const float scaleMin = 0.95f;
+    private const float scaleMin = 1.029f;
     private const float scaleMax = 1.6f;
 
     public UnityEvent onDrag;
@@ -110,7 +110,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
 
     public void Reset()
     {
-        Scale = 0.95f;
+        Scale = scaleMin;
         _rectTransform.anchoredPosition = Vector2.zero;
     }
 
@@ -168,7 +168,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     
     public void ZoomInOnPosition(Vector3 position)
     {
-        float targetScale = Math.Max(Scale, 1.3f);
+        float targetScale = Math.Max(Scale, scaleMax);
         var newPosition = -position * targetScale;
         
         ignoreDrag = true;

@@ -21,6 +21,11 @@ public class HomeButtonPanel : UIPanel
        Close();
        SmartWatchPanel.onAppOpen -= OnAppOpen;
    }
+
+   public void OnSublocationChange()
+   {
+       Close();
+   }
    
    public void OnAppOpen(SmartWatchAppPanel appPanel)
    {

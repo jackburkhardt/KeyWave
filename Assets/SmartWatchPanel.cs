@@ -59,6 +59,7 @@ public class SmartWatchPanel : UIPanel
         }
         
         appPanel.panel.Open();
+        _currentApp = appPanel;
       
     }
 

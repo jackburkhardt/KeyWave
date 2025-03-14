@@ -550,7 +550,7 @@ namespace PixelCrushers.DialogueSystem
         /// <param name="allowStealFocus">Select continue button even if another element is already selected.</param>
         public virtual void Select(bool allowStealFocus = true)
         {
-            UITools.Select(continueButton.button, allowStealFocus, eventSystem);
+            if (continueButton != null) UITools.Select(continueButton.button, allowStealFocus, eventSystem);
         }
 
         /// <summary>

@@ -148,6 +148,9 @@ namespace Project.Runtime.Scripts.Manager
         private List<StandardUISubtitlePanel> _subtitlePanels;
         private List<ItemUIPanel> _itemUIPanels;
         private SmartWatchPanel _smartWatchPanel;
+        
+        private Vector2 m_mousePosition;
+        private bool cursorModeChangedLastFrame = false;
 
 
         private void Start()
@@ -184,10 +187,40 @@ namespace Project.Runtime.Scripts.Manager
             }
 
             if (capFramerate) Application.targetFrameRate = framerateLimit;
+
+
+
+            if (!cursorModeChangedLastFrame)
+            {
+                // cursor handling
+                var newMousePosition = Mouse.current.position.ReadValue();
+
+                if (submitAction.WasPressedThisFrame() || moveAction.WasPressedThisFrame() ||
+                    cancelAction.WasPressedThisFrame())
+                {
+                    ShowCursor(false);
+                }
+            
+                else if (newMousePosition != m_mousePosition)
+                {
+                    ShowCursor(true);
+                }
+
+                else
+                {
+                    m_mousePosition = Mouse.current.position.ReadValue();
+                }
+            }
+
+            else
+            {
+                m_mousePosition = Mouse.current.position.ReadValue();
+                cursorModeChangedLastFrame = false;
+            }
             
           
-
-
+            
+            // input and selection handling
             if (clickAction.WasPressedThisFrame() || submitAction.WasPressedThisFrame())
             {
                 var openSubtitlePanel = _subtitlePanels.FirstOrDefault(p => p.isOpen);
@@ -204,6 +237,11 @@ namespace Project.Runtime.Scripts.Manager
             {
                 var anyMenuPanelOpen = _menuPanels.Any(p => p.isOpen);
                 var anyItemPanelOpen = _itemUIPanels.Any(p => p.isOpen);
+
+                if ( _defaultSelectable != null && EventSystem.current.currentSelectedGameObject == null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_defaultSelectable.gameObject);
+                }
 
                 if (anyMenuPanelOpen || anyItemPanelOpen)
                 {
@@ -233,6 +271,30 @@ namespace Project.Runtime.Scripts.Manager
                 else if (pauseButton.gameObject.activeSelf) pauseButton.TogglePause();
             }
         }
+        
+        private Selectable _defaultSelectable;
+
+        public void OverrideDefaultSelectable(Selectable selectable)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            _defaultSelectable = selectable;
+        }
+        
+        public void ResetDefaultSelectable()
+        {
+            _defaultSelectable = null;
+        }
+        
+        private void ShowCursor(bool value)
+        {
+            cursorModeChangedLastFrame = true;
+            if (Cursor.visible == value) return;
+            EventSystem.current.SetSelectedGameObject( null);
+            Cursor.visible = value;
+            Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
+        }
+        
+        
 
         private void OnDestroy()
         {
@@ -347,8 +409,6 @@ namespace Project.Runtime.Scripts.Manager
         
             GameEvent.OnMove(newLocation, gameState.GetPlayerLocation().Name, (int)DistanceToLocation(location.id));
             
-            Debug.Log("New location: " + newLocation);
-            
             BroadcastMessage( "OnTravel");
           
             EndGameScene();
@@ -461,6 +521,7 @@ namespace Project.Runtime.Scripts.Manager
             GameManager.gameState.SetPlayerLocation(location);
             GameManager.instance.OnGameSceneStart?.Invoke();
             DialogueManager.instance.gameObject.BroadcastMessageExt( "OnGameSceneStart");
+            ResetDefaultSelectable();
         }
 
         public void StartGameScene(int locationID)
@@ -575,6 +636,7 @@ namespace Project.Runtime.Scripts.Manager
         public void SetSublocation(PixelCrushers.DialogueSystem.Location location)
         {
             if (location == gameState.GetPlayerLocation(true)) return;
+            DialogueManager.instance.gameObject.BroadcastMessageExt( "OnSublocationChange");
             StartCoroutine(SwitchSublocation(location));
         }
 
@@ -595,6 +657,7 @@ namespace Project.Runtime.Scripts.Manager
             }
             
             SetSublocation(DialogueManager.masterDatabase.GetLocation(locationName));
+            
         }
 
 
@@ -686,8 +749,6 @@ namespace Project.Runtime.Scripts.Manager
         
         IEnumerator SwitchSublocation(PixelCrushers.DialogueSystem.Location location, float transitionDuration = 3f)
         {
-            Debug.Log(DialogueManager.masterDatabase.GetLocation(location.id).Name);
-            Debug.Log(DialogueManager.masterDatabase.GetLocation(location.RootID).Name);
             var locationScene = SceneManager.GetSceneByName(DialogueManager.masterDatabase.GetLocation(location.RootID).Name);
             DialogueManager.Pause();
                 
@@ -702,6 +763,8 @@ namespace Project.Runtime.Scripts.Manager
                 var currentSublocationGameObject = locationScene.FindGameObject(gameState.GetPlayerLocation(true).Name);
                 if (currentSublocationGameObject != null) currentSublocationGameObject.SetActive(false);
             }
+            
+            
                 
             yield return Fade( "unstay", transitionDuration/4);
             yield return new WaitForSeconds(transitionDuration/4);

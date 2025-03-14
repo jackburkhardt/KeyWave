@@ -18,9 +18,8 @@ public class MetricsGrid : MonoBehaviour
 
     public void OnGameSceneStart()
     {
-        if (GetComponentsInChildren<PointsFishBowl>().Length != Points.GetAllPointsTypes().Count)
+        if (GetComponentsInChildren<PointsFishBowl>().Where(p => p.transform.parent == template.transform.parent).ToList().Count != Points.GetAllPointsTypes().Count)
         {
-            DestroyMetrics();
             SetMetrics();
         }
     }
