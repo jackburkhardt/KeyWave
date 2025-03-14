@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
@@ -30,7 +31,17 @@ namespace Project.Runtime.Scripts.UI
         
         private bool timeIsUpdating;
         private string CurrentVisualizedTime => Clock.To24HourClock(CurrentVisualizedTimeRaw);
+
+        private void OnEnable()
+        {
+            Clock.onTimeChange += OnTimeChange;
+        }
         
+        private void OnDisable()
+        {
+            Clock.onTimeChange -= OnTimeChange;
+        }
+
 
         private void Awake()
         {
@@ -42,18 +53,25 @@ namespace Project.Runtime.Scripts.UI
             CurrentVisualizedTimeRaw = Clock.CurrentTimeRaw;
             timeText.text = RemoveColon(CurrentVisualizedTime);
         }
+
+        private void OnTimeChange()
+        {
+
+            if (Clock.CurrentTimeRaw == CurrentVisualizedTimeRaw)
+            {
+                DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)@1");
+                return;
+            }
+            
+            if (timeIsUpdating) return;
+         //   BroadcastMessage("OnTimeChange", (CurrentVisualizedTimeRaw,Clock.CurrentTimeRaw));
+            StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
+        }
         
 
         private void Update()
         {
             timeText.text = RemoveColon(CurrentVisualizedTime);
-            if (timeIsUpdating) return;
-
-            if (CurrentVisualizedTimeRaw < Clock.CurrentTimeRaw)
-            {
-                BroadcastMessage("OnTimeChange", (CurrentVisualizedTimeRaw,Clock.CurrentTimeRaw));
-                StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
-            }
         }
 
         private string RemoveColon(string time)

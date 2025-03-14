@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
@@ -9,15 +10,18 @@ namespace Project.Runtime.Scripts.Manager
 {
     public class Clock
     {
-        public static int CurrentTimeRaw => GameManager.settings.Clock.CurrentTime;
+        public static int CurrentTimeRaw => GameManager.CurrentTime;
 
         public static float DayProgress {
             get
             {
+                if (GameManager.settings == null) return 0;
                 float range = GameManager.settings.Clock.DayEndTime - GameManager.settings.Clock.DayStartTime;
                 return (CurrentTimeRaw - GameManager.settings.Clock.DayStartTime)/range;
             }
         }
+        
+        public static Action onTimeChange;
 
         public static string CurrentTime => To24HourClock(CurrentTimeRaw);
         
@@ -48,12 +52,16 @@ namespace Project.Runtime.Scripts.Manager
         
         public static void AddSeconds(int seconds)
         {
+          
             GameManager.settings.Clock.AddSeconds( seconds);
+            onTimeChange?.Invoke();
         }
 
         public static void SetTime(int timeInSeconds)
         {
+            
             GameManager.settings.Clock.SetTime( timeInSeconds);
+            onTimeChange?.Invoke();
         }
 
         /// <summary>

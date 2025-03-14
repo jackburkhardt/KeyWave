@@ -9,6 +9,10 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
 public class ItemUIPanel : UIPanel
 {
@@ -32,6 +36,8 @@ public class ItemUIPanel : UIPanel
     
     public List<Item> items => DialogueManager.masterDatabase.items.Where(item => item.LookupValue("Item Type") == itemType).ToList();
     
+    
+
     
     public void ShowItemButtons()
     {

@@ -55,8 +55,8 @@ namespace Project.Runtime.Scripts.Manager
 
         public static List<Item> GetAllPointsTypes(DialogueDatabase database = null)
         { 
-           
-            database ??= GameManager.settings.dialogueDatabase;
+            database ??= GameManager.dialogueDatabase;
+            if (database == null) return new List<Item>();
             return database.items.FindAll(item => item.IsPointCategory);
         } 
 
@@ -64,7 +64,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             
             
-            if (database == null) database = GameManager.settings.dialogueDatabase;
+            if (database == null) database = GameManager.dialogueDatabase;
             
             List<PointsField> itemPointsFields = new List<PointsField>();
             
@@ -118,18 +118,21 @@ namespace Project.Runtime.Scripts.Manager
 
         public static Item GetDatabaseItem(string type, DialogueDatabase database = null)
         {
-            database ??= GameManager.settings.dialogueDatabase;
+            database ??= GameManager.dialogueDatabase;
+            if (database == null) return null;
             var pointsType = database.items.Find(item => item.IsPointCategory && string.Equals(item.Name, type, StringComparison.CurrentCultureIgnoreCase));
 
             return pointsType;
             
         }
 
-        public static int Score(string type)
+        public static int Score(string type, DialogueDatabase database = null)
         {
+            database ??= GameManager.dialogueDatabase;
+            if (database == null) return 0;
             var score = 0;
 
-            var pointsType = GetDatabaseItem(type);
+            var pointsType = GetDatabaseItem(type, database);
             if (pointsType == null) return 0;
 
             return DialogueLua.GetItemField( pointsType.Name, "Score").asInt;
@@ -143,6 +146,21 @@ namespace Project.Runtime.Scripts.Manager
             if (pointsType == null) return 0;
 
             return DialogueLua.GetItemField( pointsType.Name, "Max Score").asInt;
+        }
+        
+        public static void AddPoints(string type, int points)
+        {
+            var pointsType = GetDatabaseItem(type);
+            if (pointsType == null) return;
+            if (points == 0) return;
+
+            var currentScore = DialogueLua.GetItemField(pointsType.Name, "Score").asInt;
+            var newScore = currentScore + points;
+
+           
+            OnPointsChange?.Invoke(type, newScore);
+            DialogueLua.SetItemField(pointsType.Name, "Score", Mathf.Max(newScore, 0));
+            
         }
         
 

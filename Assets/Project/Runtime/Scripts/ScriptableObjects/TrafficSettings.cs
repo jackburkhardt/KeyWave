@@ -37,8 +37,23 @@ public static class Traffic
         return GameManager.settings.Traffic.trafficCurve.Evaluate(progress);
     }
     
-    public static float BaseTrafficLevel => GameManager.settings.Traffic.baseTrafficLevel;
-    public static float PeakTrafficLevel => GameManager.settings.Traffic.peakTrafficLevel;
+    public static float BaseTrafficLevel
+    {
+        get
+        {
+            if (GameManager.settings == null || GameManager.settings.Traffic == null) return 1f;
+            return GameManager.settings.Traffic.baseTrafficLevel;
+        }
+    }
+
+    public static float PeakTrafficLevel
+    {
+        get
+        {
+            if (GameManager.settings == null || GameManager.settings.Traffic == null) return 1f;
+            return GameManager.settings.Traffic.peakTrafficLevel;
+        }
+    }
     
  
     

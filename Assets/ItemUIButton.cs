@@ -5,8 +5,9 @@ using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ItemUIButton : MonoBehaviour
+public class ItemUIButton : MonoBehaviour, ISelectHandler
 {
     /// <summary>
     /// Button that handles the display of an information of an Item, such as emails.
@@ -81,5 +82,10 @@ public class ItemUIButton : MonoBehaviour
     public void OnValidate()
     {
         button ??= GetComponent<UnityEngine.UI.Button>();
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        OnClick();
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.Utility;
@@ -76,7 +77,7 @@ namespace Project.Runtime.Scripts.UI
         
         public void PauseGame()
         {
-            GameManager.instance.TogglePause();
+            GameManager.instance.pauseButton.TogglePause();
         }
         
         public void BeginSaveRetrieval()

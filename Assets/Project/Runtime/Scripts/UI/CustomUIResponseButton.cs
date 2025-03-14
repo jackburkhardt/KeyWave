@@ -16,8 +16,7 @@ using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
 namespace Project.Runtime.Scripts.UI
 {
-    public class CustomUIResponseButton : StandardUIResponseButton, IPointerEnterHandler, IPointerExitHandler,
-        IPointerClickHandler
+    public class CustomUIResponseButton : StandardUIResponseButton
     {
         //private StandardUIResponseButton StandardUIResponseButton => GetComponent<StandardUIResponseButton>();
         
@@ -25,86 +24,16 @@ namespace Project.Runtime.Scripts.UI
 
         protected static CustomUIResponseButton _hoveredButton;
 
-        [Foldout("Custom Fields")]
-        [SerializeField] protected Graphic nodeColorChameleon;
         
-        public Graphic NodeColorChameleon => nodeColorChameleon;
+        public string autoNumberFormat = "{0}. {1}";
+        public UITextField autoNumberText;
         
-        private bool chameleonNotNull => nodeColorChameleon != null;
-
-        [ShowIf("chameleonNotNull")] [SerializeField] private string chameleonField = "UseNodeColorInMenu";
-
-        [Foldout("Custom Fields")]
-        [SerializeField] private Image icon;
-        
-        
-        public Image Icon => icon;
-        
-        private bool iconNotNull => icon != null;
-        [ShowIf("chameleonNotNull")] [SerializeField] private string iconField = "Icon";
         
         
         protected Color defaultImageColor;
         public Color DefaultImageColor => defaultImageColor;
-
-        [Foldout("Custom Fields")]
-        [SerializeField] protected string _autoNumberFormat = "{0}. {1}";
-
-        [Foldout("Custom Fields")]
-        [SerializeField] protected CustomUIMenuPanel MenuPanelContainer;
-
-        [Foldout("Custom Fields")]
-        [SerializeField] protected UITextField actorNameText;
         
-        public string ActorName => actorNameText.text;
-        
-        [Foldout("Custom Fields")]
-        [SerializeField] protected UITextField conversantNameText;
-        
-        public string ConversantName => conversantNameText.text;
-        
-        [Foldout("Custom Fields")]
-        [SerializeField] protected UITextField autonumberText;
-        
-        [Foldout("Custom Fields")]
-        [SerializeField] private Image _notificationBadge;
-        
-        [Foldout("Custom Fields")]
-        [SerializeField] private bool useLocation;
-        
-        [ShowIf("useLocation")]
-        [Foldout("Custom Fields")]
-        [SerializeField] private string locationField = "Location";
-        
-        [ShowIf("useLocation")]
-        [Foldout("Custom Fields")]
-        [SerializeField] private bool useCoordinates = true;
-        
-        [ShowIf("useLocation")]
-        [Foldout("Custom Fields")]
-        [SerializeField] private UITextField locationLabel;
-        
-        [ShowIf("useLocation")]
-        [Foldout("Custom Fields")]
-        [SerializeField] private UITextField ETALabel;
-        
-        [ShowIf("useLocation")]
-        [Foldout("Custom Fields")]
-        [SerializeField] private UITextField locationDescription;
-
-        public PixelCrushers.DialogueSystem.Location assignedLocation;
-        
-        [Foldout("Custom Fields")]
-        [SerializeField] private bool useQuestInfo;
-        
-        [ShowIf("useQuestInfo")]
-        [Foldout("Custom Fields")]
-        [SerializeField] private RectTransform repeatableQuestIcon;
-        [ShowIf("useQuestInfo")]
-        [Foldout("Custom Fields")]
-        [SerializeField] private RectTransform repeatableQuestTooltip;
        
-        
         
         [Foldout("Animation")]
         [SerializeField] private Animator _animator;
@@ -149,7 +78,6 @@ namespace Project.Runtime.Scripts.UI
         protected virtual void OnEnable()
         {
             Refresh();
-            if (MenuPanelContainer == null) MenuPanelContainer = GetComponentInParent<CustomUIMenuPanel>(true);
             
             if (_animator != null && !string.IsNullOrEmpty(_showAnimationTrigger))
             {
@@ -158,12 +86,7 @@ namespace Project.Runtime.Scripts.UI
             
         }
         
-        private void Awake()
-        {
-            defaultImageColor = nodeColorChameleon != null ? nodeColorChameleon.color : defaultColor;
-          
-        }
-
+  
         private void OnDisable()
         {
           //  if (this != MenuPanelContainer.buttonTemplate && this.transform.parent == MenuPanelContainer.buttonTemplate.transform.parent) Destroy(gameObject);
@@ -181,42 +104,6 @@ namespace Project.Runtime.Scripts.UI
             _hoveredButton = this;
 //            simStatus = response?.destinationEntry?.SimStatus()!;
             Refresh();
-        }
-
-        public virtual void OnPointerExit(PointerEventData eventData)
-        {
-            StartCoroutine(DelaydRefreshOnExit());
-        }
-
-        private IEnumerator DelaydRefreshOnExit()
-        {
-            yield return new WaitForEndOfFrame();
-            if (_hoveredButton != this)
-            {
-                Field.SetValue(response?.destinationEntry?.fields, "Show Badge", false);
-                if (_notificationBadge != null && _notificationBadge.gameObject.activeSelf) DialogueManager.instance.gameObject.BroadcastMessage("OnNewOptionSelected", response?.destinationEntry, SendMessageOptions.DontRequireReceiver);
-            }
-            Refresh();
-        }
-        
-        
-
-        public void GoToResponse()
-        {
-            var entry = response.destinationEntry.GetNextDialogueEntry();
-            if (DialogueManager.instance == null || DialogueManager.instance.conversationModel == null)
-            {
-                var nextConversation = entry.GetConversation();
-                DialogueManager.StartConversation(nextConversation.Title);
-            }
-
-            else
-            {
-                var state = DialogueManager.instance.conversationModel.GetState(entry);
-                DialogueManager.conversationController.GotoState(state);
-            }
-            
-            
         }
         
         public void SetAsLastSibling()
@@ -292,33 +179,24 @@ namespace Project.Runtime.Scripts.UI
                 trigger.key = intToKeyCodeAlpha(autoNumber);
             }
 
-            if (autonumberText.gameObject == null)
+            if (autoNumberText.gameObject == null)
             {
-                if (_autoNumberFormat.Contains("{0}")) label.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
-                if (_autoNumberFormat.Contains("{1}")) label.text = label.text.Replace("{1}", response?.formattedText.text);
+                if (autoNumberFormat.Contains("{0}")) label.text = autoNumberFormat.Replace("{0}", $"{autoNumber}");
+                if (autoNumberFormat.Contains("{1}")) label.text = label.text.Replace("{1}", response?.formattedText.text);
             }
 
             else
             {
-                if (autoNumber < 0) autonumberText.text = "";
-                else if (autoNumber < 10) autonumberText.text = _autoNumberFormat.Replace("{0}", $"{autoNumber}");
-                else autonumberText.text = _autoNumberFormat.Replace("{0}", $"{extraKeys[autoNumber - 10]}");
-                autonumberText.text.Replace("{1}", string.Empty);
+                if (autoNumber < 0) autoNumberText.text = "";
+                else if (autoNumber < 10) autoNumberText.text = autoNumberFormat.Replace("{0}", $"{autoNumber}");
+                else autoNumberText.text = autoNumberFormat.Replace("{0}", $"{extraKeys[autoNumber - 10]}");
+                autoNumberText.text.Replace("{1}", string.Empty);
             }
         }
 
-        protected void OnValidate()
-        {
-            Refresh();
-            MenuPanelContainer ??= GetComponentInParent<CustomUIMenuPanel>(true);
-            
-        }
 
         public virtual void Refresh()
         {
-       
-            if (MenuPanelContainer != null && MenuPanelContainer.buttonTemplate == this) return;
-
             if (DialogueEntryInvalid)
             {
                // if ( !Field.LookupBool(response?.destinationEntry?.fields, "Show If Invalid")) Destroy(gameObject);
@@ -332,136 +210,18 @@ namespace Project.Runtime.Scripts.UI
 
             if (response != null && response.destinationEntry != null)
             {
-                if (nodeColorChameleon != null)
-                {
-                    var color = defaultImageColor;
-                    
-                    if (!response.enabled && Field.FieldExists(response.destinationEntry.fields, "DisabledColor"))
-                    {
-                        color = Tools.WebColor(
-                            Field.LookupValue(response.destinationEntry.fields, "DisabledColor"));
-                    }
-                    
-                    else
-
-                    if (Field.FieldExists(response.destinationEntry.fields, chameleonField)
-                        && Field.LookupBool(response.destinationEntry.fields, chameleonField))
-                    {
-                        if (Field.FieldExists(response.destinationEntry.fields, "NodeColor"))
-                        {
-                            color = Tools.WebColor(
-                                Field.LookupValue(response.destinationEntry.fields, "NodeColor"));
-                        }
-                
-                        else if (Field.FieldExists(response.destinationEntry.GetActor().fields, "NodeColor"))
-                        {
-                            color = Tools.WebColor(
-                                Field.LookupValue(response.destinationEntry.GetActor().fields, "NodeColor"));
-                        }
-                    }
-                
-                    nodeColorChameleon.color = color;
-                    
-                    if (!button.interactable) nodeColorChameleon.color = Color.Lerp(nodeColorChameleon.color, Color.black, 0.5f);
-                }
-                
-                if (icon != null)
-                {
-                    if (Field.FieldExists(response.destinationEntry.fields, iconField))
-                    {
-                        var iconPath = Field.LookupValue(response.destinationEntry.fields, iconField);
-                        if (string.IsNullOrEmpty(iconPath)) icon.gameObject.SetActive(false);
-                        else
-                        {
-                            icon.gameObject.SetActive(true);
-                            AddressableLoader.RequestLoad<Sprite>(iconPath, sprite =>
-                            {
-                                icon.sprite = sprite;
-                            });
-                        }
-                    }
-                }
-                
-                if (actorNameText != null)
-                {
-                    if (response.destinationEntry.GetActor() != null)
-                    {
-                        actorNameText.text = response.destinationEntry.GetActor().Name;
-                    }
-                    else actorNameText.text = string.Empty;
-                }
-                
-                if (conversantNameText != null)
-                {
-                    if (response.destinationEntry.GetConversant() != null)
-                    {
-                        conversantNameText.text = response.destinationEntry.GetConversant().Name;
-                    }
-                    else conversantNameText.text = string.Empty;
-                }
+               
                 
                 label.text = response.formattedText.text;
                 
-                
-                if (useLocation && !string.IsNullOrEmpty(locationField) && Field.FieldExists(response.destinationEntry.fields, locationField))
-                {
-                   
-                    
-                    var locationIndex = Field.LookupInt(response.destinationEntry.fields, locationField);
-                    
-                    assignedLocation =
-                        DialogueManager.masterDatabase.GetLocation(locationIndex);
-                    
-                    //Debug.Log(Field.LookupValue(response.destinationEntry.fields, locationField));
-                    
-                    if (assignedLocation != null)
-                    {
-                        if (locationLabel != null) locationLabel.text = assignedLocation.Name;
-                        if (ETALabel != null) ETALabel.text = $"{Clock.EstimatedTimeOfArrival(assignedLocation.id)}";
-                        if (useCoordinates)
-                        {
-                            transform.localPosition = assignedLocation.LookupVector2("Coordinates");
-                        }
-                        
-                        if (locationDescription != null) locationDescription.text = assignedLocation.AssignedField("Description").value;
-                    }
-                    
-                    else Debug.LogWarning($"Location not found: {locationIndex}, name: {DialogueManager.instance.masterDatabase.locations[locationIndex].Name}");
-                }
             }
         
             SetAutonumber();
-
-
-            if (Field.FieldExists(response?.destinationEntry?.fields, "Show Badge") && Field.LookupBool(response?.destinationEntry?.fields, "Show Badge"))
-            {
-                if (_notificationBadge != null) _notificationBadge.gameObject.SetActive(true);
-            }
-            else
-            {
-                if (_notificationBadge != null) _notificationBadge.gameObject.SetActive(false);
-            }
-            
-            
-            if (MenuPanelContainer == null) MenuPanelContainer = GetComponentInParent<CustomUIMenuPanel>(true);
-            
-            
-            //buttonStyles
-            
-            
-            
-           
-            
-            
         }
 
 
         public override void OnClick()
         {
-
-
-
-
             if (_animator != null && !string.IsNullOrEmpty(_hideAnimationTrigger))
             {
                 if (_waitForHideAnimation)
@@ -472,16 +232,16 @@ namespace Project.Runtime.Scripts.UI
 
             void DoClick()
             {
-                 
-                if (MenuPanelContainer != null && MenuPanelContainer.accumulateResponse && MenuPanelContainer.accumulatedResponseContainer != null)
+                var customMenuPanel = GetComponentInParent<CustomUIMenuPanel>();
+
+                if (customMenuPanel != null && customMenuPanel.accumulateResponse &&
+                    customMenuPanel.accumulatedResponseContainer != null)
                 {
-                    MenuPanelContainer.OnChoiceClick(this);
+                    customMenuPanel.OnChoiceClick( this);
                 }
                 
                 base.OnClick();
             }
-            
-            
 
         }
         

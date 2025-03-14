@@ -2,16 +2,33 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Editor.Scripts.Attributes.DrawerAttributes;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PointsFishBowl : MonoBehaviour
 {
+    [ShowIf("gameManagerIsNull")]
+    [SerializeField] private DialogueDatabase dialogueDatabase;
+    private bool gameManagerIsNull => GameManager.instance == null;
+    
+    private DialogueDatabase Database
+    {
+        get
+        {
+            if (gameManagerIsNull) return dialogueDatabase;
+            return GameManager.settings.dialogueDatabase;
+        }
+    }
 
-    [NaughtyAttributes.Dropdown("pointTypes")]
+    [PointsPopup]
     [SerializeField] private string type;
+    
+    public UITextField scoreText;
+    
  
     public bool useFill;
 
@@ -42,7 +59,7 @@ public class PointsFishBowl : MonoBehaviour
     [ShowIf("useFill")]
     public Image inverseFill;
     
-    private Item pointItem => Points.GetDatabaseItem( type);
+    private Item pointItem => Points.GetDatabaseItem( type, Database);
     
     
     [Range(0, 1)] [SerializeField] private float shine;
@@ -187,8 +204,11 @@ public class PointsFishBowl : MonoBehaviour
 
     private void SetFishBowl()
     {
+        if (pointItem == null) return;
+        
         if (icon)
         { 
+           
             icon.sprite = Sprite.Create( pointItem.icon, new Rect(0, 0, pointItem.icon.width, pointItem.icon.height), Vector2.zero);
         }
 
@@ -206,6 +226,8 @@ public class PointsFishBowl : MonoBehaviour
 
         var panel = GetComponentInChildren<PointsPanel>();
         if (panel) panel.SetPanel(pointItem);
+        
+        if (scoreText.gameObject != null) scoreText.text = Points.Score(type, Database).ToString();
 
     }
 
@@ -220,18 +242,17 @@ public class PointsFishBowl : MonoBehaviour
         Points.OnPointsChange -= SetPoints;
     }
 
-    private void SetPoints(string pointType, int amount)
+    private void SetPoints(string pointType, int newScore)
     {
         if (pointType != type)  return;
         animator.SetTrigger(animationTrigger);
         
-        if (amount == 0)  return;
         if (Points.MaxScore(pointType) == 0) return;
         
-        isPointsDecreasing = amount < 0;
-       
+        isPointsDecreasing = newScore < 0;
         
-        DOTween.To(() => Fill, x => Fill = x, (float) Points.Score( pointType) / Points.MaxScore(pointType), timeToFill).SetEase(Ease.InOutSine);
+        
+        DOTween.To(() => Fill, x => Fill = x, (float) newScore / Points.MaxScore(pointType), timeToFill).SetEase(Ease.InOutSine);
             
         DOTween.To(() => Shine, x => Shine = x, 1, timeToFill / 2).SetEase(Ease.InOutSine).OnComplete( () =>
         DOTween.To( () => Shine, x => Shine = x, 0,  timeToFill / 2).SetEase(Ease.InOutSine));

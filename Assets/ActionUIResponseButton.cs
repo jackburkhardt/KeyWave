@@ -3,10 +3,23 @@ using System.Collections.Generic;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
-public class ActionUIResponseButton : StandardUIResponseButton
+public class ActionUIResponseButton : StandardUIResponseButton, IDeselectHandler
 {
     public UITextField description;
+    private bool _isSelected;
+    private InputAction submitAction;
+    
+    public override void Start()
+    {
+        base.Start();
+        submitAction = FindObjectOfType<InputSystemUIInputModule>().submit;
+    }
+
 
     public override Response response
     {
@@ -48,5 +61,24 @@ public class ActionUIResponseButton : StandardUIResponseButton
 
         return action.Description;
 
+    }
+    
+    public override void OnSelect( BaseEventData data)
+    {
+        base.OnSelect(data);
+        _isSelected = true;
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        _isSelected = false;
+    }
+    
+    protected virtual void Update()
+    {
+        if (_isSelected && (submitAction.WasPressedThisFrame() && gameObject.activeSelf) && button.interactable)
+        {
+            button.onClick.Invoke();
+        }
     }
 }

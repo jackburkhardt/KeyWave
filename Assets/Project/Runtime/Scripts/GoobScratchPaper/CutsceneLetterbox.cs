@@ -82,10 +82,6 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
         {
             HideImmediate();
         }
-        
-        
-        
-       
     }
     
     private void ShowImmediate()

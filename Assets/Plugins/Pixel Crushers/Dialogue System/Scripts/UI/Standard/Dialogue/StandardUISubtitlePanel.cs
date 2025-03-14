@@ -43,7 +43,7 @@ namespace PixelCrushers.DialogueSystem
         public bool delayTypewriterUntilOpen = false;
 
         [Tooltip("(Optional) Continue button. Only shown if Dialogue Manager's Continue Button mode uses continue button.")]
-        public UnityEngine.UI.Button continueButton;
+        public StandardUIContinueButtonFastForward continueButton;
 
         [Tooltip("If non-zero, prevent continue button clicks for this duration in seconds when opening subtitle panel.")]
         public float blockInputDuration = 0;
@@ -457,7 +457,7 @@ namespace PixelCrushers.DialogueSystem
             Tools.SetGameObjectActive(portraitImage, value && portraitImage != null && portraitImage.sprite != null);
             portraitName.SetActive(value);
             subtitleText.SetActive(value);
-            Tools.SetGameObjectActive(continueButton, false); // Let ConversationView determine if continueButton should be shown.
+            if (continueButton != null && continueButton.gameObject != this.gameObject) Tools.SetGameObjectActive(continueButton, false); // Let ConversationView determine if continueButton should be shown.
         }
 
         public virtual void ClearText()
@@ -487,17 +487,18 @@ namespace PixelCrushers.DialogueSystem
 
         public virtual void HideContinueButton()
         {
+            if (continueButton == null) return;
             if (m_ShowContinueButtonCoroutine != null)
             {
                 DialogueManager.instance.StopCoroutine(m_ShowContinueButtonCoroutine);
             }
-            Tools.SetGameObjectActive(continueButton, false);
+            if (continueButton.gameObject != this.gameObject) Tools.SetGameObjectActive(continueButton, false);
         }
 
         protected virtual IEnumerator ShowContinueButtonAfterBlockDuration()
         {
             if (continueButton == null) yield break;
-            continueButton.interactable = false;
+            continueButton.SetInteractable( false);
 
             // Wait for panel to open, or timeout:
             var timeout = Time.realtimeSinceStartup + 10f;
@@ -507,7 +508,7 @@ namespace PixelCrushers.DialogueSystem
             }
 
             yield return DialogueManager.instance.StartCoroutine(DialogueTime.WaitForSeconds(blockInputDuration));
-            continueButton.interactable = true;
+            continueButton.SetInteractable(true);
             ShowContinueButtonNow();
             m_ShowContinueButtonCoroutine = null;
         }
@@ -516,17 +517,17 @@ namespace PixelCrushers.DialogueSystem
         { 
             Tools.SetGameObjectActive(continueButton, true);
             if (InputDeviceManager.autoFocus) Select(); 
-            if (continueButton != null && continueButton.onClick.GetPersistentEventCount() == 0)
+            if (continueButton != null && continueButton.button != null && continueButton.button.onClick.GetPersistentEventCount() == 0)
             {
-                continueButton.onClick.RemoveAllListeners();
+                continueButton.button.onClick.RemoveAllListeners();
                 var fastForward = continueButton.GetComponent<StandardUIContinueButtonFastForward>();
                 if (fastForward != null)
                 {
-                    continueButton.onClick.AddListener(fastForward.OnFastForward);
+                    continueButton.button.onClick.AddListener(fastForward.OnFastForward);
                 }
                 else
                 {
-                    continueButton.onClick.AddListener(OnContinue);
+                    continueButton.button.onClick.AddListener(OnContinue);
                 }
             }
             shouldShowContinueButton = true;
@@ -549,7 +550,7 @@ namespace PixelCrushers.DialogueSystem
         /// <param name="allowStealFocus">Select continue button even if another element is already selected.</param>
         public virtual void Select(bool allowStealFocus = true)
         {
-            UITools.Select(continueButton, allowStealFocus, eventSystem);
+            UITools.Select(continueButton.button, allowStealFocus, eventSystem);
         }
 
         /// <summary>

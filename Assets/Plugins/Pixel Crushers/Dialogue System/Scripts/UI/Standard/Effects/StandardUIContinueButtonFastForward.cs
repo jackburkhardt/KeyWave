@@ -34,7 +34,7 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("If alert is displaying, continue past it.")]
         public bool continueAlertPanel = true;
 
-        protected UnityEngine.UI.Button continueButton;
+        public UnityEngine.UI.Button button;
 
         protected AbstractDialogueUI m_runtimeDialogueUI;
         protected virtual AbstractDialogueUI runtimeDialogueUI
@@ -63,7 +63,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 typewriterEffect = GetComponentInChildren<UnityUITypewriterEffect>();
             }
-            continueButton = GetComponent<UnityEngine.UI.Button>();
+            button = GetComponent<UnityEngine.UI.Button>();
         }
 
         public virtual void OnFastForward()
@@ -80,7 +80,7 @@ namespace PixelCrushers.DialogueSystem
 #endif
             else
             {
-                if (hideContinueButtonOnContinue && continueButton != null) continueButton.gameObject.SetActive(false);
+                if (hideContinueButtonOnContinue && button != null) button.gameObject.SetActive(false);
                 if (runtimeDialogueUI != null)
                 {
                     if (continueSubtitlePanel && continueAlertPanel) runtimeDialogueUI.OnContinue();
@@ -89,7 +89,12 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
         }
-
+        
+        public virtual void SetInteractable(bool value)
+        {
+            if (button != null) button.interactable = value;
+        }
+        
     }
 
 }

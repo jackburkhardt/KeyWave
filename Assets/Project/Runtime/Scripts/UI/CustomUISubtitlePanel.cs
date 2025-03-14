@@ -1,8 +1,14 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 public class CustomUISubtitlePanel : StandardUISubtitlePanel
@@ -13,12 +19,17 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     public RectTransform templateContent;
     public RectTransform accumulatedContentHolder;
-    
     public bool accumulateByInstantiation;
 
     private bool markForRemoveOverride;
     
     public StandardUIMenuPanel forceOverrideMenuPanel;
+    InputAction clickAction;
+    InputAction submitAction;
+    
+    private InputSystemUIInputModule _inputSystemUIInputModule;
+    private EventSystem _eventSystem;
+
     
     public override void Close()
     {

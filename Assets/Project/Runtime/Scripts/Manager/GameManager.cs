@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using PixelCrushers.DialogueSystem.SequencerCommands;
 using Project.Runtime.Scripts.Audio;
@@ -17,7 +18,11 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Transition = Project.Runtime.Scripts.AssetLoading.LoadingScreen.Transition;
 
 
@@ -30,19 +35,19 @@ namespace Project.Runtime.Scripts.Manager
     {
         public static GameManager instance;
         public static GameStateManager gameStateManager;
+
+        public static int CurrentTime => settings != null && settings.Clock != null ? settings.Clock.CurrentTime : 0;
+
         public static PlayerEventStack playerEventStack;
-        
-        
+        public static DialogueDatabase dialogueDatabase => settings != null ? settings.dialogueDatabase : null;
 
         public static Settings settings
         {
             get
             {
-                if (instance == null)
-                {
-                    // force instantiation of GM instance since there are dependants in Awake, OnEnable of other scripts
-                    instance = FindAnyObjectByType<GameManager>();
-                }
+                instance ??= FindObjectOfType<GameManager>();
+               
+                if (instance == null) return null;
                 return instance.currentSettings;
             }
             set => instance.currentSettings = value;
@@ -68,7 +73,25 @@ namespace Project.Runtime.Scripts.Manager
         public UnityEvent OnGameSceneStart;
         public UnityEvent OnGameSceneEnd;
         
+        public StandardUIPauseButton pauseButton;
+        
         public Actor PlayerActor =>  DialogueManager.masterDatabase.actors.First(p => p.IsPlayer && p.IsFieldAssigned("Location"));
+        
+        public static bool TryGetSettings( out Settings settings)
+        {
+            instance ??= FindObjectOfType<GameManager>();
+            if (instance == null)
+            {
+                settings = null;
+                return false;
+            }
+            settings = instance.currentSettings;
+            if (instance.currentSettings == null)
+            {
+                return false;
+            }
+            return true;
+        }
 
         
         private static string _mostRecentApp = "SmartWatch/Home";
@@ -115,15 +138,34 @@ namespace Project.Runtime.Scripts.Manager
             _customLuaFunctions = GetComponent<CustomLuaFunctions>() ?? gameObject.AddComponent<CustomLuaFunctions>();
 
         }
+       
+        InputAction clickAction;
+        InputAction moveAction;
+        InputAction submitAction;
+        InputAction cancelAction;
+        
+        private List<StandardUIMenuPanel> _menuPanels;
+        private List<StandardUISubtitlePanel> _subtitlePanels;
+        private List<ItemUIPanel> _itemUIPanels;
+        private SmartWatchPanel _smartWatchPanel;
+
 
         private void Start()
         {
-            
-            //OnSaveDataApplied();
+            var inputSystemUIInputModule = FindObjectOfType<InputSystemUIInputModule>();
+            clickAction = inputSystemUIInputModule.leftClick;
+            moveAction = inputSystemUIInputModule.move;
+            submitAction = inputSystemUIInputModule.submit;
+            cancelAction = inputSystemUIInputModule.cancel;
+            _menuPanels = FindObjectsByType<StandardUIMenuPanel>( FindObjectsInactive.Include,  FindObjectsSortMode.None ).ToList();
+            _subtitlePanels = FindObjectsByType<StandardUISubtitlePanel>( FindObjectsInactive.Include,  FindObjectsSortMode.None ).ToList();
+            _itemUIPanels = FindObjectsByType<ItemUIPanel>( FindObjectsInactive.Include,  FindObjectsSortMode.None ).ToList();
+            _smartWatchPanel = FindObjectOfType<SmartWatchPanel>();
         }
         
         private float autoPauseCooldown = 0.5f;
-
+        
+     
         private void Update()
         {
             if (settings.autoPauseOnFocusLost)
@@ -136,16 +178,59 @@ namespace Project.Runtime.Scripts.Manager
                 if (!Application.isFocused && !SceneManager.GetSceneByName("PauseMenu").isLoaded &&
                     autoPauseCooldown <= 0)
                 {
-                    TogglePause();
+                    pauseButton.TogglePause();
                     autoPauseCooldown = 0.5f;
                 }
             }
 
             if (capFramerate) Application.targetFrameRate = framerateLimit;
             
-            if (Input.GetKeyDown(KeyCode.Escape))
+          
+
+
+            if (clickAction.WasPressedThisFrame() || submitAction.WasPressedThisFrame())
             {
-                TogglePause();
+                var openSubtitlePanel = _subtitlePanels.FirstOrDefault(p => p.isOpen);
+                if (openSubtitlePanel != null && !_menuPanels.Any(p => p.isOpen))
+                {
+                    if (openSubtitlePanel.subtitleText.maxVisibleCharacters > 0 && (openSubtitlePanel.continueButton != null && openSubtitlePanel.continueButton.enabled))
+                    {
+                        openSubtitlePanel.continueButton.OnFastForward();
+                    }
+                }
+            }
+
+            if (moveAction.WasPressedThisFrame())
+            {
+                var anyMenuPanelOpen = _menuPanels.Any(p => p.isOpen);
+                var anyItemPanelOpen = _itemUIPanels.Any(p => p.isOpen);
+
+                if (anyMenuPanelOpen || anyItemPanelOpen)
+                {
+                    var panel = anyMenuPanelOpen ?  (UIPanel) _menuPanels.FirstOrDefault(p => p.isOpen) : _itemUIPanels.FirstOrDefault(p => p.isOpen);
+                    var selected = EventSystem.current.currentSelectedGameObject;
+
+                    if (panel != null)
+                    {
+                        var selectedIsValid = selected != null && (selected.transform.IsChildOf(panel.transform) || (selected.transform == _smartWatchPanel.homeButton.transform && _smartWatchPanel.homeButton.isOpen));
+
+                        if (!selectedIsValid)
+                        {
+                            var firstButton = anyMenuPanelOpen ? panel.GetComponentInChildren< StandardUIResponseButton >().gameObject : panel.GetComponentInChildren<ItemUIButton>().gameObject; 
+                            var firstValidSelectable = firstButton.GetComponentsInChildren<Selectable>()
+                                .First(p => p.navigation.mode != Navigation.Mode.None).gameObject;
+                            if (firstValidSelectable == null) firstValidSelectable = firstButton;
+                            EventSystem.current.SetSelectedGameObject(firstValidSelectable);
+                        }
+                        
+                    }
+                }
+            }
+            
+            if (cancelAction.WasPressedThisFrame())
+            {
+                if (_smartWatchPanel.homeButton.isOpen) _smartWatchPanel.homeButton.OnClick();
+                else if (pauseButton.gameObject.activeSelf) pauseButton.TogglePause();
             }
         }
 
@@ -399,21 +484,6 @@ namespace Project.Runtime.Scripts.Manager
             DialogueManager.PlaySequence("ChannelFade(Music, out, 1);");
             DialogueManager.PlaySequence("ChannelFade(Environment, out, 1);");
             UnmarkLocationAsDirty( gameState.GetPlayerLocation(true));
-        }
-        
-        
-        public void TogglePause()
-        {
-            if (SceneManager.GetSceneByName("PauseMenu").isLoaded != PauseMenu.active) return;
-            
-            if (PauseMenu.active)
-            {
-                PauseMenu.instance.UnpauseGame();
-            }
-            else
-            {
-                App.App.Instance.LoadScene("PauseMenu", transition: Transition.None);
-            }
         }
         
         public static Conversation GenerateConversation(Asset asset, bool repeatEntries = false)

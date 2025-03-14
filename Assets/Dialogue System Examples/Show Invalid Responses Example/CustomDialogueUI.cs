@@ -176,15 +176,6 @@ public class CustomDialogueUI : StandardDialogueUI
     }
     
 
-    private void Update()
-    {
-        
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FindObjectOfType<StandardUIContinueButtonFastForward>(true).OnFastForward();
-        }
-    }
-
 
     private void OnConversationStart()
     {

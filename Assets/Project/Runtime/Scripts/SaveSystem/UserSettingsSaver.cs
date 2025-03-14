@@ -20,9 +20,12 @@ namespace Project.Runtime.Scripts.SaveSystem
                 return;
             }
             
-            GameManager.settings.audioSettings.sfxVolume = PlayerPrefs.GetFloat("sfxVol");
-            GameManager.settings.audioSettings.musicVolume = PlayerPrefs.GetFloat("musicVol");
-            GameManager.settings.autoPauseOnFocusLost = PlayerPrefs.GetString("autoPause") == "1";
+            if (GameManager.TryGetSettings( out var settings))
+            {
+                settings.audioSettings.sfxVolume = PlayerPrefs.GetFloat("sfxVol");
+                settings.audioSettings.musicVolume = PlayerPrefs.GetFloat("musicVol");
+                settings.autoPauseOnFocusLost = PlayerPrefs.GetString("autoPause") == "1";
+            }
         }
     }
 }

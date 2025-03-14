@@ -286,7 +286,7 @@ namespace PixelCrushers.DialogueSystem
                 subtitle.formattedText.text = dialogueActor.AdjustSubtitleColor(subtitle);
             }
             panel.ShowSubtitle(subtitle);
-            continueButton = panel.continueButton;
+            continueButton = panel.continueButton.button;
             if (shouldShowContinueButton && !isLoadingGame)
             {
                 panel.ShowContinueButton();

@@ -27,8 +27,12 @@ namespace Project.Runtime.Scripts.Audio
                 Destroy(this);
             }
             
-            var audioSettings = GameManager.settings.audioSettings;
-            if (PauseMenu.active) audioSettings.SetVolume();
+            if (GameManager.TryGetSettings( out var settings))
+            {
+                if (PauseMenu.active)   settings.audioSettings.SetVolume();
+              
+            }
+         
         }
         
         private void OnEnable()

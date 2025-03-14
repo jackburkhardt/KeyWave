@@ -128,6 +128,19 @@ namespace PixelCrushers
             }
         }
 
+        public int maxVisibleCharacters
+        {
+            get
+            {
+#if TMP_PRESENT
+                if (textMeshProUGUI != null) return textMeshProUGUI.maxVisibleCharacters;
+#endif
+                if (uiText != null) return uiText.cachedTextGenerator.characterCountVisible;
+                return 0;
+            }
+
+        }
+
         public UITextField()
         {
             this.uiText = null;

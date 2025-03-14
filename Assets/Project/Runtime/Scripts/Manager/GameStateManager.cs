@@ -249,7 +249,7 @@ namespace Project.Runtime.Scripts.Manager
                 }
             }
 
-            conversation.fields.RemoveAll(p =>  p.title == "Action" && DialogueManager.masterDatabase.GetItem(int.Parse(p.value)).GetQuestState() == QuestState.Success);
+            conversation.fields.RemoveAll(p =>  p.title == "Action");
         
             if (conversation.Title.Contains("/GENERATED/"))
             {
@@ -386,7 +386,7 @@ namespace Project.Runtime.Scripts.Manager
                         
                     for (int i = 0; i < repeatCount; i++)
                     {
-                        pointField.Points = (int) (pointField.Points * multiplier);
+                        if (pointField.Points > 0) pointField.Points = (int) (pointField.Points * multiplier);
                     }
                     
                     if (pointField.Points == 0) continue;
@@ -407,16 +407,7 @@ namespace Project.Runtime.Scripts.Manager
             if (state == QuestState.Success)
             {
 
-                foreach (var pointsField in points)
-                {
-                    var pointAsItem = Points.GetDatabaseItem( pointsField.Type);
-                    if (pointAsItem != null)
-                    {
-                        var currentScore = DialogueLua.GetItemField( pointAsItem.Name, "Score").asInt;
-                        DialogueLua.SetItemField( pointAsItem.Name, "Score", currentScore + pointsField.Points);
-                        Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
-                    }
-                }
+                foreach (var pointsField in points)  Points.AddPoints(pointsField.Type, pointsField.Points);
             }
             
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
@@ -468,12 +459,7 @@ namespace Project.Runtime.Scripts.Manager
                     if (pointsField.Points == 0) continue;
                     
                     var pointAsItem = Points.GetDatabaseItem( pointsField.Type);
-                    if (pointAsItem != null)
-                    {
-                        var currentScore = Math.Min(0, DialogueLua.GetItemField( pointAsItem.Name, "Score").asInt);
-                        DialogueLua.SetItemField( pointAsItem.Name, "Score", currentScore + pointsField.Points);
-                        Points.OnPointsChange?.Invoke(pointsField.Type, pointsField.Points);
-                    }
+                    Points.AddPoints(pointsField.Type, pointsField.Points);
                 }
             }
             

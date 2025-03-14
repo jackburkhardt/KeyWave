@@ -8,6 +8,7 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SmartWatchPanel : UIPanel
 {
@@ -19,6 +20,8 @@ public class SmartWatchPanel : UIPanel
     public static Action<SmartWatchAppPanel> onAppOpen;
     
     [ConversationPopup] public string conversation;
+
+    public HomeButtonPanel homeButton;
     
     public List<SmartWatchAppPanel> appPanels =>
         GetComponentsInChildren<SmartWatchAppPanel>(true).ToList();

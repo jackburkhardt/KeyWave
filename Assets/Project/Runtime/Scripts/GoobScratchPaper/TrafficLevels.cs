@@ -27,7 +27,7 @@ public class TrafficLevels : MonoBehaviour
 
     private void OnValidate()
     {
-        SetTrafficLevels();
+        if (GameManager.settings != null) SetTrafficLevels();
     }
 
     private void OnEnable()

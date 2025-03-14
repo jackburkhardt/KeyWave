@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
@@ -14,11 +15,18 @@ public class MetricsGrid : MonoBehaviour
     }
     
     public PointsFishBowl template;
-    
 
-    private void OnEnable()
+    public void OnGameSceneStart()
     {
-        
+        if (GetComponentsInChildren<PointsFishBowl>().Length != Points.GetAllPointsTypes().Count)
+        {
+            DestroyMetrics();
+            SetMetrics();
+        }
+    }
+    
+    private void SetMetrics()
+    {
         foreach (Transform metric in transform)
         {
             if (metric == template.transform) continue;
@@ -34,8 +42,8 @@ public class MetricsGrid : MonoBehaviour
             newMetric.gameObject.SetActive(true);
         }
     }
-
-    private void OnDisable()
+    
+    private void DestroyMetrics()
     {
         var metrics = transform;
         foreach (Transform metric in metrics)
@@ -43,6 +51,16 @@ public class MetricsGrid : MonoBehaviour
             if (metric == template.transform) continue;
             Destroy(metric.gameObject);
         }
+    }
+
+    private void OnEnable()
+    {
+      SetMetrics();
+    }
+
+    private void OnDisable()
+    {
+        DestroyMetrics();
     }
 
     public List<RectTransform> GetValidMetrics(DisplayCondition displayCondition = DisplayCondition.All, Location location = null)

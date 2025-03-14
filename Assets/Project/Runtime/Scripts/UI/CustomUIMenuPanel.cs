@@ -11,6 +11,9 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.UI
@@ -26,8 +29,6 @@ namespace Project.Runtime.Scripts.UI
           "animateButtonsShow",
           "delayBetweenButtonShow"
         };
-        
-
 
         [SerializeField] Animator responseMenuAnimator;
 
@@ -43,7 +44,8 @@ namespace Project.Runtime.Scripts.UI
         public bool forceOverride = false;
         public bool animateButtonsShow;
         public float delayBetweenButtonShow;
-        
+
+
         public void AnimateButtonsShow()
         {
             IEnumerator AnimateButtons()
@@ -419,6 +421,8 @@ namespace Project.Runtime.Scripts.UI
             yield return new WaitForSeconds(0.1f);
             RefreshLayoutGroups.Refresh(gameObject);
         }
+        
+        
         
      
    
