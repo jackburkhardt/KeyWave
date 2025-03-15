@@ -2,14 +2,27 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
+using Project.Editor.Scripts.Attributes.DrawerAttributes;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ColorSwap : MonoBehaviour
+public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
 {
-    private void Awake()
+    private void OnEnable() 
     {
-        // throw new NotImplementedException();
+        SmartWatchPanel.onAppOpen += SetColor;
+    }
+    
+    private void OnDisable() 
+    {
+        SmartWatchPanel.onAppOpen -= SetColor;
+    }
+    
+    private void OnGameSceneEnd() 
+    {
+        SetColor(_defaultColor);
+     
     }
 
     public List<ColorSwapData> colors;
@@ -23,8 +36,28 @@ public class ColorSwap : MonoBehaviour
     [Serializable]
     public class ColorSwapData
     {
+        [SmartWatchAppPopup]
         public string name;
         public Color color;
+    }
+    
+    public void SetColor(SmartWatchAppPanel appPanel)
+    {
+        if (appPanel.Name == "Home")
+        {
+            SetColor(_defaultColor);
+        }
+        else
+        {
+            foreach (var color in colors)
+            {
+                if (color.name == appPanel.Name)
+                {
+                    SetColor(color.color);
+                    return;
+                }
+            }
+        }
     }
     
     public void SetColor(string name)
@@ -71,10 +104,6 @@ public class ColorSwap : MonoBehaviour
                 name = "Default",
                 color = GetComponent<Graphic>().color
             });
-        }
-        else
-        {
-            colors[0].name = "Default";
         }
     }
     
