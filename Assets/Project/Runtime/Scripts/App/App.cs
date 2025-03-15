@@ -4,6 +4,7 @@ using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
+using Sentry;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Transition = Project.Runtime.Scripts.AssetLoading.LoadingScreen.Transition;
@@ -61,6 +62,7 @@ namespace Project.Runtime.Scripts.App
             #if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.canYouHearMe();
             BrowserInterface.unityReadyForData();
+            SentrySdk.CaptureMessage("Sentry active!");
             #endif
         }
 
