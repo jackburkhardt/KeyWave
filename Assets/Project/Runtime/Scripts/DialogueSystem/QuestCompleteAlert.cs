@@ -23,12 +23,12 @@ public class QuestCompleteAlert : MonoBehaviour
 
     private void OnEnable()
     {
-        Points.OnPointsAnimEnd += OnPointsAnimEnd;
+       // Points.OnPointsAnimEnd += OnPointsAnimEnd;
     }
 
     private void OnDisable()
     {
-        Points.OnPointsAnimEnd -= OnPointsAnimEnd;
+       // Points.OnPointsAnimEnd -= OnPointsAnimEnd;
     }
 
     private void OnPointsAnimEnd()

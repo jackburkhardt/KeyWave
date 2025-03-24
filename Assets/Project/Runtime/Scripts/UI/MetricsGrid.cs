@@ -20,11 +20,11 @@ public class MetricsGrid : MonoBehaviour
     {
         if (GetComponentsInChildren<PointsFishBowl>().Where(p => p.transform.parent == template.transform.parent).ToList().Count != Points.GetAllPointsTypes().Count)
         {
-            SetMetrics();
+            InstantiateAllMetrics();
         }
     }
     
-    private void SetMetrics()
+    private void InstantiateAllMetrics()
     {
         foreach (Transform metric in transform)
         {
@@ -54,7 +54,7 @@ public class MetricsGrid : MonoBehaviour
 
     private void OnEnable()
     {
-      SetMetrics();
+      InstantiateAllMetrics();
     }
 
     private void OnDisable()

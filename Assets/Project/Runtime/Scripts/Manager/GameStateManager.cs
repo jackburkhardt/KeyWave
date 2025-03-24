@@ -99,6 +99,18 @@ namespace Project.Runtime.Scripts.Manager
             state = State.PreBase;
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            Clock.onTimeChange += OnTimeChange;
+        }
+        
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            Clock.onTimeChange -= OnTimeChange;
+        }
+
         protected override void OnPlayerEvent(PlayerEvent playerEvent)
         {
             switch (playerEvent.EventType)
@@ -139,6 +151,17 @@ namespace Project.Runtime.Scripts.Manager
             Clock.AddSeconds(playerEvent.Duration);
         
             OnGameStateChanged?.Invoke(gameState);
+        }
+        
+        public void OnTimeChange(Clock.TimeChangeData timeChangeData)
+        {
+            for (int i = timeChangeData.previousTime; i < timeChangeData.newTime; i++)
+            {
+                if (i % 600 == 0)
+                {
+                    Points.AddPoints( "Wellness", -1, false);
+                }
+            }
         }
         
         public void OnConversationStart()

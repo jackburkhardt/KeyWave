@@ -21,7 +21,7 @@ namespace Project.Runtime.Scripts.Manager
             }
         }
         
-        public static Action onTimeChange;
+        public static Action<TimeChangeData> onTimeChange;
 
         public static string CurrentTime => To24HourClock(CurrentTimeRaw);
         
@@ -52,16 +52,30 @@ namespace Project.Runtime.Scripts.Manager
         
         public static void AddSeconds(int seconds)
         {
-          
+            if (seconds == 0) return;
+            var currentTime = GameManager.settings.Clock.CurrentTime;
             GameManager.settings.Clock.AddSeconds( seconds);
-            onTimeChange?.Invoke();
+            onTimeChange?.Invoke( new TimeChangeData(currentTime, currentTime + seconds));
         }
 
         public static void SetTime(int timeInSeconds)
         {
-            
+            var currentTime = GameManager.settings.Clock.CurrentTime;
+            if (timeInSeconds == currentTime) return;
             GameManager.settings.Clock.SetTime( timeInSeconds);
-            onTimeChange?.Invoke();
+            onTimeChange?.Invoke( new TimeChangeData(currentTime, timeInSeconds));
+        }
+
+        public struct TimeChangeData
+        {
+            public int previousTime;
+            public int newTime;
+            
+            public TimeChangeData(int previousTime, int newTime)
+            {
+                this.previousTime = previousTime;
+                this.newTime = newTime;
+            }
         }
 
         /// <summary>

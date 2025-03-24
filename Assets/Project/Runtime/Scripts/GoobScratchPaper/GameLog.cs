@@ -23,13 +23,11 @@ public class GameLog : MonoBehaviour
 
     private void OnEnable()
     {
-        Points.OnPointsChange += OnPoints;
         GameEvent.OnPlayerEvent += OnPlayerEvent;
     }
     
     private void OnDisable()
     {
-        Points.OnPointsChange -= OnPoints;
         GameEvent.OnPlayerEvent -= OnPlayerEvent;
     }
 
@@ -114,23 +112,6 @@ public class GameLog : MonoBehaviour
         LogQuest(desc);
     }
     
-    public void OnPoints(string type, int amount)
-    {
-        // Removed for being too verbose
-        // if (amount < 0)
-        // {
-        //     var message = $"Points: -{Math.Abs(amount)} {type}";
-        //     LogPoints(message);
-        //     return;
-        // }
-        //
-        // else
-        // {
-        //     var message = $"Points: +{amount} {type}";
-        //     LogPoints(message);
-        // }
-    }
-
     public static IEnumerable<string> GetLogWithoutFormatting()
     {
         var log = DialogueLua.GetVariable("game.log").asString;

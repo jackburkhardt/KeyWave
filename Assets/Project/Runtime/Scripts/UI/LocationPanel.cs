@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Linq;
+using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Editor.Scripts.Attributes.DrawerAttributes;
@@ -15,6 +17,7 @@ public class LocationPanel : UIPanel
 
     public Graphic panel;
     public Color defaultColor;
+    [Label("Location Unavailable Color")]
     public Color closedColor;
     
     
@@ -32,6 +35,8 @@ public class LocationPanel : UIPanel
     public RectTransform noCharactersPresent;
     
     private Location _location;
+
+    public static Action onLocationPanelClose;
 
     private void Awake()
     {
@@ -171,6 +176,7 @@ public class LocationPanel : UIPanel
     {
         _location = null;
         base.Close();
+        onLocationPanelClose?.Invoke();
     }
     
     public void ShowLocationInfo(Location location)

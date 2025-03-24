@@ -22,11 +22,14 @@ namespace Project.Runtime.Scripts.Manager
 
         private static Vector2 spawnPosition;
         
-        public static Action<string, int> OnPointsChange;
-
-        public static Action<string> OnAnimationStart;
-
-        public static Action OnAnimationComplete;
+        public enum PointsChangeExpression
+        {
+            Explicit,
+            Passive
+        }
+        
+        public static Action<string, int, PointsChangeExpression> OnPointsChange;
+        
         public static int TotalScore {
             get
             {
@@ -148,7 +151,7 @@ namespace Project.Runtime.Scripts.Manager
             return DialogueLua.GetItemField( pointsType.Name, "Max Score").asInt;
         }
         
-        public static void AddPoints(string type, int points)
+        public static void AddPoints(string type, int points, bool animate = true)
         {
             var pointsType = GetDatabaseItem(type);
             if (pointsType == null) return;
@@ -158,18 +161,11 @@ namespace Project.Runtime.Scripts.Manager
             var newScore = currentScore + points;
 
            
-            OnPointsChange?.Invoke(type, newScore);
+            if (animate) OnPointsChange?.Invoke(type, newScore, PointsChangeExpression.Explicit);
+            else OnPointsChange?.Invoke(type, newScore, PointsChangeExpression.Passive);
+            
             DialogueLua.SetItemField(pointsType.Name, "Score", Mathf.Max(newScore, 0));
             
-        }
-        
-
-        public static Action OnPointsAnimEnd;
-        public static Action OnPointsAnimStart;
-
-        public static void SetSpawnPosition(Vector2 position)
-        {
-            spawnPosition = position;
         }
 
         /// <summary>
@@ -184,26 +180,6 @@ namespace Project.Runtime.Scripts.Manager
 
             return pointsType.LookupColor("Color");
         }
-
-        public static void AnimationStart(string type, Vector2 position)
-        {
-            spawnPosition = position;
-            AnimationStart(type);
-        }
-
-        public static void AnimationStart(string type)
-        {
-            isAnimating = true;
-            OnAnimationStart?.Invoke(type);
-        }
-
-        public static void AnimationComplete()
-        {
-            isAnimating = false;
-            Sequencer.Message("Animated");
-            OnAnimationComplete?.Invoke();
-        }
-        
         public static bool IsPointsField(this Field field)
         {
             string pattern = @"^(.*?) Points$";

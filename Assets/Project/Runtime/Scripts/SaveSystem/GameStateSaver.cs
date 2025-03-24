@@ -20,11 +20,6 @@ namespace Project.Runtime.Scripts.SaveSystem
             GameState data = PixelCrushers.SaveSystem.Deserialize<GameState>(s);
             if (data == null) return; // Serialized string isn't valid.
             GameStateManager.instance.gameState = data;
-
-            foreach (var type in Points.GetAllPointsTypes())
-            {
-                Points.OnPointsChange?.Invoke(type.Name, type.LookupInt("Score"));
-            }
             
             GameManager.instance.SetLocation(data.current_scene);
         }

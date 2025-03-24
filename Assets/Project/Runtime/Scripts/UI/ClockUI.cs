@@ -54,10 +54,10 @@ namespace Project.Runtime.Scripts.UI
             timeText.text = RemoveColon(CurrentVisualizedTime);
         }
 
-        private void OnTimeChange()
+        private void OnTimeChange(Clock.TimeChangeData timeChangeData)
         {
 
-            if (Clock.CurrentTimeRaw == CurrentVisualizedTimeRaw)
+            if (timeChangeData.newTime == CurrentVisualizedTimeRaw)
             {
                 DialogueManager.instance.PlaySequence("SequencerMessage(ClockUpdated)@1");
                 return;

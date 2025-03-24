@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -6,6 +7,7 @@ using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Editor.Scripts.Attributes.DrawerAttributes;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +16,17 @@ public class PointsFishBowl : MonoBehaviour
     [ShowIf("gameManagerIsNull")]
     [SerializeField] private DialogueDatabase dialogueDatabase;
     private bool gameManagerIsNull => GameManager.instance == null;
+    
+    public CanvasGroup canvasGroup;
+
+    public bool isAnimated = true;
+    
+     
+    [ShowIf("isAnimated")]
+    [SerializeField] Animator animator;
+    [ShowIf("isAnimated")]
+    [SerializeField] private string animationTrigger = "Fill";
+
     
     private DialogueDatabase Database
     {
@@ -29,7 +42,7 @@ public class PointsFishBowl : MonoBehaviour
     
     public UITextField scoreText;
     
- 
+    [Label("Use Score as Fill")]
     public bool useFill;
 
     private List<string> pointTypes
@@ -42,22 +55,22 @@ public class PointsFishBowl : MonoBehaviour
         }
     }
 
-    [Range(0, 1)] [SerializeField] private float fillAmount;
+    [Range(0, 1)] [SerializeField] [HideInInspector] private float fillAmount;
 
     [SerializeField] private float timeToFill = 1f;
     
-
-    [SerializeField] Animator animator;
-    [SerializeField] private string animationTrigger = "Fill";
 
     public Graphic ring;
     public Image icon;
     [ShowIf("useFill")]
     public Image inverseIcon;
 
+    [ShowIf("useFill")]
     public Image fill;
     [ShowIf("useFill")]
     public Image inverseFill;
+   
+   
     
     private Item pointItem => Points.GetDatabaseItem( type, Database);
     
@@ -126,21 +139,17 @@ public class PointsFishBowl : MonoBehaviour
         } 
     }
 
-    private void OnAwake()
-    {
-         SetPoints( type, 1);
-    }
-
     
     private void OnValidate()
     {
-        if (!Application.isPlaying) SetFishBowl();
+        if (!Application.isPlaying) SetFishBowlProperties();
+        canvasGroup ??= GetComponent<CanvasGroup>();
     }
 
     public void SetPointType(Item item)
     {
         type = item.Name;
-        SetFishBowl();
+        SetFishBowlProperties();
     }
     
     public Item GetPointType()
@@ -174,7 +183,7 @@ public class PointsFishBowl : MonoBehaviour
         if (TryGetComponent<Graphic>(out  var graphic)) graphic.color = Color.Lerp( new Color(0, 0, 0, 1f/255f), backgroundColor, shine);
 
     }
-    
+
     public static Color ColorBlend(Color baseColor, Color blendColor, string blendMode, float lerp = 1f)
     {
         float BlendChannel(float baseChannel, float blendChannel)
@@ -202,7 +211,7 @@ public class PointsFishBowl : MonoBehaviour
         return Color.Lerp( baseColor, new Color(r, g, b, a), lerp);
     }
 
-    private void SetFishBowl()
+    private void SetFishBowlProperties()
     {
         if (pointItem == null) return;
         
@@ -214,7 +223,8 @@ public class PointsFishBowl : MonoBehaviour
 
         if (useFill)
         {
-            Fill = fillAmount;
+            SetPointsFillImmediate();
+           // Fill = fillAmount;
             if (inverseIcon)
             {
                 inverseIcon.sprite = Sprite.Create( pointItem.icon, new Rect(0, 0,  pointItem.icon.width,  pointItem.icon.height), Vector2.zero);
@@ -233,33 +243,90 @@ public class PointsFishBowl : MonoBehaviour
 
     private void OnEnable()
     {
-        SetFishBowl();
-        Points.OnPointsChange += SetPoints;
+        SetFishBowlProperties();
+        Points.OnPointsChange += OnPointsChange;
+        TravelUIResponseButton.OnLocationSelected += OnLocationSelected;
+        LocationPanel.onLocationPanelClose += OnLocationPanelClose;     
     }
 
     private void OnDisable()
     {
-        Points.OnPointsChange -= SetPoints;
+        Points.OnPointsChange -= OnPointsChange;
+        TravelUIResponseButton.OnLocationSelected -= OnLocationSelected;
+        LocationPanel.onLocationPanelClose -= OnLocationPanelClose;
+        
     }
 
-    private void SetPoints(string pointType, int newScore)
+    private void OnPointsChange(string pointType, int newScore, Points.PointsChangeExpression expression)
     {
+        if (!isAnimated) return;
         if (pointType != type)  return;
-        animator.SetTrigger(animationTrigger);
-        
         if (Points.MaxScore(pointType) == 0) return;
+
+        if (expression == Points.PointsChangeExpression.Explicit)
+        {
+            
+            AnimatePointsFill(newScore);
+        }
+
+        else
+        {
+            SetPointsFillImmediate();
+        }
+        
+    }
+    
+    private void AnimatePointsFill( int newScore)
+    {
+        animator.SetTrigger(animationTrigger);
         
         isPointsDecreasing = newScore < 0;
         
+        DOTween.Kill( this);
         
-        DOTween.To(() => Fill, x => Fill = x, (float) newScore / Points.MaxScore(pointType), timeToFill).SetEase(Ease.InOutSine);
+        DOTween.To(() => Fill, x => Fill = x, (float) newScore / Points.MaxScore(type), timeToFill).SetEase(Ease.InOutSine);
             
         DOTween.To(() => Shine, x => Shine = x, 1, timeToFill / 2).SetEase(Ease.InOutSine).OnComplete( () =>
-        DOTween.To( () => Shine, x => Shine = x, 0,  timeToFill / 2).SetEase(Ease.InOutSine));
-        
-     
-        
+            DOTween.To( () => Shine, x => Shine = x, 0,  timeToFill / 2).SetEase(Ease.InOutSine));
     }
+    
+    private void SetPointsFillImmediate()
+    {
+        DOTween.To( () => Fill, x => Fill = x, (float) Points.Score(type, Database) / Points.MaxScore(type), 0.35f).SetEase(Ease.InOutSine);
+    }
+    
+    private void OnLocationSelected(Location location)
+    {
+        if (!isAnimated) return;
+        if (location.LookupInt($"{type} Affinity") > 0)
+        {
+            DOTween.To(() => Shine, x => Shine = x, 0.75f, timeToFill / 2).SetEase(Ease.InOutSine);
+            if (canvasGroup != null) DOTween.To( () => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, timeToFill / 2).SetEase(Ease.InOutSine);
+        }
+        else
+        {
+            DOTween.To(() => Shine, x => Shine = x, 0, timeToFill / 2).SetEase(Ease.InOutSine);
+            if (canvasGroup != null) DOTween.To( () => canvasGroup.alpha, x => canvasGroup.alpha = x, 0.25f, timeToFill / 2).SetEase(Ease.InOutSine);
+        }
+    }
+    
+    private void OnLocationPanelClose()
+    {
+        if (!isAnimated) return;
+        if (canvasGroup != null) DOTween.To( () => canvasGroup.alpha, x => canvasGroup.alpha = x, 1, timeToFill / 2).SetEase(Ease.InOutSine);
+        DOTween.To(() => Shine, x => Shine = x, 0, timeToFill / 2).SetEase(Ease.InOutSine);
+    }
+
+    public void OnTimeChange()
+    {
+        if (useFill)
+        {
+            DOTween.To(() => Shine, x => Shine = x, 0, timeToFill / 2).SetEase(Ease.InOutSine);
+        }
+    }
+
+    
+    
 
 
 }
