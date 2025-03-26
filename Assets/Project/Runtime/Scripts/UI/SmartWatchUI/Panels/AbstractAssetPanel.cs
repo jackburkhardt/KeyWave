@@ -188,7 +188,7 @@ public abstract class ItemResponsePanel : AbstractAssetPanel
 
             if (conversationTitle == string.Empty)
             {
-                var newConversation = GameManager.GenerateConversation(item, item.RepeatCount > 0);
+                var newConversation = KeyWaveUtility.GenerateConversation(item, item.RepeatCount > 0);
                 DialogueManager.masterDatabase.conversations.Add(newConversation);
                 dialogueEntry.outgoingLinks.Add(new Link(dialogueEntry.conversationID,
                     dialogueEntry.id, newConversation.id, 0));

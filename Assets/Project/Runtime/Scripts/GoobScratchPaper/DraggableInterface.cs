@@ -127,33 +127,9 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     }
 
     // used to check if children are visible in the viewport
-    public void CheckChildBounds()
+    private void CheckChildBounds()
     {
         return;
-        if (childrenWithinBounds == null) childrenWithinBounds = new List<RectTransform>();
-        
-        foreach (var rect in _rectChildren)
-        {
-            var distance = Vector2.Distance(rect.transform.position, _container.transform.position);
-            
-            if (distance < _container.rect.width * BoundsCheckRadiusMultiplier / 2)
-            {
-                if (!childrenWithinBounds.Contains(rect))
-                {
-                    childrenWithinBounds.Add( rect);
-                        rect.SendMessage("OnDraggableInterfaceViewportEnter", SendMessageOptions.DontRequireReceiver);
-                }
-            }
-            
-            else if (distance >= _container.rect.width * BoundsCheckRadiusMultiplier / 2)
-            {
-                if (childrenWithinBounds.Contains(rect))
-                {
-                    childrenWithinBounds.Remove(rect);
-                    rect.SendMessage("OnDraggableInterfaceViewportExit", SendMessageOptions.DontRequireReceiver);
-                }
-            }
-        }
     }
 
     private List<RectTransform> childrenWithinBounds;

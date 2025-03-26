@@ -35,20 +35,20 @@ public class ActionsMenuPanel : ItemResponsePanel
         if (actionLocation == null) return true;
             
         var location = DialogueManager.masterDatabase.GetLocation(int.Parse(actionLocation.value));
-            
-            
-        var playerLocation = GameManager.gameState.GetPlayerLocation(true);
+
+
+        var playerLocation = GameManager.instance.locationManager.PlayerLocation;
 
         if (item.IsFieldAssigned("New Sublocation"))
         {
             var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
-            var rootPlayerLocation = DialogueManager.masterDatabase.GetLocation(playerLocation.RootID);
+            var rootPlayerLocation = GameManager.instance.locationManager.PlayerLocation.GetRootLocation();
 
             return rootLocation == rootPlayerLocation;
         }
 
-        return location == GameManager.gameState.GetPlayerLocation(true);
-        
+        return location == playerLocation;
+
     }
     private bool ActionRequiredActorsAreValid(Item item)
     {
@@ -62,7 +62,7 @@ public class ActionsMenuPanel : ItemResponsePanel
                 
             var actorLocation = actor.AssignedField("Location");
             if (actorLocation == null) continue;
-            if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.gameState.GetPlayerLocation(true)) return false;
+            if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.instance.locationManager.PlayerLocation) return false;
         }
         return true;
     }

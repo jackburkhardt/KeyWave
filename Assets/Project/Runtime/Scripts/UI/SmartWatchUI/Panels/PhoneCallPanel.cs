@@ -27,10 +27,14 @@ public class PhoneCallPanel : UIPanel
     
     public UITextField contactName;
     public UITextField contactDescription;
+    
+    public static Action<string> OnPhoneCallStart;
+    public static Action<string> OnPhoneCallEnd;
 
     protected override void OnEnable()
     {
         _markForAwakeAnimation = true;
+        contactName.text = "";
     }
     
     public void OnValidate()
@@ -57,6 +61,7 @@ public class PhoneCallPanel : UIPanel
         if (_markForAwakeAnimation) StartCoroutine(AwakeAnimation());
         _markForAwakeAnimation = false;
        
+        if (contactName.text != string.Empty) OnPhoneCallStart?.Invoke(contactName.text);
     }
     
     IEnumerator AwakeAnimation()
@@ -74,6 +79,12 @@ public class PhoneCallPanel : UIPanel
         yield return new WaitForSeconds(totalStandbyTime - ringTime);
         DialogueManager.Unpause();
         GetComponent<Animator>().SetTrigger(answerAnimationTrigger);
+    }
+
+    public override void Close()
+    {
+        base.Close();
+        OnPhoneCallEnd?.Invoke( contactName.text);
     }
     
     public void SetContactInfo( Item contact)

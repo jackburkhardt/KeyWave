@@ -52,7 +52,7 @@ namespace Project.Runtime.Scripts.Audio
                 {
                     activeAudio.Add(clipAddress, source);
                 }
-                catch (ArgumentException e)
+                catch
                 {
                     Debug.LogError($"AudioEngine: Attempting to play the same clip \"{clipAddress}\" at the same time. This is not supported.");
                     return;

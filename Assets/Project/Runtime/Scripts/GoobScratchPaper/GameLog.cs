@@ -18,17 +18,26 @@ public class GameLog : MonoBehaviour
         Default,
         Travel,
         Quest,
-        Points
+        Points,
+        PhoneCall
     }
 
     private void OnEnable()
     {
         GameEvent.OnPlayerEvent += OnPlayerEvent;
+        PhoneCallPanel.OnPhoneCallStart += LogPhoneCallStart;
+        PhoneCallPanel.OnPhoneCallEnd += LogPhoneCallEnd;
+        LocationManager.OnLocationEnter += OnLocationEnter;
+        LocationManager.OnLocationExit += OnLocationLeave;
     }
     
     private void OnDisable()
     {
         GameEvent.OnPlayerEvent -= OnPlayerEvent;
+        PhoneCallPanel.OnPhoneCallStart -= LogPhoneCallStart;
+        PhoneCallPanel.OnPhoneCallEnd -= LogPhoneCallEnd;
+        LocationManager.OnLocationEnter -= OnLocationEnter;
+        LocationManager.OnLocationExit -= OnLocationLeave;
     }
 
     private void OnPlayerEvent(PlayerEvent e) 
@@ -43,6 +52,8 @@ public class GameLog : MonoBehaviour
             OnActionComplete(e.Data["actionName"].ToString());
         }
     }
+    
+    
 
     public static void Log(string message, LogType type = LogType.Default)
     {
@@ -55,6 +66,7 @@ public class GameLog : MonoBehaviour
             LogType.Travel => "<color=#98fff3>",
             LogType.Quest => "<color=#F9E076>",
             LogType.Points => "<color=#78AB78>",
+            LogType.PhoneCall => "<color=#78AB78>",
             _ => string.Empty
         };
             
@@ -83,6 +95,16 @@ public class GameLog : MonoBehaviour
     public static void LogPoints(string message)
     {
         Log(message, LogType.Points);
+    }
+    
+    public static void LogPhoneCallStart(string contactName)
+    {
+        Log($"Phone Call: {contactName}.", LogType.PhoneCall);
+    }
+    
+    public static void LogPhoneCallEnd(string contactName)
+    {
+        Log($"Call end.", LogType.PhoneCall);
     }
     
     public void OnLocationLeave(Location location)

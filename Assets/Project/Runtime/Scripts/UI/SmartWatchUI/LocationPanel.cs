@@ -80,7 +80,7 @@ public class LocationPanel : UIPanel
         locationName.text = location.IsFieldAssigned("Display Name") ? location.AssignedField("Display Name").value: location.Name;
         
         var locationHasHours = location.IsFieldAssigned("Open Time") && location.IsFieldAssigned("Close Time");
-        var locationIsOpen = !locationHasHours || Clock.EstimatedTimeOfArrivalRaw(location.id) >= location.LookupInt("Open Time") && Clock.EstimatedTimeOfArrivalRaw(location.id) <= location.LookupInt("Close Time");
+        var locationIsOpen = !locationHasHours || Clock.EstimatedTimeOfArrivalRaw(location) >= location.LookupInt("Open Time") && Clock.EstimatedTimeOfArrivalRaw(location) <= location.LookupInt("Close Time");
 
         locationHours.gameObject.SetActive(locationHasHours);
 

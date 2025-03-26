@@ -244,9 +244,9 @@ namespace Project.Runtime.Scripts.Utility
     
     public static class KeyWaveExtensions
     {
-        public static Item? GetSubconversationQuest(this DialogueEntry dialogueEntry)
+        public static Item? GetSubconversationQuest(this DialogueEntry? dialogueEntry)
         {
-            Item quest = null;
+            Item? quest = null;
             
             if (dialogueEntry != null && dialogueEntry?.GetNextDialogueEntry() != null && dialogueEntry?.GetNextDialogueEntry()
                     ?.GetConversation() != null)
@@ -547,7 +547,7 @@ namespace Project.Runtime.Scripts.Utility
 
         public static GameObject? FindGameObject(this Scene scene, string name)
         {
-            GameObject foundObject = null;
+            GameObject? foundObject = null;
             
             foreach (var obj in scene.GetRootGameObjects())
             {

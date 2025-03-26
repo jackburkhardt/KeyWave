@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NaughtyAttributes;
 using Project.Runtime.Scripts.Manager;
@@ -10,11 +11,6 @@ public static class Traffic
 
     public static float CurrentTrafficMultiplier => GetTrafficMultiplier(Clock.DayProgress);
     
-    public static float GetRawTrafficMultiplier(float progress)
-    {
-        return EvaluateTrafficCurve(progress);
-    }
-    
     private static float GetTrafficMultiplier(float progress)
     {
         if (!GameManager.settings.Traffic  || GameManager.settings.Traffic.trafficCurve == null) return 1f;
@@ -24,17 +20,26 @@ public static class Traffic
         return EvaluateTrafficCurve(progress) * range + GameManager.settings.Traffic.baseTrafficLevel;
     }
     
-    public static float GetNormalizedTrafficMultiplier(float progress)
+    public static float EvaluateTrafficCurve(float progress)
     {
-        var trafficMultiplier = GetTrafficMultiplier(progress);
-        return (trafficMultiplier - GameManager.settings.Traffic.baseTrafficLevel) / GameManager.settings.Traffic.peakTrafficLevel;
-    }
-    
-    private static float EvaluateTrafficCurve(float progress)
-    {
-        progress = GameManager.settings.Traffic.discreteTrafficLevels ? Mathf.Round(progress * GameManager.settings.Traffic.discreteLevels + 1) / (GameManager.settings.Traffic.discreteLevels + 1) : progress;
+        
+        if (GameManager.settings == null) return 0f;
+      
+        if (GameManager.settings.Traffic.useDiscreteTrafficLevels)
+        {
+            return GameManager.settings.Traffic.discreteLevels[ Mathf.FloorToInt(progress * GameManager.settings.Traffic.discreteLevelsCount)];
+        }
         
         return GameManager.settings.Traffic.trafficCurve.Evaluate(progress);
+    }
+
+    public static int CurrentDiscreteTrafficLevel
+    {
+        get
+        {
+            if (GameManager.settings == null || GameManager.settings.Traffic == null) return 0;
+            return Mathf.FloorToInt(Clock.DayProgress * GameManager.settings.Traffic.discreteLevelsCount);
+        }
     }
     
     public static float BaseTrafficLevel
@@ -67,14 +72,19 @@ public class TrafficSettings : ScriptableObject
     public float peakTrafficLevel = 1f;
     
     [Tooltip("Calculate traffic levels discretely to avoid interpolation.")]
-    public bool discreteTrafficLevels;
-    [ShowIf("discreteTrafficLevels")] public int discreteLevels = 12;
+    public bool useDiscreteTrafficLevels;
+    [ShowIf("useDiscreteTrafficLevels")] public int discreteLevelsCount = 12;
    
     
     [CurveRange(0, 1, 0, 1, EColor.Blue)]
     public AnimationCurve trafficCurve;
     
     public static Action OnTrafficSettingsChanged;
+    
+    
+    [ShowIf("useDiscreteTrafficLevels")] [ReadOnly]
+    public List<float> discreteLevels;
+    
 
     private void OnValidate()
     {
@@ -102,5 +112,23 @@ public class TrafficSettings : ScriptableObject
         OnTrafficSettingsChanged?.Invoke();
         
         
+        if (useDiscreteTrafficLevels)
+        {
+            if (discreteLevels.Count != discreteLevelsCount)
+            {
+                discreteLevels.Clear();
+                for (var i = 0; i < discreteLevelsCount; i++)
+                {
+                    discreteLevels.Add(i / (float)discreteLevelsCount);
+                }
+            }
+            
+            for (var i = 0; i < discreteLevels.Count; i++)
+            {
+                discreteLevels[i] = trafficCurve.Evaluate( (float)i / discreteLevelsCount +  0.5f / discreteLevelsCount );
+            }
+        }
+        
     }
+
 }

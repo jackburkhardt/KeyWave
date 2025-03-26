@@ -56,14 +56,9 @@ namespace Project.Runtime.Scripts.UI
         public new bool childForceExpandHeight;
 
 
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
 
         // Update is called once per frame
-        void Update()
+        private new void Update()
         {
             padding.left = leftPadding;
             padding.right = rightPadding;

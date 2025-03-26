@@ -14,6 +14,6 @@ public class RestartApplication : MonoBehaviour
             PauseMenu.instance.QuitGame();
         }
         
-        else App.Instance.ChangeScene("StartMenu", GameManager.gameState.current_scene, LoadingScreen.Transition.Black);
+        else App.Instance.ChangeScene("StartMenu", GameManager.CurrentScene, LoadingScreen.Transition.Black);
     }
 }

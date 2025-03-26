@@ -10,6 +10,5 @@ public class OnGameSceneStartEvent : MonoBehaviour
     public void OnGameSceneStart()
     {
         onGameSceneStart.Invoke();
-        Debug.Log("Game Scene Started");
     }
 }

@@ -11,6 +11,7 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UIButtonKeyTrigger = PixelCrushers.UIButtonKeyTrigger;
 
@@ -22,11 +23,10 @@ namespace Project.Runtime.Scripts.UI
         
       
 
-        protected static CustomUIResponseButton _hoveredButton;
 
         
         public string autoNumberFormat = "{0}. {1}";
-        public UITextField autoNumberText;
+        public UITextField? autoNumberText;
         
         
         
@@ -36,7 +36,7 @@ namespace Project.Runtime.Scripts.UI
        
         
         [Foldout("Animation")]
-        [SerializeField] private Animator _animator;
+        [SerializeField] private Animator? _animator;
         
         [Foldout("Animation")]
         [SerializeField] private string _showAnimationTrigger = "Show";
@@ -45,27 +45,12 @@ namespace Project.Runtime.Scripts.UI
         
         
         
+        [FormerlySerializedAs("_waitForHideAnimation")]
         [Foldout("Animation")]
         [Tooltip("Wait for the hide animation to finish before firing the StandardUIResponseButton's OnClick event.")]
-        [SerializeField] private bool _waitForHideAnimation;
+        [SerializeField] private bool waitForHideAnimation;
         
         
-
-        public string simStatus
-        {
-            get;
-            private set;
-        }
-        
-      
-       
-        protected Button UnityButton => GetComponent<Button>();
-        protected Vector2 Position => label.gameObject.transform.position;
-
-        
-       
-
-
         protected UIButtonKeyTrigger[] ButtonKeyTriggers => GetComponents<UIButtonKeyTrigger>();
 
         protected List<CustomUIResponseButton>? SiblingButtons =>
@@ -84,26 +69,6 @@ namespace Project.Runtime.Scripts.UI
                 _animator.SetTrigger(_showAnimationTrigger);
             }
             
-        }
-        
-  
-        private void OnDisable()
-        {
-          //  if (this != MenuPanelContainer.buttonTemplate && this.transform.parent == MenuPanelContainer.buttonTemplate.transform.parent) Destroy(gameObject);
-        }
-
-
-        public virtual void OnPointerClick(PointerEventData eventData)
-        {
-       
-        }
-
-
-        public virtual void OnPointerEnter(PointerEventData eventData)
-        {
-            _hoveredButton = this;
-//            simStatus = response?.destinationEntry?.SimStatus()!;
-            Refresh();
         }
         
         public void SetAsLastSibling()
@@ -179,7 +144,7 @@ namespace Project.Runtime.Scripts.UI
                 trigger.key = intToKeyCodeAlpha(autoNumber);
             }
 
-            if (autoNumberText.gameObject == null)
+            if (autoNumberText == null || autoNumberText.gameObject == null)
             {
                 if (autoNumberFormat.Contains("{0}")) label.text = autoNumberFormat.Replace("{0}", $"{autoNumber}");
                 if (autoNumberFormat.Contains("{1}")) label.text = label.text.Replace("{1}", response?.formattedText.text);
@@ -224,7 +189,7 @@ namespace Project.Runtime.Scripts.UI
         {
             if (_animator != null && !string.IsNullOrEmpty(_hideAnimationTrigger))
             {
-                if (_waitForHideAnimation)
+                if (waitForHideAnimation)
                     StartCoroutine(SetAnimationTriggerAndWait(_hideAnimationTrigger, DoClick));
                 else DoClick();
             }
@@ -247,6 +212,7 @@ namespace Project.Runtime.Scripts.UI
         
         private IEnumerator SetAnimationTriggerAndWait(string trigger, Action callback, int stateIndex = 0)
         {
+            if (_animator == null) yield break;
             _animator.SetTrigger(_hideAnimationTrigger);
             yield return new WaitForEndOfFrame();
             var clip = _animator.GetCurrentAnimatorClipInfo(stateIndex);

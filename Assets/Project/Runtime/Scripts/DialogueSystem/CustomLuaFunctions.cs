@@ -251,12 +251,12 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public string LocationETA(string location)
         {
             var loc = DialogueManager.masterDatabase.GetLocation(location);
-            return Clock.EstimatedTimeOfArrival(loc.RootID);
+            return Clock.EstimatedTimeOfArrival(loc);
         }
 
         public int LocationDistanceInMinutes(string location)
         {
-            return (int)GameManager.DistanceToLocation(location) / 60;
+            return (int)LocationManager.DistanceToLocation(DialogueManager.masterDatabase.GetLocation(location)) / 60;
         }
         
         public void SetConversationConditions(double conversationID, string fieldValue)
@@ -361,13 +361,13 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public string PlayerLocation()
         {
-            return GameManager.gameState.GetPlayerLocation().Name;
+            return GameManager.instance.locationManager.PlayerLocation.GetRootLocation().Name;
         }
 
 
         public int MapRangeToCurrentTrafficLevel(double min, double max)
         {
-            var traffic = Traffic.GetRawTrafficMultiplier( Clock.DayProgress);
+            var traffic = Traffic.EvaluateTrafficCurve( Clock.DayProgress);
             
             return Mathf.RoundToInt(Mathf.Lerp((int)min, (int)max, traffic));
         }
@@ -395,9 +395,9 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public bool PlayerLocationIsClosed()
         {
-            if (GameManager.gameState.GetPlayerLocation().FieldExists("Close Time"))
+            if (GameManager.instance.locationManager.PlayerLocation.GetRootLocation().FieldExists("Close Time"))
             {
-                var closeTime = GameManager.gameState.GetPlayerLocation().LookupInt("Close Time");
+                var closeTime = GameManager.instance.locationManager.PlayerLocation.GetRootLocation().LookupInt("Close Time");
                 return Clock.CurrentTimeRaw > closeTime;
             }
             
@@ -406,7 +406,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public void SetLocation(string locationName)
         {
-            GameManager.instance.SetLocation(locationName);
+            LocationManager.SetPlayerLocation(DialogueManager.masterDatabase.GetLocation(locationName));
         }
         
         public void DoEndOfDay()

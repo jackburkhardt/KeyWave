@@ -10,23 +10,23 @@ public class AppEvents : MonoBehaviour
 
     private void OnEnable()
     {
-        App.OnLoadStart += OnAppLoadStart;
-        App.OnLoadEnd += OnAppLoadEnd;
+        App.OnSceneLoadStart += OnAppLoadStart;
+        App.OnSceneLoadEnd += OnAppLoadEnd;
     }
 
     private void OnDisable()
     {
-        App.OnLoadStart -= OnAppLoadStart;
-        App.OnLoadEnd -= OnAppLoadEnd;
+        App.OnSceneLoadStart -= OnAppLoadStart;
+        App.OnSceneLoadEnd -= OnAppLoadEnd;
     }
 
-    private void OnAppLoadStart()
+    private void OnAppLoadStart(string scene)
     {
         OnLoadStart?.Invoke();
         
     }
     
-    private void OnAppLoadEnd()
+    private void OnAppLoadEnd(string scene)
     {
         OnLoadEnd?.Invoke();
     }

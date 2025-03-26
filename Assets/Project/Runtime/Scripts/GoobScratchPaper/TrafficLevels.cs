@@ -42,9 +42,10 @@ public class TrafficLevels : MonoBehaviour
         TrafficSettings.OnTrafficSettingsChanged -= SetTrafficLevels;
     }
     
-    private RectTransform GetElementFromPercentage(float percentage)
+    private RectTransform GetElementWithCurrentTrafficLevel()
     {
-        var index = Mathf.FloorToInt(percentage * (content.childCount));
+        var index =Traffic.CurrentDiscreteTrafficLevel;
+        
         return content.GetChild(index).GetComponent<RectTransform>();
     }
     
@@ -59,7 +60,7 @@ public class TrafficLevels : MonoBehaviour
 
         if (Clock.DayProgress < 0) return;
       
-        if (GetElementFromPercentage(Clock.DayProgress) == element)
+        if (GetElementWithCurrentTrafficLevel() == element)
         {
             element.GetComponent<CanvasGroup>().alpha = currentTrafficLevelAlpha;
         }
@@ -69,9 +70,15 @@ public class TrafficLevels : MonoBehaviour
         }
     }
     
-    private void DoActionOnElement(RectTransform element)
+    private void DoSizeAdjustmentActionOnElement(RectTransform element)
     {
-        var value = Traffic.GetRawTrafficMultiplier((element.GetSiblingIndex()) / ((float)content.childCount)) * (maxValue - minValue) + minValue;
+        var index = element.GetSiblingIndex();
+        var siblingCount = content.childCount;
+        var percentage = index / ((float)siblingCount);
+        var trafficEvaluation = Traffic.EvaluateTrafficCurve(percentage);
+        
+        
+        var value = trafficEvaluation * (maxValue - minValue) + minValue;
         switch (action)
         {
             case Action.AdjustHeight:
@@ -95,7 +102,6 @@ public class TrafficLevels : MonoBehaviour
         
         minValue = maxValue * Traffic.BaseTrafficLevel / Traffic.PeakTrafficLevel;
         
-        var elementCount = content.childCount;
 
         foreach (var t in content.GetComponentsInChildren<RectTransform>().ToList().Where(t =>
                  {
@@ -106,7 +112,7 @@ public class TrafficLevels : MonoBehaviour
             
             SetTrafficElementAlpha(t);
             
-            DoActionOnElement(t);
+            DoSizeAdjustmentActionOnElement(t);
             
         }
     }

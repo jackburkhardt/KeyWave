@@ -36,7 +36,7 @@ public class ItemUIPanel : UIPanel
     
     public List<Item> items => DialogueManager.masterDatabase.items.Where(item => item.LookupValue("Item Type") == itemType).ToList();
     
-    
+    private Item _selectedItem;
 
     
     public void ShowItemButtons()
@@ -77,6 +77,11 @@ public class ItemUIPanel : UIPanel
         {
             panel.GetComponent<Animator>().SetTrigger(offsetAnimatorTrigger);
         }
+        
+        if (_selectedItem != null)
+        {
+            itemUITextPanel.SetItem(_selectedItem);
+        }
     }
     
     public override void Close()
@@ -110,6 +115,7 @@ public class ItemUIPanel : UIPanel
         
         
         itemUITextPanel.SetItem(item);
+        _selectedItem = item;
     }
     
 }

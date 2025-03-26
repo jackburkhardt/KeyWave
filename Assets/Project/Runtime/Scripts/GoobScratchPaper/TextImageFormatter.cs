@@ -18,8 +18,6 @@ public class TextImageFormatter : MonoBehaviour
     [SerializeField] private Image _imageTemplate;
     [SerializeField] private RectTransform _imageTemplateHolder;
     
-    [ReadOnly] [SerializeField] private string imagePlaceholder = "[img($addressablePath)]";
-    
 
     private void Awake()
     {

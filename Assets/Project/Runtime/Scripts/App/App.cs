@@ -16,9 +16,10 @@ namespace Project.Runtime.Scripts.App
         private static App _instance;
         private static string playerID;
 
-        public static Action OnLoadStart;
-        public static Action OnLoadEnd;
-        public static Action OnDeloadEnd;
+        public static Action<string> OnSceneLoadStart;
+        public static Action<string> OnSceneLoadEnd;
+        public static Action<string> OnSceneDeloadStart;
+        public static Action<string> OnSceneDeloadEnd;
 
         public static bool isLoading = false;
         public string currentScene = "StartMenu";
@@ -116,11 +117,11 @@ namespace Project.Runtime.Scripts.App
         /// Loads a scene additively to the current scene
         /// </summary>
         /// 
-        public Coroutine LoadScene(string sceneToLoad, string? sceneToUnload = "", Transition? transition = Transition.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: transition));
+        public Coroutine LoadScene(string sceneToLoad, string sceneToUnload = "", Transition? transition = Transition.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: transition));
 
-        public Coroutine LoadSceneWithoutLoadingScreen(string sceneToLoad, string? sceneToUnload = "") => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: null, waitForUnload: false));
+        public Coroutine LoadSceneWithoutLoadingScreen(string sceneToLoad, string sceneToUnload = "") => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: null, waitForUnload: false));
         
-        public Coroutine LoadSceneButKeepLoadingScreen(string sceneToLoad, string? sceneToUnload = "", Transition? transition = Transition.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: transition, unloadLoadingScreen: false));
+        public Coroutine LoadSceneButKeepLoadingScreen(string sceneToLoad, string sceneToUnload = "", Transition? transition = Transition.Default) => StartCoroutine(LoadSceneHandler(sceneToLoad, sceneToUnload: sceneToUnload, transition: transition, unloadLoadingScreen: false));
 
         public void UnloadScene(string sceneToUnload)
         {
@@ -144,7 +145,8 @@ namespace Project.Runtime.Scripts.App
 
             var LoadingScreen = FindObjectOfType<LoadingScreen>();
             
-            OnLoadStart?.Invoke();
+           
+            OnSceneDeloadStart?.Invoke(sceneToUnload);
             
             if (transition != null)
             {
@@ -177,6 +179,8 @@ namespace Project.Runtime.Scripts.App
             }
 
             var newScene = SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+            
+            newScene ??= SceneManager.LoadSceneAsync(LocationManager.instance.PlayerLocation.Name, LoadSceneMode.Additive);
 
             while (!newScene.isDone || !AddressableLoader.IsQueueEmpty()) yield return null;
             
@@ -193,12 +197,15 @@ namespace Project.Runtime.Scripts.App
                     {
                         yield return null;
                     }
+                    
+                    OnSceneDeloadEnd?.Invoke(sceneToUnload);
                 }
         
                 
             }
             
-            OnDeloadEnd?.Invoke();
+            
+            OnSceneLoadStart?.Invoke(sceneToLoad);
             
             
             if (waitForUnload == false)
@@ -222,7 +229,7 @@ namespace Project.Runtime.Scripts.App
                 }
               
                 isLoading = false;
-                OnLoadEnd?.Invoke();
+                OnSceneLoadEnd?.Invoke(sceneToLoad);
                 currentScene = sceneToLoad;
             }    
         }

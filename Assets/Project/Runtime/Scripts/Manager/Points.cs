@@ -132,22 +132,19 @@ namespace Project.Runtime.Scripts.Manager
         public static int Score(string type, DialogueDatabase database = null)
         {
             database ??= GameManager.dialogueDatabase;
-            if (database == null) return 0;
-            var score = 0;
+            if (database == null) return -1;
 
             var pointsType = GetDatabaseItem(type, database);
-            if (pointsType == null) return 0;
+            if (pointsType == null) return -1;
 
             return DialogueLua.GetItemField( pointsType.Name, "Score").asInt;
         }
 
         public static int MaxScore(string type, DialogueDatabase database = null)
         {
-            database ??= GameManager.settings.dialogueDatabase;
-            var score = 0;
-            var pointsType = GetDatabaseItem( type);
-            if (pointsType == null) return 0;
-
+            database ??= GameManager.settings != null ? GameManager.settings .dialogueDatabase : null;
+            if (database == null) return 0;
+            var pointsType = GetDatabaseItem( type, database);
             return DialogueLua.GetItemField( pointsType.Name, "Max Score").asInt;
         }
         

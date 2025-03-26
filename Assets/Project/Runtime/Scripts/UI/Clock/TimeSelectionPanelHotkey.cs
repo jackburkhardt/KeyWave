@@ -13,7 +13,6 @@ namespace Project.Runtime.Scripts.ActorCompendium
     [AddComponentMenu("")] // Use wrapper.
     public class TimeSelectionPanelHotkey : MonoBehaviour
     {
-        private bool isOpen = false;
 
         [Tooltip("Toggle the actor compendium window when this key is pressed.")]
         public KeyCode key = KeyCode.T;

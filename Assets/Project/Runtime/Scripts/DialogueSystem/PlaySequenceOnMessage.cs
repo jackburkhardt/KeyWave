@@ -12,6 +12,7 @@ public class PlaySequenceOnMessage : MonoBehaviour, IMessageHandler
 
     public void OnMessage(MessageArgs messageArgs)
     {
+        if (once && hasPlayed) return;
         if (messageArgs.message == message)
         {
             hasPlayed = true;

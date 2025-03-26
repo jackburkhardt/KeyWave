@@ -20,12 +20,6 @@ public class PointsFishBowl : MonoBehaviour
     public CanvasGroup canvasGroup;
 
     public bool isAnimated = true;
-    
-     
-    [ShowIf("isAnimated")]
-    [SerializeField] Animator animator;
-    [ShowIf("isAnimated")]
-    [SerializeField] private string animationTrigger = "Fill";
 
     
     private DialogueDatabase Database
@@ -54,8 +48,6 @@ public class PointsFishBowl : MonoBehaviour
             return types;
         }
     }
-
-    [Range(0, 1)] [SerializeField] [HideInInspector] private float fillAmount;
 
     [SerializeField] private float timeToFill = 1f;
     
@@ -130,10 +122,16 @@ public class PointsFishBowl : MonoBehaviour
 
     private float Fill
     {
-        get => fillAmount;
+        get
+        {
+            if (fill) return fill.fillAmount;
+            else
+            {
+                return 0;
+            }
+        }
         set
         {
-            fillAmount = value;
             if (fill) fill.fillAmount = value;
             if (inverseFill) inverseFill.fillAmount = value;
         } 
@@ -223,8 +221,6 @@ public class PointsFishBowl : MonoBehaviour
 
         if (useFill)
         {
-            SetPointsFillImmediate();
-           // Fill = fillAmount;
             if (inverseIcon)
             {
                 inverseIcon.sprite = Sprite.Create( pointItem.icon, new Rect(0, 0,  pointItem.icon.width,  pointItem.icon.height), Vector2.zero);
@@ -246,11 +242,14 @@ public class PointsFishBowl : MonoBehaviour
         SetFishBowlProperties();
         Points.OnPointsChange += OnPointsChange;
         TravelUIResponseButton.OnLocationSelected += OnLocationSelected;
-        LocationPanel.onLocationPanelClose += OnLocationPanelClose;     
+        LocationPanel.onLocationPanelClose += OnLocationPanelClose;
+       SetPointsFillImmediate();
+        
     }
 
     private void OnDisable()
     {
+        DOTween.Kill( this);
         Points.OnPointsChange -= OnPointsChange;
         TravelUIResponseButton.OnLocationSelected -= OnLocationSelected;
         LocationPanel.onLocationPanelClose -= OnLocationPanelClose;
@@ -278,13 +277,20 @@ public class PointsFishBowl : MonoBehaviour
     
     private void AnimatePointsFill( int newScore)
     {
-        animator.SetTrigger(animationTrigger);
         
         isPointsDecreasing = newScore < 0;
+
+        if (newScore == 0) return;
         
         DOTween.Kill( this);
         
-        DOTween.To(() => Fill, x => Fill = x, (float) newScore / Points.MaxScore(type), timeToFill).SetEase(Ease.InOutSine);
+        var maxScore = Points.MaxScore(type);
+        
+        if (maxScore == 0) return;
+        
+        var fillAmount = (float) newScore / maxScore;
+        
+        DOTween.To(() => Fill, x => Fill = x, fillAmount, timeToFill).SetEase(Ease.InOutSine);
             
         DOTween.To(() => Shine, x => Shine = x, 1, timeToFill / 2).SetEase(Ease.InOutSine).OnComplete( () =>
             DOTween.To( () => Shine, x => Shine = x, 0,  timeToFill / 2).SetEase(Ease.InOutSine));
@@ -292,7 +298,18 @@ public class PointsFishBowl : MonoBehaviour
     
     private void SetPointsFillImmediate()
     {
-        DOTween.To( () => Fill, x => Fill = x, (float) Points.Score(type, Database) / Points.MaxScore(type), 0.35f).SetEase(Ease.InOutSine);
+        
+        DOTween.Kill( this);
+        
+        var score = Points.Score(type, Database);
+        var maxScore = Points.MaxScore(type);
+        
+        if (score < 0) return;
+        if (maxScore <= 0) return;
+        
+        var scoreToFill = (float) score / maxScore;
+        
+        DOTween.To( () => Fill, x => Fill = x, scoreToFill, 0.35f).SetEase(Ease.InOutSine);
     }
     
     private void OnLocationSelected(Location location)

@@ -25,7 +25,7 @@ public class ItemUIButton : MonoBehaviour, ISelectHandler
     
     public virtual Item item { get; set; }
 
-    public UITextField name;
+    public new UITextField name;
     public UITextField description;
     
     public UITextField actorField;

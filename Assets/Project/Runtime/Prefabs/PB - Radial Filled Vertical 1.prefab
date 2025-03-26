@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3689536429892300295}
   - component: {fileID: 7212824559250687296}
   - component: {fileID: 2359279177901524757}
-  - component: {fileID: 910607582709680067}
   m_Layer: 5
   m_Name: PB - Radial Filled Vertical 1
   m_TagString: Untagged
@@ -100,12 +99,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0186b8ad8d1614e25b4a3f3a4fb30313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  filledImage: {fileID: 5604759327677232940}
-  fillAmount: 0
-  timeToFill: 1
-  type: 0
+  dialogueDatabase: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  isAnimated: 1
   animator: {fileID: 7465445063336043737}
   animationTrigger: Fill
+  type: 0
+  scoreText:
+    m_uiText: {fileID: 0}
+    m_textMeshProUGUI: {fileID: 0}
+  useFill: 0
+  fillAmount: 0
+  timeToFill: 1
+  ring: {fileID: 0}
+  icon: {fileID: 0}
+  inverseIcon: {fileID: 0}
+  fill: {fileID: 0}
+  inverseFill: {fileID: 0}
+  shine: 0
 --- !u!114 &2359279177901524757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,32 +134,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &910607582709680067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1307587824844062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa3863052644a174ab6339c6d38ef371, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
-  showTrigger: 
-  hideTrigger: 
-  onPointsIncreaseTrigger: OnPointsIncrease
-  onPointsDecreaseTrigger: OnPointsDecrease
-  onPointsAnimationStartTrigger: 
-  onPointsAnimationEndTrigger: OnPointsAnimEnd
-  duration: 2
-  OnAnimationStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAnimationEnd:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1867530321336118
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,8 +479,6 @@ MonoBehaviour:
   proportionalToRect: 1
   proportionalRadius: 0.198
   syncWithOtherRoundedImage: 0
-  _otherRoundedImage: {fileID: 0}
-  _syncAspectRatioFitter: 0
   _aspectRatioFitter: {fileID: 0}
 --- !u!114 &1576434671302784969
 MonoBehaviour:
@@ -876,8 +859,6 @@ MonoBehaviour:
   proportionalToRect: 1
   proportionalRadius: 0.5
   syncWithOtherRoundedImage: 0
-  _otherRoundedImage: {fileID: 0}
-  _syncAspectRatioFitter: 0
   _aspectRatioFitter: {fileID: 0}
 --- !u!225 &9064253980348431836
 CanvasGroup:
@@ -1132,8 +1113,6 @@ MonoBehaviour:
   proportionalToRect: 1
   proportionalRadius: 0.5
   syncWithOtherRoundedImage: 0
-  _otherRoundedImage: {fileID: 0}
-  _syncAspectRatioFitter: 0
   _aspectRatioFitter: {fileID: 0}
 --- !u!114 &3001689118614485792
 MonoBehaviour:

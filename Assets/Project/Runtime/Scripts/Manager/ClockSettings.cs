@@ -17,7 +17,8 @@ namespace Project.Runtime.Scripts.Manager
             {
                 if (GameManager.settings == null) return 0;
                 float range = GameManager.settings.Clock.DayEndTime - GameManager.settings.Clock.DayStartTime;
-                return (CurrentTimeRaw - GameManager.settings.Clock.DayStartTime)/range;
+                var currentTime = Mathf.Max(CurrentTimeRaw, GameManager.settings.Clock.DayStartTime);
+                return (currentTime - GameManager.settings.Clock.DayStartTime)/range;
             }
         }
         
@@ -99,14 +100,14 @@ namespace Project.Runtime.Scripts.Manager
         }
         
 
-        public static string EstimatedTimeOfArrival(int locationID)
+        public static string EstimatedTimeOfArrival(Location location)
         {
-            return To24HourClock((int)GameManager.DistanceToLocation(locationID) + CurrentTimeRaw);
+            return To24HourClock((int)LocationManager.DistanceToLocation(location) + CurrentTimeRaw);
         }
         
-        public static int EstimatedTimeOfArrivalRaw(int locationID)
+        public static int EstimatedTimeOfArrivalRaw(Location location)
         {
-            return (int)GameManager.DistanceToLocation(locationID) + CurrentTimeRaw;
+            return (int)LocationManager.DistanceToLocation(location) + CurrentTimeRaw;
         }
 
         public static int GetHoursAsInt(string time)
@@ -164,7 +165,9 @@ public class ClockSettings : ScriptableObject
 
     private void OnValidate()
     {
-        dialogueDatabase ??= GameManager.settings.dialogueDatabase;
+        dialogueDatabase ??= GameManager.settings != null ? GameManager.settings.dialogueDatabase : null;
+        
+        if (dialogueDatabase == null) return;
         
         var secondsPerCharacterVariable = dialogueDatabase.GetVariable(secondsPerCharacterKey);
         if (secondsPerCharacterVariable == null)

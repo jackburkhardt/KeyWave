@@ -43,10 +43,10 @@ public class TravelUIResponseButton : StandardUIResponseButton, IDeselectHandler
             _location = DialogueManager.masterDatabase.GetLocation(int.Parse(locationField.value));
 
             description.text = _location.Description;
-            ETALabel.text = $"{Clock.EstimatedTimeOfArrival(_location.id)}";
+            ETALabel.text = $"{Clock.EstimatedTimeOfArrival(_location)}";
             GetComponent<Image>().color = _location.LookupColor("Color");
 
-            transform.localPosition = _location.Name == "Café" ? GameManager.gameState.GetPlayerLocation().LookupVector2("Coordinates") : _location.LookupVector2("Coordinates");
+            transform.localPosition = _location.Name == "Café" ? GameManager.instance.locationManager.PlayerLocation.LookupVector2("Coordinates") : _location.LookupVector2("Coordinates");
             
             confirmButton.interactable = true;
 
@@ -54,7 +54,7 @@ public class TravelUIResponseButton : StandardUIResponseButton, IDeselectHandler
             {
                 var openTime = _location.LookupInt("Open Time");
                 var closeTime = _location.LookupInt("Close Time");
-                var rawETA = Clock.EstimatedTimeOfArrivalRaw(_location.id);
+                var rawETA = Clock.EstimatedTimeOfArrivalRaw(_location);
                 
                 if (rawETA < openTime || rawETA > closeTime)
                 {
@@ -70,7 +70,7 @@ public class TravelUIResponseButton : StandardUIResponseButton, IDeselectHandler
     public override void OnClick()
     {
         base.OnClick();
-        GameManager.instance.SetLocation( _location.Name);
+        LocationManager.SetPlayerLocation( _location);
     }
 
     

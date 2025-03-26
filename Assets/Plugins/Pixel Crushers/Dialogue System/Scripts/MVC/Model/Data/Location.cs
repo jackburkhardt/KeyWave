@@ -52,8 +52,9 @@ namespace PixelCrushers.DialogueSystem
 
         public int RootID => IsSublocation ? LookupInt("Parent Location") : id;
         
-        public Location GetRootLocation( DialogueDatabase database)
+        public Location GetRootLocation( DialogueDatabase database = null)
         {
+            database ??= DialogueManager.masterDatabase;
             return database.GetLocation(RootID);
         }
 

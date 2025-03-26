@@ -26,16 +26,5 @@ namespace Michsky.MUIP
             maxLabel.color = maxColor;
         }
 
-        void Update()
-        {
-            return;
-            if (progressBar.currentPercent >= transitionAfter)
-                barAnimatior.Play("Radial PB Filled");
-
-            if (progressBar.currentPercent <= transitionAfter)
-                barAnimatior.Play("Radial PB Empty");
-
-            maxLabel.text = minLabel.text;
-        }
     }
 }

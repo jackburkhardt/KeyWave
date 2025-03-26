@@ -204,8 +204,9 @@ namespace PixelCrushers.DialogueSystem
             return Field.LookupColor(fields, title);
         }
         
-        public Location LookupLocation(string title, DialogueDatabase database)
+        public Location LookupLocation(string title, DialogueDatabase database = null)
         {
+            database ??= DialogueManager.MasterDatabase;
             return Field.LookupLocation(fields, title, database);
         }
         
