@@ -19,7 +19,7 @@ public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
         SmartWatchPanel.onAppOpen -= SetColor;
     }
     
-    private void OnGameSceneEnd() 
+    public void OnGameSceneEnd() 
     {
         SetColor(_defaultColor);
      

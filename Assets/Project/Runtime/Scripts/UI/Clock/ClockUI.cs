@@ -67,7 +67,15 @@ namespace Project.Runtime.Scripts.UI
          //   BroadcastMessage("OnTimeChange", (CurrentVisualizedTimeRaw,Clock.CurrentTimeRaw));
             StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
         }
-        
+
+        public void OnGameSceneStart()
+        {
+            Debug.Log("Game scene start: currentTimeRaw is " + Clock.CurrentTimeRaw);
+            if (CurrentVisualizedTimeRaw != Clock.CurrentTimeRaw)
+            {
+                StartCoroutine(UpdateVisualizedTime(Clock.CurrentTimeRaw));
+            }
+        }
 
         private void Update()
         {
