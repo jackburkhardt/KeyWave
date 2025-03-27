@@ -2,6 +2,7 @@ using DG.Tweening;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutsceneEndHandler
@@ -67,7 +68,7 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
         {
             DOTween.To(() => topBar.sizeDelta, x => topBar.sizeDelta = x, new Vector2(topBar.sizeDelta.x, 0), animationDuration);
             DOTween.To(() => bottomBar.sizeDelta, x => bottomBar.sizeDelta = x, new Vector2(bottomBar.sizeDelta.x, 0),
-                animationDuration);
+                animationDuration).onComplete = TryStartConversation;
             
             var continueButtons = FindObjectsByType<StandardUIContinueButtonFastForward>( FindObjectsInactive.Include, FindObjectsSortMode.None);
         
@@ -81,6 +82,18 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
         else if (Application.isEditor)
         {
             HideImmediate();
+        }
+    }
+
+    /// <summary>
+    /// fallback for if the letterbox closes and the conversation does not start from ConversationFlowManager for some reason
+    /// </summary>
+    public void TryStartConversation()
+    { 
+        var playerLocation = LocationManager.instance.PlayerLocation;
+        if (SceneManager.GetSceneByName(playerLocation.Name).isLoaded)
+        {
+            DialogueManager.instance.StartConversation(playerLocation.Name);
         }
     }
     
