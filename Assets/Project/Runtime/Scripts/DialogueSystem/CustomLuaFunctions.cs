@@ -361,7 +361,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public string PlayerLocation()
         {
-            return GameManager.instance.locationManager.PlayerLocation.GetRootLocation().Name;
+            return LocationManager.instance.PlayerLocation.GetRootLocation().Name;
         }
 
 
@@ -395,9 +395,9 @@ namespace Project.Runtime.Scripts.DialogueSystem
 
         public bool PlayerLocationIsClosed()
         {
-            if (GameManager.instance.locationManager.PlayerLocation.GetRootLocation().FieldExists("Close Time"))
+            if (LocationManager.instance.PlayerLocation.GetRootLocation().FieldExists("Close Time"))
             {
-                var closeTime = GameManager.instance.locationManager.PlayerLocation.GetRootLocation().LookupInt("Close Time");
+                var closeTime = LocationManager.instance.PlayerLocation.GetRootLocation().LookupInt("Close Time");
                 return Clock.CurrentTimeRaw > closeTime;
             }
             

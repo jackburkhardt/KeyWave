@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[ DisallowMultipleComponent]
 public class InputManager : MonoBehaviour
 {
     
@@ -28,11 +31,35 @@ public class InputManager : MonoBehaviour
     private SmartWatchPanel _smartWatchPanel;
     
     public StandardUIPauseButton pauseButton;
+    
+    
+    private const float autoPauseCooldownTime = 0.5f;
+    private float _autoPauseCooldownRemaining;
+    
+    public static InputManager instance;
 
+
+    private void OnValidate()
+    {
+        pauseButton ??= FindObjectOfType<StandardUIPauseButton>();
+    }
 
     public void OnGameSceneStart()
     {
         ResetDefaultSelectable();
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+        else if (instance != this)
+        {
+            Destroy(this);
+        }
     }
 
     private void Start()
@@ -48,8 +75,30 @@ public class InputManager : MonoBehaviour
         cancelAction = inputSystemUIInputModule.cancel;
     }
     
+    
+    
     private void Update()
     {
+        
+        
+        
+        if (GameManager.settings.autoPauseOnFocusLost)
+        {
+            if (_autoPauseCooldownRemaining > 0)
+            {
+                _autoPauseCooldownRemaining -= Time.deltaTime;
+            }
+
+            if (!Application.isFocused && !SceneManager.GetSceneByName("PauseMenu").isLoaded &&
+                _autoPauseCooldownRemaining <= 0)
+            {
+                pauseButton.TogglePause();
+                _autoPauseCooldownRemaining = autoPauseCooldownTime;
+            }
+        }
+        
+        
+        
           if (!cursorModeChangedLastFrame)
           {
               // cursor handling
@@ -154,5 +203,10 @@ public class InputManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject( null);
         Cursor.visible = value;
         Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
+    public static void PauseGame()
+    {
+        instance.pauseButton.TogglePause();
     }
 }

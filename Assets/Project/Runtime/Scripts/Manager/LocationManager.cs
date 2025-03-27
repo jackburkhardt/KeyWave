@@ -13,6 +13,8 @@ using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+[DisallowMultipleComponent]
 /// <summary>
 /// The LocationManager is responsible for managing the player's location and the distance between locations. It also handles the transition between locations.
 /// </summary>

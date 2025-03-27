@@ -46,7 +46,7 @@ public class TravelUIResponseButton : StandardUIResponseButton, IDeselectHandler
             ETALabel.text = $"{Clock.EstimatedTimeOfArrival(_location)}";
             GetComponent<Image>().color = _location.LookupColor("Color");
 
-            transform.localPosition = _location.Name == "Café" ? GameManager.instance.locationManager.PlayerLocation.LookupVector2("Coordinates") : _location.LookupVector2("Coordinates");
+            transform.localPosition = _location.Name == "Café" ? LocationManager.instance.PlayerLocation.LookupVector2("Coordinates") : _location.LookupVector2("Coordinates");
             
             confirmButton.interactable = true;
 

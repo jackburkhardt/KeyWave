@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 1395439616}
   - component: {fileID: 1395439617}
   - component: {fileID: 1395439618}
+  - component: {fileID: 8545433851576406635}
+  - component: {fileID: -2129767287461158634}
+  - component: {fileID: -3771485681153433588}
   m_Layer: 0
   m_Name: m_GameManager
   m_TagString: Untagged
@@ -47,18 +50,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dca4ae25e4ad9944da2bdd05f2ff59bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  locations:
-  - {fileID: 11400000, guid: 5331c390d6361429da8b0179a432ace2, type: 2}
-  - {fileID: 11400000, guid: 7016f5fe0a970418ca076ed0a635ec25, type: 2}
-  - {fileID: 11400000, guid: 53e7f0ff2516c4e1290f6f01670a6539, type: 2}
-  - {fileID: 11400000, guid: cf0cb6f429c184964a397a5239800c7e, type: 2}
-  - {fileID: 11400000, guid: 70fa58db97b6947b2be9f1ed2e8f873a, type: 2}
-  - {fileID: 11400000, guid: 01c673249f3b448e1a908b9cce658fce, type: 2}
-  - {fileID: 11400000, guid: 3377666481183439f9ad7d6671152b05, type: 2}
-  - {fileID: 11400000, guid: c6c97c501770740dfb55c0be71ca661a, type: 2}
   capFramerate: 0
   mainCanvas: {fileID: 0}
+  currentSettings: {fileID: 0}
   framerateLimit: 30
+  OnGameSceneStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameSceneEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  inputManager: {fileID: 8545433851576406635}
+  conversationFlowManager: {fileID: -2129767287461158634}
+  locationManager: {fileID: -3771485681153433588}
+  OnGameClose:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1395439616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,3 +140,40 @@ MonoBehaviour:
   onSceneLoad:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8545433851576406635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486809509058593725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 543fa71deb95fa2448d4d4f79df786bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseButton: {fileID: 0}
+--- !u!114 &-2129767287461158634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486809509058593725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898eccbc75202a744999e10a1945730c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-3771485681153433588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486809509058593725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e5da2a751fabe1428f5646d00e97a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

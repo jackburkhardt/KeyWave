@@ -31,7 +31,7 @@ public class StartMenuPanel : UIPanel
             };
         }
         
-        GameManager.instance.inputManager.OverrideDefaultSelectable( GetComponentInChildren<Button>());
+        InputManager.instance.OverrideDefaultSelectable( GetComponentInChildren<Button>());
     }
     
     

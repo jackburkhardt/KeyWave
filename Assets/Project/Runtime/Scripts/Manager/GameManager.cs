@@ -14,9 +14,14 @@ using UnityEngine.SceneManagement;
 using Transition = Project.Runtime.Scripts.AssetLoading.LoadingScreen.Transition;
 
 
+
 namespace Project.Runtime.Scripts.Manager
 {
     [Serializable]
+    [RequireComponent( typeof( InputManager))]
+    [RequireComponent( typeof( ConversationFlowManager))]
+    [RequireComponent( typeof( LocationManager))]
+    
     public class GameManager : PlayerEventHandler
     {
         public static GameManager instance;
@@ -51,19 +56,6 @@ namespace Project.Runtime.Scripts.Manager
 
         public UnityEvent OnGameSceneStart;
         public UnityEvent OnGameSceneEnd;
-
-        public static string CurrentScene {
-            get
-            {
-                if (SceneManager.GetSceneByName("StartMenu").isLoaded) return "StartMenu";
-                if (SceneManager.GetSceneByName("EndOfDay").isLoaded) return "EndOfDay";
-                return instance.locationManager.PlayerLocation.Name;
-            }
-}
-        
-        public InputManager inputManager;
-        public ConversationFlowManager conversationFlowManager;
-        public LocationManager locationManager;
         
         public static bool TryGetSettings( out Settings settings)
         {
@@ -101,7 +93,8 @@ namespace Project.Runtime.Scripts.Manager
         {
             Clock.AddSeconds(playerEvent.Duration);
         }
-        
+
+
         public void OnTimeChange(Clock.TimeChangeData timeChangeData)
         {
             for (int i = timeChangeData.previousTime; i < timeChangeData.newTime; i++)
@@ -135,32 +128,13 @@ namespace Project.Runtime.Scripts.Manager
                 playerEventStack = ScriptableObject.CreateInstance<PlayerEventStack>();
             }
 
-            inputManager ??= GetComponent<InputManager>();
-            conversationFlowManager ??= GetComponent<ConversationFlowManager>();
-            locationManager ??= GetComponent<LocationManager>();
-
         }
        
-
-        private float autoPauseCooldown = 0.5f;
 
 
         private void Update()
         {
-            if (settings.autoPauseOnFocusLost)
-            {
-                if (autoPauseCooldown > 0)
-                {
-                    autoPauseCooldown -= Time.deltaTime;
-                }
-
-                if (!Application.isFocused && !SceneManager.GetSceneByName("PauseMenu").isLoaded &&
-                    autoPauseCooldown <= 0)
-                {
-                    inputManager.pauseButton.TogglePause();
-                    autoPauseCooldown = 0.5f;
-                }
-            }
+            
 
             if (capFramerate) Application.targetFrameRate = framerateLimit;
         }
@@ -179,7 +153,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             GameEvent.OnDayEnd();
             DialogueManager.instance.gameObject.BroadcastMessageExt( "OnEndOfDay");
-            App.App.Instance.ChangeScene("EndOfDay", GameManager.CurrentScene, Transition.Black);
+            App.App.Instance.ChangeScene("EndOfDay", App.App.Instance.currentScene, Transition.Black);
         }
 
         public IEnumerator StartNewSave()
@@ -197,7 +171,7 @@ namespace Project.Runtime.Scripts.Manager
                 yield return null;
             }
 
-            if (DialogueLua.GetVariable("skip_content").asBool) LocationManager.SetPlayerLocation(locationManager.PlayerLocation.GetRootLocation(), Transition.Black);
+            if (DialogueLua.GetVariable("skip_content").asBool) LocationManager.SetPlayerLocation(LocationManager.instance.PlayerLocation.GetRootLocation(), Transition.Black);
             else DialogueManager.instance.StartConversation("Intro");
         }
 

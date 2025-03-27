@@ -79,7 +79,7 @@ namespace Project.Runtime.Scripts.UI
         
         public void PauseGame()
         {
-            GameManager.instance.inputManager.pauseButton.TogglePause();
+            InputManager.PauseGame();
         }
         
         public void BeginSaveRetrieval()

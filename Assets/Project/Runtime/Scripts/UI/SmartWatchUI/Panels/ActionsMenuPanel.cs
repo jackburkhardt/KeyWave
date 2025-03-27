@@ -37,12 +37,12 @@ public class ActionsMenuPanel : ItemResponsePanel
         var location = DialogueManager.masterDatabase.GetLocation(int.Parse(actionLocation.value));
 
 
-        var playerLocation = GameManager.instance.locationManager.PlayerLocation;
+        var playerLocation = LocationManager.instance.PlayerLocation;
 
         if (item.IsFieldAssigned("New Sublocation"))
         {
             var rootLocation = DialogueManager.masterDatabase.GetLocation(location.RootID);
-            var rootPlayerLocation = GameManager.instance.locationManager.PlayerLocation.GetRootLocation();
+            var rootPlayerLocation = LocationManager.instance.PlayerLocation.GetRootLocation();
 
             return rootLocation == rootPlayerLocation;
         }
@@ -62,7 +62,7 @@ public class ActionsMenuPanel : ItemResponsePanel
                 
             var actorLocation = actor.AssignedField("Location");
             if (actorLocation == null) continue;
-            if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != GameManager.instance.locationManager.PlayerLocation) return false;
+            if (DialogueManager.masterDatabase.GetLocation(int.Parse(actorLocation.value)) != LocationManager.instance.PlayerLocation) return false;
         }
         return true;
     }

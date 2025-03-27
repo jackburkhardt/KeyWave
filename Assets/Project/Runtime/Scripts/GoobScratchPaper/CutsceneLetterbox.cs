@@ -93,6 +93,7 @@ public class CutsceneLetterbox : MonoBehaviour, ICutsceneStartHandler, ICutscene
         var playerLocation = LocationManager.instance.PlayerLocation;
         if (SceneManager.GetSceneByName(playerLocation.Name).isLoaded)
         {
+            if (DialogueManager.instance.isConversationActive) return;
             DialogueManager.instance.StartConversation(playerLocation.Name);
         }
     }
