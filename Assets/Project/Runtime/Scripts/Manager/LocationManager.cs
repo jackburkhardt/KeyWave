@@ -179,6 +179,12 @@ public class LocationManager : MonoBehaviour
         PlayerLocation = location;
         yield return null;
     }
+    
+    public static IEnumerator SwitchLocationImmediate(Location location)
+    {
+        instance.PlayerLocation = location;
+        yield return App.Instance.ChangeScene(location.Name, App.Instance.currentScene, LoadingScreen.Transition.None);
+    }
 
 
     public static float DistanceToLocation(Location location)
@@ -231,16 +237,14 @@ public class LocationManager : MonoBehaviour
     }
 }
 
+// this sequence command is used in the Intro cutscene to change the player's location.
+
 public class SequencerCommandSetLocationImmediate : SequencerCommand
 {
     IEnumerator Start()
     {
         var location = parameters[0];
-        var currentScene = string.Empty;
-
-        if (SceneManager.GetSceneByName("StartMenu").isLoaded) currentScene = "StartMenu";
-        else currentScene = GameManager.CurrentScene;
-        yield return App.Instance.ChangeScene(location, currentScene, LoadingScreen.Transition.None);
+        yield return LocationManager.SwitchLocationImmediate(DialogueManager.masterDatabase.GetLocation(location));
         Stop();
     }
 
