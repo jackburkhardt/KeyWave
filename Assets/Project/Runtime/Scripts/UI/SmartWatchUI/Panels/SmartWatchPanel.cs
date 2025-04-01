@@ -10,6 +10,14 @@ using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
+// The SmartWatchPanel is the main panel that contains all the smartwatch apps. It is best thought of as an enclosure for the apps themselves.
+// Opening the SmartWatchPanel will open the current app, which is probably the Home app by default. Opening an app does not populate it with buttons.
+// Usually, the SmartWatchPanel will be opened by a Dialogue Entry's script during a conversation.
+// The conversation itself will call the DialogueSystem to show responses, likely using an node with an [f] tag. *This* is the trigger for a SmartWatchApp to populate with buttons.
+
+// In summary: If the SmartWatchPanel never opens, make sure that Open() is being called, or SetSmartWatch(true) is called in the Dialogue System.
+// If apps are not populating with buttons, make sure that the conversation is ending with an [f] tag.
+
 public class SmartWatchPanel : UIPanel
 {
     
@@ -19,12 +27,17 @@ public class SmartWatchPanel : UIPanel
     private static SmartWatchAppPanel _currentApp;
     public static Action<SmartWatchAppPanel> onAppOpen;
     
+    // The conversation that will be started when the SmartWatchPanel is opened, if this conversation is not already active.
+    // This conversation must end with a dialogue entry with an [f] tag, which will trigger the SmartWatchApp's ShowResponsesNow method.
     [ConversationPopup] public string conversation;
 
     public HomeButtonPanel homeButton;
     
     public List<SmartWatchAppPanel> appPanels =>
         GetComponentsInChildren<SmartWatchAppPanel>(true).ToList();
+
+    [Tooltip( "Most smartwatch apps are menu panels in disguise, but the Dialogue System sometimes uses the wrong menu panel. This will force the correct one.")]
+    public bool forceOverrideMenuPanel;
 
     public void Awake()
     {
@@ -43,11 +56,25 @@ public class SmartWatchPanel : UIPanel
             _currentApp = appPanels.Find(p => p.Name == defaultApp.Name);
         }
         OpenApp( _currentApp.Name);
+        
         base.Open();
     }
     
     public void OpenApp( string appName)
     {
+        
+        // sometimes the Dialogue System will use the wrong menu panels, so this is a workaround to force the correct one
+        if (forceOverrideMenuPanel)
+        {
+            var menuPanel = _currentApp.GetComponentInChildren<StandardUIMenuPanel>();
+            
+            if (menuPanel != null) // not all apps are menu panels
+            {
+                FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( menuPanel);
+            }
+        }
+        
+        
         var appPanel = appPanels.FirstOrDefault(p => p.Name == appName);
         
         foreach (var smartWatchApp in FindObjectsByType< SmartWatchAppPanel>(  FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -84,7 +111,9 @@ public class SmartWatchPanel : UIPanel
         switch (_currentApp.Name)
         {
             case "Phone":
+                
             {
+                // Moves the whole SmartWatch down during a phone call.
                 GetComponent<Animator>().SetTrigger("Down");
                 break;
             }

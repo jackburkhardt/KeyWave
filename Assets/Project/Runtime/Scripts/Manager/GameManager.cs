@@ -56,6 +56,7 @@ namespace Project.Runtime.Scripts.Manager
 
         public UnityEvent OnGameSceneStart;
         public UnityEvent OnGameSceneEnd;
+
         
         public static bool TryGetSettings( out Settings settings)
         {

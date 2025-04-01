@@ -20,10 +20,10 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     public RectTransform templateContent;
     public RectTransform accumulatedContentHolder;
     public bool accumulateByInstantiation;
-
-    private bool markForRemoveOverride;
     
+    [Tooltip( "When making decisions, the Dialogue System will force this menu panel when this subtitle panel is open, regardless of any DialogueActor settings.")]
     public StandardUIMenuPanel forceOverrideMenuPanel;
+    
     InputAction clickAction;
     InputAction submitAction;
     
@@ -31,16 +31,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     private EventSystem _eventSystem;
 
     
-    public override void Close()
-    {
-        if (forceOverrideMenuPanel != null) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
-        
-        if (TryGetComponent<Button>( out var button))
-        {
-            button.enabled = false;
-        }
-        base.Close(); 
-    }
+ 
 
     private void Show()
     {
@@ -53,6 +44,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     {
         Show();
         
+        // sometimes the Dialogue System will use the wrong menu panels, so this is a workaround to force the correct one
         if (forceOverrideMenuPanel != null)
         {
             FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( forceOverrideMenuPanel);
@@ -66,6 +58,17 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         base.Open();
         RefreshLayoutGroups.Refresh(gameObject);
         StartCoroutine(DelayedRefresh());
+    }
+    
+    public override void Close()
+    {
+        if (forceOverrideMenuPanel != null) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
+        
+        if (TryGetComponent<Button>( out var button))
+        {
+            button.enabled = false;
+        }
+        base.Close(); 
     }
 
     protected override void OnHidden()
