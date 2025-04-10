@@ -106,10 +106,13 @@ namespace Project.Runtime.Scripts.App
         {
             if (e.EventType is "quest_state_change" or "action_state_change")
             {
-    #if UNITY_WEBGL && !UNITY_EDITOR
+                if (e.Data["state"].ToString() == "Success")
+                {
+#if UNITY_WEBGL && !UNITY_EDITOR
                 BrowserInterface.sendPlayerEvent(e.ToString());
-    #endif
-                Debug.Log("[Unity ->] Transmitting player event: " + e.ToString());
+#endif
+                    Debug.Log("[Unity ->] Transmitting player event: " + e.ToString());
+                }
             }
         }
 
