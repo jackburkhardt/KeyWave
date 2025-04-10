@@ -5,6 +5,7 @@ using System.Linq;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -24,9 +25,8 @@ public class InputManager : MonoBehaviour
     InputAction moveAction;
     InputAction submitAction;
     InputAction cancelAction;
-    
-    private List<StandardUIMenuPanel> _menuPanels;
-    private List<StandardUISubtitlePanel> _subtitlePanels;
+
+    private CustomDialogueUI _customDialogueUI;
     private List<ItemUIPanel> _itemUIPanels;
     private SmartWatchPanel _smartWatchPanel;
     
@@ -60,19 +60,20 @@ public class InputManager : MonoBehaviour
         {
             Destroy(this);
         }
+        
+       
     }
 
     private void Start()
     {
         var inputSystemUIInputModule = FindObjectOfType<InputSystemUIInputModule>();
-        _menuPanels = FindObjectsByType<StandardUIMenuPanel>( FindObjectsInactive.Include,  FindObjectsSortMode.None ).ToList();
-        _subtitlePanels = FindObjectsByType<StandardUISubtitlePanel>( FindObjectsInactive.Include,  FindObjectsSortMode.None ).ToList();
         _itemUIPanels = FindObjectsByType<ItemUIPanel>( FindObjectsInactive.Include,  FindObjectsSortMode.None ).ToList();
         _smartWatchPanel = FindObjectOfType<SmartWatchPanel>();
         clickAction = inputSystemUIInputModule.leftClick;
         moveAction = inputSystemUIInputModule.move;
         submitAction = inputSystemUIInputModule.submit;
         cancelAction = inputSystemUIInputModule.cancel;
+        _customDialogueUI = FindObjectOfType<CustomDialogueUI>();
     }
     
     
@@ -80,7 +81,7 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         
-        
+        // auto-pausing gameplay on focus lost
         
         if (GameManager.settings.autoPauseOnFocusLost)
         {
@@ -97,7 +98,7 @@ public class InputManager : MonoBehaviour
             }
         }
         
-        
+        // show cursor when using mouse if it was hidden
         
           if (!cursorModeChangedLastFrame)
           {
@@ -127,13 +128,13 @@ public class InputManager : MonoBehaviour
               cursorModeChangedLastFrame = false;
           }
             
-          
+          var currentlyOpenMenu = CustomUIMenuPanel.latestInstance;
             
           // input and selection handling
           if (clickAction.WasPressedThisFrame() || submitAction.WasPressedThisFrame())
           {
-              var openSubtitlePanel = _subtitlePanels.FirstOrDefault(p => p.isOpen);
-              if (openSubtitlePanel != null && !_menuPanels.Any(p => p.isOpen))
+              var openSubtitlePanel = CustomUISubtitlePanel.latestInstance;
+              if (openSubtitlePanel != null && openSubtitlePanel.isOpen && (currentlyOpenMenu == null || !currentlyOpenMenu.isOpen))
               {
                   if (openSubtitlePanel.subtitleText.maxVisibleCharacters > 0 && (openSubtitlePanel.continueButton != null && openSubtitlePanel.continueButton.enabled))
                   {
@@ -144,7 +145,7 @@ public class InputManager : MonoBehaviour
 
           if (moveAction.WasPressedThisFrame())
           {
-              var anyMenuPanelOpen = _menuPanels.Any(p => p.isOpen);
+              var anyMenuOpen = currentlyOpenMenu != null && currentlyOpenMenu.isOpen; 
               var anyItemPanelOpen = _itemUIPanels.Any(p => p.isOpen);
 
               if ( _defaultSelectable != null && EventSystem.current.currentSelectedGameObject == null)
@@ -152,9 +153,9 @@ public class InputManager : MonoBehaviour
                   EventSystem.current.SetSelectedGameObject(_defaultSelectable.gameObject);
               }
 
-              if (anyMenuPanelOpen || anyItemPanelOpen)
+              if (anyMenuOpen|| anyItemPanelOpen)
               {
-                  var panel = anyMenuPanelOpen ?  (UIPanel) _menuPanels.FirstOrDefault(p => p.isOpen) : _itemUIPanels.FirstOrDefault(p => p.isOpen);
+                  var panel = anyMenuOpen?  (UIPanel) currentlyOpenMenu: _itemUIPanels.FirstOrDefault(p => p.isOpen);
                   var selected = EventSystem.current.currentSelectedGameObject;
 
                   if (panel != null)
@@ -163,7 +164,7 @@ public class InputManager : MonoBehaviour
 
                       if (!selectedIsValid)
                       {
-                          var firstButton = anyMenuPanelOpen ? panel.GetComponentInChildren< StandardUIResponseButton >().gameObject : panel.GetComponentInChildren<ItemUIButton>().gameObject; 
+                          var firstButton = anyMenuOpen? panel.GetComponentInChildren< StandardUIResponseButton >().gameObject : panel.GetComponentInChildren<ItemUIButton>().gameObject; 
                           var firstValidSelectable = firstButton.GetComponentsInChildren<Selectable>()
                               .First(p => p.navigation.mode != Navigation.Mode.None).gameObject;
                           if (firstValidSelectable == null) firstValidSelectable = firstButton;

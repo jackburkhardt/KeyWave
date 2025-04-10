@@ -1,5 +1,6 @@
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using System;
 using UnityEngine;
 
 namespace PixelCrushers.DialogueSystem
@@ -19,6 +20,14 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("Typewriter effect to fast forward if it's not done playing.")]
         public AbstractTypewriterEffect typewriterEffect;
+        
+        
+        [Tooltip(" Time to wait before allowing continue button to be pressed again.")]
+        private const float BufferTime = 0.125f;
+        private float _timeToWait = 0.125f;
+
+        public float initialBuffer = 0;
+        
 
 #if USE_STM
         [Tooltip("If using SuperTextMesh, assign this instead of typewriter effect.")]
@@ -66,8 +75,29 @@ namespace PixelCrushers.DialogueSystem
             button = GetComponent<UnityEngine.UI.Button>();
         }
 
+        protected void OnEnable()
+        {
+            _timeToWait = Mathf.Max( BufferTime, initialBuffer);
+        }
+
+        protected void Update()
+        {
+            if (_timeToWait > 0)
+            {
+                _timeToWait -= Time.unscaledDeltaTime;
+            }
+        }
+
         public virtual void OnFastForward()
         {
+
+            if (_timeToWait > 0)
+            {
+                return;
+            }
+            
+            _timeToWait = BufferTime;
+            
             if ((typewriterEffect != null) && typewriterEffect.isPlaying)
             {
                 typewriterEffect.Stop();

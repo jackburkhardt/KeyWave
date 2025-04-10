@@ -8,8 +8,14 @@ using Project.Editor.Scripts.Attributes.DrawerAttributes;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
+using Sentry.Protocol;
 using UnityEngine;
 using UnityEngine.UI;
+using App = Project.Runtime.Scripts.App.App;
+
+/// <summary>
+/// This panel displays information about a location when clicking on it in the travel SmartWatch app.
+/// </summary>
 
 public class LocationPanel : UIPanel
 {
@@ -46,14 +52,15 @@ public class LocationPanel : UIPanel
     protected override void OnEnable()
     {
         _animator ??= GetComponent<Animator>();
+        App.OnSceneDeloadStart += OnSceneDeloadStart;
         base.OnEnable();
         
     }
 
     protected override void OnDisable()
     {
+        App.OnSceneDeloadStart -= OnSceneDeloadStart;
         base.OnDisable();
-       
     }
 
     private void OnValidate()
@@ -63,14 +70,26 @@ public class LocationPanel : UIPanel
 
     public void OnGameSceneStart()
     {
+        // Since this function is called even if the game object is disabled, we subscribe to events here instead of OnEnable
         SmartWatchPanel.onAppOpen += OnAppOpen;
         TravelUIResponseButton.OnLocationSelected += ShowLocationInfo;
+        if (gameObject.activeSelf) Close();
     }
+
+
 
     public void OnGameSceneEnd()
     {
         SmartWatchPanel.onAppOpen -= OnAppOpen;
         TravelUIResponseButton.OnLocationSelected -= ShowLocationInfo;
+        Close();
+
+
+    }
+    
+    public void OnSceneDeloadStart(string scene)
+    {
+        // Sometimes the panel is not closed when the game scene ends, so this is a contingency to ensure it is closed.
         Close();
     }
 

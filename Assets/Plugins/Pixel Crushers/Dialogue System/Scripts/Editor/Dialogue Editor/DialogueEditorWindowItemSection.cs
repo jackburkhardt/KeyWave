@@ -28,11 +28,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         [SerializeField]
         private bool hideFilteredOutItems = false;
 
+#pragma warning disable CS0414 // Field is assigned but its value is never used
         private bool needToBuildLanguageListFromItems = true;
+#pragma warning restore CS0414 // Field is assigned but its value is never used
 
         private ReorderableList itemReorderableList = null;
         
-        private ReorderableList actionReorderableList = null;
 
         [SerializeField]
         private int itemListSelectedIndex = -1;
@@ -492,7 +493,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         {
             var pointLabels = points.Select(x => x.Name).ToList();
             
-            bool cleanup = false;
             List<Field> fieldsToRemove = new List<Field>();
             List<string> excessPointLabels = new List<string>();
 
@@ -1098,7 +1098,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
         private bool conversationPropertiesFoldout = false;
         private bool locationPropertiesFoldout = false;
-        private bool pointsPropertiesFoldout = true;
         private bool staticPropertiesFoldout = true;
 
         private int SecondsPerCharacter => int.Parse(database.GetVariable("game.clock.secondsPerCharacter").InitialValue);

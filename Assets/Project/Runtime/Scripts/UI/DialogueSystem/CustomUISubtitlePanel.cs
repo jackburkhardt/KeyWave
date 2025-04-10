@@ -16,6 +16,8 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
    
     
     public UITextField conversantName;
+
+    public UITextField dialogueEntryTitle;
     
     public RectTransform templateContent;
     public RectTransform accumulatedContentHolder;
@@ -29,10 +31,44 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     
     private InputSystemUIInputModule _inputSystemUIInputModule;
     private EventSystem _eventSystem;
+    private CustomDialogueUI _customDialogueUI;
 
+    public static CustomUISubtitlePanel latestInstance;
+
+
+    protected void OnValidate()
+    {
+        _customDialogueUI ??= FindObjectOfType<CustomDialogueUI>();
+    }
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+        var typewriter = subtitleText.gameObject.GetComponentInChildren<TextMeshProTypewriterEffect>(true);
+        if (typewriter != null)
+        {
+            typewriter.onBegin.AddListener( Show);
+            typewriter.onFirstCharacter.AddListener( Show);
+            typewriter.onEnd.AddListener( Show);
+        }
+        
+       
+        _customDialogueUI = FindObjectOfType<CustomDialogueUI>();
+    }
+
+    public void OnGameSceneStart()
+    {
+        ClearContents();
+    }
     
- 
-
+    public void OnGameSceneEnd()
+    {
+        Close();
+        ClearContents();
+    }
+    
+    
     private void Show()
     {
         if (!string.IsNullOrEmpty(showAnimationTrigger)) GetComponent<Animator>().SetTrigger(showAnimationTrigger);
@@ -44,10 +80,12 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     {
         Show();
         
+        latestInstance = this;
+        
         // sometimes the Dialogue System will use the wrong menu panels, so this is a workaround to force the correct one
         if (forceOverrideMenuPanel != null)
         {
-            FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( forceOverrideMenuPanel);
+            _customDialogueUI.ForceOverrideMenuPanel( forceOverrideMenuPanel);
         }
       
         if (TryGetComponent<Button>( out var button))
@@ -58,11 +96,18 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         base.Open();
         RefreshLayoutGroups.Refresh(gameObject);
         StartCoroutine(DelayedRefresh());
+        
+        
     }
     
     public override void Close()
     {
-        if (forceOverrideMenuPanel != null) FindObjectOfType<CustomDialogueUI>().ForceOverrideMenuPanel( null);
+        if (forceOverrideMenuPanel != null && _customDialogueUI != null) _customDialogueUI.ForceOverrideMenuPanel( null);
+        
+        if (latestInstance == this)
+        {
+            latestInstance = null;
+        }
         
         if (TryGetComponent<Button>( out var button))
         {
@@ -112,6 +157,11 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         }
         
         if (conversantName != null) conversantName.text = subtitle.listenerInfo.Name;
+        
+        if (dialogueEntryTitle != null)
+        {
+            dialogueEntryTitle.text = subtitle.dialogueEntry.Title;
+        }
 
         TypewriterUtility.StopTyping(subtitleText);
         var previousText = accumulateText  && !accumulateByInstantiation ? accumulatedText : string.Empty;
@@ -211,24 +261,5 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         }
     }
     
-    protected override void Awake()
-    {
-        base.Awake();
-        var typewriter = subtitleText.gameObject.GetComponentInChildren<TextMeshProTypewriterEffect>(true);
-        typewriter.onBegin.AddListener( Show);
-        typewriter.onFirstCharacter.AddListener( Show);
-        typewriter.onEnd.AddListener( Show);
-    }
-
-    public void OnGameSceneStart()
-    {
-        ClearContents();
-    }
-    
-    public void OnGameSceneEnd()
-    {
-        Close();
-        ClearContents();
-    }
     
 }

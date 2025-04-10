@@ -44,6 +44,8 @@ namespace Project.Runtime.Scripts.UI
         public bool forceOverride = false;
         public bool animateButtonsShow;
         public float delayBetweenButtonShow;
+        
+        public static CustomUIMenuPanel latestInstance;
 
 
         public void AnimateButtonsShow()
@@ -276,7 +278,7 @@ namespace Project.Runtime.Scripts.UI
             StartCoroutine(DelayedRefresh());
             
             
-            
+            latestInstance = this;
             
         }
         

@@ -41,7 +41,7 @@ namespace PixelCrushers.DialogueSystem
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("forceOverrideMenuPanel"), true);
             
-            
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dialogueEntryTitle"), true);
             
             
             

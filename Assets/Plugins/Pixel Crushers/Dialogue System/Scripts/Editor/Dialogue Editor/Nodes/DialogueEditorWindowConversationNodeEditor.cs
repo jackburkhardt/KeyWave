@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Plugins.Pixel_Crushers.Dialogue_System.Scripts.Editor.Tools.Perils_Pitfalls;
 using Plugins.Pixel_Crushers.Dialogue_System.Scripts.Utility;
 using UnityEngine;
 using UnityEditor;
@@ -1716,7 +1715,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 
             GenericMenu contextMenu = new GenericMenu();
             contextMenu.AddItem(new GUIContent("Create Node"), false, AddChildCallback, null);
-            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, null, false));
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Vertically"), false, ArrangeNodesCallback, AutoArrangeStyle.Vertically);
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Vertically (alternate)"), false, ArrangeNodesCallback, AutoArrangeStyle.VerticallyOld);
             contextMenu.AddItem(new GUIContent("Arrange Nodes/Horizontally"), false, ArrangeNodesCallback, AutoArrangeStyle.Horizontally);
@@ -1821,8 +1819,6 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
                 contextMenu.AddItem(new GUIContent("Switch Nodes"), false, SwitchNodesCallback, entry);
             }
             contextMenu.AddSeparator("");
-            contextMenu.AddItem(new GUIContent("Create Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, currentEntry, false));
-            contextMenu.AddItem(new GUIContent("Edit Subconversation"), false, CreateSubconversation.ShowSubconversationWindow, new Tuple<Conversation, DialogueEntry, bool>(currentConversation, currentEntry, true));
             
             var sequenceOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/SequenceOptions.asset");
             var titleOpts = AssetDatabase.LoadAssetAtPath<StringList>("Assets/P&P/Utility/TitleOptions.asset");

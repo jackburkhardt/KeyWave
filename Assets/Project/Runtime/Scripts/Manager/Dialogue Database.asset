@@ -967,6 +967,32 @@ MonoBehaviour:
     spritePortrait: {fileID: 0}
     alternatePortraits: []
     spritePortraits: []
+  - id: 45
+    fields:
+    - title: Name
+      value: Game/Tutorial
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Pictures
+      value: '[]'
+      type: 3
+      typeString: CustomFieldType_Files
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: IsPlayer
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: State
+      value: unidentified
+      type: 0
+      typeString: 
+    portrait: {fileID: 0}
+    spritePortrait: {fileID: 0}
+    alternatePortraits: []
+    spritePortraits: []
   items:
   - id: 162
     fields:
@@ -6489,6 +6515,22 @@ MonoBehaviour:
       value: '#a2615eff'
       type: 13
       typeString: CustomFieldType_Color
+    - title: Entry 1 Override Time
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 1 Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Repeat Entry 1 Override Time
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Repeat Entry 1 Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
   - id: 2
     fields:
     - title: Name
@@ -7956,6 +7998,20 @@ MonoBehaviour:
       value: 
       type: 0
       typeString: CustomFieldType_Text
+  - id: 105
+    fields:
+    - title: Name
+      value: game.baseTutorialObserved
+      type: 0
+      typeString: CustomFieldType_Text
+    - title: Initial Value
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Description
+      value: 
+      type: 0
+      typeString: CustomFieldType_Text
   conversations:
   - id: 25
     fields:
@@ -8450,7 +8506,7 @@ MonoBehaviour:
       - originConversationID: 28
         originDialogueID: 0
         destinationConversationID: 28
-        destinationDialogueID: 62
+        destinationDialogueID: 63
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -8460,8 +8516,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 803.9578
-        y: 387.0428
+        x: 638.0906
+        y: 207.44861
         width: 160
         height: 30
     - id: 32
@@ -9631,8 +9687,68 @@ MonoBehaviour:
         y: 412.4346
         width: 160
         height: 30
+    - id: 63
+      fields:
+      - title: Title
+        value: Backstory
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 45
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: This game begins with a tutorialized Backstory section. The decisions
+          you make here will not be reflected in your final score.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
+      conversationID: 28
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 28
+        originDialogueID: 63
+        destinationConversationID: 28
+        destinationDialogueID: 62
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 632.92456
+        y: 320.1055
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 186.33722, y: 753.85376}
+    canvasScrollPosition: {x: 352.20444, y: 21.750366}
     canvasZoom: 0.6993547
   - id: 34
     fields:
@@ -26806,7 +26922,7 @@ MonoBehaviour:
       - title: Duration
         value: 170
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 78
       isRoot: 0
       isGroup: 0
@@ -27005,8 +27121,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Boolean
       - title: Duration
         value: 0
-        type: 0
-        typeString: 
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 78
       isRoot: 0
       isGroup: 1
@@ -27223,7 +27339,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 78
       isRoot: 0
       isGroup: 0
@@ -27417,8 +27533,8 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       - title: Duration
         value: 0
-        type: 0
-        typeString: 
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 78
       isRoot: 0
       isGroup: 0
@@ -27449,11 +27565,11 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
         value: 12
         type: 5
@@ -27465,19 +27581,19 @@ MonoBehaviour:
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: '"Hmm, I should have those around here. One moment, please."'
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Duration
         value: 170
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 78
       isRoot: 0
       isGroup: 0
@@ -27508,11 +27624,11 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
         value: 12
         type: 5
@@ -27524,19 +27640,19 @@ MonoBehaviour:
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: You hear the shuffling of papers and the opening and closing of drawers.
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Duration
         value: 185
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 78
       isRoot: 0
       isGroup: 0
@@ -27627,11 +27743,11 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
         value: 13
         type: 5
@@ -27643,20 +27759,20 @@ MonoBehaviour:
       - title: Menu Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: Drats! Looks like this one is a dead end. You'll have to rely on your
           intuition and conversations with the staff.
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 78
       isRoot: 0
       isGroup: 0
@@ -27683,8 +27799,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 3244.772, y: 184.83513}
-    canvasZoom: 1.0502594
+    canvasScrollPosition: {x: 3241.9402, y: 127.62768}
+    canvasZoom: 0.90025944
   - id: 102
     fields:
     - title: Title
@@ -45184,8 +45300,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 135.89587
-        y: 756.0416
+        x: 130.82188
+        y: 724.7519
         width: 160
         height: 30
     - id: 11
@@ -45230,6 +45346,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 147
       isRoot: 0
       isGroup: 0
@@ -45245,13 +45365,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 131.95229
-        y: 869.42053
+        x: 265.5608
+        y: 935.36194
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 126.126724, y: 0}
-    canvasZoom: 0.73599887
+    canvasScrollPosition: {x: 56.659714, y: 187.0384}
+    canvasZoom: 0.94599867
   - id: 149
     fields:
     - title: Title
@@ -46154,7 +46274,7 @@ MonoBehaviour:
       - originConversationID: 149
         originDialogueID: 18
         destinationConversationID: 149
-        destinationDialogueID: 30
+        destinationDialogueID: 31
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -46370,12 +46490,72 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 128.47018
-        y: 1121.1324
+        x: 117.95252
+        y: 1193.003
+        width: 160
+        height: 30
+    - id: 31
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Wait, was that really the best use of your time? Your increased anxiety
+          has caused your wellness to fall.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
+      conversationID: 149
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 149
+        originDialogueID: 31
+        destinationConversationID: 149
+        destinationDialogueID: 30
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 114.491745
+        y: 1110.4559
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 35.0589}
+    canvasScrollPosition: {x: 0, y: 305.88898}
     canvasZoom: 0.9127496
   - id: 150
     fields:
@@ -47067,7 +47247,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 150
+        originDialogueID: 43
+        destinationConversationID: 150
+        destinationDialogueID: 54
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 'SetQuestEntryState("Complete a public speaking course.", 2, "success");
 
@@ -47078,8 +47264,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 371.55692
-        y: 622.6494
+        x: 364.4419
+        y: 617.31305
         width: 160
         height: 30
     - id: 51
@@ -47293,6 +47479,60 @@ MonoBehaviour:
         serializedVersion: 2
         x: 372.3146
         y: 270.72565
+        width: 160
+        height: 30
+    - id: 54
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 14
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Wait, was that really the best use of your time? Your increased anxiety
+          has caused your wellness to fall.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
+      conversationID: 150
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks: []
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 364.4419
+        y: 733.12744
         width: 160
         height: 30
     entryGroups: []
@@ -47518,6 +47758,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 151
       isRoot: 0
       isGroup: 0
@@ -47533,8 +47777,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 265.2241
-        y: 477.9534
+        x: 263.67633
+        y: 661.3634
         width: 160
         height: 30
     - id: 14
@@ -47884,6 +48128,66 @@ MonoBehaviour:
       - originConversationID: 151
         originDialogueID: 18
         destinationConversationID: 151
+        destinationDialogueID: 19
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 274.05515
+        y: 432.57495
+        width: 160
+        height: 30
+    - id: 19
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 13
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Wait, was that really the best use of your time? Your increased anxiety
+          has caused your wellness to fall.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
+      conversationID: 151
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 151
+        originDialogueID: 19
+        destinationConversationID: 151
         destinationDialogueID: 13
         isConnector: 0
         priority: 2
@@ -47894,13 +48198,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 262.44693
-        y: 390.78534
+        x: 277.5418
+        y: 524.99445
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 170.68498, y: 37.973083}
-    canvasZoom: 1.03375
+    canvasScrollPosition: {x: 91.591736, y: 8.787483}
+    canvasZoom: 1.06375
   - id: 154
     fields:
     - title: Title
@@ -60975,15 +61279,15 @@ MonoBehaviour:
       - originConversationID: 201
         originDialogueID: 0
         destinationConversationID: 201
-        destinationDialogueID: 1
-        isConnector: 0
-        priority: 2
-      - originConversationID: 201
-        originDialogueID: 0
-        destinationConversationID: 201
         destinationDialogueID: 4
         isConnector: 0
         priority: 3
+      - originConversationID: 201
+        originDialogueID: 0
+        destinationConversationID: 201
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -60991,8 +61295,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 173.33078
-        y: 326.9141
+        x: 157.5367
+        y: 284.37448
         width: 160
         height: 30
     - id: 1
@@ -61056,14 +61360,14 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Variable["game.baseTutorialObserved"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 170.13489
-        y: 634.9283
+        x: 112.916275
+        y: 749.3655
         width: 160
         height: 30
     - id: 2
@@ -61122,8 +61426,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 163.25316
-        y: 731.0357
+        x: 109.56659
+        y: 858.8944
         width: 160
         height: 30
     - id: 3
@@ -61244,9 +61548,69 @@ MonoBehaviour:
         y: 555.1508
         width: 160
         height: 30
+    - id: 5
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 45
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 21
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: From this point onwards, your choices will be scored. Try to maximize
+          your total score.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
+      conversationID: 201
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Passthrough
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 201
+        originDialogueID: 5
+        destinationConversationID: 201
+        destinationDialogueID: 1
+        isConnector: 0
+        priority: 2
+      conditionsString: Variable["game.baseTutorialObserved"] == false
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 109.50133
+        y: 625.4123
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 77.685585, y: 364.35938}
-    canvasZoom: 1.1924993
+    canvasScrollPosition: {x: 0, y: 266.09174}
+    canvasZoom: 1.1324993
   - id: 202
     fields:
     - title: Title
