@@ -13,7 +13,7 @@ namespace Project.Runtime.Scripts.Manager
         public readonly int Day;
         private List<string> _activeTasks = new();
         private List<string> _completedTasks = new();
-        private List<string> _failedTasks = new();
+        private List<string> _abandonedTasks = new();
 
         public Dictionary<string, int> EarnedPoints;
 
@@ -21,67 +21,71 @@ namespace Project.Runtime.Scripts.Manager
         {
             Day = day;
             GameEvent.OnPlayerEvent += OnPlayerEvent;
+            EarnedPoints = new Dictionary<string, int>();
+
+            foreach (var pointType in Points.GetAllPointsTypes())
+            {
+                EarnedPoints.Add(pointType.Name , 0);
+            }
         }
 
         public List<string> CompletedTasks => _completedTasks;
         public List<string> ActiveTasks => _activeTasks;
-        public List<string> FailedTasks => _failedTasks;
+        public List<string> AbandonedTasks => _abandonedTasks;
 
         private void OnPlayerEvent(PlayerEvent playerEvent)
         {
-            
-            if (EarnedPoints == null)
+            string questName;
+            if (playerEvent.EventType == "quest_state_change")
             {
-                EarnedPoints = new Dictionary<string, int>();
-
-                foreach (var pointType in Points.GetAllPointsTypes())
-                {
-                    EarnedPoints.Add(pointType.Name , 0);
-                }
+                questName = QuestLog.GetQuestTitle(playerEvent.Data["questName"].ToString());
+            } else if (playerEvent.EventType == "action_state_change")
+            {
+                questName = QuestLog.GetQuestTitle(playerEvent.Data["actionName"].ToString());
+            }
+            else
+            {
+                return;
             }
             
-            switch (playerEvent.EventType)
+            if (string.IsNullOrEmpty(questName)) return;
+            
+            if (playerEvent.EventType is "quest_state_change" or "action_state_change")
             {
-                case "points":
+                switch (playerEvent.Data["state"].ToString())
                 {
-                    Points.PointsField pointsInfo = Points.PointsField.FromJObject(playerEvent.Data);
-                    EarnedPoints[pointsInfo.Type] += pointsInfo.Points;
-                    
-                    
-                    for( int i = 0; i < EarnedPoints.Count; i++)
-                    {
-                        DialogueLua.SetItemField( EarnedPoints.ElementAt(i).Key, "Score", EarnedPoints.ElementAt(i).Value);
-                    }
-                    
-                    break;
-                }
-                case "quest_state_change":
-                {
-                    string questName = playerEvent.Data["questName"].ToString();
-                    if (string.IsNullOrEmpty(questName)) return;
-                
-                    switch (playerEvent.Data["state"].ToString())
-                    {
-                        case "Success":
-                            if (!_completedTasks.Contains(questName))
-                            {
-                                _completedTasks.Add(questName);
-                            }
-                            break;
-                        case "Active":
-                            if (!_activeTasks.Contains(questName))
-                            {
-                                _activeTasks.Add(questName);
-                            }
-                            break;
-                        case "Failure":
-                            if (!_failedTasks.Contains(questName))
-                            {
-                                _failedTasks.Add(questName);
-                            }
-                            break;
-                    }
-                    break;
+                    case "Success":
+                        if (!_completedTasks.Contains(questName))
+                        {
+                            _completedTasks.Add(questName);
+                        }
+                        JArray pointsArray = JArray.FromObject(playerEvent.Data["points"] ?? new JArray() );
+                        foreach (var field in pointsArray)
+                        {
+                            Points.PointsField pointsInfo = Points.PointsField.FromJObject(field);
+                            EarnedPoints[pointsInfo.Type] += pointsInfo.Points;   
+                        }
+            
+                        for( int i = 0; i < EarnedPoints.Count; i++)
+                        {
+                            DialogueLua.SetItemField( EarnedPoints.ElementAt(i).Key, "Score", EarnedPoints.ElementAt(i).Value);
+                        }
+
+                        break;
+                    case "Active":
+                        if (!_activeTasks.Contains(questName))
+                        {
+                            _activeTasks.Add(questName);
+                        }
+
+                        break;
+                    case "Abandoned":
+                        if (!_abandonedTasks.Contains(questName))
+                        {
+                            _abandonedTasks.Add(questName);
+                        }
+
+                        break;
                 }
             }
         }
@@ -100,6 +104,7 @@ namespace Project.Runtime.Scripts.Manager
                 ["Day"] = Day,
                 ["CompletedTasks"] = JArray.FromObject(_completedTasks),
                 ["ActiveTasks"] = JArray.FromObject(_activeTasks),
+                ["AbandonedTasks"] = JArray.FromObject(_abandonedTasks),
                 ["Points"] = JObject.FromObject(EarnedPoints, settings)
             };
 

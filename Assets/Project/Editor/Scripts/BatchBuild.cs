@@ -46,7 +46,7 @@ public static class BatchBuild
             PlayerSettings.SetIl2CppCompilerConfiguration(BuildTargetGroup.WebGL, Il2CppCompilerConfiguration.Release);
             PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL , ManagedStrippingLevel.Low);
             PlayerSettings.stripEngineCode = true;
-            var buildDate = DateTime.Today.ToString("yy.M.dd");
+            var buildDate = DateTime.Today.ToString("yy.MM.dd");
             buildDate += "-DEMO";
             Debug.Log($"Beginning build number {buildDate}");
             PlayerSettings.bundleVersion = buildDate;
@@ -87,8 +87,7 @@ public static class BatchBuild
             PlayerSettings.SetIl2CppCompilerConfiguration(BuildTargetGroup.WebGL, Il2CppCompilerConfiguration.Release);
             PlayerSettings.stripEngineCode = true;
             PlayerSettings.SetManagedStrippingLevel(BuildTargetGroup.WebGL , ManagedStrippingLevel.Low);
-            var buildDate = DateTime.Today.ToString("yy.M.dd");
-            buildDate += "-PUBLIC";
+            var buildDate = DateTime.Today.ToString("yy.MM.dd");
             Debug.Log($"Beginning build number {buildDate}");
             PlayerSettings.bundleVersion = buildDate;
             PlayerSettings.SplashScreen.showUnityLogo = false;

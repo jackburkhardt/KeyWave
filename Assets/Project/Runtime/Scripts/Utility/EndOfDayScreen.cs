@@ -33,7 +33,7 @@ namespace Project.Runtime.Scripts.Utility
                 taskObject.GetComponent<ObjectivePanelItem>().SetVisibleElements("active", task);
             }
         
-            foreach (var task in _report.FailedTasks)
+            foreach (var task in _report.AbandonedTasks)
             {
                 var taskObject = Instantiate(_taskDisplayPrefab, _failedPanel) as GameObject;
                 taskObject.GetComponent<ObjectivePanelItem>().SetVisibleElements("failure", task);

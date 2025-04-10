@@ -130,8 +130,6 @@ namespace Project.Runtime.Scripts.Manager
             }
 
         }
-       
-
 
         private void Update()
         {

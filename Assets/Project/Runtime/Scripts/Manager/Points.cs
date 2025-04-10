@@ -192,12 +192,12 @@ namespace Project.Runtime.Scripts.Manager
             [FormerlySerializedAs("points")] 
             public int Points;
             
-            public static PointsField FromJObject(JObject data)
+            public static PointsField FromJObject(JToken data)
             {
-                if (data["points"] == null || data["pointsType"] == null) return new PointsField {Type = string.Empty, Points = 0};
+                if (data["Points"] == null || data["Type"] == null) return new PointsField {Type = string.Empty, Points = 0};
                 
-                var type = (string) data["pointsType"];
-                var points = (int) data["points"];
+                var type = (string) data["Type"];
+                var points = (int) data["Points"];
                 return new PointsField {Type = type, Points = points};
             }
 
