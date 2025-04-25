@@ -69,6 +69,17 @@ namespace Project.Runtime.Scripts.UI
         {
             _onNewGame.Invoke();
             App.App.Instance.StartNewGame();
+            
+            
+            // ensure that the start menu buttons like Start New Game, etc are hidden.
+            
+            var allStartMenuPanels = FindObjectsByType< StartMenuPanel>( FindObjectsSortMode.None);
+            
+            foreach (var panel in allStartMenuPanels)
+            {
+                panel.Close();
+            }
+            
         }
 
         public void ContinueGame()
