@@ -83,7 +83,7 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
         latestInstance = this;
         
         // Open can be called before Awake, so this ensures that the _customDialogueUI is set
-        if (!_customDialogueUI) _customDialogueUI = FindObjectOfType<CustomDialogueUI>();
+        _customDialogueUI ??= FindObjectOfType<CustomDialogueUI>();
         
         
         // sometimes the Dialogue System will use the wrong menu panels, so this is a workaround to force the correct one
