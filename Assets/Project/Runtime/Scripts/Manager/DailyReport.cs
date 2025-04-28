@@ -58,6 +58,7 @@ namespace Project.Runtime.Scripts.Manager
                         if (!_completedTasks.Contains(questName))
                         {
                             _completedTasks.Add(questName);
+                            _activeTasks.RemoveAll((name) => name == questName);
                         }
                         JArray pointsArray = JArray.FromObject(playerEvent.Data["points"] ?? new JArray() );
                         foreach (var field in pointsArray)
@@ -83,6 +84,7 @@ namespace Project.Runtime.Scripts.Manager
                         if (!_abandonedTasks.Contains(questName))
                         {
                             _abandonedTasks.Add(questName);
+                            _activeTasks.RemoveAll((name) => name == questName);
                         }
 
                         break;
