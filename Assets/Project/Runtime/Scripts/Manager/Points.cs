@@ -65,8 +65,6 @@ namespace Project.Runtime.Scripts.Manager
 
         public static List<PointsField> GetPointsFieldsFromItem(Item item, DialogueDatabase database = null)
         {
-            
-            
             if (database == null) database = GameManager.dialogueDatabase;
             
             List<PointsField> itemPointsFields = new List<PointsField>();

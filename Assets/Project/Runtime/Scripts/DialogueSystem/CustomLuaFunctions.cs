@@ -90,6 +90,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
                
                Lua.RegisterFunction(nameof(DoEndOfDay), this,
                 SymbolExtensions.GetMethodInfo(() => DoEndOfDay()));
+            Lua.RegisterFunction(nameof(AddPoints), this, SymbolExtensions.GetMethodInfo(() => AddPoints(0,"")));
         }
         
 
@@ -134,6 +135,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(PlayerLocationIsClosed));
             Lua.UnregisterFunction(nameof(SetLocation));
             Lua.UnregisterFunction(nameof(DoEndOfDay));
+            Lua.UnregisterFunction(nameof(AddPoints));
         }
         
         
@@ -412,6 +414,11 @@ namespace Project.Runtime.Scripts.DialogueSystem
         public void DoEndOfDay()
         {
             GameManager.instance.DoEndOfDay();
+        }
+
+        public void AddPoints(double points, string pointType)
+        {
+            Points.AddPoints(pointType, (int)points, false);
         }
         
     }

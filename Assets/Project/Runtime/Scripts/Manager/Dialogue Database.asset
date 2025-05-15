@@ -17810,6 +17810,10 @@ MonoBehaviour:
         value: Context:0
         type: 10
         typeString: CustomFieldType_PointsType
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 51
       isRoot: 0
       isGroup: 0
@@ -17820,8 +17824,8 @@ MonoBehaviour:
       outgoingLinks:
       - originConversationID: 51
         originDialogueID: 22
-        destinationConversationID: 21
-        destinationDialogueID: 0
+        destinationConversationID: -1
+        destinationDialogueID: -1
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -18088,8 +18092,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.73000044
+    canvasScrollPosition: {x: 205.81146, y: 23.836227}
+    canvasZoom: 0.7600004
   - id: 52
     fields:
     - title: Title
@@ -25407,7 +25411,9 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: 'AddPoints(5, "Teamwork");
+
+'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -25463,7 +25469,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 77
       isRoot: 0
       isGroup: 0
@@ -25621,7 +25627,9 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: 'AddPoints(5, "Teamwork");
+
+'
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -26697,8 +26705,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 612.08154, y: 0}
-    canvasZoom: 0.68249923
+    canvasScrollPosition: {x: 373.349, y: 0}
+    canvasZoom: 0.65249926
   - id: 78
     fields:
     - title: Title
@@ -27363,7 +27371,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 3324.0327
+        x: 3323.107
         y: 517.9111
         width: 160
         height: 30
@@ -27801,8 +27809,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 3214.8833, y: 121.71117}
-    canvasZoom: 0.9302594
+    canvasScrollPosition: {x: 3118.98, y: 0}
+    canvasZoom: 0.6902597
   - id: 102
     fields:
     - title: Title
@@ -36877,7 +36885,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37324,7 +37332,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37392,6 +37400,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37511,9 +37523,8 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: '"Rudeness is only wrong if the receiving end does not deserve it.
-          Now, let''s cut to the chase. Do you want a haircut or not? We also offer
-          massage services.'
+        value: '"I don''t mean to be rude, I''m just saying what I see. Nothing to
+          be ashamed of. Do you want a haircut? We also offer massage services."'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -37533,7 +37544,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 270
+        value: 255
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -37603,6 +37614,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 137
       isRoot: 0
       isGroup: 0
@@ -37652,7 +37667,7 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: '"Then you better be on your way. Still, free to stop by anytime.
-          You know you need it."'
+          You''ll need one eventually!"'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -37672,7 +37687,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 210
+        value: 205
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 137
@@ -38964,8 +38979,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 9.933807, y: 1076.9404}
-    canvasZoom: 0.8858701
+    canvasScrollPosition: {x: 19.526676, y: 233.94543}
+    canvasZoom: 0.80686975
   - id: 140
     fields:
     - title: Title
@@ -39321,9 +39336,9 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: Of course, of course. Would you lke to look around at our shelf items
-          or have a jacket altered just for you? The shelf items are great quality,
-          but nothing compared to the impression from a fitted jacket!
+        value: '"Of course, of course. Would you lke to look around at our shelf
+          items or have a jacket altered just for you? The shelf items are great
+          quality, but nothing compared to the impression from a fitted jacket!"'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -39419,6 +39434,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 140
       isRoot: 0
       isGroup: 0
@@ -39538,7 +39557,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: You made an excellent choice. It'll be more than worth it.
+        value: '"You made an excellent choice. It''ll be more than worth it."'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -39609,7 +39628,7 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
-        value: I'm looking forward to seeing your selection.
+        value: '"I''m looking forward to seeing your selection."'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -39823,9 +39842,7 @@ MonoBehaviour:
         typeString: CustomFieldType_Actor
       - title: Menu Text
         value: You find a nice unstructured jacket that fits you pretty well, plus
-          it's on sale.  Your staff will certainly be impressed by your seriousness
-          and professionalism, and that's the first impression you are looking to
-          make.
+          it's on sale!
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -39851,7 +39868,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 140
       isRoot: 0
       isGroup: 0
@@ -39863,7 +39880,7 @@ MonoBehaviour:
       - originConversationID: 140
         originDialogueID: 14
         destinationConversationID: 140
-        destinationDialogueID: 16
+        destinationDialogueID: 19
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -39896,11 +39913,10 @@ MonoBehaviour:
         type: 0
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: "Finally, you have a new bespoke sport coat. However, you are feeling
-          a little buyer's remorse. It's nice, sure, but maybe you spent too much
-          time and money on it. Perhaps you may have been better off just getting
-          an off-the-shelf jacket instead. \n\nThe first day looms closer with every
-          hour you spend here...."
+        value: 'Finally, you have a new bespoke sport coat. However, you are feeling
+          a little buyer''s remorse. It''s nice, sure, but you spent a lot of time
+          and money on it. Perhaps you may have been better off just getting an off-the-shelf
+          jacket instead. '
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -39926,7 +39942,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 140
       isRoot: 0
       isGroup: 0
@@ -39938,7 +39954,7 @@ MonoBehaviour:
       - originConversationID: 140
         originDialogueID: 15
         destinationConversationID: 140
-        destinationDialogueID: 16
+        destinationDialogueID: 20
         isConnector: 0
         priority: 2
       conditionsString: 
@@ -40013,8 +40029,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 373.33923
-        y: 666.82025
+        x: 347.29132
+        y: 713.4895
         width: 160
         height: 30
     - id: 17
@@ -40087,11 +40103,11 @@ MonoBehaviour:
       - title: Title
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Description
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Actor
         value: 7
         type: 5
@@ -40104,19 +40120,19 @@ MonoBehaviour:
         value: You enter the store and look around. The shelves are lined neatly
           with suit jackets, shirts, and many, many ties.
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Sequence
         value: 
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 140
       isRoot: 0
       isGroup: 0
@@ -40142,8 +40158,127 @@ MonoBehaviour:
         y: 84.8189
         width: 160
         height: 30
+    - id: 19
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: Your staff will certainly be impressed by your seriousness and professionalism,
+          and that's the first impression you are looking to make.
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
+      conversationID: 140
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 140
+        originDialogueID: 19
+        destinationConversationID: 140
+        destinationDialogueID: 16
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 173.1857
+        y: 605.4423
+        width: 160
+        height: 30
+    - id: 20
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Description
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Actor
+        value: 7
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: No matter. Your first day looms closer with every hour you spend here....
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: CustomFieldType_Text
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
+      conversationID: 140
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 140
+        originDialogueID: 20
+        destinationConversationID: 140
+        destinationDialogueID: 16
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 376.69803
+        y: 621.9993
+        width: 160
+        height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 69.46115, y: 0}
+    canvasScrollPosition: {x: 72.71713, y: 0}
     canvasZoom: 0.9213787
   - id: 144
     fields:
@@ -40532,7 +40667,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40548,7 +40683,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(-5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -40603,7 +40738,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -40619,7 +40754,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Context");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -40819,7 +40954,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -41416,7 +41551,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 144
       isRoot: 0
       isGroup: 0
@@ -41774,8 +41909,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 86.996765}
-    canvasZoom: 0.81842196
+    canvasScrollPosition: {x: 95.412224, y: 94.34144}
+    canvasZoom: 0.84842193
   - id: 145
     fields:
     - title: Title
@@ -42308,7 +42443,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42324,7 +42459,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Context");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -42379,7 +42514,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -42395,7 +42530,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Skills");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -44004,7 +44139,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -44020,7 +44155,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(-5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -44075,7 +44210,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -44091,7 +44226,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(-5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -44147,7 +44282,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 145
       isRoot: 0
       isGroup: 0
@@ -44163,7 +44298,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(-5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -44524,8 +44659,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 151.08612, y: 996.09863}
-    canvasZoom: 0.7479177
+    canvasScrollPosition: {x: 164.62076, y: 1175.8273}
+    canvasZoom: 0.80791765
   - id: 147
     fields:
     - title: Title
@@ -46557,8 +46692,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 305.88898}
-    canvasZoom: 0.9127496
+    canvasScrollPosition: {x: 0, y: 61.209595}
+    canvasZoom: 0.76274973
   - id: 150
     fields:
     - title: Title
@@ -48637,7 +48772,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48709,7 +48844,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -48725,7 +48860,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -49163,7 +49298,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -49234,7 +49369,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -49305,7 +49440,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 157
       isRoot: 0
       isGroup: 0
@@ -50392,8 +50527,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 186.85406}
-    canvasZoom: 0.85200167
+    canvasScrollPosition: {x: 135.71812, y: 293.18546}
+    canvasZoom: 1.0020015
   - id: 158
     fields:
     - title: Title
@@ -51262,7 +51397,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 159
       isRoot: 0
       isGroup: 0
@@ -51333,7 +51468,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 159
       isRoot: 0
       isGroup: 0
@@ -51349,7 +51484,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(-5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -51850,6 +51985,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 159
       isRoot: 0
       isGroup: 0
@@ -51865,7 +52004,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -53238,7 +53377,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 585.33826}
+    canvasScrollPosition: {x: 0, y: 413.66223}
     canvasZoom: 0.8050046
   - id: 177
     fields:
@@ -54546,8 +54685,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 474.38373
-        y: 963.09924
+        x: 467.80658
+        y: 967.484
         width: 160
         height: 30
     - id: 17
@@ -54708,7 +54847,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 215.19817
+        x: 213.00575
         y: 1050.2383
         width: 160
         height: 30
@@ -54786,8 +54925,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 729.4833
-        y: 1167.9993
+        x: 728.3498
+        y: 1169.1327
         width: 160
         height: 30
     - id: 20
@@ -54881,8 +55020,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: Maybe you could've just waited out the downturn and come out on top
-          later?
+        value: 'Why not wait out out the downturn and come out on top later? '
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -54930,8 +55068,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 232.58405
-        y: 1172.9348
+        x: 241.6518
+        y: 1187.6699
         width: 160
         height: 30
     - id: 22
@@ -56712,8 +56850,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 47.35562, y: 945.958}
-    canvasZoom: 0.91224617
+    canvasScrollPosition: {x: 0, y: 904.9851}
+    canvasZoom: 0.8822462
   - id: 180
     fields:
     - title: Title
@@ -57925,7 +58063,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 565.1305}
+    canvasScrollPosition: {x: 0, y: 606.56616}
     canvasZoom: 1.0377531
   - id: 182
     fields:
@@ -59817,8 +59955,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 179.65193, y: 266.40466}
-    canvasZoom: 0.8130015
+    canvasScrollPosition: {x: 151.38962, y: 230.34131}
+    canvasZoom: 0.7530016
   - id: 188
     fields:
     - title: Title
@@ -63062,7 +63200,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 203
       isRoot: 0
       isGroup: 0
@@ -63439,7 +63577,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 8.07341, y: 128.44394}
+    canvasScrollPosition: {x: 0, y: 191.7467}
     canvasZoom: 1.0899999
   - id: 204
     fields:
@@ -65340,7 +65478,7 @@ MonoBehaviour:
       - title: Duration
         value: 0
         type: 0
-        typeString: 
+        typeString: CustomFieldType_Text
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -65696,6 +65834,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -65763,6 +65905,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -65986,6 +66132,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -66001,7 +66151,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Context");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -66054,6 +66204,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -66069,7 +66223,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(-5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -66122,6 +66276,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -66340,6 +66498,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 207
       isRoot: 0
       isGroup: 0
@@ -66599,7 +66761,8 @@ MonoBehaviour:
         value: '"Good for you!"
 
 
-          It''s half sarcastic, half serious.'
+          It''s half sarcastic but you can tell
+          she respects you.'
         type: 0
         typeString: CustomFieldType_Text
       - title: Sequence
@@ -66619,7 +66782,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 155
+        value: 180
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -66936,8 +67099,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.9020001
+    canvasScrollPosition: {x: 0, y: 379.14297}
+    canvasZoom: 0.76375043
   - id: 208
     fields:
     - title: Title
@@ -69163,7 +69326,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 435.76703, y: 98.21866}
+    canvasScrollPosition: {x: 910.4177, y: 94.27234}
     canvasZoom: 0.91225004
   - id: 209
     fields:
