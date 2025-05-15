@@ -1,4 +1,5 @@
 using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -16,10 +17,11 @@ namespace Project.Runtime.Scripts.Utility
         private void Start()
         {
             _report = GameManager.instance.dailyReport;
-#if UNITY_WEBGL && !UNITY_EDITOR
-        BrowserInterface.sendPlayerEvent(_report.SerializeForWeb());
-        BrowserInterface.sendPlayerEvent(GameLog.SerializeForWeb());
-#endif
+            string eodEvent = ConstructEndOfDayEvent();
+            Debug.Log("Transmitting EOD event...\n" + eodEvent);
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            BrowserInterface.sendPlayerEvent(eodEvent);
+            #endif
             
             foreach (var task in _report.CompletedTasks)
             {
@@ -47,6 +49,15 @@ namespace Project.Runtime.Scripts.Utility
             #endif
             // uncomment/remove above if we do add multiple days.
             // GameManager.instance.StartNewDay();
+        }
+
+        private string ConstructEndOfDayEvent()
+        {
+            var dayReport = _report.ToJson();
+            var gameLog = GameLog.Log2Json();
+            dayReport.Merge(gameLog);
+            var playerEvent = new PlayerEvent("end_of_day", dayReport);
+            return playerEvent.ToString();
         }
     }
 }

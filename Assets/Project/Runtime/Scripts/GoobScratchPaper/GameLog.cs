@@ -146,7 +146,7 @@ public class GameLog : MonoBehaviour
         return logEntries.Where(e => !string.IsNullOrEmpty(e));
     }
 
-    public static string SerializeForWeb()
+    public static JObject Log2Json()
     {
         var entries = GetLogWithoutFormatting();
         
@@ -162,10 +162,9 @@ public class GameLog : MonoBehaviour
 
         JObject log = new JObject
         {
-            ["EventType"] = "player_log",
-            ["Entries"] = JObject.FromObject(logAsDict)
+            ["GameLog"] = JObject.FromObject(logAsDict)
         };
         
-        return JsonConvert.SerializeObject(log, Formatting.None);
+        return log;
     }
 }

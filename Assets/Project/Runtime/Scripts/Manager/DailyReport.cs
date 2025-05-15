@@ -92,7 +92,7 @@ namespace Project.Runtime.Scripts.Manager
             }
         }
 
-        public string SerializeForWeb()
+        public JObject ToJson()
         {
             var settings = new JsonSerializer()
             {
@@ -102,7 +102,6 @@ namespace Project.Runtime.Scripts.Manager
 
             JObject report = new()
             {
-                ["EventType"] = "daily_report",
                 ["Day"] = Day,
                 ["CompletedTasks"] = JArray.FromObject(_completedTasks),
                 ["ActiveTasks"] = JArray.FromObject(_activeTasks),
@@ -110,7 +109,7 @@ namespace Project.Runtime.Scripts.Manager
                 ["Points"] = JObject.FromObject(EarnedPoints, settings)
             };
 
-            return JsonConvert.SerializeObject(report, Formatting.None);
+            return report;
         }
 
         ~DailyReport()
