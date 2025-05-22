@@ -154,7 +154,7 @@ public class GameLog : MonoBehaviour
         Dictionary<string, string> logAsDict = new();
         foreach (var entry in entries)
         {
-            var time = entry[1..6];
+            var time = entry[1..6].Replace(':', '_');
             var message = entry[8..];
             
             logAsDict.Add(time, message);
