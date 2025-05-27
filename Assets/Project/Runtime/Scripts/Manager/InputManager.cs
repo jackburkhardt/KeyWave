@@ -128,51 +128,30 @@ public class InputManager : MonoBehaviour
               cursorModeChangedLastFrame = false;
           }
             
-          var currentlyOpenMenu = CustomUIMenuPanel.latestInstance;
+     
             
           // input and selection handling
+          
+          // continue dialogue when clicking anywhere
           if (clickAction.WasPressedThisFrame() || submitAction.WasPressedThisFrame())
           {
-              var openSubtitlePanel = CustomUISubtitlePanel.latestInstance;
-              if (openSubtitlePanel != null && openSubtitlePanel.isOpen && (currentlyOpenMenu == null || !currentlyOpenMenu.isOpen))
-              {
-                  if (openSubtitlePanel.subtitleText.maxVisibleCharacters > 0 && (openSubtitlePanel.continueButton != null && openSubtitlePanel.continueButton.enabled))
-                  {
-                      openSubtitlePanel.continueButton.OnFastForward();
-                  }
-              }
+             TryDialogueContinue();
           }
 
+          var currentlyOpenMenu = CustomUIMenuPanel.latestInstance;
+          // select appropriate UI element when using keyboard or gamepad
           if (moveAction.WasPressedThisFrame())
           {
-              var anyMenuOpen = currentlyOpenMenu != null && currentlyOpenMenu.isOpen; 
-              var anyItemPanelOpen = _itemUIPanels.Any(p => p.isOpen);
-
+              
               if ( _defaultSelectable != null && EventSystem.current.currentSelectedGameObject == null)
               {
                   EventSystem.current.SetSelectedGameObject(_defaultSelectable.gameObject);
               }
-
-              if (anyMenuOpen|| anyItemPanelOpen)
-              {
-                  var panel = anyMenuOpen?  (UIPanel) currentlyOpenMenu: _itemUIPanels.FirstOrDefault(p => p.isOpen);
-                  var selected = EventSystem.current.currentSelectedGameObject;
-
-                  if (panel != null)
-                  {
-                      var selectedIsValid = selected != null && (selected.transform.IsChildOf(panel.transform) || (selected.transform == _smartWatchPanel.homeButton.transform && _smartWatchPanel.homeButton.isOpen));
-
-                      if (!selectedIsValid)
-                      {
-                          var firstButton = anyMenuOpen? panel.GetComponentInChildren< StandardUIResponseButton >().gameObject : panel.GetComponentInChildren<ItemUIButton>().gameObject; 
-                          var firstValidSelectable = firstButton.GetComponentsInChildren<Selectable>()
-                              .First(p => p.navigation.mode != Navigation.Mode.None).gameObject;
-                          if (firstValidSelectable == null) firstValidSelectable = firstButton;
-                          EventSystem.current.SetSelectedGameObject(firstValidSelectable);
-                      }
-                        
-                  }
-              }
+              
+              // sometimes the selected game object from the event system is not visible or enabled, so this ensures
+              // that a valid selectable is always selected
+              ForceValidSelectable();
+            
           }
             
           if (cancelAction.WasPressedThisFrame())
@@ -209,5 +188,69 @@ public class InputManager : MonoBehaviour
     public static void PauseGame()
     {
         instance.pauseButton.TogglePause();
+    }
+
+    /// <summary>
+    ///  Attempts to continue the dialogue if the subtitle panel is open and the continue button is enabled.
+    /// </summary>
+    private void TryDialogueContinue()
+    {
+        var currentMenu = CustomUIMenuPanel.latestInstance;
+        var openSubtitlePanel = CustomUISubtitlePanel.latestInstance;
+        
+        if (SceneManager.GetSceneByName("PauseMenu").isLoaded) return;
+
+        if (openSubtitlePanel == null || !openSubtitlePanel.isOpen ||
+            (currentMenu != null && currentMenu.isOpen)) return;
+        if (openSubtitlePanel.subtitleText.maxVisibleCharacters <= 0 || (openSubtitlePanel.continueButton == null ||
+                                                                         !openSubtitlePanel.continueButton.enabled))
+            return;
+        
+        // Check if the mouse is over object tagged with "DialogueContinueBlocker" such as the scrollbar to prevent fast-forwarding when clicking on it
+                      
+        var blockContinue = EventSystem.current.IsPointerOverGameObject() && EventSystem.current.currentSelectedGameObject != null &&
+                                 EventSystem.current.currentSelectedGameObject.CompareTag("DialogueContinueBlocker");
+                        
+        if (!blockContinue) openSubtitlePanel.continueButton.OnFastForward();
+    }
+
+    /// <summary>
+    /// Ensures that the currently selected UI element is valid and part of the currently open menu or item panel.
+    /// </summary>
+    private void ForceValidSelectable()
+    {
+
+        // First, check if any CustomUIMenuPanel or ItemUIPanel is open
+
+        var currentMenu = CustomUIMenuPanel.latestInstance;
+
+        var anyMenuOpen = currentMenu != null && currentMenu.isOpen;
+        var anyItemPanelOpen = _itemUIPanels.Any(p => p.isOpen);
+
+        if (!anyMenuOpen && !anyItemPanelOpen) return;
+        
+        // Then, check if the currently selected UI element is valid within the open panel
+        
+        var panel = anyMenuOpen ? (UIPanel)currentMenu : _itemUIPanels.FirstOrDefault(p => p.isOpen);
+        var selected = EventSystem.current.currentSelectedGameObject;
+
+        if (panel == null) return;
+        var selectedIsValid = selected != null && (selected.transform.IsChildOf(panel.transform) ||
+                                                       (selected.transform ==
+                                                        _smartWatchPanel.homeButton.transform &&
+                                                        _smartWatchPanel.homeButton.isOpen));
+
+        if (selectedIsValid) return;
+        
+        // If the selected UI element is not valid, find the first valid selectable in the panel
+        
+        var firstButton = anyMenuOpen
+            ? panel.GetComponentInChildren<StandardUIResponseButton>().gameObject
+            : panel.GetComponentInChildren<ItemUIButton>().gameObject;
+        var firstValidSelectable = firstButton.GetComponentsInChildren<Selectable>()
+            .First(p => p.navigation.mode != Navigation.Mode.None).gameObject;
+        if (firstValidSelectable == null) firstValidSelectable = firstButton;
+        EventSystem.current.SetSelectedGameObject(firstValidSelectable);
+
     }
 }

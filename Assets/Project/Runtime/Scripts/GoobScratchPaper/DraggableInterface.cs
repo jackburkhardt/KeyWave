@@ -26,7 +26,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     private const float scaleMax = 1.6f;
 
     public UnityEvent onDrag;
-    public UnityEvent onScroll;
+    public UnityEvent<float> onScroll;
     
     private RectTransform[] _rectChildren;
     private int _childCount;
@@ -35,6 +35,8 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     
     [Tooltip("Scales the radius used to check if a child is inside or outside the viewport.")]
     public float BoundsCheckRadiusMultiplier = 1.6f;
+    
+    public Slider scaleSlider;
 
    
     
@@ -91,12 +93,30 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
         _rectTransform ??= GetComponent<RectTransform>();
         _container ??= transform.parent.GetComponentInParent<RectTransform>();
         _aspectRatioFitter ??= GetComponent<AspectRatioFitter>();
+        
+        if (scaleSlider != null)
+        {
+            scaleSlider.minValue = scaleMin;
+            scaleSlider.maxValue = scaleMax;
+            scaleSlider.value = Scale;
+        }
     }
 
     private void Update()
     {
         if (_rectTransform == null) return;
+        
+        
+
+        var currentScale = _rectTransform.localScale.x;
+        
         _rectTransform.localScale = new Vector3(Scale, Scale, 1);
+        
+        if (Mathf.Abs(currentScale - Scale) > 0.01f)
+        {
+            onScroll?.Invoke( Scale); // notify about scale change to update the slider
+        }
+        
         _rectTransform.anchoredPosition = NearestValidPosition;
         
         if (_childCount != transform.childCount)
@@ -112,6 +132,15 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     {
         Scale = scaleMin;
         _rectTransform.anchoredPosition = Vector2.zero;
+    }
+    
+    public void SetScale(float value)
+    {
+        Scale = Mathf.Clamp(value, scaleMin, scaleMax);
+        if (scaleSlider != null)
+        {
+            scaleSlider.value = Scale;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -138,7 +167,7 @@ public class DraggableInterface : MonoBehaviour, IDragHandler, IScrollHandler
     {
         if (ignoreDrag) return;
         Scale += eventData.scrollDelta.y * 0.03f;
-        onScroll?.Invoke();
+        onScroll?.Invoke( Scale);
 
     }
     
