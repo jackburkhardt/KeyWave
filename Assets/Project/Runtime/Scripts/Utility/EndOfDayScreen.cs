@@ -1,6 +1,8 @@
+using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
+using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -8,11 +10,9 @@ namespace Project.Runtime.Scripts.Utility
 {
     public class EndOfDayScreen : MonoBehaviour
     {
-        [SerializeField] private Transform _completedPanel;
-        [SerializeField] private Transform _activePanel;
-        [SerializeField] private Transform _failedPanel;
-        [SerializeField] private Object _taskDisplayPrefab;
         private DailyReport _report;
+        [SerializeField] private string[] _danielTypes;
+        [SerializeField] private TextMeshProUGUI _danieltypeDesc;
 
         private void Start()
         {
@@ -22,24 +22,25 @@ namespace Project.Runtime.Scripts.Utility
             #if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.sendPlayerEvent(eodEvent);
             #endif
+        }
+
+        private void DetermineDanieltype()
+        {
+            string trueDaniel = "uncontained_daniel";
+            int trueDanielThreshold = int.MaxValue;
+            for (int i = 0; i < _danielTypes.Length; i++)
+            {
+                string type = _danielTypes[i];
+                int repVar = DialogueLua.GetVariable("reputation." + type, 0);
+                int thresholdVar = DialogueLua.GetVariable("reputation." + type + ".threshold", 0);
+
+                if (repVar >= thresholdVar && thresholdVar <= trueDanielThreshold)
+                {
+                    trueDaniel = type;
+                    trueDanielThreshold = thresholdVar;
+                }
+            }
             
-            foreach (var task in _report.CompletedTasks)
-            {
-                var taskObject = Instantiate(_taskDisplayPrefab, _completedPanel) as GameObject;
-                taskObject.GetComponent<ObjectivePanelItem>().SetVisibleElements("success", task);
-            }
-        
-            foreach (var task in _report.ActiveTasks)
-            {
-                var taskObject = Instantiate(_taskDisplayPrefab, _activePanel) as GameObject;
-                taskObject.GetComponent<ObjectivePanelItem>().SetVisibleElements("active", task);
-            }
-        
-            foreach (var task in _report.AbandonedTasks)
-            {
-                var taskObject = Instantiate(_taskDisplayPrefab, _failedPanel) as GameObject;
-                taskObject.GetComponent<ObjectivePanelItem>().SetVisibleElements("failure", task);
-            }
         }
 
         public void StartNextDay()
