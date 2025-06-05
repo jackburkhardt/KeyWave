@@ -11,11 +11,12 @@ namespace Project.Runtime.Scripts.Manager
     public class DailyReport
     {
         public readonly int Day;
-        private List<string> _activeTasks = new();
-        private List<string> _completedTasks = new();
-        private List<string> _abandonedTasks = new();
+        private HashSet<string> _activeTasks = new();
+        private HashSet<string> _completedTasks = new();
+        private HashSet<string> _abandonedTasks = new();
+        private HashSet<string> _seenLocations = new();
 
-        public Dictionary<string, int> EarnedPoints;
+        private Dictionary<string, int> EarnedPoints;
 
         public DailyReport(int day)
         {
@@ -29,19 +30,27 @@ namespace Project.Runtime.Scripts.Manager
             }
         }
 
-        public List<string> CompletedTasks => _completedTasks;
-        public List<string> ActiveTasks => _activeTasks;
-        public List<string> AbandonedTasks => _abandonedTasks;
+        public HashSet<string> CompletedTasks => _completedTasks;
+        public HashSet<string> ActiveTasks => _activeTasks;
+        public HashSet<string> AbandonedTasks => _abandonedTasks;
 
         private void OnPlayerEvent(PlayerEvent playerEvent)
         {
             string questName;
             if (playerEvent.EventType == "quest_state_change")
             {
-                questName = QuestLog.GetQuestTitle(playerEvent.Data["questName"].ToString());
+                questName = QuestLog.GetQuestTitle(playerEvent.Data["questName"]?.ToString());
             } else if (playerEvent.EventType == "action_state_change")
             {
-                questName = QuestLog.GetQuestTitle(playerEvent.Data["actionName"].ToString());
+                questName = QuestLog.GetQuestTitle(playerEvent.Data["actionName"]?.ToString());
+            } else if (playerEvent.EventType == "move")
+            {
+                string locName = playerEvent.Data["newLocation"]?.ToString();
+                if (_seenLocations.Add(locName))
+                {
+                    if (_seenLocations.Count % 2 == 0) DialogueLua.SetVariable("reputation.traveler_daniel", DialogueLua.GetVariable("reputation.traveler_daniel", 0) + 1);
+                }
+                return;
             }
             else
             {
@@ -52,13 +61,12 @@ namespace Project.Runtime.Scripts.Manager
             
             if (playerEvent.EventType is "quest_state_change" or "action_state_change")
             {
-                switch (playerEvent.Data["state"].ToString())
+                switch (playerEvent.Data["state"]?.ToString())
                 {
                     case "Success":
-                        if (!_completedTasks.Contains(questName))
+                        if (_completedTasks.Add(questName))
                         {
-                            _completedTasks.Add(questName);
-                            _activeTasks.RemoveAll((name) => name == questName);
+                            _activeTasks.Remove(questName);
                         }
                         JArray pointsArray = JArray.FromObject(playerEvent.Data["points"] ?? new JArray() );
                         foreach (var field in pointsArray)
@@ -71,22 +79,15 @@ namespace Project.Runtime.Scripts.Manager
                         {
                             DialogueLua.SetItemField( EarnedPoints.ElementAt(i).Key, "Score", EarnedPoints.ElementAt(i).Value);
                         }
-
                         break;
                     case "Active":
-                        if (!_activeTasks.Contains(questName))
-                        {
-                            _activeTasks.Add(questName);
-                        }
-
+                        _activeTasks.Add(questName);
                         break;
                     case "Abandoned":
-                        if (!_abandonedTasks.Contains(questName))
+                        if (_abandonedTasks.Add(questName))
                         {
-                            _abandonedTasks.Add(questName);
-                            _activeTasks.RemoveAll((name) => name == questName);
+                            _activeTasks.Remove(questName);
                         }
-
                         break;
                 }
             }

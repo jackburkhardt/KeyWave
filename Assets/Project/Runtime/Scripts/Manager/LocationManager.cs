@@ -106,7 +106,6 @@ public class LocationManager : MonoBehaviour
     
     public static void SetPlayerLocation(Location newLocation,  LoadingScreen.Transition transition = LoadingScreen.Transition.Default)
     {
-        
         var currentLocation = instance.PlayerLocation;
         
         if (currentLocation == newLocation)

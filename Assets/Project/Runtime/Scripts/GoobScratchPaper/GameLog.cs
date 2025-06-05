@@ -156,7 +156,18 @@ public class GameLog : MonoBehaviour
         {
             var time = entry[1..6].Replace(':', '_');
             var message = entry[8..];
-            
+
+            int secondsIncrementor = 1;
+            while (logAsDict.ContainsKey(time))
+            {
+                if (time.Split('_').Length > 1)
+                {
+                    time = time[..^3];
+                }
+                time += $"_{secondsIncrementor:00}";
+                
+                secondsIncrementor++;
+            }
             logAsDict.Add(time, message);
         }
 

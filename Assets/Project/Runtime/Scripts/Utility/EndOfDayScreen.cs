@@ -13,12 +13,14 @@ namespace Project.Runtime.Scripts.Utility
         private DailyReport _report;
         [SerializeField] private string[] _danielTypes;
         [SerializeField] private TextMeshProUGUI _danieltypeDesc;
+        [SerializeField] private TextMeshProUGUI _danieltypeTitle;
 
         private void Start()
         {
             _report = GameManager.instance.dailyReport;
             string eodEvent = ConstructEndOfDayEvent();
             Debug.Log("Transmitting EOD event...\n" + eodEvent);
+            DetermineDanieltype();
             #if UNITY_WEBGL && !UNITY_EDITOR
             BrowserInterface.sendPlayerEvent(eodEvent);
             #endif
@@ -40,7 +42,8 @@ namespace Project.Runtime.Scripts.Utility
                     trueDanielThreshold = thresholdVar;
                 }
             }
-            
+
+            _danieltypeTitle.text = trueDaniel.Replace('_', ' ').ToUpper();
         }
 
         public void StartNextDay()
