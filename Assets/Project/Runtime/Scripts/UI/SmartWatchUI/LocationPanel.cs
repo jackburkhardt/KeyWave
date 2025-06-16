@@ -194,8 +194,9 @@ public class LocationPanel : UIPanel
     public override void Close()
     {
         _location = null;
+        if (isOpen) onLocationPanelClose?.Invoke();
         base.Close();
-        onLocationPanelClose?.Invoke();
+      
     }
     
     public void ShowLocationInfo(Location location)

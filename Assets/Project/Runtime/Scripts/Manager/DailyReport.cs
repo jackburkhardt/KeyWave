@@ -74,11 +74,17 @@ namespace Project.Runtime.Scripts.Manager
                             Points.PointsField pointsInfo = Points.PointsField.FromJObject(field);
                             EarnedPoints[pointsInfo.Type] += pointsInfo.Points;   
                         }
-            
+                        
+                        // the GameManager/PointsManager already sets the points in the DialogueLua so I am commenting this out as it is interfering with Wellness.
+                        
+                        /*
                         for( int i = 0; i < EarnedPoints.Count; i++)
                         {
+                             
                             DialogueLua.SetItemField( EarnedPoints.ElementAt(i).Key, "Score", EarnedPoints.ElementAt(i).Value);
                         }
+                        */
+                        
                         break;
                     case "Active":
                         _activeTasks.Add(questName);

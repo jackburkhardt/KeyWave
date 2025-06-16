@@ -21,6 +21,7 @@ namespace Project.Runtime.Scripts.Manager
     [RequireComponent( typeof( InputManager))]
     [RequireComponent( typeof( ConversationFlowManager))]
     [RequireComponent( typeof( LocationManager))]
+    [RequireComponent( typeof( PointsManager))]
     
     public class GameManager : PlayerEventHandler
     {
@@ -79,7 +80,7 @@ namespace Project.Runtime.Scripts.Manager
             base.OnEnable();
            App.App.OnSceneLoadEnd += StartGameScene;
            App.App.OnSceneDeloadStart += EndGameScene;
-           Clock.onTimeChange += OnTimeChange;
+         
         }
 
         protected override void OnDisable()
@@ -87,7 +88,6 @@ namespace Project.Runtime.Scripts.Manager
             base.OnDisable();
             App.App.OnSceneLoadEnd -= StartGameScene;
             App.App.OnSceneDeloadStart -= EndGameScene;
-            Clock.onTimeChange -= OnTimeChange;
         }
 
         protected override void OnPlayerEvent(PlayerEvent playerEvent)
@@ -96,16 +96,6 @@ namespace Project.Runtime.Scripts.Manager
         }
 
 
-        public void OnTimeChange(Clock.TimeChangeData timeChangeData)
-        {
-            for (int i = timeChangeData.previousTime; i < timeChangeData.newTime; i++)
-            {
-                if (i % 600 == 0)
-                {
-                    Points.AddPoints( "Wellness", -1, false);
-                }
-            }
-        }
 
 
         private void Awake()
@@ -329,9 +319,7 @@ namespace Project.Runtime.Scripts.Manager
 
         }
         
-        
-        
-          public void OnQuestStateChange(string questName)
+        public void OnQuestStateChange(string questName)
         {
             var quest = DialogueManager.masterDatabase.GetItem(questName);
             if (!quest.IsAction && !quest.IsQuest) return;
@@ -345,25 +333,14 @@ namespace Project.Runtime.Scripts.Manager
 
             if (state == QuestState.Success)
             {                
-                points = DialogueUtility.GetPointsFromField(quest!.fields);
-                var repeatCount =  DialogueLua.GetQuestField(questName, "Repeat Count").asInt;
                 
-                foreach (var pointField in points)
-                {
-                    var multiplier = 1 - quest.LookupFloat("Repeat Points Reduction");
-                        
-                    for (int i = 0; i < repeatCount; i++)
-                    {
-                        if (pointField.Points > 0) pointField.Points = (int) (pointField.Points * multiplier);
-                    }
-                    
-                    if (pointField.Points == 0) continue;
-                }
-
+                DialogueManager.instance.gameObject.BroadcastMessage("OnQuestSuccess", questName, SendMessageOptions.DontRequireReceiver);
+                
+                points = PointsManager.GetQuestPoints( questName, true);
+                
                 if (quest.IsAction)
                 {
                     if (quest.IsStatic) QuestLog.SetQuestState(questName, QuestState.Active);
-                    DialogueLua.SetQuestField(questName, "Repeat Count", repeatCount + 1);
                 }
             }
         
@@ -372,14 +349,7 @@ namespace Project.Runtime.Scripts.Manager
             if (quest.IsQuest) GameEvent.OnQuestStateChange(questName, state, points, duration);
             else if (quest.IsAction && ((quest.IsStatic && state == QuestState.Success) || !quest.IsStatic)) GameEvent.OnActionStateChange(questName, state, points, duration);
             
-            if (state == QuestState.Success)
-            {
-
-                foreach (var pointsField in points)  Points.AddPoints(pointsField.Type, pointsField.Points);
-            }
-            
             SaveDataStorer.WebStoreGameData(PixelCrushers.SaveSystem.RecordSavedGameData());
-            
             
             if (QuestLog.GetQuestEntryCount( questName) > 0 && quest.LookupBool("Auto Set Success"))
             {

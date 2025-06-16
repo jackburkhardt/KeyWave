@@ -21,6 +21,7 @@ public class PointsFishBowl : MonoBehaviour
 
     public bool isAnimated = true;
 
+    private int _currentScore;
     
     private DialogueDatabase Database
     {
@@ -243,7 +244,9 @@ public class PointsFishBowl : MonoBehaviour
         Points.OnPointsChange += OnPointsChange;
         TravelUIResponseButton.OnLocationSelected += OnLocationSelected;
         LocationPanel.onLocationPanelClose += OnLocationPanelClose;
-       SetPointsFillImmediate();
+        
+        _currentScore = Points.Score(type, Database);
+        FillBowlWithCurrentScore(_currentScore, false);
         
     }
 
@@ -256,60 +259,48 @@ public class PointsFishBowl : MonoBehaviour
         
     }
 
-    private void OnPointsChange(string pointType, int newScore, Points.PointsChangeExpression expression)
+    private void OnPointsChange(string pointType, int newScore, Points.PointsChangeAnimation animationType)
     {
-        if (!isAnimated) return;
+        
+        if (!isAnimated) return; // used for the EndOfDay screen
+        
+        
+        
         if (pointType != type)  return;
         if (Points.MaxScore(pointType) == 0) return;
+        
+        FillBowlWithCurrentScore(newScore, animationType == Points.PointsChangeAnimation.Obvious);
+        
+        
+    }
+    
+    private void FillBowlWithCurrentScore( int newScore, bool useShine)
+    {
 
-        if (expression == Points.PointsChangeExpression.Explicit)
+        isPointsDecreasing = newScore < _currentScore;
+        _currentScore = newScore;
+        
+        DOTween.Kill( this);
+        
+        var maxScore = Points.MaxScore(type);
+        if (maxScore <= 0) return;
+        
+        var fillAmount = (float) newScore / maxScore;
+
+        if (useShine)
         {
+            DOTween.To(() => Fill, x => Fill = x, fillAmount, timeToFill).SetEase(Ease.InOutSine);
             
-            AnimatePointsFill(newScore);
+            DOTween.To(() => Shine, x => Shine = x, 1, timeToFill / 2).SetEase(Ease.InOutSine).OnComplete( () =>
+                DOTween.To( () => Shine, x => Shine = x, 0,  timeToFill / 2).SetEase(Ease.InOutSine));
         }
 
         else
         {
-            SetPointsFillImmediate();
+            DOTween.To( () => Fill, x => Fill = x, fillAmount, 0.35f).SetEase(Ease.InOutSine);
         }
         
-    }
-    
-    private void AnimatePointsFill( int newScore)
-    {
-        
-        isPointsDecreasing = newScore < 0;
-
-        if (newScore == 0) return;
-        
-        DOTween.Kill( this);
-        
-        var maxScore = Points.MaxScore(type);
-        
-        if (maxScore == 0) return;
-        
-        var fillAmount = (float) newScore / maxScore;
-        
-        DOTween.To(() => Fill, x => Fill = x, fillAmount, timeToFill).SetEase(Ease.InOutSine);
-            
-        DOTween.To(() => Shine, x => Shine = x, 1, timeToFill / 2).SetEase(Ease.InOutSine).OnComplete( () =>
-            DOTween.To( () => Shine, x => Shine = x, 0,  timeToFill / 2).SetEase(Ease.InOutSine));
-    }
-    
-    private void SetPointsFillImmediate()
-    {
-        
-        DOTween.Kill( this);
-        
-        var score = Points.Score(type, Database);
-        var maxScore = Points.MaxScore(type);
-        
-        if (score < 0) return;
-        if (maxScore <= 0) return;
-        
-        var scoreToFill = (float) score / maxScore;
-        
-        DOTween.To( () => Fill, x => Fill = x, scoreToFill, 0.35f).SetEase(Ease.InOutSine);
+       
     }
     
     private void OnLocationSelected(Location location)
