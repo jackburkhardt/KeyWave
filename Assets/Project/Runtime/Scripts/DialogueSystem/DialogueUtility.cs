@@ -406,5 +406,33 @@ namespace Project.Runtime.Scripts.DialogueSystem
             var node = GetDialogueEntryByID(conversationID, nodeID);
             return GetNodeDuration(node);
         }
+        
+        public static string GetConditionalDisplayName(Item action)
+        {
+            var conditionalDisplayEntryCount = action.LookupInt("Conditional Display Entry Count");
+            
+            if (conditionalDisplayEntryCount > 0)
+            {
+                for (int i = 1; i < conditionalDisplayEntryCount + 1; i++)
+                {
+                    var displayEntry = action.AssignedField($"Conditional Display Entry {i}");
+                    if (displayEntry == null) continue;
+                    
+                    var condition = action.LookupValue( $"Conditional Display Entry {i} Conditions");
+                    
+                    if (Lua.IsTrue(condition) && !string.IsNullOrEmpty(condition) && condition != "true")
+                    {
+                        return displayEntry.value;
+                    }
+                }
+            }
+
+            return action.GetField("Display Name")?.value;
+        }
+
+        public static bool EvaluateConditions(Item action, string conditionField = "Conditions")
+        {
+            return Lua.IsTrue(action.LookupValue(conditionField));
+        }
     }
 }

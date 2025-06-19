@@ -2,6 +2,7 @@ using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.App;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
+using Project.Runtime.Scripts.ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -11,7 +12,7 @@ namespace Project.Runtime.Scripts.Utility
     public class EndOfDayScreen : MonoBehaviour
     {
         private DailyReport _report;
-        [SerializeField] private string[] _danielTypes;
+        [SerializeField] private Danieltype[] _danielTypes;
         [SerializeField] private TextMeshProUGUI _danieltypeDesc;
         [SerializeField] private TextMeshProUGUI _danieltypeTitle;
 
@@ -28,13 +29,13 @@ namespace Project.Runtime.Scripts.Utility
 
         private void DetermineDanieltype()
         {
-            string trueDaniel = "uncontained_daniel";
+            Danieltype trueDaniel = _danielTypes[0];
             int trueDanielThreshold = int.MaxValue;
             for (int i = 0; i < _danielTypes.Length; i++)
             {
-                string type = _danielTypes[i];
-                int repVar = DialogueLua.GetVariable("reputation." + type, 0);
-                int thresholdVar = DialogueLua.GetVariable("reputation." + type + ".threshold", 0);
+                Danieltype type = _danielTypes[i];
+                int repVar = type.Value;
+                int thresholdVar = type.threshold;
 
                 if (repVar >= thresholdVar && thresholdVar <= trueDanielThreshold)
                 {
@@ -43,7 +44,8 @@ namespace Project.Runtime.Scripts.Utility
                 }
             }
 
-            _danieltypeTitle.text = trueDaniel.Replace('_', ' ').ToUpper();
+            _danieltypeTitle.text = trueDaniel.displayName;
+            _danieltypeDesc.text = trueDaniel.description;
         }
 
         public void StartNextDay()
