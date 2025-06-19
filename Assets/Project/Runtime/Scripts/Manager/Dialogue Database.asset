@@ -2300,7 +2300,8 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Talk/Mariana") == "active" and ((CurrentQuestState("Complete
-        as Secret Shopper.") ~= "active") )
+        as Secret Shopper.") ~= "active") and (CurrentQuestState("Store/Enter") ==
+        "success"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -2549,7 +2550,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Talk/Maria") == "active" and (true)
+      value: CurrentQuestState("Talk/Maria") == "active" and ((CurrentQuestState("Store/Enter")
+        == "success"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -2668,7 +2670,8 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Talk/Laura") == "active" and (true)
+      value: CurrentQuestState("Talk/Laura") == "active" and ((CurrentQuestState("Store/Enter")
+        == "success"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -2812,7 +2815,8 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Talk/Roberta") == "active" and ((CurrentQuestState("Complete
-        as Secret Shopper.") ~= "active"))
+        as Secret Shopper.") ~= "active") and (CurrentQuestState("Store/Enter") ==
+        "success"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -3326,6 +3330,10 @@ MonoBehaviour:
       value: 0.5
       type: 1
       typeString: CustomFieldType_Number
+    - title: Display Name
+      value: Take a nap.
+      type: 0
+      typeString: CustomFieldType_Text
     icon: {fileID: 0}
   - id: 238
     fields:
@@ -3478,6 +3486,10 @@ MonoBehaviour:
       value: 1200
       type: 1
       typeString: CustomFieldType_Number
+    - title: Display Name
+      value: Grab a meal.
+      type: 0
+      typeString: CustomFieldType_Text
     icon: {fileID: 0}
   - id: 173
     fields:
@@ -4515,8 +4527,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Conditions
-      value: CurrentQuestState("Store/Enter") == "active" and (Actor["Player"].Location
-        == 15)
+      value: CurrentQuestState("Store/Enter") == "active" and (true)
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4605,7 +4616,8 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Store/SecShp/Seasonal") == "active" and (CurrentQuestState("Complete
-        as Secret Shopper.") == "active")
+        as Secret Shopper.") == "active" and (CurrentQuestState("Store/Enter") ==
+        "success"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4725,7 +4737,8 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Conditions
       value: CurrentQuestState("Store/SecShp/Discount") == "active" and (CurrentQuestState("Complete
-        as Secret Shopper.") == "active")
+        as Secret Shopper.") == "active" and (CurrentQuestState("Store/Enter") ==
+        "success"))
       type: 0
       typeString: CustomFieldType_Text
     - title: Location
@@ -4916,6 +4929,10 @@ MonoBehaviour:
       value: Action
       type: 0
       typeString: CustomFieldType_Text
+    - title: Display Name
+      value: Take a city tour.
+      type: 0
+      typeString: 
     icon: {fileID: 0}
   - id: 242
     fields:
@@ -5026,7 +5043,11 @@ MonoBehaviour:
     - title: Item Type
       value: Action
       type: 0
-      typeString: 
+      typeString: CustomFieldType_Text
+    - title: Display Name
+      value: Meet with hometown friends.
+      type: 0
+      typeString: CustomFieldType_Text
     icon: {fileID: 0}
   - id: 145
     fields:
@@ -5141,6 +5162,10 @@ MonoBehaviour:
       typeString: CustomFieldType_Number
     - title: Item Type
       value: Action
+      type: 0
+      typeString: 
+    - title: Display Name
+      value: Meet with a past colleague.
       type: 0
       typeString: 
     icon: {fileID: 0}
@@ -5306,6 +5331,10 @@ MonoBehaviour:
       value: 1800
       type: 1
       typeString: CustomFieldType_Number
+    - title: Display Name
+      value: Go to the beach.
+      type: 0
+      typeString: CustomFieldType_Text
     icon: {fileID: 0}
   - id: 248
     fields:
@@ -6029,7 +6058,8 @@ MonoBehaviour:
     - title: Description
       value: "To all our Vitoria staff, \n\nTomorrow, we will be welcoming our new
         store manager, Daniel Oliviera. Please join me in extending a very warm welcome
-        to him.\n\n If you have any questions, reach out to me. \n\nPrado & Associates"
+        to him.\n\n If you have any questions, reach out to me. \n\nSincerely,\nFrancisco
+        Prado"
       type: 0
       typeString: 
     - title: Body
@@ -8019,7 +8049,7 @@ MonoBehaviour:
   - id: 106
     fields:
     - title: Name
-      value: reputation.sorry_daniel
+      value: reputation.apologetic_daniel
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
@@ -8061,7 +8091,7 @@ MonoBehaviour:
   - id: 109
     fields:
     - title: Name
-      value: reputation.slacker_daniel
+      value: reputation.leisurely_daniel
       type: 0
       typeString: CustomFieldType_Text
     - title: Initial Value
@@ -8094,90 +8124,6 @@ MonoBehaviour:
       typeString: CustomFieldType_Text
     - title: Initial Value
       value: 0
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 112
-    fields:
-    - title: Name
-      value: reputation.sorry_daniel.threshold
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 3
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 113
-    fields:
-    - title: Name
-      value: reputation.traveler_daniel.threshold
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 3
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 114
-    fields:
-    - title: Name
-      value: reputation.assertive_daniel.threshold
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 4
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 115
-    fields:
-    - title: Name
-      value: reputation.slacker_daniel.threshold
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 4
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 116
-    fields:
-    - title: Name
-      value: reputation.sleuth_daniel.threshold
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 3
-      type: 1
-      typeString: CustomFieldType_Number
-    - title: Description
-      value: 
-      type: 0
-      typeString: CustomFieldType_Text
-  - id: 117
-    fields:
-    - title: Name
-      value: reputation.uncontained_daniel.threshold
-      type: 0
-      typeString: CustomFieldType_Text
-    - title: Initial Value
-      value: 99999
       type: 1
       typeString: CustomFieldType_Number
     - title: Description
@@ -66601,7 +66547,7 @@ MonoBehaviour:
         typeString: CustomFieldType_Text
       - title: Dialogue Text
         value: '"I can just tell. You''ve got that "manager look" about you. The
-          way you look over the shelves, how you talked to Mariana, it''s...different...than
+          way you look over the shelves, how you talk to other employees, it''s...different...than
           the way most of us operate."'
         type: 0
         typeString: CustomFieldType_Text
@@ -66622,7 +66568,7 @@ MonoBehaviour:
         type: 2
         typeString: CustomFieldType_Boolean
       - title: Duration
-        value: 270
+        value: 275
         type: 0
         typeString: CustomFieldType_Text
       conversationID: 207
@@ -68101,8 +68047,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 50.261982}
-    canvasZoom: 0.25074986
+    canvasScrollPosition: {x: 131.23067, y: 262.58493}
+    canvasZoom: 0.50199854
   - id: 208
     fields:
     - title: Title

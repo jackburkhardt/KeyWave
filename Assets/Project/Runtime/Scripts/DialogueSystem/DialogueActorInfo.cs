@@ -7,6 +7,11 @@ public class DialogueActorInfo : MonoBehaviour
 {
     public Image actorImage;
     public UITextField actorName;
+
+    public void SetActionInfo(string displayName)
+    {
+        actorName.text = displayName;
+    }
     
     public void SetActorInfo(DialogueActor actor, string suffix = "")
     {

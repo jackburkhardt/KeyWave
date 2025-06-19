@@ -5,11 +5,13 @@ using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Editor.Scripts.Attributes.DrawerAttributes;
+using Project.Runtime.Scripts.DialogueSystem;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using Sentry.Protocol;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using App = Project.Runtime.Scripts.App.App;
 
@@ -32,8 +34,8 @@ public class LocationPanel : UIPanel
     public UITextField locationDescription;
     public UITextField specialDescription;
     
-    public RectTransform actorStatusContainer;
-    public DialogueActorInfo actorStatusTemplate;
+    [FormerlySerializedAs("actorStatusContainer")] public RectTransform actionStatusContainer;
+    [FormerlySerializedAs("actorStatusTemplate")] public DialogueActorInfo actionStatusTemplate;
     
     public MetricsGrid metricsGrid;
     
@@ -130,36 +132,30 @@ public class LocationPanel : UIPanel
         }
         
         
-        locationDescription.text = location.Description;
+        locationDescription.text = "Some things you can do here:";
         specialDescription.text = location.IsFieldAssigned("Special Description") ? location.AssignedField("Special Description").value : "";
         
-        foreach (Transform child in actorStatusContainer)
+        foreach (Transform child in actionStatusContainer)
         {
-            if (child == actorStatusTemplate.transform || child == noCharactersPresent.transform) continue;
+            if (child == actionStatusTemplate.transform || child == noCharactersPresent.transform) continue;
             Destroy(child.gameObject);
         }
         
-        actorStatusTemplate.gameObject.SetActive(false);
+        actionStatusTemplate.gameObject.SetActive(false);
         noCharactersPresent.gameObject.SetActive(true);
 
-        if (locationIsOpen)
+        foreach (var action in DialogueManager.instance.masterDatabase.items)
         {
-            foreach (var actor in DialogueManager.instance.masterDatabase.actors)
-            {
-                if (actor.IsPlayer) continue;
-                var actorLocation = DialogueLua.GetActorField(actor.Name, "Location").asInt;
-                if (actorLocation != location.id) continue;
-                var actorStatus = Instantiate(actorStatusTemplate, actorStatusContainer);
-                actorStatus.gameObject.SetActive(true);
-                actorStatus.SetActorInfo(actor, "is present.");
-                noCharactersPresent.gameObject.SetActive(false);
-            }
+            if (!action.IsAction) continue;
+            if (int.Parse(action.GetField("Location").value) != location.id || !DialogueUtility.EvaluateConditions(action)) continue;
+            var actionName = DialogueUtility.GetConditionalDisplayName(action);
+            var actorStatus = Instantiate(actionStatusTemplate, actionStatusContainer);
+            actorStatus.gameObject.SetActive(true);
+            actorStatus.SetActionInfo(actionName);
+            noCharactersPresent.gameObject.SetActive(false);
         }
         
-        
-        
         metricsGrid.EnableValidMetrics(MetricsGrid.DisplayCondition.HighLocationAffinity, location);
-        
     }
 
     public void ShowLocationInfo(StandardUIResponseButton standardUIResponseButton)
