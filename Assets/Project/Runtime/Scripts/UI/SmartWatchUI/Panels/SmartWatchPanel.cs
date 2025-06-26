@@ -11,12 +11,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // The SmartWatchPanel is the main panel that contains all the smartwatch apps. It is best thought of as an enclosure for the apps themselves.
-// Opening the SmartWatchPanel will open the current app, which is probably the Home app by default. Opening an app does not populate it with buttons.
-// Usually, the SmartWatchPanel will be opened by a Dialogue Entry's script during a conversation.
-// The conversation itself will call the DialogueSystem to show responses, likely using an node with an [f] tag. *This* is the trigger for a SmartWatchApp to populate with buttons.
+// Opening the SmartWatchPanel will open _currentApp, which is probably the Actions app by default.
+// Usually, the SmartWatchPanel will be opened by a Dialogue Entry's script during a conversation, using the function SetSmartWatch.
+// Buttons are populated when the ResponseMenu calls ShowResponses(). This is probably done using a Dialogue Entry node with an [f] tag. 
 
 // In summary: If the SmartWatchPanel never opens, make sure that Open() is being called, or SetSmartWatch(true) is called in the Dialogue System.
-// If apps are not populating with buttons, make sure that the conversation is ending with an [f] tag.
+// If apps are not populating with buttons, make sure that the conversation forces a ResponseMenu with the [f] tag.
 
 public class SmartWatchPanel : UIPanel
 {
@@ -138,6 +138,15 @@ public class SmartWatchPanel : UIPanel
     public void ForceDefaultApp()
     {
         _currentApp = null;
+        DialogueManager.instance.GoToConversation( conversation);
+        Open();
+    }
+
+    public void OpenRootApp()
+    {
+        var rootApp = GetAllApps().Find(x => x.LookupBool("Is Root"));
+        _currentApp = appPanels.Find(p => p.Name == rootApp.Name);
+        
         DialogueManager.instance.GoToConversation( conversation);
         Open();
     }

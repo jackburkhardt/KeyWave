@@ -16,7 +16,7 @@ public class HomeScreenMenuPanel : ItemResponsePanel
 
     protected override bool ItemIsValid(Item item)
     {
-        return item.IsApp && !item.LookupBool("Is Default");
+        return item.IsApp && !item.LookupBool("Is Root");
     }
     
     protected override void SetupFollowupConversationOrDialogueEntries(Item item, ref DialogueEntry dialogueEntry)

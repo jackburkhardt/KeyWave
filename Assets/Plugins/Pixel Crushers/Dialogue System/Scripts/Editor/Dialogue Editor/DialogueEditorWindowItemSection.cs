@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Unity.VisualScripting;
+using Unity.VisualScripting.YamlDotNet.Core;
 using GUIStyle = UnityEngine.GUIStyle;
 
 namespace PixelCrushers.DialogueSystem.DialogueEditor
@@ -1002,55 +1003,69 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         
         private void DrawAppProperties(Item item)
         {
-            Field isDefaultField = Field.Lookup(item.fields, "Is Default");
-            
-            if (isDefaultField == null)
-            {
-                isDefaultField = new Field("Is Default", "False", FieldType.Boolean);
-                item.fields.Add(isDefaultField);
-                SetDatabaseDirty("Create Is Default Field");
-            }
-            
-            var anyAppDefault = apps.Any(x => x.LookupBool("Is Default"));
-
-            if (!anyAppDefault || isDefaultField.value == "True")
-            {
-                var newIsDefault = EditorGUILayout.Toggle(new GUIContent("Is Default", "Tick to make this the default (home screen) app."), item.LookupBool("Is Default")).ToString();
-                if (newIsDefault != isDefaultField.value)
-                {
-                    foreach (var app in apps)
-                    {
-                        if (app != item)
-                        {
-                            app.fields.Find(x => x.title == "Is Default").value = "False";
-                        }
-                    }
-                
-                    isDefaultField.value = newIsDefault;
-                }
-            }
-
            
 
-            if (item.LookupBool("Is Default")) return;
-            
-            DrawDoubleScripts( item, "Script", $"SetSmartWatchApp(\"{item.Name}\")");
-            
-            var forceResponseMenu = Field.Lookup(item.fields, "Force Response Menu");
-            if (forceResponseMenu == null)
+            void DrawExclusiveTrueToggle(string fieldTitle, string tooltip)
             {
-                forceResponseMenu = new Field("Force Response Menu", "False", FieldType.Boolean);
-                item.fields.Add(forceResponseMenu);
-                SetDatabaseDirty("Create Force Response Menu Field");
+                Field isExclusiveTrueField = Field.Lookup(item.fields, fieldTitle);
+            
+                if (isExclusiveTrueField == null)
+                {
+                    isExclusiveTrueField = new Field(fieldTitle, "False", FieldType.Boolean);
+                    item.fields.Add(isExclusiveTrueField);
+                    SetDatabaseDirty($"Create {fieldTitle} Field");
+                }
+            
+                var anyAppAlreadyTrue = apps.Any(x => x.LookupBool(fieldTitle));
+
+                if (!anyAppAlreadyTrue || isExclusiveTrueField.value == "True")
+                {
+                    var newIsDefault = EditorGUILayout.Toggle(new GUIContent(fieldTitle, tooltip ), item.LookupBool(fieldTitle)).ToString();
+                    if (newIsDefault != isExclusiveTrueField.value)
+                    {
+                        foreach (var app in apps)
+                        {
+                            if (app != item)
+                            {
+                                var field = app.fields.Find(x => x.title == fieldTitle);
+                                if (field != null) field.value = "False";
+                            }
+                        }
+                
+                        isExclusiveTrueField.value = newIsDefault;
+                    }
+                }
             }
             
-            forceResponseMenu.value = EditorGUILayout.Toggle(new GUIContent("Force Response Menu", "Tick to force the response menu to appear when this app is opened by generating a dialogue entry."), item.LookupBool("Force Response Menu")).ToString();
+            DrawExclusiveTrueToggle("Is Default",  "Tick to make this the first app that the SmartWatch opens.");
             
-            EditorGUILayout.Space();
+            DrawExclusiveTrueToggle("Is Root",  "Tick to make this the root/homescreen app.");
+
+
+            if (!item.LookupBool("Is Root"))
+            {
+                DrawDoubleScripts( item, "Script", $"SetSmartWatchApp(\"{item.Name}\")");
             
-            DrawColorField( new GUIContent("Color"), item, "Color");
+                var forceResponseMenu = Field.Lookup(item.fields, "Force Response Menu");
+                if (forceResponseMenu == null)
+                {
+                    forceResponseMenu = new Field("Force Response Menu", "False", FieldType.Boolean);
+                    item.fields.Add(forceResponseMenu);
+                    SetDatabaseDirty("Create Force Response Menu Field");
+                }
             
-            DrawIconField(new GUIContent("Icon", "The icon used for this app in the home screen."), item);
+                forceResponseMenu.value = EditorGUILayout.Toggle(new GUIContent("Force Response Menu", "Tick to force the response menu to appear when this app is opened by generating a dialogue entry."), item.LookupBool("Force Response Menu")).ToString();
+                
+                EditorGUILayout.Space();
+            
+                DrawColorField( new GUIContent("Color"), item, "Color");
+            
+                DrawIconField(new GUIContent("Icon", "The icon used for this app in the home screen."), item);
+                
+            }
+            
+                    
+           
             
         }
         
