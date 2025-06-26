@@ -147,7 +147,7 @@ public class LocationPanel : UIPanel
         foreach (var action in DialogueManager.instance.masterDatabase.items)
         {
             if (!action.IsAction) continue;
-            if (int.Parse(action.GetField("Location").value) != location.id || !DialogueUtility.EvaluateConditions(action)) continue;
+            if (int.Parse(action.GetField("Location").value) != location.id) continue;
             var actionName = DialogueUtility.GetConditionalDisplayName(action);
             var actorStatus = Instantiate(actionStatusTemplate, actionStatusContainer);
             actorStatus.gameObject.SetActive(true);

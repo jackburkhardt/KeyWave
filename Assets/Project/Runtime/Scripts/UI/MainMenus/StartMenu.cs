@@ -98,6 +98,11 @@ namespace Project.Runtime.Scripts.UI
             SaveDataStorer.BeginSaveRetrieval();
         }
 
+        public void OpenHelpSite()
+        {
+            Application.OpenURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        }
+
         public void OnFirstClick()
         {
             GetComponent<Animator>().SetTrigger("Click");
