@@ -191,13 +191,15 @@ public class LocationManager : MonoBehaviour
     public static float DistanceToLocation(Location location)
     {
         if (instance.PlayerLocation.GetRootLocation() == location) return 0;
-        // if cafe, distance is relative to current location
+      
         if (location.Name == "Café")
         {
             return DistanceToCafé;
         }
         
-        if (instance.PlayerLocation.GetRootLocation().Name == "Café")
+        // if cafe, distance is relative to current location
+
+        if (instance.PlayerLocation.GetRootLocation().Name == "Café" && location.Name == instance.LastNonCaféLocation)
         {
             return DistanceToCafé;
         }
