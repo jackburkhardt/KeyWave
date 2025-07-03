@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
+using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using Sentry;
@@ -23,6 +24,8 @@ namespace Project.Runtime.Scripts.App
 
         public static bool isLoading = false;
         public string currentScene = "StartMenu";
+
+        
 
         public static App Instance
         {
@@ -75,6 +78,7 @@ namespace Project.Runtime.Scripts.App
         public void ContinueGame()
         {
             StartCoroutine(BeginGameSequence(false));
+         
         }
         
         

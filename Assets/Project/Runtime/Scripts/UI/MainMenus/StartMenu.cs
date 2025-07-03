@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using PixelCrushers;
+using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.SaveSystem;
 using Project.Runtime.Scripts.Utility;
@@ -71,6 +72,7 @@ namespace Project.Runtime.Scripts.UI
             App.App.Instance.StartNewGame();
             
             
+            
             // ensure that the start menu buttons like Start New Game, etc are hidden.
             
             var allStartMenuPanels = FindObjectsByType< StartMenuPanel>( FindObjectsSortMode.None);
@@ -79,6 +81,7 @@ namespace Project.Runtime.Scripts.UI
             {
                 panel.Close();
             }
+            AudioEngine.Instance.StopAllAudioOnChannel("Music");
             
         }
 
@@ -86,6 +89,7 @@ namespace Project.Runtime.Scripts.UI
         {
             _onContinue.Invoke();
            App.App.Instance.ContinueGame();
+           AudioEngine.Instance.StopAllAudioOnChannel("Music");
         }
         
         public void PauseGame()
@@ -107,8 +111,10 @@ namespace Project.Runtime.Scripts.UI
         {
             GetComponent<Animator>().SetTrigger("Click");
             SaveDataStorer.BeginSaveRetrieval();
+        
             DOTween.Sequence( )
-                .AppendInterval(2f)
+                .AppendInterval(0.5f).AppendCallback(() =>     AudioEngine.Instance.PlayClipLooped("music/startmenu"))
+                .AppendInterval(1.5f)
                 .AppendCallback(() => _mainMenuButtonsPanel.Open());
         }
         

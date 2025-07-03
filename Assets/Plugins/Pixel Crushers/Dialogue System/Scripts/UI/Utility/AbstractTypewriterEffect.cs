@@ -46,6 +46,11 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("Use AudioSource.PlayOneShot instead of Play. Slightly heavier performance but produces different effect.")]
         public bool usePlayOneShot = false;
+        
+        [Tooltip("Play the clip only once instead of repeating.")]
+        public bool playAudioOncePerLine = false;
+
+        protected bool audioSourcePerLinePlayFlag = false;
 
         /// <summary>
         /// If audio clip is still playing from previous character, stop and restart it when typing next character.
@@ -226,7 +231,18 @@ namespace PixelCrushers.DialogueSystem
                 var randomIndex = UnityEngine.Random.Range(0, alternateAudioClips.Length + 1);
                 randomClip = (randomIndex < alternateAudioClips.Length) ? alternateAudioClips[randomIndex] : audioClip;
             }
-            if (interruptAudioClip)
+
+            if (playAudioOncePerLine)
+            {
+                if (!audioSourcePerLinePlayFlag)
+                {
+                    audioSourcePerLinePlayFlag = true;
+                    if (randomClip) audioSource.PlayOneShot(randomClip);
+                    else audioSource.Play();
+                }
+            }
+            
+            else if (interruptAudioClip)
             {
                 if (usePlayOneShot)
                 {

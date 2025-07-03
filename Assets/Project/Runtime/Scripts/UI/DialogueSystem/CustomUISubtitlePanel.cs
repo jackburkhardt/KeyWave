@@ -222,6 +222,9 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
 
     private void RevealAccumulatedContent()
     {
+        var audioSource = GetComponent<AudioSource>();
+        if (audioSource) audioSource.Play();
+        
         foreach (var go in accumulatedContentHolder.gameObject.GetComponentsInChildren<Transform>(true))
         {
             if (go.parent == accumulatedContentHolder)
