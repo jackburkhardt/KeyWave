@@ -6167,7 +6167,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Is Default
-      value: True
+      value: False
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Force Response Menu
@@ -6385,7 +6385,7 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Is Default
-      value: False
+      value: True
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Force Response Menu
@@ -6531,9 +6531,9 @@ MonoBehaviour:
       type: 0
       typeString: CustomFieldType_Text
     - title: Entry 5 Menu Text
-      value: To place a phone call, click the Phone icon on your watch. Your watch
-        also lets you perform Actions, Travel across Vitoria, or view a Log of your
-        day.
+      value: Your watch is the core of how you interact with the world. Use it to
+        do perform Actions at locations, call with the Phone, Travel across Vitoria,
+        or view a Log of your day.
       type: 0
       typeString: CustomFieldType_Text
     - title: Entry 5 Dialogue Text
@@ -6586,6 +6586,46 @@ MonoBehaviour:
       type: 2
       typeString: CustomFieldType_Boolean
     - title: Repeat Entry 1 Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 2 Override Time
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 2 Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 3 Override Time
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 3 Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 4 Override Time
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 4 Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 5 Override Time
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 5 Duration
+      value: 0
+      type: 1
+      typeString: CustomFieldType_Number
+    - title: Entry 6 Override Time
+      value: False
+      type: 2
+      typeString: CustomFieldType_Boolean
+    - title: Entry 6 Duration
       value: 0
       type: 1
       typeString: CustomFieldType_Number
@@ -58702,8 +58742,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 347.79868
-        y: 359.44443
+        x: 352.45346
+        y: 262.47
         width: 160
         height: 30
     - id: 21
@@ -58756,14 +58796,15 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: SetSmartWatch(true)
+      userScript: if PlayerLocation() == "Hotel" then OpenSmartWatchApp("Home") else
+        SetSmartWatch(true) end
       onExecute:
         m_PersistentCalls:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 345.5663
-        y: 433.47537
+        x: 275.74475
+        y: 419.51114
         width: 160
         height: 30
     - id: 29
@@ -58816,8 +58857,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 348.8983
-        y: 520.452
+        x: 262.785
+        y: 535.96796
         width: 160
         height: 30
     entryGroups: []
@@ -60132,7 +60173,7 @@ MonoBehaviour:
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.85524946
+    canvasZoom: 0.5007496
   - id: 202
     fields:
     - title: Title

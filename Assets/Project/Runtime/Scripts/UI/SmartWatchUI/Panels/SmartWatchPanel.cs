@@ -66,7 +66,7 @@ public class SmartWatchPanel : UIPanel
         // sometimes the Dialogue System will use the wrong menu panels, so this is a workaround to force the correct one
         if (forceOverrideMenuPanel)
         {
-            var menuPanel = _currentApp.GetComponentInChildren<StandardUIMenuPanel>();
+            var menuPanel = _currentApp?.GetComponentInChildren<StandardUIMenuPanel>();
             
             if (menuPanel != null) // not all apps are menu panels
             {

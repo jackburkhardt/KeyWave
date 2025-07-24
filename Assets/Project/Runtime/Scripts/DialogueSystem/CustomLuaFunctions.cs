@@ -85,6 +85,8 @@ namespace Project.Runtime.Scripts.DialogueSystem
                Lua.RegisterFunction(nameof(PlayerLocationIsClosed), this,
                 SymbolExtensions.GetMethodInfo(() => PlayerLocationIsClosed()));
                
+            Lua.RegisterFunction(nameof(OpenSmartWatchApp), this, SymbolExtensions.GetMethodInfo<string>((s) => OpenSmartWatchApp(s)));
+               
                Lua.RegisterFunction(nameof(SetLocation), this,
                 SymbolExtensions.GetMethodInfo(() => SetLocation(string.Empty)));
                
@@ -136,6 +138,7 @@ namespace Project.Runtime.Scripts.DialogueSystem
             Lua.UnregisterFunction(nameof(SetLocation));
             Lua.UnregisterFunction(nameof(DoEndOfDay));
             Lua.UnregisterFunction(nameof(AddPoints));
+            Lua.UnregisterFunction(nameof(OpenSmartWatchApp));
         }
         
         
@@ -392,6 +395,15 @@ namespace Project.Runtime.Scripts.DialogueSystem
                 if (value)   smartWatch.Open();
                 
                 else smartWatch.Close();
+            }
+        }
+        
+        public void OpenSmartWatchApp(string appName)
+        {
+            var smartWatch = FindObjectsByType<SmartWatchPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None ).FirstOrDefault();
+            if (smartWatch != null)
+            {
+                smartWatch.OpenApp(appName);
             }
         }
 
