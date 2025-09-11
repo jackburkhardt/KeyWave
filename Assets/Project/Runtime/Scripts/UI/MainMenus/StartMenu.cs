@@ -102,7 +102,7 @@ namespace Project.Runtime.Scripts.UI
             SaveDataStorer.BeginSaveRetrieval();
         }
 
-        public void OpenHelpSite()
+        public void OpenOnboardingSite()
         {
             Application.OpenURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         }
