@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using PixelCrushers;
 using Project.Runtime.Scripts.Manager;
+using UnityEngine;
 
 namespace Project.Runtime.Scripts.SaveSystem
 {
@@ -17,8 +19,13 @@ namespace Project.Runtime.Scripts.SaveSystem
                 return;
             }; // No data to apply.
             DailyReport data = PixelCrushers.SaveSystem.Deserialize<DailyReport>(s);
+            Debug.Log($"loaded report data {JsonConvert.SerializeObject(data)}");
             if (data == null) return; // Serialized string isn't valid.
             GameManager.instance.dailyReport = data;
+            foreach (var pointEntry in data.EarnedPoints)
+            {
+                Points.AddPoints(pointEntry.Key, pointEntry.Value);
+            }
         }
 
         public override void ApplyDataImmediate()

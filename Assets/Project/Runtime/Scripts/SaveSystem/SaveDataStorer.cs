@@ -130,7 +130,9 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override void DeleteSavedGameData(int slotNumber)
         {
+            #if UNITY_EDITOR
             File.Delete($"{Application.dataPath}/DebugSaves/{slotNumber}.json");
+            #endif
         }
     }
     

@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json.Utilities;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Audio;
@@ -57,6 +59,9 @@ namespace Project.Runtime.Scripts.App
             
             if (Camera.main != null) Camera.main.backgroundColor = Color.black;
             Cursor.lockState = CursorLockMode.None;
+            
+            AotHelper.EnsureList<string>();
+            AotHelper.EnsureList<int>();
         }
         
         

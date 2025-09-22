@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Events;
+using UnityEngine;
 
 namespace Project.Runtime.Scripts.Manager
 {
@@ -16,7 +17,7 @@ namespace Project.Runtime.Scripts.Manager
         private HashSet<string> _abandonedTasks = new();
         private HashSet<string> _seenLocations = new();
 
-        private Dictionary<string, int> EarnedPoints;
+        public Dictionary<string, int> EarnedPoints;
 
         public DailyReport(int day)
         {
@@ -74,17 +75,6 @@ namespace Project.Runtime.Scripts.Manager
                             Points.PointsField pointsInfo = Points.PointsField.FromJObject(field);
                             EarnedPoints[pointsInfo.Type] += pointsInfo.Points;   
                         }
-                        
-                        // the GameManager/PointsManager already sets the points in the DialogueLua so I am commenting this out as it is interfering with Wellness.
-                        
-                        /*
-                        for( int i = 0; i < EarnedPoints.Count; i++)
-                        {
-                             
-                            DialogueLua.SetItemField( EarnedPoints.ElementAt(i).Key, "Score", EarnedPoints.ElementAt(i).Value);
-                        }
-                        */
-                        
                         break;
                     case "Active":
                         _activeTasks.Add(questName);
