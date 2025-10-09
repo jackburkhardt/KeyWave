@@ -8,6 +8,7 @@ using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.UI;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // The SmartWatchPanel is the main panel that contains all the smartwatch apps. It is best thought of as an enclosure for the apps themselves.
@@ -180,5 +181,13 @@ public class SmartWatchPanel : UIPanel
         _currentApp = null;
         GetComponent<Animator>().SetTrigger(unfocusAnimationTrigger);
     }
-    
+
+    private void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Debug.Log(SceneManager.sceneCount);
+            Debug.Log(SceneManager.GetActiveScene().name);
+        }
+    }
 }

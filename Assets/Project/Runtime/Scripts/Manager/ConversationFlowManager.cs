@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.App;
+using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Audio;
 using Project.Runtime.Scripts.Events;
 using Project.Runtime.Scripts.Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [ DisallowMultipleComponent]
 
@@ -59,8 +62,20 @@ public class ConversationFlowManager : MonoBehaviour
 
             state = State.PreBase;
             
-            
             var playerLocation = LocationManager.instance.PlayerLocation;
+            
+             
+            // contingency: check if the proper scene is loaded, and if not, load that scene
+            var playerRootLocation = playerLocation.GetRootLocation();
+            var activeScene = SceneManager.GetActiveScene().name;
+
+            if (activeScene != playerRootLocation.Name)
+            {
+                App.Instance.ChangeScene(playerRootLocation.Name, activeScene, LoadingScreen.Transition.Default);
+                return;
+            }  //contingency end
+            
+            
             
             var visitCount = DialogueLua.GetLocationField(playerLocation.Name, "Visit Count").asInt;
                  var loopConversation = playerLocation.LookupBool("Loop Conversation");

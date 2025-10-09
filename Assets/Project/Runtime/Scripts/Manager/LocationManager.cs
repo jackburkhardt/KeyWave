@@ -148,7 +148,7 @@ public class LocationManager : MonoBehaviour
             PlayerLocation = newLocation;
         }
         
-        yield return App.Instance.ChangeScene(newLocation.Name, App.Instance.currentScene, transition);
+        yield return App.Instance.ChangeScene(newLocation.Name, App.Instance.currentScene, transition); // scene transition
         AudioEngine.Instance.StopAllAudioOnChannel("Music");
         
         OnLocationEnter?.Invoke(newLocation.GetRootLocation());
