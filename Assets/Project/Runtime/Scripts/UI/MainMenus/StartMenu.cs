@@ -104,7 +104,7 @@ namespace Project.Runtime.Scripts.UI
 
         public void OpenOnboardingSite()
         {
-            Application.OpenURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            Application.OpenURL("https://player.vimeo.com/video/1126001395?badge=0&autopause=0&player_id=0&app_id=58479");
         }
 
         public void OnFirstClick()
