@@ -130,10 +130,11 @@ public class LocationManager : MonoBehaviour
     
     IEnumerator SwitchLocationHandler(Location newLocation,  LoadingScreen.Transition transition)
     {
+        var currentLocation = instance.PlayerLocation.GetRootLocation();
         if (PlayerLocation != null)
         {
             OnLocationExit?.Invoke(PlayerLocation);
-            GameEvent.OnMove(newLocation.Name, instance.PlayerLocation.GetRootLocation().Name, (int)DistanceToLocation(newLocation));
+            GameEvent.OnMove(newLocation.Name, currentLocation.Name, (int)DistanceToLocation(newLocation));
         }
         
         if (newLocation.FieldExists("Spawn Point")) // if a location has a spawn point, PlayerLocation must be set to that spawn point
@@ -148,7 +149,7 @@ public class LocationManager : MonoBehaviour
             PlayerLocation = newLocation;
         }
         
-        yield return App.Instance.ChangeScene(newLocation.Name, App.Instance.currentScene, transition); // scene transition
+        yield return App.Instance.ChangeScene(newLocation.Name, SceneManager.GetActiveScene().name, transition); // scene transition
         AudioEngine.Instance.StopAllAudioOnChannel("Music");
         
         OnLocationEnter?.Invoke(newLocation.GetRootLocation());
@@ -184,7 +185,7 @@ public class LocationManager : MonoBehaviour
     public static IEnumerator SwitchLocationImmediate(Location location)
     {
         instance.PlayerLocation = location;
-        yield return App.Instance.ChangeScene(location.Name, App.Instance.currentScene, LoadingScreen.Transition.None);
+        yield return App.Instance.ChangeScene(location.Name, SceneManager.GetActiveScene().name, LoadingScreen.Transition.None);
     }
 
 

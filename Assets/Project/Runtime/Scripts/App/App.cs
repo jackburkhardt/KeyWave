@@ -25,9 +25,9 @@ namespace Project.Runtime.Scripts.App
         public static Action<string> OnSceneDeloadEnd;
 
         public static bool isLoading = false;
-        public string currentScene = "StartMenu";
 
         
+
 
         public static App Instance
         {
@@ -242,7 +242,6 @@ namespace Project.Runtime.Scripts.App
               
                 isLoading = false;
                 OnSceneLoadEnd?.Invoke(sceneToLoad);
-                currentScene = sceneToLoad;
             }    
         }
         

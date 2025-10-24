@@ -67,10 +67,11 @@ public class ConversationFlowManager : MonoBehaviour
              
             // contingency: check if the proper scene is loaded, and if not, load that scene
             var playerRootLocation = playerLocation.GetRootLocation();
-            var activeScene = SceneManager.GetActiveScene().name;
+            var activeScene = SceneManager.GetSceneAt(0).name;
 
             if (activeScene != playerRootLocation.Name)
             {
+                Debug.LogWarning($"active scene {activeScene} != playerRootLocation ${playerRootLocation.Name}; reloading scene"); 
                 App.Instance.ChangeScene(playerRootLocation.Name, activeScene, LoadingScreen.Transition.Default);
                 return;
             }  //contingency end
@@ -132,6 +133,7 @@ public class ConversationFlowManager : MonoBehaviour
         
         public void OnConversationStart()
         {
+            
             
             var conversation = DialogueManager.masterDatabase.GetConversation(DialogueManager.currentConversationState
                 .subtitle.dialogueEntry.conversationID);

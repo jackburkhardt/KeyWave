@@ -4066,7 +4066,7 @@ MonoBehaviour:
       type: 1
       typeString: CustomFieldType_Number
     - title: Wellness Points
-      value: -10
+      value: 0
       type: 1
       typeString: CustomFieldType_Number
     icon: {fileID: 0}
@@ -8810,6 +8810,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 28
       isRoot: 0
       isGroup: 0
@@ -8831,8 +8835,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 358.8705
-        y: 566.88025
+        x: 373.27982
+        y: 544.4658
         width: 160
         height: 30
     - id: 37
@@ -8943,6 +8947,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 28
       isRoot: 0
       isGroup: 0
@@ -9075,6 +9083,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 28
       isRoot: 0
       isGroup: 0
@@ -9850,7 +9862,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 418.60538, y: 1014.4692}
+    canvasScrollPosition: {x: 178.45027, y: 265.9861}
     canvasZoom: 0.99935454
   - id: 34
     fields:
@@ -39972,7 +39984,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 454.27075
+        x: 455.1939
         y: 736.20624
         width: 160
         height: 30
@@ -40473,7 +40485,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Context");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -40861,7 +40873,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(5, "Context");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -40933,8 +40945,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 21.13153, y: 79.932465}
-    canvasZoom: 1.0884217
+    canvasScrollPosition: {x: 0.8983307, y: 738.8384}
+    canvasZoom: 1.1131715
   - id: 145
     fields:
     - title: Title
@@ -47439,7 +47451,7 @@ MonoBehaviour:
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
-        value: Hello. I'm Daniel Olivera, the new store manager.
+        value: Hey, I'm your new manager.
         type: 0
         typeString: CustomFieldType_Text
       - title: Dialogue Text
@@ -47477,7 +47489,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: AddPoints(-5, "Teamwork");
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -47582,7 +47594,7 @@ MonoBehaviour:
 
 
           "Oh,
-          right, they told us you were coming. Welcome to Vitoria, Daniel. I hope
+          right, they told us you were coming, Daniel. Welcome to Vitoria. I hope
           tomorrow has good things in store for us."'
         type: 0
         typeString: CustomFieldType_Text
@@ -47974,7 +47986,7 @@ MonoBehaviour:
         destinationDialogueID: 19
         isConnector: 0
         priority: 2
-      conditionsString: Dialog[thisID].SimStatus ~= "WasDisplayed"
+      conditionsString: 
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -48041,7 +48053,7 @@ MonoBehaviour:
         destinationDialogueID: 24
         isConnector: 0
         priority: 2
-      conditionsString: Dialog[thisID].SimStatus ~= "WasDisplayed"
+      conditionsString: 
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -48108,7 +48120,7 @@ MonoBehaviour:
         destinationDialogueID: 25
         isConnector: 0
         priority: 2
-      conditionsString: Dialog[thisID].SimStatus ~= "WasDisplayed"
+      conditionsString: 
       userScript: 
       onExecute:
         m_PersistentCalls:
@@ -48243,8 +48255,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 301.59998
-        y: 872.80005
+        x: 304.2212
+        y: 870.17883
         width: 160
         height: 30
     - id: 19
@@ -48997,8 +49009,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 531.4697
-        y: 1312.4089
+        x: 537.88165
+        y: 1310.2716
         width: 160
         height: 30
     - id: 30
@@ -49122,8 +49134,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 526.95984}
-    canvasZoom: 1.0945
+    canvasScrollPosition: {x: 278.5671, y: 269.1858}
+    canvasZoom: 0.8090024
   - id: 158
     fields:
     - title: Title
@@ -60352,8 +60364,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 455.83984
-        y: 134.91228
+        x: 455.83997
+        y: 132.90974
         width: 160
         height: 30
     - id: 2
@@ -60492,8 +60504,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 229.08897
-        y: 231.90198
+        x: 233.09401
+        y: 235.90698
         width: 160
         height: 30
     - id: 4
@@ -60560,8 +60572,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 26
-        y: 231
+        x: 22.66249
+        y: 226.995
         width: 160
         height: 30
     - id: 5
@@ -60647,8 +60659,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 139
-        y: 316
+        x: 146.34253
+        y: 312.6625
         width: 160
         height: 30
     - id: 6
@@ -60891,6 +60903,10 @@ MonoBehaviour:
         value: False
         type: 2
         typeString: CustomFieldType_Boolean
+      - title: Duration
+        value: 0
+        type: 1
+        typeString: CustomFieldType_Number
       conversationID: 202
       isRoot: 0
       isGroup: 0
@@ -60912,8 +60928,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 427.64142
-        y: 335.49973
+        x: 441.65894
+        y: 336.1672
         width: 160
         height: 30
     - id: 10
@@ -61182,8 +61198,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 73.509026}
-    canvasZoom: 1.5884988
+    canvasScrollPosition: {x: 96.43531, y: 0}
+    canvasZoom: 1.0184994
   - id: 203
     fields:
     - title: Title
@@ -69489,7 +69505,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 301.32925
-        y: 277.2526
+        y: 278.05905
         width: 160
         height: 30
     - id: 3

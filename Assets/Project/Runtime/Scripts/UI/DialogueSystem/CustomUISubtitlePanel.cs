@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NaughtyAttributes;
 using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.Utility;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -35,11 +37,15 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
 
     public static CustomUISubtitlePanel latestInstance;
 
+  
+
 
     protected void OnValidate()
     {
         _customDialogueUI ??= FindObjectOfType<CustomDialogueUI>();
-    }
+
+        
+}
 
 
     protected override void Awake()
@@ -52,9 +58,9 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
             typewriter.onFirstCharacter.AddListener( Show);
             typewriter.onEnd.AddListener( Show);
         }
-        
-       
         _customDialogueUI = FindObjectOfType<CustomDialogueUI>();
+        
+        
     }
 
     public void OnGameSceneStart()

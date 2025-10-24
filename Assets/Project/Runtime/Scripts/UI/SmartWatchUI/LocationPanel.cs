@@ -19,14 +19,16 @@ using App = Project.Runtime.Scripts.App.App;
 /// This panel displays information about a location when clicking on it in the travel SmartWatch app.
 /// </summary>
 
-public class LocationPanel : UIPanel
+public class LocationPanel : UIPanel, IHighContrastHandler
 {
     [SmartWatchAppPopup] public string app;
 
     public Graphic panel;
-    public Color defaultColor;
-    [Label("Location Unavailable Color")]
-    public Color closedColor;
+    public Color panelColorLocationAvailable;
+    public Color panelColorLocationAvailableHighContrast;
+    public Color panelColorLocationUnavailable;
+    public Color panelColorLocationUnavailableHighContrast;
+
     
     
     public UITextField locationName;
@@ -115,20 +117,20 @@ public class LocationPanel : UIPanel
             {
                 locationHours.text += " (Closed)";
                 locationHours.color = Color.red;
-                panel.color = closedColor;
+                panel.color = GameManager.settings.HighContrastMode ? panelColorLocationUnavailableHighContrast : panelColorLocationUnavailable;
             }
             
             else
             {
                 locationHours.text += " (Open)";
                 locationHours.color = Color.green;
-                panel.color = defaultColor;
+                panel.color = GameManager.settings.HighContrastMode ? panelColorLocationAvailableHighContrast : panelColorLocationAvailable;
             }
         }
 
         else
         {
-            panel.color = defaultColor;
+            panel.color = GameManager.settings.HighContrastMode ? panelColorLocationAvailableHighContrast : panelColorLocationAvailable;
         }
         
         
@@ -225,6 +227,19 @@ public class LocationPanel : UIPanel
            
         }
     }
-    
- 
+
+
+    public void OnHighContrastModeEnter()
+    {
+        
+        if (panel.color == panelColorLocationAvailable) panel.color = panelColorLocationAvailableHighContrast;
+        if (panel.color == panelColorLocationUnavailable) panel.color = panelColorLocationUnavailableHighContrast;
+
+    }
+
+    public void OnHighContrastModeExit()
+    {
+        if (panel.color == panelColorLocationAvailableHighContrast) panel.color = panelColorLocationAvailable;
+        if (panel.color == panelColorLocationUnavailableHighContrast) panel.color = panelColorLocationUnavailable;
+    }
 }

@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HomeScreenUIResponseButton : StandardUIResponseButton
+public class HomeScreenUIResponseButton : StandardUIResponseButton, IHighContrastHandler
 {
+    public Color highContrastColor;
     public Image appIcon;
     public Graphic appColor;
     public float timeBetweenButtonShow = 0.1f;
@@ -31,14 +33,13 @@ public class HomeScreenUIResponseButton : StandardUIResponseButton
                 if (app != null)
                 {
                     appIcon.sprite = Sprite.Create( app.icon, new Rect(0, 0, app.icon.width, app.icon.height), new Vector2(0.5f, 0.5f));
-                    appColor.color = app.LookupColor("Color");
+                    defaultColor = app.LookupColor("Color");
+                    appColor.color = GameManager.settings.HighContrastMode ? Color.Lerp(Color.black * defaultColor, defaultColor, 0.1f) : defaultColor;
                     _fakeResponseButton = !app.LookupBool("Force Response Menu");
                     _app = app.Name;
                 }
                 
             }
-           
-            
         }
     }
 
@@ -64,4 +65,13 @@ public class HomeScreenUIResponseButton : StandardUIResponseButton
         }
     }
 
+    public void OnHighContrastModeEnter()
+    {
+        appColor.color = Color.Lerp(Color.black * defaultColor, defaultColor, 0.1f);
+    }
+
+    public void OnHighContrastModeExit()
+    {
+        appColor.color = defaultColor;
+    }
 }

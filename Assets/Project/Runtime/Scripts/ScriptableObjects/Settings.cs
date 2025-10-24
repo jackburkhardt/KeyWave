@@ -1,5 +1,7 @@
+using System.Linq;
 using NaughtyAttributes;
 using PixelCrushers.DialogueSystem;
+using Project.Runtime.Scripts.Manager;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Game Settings", menuName = "Game Settings")]
@@ -18,6 +20,29 @@ public class Settings : ScriptableObject
 
     [SerializeField]
     public bool autoPauseOnFocusLost = false;
+
+    [SerializeField]
+    private bool _highContrastMode;
+
+   
+
+    public bool HighContrastMode
+    {
+        get => _highContrastMode;
+        set
+        {
+            _highContrastMode = value;
+            IHighContrastHandler[] handlers = GameManager.FindObjectsOfType<MonoBehaviour>(true).OfType<IHighContrastHandler>().ToArray();
+            Debug.Log(handlers.Length);
+            foreach (var handler in handlers)
+            {
+                if (value) handler.OnHighContrastModeEnter();
+                else handler.OnHighContrastModeExit();
+            }
+        }
+    }
+    
+
 
     
     public ClockSettings Clock
@@ -59,10 +84,16 @@ public class Settings : ScriptableObject
             }
         }
     }
+    
+    private bool _newHighContrastMode;
 
     private void OnValidate()
     {
-        
+        if (_newHighContrastMode != _highContrastMode)
+        {
+            HighContrastMode = _highContrastMode;
+            _newHighContrastMode = _highContrastMode;
+        }
     }
 }
 

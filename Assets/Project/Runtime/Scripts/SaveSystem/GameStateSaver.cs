@@ -2,6 +2,7 @@ using PixelCrushers;
 using PixelCrushers.DialogueSystem;
 using Project.Runtime.Scripts.AssetLoading;
 using Project.Runtime.Scripts.Manager;
+using UnityEngine.SceneManagement;
 
 namespace Project.Runtime.Scripts.SaveSystem
 {
@@ -14,7 +15,7 @@ namespace Project.Runtime.Scripts.SaveSystem
 
         public override void ApplyData(string s)
         {
-            App.App.Instance.ChangeScene(s, App.App.Instance.currentScene, LoadingScreen.Transition.Default);
+            App.App.Instance.ChangeScene(s, SceneManager.GetActiveScene().name, LoadingScreen.Transition.Default);
         }
 
     }

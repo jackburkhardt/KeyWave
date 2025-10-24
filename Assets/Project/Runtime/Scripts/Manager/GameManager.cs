@@ -142,7 +142,7 @@ namespace Project.Runtime.Scripts.Manager
         {
             GameEvent.OnDayEnd();
             DialogueManager.instance.gameObject.BroadcastMessageExt( "OnEndOfDay");
-            App.App.Instance.ChangeScene("EndOfDay", App.App.Instance.currentScene, Transition.Black);
+            App.App.Instance.ChangeScene("EndOfDay", SceneManager.GetActiveScene().name, Transition.Black);
         }
 
         public IEnumerator StartNewSave()
