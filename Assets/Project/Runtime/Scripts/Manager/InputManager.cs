@@ -195,13 +195,11 @@ public class InputManager : MonoBehaviour
     /// </summary>
     private void TryDialogueContinue()
     {
-        var currentMenu = CustomUIMenuPanel.latestInstance;
         var openSubtitlePanel = CustomUISubtitlePanel.latestInstance;
         
         if (SceneManager.GetSceneByName("PauseMenu").isLoaded) return;
 
-        if (openSubtitlePanel == null || !openSubtitlePanel.isOpen ||
-            (currentMenu != null && currentMenu.isOpen)) return;
+        if (openSubtitlePanel == null || !openSubtitlePanel.isOpen) return;
         if (openSubtitlePanel.subtitleText.maxVisibleCharacters <= 0 || (openSubtitlePanel.continueButton == null ||
                                                                          !openSubtitlePanel.continueButton.enabled))
             return;

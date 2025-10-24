@@ -36,16 +36,11 @@ public class CustomUISubtitlePanel : StandardUISubtitlePanel
     private CustomDialogueUI _customDialogueUI;
 
     public static CustomUISubtitlePanel latestInstance;
-
-  
-
-
+    
     protected void OnValidate()
     {
         _customDialogueUI ??= FindObjectOfType<CustomDialogueUI>();
-
-        
-}
+    }
 
 
     protected override void Awake()

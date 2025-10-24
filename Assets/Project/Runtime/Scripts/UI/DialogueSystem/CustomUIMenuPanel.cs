@@ -263,10 +263,7 @@ namespace Project.Runtime.Scripts.UI
                 if (standardDialogueUI == null) return;
                 standardDialogueUI.ForceOverrideMenuPanel( this);
             }
-
-          
-            
-            
+ 
             base.Open();
             
             if (!deactivateOnHidden && TryGetComponent<SmartWatchAppPanel>(out var app))
@@ -423,11 +420,6 @@ namespace Project.Runtime.Scripts.UI
             yield return new WaitForSeconds(0.1f);
             RefreshLayoutGroups.Refresh(gameObject);
         }
-        
-        
-        
-     
-   
     }
 }
 
