@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
 using Project.Editor.Scripts.Attributes.DrawerAttributes;
+using Project.Runtime.Scripts.Manager;
 using Project.Runtime.Scripts.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
+public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour, IHighContrastHandler
 {
+
+    private ColorSwapData _currentColorData = null;
+    
     private void OnEnable() 
     {
         SmartWatchPanel.onAppOpen += SetColor;
@@ -26,7 +30,7 @@ public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
     }
 
     public List<ColorSwapData> colors;
-    private Color _defaultColor => colors[0].color;
+    private ColorSwapData _defaultColor => colors[0];
     
     [Range(0, 1)]
     public float transitionAmount = 0.5f;
@@ -39,6 +43,7 @@ public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
         [SmartWatchAppPopup]
         public string name;
         public Color color;
+        public Color highContrastModeColor;
     }
     
     public void SetColor(SmartWatchAppPanel appPanel)
@@ -53,7 +58,7 @@ public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
             {
                 if (color.name == appPanel.Name)
                 {
-                    SetColor(color.color);
+                    SetColor(color);
                     return;
                 }
             }
@@ -66,26 +71,34 @@ public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
         {
             if (color.name == name)
             {
-                SetColor(color.color);
+                SetColor(color);
                 return;
             }
         }
     }
     
-    public void SetColor(Color color)
+    public void SetColor(ColorSwapData colorData)
     {
+
+        colorData ??= _defaultColor;
+        
         var graphic = GetComponent<Graphic>();
         if (graphic == null) return;
-        if (color == graphic.color) return;
+
+        var newColor = GameManager.settings.HighContrastMode ? colorData.highContrastModeColor : colorData.color;
+        if (newColor == graphic.color) return;
+        
         if (!Application.isPlaying)
         {
-            graphic.color = Color.Lerp(_defaultColor, color, transitionAmount);
+            graphic.color = Color.Lerp(_defaultColor.color, newColor, transitionAmount);
         }
         else
         {
-            var newColor = Color.Lerp(_defaultColor, color, transitionAmount);
+            newColor = Color.Lerp(_defaultColor.color, newColor, transitionAmount);
             DOTween.To(() => graphic.color, x => graphic.color = x, newColor, transitionDuration);
         }
+
+        _currentColorData = colorData;
     }
     
     [Button("Revert to Default")]
@@ -123,5 +136,14 @@ public class ColorSwapOnSmartWatchAppOpen : MonoBehaviour
         
         
     }
-    
+
+    public void OnHighContrastModeEnter()
+    {
+       SetColor(_currentColorData);
+    }
+
+    public void OnHighContrastModeExit()
+    {
+        SetColor(_currentColorData);
+    }
 }
