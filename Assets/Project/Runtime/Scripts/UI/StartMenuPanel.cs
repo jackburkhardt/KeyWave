@@ -12,25 +12,10 @@ public class StartMenuPanel : UIPanel
     {
         base.Open();
         
-        RefreshLayoutGroups.Refresh( gameObject);
-        
-        
-        // ensure that only one StartMenuPanel is open at a time
-        
-        var allStartMenuPanels = FindObjectsByType< StartMenuPanel>( FindObjectsSortMode.None);
-        
-        foreach (var panel in allStartMenuPanels)
-        {
-            if (panel != this)
-            {
-                panel.Close();
-            }
-        }
+        RefreshLayoutGroups.Refresh(gameObject);
         
         // set the navigation mode of all selectables to automatic to ensure proper keyboard navigation
         // otherwise the keyboard can get stuck on non-visible selectables
-        
-        
         foreach (var selectable in GetComponentsInChildren<Selectable>())
         {
             selectable.navigation = new UnityEngine.UI.Navigation()

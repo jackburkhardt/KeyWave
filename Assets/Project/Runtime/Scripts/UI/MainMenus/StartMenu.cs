@@ -8,6 +8,8 @@ using Project.Runtime.Scripts.Utility;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Project.Runtime.Scripts.UI
 {
@@ -16,11 +18,13 @@ namespace Project.Runtime.Scripts.UI
         [SerializeField] private GameObject _continueButton;
         [SerializeField] private TextMeshProUGUI _continueTimestamp;
         
-        [SerializeField] private UIPanel _saveExistsWarningPopup;
+        [SerializeField] private UIPanel _warningPopup;
         [SerializeField] private UIPanel _mainMenuButtonsPanel;
-        [SerializeField] private TextMeshProUGUI _saveExistsWarningTimestamp;
+        [SerializeField] private TextMeshProUGUI _warningPopupMessage;
         [SerializeField] private UnityEvent _onNewGame;
         [SerializeField] private UnityEvent _onContinue;
+
+        private Button _warningPopupContinueBtn => _warningPopup.transform.Find("Continue").GetComponent<Button>();
 
         private void Awake()
         {
@@ -36,6 +40,16 @@ namespace Project.Runtime.Scripts.UI
             }
 
             SaveDataStorer.OnSaveGameDataReady += OnSaveDataReceived;
+            
+            // flush listeners now that the popup has multiple uses
+            _warningPopup.onOpen.AddListener(() =>
+            {
+                _warningPopupContinueBtn.onClick.AddListener(_warningPopup.Close);
+            });
+            _warningPopup.onClose.AddListener(() =>
+            {
+                _warningPopupContinueBtn.onClick.RemoveAllListeners();
+            });
         }
 
         private void OnEnable()
@@ -60,29 +74,25 @@ namespace Project.Runtime.Scripts.UI
                 return;
             }
             
-            _saveExistsWarningPopup.Open();
+            _warningPopup.Open();
             string saveTimestamp = SaveDataStorer.LatestSaveData.last_played.ToLocalTime().ToString("MM/dd/yyyy HH:mm");
-            _saveExistsWarningTimestamp.text =
+            _warningPopupMessage.text =
                 $"Existing progress found! Last played: {saveTimestamp}.\nStart a new game and overwrite this data?";
+            _warningPopupContinueBtn.onClick.AddListener(StartNewGame);
         }
-        
-        public void StartNewGame()
+
+        private void StartNewGame()
         {
             _onNewGame.Invoke();
             App.App.Instance.StartNewGame();
             
-            
-            
             // ensure that the start menu buttons like Start New Game, etc are hidden.
-            
             var allStartMenuPanels = FindObjectsByType< StartMenuPanel>( FindObjectsSortMode.None);
-            
             foreach (var panel in allStartMenuPanels)
             {
                 panel.Close();
             }
             AudioEngine.Instance.StopAllAudioOnChannel("Music");
-            
         }
 
         public void ContinueGame()
@@ -102,7 +112,14 @@ namespace Project.Runtime.Scripts.UI
             SaveDataStorer.BeginSaveRetrieval();
         }
 
-        public void OpenOnboardingSite()
+        public void TryOpenTutorial()
+        {
+            _warningPopup.Open();
+            _warningPopupMessage.text = "A video will open in a new tab. Return to this tab to continue playing.";
+            _warningPopupContinueBtn.onClick.AddListener(OpenTutorial);
+        }
+
+        private void OpenTutorial()
         {
             Application.OpenURL("https://player.vimeo.com/video/1126001395?badge=0&autopause=0&player_id=0&app_id=58479");
         }
